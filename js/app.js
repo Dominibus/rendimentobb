@@ -5692,7 +5692,12 @@ const city =
   "roma";
 
 // ================= FORMAT =================
-const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
+const eur = v => {
+  const rounded = Math.round(safe(v));
+  const sign = rounded < 0 ? "-" : "";
+  const grouped = String(Math.abs(rounded)).replace(/\B(?=(\d{3})+(?!\d))/g, isEN ? "," : ".");
+  return isEN ? `${sign}€${grouped}` : `${sign}${grouped} €`;
+};
 const pct = v => {
 
   const n = safe(v);
@@ -5704,22 +5709,22 @@ const pct = v => {
 };
 
 // ================= RATING =================
-let rating = "Moderate";
+let rating = T("Moderato","Moderate");
 
 if(roi >= 25){
-  rating = "Outstanding";
+  rating = T("Eccellente","Outstanding");
 }
 else if(roi >= 18){
-  rating = "Investment Grade";
+  rating = T("Qualità istituzionale","Investment Grade");
 }
 else if(roi >= 12){
-  rating = "Strong Opportunity";
+  rating = T("Opportunità solida","Strong Opportunity");
 }
 else if(roi >= 8){
-  rating = "Stable";
+  rating = T("Stabile","Stable");
 }
 else{
-  rating = "Speculative";
+  rating = T("Speculativo","Speculative");
 }
 
 // ================= COLORS =================
@@ -5727,17 +5732,17 @@ const green = [16,185,129];
 const dark = [15,23,42];
 const gray = [100,116,139];
 
-// ================= LOGO =================
-let logo = null;
-try{
-  const res = await fetch("/img/logo-report.png");
-  const blob = await res.blob();
-  const reader = new FileReader();
-  logo = await new Promise(r=>{
-    reader.onloadend = ()=>r(reader.result);
-    reader.readAsDataURL(blob);
-  });
-}catch(e){}
+// ================= TYPOGRAPHIC BRAND =================
+const drawBrand = (x=20,y=14,onDark=false)=>{
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(15);
+  doc.setTextColor(...(onDark ? [255,255,255] : dark));
+  doc.text("RendimentoBB",x,y);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(5.5);
+  doc.setTextColor(...(onDark ? [110,231,183] : green));
+  doc.text("SHORT-RENT INVESTMENT INTELLIGENCE",x,y+5);
+};
 
 // ================= FOOTER =================
 const footer = ()=>{
@@ -5803,36 +5808,26 @@ function row(label, value){
 // COVER
 // ===================================================
 
-doc.setFillColor(245,247,250);
+doc.setFillColor(...dark);
 doc.rect(0,0,210,297,"F");
-
-// ================= LOGO =================
-
-if(logo){
-  doc.addImage(
-    logo,
-    "PNG",
-    20,
-    22,
-    54,
-    15
-  );
-}
+doc.setFillColor(...green);
+doc.rect(0,34,210,1.5,"F");
+drawBrand(20,15,true);
 
 // ================= REPORT LABEL =================
 
 doc.setFontSize(9);
-doc.setTextColor(...gray);
+doc.setTextColor(148,163,184);
 
 doc.text(
   T("REPORT DI FATTIBILITÀ","INVESTMENT FEASIBILITY REPORT"),
   20,
-  55
+  48
 );
 
 // ================= TITLE =================
 
-doc.setTextColor(...dark);
+doc.setTextColor(255,255,255);
 
 doc.setFontSize(24);
 
@@ -5842,14 +5837,14 @@ doc.text(
     "Investment Feasibility Report"
   ),
   20,
-  72
+  67
 );
 
 // ================= SUBTITLE =================
 
 doc.setFontSize(11);
 
-doc.setTextColor(...gray);
+doc.setTextColor(203,213,225);
 
 doc.text(
   T(
@@ -5857,7 +5852,7 @@ doc.text(
     "Professional analysis for short-rent investments"
   ),
   20,
-  84
+  80
 );
 
 // ================= AI ENGINE =================
@@ -5870,7 +5865,7 @@ doc.text(
     "Prepared by the RendimentoBB analysis engine"
   ),
   20,
-  94
+  91
 );
 
 // ================= MARKET =================
@@ -5883,7 +5878,7 @@ doc.text(
   city.charAt(0).toUpperCase() +
   city.slice(1),
   20,
-  112
+  109
 );
 
 // ================= ROI =================
@@ -5895,7 +5890,7 @@ doc.setFontSize(40);
 doc.text(
   pct(roi),
   20,
-  158
+  155
 );
 
 // ================= ROI LABEL =================
@@ -5906,16 +5901,16 @@ doc.setTextColor(...gray);
 
 doc.text(
   T(
-    "Investment Return",
+    "Rendimento dell'investimento",
     "Investment Return"
   ),
   22,
-  168
+  165
 );
 
 // ================= ROI BAR =================
 
-doc.setFillColor(230,230,230);
+doc.setFillColor(51,65,85);
 
 doc.roundedRect(
   20,
@@ -5931,7 +5926,7 @@ doc.roundedRect(
 
 doc.setFontSize(13);
 
-doc.setTextColor(...dark);
+doc.setTextColor(255,255,255);
 
 doc.text(
   rating,
@@ -5999,9 +5994,9 @@ doc.setTextColor(...gray);
 
 doc.setFontSize(7);
 
-doc.text(T("Investment Score","Investment Score"),28,239);
-doc.text("Verdict",82,239);
-doc.text("Risk",122,239);
+doc.text(T("Punteggio investimento","Investment score"),28,239);
+doc.text(T("Esito","Verdict"),82,239);
+doc.text(T("Rischio","Risk"),122,239);
 doc.text(T("Qualità dati","Data quality"),154,239);
 
 // VALUES
@@ -6016,10 +6011,10 @@ doc.text(verdict,82,249);
 
 doc.text(
   riskScore < 40
-    ? "Low"
+    ? T("Basso","Low")
     : riskScore < 65
-      ? "Moderate"
-      : "High",
+      ? T("Moderato","Moderate")
+      : T("Alto","High"),
   122,
   249
 );
@@ -6036,9 +6031,7 @@ doc.text(
 
 doc.addPage();
 
-if(logo){
-  doc.addImage(logo,"PNG",20,10,40,12);
-}
+drawBrand(20,14,false);
 
 doc.setFontSize(14);
 doc.setTextColor(...dark);
@@ -6154,7 +6147,7 @@ doc.setTextColor(...dark);
 
 doc.text(
   T(
-    "Key Investment Metrics",
+    "Indicatori chiave dell'investimento",
     "Key Investment Metrics"
   ),
   20,
@@ -6170,13 +6163,13 @@ const executiveKPIs = [
 {
 title:T("Prezzo immobile","Property Price"),
 value:eur(price),
-subtitle:T("Asset Value","Asset Value")
+subtitle:T("Valore dell'asset","Asset Value")
 },
 
 {
 title:T("Ricavi annui","Annual Revenue"),
 value:eur(revenue),
-subtitle:T("Gross Income","Gross Income")
+subtitle:T("Ricavi lordi","Gross Income")
 },
 
 {
@@ -6184,8 +6177,8 @@ title:T("Cashflow netto","Net Cashflow"),
 value:eur(profit),
 subtitle:
 profit >= 0
-? T("Positive","Positive")
-: T("Negative","Negative")
+? T("Positivo","Positive")
+: T("Negativo","Negative")
 },
 
 {
@@ -6301,17 +6294,17 @@ y += 18;
 
 const cashflowScenarios = [
   {
-    label:"Low",
+    label:T("Prudente","Low"),
     value: revenue * 0.85,
     color:[239,68,68]
   },
   {
-    label:"Base",
+    label:T("Base","Base"),
     value: revenue,
     color:[59,130,246]
   },
   {
-    label:"High",
+    label:T("Espansivo","High"),
     value: revenue * 1.10,
     color:[16,185,129]
   }
@@ -6657,8 +6650,8 @@ const marketKey =
     .toLowerCase()
     .trim();
 
-const marketROI =
-  marketROIMap[marketKey] || 8.4;
+const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(marketROIMap, marketKey);
+const marketROI = hasLocalBenchmark ? marketROIMap[marketKey] : 8.4;
 
 const benchmarkROI = marketROI;
 
@@ -6695,7 +6688,7 @@ y+8
 );
 
 doc.text(
-T("Benchmark","Benchmark"),
+hasLocalBenchmark ? T("Benchmark locale","Local benchmark") : T("Riferimento generale","General reference"),
 88,
 y+8
 );
@@ -6958,17 +6951,17 @@ y += 12;
 
 const cashflowFinalScenarios = [
   {
-    label:"Low",
+    label:T("Prudente","Low"),
     value:profit * 0.8,
     color:[239,68,68]
   },
   {
-    label:"Base",
+    label:T("Base","Base"),
     value:profit,
     color:[245,158,11]
   },
   {
-    label:"High",
+    label:T("Espansivo","High"),
     value:profit * 1.2,
     color:[16,185,129]
   }
@@ -6992,7 +6985,9 @@ cashflowFinalScenarios.forEach(s=>{
 
   y += 16;
 
-});  
+});
+
+footer();
 
 
 // ===================================================
@@ -7079,8 +7074,12 @@ if (roi >= marketROI + 5) {
 
   insights.push(
     T(
-      "Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo.",
-      "Estimated returns are significantly above market averages and represent a highly competitive investment."
+      hasLocalBenchmark
+        ? "Il rendimento stimato è nettamente superiore al benchmark locale disponibile."
+        : "Il rendimento stimato è nettamente superiore al benchmark generale di riferimento; il confronto non è specifico per la città.",
+      hasLocalBenchmark
+        ? "Estimated returns are significantly above the available local benchmark."
+        : "Estimated returns are significantly above the general reference benchmark; the comparison is not city-specific."
     )
   );
 
@@ -7088,8 +7087,8 @@ if (roi >= marketROI + 5) {
 
   insights.push(
     T(
-      "Il ROI è superiore al benchmark della città e rappresenta un investimento competitivo.",
-      "ROI is above the city's benchmark and represents a competitive investment."
+      hasLocalBenchmark ? "Il ROI è superiore al benchmark locale disponibile." : "Il ROI è superiore al benchmark generale di riferimento, non specifico per la città.",
+      hasLocalBenchmark ? "ROI is above the available local benchmark." : "ROI is above the general reference benchmark, which is not city-specific."
     )
   );
 
@@ -7097,8 +7096,8 @@ if (roi >= marketROI + 5) {
 
   insights.push(
     T(
-      "Il rendimento risulta inferiore al benchmark della città e merita ulteriori valutazioni.",
-      "Returns are below the city's benchmark and deserve further evaluation."
+      hasLocalBenchmark ? "Il rendimento è inferiore al benchmark locale disponibile." : "Il rendimento è inferiore al benchmark generale di riferimento, non specifico per la città.",
+      hasLocalBenchmark ? "Returns are below the available local benchmark." : "Returns are below the general reference benchmark, which is not city-specific."
     )
   );
 
