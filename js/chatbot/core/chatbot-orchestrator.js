@@ -132,6 +132,8 @@ if(window.RB_DEBUG === true){
 
 const intentPriority = {
 
+    pms_renovation:110,
+
     simulation_summary:101,
 
     investment_strategy:96,
@@ -267,7 +269,8 @@ if(
     "pms_revenue",
     "pms_occupancy",
     "pms_adr",
-    "pms_guests"
+    "pms_guests",
+    "pms_renovation"
 
   ].includes(
     detectedIntent.intent
