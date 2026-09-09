@@ -2029,7 +2029,8 @@ if(
   intent.intent !== "pms_revenue" &&
   intent.intent !== "pms_occupancy" &&
   intent.intent !== "pms_adr" &&
-  intent.intent !== "pms_guests"
+  intent.intent !== "pms_guests" &&
+  intent.intent !== "pms_renovation"
 
 ){
 
@@ -3286,7 +3287,9 @@ else if(
 
   intent.intent === "pms_adr" ||
 
-  intent.intent === "pms_guests"
+  intent.intent === "pms_guests" ||
+
+  intent.intent === "pms_renovation"
 
 ){
 
@@ -3340,6 +3343,115 @@ const checkouts =
   Number(
     pmsData?.checkouts || 0
   );
+
+// =====================================
+// 🛠️ RENOVATION COPILOT
+// =====================================
+
+if(intent.intent === "pms_renovation"){
+
+  const renovationList = Array.isArray(pmsData?.renovationList)
+    ? pmsData.renovationList
+    : [];
+
+  if(!renovationList.length){
+    response.textIT =
+`🛠️ Renovation Copilot
+
+Non risultano piani di ristrutturazione attivi.
+
+Apri una proprietà e seleziona “Pianifica lavori” per creare il primo piano.`;
+
+    response.textEN =
+`🛠️ Renovation Copilot
+
+There are no active renovation plans.
+
+Open a property and select “Plan renovation” to create the first plan.`;
+
+    return response;
+  }
+
+  const moneyIT = value => Number(value || 0).toLocaleString("it-IT", {style:"currency", currency:"EUR"});
+  const moneyEN = value => Number(value || 0).toLocaleString("en-US", {style:"currency", currency:"EUR"});
+  const statusIT = {planning:"Pianificazione", approved:"Approvata", in_progress:"In corso", paused:"In pausa", completed:"Completata"};
+  const statusEN = {planning:"Planning", approved:"Approved", in_progress:"In progress", paused:"Paused", completed:"Completed"};
+
+  const totalBudget = renovationList.reduce((sum, plan) => sum + Number(plan.plannedTotal || 0), 0);
+  const totalSpent = renovationList.reduce((sum, plan) => sum + Number(plan.actualSpent || 0), 0);
+  const totalAnnualUplift = renovationList.reduce((sum, plan) => sum + Number(plan.annualRevenueUplift || 0), 0);
+  const totalValueUplift = renovationList.reduce((sum, plan) => sum + Number(plan.valueUplift || 0), 0);
+
+  const plansIT = renovationList.map(plan => {
+    const remaining = Math.max(0, Number(plan.plannedTotal || 0) - Number(plan.actualSpent || 0));
+    const payback = Number(plan.annualRevenueUplift || 0) > 0
+      ? Number(plan.plannedTotal || 0) / Number(plan.annualRevenueUplift || 0)
+      : 0;
+    const budgetSignal = Number(plan.actualSpent || 0) > Number(plan.plannedTotal || 0)
+      ? "⚠️ Budget superato"
+      : `Budget residuo ${moneyIT(remaining)}`;
+
+    return `🏠 ${plan.propertyName} · ${plan.city}
+Stato: ${statusIT[plan.status] || "Pianificazione"} · avanzamento ${Number(plan.progressPercent || 0).toFixed(0)}%
+Budget: ${moneyIT(plan.plannedTotal)} · speso ${moneyIT(plan.actualSpent)}
+${budgetSignal}
+ADR: ${moneyIT(plan.currentADR)} → ${moneyIT(plan.targetADR)}
+Ricavi annui aggiuntivi: ${moneyIT(plan.annualRevenueUplift)}
+Rendimento lordo stimato: ${Number(plan.renovationROI || 0).toFixed(1)}%
+Aumento valore stimato: ${moneyIT(plan.valueUplift)}
+Recupero investimento: ${payback > 0 ? `${payback.toFixed(1)} anni` : "non calcolabile"}`;
+  }).join("\n\n━━━━━━━━━━━━━━━\n\n");
+
+  const plansEN = renovationList.map(plan => {
+    const remaining = Math.max(0, Number(plan.plannedTotal || 0) - Number(plan.actualSpent || 0));
+    const payback = Number(plan.annualRevenueUplift || 0) > 0
+      ? Number(plan.plannedTotal || 0) / Number(plan.annualRevenueUplift || 0)
+      : 0;
+    const budgetSignal = Number(plan.actualSpent || 0) > Number(plan.plannedTotal || 0)
+      ? "⚠️ Over budget"
+      : `Remaining budget ${moneyEN(remaining)}`;
+
+    return `🏠 ${plan.propertyName} · ${plan.city}
+Status: ${statusEN[plan.status] || "Planning"} · progress ${Number(plan.progressPercent || 0).toFixed(0)}%
+Budget: ${moneyEN(plan.plannedTotal)} · spent ${moneyEN(plan.actualSpent)}
+${budgetSignal}
+ADR: ${moneyEN(plan.currentADR)} → ${moneyEN(plan.targetADR)}
+Additional annual revenue: ${moneyEN(plan.annualRevenueUplift)}
+Estimated gross return: ${Number(plan.renovationROI || 0).toFixed(1)}%
+Estimated value increase: ${moneyEN(plan.valueUplift)}
+Estimated payback: ${payback > 0 ? `${payback.toFixed(1)} years` : "not available"}`;
+  }).join("\n\n━━━━━━━━━━━━━━━\n\n");
+
+  response.textIT =
+`🛠️ Renovation Copilot
+
+${renovationList.length} ${renovationList.length === 1 ? "piano monitorato" : "piani monitorati"}.
+
+Budget complessivo: ${moneyIT(totalBudget)}
+Spesa registrata: ${moneyIT(totalSpent)}
+Ricavi annui aggiuntivi stimati: ${moneyIT(totalAnnualUplift)}
+Aumento di valore stimato: ${moneyIT(totalValueUplift)}
+
+━━━━━━━━━━━━━━━
+
+${plansIT}`;
+
+  response.textEN =
+`🛠️ Renovation Copilot
+
+${renovationList.length} ${renovationList.length === 1 ? "plan monitored" : "plans monitored"}.
+
+Total budget: ${moneyEN(totalBudget)}
+Recorded spend: ${moneyEN(totalSpent)}
+Estimated additional annual revenue: ${moneyEN(totalAnnualUplift)}
+Estimated value increase: ${moneyEN(totalValueUplift)}
+
+━━━━━━━━━━━━━━━
+
+${plansEN}`;
+
+  return response;
+}
 
 // =====================================
 // 🏨 PMS EXECUTIVE OVERVIEW
