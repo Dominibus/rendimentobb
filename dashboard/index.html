@@ -3753,7 +3753,8 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260908-guest-portal-v20-1"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script type="module" src="/js/dashboard.js?v=20260909-guest-portal-v20-3"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4598,8 +4599,19 @@ background:#fff;
     <button id="booking-guest-portal-copy" type="button" onclick="copyGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #10b981;border-radius:11px;background:#ecfdf5;color:#047857;font-weight:800;cursor:pointer;" data-it="📋 Copia link" data-en="📋 Copy link">📋 Copia link</button>
     <button id="booking-guest-portal-whatsapp" type="button" onclick="shareGuestIssuePortalWhatsApp()" style="display:none;padding:10px 13px;border:1px solid #22c55e;border-radius:11px;background:#f0fdf4;color:#15803d;font-weight:800;cursor:pointer;" data-it="💬 Invia su WhatsApp" data-en="💬 Send via WhatsApp">💬 Invia su WhatsApp</button>
     <button id="booking-guest-portal-email" type="button" onclick="shareGuestIssuePortalEmail()" style="display:none;padding:10px 13px;border:1px solid #3b82f6;border-radius:11px;background:#eff6ff;color:#1d4ed8;font-weight:800;cursor:pointer;" data-it="✉️ Invia via email" data-en="✉️ Send via email">✉️ Invia via email</button>
+    <button id="booking-guest-portal-qr" type="button" onclick="showGuestIssuePortalQR()" style="display:none;padding:10px 13px;border:1px solid #8b5cf6;border-radius:11px;background:#f5f3ff;color:#6d28d9;font-weight:800;cursor:pointer;" data-it="▦ Mostra QR" data-en="▦ Show QR">▦ Mostra QR</button>
     <button id="booking-guest-portal-revoke" type="button" onclick="revokeGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #94a3b8;border-radius:11px;background:#f8fafc;color:#475569;font-weight:800;cursor:pointer;" data-it="Disattiva link" data-en="Disable link">Disattiva link</button>
     <span id="booking-guest-portal-status" style="font-size:11px;color:#64748b;" data-it="Nessun link attivo" data-en="No active link">Nessun link attivo</span>
+  </div>
+  <div id="booking-guest-portal-qr-panel" style="display:none;margin-top:12px;padding:16px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;text-align:center;">
+    <div style="font-size:13px;font-weight:800;color:#5b21b6;" data-it="QR personale dell’ospite" data-en="Guest personal QR code">QR personale dell’ospite</div>
+    <div style="font-size:11px;color:#64748b;margin:4px 0 12px;" data-it="Scansiona per aprire il portale. Il QR segue la stessa scadenza e revoca del link." data-en="Scan to open the portal. The QR follows the same expiry and revocation as the link.">Scansiona per aprire il portale. Il QR segue la stessa scadenza e revoca del link.</div>
+    <div id="booking-guest-portal-qr-code" style="display:inline-flex;padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;"></div>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px;">
+      <button type="button" onclick="downloadGuestIssuePortalQR()" style="padding:9px 12px;border:1px solid #8b5cf6;border-radius:10px;background:#7c3aed;color:#fff;font-weight:800;cursor:pointer;" data-it="⬇ Scarica PNG" data-en="⬇ Download PNG">⬇ Scarica PNG</button>
+      <button type="button" onclick="printGuestIssuePortalQR()" style="padding:9px 12px;border:1px solid #64748b;border-radius:10px;background:#fff;color:#334155;font-weight:800;cursor:pointer;" data-it="🖨 Stampa" data-en="🖨 Print">🖨 Stampa</button>
+      <button type="button" onclick="hideGuestIssuePortalQR()" style="padding:9px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#475569;font-weight:800;cursor:pointer;" data-it="Chiudi QR" data-en="Close QR">Chiudi QR</button>
+    </div>
   </div>
 </div>
 
