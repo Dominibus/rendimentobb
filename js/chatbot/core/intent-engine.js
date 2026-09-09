@@ -3101,6 +3101,21 @@ if(
 // Property Management Intelligence
 // ===========================================
 
+// ===========================================
+// 🛠️ RENOVATION INTELLIGENCE
+// ===========================================
+
+if(
+  /ristruttur|lavori|interventi|budget lavori|cantiere|renovation|refurbish|works budget|work items/.test(text)
+){
+  applyIntent({
+    intent: "pms_renovation",
+    category: "pms",
+    confidence: 0.99,
+    priority: 275
+  });
+}
+
 const pmsWords = [
 
   // 🇮🇹
