@@ -3397,6 +3397,42 @@ Open a property and select “Plan renovation” to create the first plan.`;
   const asksBudget = /budget|preventiv|quanto cost|costi lavori|spesa|spent|cost|estimate/.test(renovationMessage);
   const asksProgress = /avanz|procede|stato lavori|complet|progress|status|going|coming along/.test(renovationMessage);
   const asksReturn = /rendimento|ritorno|recuper|payback|ricavi aggiuntivi|conviene|return|additional revenue|worth/.test(renovationMessage);
+  const asksControl = /ritard|scostamento|fuori budget|critic|priorit|problemi?.*lavor|controllo cantiere|delay|over budget|variance|issue.*work|construction control/.test(renovationMessage);
+  const controlMessagesIT = {
+    over_budget: "Budget superato: verifica costi e varianti.",
+    budget_near_limit: "Oltre il 90% del budget è già utilizzato con lavori ancora aperti.",
+    overdue: "La data di fine è superata e il piano non è completato.",
+    progress_before_start: "Risultano lavori completati prima della data di inizio prevista.",
+    status_not_updated: "Sono presenti lavori completati ma lo stato generale è ancora Pianificazione.",
+    completion_mismatch: "Il piano risulta completato ma alcuni interventi sono ancora aperti."
+  };
+  const controlMessagesEN = {
+    over_budget: "The budget has been exceeded: review costs and change orders.",
+    budget_near_limit: "More than 90% of the budget is already used while work remains open.",
+    overdue: "The completion date has passed and the plan is not complete.",
+    progress_before_start: "Completed work is recorded before the planned start date.",
+    status_not_updated: "Some work is complete but the overall status is still Planning.",
+    completion_mismatch: "The plan is marked complete while some work items remain open."
+  };
+
+  if(asksControl){
+    const controlIT = renovationList.map(plan => {
+      const codes = Array.isArray(plan.controlCodes) ? plan.controlCodes : [];
+      const priority = plan.controlLevel === "critical" ? "🚨 Priorità alta" : plan.controlLevel === "attention" ? "⚠️ Da verificare" : "✅ Sotto controllo";
+      const details = codes.length ? codes.map(code => controlMessagesIT[code]).filter(Boolean).join(" ") : "Budget, avanzamento e calendario risultano coerenti.";
+      return `🏠 ${plan.propertyName}: ${priority}\n${details}`;
+    }).join("\n\n");
+    const controlEN = renovationList.map(plan => {
+      const codes = Array.isArray(plan.controlCodes) ? plan.controlCodes : [];
+      const priority = plan.controlLevel === "critical" ? "🚨 High priority" : plan.controlLevel === "attention" ? "⚠️ Review needed" : "✅ On track";
+      const details = codes.length ? codes.map(code => controlMessagesEN[code]).filter(Boolean).join(" ") : "Budget, progress and schedule are consistent.";
+      return `🏠 ${plan.propertyName}: ${priority}\n${details}`;
+    }).join("\n\n");
+
+    response.textIT = `🚧 Controllo cantiere\n\n${controlIT}`;
+    response.textEN = `🚧 Renovation control\n\n${controlEN}`;
+    return response;
+  }
 
   if(asksBudget && !asksProgress && !asksReturn){
     const budgetLinesIT = renovationList.map(plan => {
@@ -3435,11 +3471,17 @@ Open a property and select “Plan renovation” to create the first plan.`;
     const budgetSignal = Number(plan.actualSpent || 0) > Number(plan.plannedTotal || 0)
       ? "⚠️ Budget superato"
       : `Budget residuo ${moneyIT(remaining)}`;
+    const controlSignal = plan.controlLevel === "critical"
+      ? "🚨 Controllo: priorità alta"
+      : plan.controlLevel === "attention"
+        ? "⚠️ Controllo: verifica necessaria"
+        : "✅ Controllo: regolare";
 
     return `🏠 ${plan.propertyName} · ${plan.city}
 Stato: ${statusIT[plan.status] || "Pianificazione"} · avanzamento ${Number(plan.progressPercent || 0).toFixed(0)}%
 Budget: ${moneyIT(plan.plannedTotal)} · speso ${moneyIT(plan.actualSpent)}
 ${budgetSignal}
+${controlSignal}
 ADR: ${moneyIT(plan.currentADR)} → ${moneyIT(plan.targetADR)}
 Ricavi annui aggiuntivi: ${moneyIT(plan.annualRevenueUplift)}
 Rendimento lordo stimato: ${decimalIT(plan.renovationROI)}%
@@ -3455,11 +3497,17 @@ Recupero investimento: ${payback > 0 ? `${decimalIT(payback)} anni` : "non calco
     const budgetSignal = Number(plan.actualSpent || 0) > Number(plan.plannedTotal || 0)
       ? "⚠️ Over budget"
       : `Remaining budget ${moneyEN(remaining)}`;
+    const controlSignal = plan.controlLevel === "critical"
+      ? "🚨 Control: high priority"
+      : plan.controlLevel === "attention"
+        ? "⚠️ Control: review needed"
+        : "✅ Control: on track";
 
     return `🏠 ${plan.propertyName} · ${plan.city}
 Status: ${statusEN[plan.status] || "Planning"} · progress ${Number(plan.progressPercent || 0).toFixed(0)}%
 Budget: ${moneyEN(plan.plannedTotal)} · spent ${moneyEN(plan.actualSpent)}
 ${budgetSignal}
+${controlSignal}
 ADR: ${moneyEN(plan.currentADR)} → ${moneyEN(plan.targetADR)}
 Additional annual revenue: ${moneyEN(plan.annualRevenueUplift)}
 Estimated gross return: ${Number(plan.renovationROI || 0).toFixed(1)}%
