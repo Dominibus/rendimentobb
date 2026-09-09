@@ -10411,27 +10411,52 @@ function renderPMSPortalAlerts(pmsData = {}){
   const container = document.getElementById("pms-portal-alerts");
   if(!container) return;
 
-  const attentionBookings = Array.isArray(pmsData.attentionBookings)
-    ? pmsData.attentionBookings
+  const bookingList = Array.isArray(pmsData.bookingList)
+    ? pmsData.bookingList
     : [];
   const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
   const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
-  const taskLabels = {
-    tourist_tax_pending: window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"),
-    guest_registration_incomplete: window.t("Registrazione ospiti incompleta", "Guest registration incomplete"),
-    cleaning_to_schedule: window.t("Pulizia da pianificare", "Cleaning to schedule"),
-    guest_issue_open: window.t("Segnalazione ospite aperta", "Open guest issue"),
-    guest_issue_urgent: window.t("Segnalazione ospite urgente", "Urgent guest issue")
-  };
-
-  const alerts = attentionBookings.flatMap(booking =>
-    (Array.isArray(booking.attentionCodes) ? booking.attentionCodes : []).map(code => ({
-      code,
-      bookingId: booking.id,
-      guestName: booking.guestName || window.t("Ospite", "Guest"),
-      label: taskLabels[code] || window.t("Attività da verificare", "Task to review")
-    }))
-  );
+  const alerts = bookingList.flatMap(booking => {
+    if(["completed", "cancelled"].includes(String(booking.status || "").toLowerCase())) return [];
+    const tasks = [];
+    const guestName = booking.guestName || window.t("Ospite", "Guest");
+    const addTask = (code, label) => tasks.push({ code, bookingId:booking.id, guestName, label });
+    const issue = booking.guestIssue || {};
+    if(issue.active === true && String(issue.status || "open") !== "resolved"){
+      addTask(
+        String(issue.priority || "medium") === "urgent" ? "guest_issue_urgent" : "guest_issue_open",
+        String(issue.priority || "medium") === "urgent"
+          ? window.t("Segnalazione ospite urgente", "Urgent guest issue")
+          : window.t("Segnalazione ospite aperta", "Open guest issue")
+      );
+    }
+    const registration = booking.guestRegistration || {};
+    const missingDocuments = Math.max(0, Number(booking.guests || 0) - Number(registration.documentsReceived || 0));
+    if(missingDocuments > 0){
+      addTask("guest_documents_missing", window.t(`${missingDocuments} documenti ospiti mancanti`, `${missingDocuments} guest documents missing`));
+    }
+    if(!["submitted", "not_required"].includes(String(registration.authorityStatus || "pending"))){
+      addTask(
+        "authority_report_pending",
+        registration.authorityStatus === "ready"
+          ? window.t("Invia comunicazione autorità", "Submit authority report")
+          : window.t("Prepara comunicazione autorità", "Prepare authority report")
+      );
+    }
+    if(booking.touristTax?.enabled === true && String(booking.touristTax.status || "pending") === "pending"){
+      addTask("tourist_tax_pending", window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"));
+    }
+    const cleaning = booking.cleaning || { required:true, status:"pending" };
+    if(cleaning.required !== false && String(cleaning.status || "pending") !== "completed"){
+      addTask(
+        cleaning.status === "scheduled" ? "cleaning_scheduled" : "cleaning_to_schedule",
+        cleaning.status === "scheduled"
+          ? window.t("Pulizia programmata", "Cleaning scheduled")
+          : window.t("Pulizia da pianificare", "Cleaning to schedule")
+      );
+    }
+    return tasks;
+  });
   const urgentCount = alerts.filter(alert => alert.code === "guest_issue_urgent").length;
   const operationalCount = alerts.length + arrivalsToday + departuresToday;
 
@@ -12871,6 +12896,12 @@ const normalizedPMSBookings =
                 applied: booking.pricingAssistant.applied === true
               }
             : null,
+
+        touristTax: booking.touristTax || null,
+
+        guestRegistration: booking.guestRegistration || null,
+
+        cleaning: booking.cleaning || null,
 
         guestIssue: booking.guestIssue || null,
 
