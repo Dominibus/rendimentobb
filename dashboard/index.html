@@ -3754,7 +3754,7 @@ Insight predittivi basati su performance e rischio
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20260909-guest-portal-v20-3"></script>
+<script type="module" src="/js/dashboard.js?v=20260909-renovation-v1"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3972,6 +3972,114 @@ Salva
 
 </div>
 
+</div>
+
+<!-- =====================================
+🛠️ RENOVATION PLANNER MODAL
+===================================== -->
+
+<style>
+#renovation-modal.property-modal-overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(9,20,38,.72);
+  backdrop-filter:blur(8px);
+  z-index:999999;
+}
+#renovation-modal label{
+  display:block;
+  margin-bottom:6px;
+  color:#0f172a;
+  font-size:12px;
+  font-weight:800;
+}
+@media (max-width:760px){
+  #renovation-modal.property-modal-overlay{padding:14px;align-items:flex-start;}
+  .renovation-item-row{grid-template-columns:1fr 1fr !important;}
+  .renovation-item-row > div:nth-child(2){grid-column:1 / -1;grid-row:1;}
+  .renovation-item-remove{justify-self:end;}
+}
+@media (max-width:430px){
+  .renovation-item-row{grid-template-columns:1fr !important;}
+  .renovation-item-row > div:nth-child(2){grid-column:auto;grid-row:auto;}
+}
+</style>
+
+<div id="renovation-modal" class="property-modal-overlay">
+<div class="property-modal-panel" style="width:min(940px,calc(100vw - 28px));max-height:90vh;overflow:auto;" role="dialog" aria-modal="true" aria-labelledby="renovation-modal-title">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px;">
+  <div>
+    <h2 id="renovation-modal-title" style="margin:0;" data-it="🛠️ Piano di ristrutturazione" data-en="🛠️ Renovation plan">🛠️ Piano di ristrutturazione</h2>
+    <div id="renovation-property-name" style="margin-top:5px;color:#64748b;font-size:13px;"></div>
+  </div>
+  <button type="button" onclick="closeRenovationModal()" aria-label="Close" style="border:0;background:#f1f5f9;border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:18px;">×</button>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;">
+  <div>
+    <label for="renovation-status" data-it="Stato generale" data-en="Overall status">Stato generale</label>
+    <select id="renovation-status" style="width:100%;height:46px;border:1px solid #cbd5e1;border-radius:11px;padding:0 10px;background:#fff;">
+      <option value="planning" data-it="In pianificazione" data-en="Planning">In pianificazione</option>
+      <option value="approved" data-it="Approvata" data-en="Approved">Approvata</option>
+      <option value="in_progress" data-it="In corso" data-en="In progress">In corso</option>
+      <option value="paused" data-it="In pausa" data-en="Paused">In pausa</option>
+      <option value="completed" data-it="Completata" data-en="Completed">Completata</option>
+    </select>
+  </div>
+  <div>
+    <label for="renovation-start-date" data-it="Inizio previsto" data-en="Planned start">Inizio previsto</label>
+    <input id="renovation-start-date" type="date" style="width:100%;height:46px;border:1px solid #cbd5e1;border-radius:11px;padding:0 10px;">
+  </div>
+  <div>
+    <label for="renovation-end-date" data-it="Fine prevista" data-en="Planned completion">Fine prevista</label>
+    <input id="renovation-end-date" type="date" style="width:100%;height:46px;border:1px solid #cbd5e1;border-radius:11px;padding:0 10px;">
+  </div>
+  <div>
+    <label for="renovation-contingency" data-it="Fondo imprevisti (%)" data-en="Contingency (%)">Fondo imprevisti (%)</label>
+    <input id="renovation-contingency" type="number" min="0" max="50" step="1" inputmode="decimal" value="10" style="width:100%;height:46px;border:1px solid #cbd5e1;border-radius:11px;padding:0 10px;">
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px;padding:14px;border:1px solid #bae6fd;border-radius:14px;background:#f0f9ff;">
+  <div>
+    <label for="renovation-target-adr" data-it="ADR obiettivo dopo i lavori (€)" data-en="Target ADR after works (€)">ADR obiettivo dopo i lavori (€)</label>
+    <input id="renovation-target-adr" type="number" min="0" step="0.01" inputmode="decimal" style="width:100%;height:46px;border:1px solid #7dd3fc;border-radius:11px;padding:0 10px;">
+  </div>
+  <div>
+    <label for="renovation-target-value" data-it="Valore stimato post-lavori (€)" data-en="Estimated value after works (€)">Valore stimato post-lavori (€)</label>
+    <input id="renovation-target-value" type="number" min="0" step="1000" inputmode="decimal" style="width:100%;height:46px;border:1px solid #7dd3fc;border-radius:11px;padding:0 10px;">
+  </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;">
+  <div>
+    <strong data-it="Interventi" data-en="Work items">Interventi</strong>
+    <div style="font-size:11px;color:#64748b;margin-top:3px;" data-it="Massimo 30 interventi per immobile." data-en="Maximum 30 work items per property.">Massimo 30 interventi per immobile.</div>
+  </div>
+  <button type="button" class="btn-dashboard" onclick="addRenovationItem()" data-it="+ Aggiungi intervento" data-en="+ Add work item">+ Aggiungi intervento</button>
+</div>
+
+<div id="renovation-items" style="display:grid;gap:10px;margin-top:12px;"></div>
+
+<div id="renovation-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px;"></div>
+<div id="renovation-financial-note" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
+
+<div style="margin-top:16px;">
+  <label for="renovation-notes" data-it="Note operative" data-en="Operational notes">Note operative</label>
+  <textarea id="renovation-notes" maxlength="1000" rows="3" data-it-placeholder="Vincoli, fornitori, autorizzazioni o indicazioni utili…" data-en-placeholder="Constraints, suppliers, permits or useful notes…" placeholder="Vincoli, fornitori, autorizzazioni o indicazioni utili…" style="width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:11px;resize:vertical;font:inherit;"></textarea>
+</div>
+
+<div class="property-modal-actions" style="margin-top:18px;">
+  <button class="btn-dashboard property-modal-secondary" type="button" onclick="closeRenovationModal()" data-it="Chiudi" data-en="Close">Chiudi</button>
+  <button id="renovation-save-button" class="btn-dashboard property-modal-primary" type="button" onclick="saveRenovationPlan()" data-it="💾 Salva piano" data-en="💾 Save plan">💾 Salva piano</button>
+</div>
+
+</div>
 </div>
 
 <!-- ===================================== -->
