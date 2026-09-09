@@ -1964,22 +1964,11 @@ const monthlyProfit = safe(
 
     // ================= FORMAT =================
     const eur = v => {
-
-  const locale =
-    lang === "en"
-      ? "en-US"
-      : "it-IT";
-
-  return new Intl.NumberFormat(
-    locale,
-    {
-      style:"currency",
-      currency:"EUR",
-      maximumFractionDigits:0
-    }
-  ).format(safe(v));
-
-};
+      const rounded = Math.round(safe(v));
+      const sign = rounded < 0 ? "-" : "";
+      const grouped = String(Math.abs(rounded)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : ".");
+      return lang === "en" ? `${sign}€${grouped}` : `${sign}${grouped} €`;
+    };
 
     const dark = [15,23,42];
     const green = [16,185,129];
@@ -1987,18 +1976,16 @@ const monthlyProfit = safe(
     const amber = [245,158,11];
     const red = [220,38,38];
 
-    let reportLogo = null;
-    try{
-      const logoResponse = await fetch("/img/logo-report.png");
-      const logoBlob = await logoResponse.blob();
-      reportLogo = await new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(logoBlob);
-      });
-    }catch(error){
-      reportLogo = null;
-    }
+    const drawBrand = (x=20,y=14)=>{
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(15);
+      doc.setTextColor(255,255,255);
+      doc.text("RendimentoBB",x,y);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(5.5);
+      doc.setTextColor(110,231,183);
+      doc.text("SHORT-RENT INVESTMENT INTELLIGENCE",x,y+5);
+    };
 
     // ================= USER =================
     const profile = window.userProfile || {};
@@ -2042,17 +2029,8 @@ doc.rect(0,0,210,34,"F");
 doc.setFillColor(...green);
 doc.rect(0,34,210,1.5,"F");
 
-// BRAND
-if(reportLogo){
-  doc.setFillColor(255,255,255);
-  doc.roundedRect(18,7,48,13,3,3,"F");
-  doc.addImage(reportLogo,"PNG",21,9,42,9);
-}else{
-  doc.setTextColor(255,255,255);
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(16);
-  doc.text("RendimentoBB",20,15);
-}
+// TYPOGRAPHIC BRAND
+drawBrand(20,13);
 
 // REPORT TYPE
 doc.setFont("helvetica","normal");
@@ -2064,7 +2042,7 @@ doc.text(
     "INVESTMENT & OPERATIONS REPORT"
   ),
   20,
-  22
+  27
 );
 
 // VERIFIED LABEL
@@ -2077,8 +2055,8 @@ doc.setTextColor(209,250,229);
 
 doc.text(
   t(
-    "DATI ELABORATI • SNAPSHOT PMS",
-    "DATA MODELLED • PMS SNAPSHOT"
+    "QUADRO FINANZIARIO • SNAPSHOT PMS",
+    "FINANCIAL FRAMEWORK • PMS SNAPSHOT"
   ),
   161,
   16.3,
@@ -2108,7 +2086,7 @@ doc.setFont("helvetica","bold");
 doc.setFontSize(18);
 
 doc.text(
-  t("Executive Summary","Executive Summary"),
+  t("Sintesi esecutiva","Executive Summary"),
   20,
   y
 );
@@ -2734,7 +2712,10 @@ doc.text(
     doc.setTextColor(...dark);
     doc.text(t("Confronto mercato","Market comparison"),20,20);
 
-    const marketROI = 8.4;
+    const localBenchmarks = { roma:8.4, milano:7.2, napoli:11.5, firenze:7.9 };
+    const marketKey = String(city || "").toLowerCase().trim();
+    const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(localBenchmarks, marketKey);
+    const marketROI = hasLocalBenchmark ? localBenchmarks[marketKey] : 8.4;
 const diff = roi - marketROI;
 
 const comparisonColor =
@@ -2813,7 +2794,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  t("ROI MEDIO MERCATO","MARKET ROI"),
+  hasLocalBenchmark ? t("BENCHMARK LOCALE","LOCAL BENCHMARK") : t("RIFERIMENTO GENERALE","GENERAL REFERENCE"),
   115,
   44
 );
@@ -2871,17 +2852,17 @@ doc.setTextColor(100,116,139);
 doc.text(
   diff > 0
     ? t(
-        "Il rendimento del progetto supera il benchmark di mercato utilizzato nel report.",
-        "The project return exceeds the market benchmark used in this report."
+        hasLocalBenchmark ? "Il rendimento del progetto supera il benchmark locale disponibile." : "Il rendimento supera il riferimento generale; il confronto non è specifico per la città.",
+        hasLocalBenchmark ? "The project return exceeds the available local benchmark." : "The project return exceeds the general reference; the comparison is not city-specific."
       )
     : diff < 0
       ? t(
-          "Il rendimento del progetto è inferiore al benchmark di mercato utilizzato nel report.",
-          "The project return is below the market benchmark used in this report."
+          hasLocalBenchmark ? "Il rendimento del progetto è inferiore al benchmark locale disponibile." : "Il rendimento è inferiore al riferimento generale; il confronto non è specifico per la città.",
+          hasLocalBenchmark ? "The project return is below the available local benchmark." : "The project return is below the general reference; the comparison is not city-specific."
         )
       : t(
-          "Il rendimento del progetto è allineato al benchmark di mercato utilizzato nel report.",
-          "The project return is aligned with the market benchmark used in this report."
+          hasLocalBenchmark ? "Il rendimento è allineato al benchmark locale disponibile." : "Il rendimento è allineato al riferimento generale, non specifico per la città.",
+          hasLocalBenchmark ? "The return is aligned with the available local benchmark." : "The return is aligned with the general reference, which is not city-specific."
         ),
   20,
   130,
@@ -2905,13 +2886,7 @@ doc.setFont("helvetica","bold");
 doc.setFontSize(16);
 doc.setTextColor(255,255,255);
 
-if(reportLogo){
-  doc.setFillColor(255,255,255);
-  doc.roundedRect(18,7,48,13,3,3,"F");
-  doc.addImage(reportLogo,"PNG",21,9,42,9);
-}else{
-  doc.text("RendimentoBB",20,15);
-}
+drawBrand(20,13);
 
 doc.setFont("helvetica","normal");
 doc.setFontSize(8);
@@ -2920,7 +2895,7 @@ doc.setTextColor(203,213,225);
 doc.text(
   t("REPORT INVESTIMENTO E GESTIONE","INVESTMENT & OPERATIONS REPORT"),
   20,
-  22
+  27
 );
 
 // VERIFIED BADGE
@@ -2941,7 +2916,7 @@ doc.setFontSize(6.5);
 doc.setTextColor(209,250,229);
 
 doc.text(
-  t("DATI ELABORATI • SNAPSHOT PMS","DATA MODELLED • PMS SNAPSHOT"),
+  t("QUADRO FINANZIARIO • SNAPSHOT PMS","FINANCIAL FRAMEWORK • PMS SNAPSHOT"),
   161,
   16.3,
   { align:"center" }
@@ -2995,8 +2970,8 @@ doc.setFontSize(8);
 doc.setTextColor(100,116,139);
 
 const disclaimerText = t(
-  "Il presente documento è una simulazione basata sui dati disponibili e sulle ipotesi utilizzate nell'analisi. I risultati rappresentano una valutazione indicativa dell'investimento e possono variare al modificarsi delle condizioni economiche, finanziarie e operative.",
-  "This document is a simulation based on the available data and assumptions used in the analysis. Results represent an indicative investment assessment and may vary as economic, financial and operating conditions change."
+  "Il documento integra tre fonti: risultati previsionali della simulazione selezionata, dati operativi PMS disponibili al momento della generazione e stime del piano di ristrutturazione. I valori previsionali e stimati non costituiscono risultati garantiti.",
+  "This document integrates three sources: forecast results from the selected simulation, PMS operating data available at generation time, and renovation-plan estimates. Forecast and estimated values are not guaranteed results."
 );
 
 const disclaimerLines =
