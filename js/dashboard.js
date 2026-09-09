@@ -4841,6 +4841,28 @@ function calculateRenovationMetrics(){
   const renovationROI = plannedTotal > 0 ? annualRevenueUplift / plannedTotal * 100 : 0;
   const currentValue = toRenovationAmount(property.investmentSnapshot?.propertyPrice);
   const targetValue = toRenovationAmount(document.getElementById("renovation-target-value")?.value);
+  const overallStatus = document.getElementById("renovation-status")?.value || "planning";
+  const startDate = document.getElementById("renovation-start-date")?.value || "";
+  const endDate = document.getElementById("renovation-end-date")?.value || "";
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const daysRemaining = endDate
+    ? Math.ceil((Date.parse(`${endDate}T00:00:00Z`) - Date.parse(`${todayISO}T00:00:00Z`)) / 86400000)
+    : null;
+  const budgetUsagePercent = plannedTotal > 0 ? actualSpent / plannedTotal * 100 : 0;
+  const controlCodes = [];
+
+  if(plannedTotal > 0 && actualSpent > plannedTotal) controlCodes.push("over_budget");
+  else if(budgetUsagePercent >= 90 && progressPercent < 100) controlCodes.push("budget_near_limit");
+  if(endDate && endDate < todayISO && progressPercent < 100) controlCodes.push("overdue");
+  if(startDate && startDate > todayISO && progressPercent > 0) controlCodes.push("progress_before_start");
+  if(overallStatus === "planning" && progressPercent > 0) controlCodes.push("status_not_updated");
+  if(overallStatus === "completed" && progressPercent < 100) controlCodes.push("completion_mismatch");
+
+  const controlLevel = controlCodes.some(code => ["over_budget", "overdue"].includes(code))
+    ? "critical"
+    : controlCodes.length
+      ? "attention"
+      : "on_track";
 
   return {
     items,
@@ -4859,7 +4881,11 @@ function calculateRenovationMetrics(){
     renovationROI,
     currentValue,
     targetValue,
-    valueUplift: Math.max(0, targetValue - currentValue)
+    valueUplift: Math.max(0, targetValue - currentValue),
+    budgetUsagePercent,
+    daysRemaining,
+    controlLevel,
+    controlCodes
   };
 }
 
@@ -4881,6 +4907,29 @@ window.updateRenovationSummary = function(){
       <strong style="display:block;margin-top:5px;color:#0f172a;font-size:16px;">${value}</strong>
     </div>
   `).join("");
+  const controlAlert = document.getElementById("renovation-control-alert");
+  if(controlAlert){
+    const messages = {
+      over_budget: t("Budget superato: verifica costi e varianti.", "Budget exceeded: review costs and change orders."),
+      budget_near_limit: t("Budget utilizzato oltre il 90% con lavori ancora aperti.", "More than 90% of the budget is used while work remains open."),
+      overdue: t("Data di fine superata con lavori non completati.", "Completion date has passed while work remains incomplete."),
+      progress_before_start: t("Risultano lavori completati prima della data di inizio prevista.", "Completed work is recorded before the planned start date."),
+      status_not_updated: t("Lavori avviati: aggiorna lo stato generale da Pianificazione a In corso.", "Work has started: update the overall status from Planning to In progress."),
+      completion_mismatch: t("Il piano risulta completato ma alcuni interventi sono ancora aperti.", "The plan is marked completed while some work items remain open.")
+    };
+    const palette = metrics.controlLevel === "critical"
+      ? {background:"#fef2f2", border:"#fecaca", color:"#991b1b", icon:"🚨", title:t("Priorità alta", "High priority")}
+      : metrics.controlLevel === "attention"
+        ? {background:"#fffbeb", border:"#fde68a", color:"#92400e", icon:"⚠️", title:t("Da verificare", "Review needed")}
+        : {background:"#ecfdf5", border:"#a7f3d0", color:"#065f46", icon:"✅", title:t("Cantiere sotto controllo", "Renovation on track")};
+    const detail = metrics.controlCodes.length
+      ? metrics.controlCodes.map(code => messages[code]).filter(Boolean).join(" ")
+      : t("Budget, avanzamento e calendario risultano coerenti.", "Budget, progress and schedule are consistent.");
+    controlAlert.style.background = palette.background;
+    controlAlert.style.border = `1px solid ${palette.border}`;
+    controlAlert.style.color = palette.color;
+    controlAlert.innerHTML = `<strong>${palette.icon} ${palette.title}</strong><div style="margin-top:3px;">${detail}</div>`;
+  }
   const note = document.getElementById("renovation-financial-note");
   if(note){
     note.textContent = metrics.occupancy
@@ -4919,7 +4968,7 @@ window.openRenovationPlanner = async function(propertyId){
     if(items.length) items.forEach(item => window.addRenovationItem(item));
     else window.addRenovationItem();
 
-    ["renovation-contingency", "renovation-target-adr", "renovation-target-value"]
+    ["renovation-status", "renovation-start-date", "renovation-end-date", "renovation-contingency", "renovation-target-adr", "renovation-target-value"]
       .forEach(id => {
         const field = document.getElementById(id);
         if(field && !field.dataset.renovationBound){
@@ -4982,7 +5031,11 @@ window.saveRenovationPlan = async function(){
       annualRevenueUplift: metrics.annualRevenueUplift,
       renovationROI: metrics.renovationROI,
       currentValue: metrics.currentValue,
-      valueUplift: metrics.valueUplift
+      valueUplift: metrics.valueUplift,
+      budgetUsagePercent: metrics.budgetUsagePercent,
+      daysRemaining: metrics.daysRemaining,
+      controlLevel: metrics.controlLevel,
+      controlCodes: metrics.controlCodes
     },
     updatedAt: new Date().toISOString()
   };
@@ -5014,7 +5067,11 @@ window.saveRenovationPlan = async function(){
       renovationROI: plan.metrics.renovationROI,
       currentValue: plan.metrics.currentValue,
       targetValue: plan.targetValue,
-      valueUplift: plan.metrics.valueUplift
+      valueUplift: plan.metrics.valueUplift,
+      budgetUsagePercent: plan.metrics.budgetUsagePercent,
+      daysRemaining: plan.metrics.daysRemaining,
+      controlLevel: plan.metrics.controlLevel,
+      controlCodes: plan.metrics.controlCodes
     };
 
     const existingRenovations = Array.isArray(window.rbPMSData?.renovationList)
@@ -12136,19 +12193,39 @@ async function loadPMSStats(){
       if(!plan) return null;
 
       const metrics = plan.metrics || {};
+      const planProgress = Number(metrics.progressPercent || 0);
+      const planBudget = Number(metrics.plannedTotal || 0);
+      const planSpent = Number(metrics.actualSpent || 0);
+      const planStart = String(plan.startDate || "");
+      const planEnd = String(plan.endDate || "");
+      const planStatus = String(plan.status || "planning");
+      const todayISO = new Date().toISOString().slice(0, 10);
+      const derivedControlCodes = [];
+
+      if(planBudget > 0 && planSpent > planBudget) derivedControlCodes.push("over_budget");
+      else if(planBudget > 0 && planSpent / planBudget * 100 >= 90 && planProgress < 100) derivedControlCodes.push("budget_near_limit");
+      if(planEnd && planEnd < todayISO && planProgress < 100) derivedControlCodes.push("overdue");
+      if(planStart && planStart > todayISO && planProgress > 0) derivedControlCodes.push("progress_before_start");
+      if(planStatus === "planning" && planProgress > 0) derivedControlCodes.push("status_not_updated");
+      if(planStatus === "completed" && planProgress < 100) derivedControlCodes.push("completion_mismatch");
+      const derivedControlLevel = derivedControlCodes.some(code => ["over_budget", "overdue"].includes(code))
+        ? "critical"
+        : derivedControlCodes.length
+          ? "attention"
+          : "on_track";
 
       return {
         propertyId: propertyDoc.id,
         propertyName: String(propertyData.name || "-").slice(0, 120),
         city: String(propertyData.city || "-").slice(0, 80),
-        status: String(plan.status || "planning"),
-        startDate: String(plan.startDate || ""),
-        endDate: String(plan.endDate || ""),
+        status: planStatus,
+        startDate: planStart,
+        endDate: planEnd,
         itemsCount: Array.isArray(plan.items) ? plan.items.length : 0,
         completedItems: Number(metrics.completedItems || 0),
-        progressPercent: Number(metrics.progressPercent || 0),
-        plannedTotal: Number(metrics.plannedTotal || 0),
-        actualSpent: Number(metrics.actualSpent || 0),
+        progressPercent: planProgress,
+        plannedTotal: planBudget,
+        actualSpent: planSpent,
         variance: Number(metrics.variance || 0),
         currentADR: Number(metrics.currentADR || propertyData.priceNight || 0),
         targetADR: Number(metrics.targetADR || plan.targetADR || 0),
@@ -12156,7 +12233,11 @@ async function loadPMSStats(){
         renovationROI: Number(metrics.renovationROI || 0),
         currentValue: Number(metrics.currentValue || propertyData.investmentSnapshot?.propertyPrice || 0),
         targetValue: Number(metrics.targetValue || plan.targetValue || 0),
-        valueUplift: Number(metrics.valueUplift || 0)
+        valueUplift: Number(metrics.valueUplift || 0),
+        budgetUsagePercent: planBudget > 0 ? planSpent / planBudget * 100 : 0,
+        daysRemaining: planEnd ? Math.ceil((Date.parse(`${planEnd}T00:00:00Z`) - Date.parse(`${todayISO}T00:00:00Z`)) / 86400000) : null,
+        controlLevel: derivedControlLevel,
+        controlCodes: derivedControlCodes
       };
     })
     .filter(Boolean);
