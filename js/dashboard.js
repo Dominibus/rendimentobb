@@ -5188,12 +5188,16 @@ function createGuestPortalToken(){
 
 window.updateGuestIssuePortalStatus = function(guestPortal = {}){
   const copyButton = document.getElementById("booking-guest-portal-copy");
+  const whatsappButton = document.getElementById("booking-guest-portal-whatsapp");
+  const emailButton = document.getElementById("booking-guest-portal-email");
   const revokeButton = document.getElementById("booking-guest-portal-revoke");
   const status = document.getElementById("booking-guest-portal-status");
   if(!copyButton || !revokeButton || !status) return;
 
   const generatedLink = copyButton.dataset.portalLink || "";
   copyButton.style.display = generatedLink ? "inline-flex" : "none";
+  if(whatsappButton) whatsappButton.style.display = generatedLink ? "inline-flex" : "none";
+  if(emailButton) emailButton.style.display = generatedLink ? "inline-flex" : "none";
 
   const expiryTimestamp = Date.parse(guestPortal.expiresAt || "");
   const isExpired = Number.isFinite(expiryTimestamp) && expiryTimestamp <= Date.now();
@@ -5281,6 +5285,61 @@ window.copyGuestIssuePortalLink = async function(){
   }
 };
 
+function getGuestPortalShareMessage(portalLink){
+  const booking = window.currentSelectedBooking || {};
+  const firstName = String(booking.guestName || "").trim().split(/\s+/)[0];
+  const greeting = firstName
+    ? window.t(`Ciao ${firstName},`, `Hello ${firstName},`)
+    : window.t("Ciao,", "Hello,");
+  return window.t(
+    `${greeting}\nDurante il soggiorno puoi usare questo collegamento personale per segnalarci rapidamente qualsiasi problema:\n${portalLink}\nIl link è riservato: non condividerlo con altre persone.`,
+    `${greeting}\nDuring your stay, use this personal link to report any issue quickly:\n${portalLink}\nThis link is private: please do not share it with anyone else.`
+  );
+}
+
+window.shareGuestIssuePortalWhatsApp = function(){
+  const portalLink = document.getElementById("booking-guest-portal-copy")?.dataset.portalLink || "";
+  if(!portalLink) return;
+  const savedPhone = String(
+    document.getElementById("booking-guest-phone")?.value ||
+    window.currentSelectedBooking?.guestContact?.phone || ""
+  ).trim();
+  const phone = savedPhone.replace(/[^\d]/g, "");
+  if(!phone){
+    alert(window.t(
+      "Inserisci e salva il numero WhatsApp dell’ospite nella prenotazione.",
+      "Enter and save the guest's WhatsApp number in the booking."
+    ));
+    return;
+  }
+  window.open(
+    `https://wa.me/${phone}?text=${encodeURIComponent(getGuestPortalShareMessage(portalLink))}`,
+    "_blank",
+    "noopener,noreferrer"
+  );
+};
+
+window.shareGuestIssuePortalEmail = function(){
+  const portalLink = document.getElementById("booking-guest-portal-copy")?.dataset.portalLink || "";
+  if(!portalLink) return;
+  const email = String(
+    document.getElementById("booking-guest-email")?.value ||
+    window.currentSelectedBooking?.guestContact?.email || ""
+  ).trim();
+  if(!email){
+    alert(window.t(
+      "Inserisci e salva l’email dell’ospite nella prenotazione.",
+      "Enter and save the guest's email address in the booking."
+    ));
+    return;
+  }
+  const subject = window.t(
+    "Il tuo portale ospite RendimentoBB",
+    "Your RendimentoBB guest portal"
+  );
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(getGuestPortalShareMessage(portalLink))}`;
+};
+
 window.revokeGuestIssuePortalLink = async function(){
   const booking = window.currentSelectedBooking;
   if(!window.pmsEditingBooking || !booking?.id) return;
@@ -5330,6 +5389,8 @@ window.openBookingModal = async function(){
 
     const fields = {
       guest: document.getElementById("booking-guest"),
+      guestPhone: document.getElementById("booking-guest-phone"),
+      guestEmail: document.getElementById("booking-guest-email"),
       checkin: document.getElementById("booking-checkin"),
       checkout: document.getElementById("booking-checkout"),
       guests: document.getElementById("booking-guests"),
@@ -5338,7 +5399,7 @@ window.openBookingModal = async function(){
       source: document.getElementById("booking-source")
     };
 
-    [fields.guest, fields.checkin, fields.checkout, fields.guests, fields.total]
+    [fields.guest, fields.guestPhone, fields.guestEmail, fields.checkin, fields.checkout, fields.guests, fields.total]
       .forEach(field => {
         if(field){
           field.value = "";
@@ -6694,6 +6755,9 @@ window.currentSelectedBooking = booking;
             "booking-guest"
         );
 
+    const guestPhone = document.getElementById("booking-guest-phone");
+    const guestEmail = document.getElementById("booking-guest-email");
+
 
     const checkin =
         document.getElementById(
@@ -6713,6 +6777,14 @@ window.currentSelectedBooking = booking;
         guest.value =
             booking.guestName || "";
 
+    }
+
+    if(guestPhone){
+        guestPhone.value = booking.guestContact?.phone || "";
+    }
+
+    if(guestEmail){
+        guestEmail.value = booking.guestContact?.email || "";
     }
 
 
@@ -9443,6 +9515,12 @@ if(!window.currentPropertyId){
       "booking-guest"
     )?.value?.trim();
 
+  const guestPhone =
+    document.getElementById("booking-guest-phone")?.value?.trim() || "";
+
+  const guestEmail =
+    document.getElementById("booking-guest-email")?.value?.trim().toLowerCase() || "";
+
   const checkin =
     document.getElementById(
       "booking-checkin"
@@ -9479,6 +9557,16 @@ if(!window.currentPropertyId){
     alert(t("Inserisci il nome dell’ospite.", "Enter the guest name."));
     return;
   }
+
+  if(guestEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)){
+    alert(t("Inserisci un indirizzo email valido.", "Enter a valid email address."));
+    return;
+  }
+
+  const guestContact = {
+    phone: guestPhone.slice(0, 30),
+    email: guestEmail.slice(0, 254)
+  };
 
   if(
     !checkin ||
@@ -9654,6 +9742,7 @@ if(!window.currentPropertyId){
         {
 
             guestName: guest,
+            guestContact,
             checkin,
             checkout,
             guests,
@@ -9696,6 +9785,8 @@ if(!window.currentPropertyId){
 
       guestName:
         guest,
+
+      guestContact,
 
       checkin,
 
