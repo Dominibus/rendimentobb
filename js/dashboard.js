@@ -5190,6 +5190,8 @@ window.updateGuestIssuePortalStatus = function(guestPortal = {}){
   const copyButton = document.getElementById("booking-guest-portal-copy");
   const whatsappButton = document.getElementById("booking-guest-portal-whatsapp");
   const emailButton = document.getElementById("booking-guest-portal-email");
+  const qrButton = document.getElementById("booking-guest-portal-qr");
+  const qrPanel = document.getElementById("booking-guest-portal-qr-panel");
   const revokeButton = document.getElementById("booking-guest-portal-revoke");
   const status = document.getElementById("booking-guest-portal-status");
   if(!copyButton || !revokeButton || !status) return;
@@ -5198,6 +5200,8 @@ window.updateGuestIssuePortalStatus = function(guestPortal = {}){
   copyButton.style.display = generatedLink ? "inline-flex" : "none";
   if(whatsappButton) whatsappButton.style.display = generatedLink ? "inline-flex" : "none";
   if(emailButton) emailButton.style.display = generatedLink ? "inline-flex" : "none";
+  if(qrButton) qrButton.style.display = generatedLink ? "inline-flex" : "none";
+  if(!generatedLink && qrPanel) qrPanel.style.display = "none";
 
   const expiryTimestamp = Date.parse(guestPortal.expiresAt || "");
   const isExpired = Number.isFinite(expiryTimestamp) && expiryTimestamp <= Date.now();
@@ -5338,6 +5342,76 @@ window.shareGuestIssuePortalEmail = function(){
     "Your RendimentoBB guest portal"
   );
   window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(getGuestPortalShareMessage(portalLink))}`;
+};
+
+function getGuestPortalQRCodeImage(){
+  const container = document.getElementById("booking-guest-portal-qr-code");
+  return container?.querySelector("canvas")?.toDataURL("image/png") ||
+    container?.querySelector("img")?.src || "";
+}
+
+window.showGuestIssuePortalQR = function(){
+  const portalLink = document.getElementById("booking-guest-portal-copy")?.dataset.portalLink || "";
+  const panel = document.getElementById("booking-guest-portal-qr-panel");
+  const container = document.getElementById("booking-guest-portal-qr-code");
+  if(!portalLink || !panel || !container) return;
+  if(typeof window.QRCode !== "function"){
+    alert(window.t(
+      "Impossibile caricare il generatore QR. Controlla la connessione e riprova.",
+      "Unable to load the QR generator. Check your connection and try again."
+    ));
+    return;
+  }
+  container.replaceChildren();
+  new window.QRCode(container, {
+    text: portalLink,
+    width: 220,
+    height: 220,
+    colorDark: "#0f172a",
+    colorLight: "#ffffff",
+    correctLevel: window.QRCode.CorrectLevel.M
+  });
+  panel.style.display = "block";
+  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+};
+
+window.hideGuestIssuePortalQR = function(){
+  const panel = document.getElementById("booking-guest-portal-qr-panel");
+  if(panel) panel.style.display = "none";
+};
+
+window.downloadGuestIssuePortalQR = function(){
+  const imageUrl = getGuestPortalQRCodeImage();
+  if(!imageUrl) return;
+  const guestName = String(window.currentSelectedBooking?.guestName || "ospite")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase() || "ospite";
+  const link = document.createElement("a");
+  link.href = imageUrl;
+  link.download = `rendimentobb-portale-${guestName}.png`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+window.printGuestIssuePortalQR = function(){
+  const imageUrl = getGuestPortalQRCodeImage();
+  if(!imageUrl) return;
+  const booking = window.currentSelectedBooking || {};
+  const guestName = String(booking.guestName || window.t("Ospite", "Guest"));
+  const title = window.t("Portale ospite RendimentoBB", "RendimentoBB guest portal");
+  const instruction = window.t(
+    "Scansiona il QR per segnalare rapidamente un problema durante il soggiorno.",
+    "Scan the QR code to report an issue quickly during your stay."
+  );
+  const printWindow = window.open("", "_blank");
+  if(!printWindow) return;
+  printWindow.opener = null;
+  printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeDashboardHTML(title)}</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:40px;color:#0f172a}h1{color:#047857}img{width:280px;height:280px;margin:18px}.note{max-width:520px;margin:auto;line-height:1.5;color:#475569}</style></head><body><h1>RendimentoBB</h1><h2>${escapeDashboardHTML(guestName)}</h2><img src="${imageUrl}" alt="QR"><p class="note">${escapeDashboardHTML(instruction)}</p><script>window.onload=()=>window.print()<\/script></body></html>`);
+  printWindow.document.close();
 };
 
 window.revokeGuestIssuePortalLink = async function(){
