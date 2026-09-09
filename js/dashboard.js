@@ -4994,6 +4994,45 @@ window.saveRenovationPlan = async function(){
   try{
     await updateDoc(doc(db, "properties", current.id), { renovationPlan: plan });
     current.data.renovationPlan = plan;
+
+    const liveRenovationEntry = {
+      propertyId: current.id,
+      propertyName: String(current.data.name || "-").slice(0, 120),
+      city: String(current.data.city || "-").slice(0, 80),
+      status: plan.status,
+      startDate: plan.startDate,
+      endDate: plan.endDate,
+      itemsCount: plan.items.length,
+      completedItems: plan.metrics.completedItems,
+      progressPercent: plan.metrics.progressPercent,
+      plannedTotal: plan.metrics.plannedTotal,
+      actualSpent: plan.metrics.actualSpent,
+      variance: plan.metrics.variance,
+      currentADR: plan.metrics.currentADR,
+      targetADR: plan.targetADR,
+      annualRevenueUplift: plan.metrics.annualRevenueUplift,
+      renovationROI: plan.metrics.renovationROI,
+      currentValue: plan.metrics.currentValue,
+      targetValue: plan.targetValue,
+      valueUplift: plan.metrics.valueUplift
+    };
+
+    const existingRenovations = Array.isArray(window.rbPMSData?.renovationList)
+      ? window.rbPMSData.renovationList
+      : [];
+    const entryIndex = existingRenovations.findIndex(entry => entry.propertyId === current.id);
+    const nextRenovations = [...existingRenovations];
+
+    if(entryIndex >= 0) nextRenovations[entryIndex] = liveRenovationEntry;
+    else nextRenovations.push(liveRenovationEntry);
+
+    window.rbPMSData = {
+      ...(window.rbPMSData || {}),
+      renovationList: nextRenovations,
+      renovationCount: nextRenovations.length
+    };
+
+    window.dispatchEvent(new CustomEvent("rb_pms_data_updated", {detail: window.rbPMSData}));
     await loadProperties();
     alert(t("Piano di ristrutturazione salvato.", "Renovation plan saved."));
     window.closeRenovationModal();
@@ -12089,6 +12128,39 @@ async function loadPMSStats(){
   const properties =
     propertiesSnap.size;
 
+  const renovationList = propertiesSnap.docs
+    .map(propertyDoc => {
+      const propertyData = propertyDoc.data() || {};
+      const plan = propertyData.renovationPlan;
+
+      if(!plan) return null;
+
+      const metrics = plan.metrics || {};
+
+      return {
+        propertyId: propertyDoc.id,
+        propertyName: String(propertyData.name || "-").slice(0, 120),
+        city: String(propertyData.city || "-").slice(0, 80),
+        status: String(plan.status || "planning"),
+        startDate: String(plan.startDate || ""),
+        endDate: String(plan.endDate || ""),
+        itemsCount: Array.isArray(plan.items) ? plan.items.length : 0,
+        completedItems: Number(metrics.completedItems || 0),
+        progressPercent: Number(metrics.progressPercent || 0),
+        plannedTotal: Number(metrics.plannedTotal || 0),
+        actualSpent: Number(metrics.actualSpent || 0),
+        variance: Number(metrics.variance || 0),
+        currentADR: Number(metrics.currentADR || propertyData.priceNight || 0),
+        targetADR: Number(metrics.targetADR || plan.targetADR || 0),
+        annualRevenueUplift: Number(metrics.annualRevenueUplift || 0),
+        renovationROI: Number(metrics.renovationROI || 0),
+        currentValue: Number(metrics.currentValue || propertyData.investmentSnapshot?.propertyPrice || 0),
+        targetValue: Number(metrics.targetValue || plan.targetValue || 0),
+        valueUplift: Number(metrics.valueUplift || 0)
+      };
+    })
+    .filter(Boolean);
+
   const activeBookingDocs =
     bookingsSnap.docs.filter(
       docItem => !isCancelledBooking(docItem.data())
@@ -12636,6 +12708,11 @@ window.rbPMSData = {
   ),
 
   properties,
+
+  renovationList,
+
+  renovationCount:
+    renovationList.length,
 
   bookings:
     bookings,
