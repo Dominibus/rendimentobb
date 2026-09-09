@@ -3372,8 +3372,14 @@ Open a property and select “Plan renovation” to create the first plan.`;
     return response;
   }
 
-  const moneyIT = value => Number(value || 0).toLocaleString("it-IT", {style:"currency", currency:"EUR"});
+  const moneyIT = value => {
+    const amount = Number(value || 0);
+    const sign = amount < 0 ? "-" : "";
+    const [integer, decimals] = Math.abs(amount).toFixed(2).split(".");
+    return `${sign}${integer.replace(/\B(?=(\d{3})+(?!\d))/g, ".")},${decimals} €`;
+  };
   const moneyEN = value => Number(value || 0).toLocaleString("en-US", {style:"currency", currency:"EUR"});
+  const decimalIT = value => Number(value || 0).toFixed(1).replace(".", ",");
   const statusIT = {planning:"Pianificazione", approved:"Approvata", in_progress:"In corso", paused:"In pausa", completed:"Completata"};
   const statusEN = {planning:"Planning", approved:"Approved", in_progress:"In progress", paused:"Paused", completed:"Completed"};
 
@@ -3381,6 +3387,45 @@ Open a property and select “Plan renovation” to create the first plan.`;
   const totalSpent = renovationList.reduce((sum, plan) => sum + Number(plan.actualSpent || 0), 0);
   const totalAnnualUplift = renovationList.reduce((sum, plan) => sum + Number(plan.annualRevenueUplift || 0), 0);
   const totalValueUplift = renovationList.reduce((sum, plan) => sum + Number(plan.valueUplift || 0), 0);
+  const totalRemaining = totalBudget - totalSpent;
+  const averageProgress = renovationList.reduce((sum, plan) => sum + Number(plan.progressPercent || 0), 0) / renovationList.length;
+  const portfolioPayback = totalAnnualUplift > 0 ? totalBudget / totalAnnualUplift : 0;
+  const renovationMessage = String(originalMessage || message || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const asksBudget = /budget|preventiv|quanto cost|costi lavori|spesa|spent|cost|estimate/.test(renovationMessage);
+  const asksProgress = /avanz|procede|stato lavori|complet|progress|status|going/.test(renovationMessage);
+  const asksReturn = /rendimento|ritorno|recuper|payback|ricavi aggiuntivi|conviene|return|additional revenue|worth/.test(renovationMessage);
+
+  if(asksBudget && !asksProgress && !asksReturn){
+    const budgetLinesIT = renovationList.map(plan => {
+      const remaining = Number(plan.plannedTotal || 0) - Number(plan.actualSpent || 0);
+      return `🏠 ${plan.propertyName}: ${moneyIT(plan.plannedTotal)} previsti · ${moneyIT(plan.actualSpent)} spesi · ${remaining >= 0 ? `${moneyIT(remaining)} disponibili` : `${moneyIT(Math.abs(remaining))} oltre budget`}`;
+    }).join("\n");
+    const budgetLinesEN = renovationList.map(plan => {
+      const remaining = Number(plan.plannedTotal || 0) - Number(plan.actualSpent || 0);
+      return `🏠 ${plan.propertyName}: ${moneyEN(plan.plannedTotal)} planned · ${moneyEN(plan.actualSpent)} spent · ${remaining >= 0 ? `${moneyEN(remaining)} remaining` : `${moneyEN(Math.abs(remaining))} over budget`}`;
+    }).join("\n");
+
+    response.textIT = `🛠️ Budget ristrutturazione\n\nBudget complessivo: ${moneyIT(totalBudget)}\nSpesa registrata: ${moneyIT(totalSpent)}\n${totalRemaining >= 0 ? `Disponibilità residua: ${moneyIT(totalRemaining)}` : `⚠️ Superamento budget: ${moneyIT(Math.abs(totalRemaining))}`}\n\n${budgetLinesIT}`;
+    response.textEN = `🛠️ Renovation budget\n\nTotal budget: ${moneyEN(totalBudget)}\nRecorded spend: ${moneyEN(totalSpent)}\n${totalRemaining >= 0 ? `Remaining budget: ${moneyEN(totalRemaining)}` : `⚠️ Over budget: ${moneyEN(Math.abs(totalRemaining))}`}\n\n${budgetLinesEN}`;
+    return response;
+  }
+
+  if(asksReturn && !asksProgress){
+    response.textIT = `📈 Rendimento ristrutturazione\n\nRicavi annui aggiuntivi stimati: ${moneyIT(totalAnnualUplift)}\nAumento di valore stimato: ${moneyIT(totalValueUplift)}\nRecupero complessivo: ${portfolioPayback > 0 ? `${decimalIT(portfolioPayback)} anni` : "non calcolabile"}\n\nStima indicativa, non rappresenta un utile netto garantito.`;
+    response.textEN = `📈 Renovation return\n\nEstimated additional annual revenue: ${moneyEN(totalAnnualUplift)}\nEstimated value increase: ${moneyEN(totalValueUplift)}\nOverall payback: ${portfolioPayback > 0 ? `${portfolioPayback.toFixed(1)} years` : "not available"}\n\nThis is an indicative estimate, not guaranteed net profit.`;
+    return response;
+  }
+
+  if(asksProgress && !asksReturn){
+    const progressIT = renovationList.map(plan => `🏠 ${plan.propertyName}: ${statusIT[plan.status] || "Pianificazione"} · ${Number(plan.progressPercent || 0).toFixed(0)}%`).join("\n");
+    const progressEN = renovationList.map(plan => `🏠 ${plan.propertyName}: ${statusEN[plan.status] || "Planning"} · ${Number(plan.progressPercent || 0).toFixed(0)}%`).join("\n");
+    response.textIT = `🛠️ Avanzamento lavori\n\nAvanzamento medio: ${averageProgress.toFixed(0)}%\n\n${progressIT}`;
+    response.textEN = `🛠️ Renovation progress\n\nAverage progress: ${averageProgress.toFixed(0)}%\n\n${progressEN}`;
+    return response;
+  }
 
   const plansIT = renovationList.map(plan => {
     const remaining = Math.max(0, Number(plan.plannedTotal || 0) - Number(plan.actualSpent || 0));
@@ -3397,9 +3442,9 @@ Budget: ${moneyIT(plan.plannedTotal)} · speso ${moneyIT(plan.actualSpent)}
 ${budgetSignal}
 ADR: ${moneyIT(plan.currentADR)} → ${moneyIT(plan.targetADR)}
 Ricavi annui aggiuntivi: ${moneyIT(plan.annualRevenueUplift)}
-Rendimento lordo stimato: ${Number(plan.renovationROI || 0).toFixed(1)}%
+Rendimento lordo stimato: ${decimalIT(plan.renovationROI)}%
 Aumento valore stimato: ${moneyIT(plan.valueUplift)}
-Recupero investimento: ${payback > 0 ? `${payback.toFixed(1)} anni` : "non calcolabile"}`;
+Recupero investimento: ${payback > 0 ? `${decimalIT(payback)} anni` : "non calcolabile"}`;
   }).join("\n\n━━━━━━━━━━━━━━━\n\n");
 
   const plansEN = renovationList.map(plan => {
