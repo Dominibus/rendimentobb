@@ -3106,7 +3106,7 @@ if(
 // ===========================================
 
 if(
-  /ristruttur|lavori|interventi|budget lavori|cantiere|renovation|refurbish|works budget|work items/.test(text)
+  /ristruttur|lavori|interventi|budget lavori|cantiere|renovation|refurbish|works? budget|budget(?: for| of)? (?:the )?works?|cost(?:s)? of (?:the )?works?|work items/.test(text)
 ){
   applyIntent({
     intent: "pms_renovation",
