@@ -432,13 +432,48 @@ letter-spacing:-1px;
 /* ===== MOBILE ===== */
 @media (max-width:768px){
 
-  .hero{
-  grid-template-columns:1fr !important;
-}
+  html, body{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
 
-.chart-box{
-  padding:20px;
-}
+  .page{
+    width:100% !important;
+    max-width:none !important;
+    margin:88px 0 40px !important;
+    padding:0 12px !important;
+  }
+
+  .report-nav{
+    width:100% !important;
+    margin-bottom:16px !important;
+    gap:10px;
+  }
+
+  .report{
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:18px 14px !important;
+    border-radius:18px !important;
+  }
+
+  .hero{
+    width:100% !important;
+    min-width:0 !important;
+    grid-template-columns:1fr !important;
+    padding:24px 18px !important;
+    border-radius:20px !important;
+  }
+
+  .chart-box{
+    width:100% !important;
+    min-width:0 !important;
+    padding:18px 12px !important;
+    overflow:hidden !important;
+  }
 
 .chart-box canvas{
   max-height:320px !important;
@@ -465,16 +500,29 @@ letter-spacing:-1px;
   padding:18px;
 }
 
-  .page{
-    margin-top:100px;
-  }
-
-  .report{
-    padding:22px;
-  }
-
   .kpi-grid{
-    grid-template-columns:repeat(2,1fr);
+    width:100% !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .kpi{
+    min-width:0 !important;
+    padding:14px 12px !important;
+  }
+
+  .kpi strong{
+    font-size:20px !important;
+    overflow-wrap:anywhere;
+  }
+
+  #heroROI{
+    font-size:48px !important;
+    letter-spacing:-2px !important;
+  }
+
+  .rb-report-operational-grid{
+    grid-template-columns:1fr 1fr !important;
   }
 
 }
@@ -1093,6 +1141,13 @@ data-en="🤖 AI Powered">
   </div>
 
 </div>
+
+<section id="operational-report" style="display:none;margin-top:28px;">
+  <h2 data-it="Gestione operativa PMS" data-en="PMS operations">Gestione operativa PMS</h2>
+  <p id="operational-report-date" style="font-size:12px;color:#64748b;margin-top:-4px;"></p>
+  <div id="operational-report-kpis" class="rb-report-operational-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px;"></div>
+  <div id="operational-report-renovations" style="margin-top:16px;"></div>
+</section>
 </div>
 
 <script>
@@ -1106,6 +1161,7 @@ const params =
   );
 
 let storedSimulations = [];
+let dashboardReportContext = {};
 
 try{
 
@@ -1123,6 +1179,15 @@ try{
     error
   );
 
+}
+
+try{
+  dashboardReportContext = JSON.parse(
+    localStorage.getItem("rb_dashboard_report_context") || "{}"
+  );
+}catch(error){
+  console.warn("Dashboard report PMS context parse error", error);
+  dashboardReportContext = {};
 }
 
 const canonicalSimulation =
@@ -1371,6 +1436,47 @@ if(realROIHero){
 
   realROIHero.innerText =
     realROI.toFixed(1) + "%";
+}
+
+function renderOperationalReport(){
+  const section = document.getElementById("operational-report");
+  const grid = document.getElementById("operational-report-kpis");
+  const renovationsBox = document.getElementById("operational-report-renovations");
+  const pms = dashboardReportContext.pms;
+  if(!section || !grid || !pms || typeof pms !== "object") return;
+
+  const n = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+  const percent = value => `${n(value).toFixed(0)}%`;
+  const cards = [
+    [t("Proprietà","Properties"), n(pms.properties)],
+    [t("Prenotazioni","Bookings"), n(pms.bookings)],
+    [t("Ricavi totali","Total revenue"), euro(n(pms.totalRevenue))],
+    [t("Occupazione","Occupancy"), percent(pms.occupancy)],
+    ["ADR", euro(n(pms.adr))],
+    ["RevPAR", euro(n(pms.revpar))],
+    [t("Ospiti","Guests"), n(pms.guests)],
+    [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
+  ];
+
+  grid.innerHTML = cards.map(([label,value]) => `
+    <div class="kpi" style="min-height:92px;padding:14px;">
+      <span>${label}</span><strong style="font-size:20px;">${value}</strong>
+    </div>`).join("");
+
+  const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
+  renovationsBox.innerHTML = renovations.length
+    ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
+        <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
+          <strong>${item.propertyName || item.name || t("Immobile","Property")}</strong><br>
+          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
+        </div>`).join("")
+    : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
+
+  const dateBox = document.getElementById("operational-report-date");
+  if(dateBox && dashboardReportContext.generatedAt){
+    dateBox.textContent = `${t("Dati aggiornati","Data updated")}: ${new Date(dashboardReportContext.generatedAt).toLocaleString(lang === "en" ? "en-US" : "it-IT")}`;
+  }
+  section.style.display = "block";
 }
 
   const dscrHero =
@@ -2992,7 +3098,60 @@ doc.text(
   248
 );
 
-addFooter();
+    addFooter();
+
+    // ================= PAGE 7 · PMS / RENOVATIONS =================
+    const pms = dashboardReportContext.pms;
+    if(pms && typeof pms === "object"){
+      const safe = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+      doc.addPage();
+      doc.setTextColor(...dark);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(15);
+      doc.text(t("Gestione operativa PMS","PMS operations"),20,20);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.setTextColor(100,116,139);
+      doc.text(t("Fotografia operativa dei dati disponibili in dashboard.","Operational snapshot of the data available in the dashboard."),20,28);
+
+      const rows = [
+        [t("Proprietà","Properties"), String(safe(pms.properties)), t("Prenotazioni","Bookings"), String(safe(pms.bookings))],
+        [t("Ricavi totali","Total revenue"), eur(safe(pms.totalRevenue)), t("Occupazione","Occupancy"), `${safe(pms.occupancy).toFixed(0)}%`],
+        ["ADR", eur(safe(pms.adr)), "RevPAR", eur(safe(pms.revpar))],
+        [t("Ospiti","Guests"), String(safe(pms.guests)), t("Da attenzionare","Requiring attention"), String(safe(pms.attentionCount))],
+        [t("Arrivi oggi","Arrivals today"), String(safe(pms.arrivalsToday)), t("Partenze oggi","Departures today"), String(safe(pms.departuresToday))]
+      ];
+      let pmsY = 40;
+      rows.forEach(row => {
+        doc.setFillColor(248,250,252);
+        doc.setDrawColor(226,232,240);
+        doc.roundedRect(20,pmsY,170,22,3,3,"FD");
+        doc.setFont("helvetica","normal"); doc.setFontSize(7); doc.setTextColor(100,116,139);
+        doc.text(row[0],27,pmsY+8); doc.text(row[2],112,pmsY+8);
+        doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(...dark);
+        doc.text(row[1],27,pmsY+17); doc.text(row[3],112,pmsY+17);
+        pmsY += 27;
+      });
+
+      const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
+      doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(...dark);
+      doc.text(t("Ristrutturazioni","Renovations"),20,pmsY+8);
+      pmsY += 17;
+      if(!renovations.length){
+        doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(100,116,139);
+        doc.text(t("Nessun piano monitorato.","No monitored plan."),20,pmsY);
+      }else{
+        renovations.slice(0,4).forEach(item => {
+          const title = item.propertyName || item.name || t("Immobile","Property");
+          const detail = `${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${safe(item.progressPercent)}% · ${t("Budget","Budget")}: ${eur(safe(item.plannedTotal))} · ${t("Speso","Spent")}: ${eur(safe(item.actualSpent))}`;
+          doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(...dark); doc.text(title,24,pmsY);
+          doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(100,116,139);
+          doc.text(doc.splitTextToSize(detail,160),24,pmsY+6);
+          pmsY += 20;
+        });
+      }
+      addFooter();
+    }
 
     // ================= REGISTER DASHBOARD REPORT =================
     if(
@@ -3136,6 +3295,7 @@ function init(){
   populateSimulations();
   renderData();
   renderVerdict();
+  renderOperationalReport();
 
   renderChart();
   applyLock();
