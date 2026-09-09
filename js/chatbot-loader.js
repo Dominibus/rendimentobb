@@ -142,7 +142,7 @@
 
     "/js/chatbot/core/semantic-router.js",
     "/js/chatbot/core/entity-engine.js",
-    "/js/chatbot/core/intent-engine.js?v=20260908-guest-portal-v20-1",
+    "/js/chatbot/core/intent-engine.js?v=20260909-renovation-copilot-v21-1",
     "/js/chatbot/core/memory-engine.js",
     "/js/chatbot/core/conversation-engine.js",
     "/js/chatbot/core/investor-profile-engine.js",
@@ -160,9 +160,9 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260908-guest-portal-v20-1",
+    "/js/chatbot/core/response-engine.js?v=20260909-renovation-copilot-v21-1",
     "/js/chatbot/core/chatbot-file-dispatcher.js",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260908-guest-portal-v20-1",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20260909-renovation-copilot-v21-1",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
