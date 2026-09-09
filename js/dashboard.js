@@ -10242,6 +10242,10 @@ if(!window.currentPropertyId){
     saveButton.textContent = t("Salvataggio…", "Saving…");
   }
 
+  let savedBookingId = window.pmsEditingBooking
+    ? window.currentSelectedBooking?.id || ""
+    : "";
+
   try{
   if(
     window.pmsEditingBooking &&
@@ -10276,7 +10280,10 @@ if(!window.currentPropertyId){
             source:
                 document.getElementById(
                     "booking-source"
-                )?.value || "direct"
+                )?.value || "direct",
+
+            updatedAt:
+                serverTimestamp()
 
         }
 
@@ -10285,7 +10292,7 @@ if(!window.currentPropertyId){
    
 }else{
 
-  await addDoc(
+  const createdBooking = await addDoc(
 
     collection(
       db,
@@ -10328,11 +10335,15 @@ source:
   )?.value || "direct",
 
       createdAt:
+        serverTimestamp(),
+
+      updatedAt:
         serverTimestamp()
 
     }
 
   );
+  savedBookingId = createdBooking.id;
 }
   }catch(error){
     dashboardError("Booking save failed", error);
@@ -10375,6 +10386,45 @@ window.dispatchEvent(
   )
 );
 
+  let urgentEmailStatus = "";
+
+  if(
+    savedBookingId &&
+    guestIssue.active === true &&
+    guestIssue.priority === "urgent" &&
+    guestIssue.status !== "resolved"
+  ){
+    try{
+      const idToken = await window.currentUser.getIdToken();
+      const notificationResponse = await fetch("/api/work-email", {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${idToken}`
+        },
+        body:JSON.stringify({
+          bookingId:savedBookingId,
+          lang:window.RB_LANG?.current === "en" ? "en" : "it"
+        })
+      });
+
+      if(!notificationResponse.ok){
+        dashboardError("Urgent host email notification failed");
+        urgentEmailStatus = "failed";
+      }else{
+        const notificationResult = await notificationResponse.json();
+        urgentEmailStatus = notificationResult.sent
+          ? "sent"
+          : notificationResult.duplicate
+            ? "duplicate"
+            : "";
+      }
+    }catch(error){
+      urgentEmailStatus = "failed";
+      dashboardError("Urgent host email notification failed", error);
+    }
+  }
+
   if(saveButton){
     saveButton.disabled = false;
     saveButton.textContent = t("💾 Salva Prenotazione", "💾 Save Booking");
@@ -10384,10 +10434,10 @@ window.dispatchEvent(
   t(
     status === "pending"
       ? "Richiesta salvata"
-      : "Prenotazione salvata",
+      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
     status === "pending"
       ? "Request saved"
-      : "Booking saved"
+      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
   )
 );
 
