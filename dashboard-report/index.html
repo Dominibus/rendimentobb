@@ -1438,47 +1438,6 @@ if(realROIHero){
     realROI.toFixed(1) + "%";
 }
 
-function renderOperationalReport(){
-  const section = document.getElementById("operational-report");
-  const grid = document.getElementById("operational-report-kpis");
-  const renovationsBox = document.getElementById("operational-report-renovations");
-  const pms = dashboardReportContext.pms;
-  if(!section || !grid || !pms || typeof pms !== "object") return;
-
-  const n = value => Number.isFinite(Number(value)) ? Number(value) : 0;
-  const percent = value => `${n(value).toFixed(0)}%`;
-  const cards = [
-    [t("Proprietà","Properties"), n(pms.properties)],
-    [t("Prenotazioni","Bookings"), n(pms.bookings)],
-    [t("Ricavi totali","Total revenue"), euro(n(pms.totalRevenue))],
-    [t("Occupazione","Occupancy"), percent(pms.occupancy)],
-    ["ADR", euro(n(pms.adr))],
-    ["RevPAR", euro(n(pms.revpar))],
-    [t("Ospiti","Guests"), n(pms.guests)],
-    [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
-  ];
-
-  grid.innerHTML = cards.map(([label,value]) => `
-    <div class="kpi" style="min-height:92px;padding:14px;">
-      <span>${label}</span><strong style="font-size:20px;">${value}</strong>
-    </div>`).join("");
-
-  const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
-  renovationsBox.innerHTML = renovations.length
-    ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
-        <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
-          <strong>${item.propertyName || item.name || t("Immobile","Property")}</strong><br>
-          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
-        </div>`).join("")
-    : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
-
-  const dateBox = document.getElementById("operational-report-date");
-  if(dateBox && dashboardReportContext.generatedAt){
-    dateBox.textContent = `${t("Dati aggiornati","Data updated")}: ${new Date(dashboardReportContext.generatedAt).toLocaleString(lang === "en" ? "en-US" : "it-IT")}`;
-  }
-  section.style.display = "block";
-}
-
   const dscrHero =
   document.getElementById("dscrHero");
 
@@ -1559,6 +1518,47 @@ if(riskHero){
     : (lang==="en" ? "HIGH" : "ALTO");
 }
 }
+}
+
+function renderOperationalReport(){
+  const section = document.getElementById("operational-report");
+  const grid = document.getElementById("operational-report-kpis");
+  const renovationsBox = document.getElementById("operational-report-renovations");
+  const pms = dashboardReportContext.pms;
+  if(!section || !grid || !pms || typeof pms !== "object") return;
+
+  const n = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+  const percent = value => `${n(value).toFixed(0)}%`;
+  const cards = [
+    [t("Proprietà","Properties"), n(pms.properties)],
+    [t("Prenotazioni","Bookings"), n(pms.bookings)],
+    [t("Ricavi totali","Total revenue"), euro(n(pms.totalRevenue))],
+    [t("Occupazione","Occupancy"), percent(pms.occupancy)],
+    ["ADR", euro(n(pms.adr))],
+    ["RevPAR", euro(n(pms.revpar))],
+    [t("Ospiti","Guests"), n(pms.guests)],
+    [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
+  ];
+
+  grid.innerHTML = cards.map(([label,value]) => `
+    <div class="kpi" style="min-height:92px;padding:14px;">
+      <span>${label}</span><strong style="font-size:20px;">${value}</strong>
+    </div>`).join("");
+
+  const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
+  renovationsBox.innerHTML = renovations.length
+    ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
+        <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
+          <strong>${item.propertyName || item.name || t("Immobile","Property")}</strong><br>
+          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
+        </div>`).join("")
+    : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
+
+  const dateBox = document.getElementById("operational-report-date");
+  if(dateBox && dashboardReportContext.generatedAt){
+    dateBox.textContent = `${t("Dati aggiornati","Data updated")}: ${new Date(dashboardReportContext.generatedAt).toLocaleString(lang === "en" ? "en-US" : "it-IT")}`;
+  }
+  section.style.display = "block";
 }
 
 // ================= VERDICT =================
