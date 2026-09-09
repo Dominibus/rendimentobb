@@ -3395,7 +3395,7 @@ Open a property and select “Plan renovation” to create the first plan.`;
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
   const asksBudget = /budget|preventiv|quanto cost|costi lavori|spesa|spent|cost|estimate/.test(renovationMessage);
-  const asksProgress = /avanz|procede|stato lavori|complet|progress|status|going/.test(renovationMessage);
+  const asksProgress = /avanz|procede|stato lavori|complet|progress|status|going|coming along/.test(renovationMessage);
   const asksReturn = /rendimento|ritorno|recuper|payback|ricavi aggiuntivi|conviene|return|additional revenue|worth/.test(renovationMessage);
 
   if(asksBudget && !asksProgress && !asksReturn){
