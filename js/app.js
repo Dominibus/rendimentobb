@@ -5910,6 +5910,20 @@ doc.text(
 
 // ================= ROI BAR =================
 
+const coverBenchmarkByCity = {
+  roma:8.4,
+  milano:7.2,
+  napoli:11.5,
+  firenze:7.9
+};
+const coverMarketKey = String(city).toLowerCase().trim();
+const coverHasLocalBenchmark = Object.prototype.hasOwnProperty.call(coverBenchmarkByCity, coverMarketKey);
+const coverBenchmark = coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4;
+const coverScaleMax = 40;
+const coverBarWidth = 120;
+const coverFillWidth = Math.min(Math.max(roi,0),coverScaleMax) / coverScaleMax * coverBarWidth;
+const coverBenchmarkX = 20 + Math.min(coverBenchmark,coverScaleMax) / coverScaleMax * coverBarWidth;
+
 doc.setFillColor(51,65,85);
 
 doc.roundedRect(
@@ -5922,6 +5936,26 @@ doc.roundedRect(
   "F"
 );
 
+doc.setFillColor(...green);
+doc.roundedRect(20,178,coverFillWidth,8,4,4,"F");
+
+doc.setDrawColor(255,255,255);
+doc.setLineWidth(0.7);
+doc.line(coverBenchmarkX,176.5,coverBenchmarkX,187.5);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(6.5);
+doc.setTextColor(148,163,184);
+doc.text("0%",20,191);
+doc.text("40%",140,191,{align:"right"});
+doc.setTextColor(203,213,225);
+doc.text(
+  (coverHasLocalBenchmark ? T("Benchmark locale ","Local benchmark ") : T("Riferimento generale ","General reference ")) + pct(coverBenchmark),
+  coverBenchmarkX,
+  191,
+  {align:"center"}
+);
+
 // ================= RATING =================
 
 doc.setFontSize(13);
@@ -5931,7 +5965,7 @@ doc.setTextColor(255,255,255);
 doc.text(
   rating,
   20,
-  200
+  207
 );
 
 // =====================================
@@ -6078,7 +6112,7 @@ doc.text(
 doc.setFontSize(9);
 
 doc.text(
-  "RETURN ON INVESTMENT",
+    "RENDIMENTO DELL'INVESTIMENTO",
   28,
   y + 10
 );
