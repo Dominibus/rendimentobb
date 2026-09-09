@@ -1863,6 +1863,13 @@ async function generatePDF(){
     const lang = window.currentLang || "it";
     const t = (it,en)=> lang==="en"?en:it;
 
+    doc.setProperties({
+      title: t("RendimentoBB - Report investimento e gestione","RendimentoBB - Investment & Operations Report"),
+      subject: t("Monitoraggio finanziario, PMS e ristrutturazioni","Financial, PMS and renovation monitoring"),
+      author: "RendimentoBB",
+      creator: "RendimentoBB Reporting Engine"
+    });
+
     const safe = v => {
       const n = Number(v);
       return isFinite(n) ? n : 0;
@@ -1980,13 +1987,26 @@ const monthlyProfit = safe(
     const amber = [245,158,11];
     const red = [220,38,38];
 
+    let reportLogo = null;
+    try{
+      const logoResponse = await fetch("/img/logo-report.png");
+      const logoBlob = await logoResponse.blob();
+      reportLogo = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(logoBlob);
+      });
+    }catch(error){
+      reportLogo = null;
+    }
+
     // ================= USER =================
     const profile = window.userProfile || {};
     
     const clientName =
       (profile.name && profile.surname)
         ? profile.name + " " + profile.surname
-        : profile.name || profile.email || "Private Client";
+        : profile.name || t("Utente RendimentoBB","RendimentoBB User");
 
     // ================= FOOTER =================
     const addFooter = ()=>{
@@ -1994,11 +2014,23 @@ const monthlyProfit = safe(
       doc.setTextColor(130,130,130);
       doc.text(
         t(
-          "Documento confidenziale – Uso esclusivo del cliente",
-          "Confidential document – For client use only"
+          "RendimentoBB • Report investimento e gestione",
+          "RendimentoBB • Investment & Operations Report"
         ),
         20,
         285
+      );
+      doc.text(
+        new Date().toLocaleDateString(lang === "en" ? "en-US" : "it-IT"),
+        105,
+        285,
+        {align:"center"}
+      );
+      doc.text(
+        `${t("Riservato","Confidential")} • ${doc.getNumberOfPages()}`,
+        190,
+        285,
+        {align:"right"}
       );
     };
 
@@ -2011,10 +2043,16 @@ doc.setFillColor(...green);
 doc.rect(0,34,210,1.5,"F");
 
 // BRAND
-doc.setTextColor(255,255,255);
-doc.setFont("helvetica","bold");
-doc.setFontSize(16);
-doc.text("RendimentoBB",20,15);
+if(reportLogo){
+  doc.setFillColor(255,255,255);
+  doc.roundedRect(18,7,48,13,3,3,"F");
+  doc.addImage(reportLogo,"PNG",21,9,42,9);
+}else{
+  doc.setTextColor(255,255,255);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(16);
+  doc.text("RendimentoBB",20,15);
+}
 
 // REPORT TYPE
 doc.setFont("helvetica","normal");
@@ -2022,8 +2060,8 @@ doc.setFontSize(8);
 doc.setTextColor(203,213,225);
 doc.text(
   t(
-    "INVESTMENT INTELLIGENCE REPORT",
-    "INVESTMENT INTELLIGENCE REPORT"
+    "REPORT INVESTIMENTO E GESTIONE",
+    "INVESTMENT & OPERATIONS REPORT"
   ),
   20,
   22
@@ -2039,8 +2077,8 @@ doc.setTextColor(209,250,229);
 
 doc.text(
   t(
-    "AI VERIFIED • INSTITUTIONAL",
-    "AI VERIFIED • INSTITUTIONAL"
+    "DATI ELABORATI • SNAPSHOT PMS",
+    "DATA MODELLED • PMS SNAPSHOT"
   ),
   161,
   16.3,
@@ -2105,8 +2143,8 @@ doc.setTextColor(100,116,139);
 
 doc.text(
   t(
-    "ROI PROGETTO",
-    "PROJECT ROI"
+    "ROI PREVISIONALE",
+    "FORECAST ROI"
   ),
   28,
   y + 19
@@ -2867,18 +2905,20 @@ doc.setFont("helvetica","bold");
 doc.setFontSize(16);
 doc.setTextColor(255,255,255);
 
-doc.text(
-  "RendimentoBB",
-  20,
-  15
-);
+if(reportLogo){
+  doc.setFillColor(255,255,255);
+  doc.roundedRect(18,7,48,13,3,3,"F");
+  doc.addImage(reportLogo,"PNG",21,9,42,9);
+}else{
+  doc.text("RendimentoBB",20,15);
+}
 
 doc.setFont("helvetica","normal");
 doc.setFontSize(8);
 doc.setTextColor(203,213,225);
 
 doc.text(
-  "INVESTMENT INTELLIGENCE REPORT",
+  t("REPORT INVESTIMENTO E GESTIONE","INVESTMENT & OPERATIONS REPORT"),
   20,
   22
 );
@@ -2901,7 +2941,7 @@ doc.setFontSize(6.5);
 doc.setTextColor(209,250,229);
 
 doc.text(
-  "AI VERIFIED • INSTITUTIONAL",
+  t("DATI ELABORATI • SNAPSHOT PMS","DATA MODELLED • PMS SNAPSHOT"),
   161,
   16.3,
   { align:"center" }
@@ -3129,8 +3169,8 @@ doc.setTextColor(100,116,139);
 
 doc.text(
   t(
-    "Investment Intelligence • Analisi dati • Supporto decisionale",
-    "Investment Intelligence • Data Analysis • Decision Support"
+    "Analisi investimento • Dati operativi • Supporto decisionale",
+    "Investment analysis • Operational data • Decision support"
   ),
   20,
   248
@@ -3151,6 +3191,12 @@ doc.text(
       doc.setFontSize(8);
       doc.setTextColor(100,116,139);
       doc.text(t("Fotografia operativa dei dati disponibili in dashboard.","Operational snapshot of the data available in the dashboard."),20,28);
+      doc.setFillColor(236,253,245);
+      doc.setTextColor(4,120,87);
+      doc.roundedRect(145,17,45,10,3,3,"F");
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.5);
+      doc.text(t("DATI OPERATIVI","OPERATIONAL DATA"),167.5,23.5,{align:"center"});
 
       const rows = [
         [t("Proprietà","Properties"), String(safe(pms.properties)), t("Prenotazioni","Bookings"), String(safe(pms.bookings))],
@@ -3181,11 +3227,26 @@ doc.text(
       }else{
         renovations.slice(0,4).forEach(item => {
           const title = item.propertyName || item.name || t("Immobile","Property");
-          const detail = `${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${safe(item.progressPercent)}% · ${t("Budget","Budget")}: ${eur(safe(item.plannedTotal))} · ${t("Speso","Spent")}: ${eur(safe(item.actualSpent))}`;
+          const statusMap = {
+            planning: t("Pianificazione","Planning"),
+            in_progress: t("In corso","In progress"),
+            completed: t("Completata","Completed"),
+            paused: t("In pausa","Paused")
+          };
+          const controlMap = {
+            on_track: t("Sotto controllo","On track"),
+            attention: t("Da verificare","Review needed"),
+            critical: t("Priorità alta","High priority")
+          };
+          const remaining = Math.max(0, safe(item.plannedTotal) - safe(item.actualSpent));
+          const detail = `${t("Stato","Status")}: ${statusMap[item.status] || item.status || "—"} · ${t("Avanzamento","Progress")}: ${safe(item.progressPercent)}% · ${t("Budget","Budget")}: ${eur(safe(item.plannedTotal))} · ${t("Speso","Spent")}: ${eur(safe(item.actualSpent))}`;
+          const control = `${t("Residuo","Remaining")}: ${eur(remaining)} · ${t("Controllo","Control")}: ${controlMap[item.controlLevel] || t("Non disponibile","Not available")}`;
           doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(...dark); doc.text(title,24,pmsY);
           doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(100,116,139);
           doc.text(doc.splitTextToSize(detail,160),24,pmsY+6);
-          pmsY += 20;
+          doc.setTextColor(item.controlLevel === "critical" ? 220 : item.controlLevel === "attention" ? 180 : 4, item.controlLevel === "critical" ? 38 : item.controlLevel === "attention" ? 83 : 120, item.controlLevel === "critical" ? 38 : item.controlLevel === "attention" ? 9 : 87);
+          doc.text(doc.splitTextToSize(control,160),24,pmsY+12);
+          pmsY += 24;
         });
       }
       addFooter();
@@ -3247,7 +3308,7 @@ doc.text(
     }
 
     // ================= SAVE =================
-    doc.save(`RendimentoBB_${city}_${roi.toFixed(0)}ROI.pdf`);
+    doc.save(`RendimentoBB-Investimento-Gestione-${city}.pdf`);
 
   }catch(err){
     console.error("PDF ERROR:", err);
