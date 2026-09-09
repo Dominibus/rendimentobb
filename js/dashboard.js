@@ -4740,6 +4740,286 @@ modal.style.display = "none";
 };
 
 // =====================================
+// 🛠️ RENOVATION PLANNER
+// =====================================
+
+window.currentRenovationProperty = null;
+
+const toRenovationAmount = value => {
+  const amount = Number(value || 0);
+  return Number.isFinite(amount) ? Math.max(0, amount) : 0;
+};
+
+const renovationCategoryOptions = selected => [
+  ["structure", "Struttura", "Structure"],
+  ["systems", "Impianti", "Systems"],
+  ["bathroom", "Bagno", "Bathroom"],
+  ["kitchen", "Cucina", "Kitchen"],
+  ["finishes", "Finiture", "Finishes"],
+  ["furniture", "Arredi", "Furniture"],
+  ["energy", "Efficienza energetica", "Energy efficiency"],
+  ["outdoor", "Spazi esterni", "Outdoor areas"],
+  ["permits", "Pratiche e permessi", "Permits"],
+  ["other", "Altro", "Other"]
+].map(([value, it, en]) =>
+  `<option value="${value}" ${selected === value ? "selected" : ""}>${t(it, en)}</option>`
+).join("");
+
+const renovationStatusOptions = selected => [
+  ["planned", "Da iniziare", "To start"],
+  ["in_progress", "In corso", "In progress"],
+  ["completed", "Completato", "Completed"],
+  ["cancelled", "Annullato", "Cancelled"]
+].map(([value, it, en]) =>
+  `<option value="${value}" ${selected === value ? "selected" : ""}>${t(it, en)}</option>`
+).join("");
+
+window.addRenovationItem = function(item = {}){
+  const container = document.getElementById("renovation-items");
+  if(!container) return;
+  if(container.children.length >= 30){
+    alert(t(
+      "Puoi inserire al massimo 30 interventi per immobile.",
+      "You can add up to 30 work items per property."
+    ));
+    return;
+  }
+
+  const row = document.createElement("div");
+  row.className = "renovation-item-row";
+  row.dataset.itemId = String(item.id || "");
+  row.style.cssText = "display:grid;grid-template-columns:minmax(130px,.8fr) minmax(200px,1.7fr) minmax(105px,.7fr) minmax(105px,.7fr) minmax(125px,.8fr) 42px;gap:8px;align-items:end;padding:12px;border:1px solid #e2e8f0;border-radius:13px;background:#fff;";
+  row.innerHTML = `
+    <div><label style="font-size:11px;" data-it="Categoria" data-en="Category">${t("Categoria", "Category")}</label><select class="renovation-item-category" style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:9px;padding:0 8px;background:#fff;">${renovationCategoryOptions(item.category || "structure")}</select></div>
+    <div><label style="font-size:11px;" data-it="Descrizione" data-en="Description">${t("Descrizione", "Description")}</label><input class="renovation-item-description" maxlength="120" value="${escapeDashboardHTML(item.description || "")}" data-it-placeholder="Es. rifacimento bagno" data-en-placeholder="E.g. bathroom renovation" placeholder="${t("Es. rifacimento bagno", "E.g. bathroom renovation")}" style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:9px;padding:0 9px;"></div>
+    <div><label style="font-size:11px;" data-it="Preventivo €" data-en="Estimate €">${t("Preventivo €", "Estimate €")}</label><input class="renovation-item-estimated" type="number" min="0" step="0.01" inputmode="decimal" value="${Math.max(0, Number(item.estimatedCost || 0)) || ""}" style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:9px;padding:0 9px;"></div>
+    <div><label style="font-size:11px;" data-it="Effettivo €" data-en="Actual €">${t("Effettivo €", "Actual €")}</label><input class="renovation-item-actual" type="number" min="0" step="0.01" inputmode="decimal" value="${Math.max(0, Number(item.actualCost || 0)) || ""}" style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:9px;padding:0 9px;"></div>
+    <div><label style="font-size:11px;" data-it="Stato" data-en="Status">${t("Stato", "Status")}</label><select class="renovation-item-status" style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:9px;padding:0 8px;background:#fff;">${renovationStatusOptions(item.status || "planned")}</select></div>
+    <button type="button" class="renovation-item-remove" title="${t("Rimuovi", "Remove")}" aria-label="${t("Rimuovi intervento", "Remove work item")}" style="width:42px;height:42px;border:0;border-radius:9px;background:#fee2e2;color:#b91c1c;cursor:pointer;font-size:16px;">🗑️</button>
+  `;
+  row.querySelectorAll("input,select").forEach(field =>
+    field.addEventListener("input", window.updateRenovationSummary)
+  );
+  row.querySelector(".renovation-item-remove")?.addEventListener("click", () => {
+    row.remove();
+    window.updateRenovationSummary();
+  });
+  container.appendChild(row);
+  window.updateRenovationSummary();
+};
+
+function collectRenovationItems(){
+  return Array.from(document.querySelectorAll("#renovation-items .renovation-item-row"))
+    .map(row => ({
+      id: row.dataset.itemId || (crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`),
+      category: row.querySelector(".renovation-item-category")?.value || "other",
+      description: row.querySelector(".renovation-item-description")?.value?.trim().slice(0, 120) || "",
+      estimatedCost: toRenovationAmount(row.querySelector(".renovation-item-estimated")?.value),
+      actualCost: toRenovationAmount(row.querySelector(".renovation-item-actual")?.value),
+      status: row.querySelector(".renovation-item-status")?.value || "planned"
+    }));
+}
+
+function calculateRenovationMetrics(){
+  const property = window.currentRenovationProperty?.data || {};
+  const items = collectRenovationItems();
+  const estimatedSubtotal = items.reduce((sum, item) => sum + item.estimatedCost, 0);
+  const actualSpent = items.reduce((sum, item) => sum + item.actualCost, 0);
+  const contingencyPercent = Math.min(50, Math.max(0, Number(
+    document.getElementById("renovation-contingency")?.value || 0
+  )));
+  const contingencyAmount = estimatedSubtotal * contingencyPercent / 100;
+  const plannedTotal = estimatedSubtotal + contingencyAmount;
+  const completedItems = items.filter(item => item.status === "completed").length;
+  const progressPercent = items.length ? Math.round(completedItems / items.length * 100) : 0;
+  const currentADR = toRenovationAmount(property.priceNight);
+  const targetADR = toRenovationAmount(document.getElementById("renovation-target-adr")?.value);
+  const occupancy = Math.min(100, Math.max(0, Number(property.investmentSnapshot?.occupancy || 0)));
+  const annualRevenueUplift = occupancy > 0
+    ? Math.max(0, targetADR - currentADR) * 365 * occupancy / 100
+    : 0;
+  const renovationROI = plannedTotal > 0 ? annualRevenueUplift / plannedTotal * 100 : 0;
+  const currentValue = toRenovationAmount(property.investmentSnapshot?.propertyPrice);
+  const targetValue = toRenovationAmount(document.getElementById("renovation-target-value")?.value);
+
+  return {
+    items,
+    estimatedSubtotal,
+    contingencyPercent,
+    contingencyAmount,
+    plannedTotal,
+    actualSpent,
+    variance: actualSpent - plannedTotal,
+    completedItems,
+    progressPercent,
+    currentADR,
+    targetADR,
+    occupancy,
+    annualRevenueUplift,
+    renovationROI,
+    currentValue,
+    targetValue,
+    valueUplift: Math.max(0, targetValue - currentValue)
+  };
+}
+
+window.updateRenovationSummary = function(){
+  const summary = document.getElementById("renovation-summary");
+  if(!summary) return;
+  const metrics = calculateRenovationMetrics();
+  const cards = [
+    [t("Budget con imprevisti", "Budget incl. contingency"), formatCurrency(metrics.plannedTotal)],
+    [t("Speso effettivo", "Actual spent"), formatCurrency(metrics.actualSpent)],
+    [t("Avanzamento", "Progress"), `${metrics.progressPercent}%`],
+    [t("Ricavi annui aggiuntivi", "Additional annual revenue"), metrics.occupancy ? formatCurrency(metrics.annualRevenueUplift) : "—"],
+    [t("Rendimento lordo stimato", "Estimated gross return"), metrics.occupancy && metrics.plannedTotal ? formatPercent(metrics.renovationROI) : "—"],
+    [t("Aumento valore stimato", "Estimated value increase"), metrics.currentValue && metrics.targetValue ? formatCurrency(metrics.valueUplift) : "—"]
+  ];
+  summary.innerHTML = cards.map(([label, value]) => `
+    <div style="padding:12px;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc;">
+      <div style="font-size:11px;color:#64748b;">${label}</div>
+      <strong style="display:block;margin-top:5px;color:#0f172a;font-size:16px;">${value}</strong>
+    </div>
+  `).join("");
+  const note = document.getElementById("renovation-financial-note");
+  if(note){
+    note.textContent = metrics.occupancy
+      ? t(
+          "Stima indicativa basata sull’occupazione dell’analisi collegata e sull’aumento ADR. Non rappresenta utile netto garantito.",
+          "Indicative estimate based on linked-analysis occupancy and ADR increase. It is not guaranteed net profit."
+        )
+      : t(
+          "Collega un’analisi finanziaria alla proprietà per stimare ricavi aggiuntivi e rendimento lordo dei lavori.",
+          "Link a financial analysis to the property to estimate additional revenue and gross renovation return."
+        );
+  }
+};
+
+window.openRenovationPlanner = async function(propertyId){
+  if(!window.currentUser || !propertyId) return;
+  try{
+    const propertySnap = await getDoc(doc(db, "properties", propertyId));
+    if(!propertySnap.exists()) return;
+    const data = propertySnap.data();
+    const plan = data.renovationPlan || {};
+    window.currentRenovationProperty = { id: propertyId, data };
+
+    document.getElementById("renovation-property-name").textContent = `${data.name || "-"} · ${data.city || "-"}`;
+    document.getElementById("renovation-status").value = plan.status || "planning";
+    document.getElementById("renovation-start-date").value = plan.startDate || "";
+    document.getElementById("renovation-end-date").value = plan.endDate || "";
+    document.getElementById("renovation-contingency").value = Number(plan.contingencyPercent ?? 10);
+    document.getElementById("renovation-target-adr").value = Number(plan.targetADR || data.priceNight || 0) || "";
+    document.getElementById("renovation-target-value").value = Number(plan.targetValue || data.investmentSnapshot?.propertyPrice || 0) || "";
+    document.getElementById("renovation-notes").value = plan.notes || "";
+
+    const itemsContainer = document.getElementById("renovation-items");
+    itemsContainer.replaceChildren();
+    const items = Array.isArray(plan.items) ? plan.items.slice(0, 30) : [];
+    if(items.length) items.forEach(item => window.addRenovationItem(item));
+    else window.addRenovationItem();
+
+    ["renovation-contingency", "renovation-target-adr", "renovation-target-value"]
+      .forEach(id => {
+        const field = document.getElementById(id);
+        if(field && !field.dataset.renovationBound){
+          field.dataset.renovationBound = "true";
+          field.addEventListener("input", window.updateRenovationSummary);
+        }
+      });
+    window.updateRenovationSummary();
+    document.getElementById("renovation-modal").style.display = "flex";
+  }catch(error){
+    dashboardError("Renovation plan load failed", error);
+    alert(t("Impossibile aprire il piano di ristrutturazione.", "Unable to open the renovation plan."));
+  }
+};
+
+window.closeRenovationModal = function(){
+  const modal = document.getElementById("renovation-modal");
+  if(modal) modal.style.display = "none";
+  window.currentRenovationProperty = null;
+};
+
+window.saveRenovationPlan = async function(){
+  const current = window.currentRenovationProperty;
+  if(!current?.id || !window.currentUser) return;
+  const startDate = document.getElementById("renovation-start-date")?.value || "";
+  const endDate = document.getElementById("renovation-end-date")?.value || "";
+  if(startDate && endDate && endDate < startDate){
+    alert(t("La data di fine deve essere successiva alla data di inizio.", "The completion date must be after the start date."));
+    return;
+  }
+  const metrics = calculateRenovationMetrics();
+  const incompleteItem = metrics.items.find(item =>
+    !item.description && (item.estimatedCost > 0 || item.actualCost > 0)
+  );
+  if(incompleteItem){
+    alert(t("Aggiungi una descrizione agli interventi con un costo.", "Add a description to work items with a cost."));
+    return;
+  }
+  const items = metrics.items.filter(item => item.description || item.estimatedCost || item.actualCost);
+  const plan = {
+    version: "1.0",
+    status: document.getElementById("renovation-status")?.value || "planning",
+    startDate,
+    endDate,
+    contingencyPercent: metrics.contingencyPercent,
+    targetADR: metrics.targetADR,
+    targetValue: metrics.targetValue,
+    notes: document.getElementById("renovation-notes")?.value?.trim().slice(0, 1000) || "",
+    items,
+    metrics: {
+      estimatedSubtotal: metrics.estimatedSubtotal,
+      contingencyAmount: metrics.contingencyAmount,
+      plannedTotal: metrics.plannedTotal,
+      actualSpent: metrics.actualSpent,
+      variance: metrics.variance,
+      completedItems: metrics.completedItems,
+      progressPercent: metrics.progressPercent,
+      currentADR: metrics.currentADR,
+      occupancy: metrics.occupancy,
+      annualRevenueUplift: metrics.annualRevenueUplift,
+      renovationROI: metrics.renovationROI,
+      currentValue: metrics.currentValue,
+      valueUplift: metrics.valueUplift
+    },
+    updatedAt: new Date().toISOString()
+  };
+  const button = document.getElementById("renovation-save-button");
+  if(button){
+    button.disabled = true;
+    button.textContent = t("Salvataggio…", "Saving…");
+  }
+  try{
+    await updateDoc(doc(db, "properties", current.id), { renovationPlan: plan });
+    current.data.renovationPlan = plan;
+    await loadProperties();
+    alert(t("Piano di ristrutturazione salvato.", "Renovation plan saved."));
+    window.closeRenovationModal();
+  }catch(error){
+    dashboardError("Renovation plan save failed", error);
+    alert(t("Impossibile salvare il piano. Riprova.", "Unable to save the plan. Please try again."));
+  }finally{
+    if(button){
+      button.disabled = false;
+      button.textContent = t("💾 Salva piano", "💾 Save plan");
+    }
+  }
+};
+
+document.addEventListener("rb_language_changed", () => {
+  const modal = document.getElementById("renovation-modal");
+  if(!window.currentRenovationProperty || modal?.style.display !== "flex") return;
+  const items = collectRenovationItems();
+  const container = document.getElementById("renovation-items");
+  if(!container) return;
+  container.replaceChildren();
+  items.forEach(item => window.addRenovationItem(item));
+  window.updateRenovationSummary();
+});
+
+// =====================================
 // 🏠 PMS INIT
 // =====================================
 
@@ -6123,6 +6403,9 @@ const data =
 const investment =
   data.investmentSnapshot || null;
 
+const renovation =
+  data.renovationPlan || null;
+
 const bookingsSnap =
   await getDocs(
     query(
@@ -6394,6 +6677,21 @@ flex-wrap:wrap;
 </div>
 ` : ""}
 
+${renovation ? `
+<div style="margin-bottom:18px;padding:14px 16px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+  <div>
+    <strong style="display:block;color:#6d28d9;font-size:13px;">🛠️ ${t("Ristrutturazione", "Renovation")}</strong>
+    <span style="color:#64748b;font-size:12px;">
+      ${t("Avanzamento", "Progress")} ${Math.max(0, Number(renovation.metrics?.progressPercent || 0))}% ·
+      ${t("Budget", "Budget")} ${formatCurrency(renovation.metrics?.plannedTotal || 0)}
+    </span>
+  </div>
+  <span style="padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:12px;font-weight:800;">
+    ${{planning:t("Pianificazione","Planning"),approved:t("Approvata","Approved"),in_progress:t("In corso","In progress"),paused:t("In pausa","Paused"),completed:t("Completata","Completed")}[renovation.status] || t("Pianificazione","Planning")}
+  </span>
+</div>
+` : ""}
+
         <div style="
 margin-top:18px;
 padding:18px;
@@ -6619,6 +6917,7 @@ style="
 display:flex;
 gap:12px;
 margin-top:22px;
+flex-wrap:wrap;
 ">
 
 <button
@@ -6635,6 +6934,17 @@ onclick="openBookings('${docItem.id}')">
 "Prenotazioni",
 "Bookings"
 )}
+
+</button>
+
+<button
+class="btn-dashboard"
+style="flex:1;min-width:150px;height:48px;font-weight:700;border-radius:12px;border:1px solid #8b5cf6;background:#faf5ff;color:#6d28d9;"
+onclick="openRenovationPlanner('${docItem.id}')">
+
+🛠️ ${renovation
+  ? t("Ristrutturazione", "Renovation")
+  : t("Pianifica lavori", "Plan renovation")}
 
 </button>
 
