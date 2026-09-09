@@ -10407,6 +10407,82 @@ window.dispatchEvent(
 // 📅 LOAD BOOKINGS
 // =====================================
 
+function renderPMSPortalAlerts(pmsData = {}){
+  const container = document.getElementById("pms-portal-alerts");
+  if(!container) return;
+
+  const attentionBookings = Array.isArray(pmsData.attentionBookings)
+    ? pmsData.attentionBookings
+    : [];
+  const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
+  const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
+  const taskLabels = {
+    tourist_tax_pending: window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"),
+    guest_registration_incomplete: window.t("Registrazione ospiti incompleta", "Guest registration incomplete"),
+    cleaning_to_schedule: window.t("Pulizia da pianificare", "Cleaning to schedule"),
+    guest_issue_open: window.t("Segnalazione ospite aperta", "Open guest issue"),
+    guest_issue_urgent: window.t("Segnalazione ospite urgente", "Urgent guest issue")
+  };
+
+  const alerts = attentionBookings.flatMap(booking =>
+    (Array.isArray(booking.attentionCodes) ? booking.attentionCodes : []).map(code => ({
+      code,
+      bookingId: booking.id,
+      guestName: booking.guestName || window.t("Ospite", "Guest"),
+      label: taskLabels[code] || window.t("Attività da verificare", "Task to review")
+    }))
+  );
+  const urgentCount = alerts.filter(alert => alert.code === "guest_issue_urgent").length;
+  const operationalCount = alerts.length + arrivalsToday + departuresToday;
+
+  if(!operationalCount){
+    container.innerHTML = `
+      <div style="padding:15px 16px;border:1px solid #a7f3d0;border-radius:15px;background:#ecfdf5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:14px;font-weight:900;color:#065f46;">✅ ${window.t("Centro avvisi host", "Host alert centre")}</div>
+          <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessuna attività urgente: operatività sotto controllo.", "No urgent tasks: operations are under control.")}</div>
+        </div>
+        <span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${window.t("Tutto aggiornato", "All up to date")}</span>
+      </div>`;
+    return;
+  }
+
+  const palette = urgentCount
+    ? { border:"#fecaca", background:"#fef2f2", color:"#991b1b", badge:"#fee2e2", icon:"🚨" }
+    : { border:"#fde68a", background:"#fffbeb", color:"#92400e", badge:"#fef3c7", icon:"🔔" };
+  const summaryParts = [];
+  if(arrivalsToday) summaryParts.push(window.t(`${arrivalsToday} arrivi oggi`, `${arrivalsToday} arrivals today`));
+  if(departuresToday) summaryParts.push(window.t(`${departuresToday} partenze oggi`, `${departuresToday} departures today`));
+  if(alerts.length) summaryParts.push(window.t(`${alerts.length} attività PMS`, `${alerts.length} PMS tasks`));
+
+  container.innerHTML = `
+    <div style="padding:15px 16px;border:1px solid ${palette.border};border-radius:15px;background:${palette.background};">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:14px;font-weight:900;color:${palette.color};">${palette.icon} ${window.t("Centro avvisi host", "Host alert centre")}</div>
+          <div style="font-size:12px;color:#475569;margin-top:4px;">${escapeDashboardHTML(summaryParts.join(" · "))}</div>
+        </div>
+        <span style="padding:7px 11px;border-radius:999px;background:${palette.badge};color:${palette.color};font-size:11px;font-weight:900;">
+          ${urgentCount
+            ? window.t(`${urgentCount} urgenti`, `${urgentCount} urgent`)
+            : operationalCount === 1
+              ? window.t("1 avviso", "1 alert")
+              : window.t(`${operationalCount} avvisi`, `${operationalCount} alerts`)}
+        </span>
+      </div>
+      ${alerts.length ? `
+        <div style="display:grid;gap:7px;margin-top:11px;">
+          ${alerts.slice(0,3).map(alert => `
+            <div style="padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
+              <strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}
+            </div>`).join("")}
+        </div>` : ""}
+      <button type="button" onclick="openCurrentBookings()" style="margin-top:12px;border:0;border-radius:10px;background:#0f172a;color:white;padding:10px 14px;font-size:12px;font-weight:900;cursor:pointer;">
+        ${window.t("Apri attività PMS →", "Open PMS tasks →")}
+      </button>
+    </div>`;
+}
+
 function renderTodayBookingOperations(bookings = []){
   const container = document.getElementById("booking-today-operations");
   if(!container) return;
@@ -12888,6 +12964,8 @@ window.rbPMSData = {
   pendingBookings
 
 };
+
+renderPMSPortalAlerts(window.rbPMSData);
 
 // =====================================
 // 🤖 PMS AI INSIGHT
@@ -15407,6 +15485,7 @@ ${executiveBrief}
 document.addEventListener("rb_language_changed", () => {
   if(window.rbPMSData){
     renderExecutiveSummary(window.rbPMSData);
+    renderPMSPortalAlerts(window.rbPMSData);
   }
 });
 
