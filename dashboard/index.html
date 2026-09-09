@@ -4277,6 +4277,19 @@ font-size:15px;
 background:#fff;
 ">
 
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+<input id="booking-guest-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30"
+placeholder="Telefono / WhatsApp con prefisso, es. +39 (facoltativo)"
+data-it-placeholder="Telefono / WhatsApp con prefisso, es. +39 (facoltativo)"
+data-en-placeholder="Phone / WhatsApp with country code (optional)"
+style="height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 16px;font-size:15px;background:#fff;">
+<input id="booking-guest-email" type="email" inputmode="email" autocomplete="email" maxlength="254"
+placeholder="Email ospite (facoltativa)"
+data-it-placeholder="Email ospite (facoltativa)"
+data-en-placeholder="Guest email (optional)"
+style="height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 16px;font-size:15px;background:#fff;">
+</div>
+
 <div
 style="
 display:grid;
@@ -4583,6 +4596,8 @@ background:#fff;
   <div style="margin-top:12px;padding-top:12px;border-top:1px solid #fecaca;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
     <button id="booking-guest-portal-create" type="button" onclick="createGuestIssuePortalLink()" style="padding:10px 13px;border:1px solid #ef4444;border-radius:11px;background:#fff;color:#b91c1c;font-weight:800;cursor:pointer;" data-it="🔗 Genera link ospite" data-en="🔗 Create guest link">🔗 Genera link ospite</button>
     <button id="booking-guest-portal-copy" type="button" onclick="copyGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #10b981;border-radius:11px;background:#ecfdf5;color:#047857;font-weight:800;cursor:pointer;" data-it="📋 Copia link" data-en="📋 Copy link">📋 Copia link</button>
+    <button id="booking-guest-portal-whatsapp" type="button" onclick="shareGuestIssuePortalWhatsApp()" style="display:none;padding:10px 13px;border:1px solid #22c55e;border-radius:11px;background:#f0fdf4;color:#15803d;font-weight:800;cursor:pointer;" data-it="💬 Invia su WhatsApp" data-en="💬 Send via WhatsApp">💬 Invia su WhatsApp</button>
+    <button id="booking-guest-portal-email" type="button" onclick="shareGuestIssuePortalEmail()" style="display:none;padding:10px 13px;border:1px solid #3b82f6;border-radius:11px;background:#eff6ff;color:#1d4ed8;font-weight:800;cursor:pointer;" data-it="✉️ Invia via email" data-en="✉️ Send via email">✉️ Invia via email</button>
     <button id="booking-guest-portal-revoke" type="button" onclick="revokeGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #94a3b8;border-radius:11px;background:#f8fafc;color:#475569;font-weight:800;cursor:pointer;" data-it="Disattiva link" data-en="Disable link">Disattiva link</button>
     <span id="booking-guest-portal-status" style="font-size:11px;color:#64748b;" data-it="Nessun link attivo" data-en="No active link">Nessun link attivo</span>
   </div>
