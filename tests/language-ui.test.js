@@ -38,6 +38,20 @@ test("tool language refresh only rebuilds presentation", () => {
   assert.doesNotMatch(executableSource, /saveAnalysis\s*\(/);
 });
 
+test("tool language refresh reformats cached KPI values locally", () => {
+  const marker = "// LANGUAGE-ONLY REFRESH";
+  const refreshSource = appSource.slice(appSource.indexOf(marker));
+
+  assert.match(refreshSource, /renderUniversalKPI\s*\(/);
+  assert.match(refreshSource, /profit-live/);
+  assert.match(refreshSource, /revenue-live/);
+  assert.match(refreshSource, /formatCurrency\s*\(/);
+});
+
+test("break-even unit follows the selected language", () => {
+  assert.match(appSource, /payback\.toFixed\(1\) \+ t\(" anni", " years"\)/);
+});
+
 test("every static Tool translation has both Italian and English", () => {
   const translatedTags = toolHTML.match(/<[^>]+data-(?:it|en)=[^>]*>/gs) || [];
   const incompleteTags = translatedTags.filter(tag =>
