@@ -1843,7 +1843,7 @@ function renderRiskMeter(riskScore){
     icon = "🟢";
   }
   else if(riskScore < 65){
-    label = t("Rischio medio","Medium risk");
+    label = t("Rischio moderato","Moderate risk");
     color = "#f59e0b";
     icon = "🟠";
   }
@@ -2049,6 +2049,13 @@ ${r}
 `)
 .join("");
 
+const verdictLabel =
+  verdict === "BUY"
+    ? t("ACQUISTA", "BUY")
+    : verdict === "WAIT"
+      ? t("ATTENDI", "WAIT")
+      : t("EVITA", "AVOID");
+
 box.innerHTML = `
 
 <div class="ai-verdict-card">
@@ -2072,7 +2079,7 @@ color:${color};
 letter-spacing:-1px;
 ">
 
-${icon} ${verdict}
+${icon} ${verdictLabel}
 
 </h3>
 
@@ -9146,3 +9153,68 @@ setTimeout(()=>{
 // 🔥 sync eventi
 window.addEventListener("rb_plan_ready", window.syncAccessClasses);
 window.addEventListener("rb_auth_ready", window.syncAccessClasses);
+
+// =====================================
+// LANGUAGE-ONLY REFRESH
+// =====================================
+// Rebuild translated presentation from the existing SSOT snapshot.
+// This listener must never invoke calculate() or saveAnalysis().
+if(!window.__rbToolLanguageRefreshBound){
+  window.__rbToolLanguageRefreshBound = true;
+
+  document.addEventListener("rb_language_changed", () => {
+    const data = window.lastAnalysisData;
+    if(!data || window.simulationExecuted !== true) return;
+
+    const roi = Number(data.roi ?? data.visualROI ?? 0);
+    const risk = Math.round(Number(data.risk ?? 0));
+    const cashflow = Number(data.net ?? data.cashflow ?? 0);
+    const occupancy = Number(data.occupancy ?? 0);
+    const gross = Number(data.gross ?? data.revenueAnnual ?? 0);
+    const city = String(
+      data.marketCity ??
+      data.city ??
+      window.currentCity ??
+      "roma"
+    ).toLowerCase();
+
+    const score = Number(
+      data.investmentScore ??
+      window.lastInvestmentScore?.score ??
+      0
+    );
+
+    if(typeof window.updateInvestmentScore === "function"){
+      window.updateInvestmentScore(score);
+    }else{
+      renderInvestmentScore(roi, risk);
+    }
+
+    renderRiskMeter(risk);
+    renderInvestmentVerdict(roi, risk, cashflow, occupancy);
+    renderInvestmentRanking(roi);
+    renderRevenueForecast(gross);
+    renderROIMarketComparison(roi, city);
+    renderCashflowProjection(cashflow);
+    updateROIMessage(roi);
+
+    const badge = document.getElementById("roi-badge");
+    if(badge){
+      badge.textContent = getInvestmentBadge(roi);
+      badge.className = getInvestmentBadgeClass(roi);
+    }
+
+    const resultCity = document.getElementById("tool-result-city");
+    if(resultCity){
+      const cityLabels = {
+        roma: t("Roma", "Rome"),
+        milano: t("Milano", "Milan"),
+        napoli: t("Napoli", "Naples"),
+        firenze: t("Firenze", "Florence")
+      };
+      const cityLabel = cityLabels[city] || data.realCity || city;
+      resultCity.textContent =
+        `${cityLabel} · ${t("Scenario base", "Base scenario")}`;
+    }
+  });
+}
