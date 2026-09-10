@@ -1014,6 +1014,18 @@ const analyses = querySnapshot.docs.map(doc => {
     dscr:
       Number(data.dscr ?? 0),
 
+    noi:
+      Number(data.noi ?? data.netOperatingIncome ?? 0),
+
+    netOperatingIncome:
+      Number(data.netOperatingIncome ?? data.noi ?? 0),
+
+    capRate:
+      Number(data.capRate ?? 0),
+
+    annualDebtService:
+      Number(data.annualDebtService ?? data.mortgageYearly ?? 0),
+
     investmentScore:
   data.investmentScore ?? 0,
 
@@ -1665,6 +1677,18 @@ window.lastAnalysisData = {
 
   dscr:
     Number(best?.dscr ?? 0),
+
+  noi:
+    Number(best?.noi ?? best?.netOperatingIncome ?? 0),
+
+  netOperatingIncome:
+    Number(best?.netOperatingIncome ?? best?.noi ?? 0),
+
+  capRate:
+    Number(best?.capRate ?? 0),
+
+  annualDebtService:
+    Number(best?.annualDebtService ?? best?.mortgageYearly ?? 0),
 
   occupancy:
     Number(best?.occupancy || 0),
