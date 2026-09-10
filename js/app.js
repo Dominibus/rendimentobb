@@ -3653,6 +3653,19 @@ function getValue(id){
   return isNaN(v) ? 0 : v;
 }
 
+// Preserva lo zero inserito dall'utente e usa il fallback solo per campi
+// assenti, vuoti o non numerici.
+function getValueOrDefault(id, fallback){
+  const el = document.getElementById(id);
+  if(!el) return fallback;
+
+  const raw = String(el.value ?? "").trim();
+  if(raw === "") return fallback;
+
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : fallback;
+}
+
 window.__LAST_CALCULATION__ = 0;
 
 window.calculate = async function(mode = false){
@@ -3799,7 +3812,7 @@ if(access.isPro || access.isAdmin){
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
 
-    const price       = isTool ? getValue("price") || 100000 : getValue("qr_price") || 100000;
+    const price       = isTool ? getValueOrDefault("price", 100000) : getValueOrDefault("qr_price", 100000);
     const equityInput = getValue("equity");
 
     let equity = isTool
@@ -3821,12 +3834,12 @@ if(equity < minEquity){
   equity = minEquity;
 }
 
-    const priceNight  = isTool ? getValue("priceNight") || 100 : getValue("qr_night") || 100;
-    const occupancy   = isTool ? getValue("occupancy") || 65 : getValue("qr_occ") || 65;
-    const expenses    = isTool ? getValue("expenses") || 30 : getValue("qr_cost") || 30;
+    const priceNight  = isTool ? getValueOrDefault("priceNight", 100) : getValueOrDefault("qr_night", 100);
+    const occupancy   = isTool ? getValueOrDefault("occupancy", 65) : getValueOrDefault("qr_occ", 65);
+    const expenses    = isTool ? getValueOrDefault("expenses", 30) : getValueOrDefault("qr_cost", 30);
 
-    const commission  = getValue("commission") || 15;
-    const tax         = getValue("tax") || 21;
+    const commission  = getValueOrDefault("commission", 15);
+    const tax         = getValueOrDefault("tax", 21);
 
     // ================= LOCATION =================
     const customLocation = document.getElementById("custom-location")?.value;
@@ -3856,10 +3869,10 @@ if(equity < minEquity){
 );
 
 const loanAmount =
-  getValue("loanAmount") ||
-  calculatedLoan;
-    const interestRate = getValue("interestRate") || 3.5;
-    const loanYears    = getValue("loanYears") || 20;
+  getValueOrDefault("loanAmount", calculatedLoan);
+    const interestRate = getValueOrDefault("interestRate", 3.5);
+    const loanYearsInput = getValueOrDefault("loanYears", 20);
+    const loanYears = loanYearsInput > 0 ? loanYearsInput : 20;
 
     // ================= CALCOLO =================
 
@@ -3971,15 +3984,6 @@ const risk = Number(
   result?.risk ??
   result?.riskScore ??
   0
-);
-
-// =====================================
-// 📊 SCORE ENGINE
-// =====================================
-
-renderInvestmentScore(
-  safeROI,
-  Math.round(risk)
 );
 
 // ===============================================
@@ -4132,6 +4136,7 @@ window.rbChatbotLive = {
 window.lastAnalysisData = {
 
   roi:
+    result?.roi ??
     roi ??
     safeROI ??
     0,
@@ -4148,6 +4153,18 @@ window.lastAnalysisData = {
     0,
 
   net:
+    net ??
+    0,
+
+  realROI:
+    realROI ??
+    0,
+
+  risk:
+    risk ??
+    0,
+
+  cashflow:
     net ??
     0,
 
@@ -4186,11 +4203,16 @@ window.lastAnalysisData = {
     0,
 
   totalExpenses:
-    (
-      expenses ??
-      monthlyCosts ??
-      0
-    ) * 12,
+    Number(
+      result?.expensesYearly ??
+      ((expenses ?? monthlyCosts ?? 0) * 12)
+    ),
+
+  expensesYearly:
+    Number(
+      result?.expensesYearly ??
+      ((expenses ?? monthlyCosts ?? 0) * 12)
+    ),
 
   equity:
     equity ??
@@ -4209,6 +4231,11 @@ mortgageAmount:
   window.mortgage ??
   window.mortgageAmount ??
   0,
+
+mortgagePercent:
+  price > 0
+    ? (Number(loanAmount ?? 0) / Number(price)) * 100
+    : 0,
 
 mortgageYearly:
   Number(
@@ -4244,6 +4271,15 @@ price:
     price ??
     0,
 
+  propertyPrice:
+    price ??
+    0,
+
+  marketCity:
+    marketCity ||
+    window.currentCity ||
+    "Roma",
+
   city:
     selectedCity ||
     marketCity ||
@@ -4254,6 +4290,12 @@ price:
     Date.now()
 
 };
+
+// Lo Score deve leggere esclusivamente lo snapshot della simulazione corrente.
+renderInvestmentScore(
+  Number(window.lastAnalysisData.roi ?? 0),
+  Math.round(Number(window.lastAnalysisData.risk ?? 0))
+);
 
 // =====================================
 // 🧠 CITY MEMORY ENGINE
