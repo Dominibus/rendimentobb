@@ -112,17 +112,9 @@
     setTimeout(applyTranslations, 150);
     setTimeout(applyTranslations, 300);
 
-    // ================= TOOL HOOK =================
-    // Il cambio lingua aggiorna soltanto la UI.
-    // Non deve ricalcolare o salvare una nuova simulazione.
-
-    if(typeof runRealCalculation === "function"){
-      runRealCalculation();
-    }
-
-    if(typeof compareMortgages === "function"){
-      compareMortgages();
-    }
+    // I singoli moduli ascoltano rb_language_changed e ridisegnano
+    // esclusivamente la UI usando i dati già presenti in memoria.
+    // Nessun calcolo o salvataggio deve partire da questo motore.
 
   }
 
