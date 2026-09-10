@@ -935,15 +935,15 @@ margin-top:4px;
 
     </div>
 
-<!-- REAL ROI / CAP RATE -->
+<!-- PROPERTY ROI -->
 <div class="hero-mini-card">
 
   <div
     class="hero-mini-label"
-    data-it="ROI IMMOBILE / CAP RATE"
-    data-en="PROPERTY ROI / CAP RATE"
+    data-it="ROI IMMOBILE"
+    data-en="PROPERTY ROI"
   >
-    ROI IMMOBILE / CAP RATE
+    ROI IMMOBILE
   </div>
 
   <div
@@ -1326,6 +1326,7 @@ function getFinancingMetrics(
 
   let annualDebtService =
     safeNumber(
+      source.annualDebtService ??
       source.mortgageYearly ??
       0
     );
@@ -1407,8 +1408,14 @@ function getFinancingMetrics(
   }
 
   const netOperatingIncome =
-    safeNumber(netAfterMortgage) +
-    annualDebtService;
+    safeNumber(
+      source.noi ??
+      source.netOperatingIncome ??
+      (
+        safeNumber(netAfterMortgage) +
+        annualDebtService
+      )
+    );
 
   const dscr =
     annualDebtService > 0
@@ -1490,9 +1497,9 @@ if(dscrHero){
     );
 
   dscrHero.innerText =
-    financingMetrics
-      .dscr
-      .toFixed(2);
+    financingMetrics.annualDebtService > 0
+      ? financingMetrics.dscr.toFixed(2)
+      : "N/A";
 
 }
   
@@ -1940,12 +1947,17 @@ const monthlyProfit = safe(
     // ================= BANK METRICS =================
 
     const capRate =
-      price > 0
-        ? (
-            annualProfit /
-            price
-          ) * 100
-        : 0;
+      safe(
+        fallback.capRate ??
+        (
+          price > 0
+            ? (
+                financingMetrics.netOperatingIncome /
+                price
+              ) * 100
+            : 0
+        )
+      );
 
     const roe =
       equity > 0
@@ -2518,7 +2530,9 @@ drawFinancingKPI(
   20 + (financingCardW + financingGap) * 2,
   32,
   "DSCR",
-  dscr.toFixed(2)
+  annualDebtService > 0
+    ? dscr.toFixed(2)
+    : "N/A"
 );
 
 // ROW 2
@@ -2536,13 +2550,25 @@ drawFinancingKPI(
   `${roe.toFixed(1)}%`
 );
 
+drawFinancingKPI(
+  20 + (financingCardW + financingGap) * 2,
+  64,
+  "NOI",
+  eur(financingMetrics.netOperatingIncome)
+);
+
     const decision =
-  dscr > 1.5
+  annualDebtService <= 0
+    ? t(
+        "Nessun finanziamento rilevato",
+        "No financing detected"
+      )
+    : dscr >= 1.5
     ? t(
         "Copertura del debito solida",
         "Strong debt coverage"
       )
-    : dscr > 1.2
+    : dscr >= 1.2
       ? t(
           "Copertura del debito da valutare",
           "Debt coverage requires review"
@@ -2552,7 +2578,13 @@ drawFinancingKPI(
           "Insufficient debt coverage"
         );
 
-    doc.setTextColor(...(dscr > 1.2 ? green : red));
+    doc.setTextColor(...(
+      annualDebtService <= 0
+        ? gray
+        : dscr >= 1.2
+          ? green
+          : red
+    ));
     doc.text(decision,20,100);
 
     addFooter();
