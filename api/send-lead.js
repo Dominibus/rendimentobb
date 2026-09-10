@@ -227,6 +227,10 @@ export default async function handler(req, res){
       price,
       equity,
       profit,
+      noi,
+      capRate,
+      dscr,
+      annualDebtService,
       type,
       lang,
       source,
@@ -249,6 +253,10 @@ export default async function handler(req, res){
     price = clamp(price, 0, 100000000);
     equity = clamp(equity, 0, 100000000);
     profit = clamp(profit, -100000000, 100000000);
+    noi = clamp(noi, -100000000, 100000000);
+    capRate = clamp(capRate, -1000, 1000);
+    dscr = clamp(dscr, 0, 1000);
+    annualDebtService = clamp(annualDebtService, 0, 100000000);
     type = clean(type || "generic", 50).toLowerCase();
     if(type === "career") type = "work";
     if(type === "mutuo") type = "mutui";
@@ -304,7 +312,18 @@ export default async function handler(req, res){
     // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
     const loan = price - equity;
-    const dscr = loan > 0 ? (profit / (loan * 0.04)) : 0;
+
+    // NOI, Cap Rate and DSCR are calculated by the canonical ROI engine.
+    // The lead endpoint stores them but never invents a different formula.
+    const canonicalCapRate =
+      price > 0 && capRate === 0 && noi !== 0
+        ? (noi / price) * 100
+        : capRate;
+
+    const canonicalDSCR =
+      annualDebtService > 0 && dscr === 0 && noi !== 0
+        ? noi / annualDebtService
+        : dscr;
 
     const { score, value, label } = getScore({
       roi: roiRounded,
@@ -371,7 +390,10 @@ message: clean(message || ""),
   loan,
   profit,
 
-  dscr: Number(dscr.toFixed(2)),
+  noi,
+  capRate: Number(canonicalCapRate.toFixed(2)),
+  annualDebtService,
+  dscr: Number(canonicalDSCR.toFixed(2)),
 
 score,
 value,
@@ -1078,7 +1100,7 @@ ${!isOperationalLead ? `<tr>
 
 <tr>
 <td><strong>🏦 DSCR</strong></td>
-<td>${dscr.toFixed(2)}</td>
+<td>${canonicalDSCR.toFixed(2)}</td>
 </tr>` : ""}
 
 ${!isPropertyUpdatesLead && !isMortgageLead ? `<tr>
