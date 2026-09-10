@@ -1577,20 +1577,29 @@ function calculate(options = {}){
 // Production: nessun log
   
 const amount = parseFloat(document.getElementById("amount").value || 200000);
-const rateInput = document.getElementById("rate").value || "3.5";
+const rateInput = String(
+  document.getElementById("rate").value ?? ""
+).trim();
 
-const rate = parseFloat(
-  String(rateInput)
+const parsedRate = parseFloat(
+  rateInput
     .replace("%","")
     .replace(",",".")
-) || 3.5;
+);
+
+// Lo 0% è un valore valido; il fallback si applica solo a input vuoti o errati.
+const rate = Number.isFinite(parsedRate) && parsedRate >= 0
+  ? parsedRate
+  : 3.5;
 const years  = parseFloat(document.getElementById("years").value || 20);
 const income = parseFloat(document.getElementById("income").value || 30000);
 
 const monthlyRate = rate/100/12;
 const n = years*12;
 
-const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
+const monthly = monthlyRate === 0
+  ? amount / n
+  : amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly*12;
 
 const roi = income > 0
