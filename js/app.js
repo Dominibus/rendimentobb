@@ -613,6 +613,9 @@ await addDoc(collection(db,"analyses"),{
   visualROI:
     data.visualROI ?? 0,
 
+  realROI:
+    data.realROI ?? 0,
+
   net:
     data.net ?? 0,
 
@@ -2799,8 +2802,8 @@ if(window.RB_DEBUG === true){
     ),
 
   realROI:
-    window.realROI ||
-    finalROI ||
+    window.realROI ??
+    finalROI ??
     0
 };
 
@@ -2911,6 +2914,16 @@ window.__MANUAL_ANALYSIS__ === true;
     equity,
     roi: finalROI,
     visualROI: finalROI,
+    realROI:
+      Number(
+        result?.realROI ??
+        window.realROI ??
+        (
+          propertyPrice > 0
+            ? (net / propertyPrice) * 100
+            : 0
+        )
+      ),
     risk,
     gross,
     net,
@@ -5943,8 +5956,8 @@ doc.setTextColor(...gray);
 
 doc.text(
   T(
-    "Rendimento dell'investimento",
-    "Investment Return"
+    "ROI sul capitale proprio",
+    "Equity ROI"
   ),
   22,
   165
@@ -6758,7 +6771,7 @@ doc.setFontSize(8);
 doc.setTextColor(...gray);
 
 doc.text(
-T("Il tuo ROI","Your ROI"),
+T("ROI equity","Equity ROI"),
 28,
 y+8
 );
@@ -7389,7 +7402,7 @@ if(
     ...d,
 
     realROI:
-      roi,
+      realROI,
 
     risk:
       riskScore,
