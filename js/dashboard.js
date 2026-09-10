@@ -5243,6 +5243,15 @@ window.loadCurrentPropertyTouristTax = async function(propertyId = window.curren
     return null;
   }
 
+  // Free/guest dashboards use local demo data and must never query
+  // Firestore properties, which are intentionally protected by rules.
+  if(isDemo() || !canUseFirestorePMS()){
+    window.currentPropertyId = propertyId;
+    window.currentPropertyData = null;
+    window.currentPropertyTouristTaxConfig = null;
+    return null;
+  }
+
   const propertySnap = await getDoc(
     doc(db, "properties", propertyId)
   );
@@ -9874,6 +9883,14 @@ window.openBookingFromCopilot = async function(
 // =====================================
 
 window.openCurrentBookings = async function(){
+
+  if(isDemo() || !canUseFirestorePMS()){
+
+    window.currentPropertyId = "demo-property";
+    await openBookings(window.currentPropertyId);
+    return;
+
+  }
 
   if(window.currentPropertyId){
 
