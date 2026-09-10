@@ -31,6 +31,14 @@ function getBearerToken(req){
   return authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
 }
 
+function formatDate(value, lang){
+  const match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!match) return clean(value || "-", 20);
+  return lang === "en"
+    ? `${match[2]}/${match[3]}/${match[1]}`
+    : `${match[3]}/${match[2]}/${match[1]}`;
+}
+
 function buildUrgentEmail({ lang, guestName, category, note, checkin, checkout }){
   const isEnglish = lang === "en";
   const categoryLabels = {
@@ -109,6 +117,14 @@ export default async function handler(req, res) {
     const booking = bookingSnapshot.data() || {};
     if(booking.uid !== decoded.uid) return res.status(403).json({ success:false, error:"forbidden" });
 
+    const userSnapshot = await db.collection("users").doc(decoded.uid).get();
+    const preferences = userSnapshot.exists
+      ? userSnapshot.data()?.notificationPreferences || {}
+      : {};
+    if(preferences.pmsUrgentEmail === false){
+      return res.status(200).json({ success:true, skipped:true, reason:"preference_disabled" });
+    }
+
     const issue = booking.guestIssue || {};
     const isUrgent = issue.active === true
       && String(issue.priority || "") === "urgent"
@@ -152,8 +168,8 @@ export default async function handler(req, res) {
       guestName,
       category:clean(issue.category || (lang === "en" ? "Other" : "Altro"), 80),
       note:clean(issue.note, 500),
-      checkin:clean(booking.checkin || "-", 20),
-      checkout:clean(booking.checkout || "-", 20)
+      checkin:formatDate(booking.checkin, lang),
+      checkout:formatDate(booking.checkout, lang)
     });
 
     try{
