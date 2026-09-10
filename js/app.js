@@ -249,7 +249,7 @@ if(payback > 0 && payback < 1){
 
 const paybackText =
   payback > 0
-    ? payback.toFixed(1) + " anni"
+    ? payback.toFixed(1) + t(" anni", " years")
     : "-";
 
   if(qrBreak) qrBreak.innerText = paybackText;
@@ -9171,6 +9171,7 @@ if(!window.__rbToolLanguageRefreshBound){
     const cashflow = Number(data.net ?? data.cashflow ?? 0);
     const occupancy = Number(data.occupancy ?? 0);
     const gross = Number(data.gross ?? data.revenueAnnual ?? 0);
+    const investment = Number(data.propertyPrice ?? data.price ?? 0);
     const city = String(
       data.marketCity ??
       data.city ??
@@ -9193,6 +9194,25 @@ if(!window.__rbToolLanguageRefreshBound){
     renderRiskMeter(risk);
     renderInvestmentVerdict(roi, risk, cashflow, occupancy);
     renderInvestmentRanking(roi);
+    renderUniversalKPI({
+      net: cashflow,
+      revenue: gross,
+      investment
+    });
+
+    const profitLive = document.getElementById("profit-live");
+    if(profitLive){
+      profitLive.textContent = formatCurrency(cashflow);
+    }
+
+    const revenueLive = document.getElementById("revenue-live");
+    if(revenueLive){
+      const access = window.getUserAccess?.() || {};
+      revenueLive.textContent = access.isFree
+        ? "—"
+        : formatCurrency(gross);
+    }
+
     renderRevenueForecast(gross);
     renderROIMarketComparison(roi, city);
     renderCashflowProjection(cashflow);
