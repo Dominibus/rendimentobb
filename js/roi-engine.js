@@ -96,12 +96,73 @@ function calculateROI(input = {}){
   const adr = priceNight;
 
   // ================= RISK =================
-  let risk = 75;
+  // Canonical composite risk: 10-point prudential floor plus
+  // profitability, demand, leverage, debt coverage and cashflow.
+  const ltv =
+    price > 0
+      ? (loanAmount / price) * 100
+      : 0;
 
-  if(roi >= 15) risk = 25;
-  else if(roi >= 10) risk = 40;
-  else if(roi >= 6) risk = 60;
-  else risk = 80;
+  const cashAvailableForDebt =
+    netAfterMortgage + mortgageYearly;
+
+  const dscr =
+    mortgageYearly > 0
+      ? cashAvailableForDebt / mortgageYearly
+      : 0;
+
+  const roiRisk =
+    roi < 0 ? 25 :
+    roi < 6 ? 20 :
+    roi < 10 ? 15 :
+    roi < 15 ? 10 :
+    roi < 20 ? 5 :
+    0;
+
+  const occupancyRisk =
+    occupancy < 45 ? 20 :
+    occupancy < 55 ? 15 :
+    occupancy < 65 ? 10 :
+    occupancy < 75 ? 5 :
+    0;
+
+  const leverageRisk =
+    loanAmount <= 0 ? 0 :
+    ltv >= 80 ? 10 :
+    ltv >= 70 ? 8 :
+    ltv >= 60 ? 5 :
+    2;
+
+  const debtCoverageRisk =
+    mortgageYearly <= 0 ? 0 :
+    dscr < 1 ? 20 :
+    dscr < 1.2 ? 15 :
+    dscr < 1.5 ? 10 :
+    dscr < 2 ? 5 :
+    0;
+
+  const cashflowRisk =
+    netAfterMortgage < 0 ? 10 :
+    netAfterMortgage < 2400 ? 6 :
+    netAfterMortgage < 6000 ? 3 :
+    0;
+
+  const riskBreakdown = {
+    base: 10,
+    roi: roiRisk,
+    occupancy: occupancyRisk,
+    leverage: leverageRisk,
+    debtCoverage: debtCoverageRisk,
+    cashflow: cashflowRisk
+  };
+
+  const risk = Math.min(
+    100,
+    Object.values(riskBreakdown).reduce(
+      (total, value) => total + value,
+      0
+    )
+  );
 
   // ================= SAFETY =================
   const clean = (v) => isFinite(v) ? v : 0;
@@ -135,7 +196,10 @@ function calculateROI(input = {}){
     occupancy: clean(occupancy),
     priceNight: clean(adr),
 
-    risk: clean(risk)
+    ltv: clean(ltv),
+    dscr: clean(dscr),
+    risk: clean(risk),
+    riskBreakdown
   };
 
   if(!result || typeof result !== "object"){
