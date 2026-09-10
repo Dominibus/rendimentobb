@@ -5938,7 +5938,7 @@ doc.text(
 
 // ================= ROI =================
 
-doc.setTextColor(...green);
+doc.setTextColor(...(roi < 0 ? [220,38,38] : green));
 
 doc.setFontSize(40);
 
@@ -6167,7 +6167,10 @@ doc.text(
 doc.setFontSize(9);
 
 doc.text(
-    "RENDIMENTO DELL'INVESTIMENTO",
+  T(
+    "ROI SUL CAPITALE PROPRIO",
+    "EQUITY ROI"
+  ),
   28,
   y + 10
 );
@@ -6271,7 +6274,7 @@ profit >= 0
 },
 
 {
-title:"ROI",
+title:T("ROI equity","Equity ROI"),
 value:pct(roi),
 subtitle:rating
 }
@@ -6820,12 +6823,12 @@ y += 38;
 // ================= KPI =================
 
 row(
-  T("ROI tuo","Your ROI"),
+  T("ROI equity","Equity ROI"),
   pct(roi)
 );
 
 row(
-  T("ROI mercato","Market ROI"),
+  T("ROI equity di mercato","Market equity ROI"),
   pct(marketROI)
 );
 
