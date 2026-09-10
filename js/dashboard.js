@@ -985,7 +985,34 @@ const analyses = querySnapshot.docs.map(doc => {
       data.net || 0,
 
     risk:
-  data.risk || 0,
+  data.risk ?? 0,
+
+    riskBreakdown:
+      data.riskBreakdown ?? null,
+
+    ltv:
+      Number(
+        data.ltv ??
+        (
+          Number(data.propertyPrice ?? data.price ?? 0) > 0
+            ? (
+                Number(
+                  data.loanAmount ??
+                  data.loan ??
+                  Math.max(
+                    Number(data.propertyPrice ?? data.price ?? 0) -
+                    Number(data.equity ?? 0),
+                    0
+                  )
+                ) /
+                Number(data.propertyPrice ?? data.price ?? 0)
+              ) * 100
+            : 0
+        )
+      ),
+
+    dscr:
+      Number(data.dscr ?? 0),
 
     investmentScore:
   data.investmentScore ?? 0,
@@ -1622,13 +1649,22 @@ window.lastAnalysisData = {
     Number(best?.roi || 0),
 
   realROI:
-    Number(best?.roi || 0),
+    Number(best?.realROI ?? best?.roi ?? 0),
 
   visualROI:
     Number(best?.roi || 0),
 
   risk:
     Number(best?.risk || 0),
+
+  riskBreakdown:
+    best?.riskBreakdown ?? null,
+
+  ltv:
+    Number(best?.ltv ?? 0),
+
+  dscr:
+    Number(best?.dscr ?? 0),
 
   occupancy:
     Number(best?.occupancy || 0),
