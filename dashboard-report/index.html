@@ -2130,7 +2130,7 @@ doc.text(
 
 doc.setFont("helvetica","bold");
 doc.setFontSize(30);
-doc.setTextColor(...green);
+doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
   roi.toFixed(1) + "%",
@@ -2770,7 +2770,7 @@ doc.text(
 // PROJECT ROI VALUE
 doc.setFont("helvetica","bold");
 doc.setFontSize(24);
-doc.setTextColor(...green);
+doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
   `${roi.toFixed(1)}%`,
