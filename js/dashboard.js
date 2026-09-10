@@ -2724,8 +2724,10 @@ window.addEventListener("DOMContentLoaded", () => {
       if(userDoc.exists()){
         const data = userDoc.data();
         window.currentPlan = data.plan || "free";
+        window.rbNotificationPreferences = data.notificationPreferences || {};
       }else{
         window.currentPlan = "free";
+        window.rbNotificationPreferences = {};
       }
 
       
@@ -10394,7 +10396,9 @@ window.dispatchEvent(
     guestIssue.priority === "urgent" &&
     guestIssue.status !== "resolved"
   ){
-    try{
+    if(window.rbNotificationPreferences?.pmsUrgentEmail === false){
+      urgentEmailStatus = "disabled";
+    }else try{
       const idToken = await window.currentUser.getIdToken();
       const notificationResponse = await fetch("/api/work-email", {
         method:"POST",
@@ -10434,10 +10438,10 @@ window.dispatchEvent(
   t(
     status === "pending"
       ? "Richiesta salvata"
-      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
+      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "disabled" ? " · Email urgenti disattivate" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
     status === "pending"
       ? "Request saved"
-      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
+      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "disabled" ? " · Urgent emails disabled" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
   )
 );
 
@@ -10509,6 +10513,11 @@ function renderPMSPortalAlerts(pmsData = {}){
   });
   const urgentCount = alerts.filter(alert => alert.code === "guest_issue_urgent").length;
   const operationalCount = alerts.length + arrivalsToday + departuresToday;
+  const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
+  const emailToggle = `
+    <button type="button" onclick="togglePMSUrgentEmail()" style="border:1px solid ${urgentEmailEnabled ? "#a7f3d0" : "#cbd5e1"};border-radius:999px;background:${urgentEmailEnabled ? "#ecfdf5" : "#f8fafc"};color:${urgentEmailEnabled ? "#047857" : "#64748b"};padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;">
+      ${urgentEmailEnabled ? "✉️ " + window.t("Email urgenti attive", "Urgent emails on") : "🔕 " + window.t("Email urgenti disattivate", "Urgent emails off")}
+    </button>`;
 
   if(!operationalCount){
     container.innerHTML = `
@@ -10517,7 +10526,7 @@ function renderPMSPortalAlerts(pmsData = {}){
           <div style="font-size:14px;font-weight:900;color:#065f46;">✅ ${window.t("Centro avvisi host", "Host alert centre")}</div>
           <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessuna attività urgente: operatività sotto controllo.", "No urgent tasks: operations are under control.")}</div>
         </div>
-        <span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${window.t("Tutto aggiornato", "All up to date")}</span>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${window.t("Tutto aggiornato", "All up to date")}</span></div>
       </div>`;
     return;
   }
@@ -10537,13 +10546,13 @@ function renderPMSPortalAlerts(pmsData = {}){
           <div style="font-size:14px;font-weight:900;color:${palette.color};">${palette.icon} ${window.t("Centro avvisi host", "Host alert centre")}</div>
           <div style="font-size:12px;color:#475569;margin-top:4px;">${escapeDashboardHTML(summaryParts.join(" · "))}</div>
         </div>
-        <span style="padding:7px 11px;border-radius:999px;background:${palette.badge};color:${palette.color};font-size:11px;font-weight:900;">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:${palette.badge};color:${palette.color};font-size:11px;font-weight:900;">
           ${urgentCount
             ? window.t(`${urgentCount} urgenti`, `${urgentCount} urgent`)
             : operationalCount === 1
               ? window.t("1 avviso", "1 alert")
               : window.t(`${operationalCount} avvisi`, `${operationalCount} alerts`)}
-        </span>
+        </span></div>
       </div>
       ${alerts.length ? `
         <div style="display:grid;gap:7px;margin-top:11px;">
@@ -10557,6 +10566,30 @@ function renderPMSPortalAlerts(pmsData = {}){
       </button>
     </div>`;
 }
+
+window.togglePMSUrgentEmail = async function(){
+  if(!window.currentUser || window.currentUser.uid === "demo-user") return;
+  const currentValue = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
+  const nextValue = !currentValue;
+
+  try{
+    await updateDoc(doc(db, "users", window.currentUser.uid), {
+      "notificationPreferences.pmsUrgentEmail":nextValue,
+      "notificationPreferences.updatedAt":serverTimestamp()
+    });
+    window.rbNotificationPreferences = {
+      ...(window.rbNotificationPreferences || {}),
+      pmsUrgentEmail:nextValue
+    };
+    renderPMSPortalAlerts(window.rbPMSData || {});
+  }catch(error){
+    dashboardError("PMS notification preference update failed", error);
+    alert(window.t(
+      "Impossibile aggiornare la preferenza email.",
+      "Unable to update the email preference."
+    ));
+  }
+};
 
 function renderTodayBookingOperations(bookings = []){
   const container = document.getElementById("booking-today-operations");
