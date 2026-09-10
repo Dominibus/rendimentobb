@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "RendimentoBB SaaS",
   "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "test:financial": "node --test tests/financial-engine.test.js"
+  },
   "dependencies": {
     "stripe": "^14.0.0",
     "firebase-admin": "^12.0.0",
