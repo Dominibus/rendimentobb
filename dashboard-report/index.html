@@ -1894,6 +1894,7 @@ async function generatePDF(){
     const price = safe(fallback.price);
     const equity = safe(fallback.equity);
     const risk = safe(fallback.risk);
+    const riskBreakdown = fallback.riskBreakdown || null;
     const city = fallback.city || "—";
 
     const annualProfit = safe(
@@ -2702,6 +2703,21 @@ doc.text(
   106,
   { align:"right" }
 );
+
+if(riskBreakdown){
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(8);
+  doc.setTextColor(71,85,105);
+  doc.text(
+    [
+      `${t("Base prudenziale","Prudential base")} +${safe(riskBreakdown.base)}  ·  ${t("ROI equity","Equity ROI")} +${safe(riskBreakdown.roi)}  ·  ${t("Occupazione","Occupancy")} +${safe(riskBreakdown.occupancy)}`,
+      `${t("Leva LTV","LTV leverage")} +${safe(riskBreakdown.leverage)}  ·  ${t("Copertura DSCR","DSCR coverage")} +${safe(riskBreakdown.debtCoverage)}  ·  ${t("Cashflow","Cashflow")} +${safe(riskBreakdown.cashflow)}`
+    ],
+    20,
+    121,
+    { maxWidth:170 }
+  );
+}
 
     addFooter();
 
