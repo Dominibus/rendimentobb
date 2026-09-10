@@ -631,6 +631,18 @@ await addDoc(collection(db,"analyses"),{
   dscr:
     data.dscr ?? 0,
 
+  noi:
+    data.noi ?? data.netOperatingIncome ?? 0,
+
+  netOperatingIncome:
+    data.netOperatingIncome ?? data.noi ?? 0,
+
+  capRate:
+    data.capRate ?? 0,
+
+  annualDebtService:
+    data.annualDebtService ?? data.mortgageYearly ?? 0,
+
     occupancy:
     data.occupancy ?? 0,
 
@@ -2940,6 +2952,14 @@ window.__MANUAL_ANALYSIS__ === true;
       Number(result?.ltv ?? 0),
     dscr:
       Number(result?.dscr ?? 0),
+    noi:
+      Number(result?.noi ?? result?.netOperatingIncome ?? 0),
+    netOperatingIncome:
+      Number(result?.netOperatingIncome ?? result?.noi ?? 0),
+    capRate:
+      Number(result?.capRate ?? 0),
+    annualDebtService:
+      Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
     gross,
     net,
     occupancy: occupancyRate,
@@ -3015,6 +3035,18 @@ ltv:
 
 dscr:
   Number(result?.dscr ?? 0),
+
+noi:
+  Number(result?.noi ?? result?.netOperatingIncome ?? 0),
+
+netOperatingIncome:
+  Number(result?.netOperatingIncome ?? result?.noi ?? 0),
+
+capRate:
+  Number(result?.capRate ?? 0),
+
+annualDebtService:
+  Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
 
 occupancy: occupancyRate,
 
@@ -3350,6 +3382,10 @@ if(finalROI <= 0){
         price: propertyPrice,
         equity: Number(equity || 0),
         profit: Number(net || 0),
+        noi: Number(result?.noi ?? result?.netOperatingIncome ?? 0),
+        capRate: Number(result?.capRate ?? 0),
+        dscr: Number(result?.dscr ?? 0),
+        annualDebtService: Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
         type: "analysis",
         source: "roi_simulator",
         funnel: "analysis_completed",
@@ -4127,6 +4163,18 @@ window.rbChatbotData = {
 
   net: chatbotNet,
 
+  noi:
+    Number(result?.noi ?? result?.netOperatingIncome ?? 0),
+
+  netOperatingIncome:
+    Number(result?.netOperatingIncome ?? result?.noi ?? 0),
+
+  capRate:
+    Number(result?.capRate ?? 0),
+
+  dscr:
+    Number(result?.dscr ?? 0),
+
   occupancy:
     occupancy ??
     occupancyRate ??
@@ -4200,6 +4248,21 @@ window.lastAnalysisData = {
   risk:
     risk ??
     0,
+
+  riskBreakdown:
+    result?.riskBreakdown ?? null,
+
+  noi:
+    Number(result?.noi ?? result?.netOperatingIncome ?? 0),
+
+  netOperatingIncome:
+    Number(result?.netOperatingIncome ?? result?.noi ?? 0),
+
+  capRate:
+    Number(result?.capRate ?? 0),
+
+  dscr:
+    Number(result?.dscr ?? 0),
 
   cashflow:
     net ??
@@ -6598,6 +6661,7 @@ const financingYears =
 
 const annualDebtService =
   safe(
+    d.annualDebtService ??
     d.mortgageYearly ??
     (
       (
@@ -6609,7 +6673,16 @@ const annualDebtService =
   );
 
 const netOperatingIncome =
-  profit + annualDebtService;
+  safe(
+    d.noi ??
+    d.netOperatingIncome ??
+    (profit + annualDebtService)
+  );
+
+const capRate =
+  safePrice > 0
+    ? (netOperatingIncome / safePrice) * 100
+    : 0;
 
 const dscr =
   annualDebtService > 0
@@ -6662,6 +6735,16 @@ row(
 row(
   "DSCR",
   dscrLabel
+);
+
+row(
+  "NOI",
+  eur(netOperatingIncome)
+);
+
+row(
+  "Cap Rate",
+  capRate.toFixed(2) + "%"
 );
 
 row(
