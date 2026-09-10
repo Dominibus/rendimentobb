@@ -50,6 +50,14 @@ function calculateROI(input = {}){
 
   const operatingProfit = gross - fees - yearlyExpenses;
 
+  // Canonical property metrics: financing and income taxes are excluded.
+  const netOperatingIncome = operatingProfit;
+
+  const capRate =
+    price > 0
+      ? (netOperatingIncome / price) * 100
+      : 0;
+
   const taxCost =
     operatingProfit > 0
       ? operatingProfit * (tax / 100)
@@ -103,12 +111,9 @@ function calculateROI(input = {}){
       ? (loanAmount / price) * 100
       : 0;
 
-  const cashAvailableForDebt =
-    netAfterMortgage + mortgageYearly;
-
   const dscr =
     mortgageYearly > 0
-      ? cashAvailableForDebt / mortgageYearly
+      ? netOperatingIncome / mortgageYearly
       : 0;
 
   const roiRisk =
@@ -179,9 +184,13 @@ function calculateROI(input = {}){
     expensesYearly: clean(yearlyExpenses),
 
     operatingProfit: clean(operatingProfit),
+    noi: clean(netOperatingIncome),
+    netOperatingIncome: clean(netOperatingIncome),
+    capRate: clean(capRate),
     taxCost: clean(taxCost),
 
     mortgageYearly: clean(mortgageYearly),
+    annualDebtService: clean(mortgageYearly),
 
     netAfterMortgage: clean(netAfterMortgage),
     profit: clean(netAfterMortgage),
