@@ -10,13 +10,28 @@
 
 export function calculateMortgage(amount, rate, years){
 
-if(!amount || !rate || !years) return 0;
+const principal = Number(amount);
+const annualRate = Number(rate);
+const durationYears = Number(years);
 
-const monthlyRate = rate / 100 / 12;
-const months = years * 12;
+if(
+  !Number.isFinite(principal) ||
+  !Number.isFinite(annualRate) ||
+  !Number.isFinite(durationYears) ||
+  principal <= 0 ||
+  annualRate < 0 ||
+  durationYears <= 0
+) return 0;
+
+const monthlyRate = annualRate / 100 / 12;
+const months = durationYears * 12;
+
+if(monthlyRate === 0){
+  return principal / durationYears;
+}
 
 const monthlyPayment =
-amount *
+principal *
 (monthlyRate * Math.pow(1 + monthlyRate, months)) /
 (Math.pow(1 + monthlyRate, months) - 1);
 
@@ -33,19 +48,38 @@ return yearlyCost;
 
 export function mortgageSimulation(amount, rate, years){
 
-if(!amount || !rate || !years) return null;
+const principal = Number(amount);
+const annualRate = Number(rate);
+const durationYears = Number(years);
 
-const monthlyRate = rate / 100 / 12;
-const months = years * 12;
+if(
+  !Number.isFinite(principal) ||
+  !Number.isFinite(annualRate) ||
+  !Number.isFinite(durationYears) ||
+  principal <= 0 ||
+  annualRate < 0 ||
+  durationYears <= 0
+) return null;
+
+const monthlyRate = annualRate / 100 / 12;
+const months = durationYears * 12;
+
+if(monthlyRate === 0){
+  return {
+    monthlyPayment: principal / months,
+    totalPaid: principal,
+    totalInterest: 0
+  };
+}
 
 const monthlyPayment =
-amount *
+principal *
 (monthlyRate * Math.pow(1 + monthlyRate, months)) /
 (Math.pow(1 + monthlyRate, months) - 1);
 
 const totalPaid = monthlyPayment * months;
 
-const totalInterest = totalPaid - amount;
+const totalInterest = totalPaid - principal;
 
 return {
 
@@ -77,13 +111,15 @@ rates.forEach(rate => {
 
 const r = typeof rate === "object" ? rate.rate : rate;
 
-if(!r) return;
+const numericRate = Number(r);
 
-const yearlyCost = calculateMortgage(amount, r, years);
+if(!Number.isFinite(numericRate) || numericRate < 0) return;
+
+const yearlyCost = calculateMortgage(amount, numericRate, years);
 
 results.push({
 name: rate.name || "Bank",
-rate: r,
+rate: numericRate,
 yearlyCost
 });
 
@@ -92,5 +128,4 @@ yearlyCost
 return results;
 
 }
-
 
