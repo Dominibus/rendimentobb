@@ -2903,7 +2903,7 @@ window.__MANUAL_ANALYSIS__ === true;
   shouldSave &&
   window.currentUser &&
   window.firebaseReady &&
-  finalROI > 0
+  Number.isFinite(Number(finalROI))
 ){
 
   saveAnalysis({
