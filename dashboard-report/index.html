@@ -984,7 +984,7 @@ margin-top:4px;
   </div>
 
   <div class="kpi">
-    <span data-it="ROI" data-en="ROI">ROI</span>
+    <span data-it="ROI equity" data-en="Equity ROI">ROI equity</span>
     <strong id="roi"></strong>
   </div>
 
@@ -2121,8 +2121,8 @@ doc.setTextColor(100,116,139);
 
 doc.text(
   t(
-    "ROI PREVISIONALE",
-    "FORECAST ROI"
+    "ROI EQUITY PREVISIONALE",
+    "FORECAST EQUITY ROI"
   ),
   28,
   y + 19
@@ -2762,7 +2762,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  t("ROI PROGETTO","PROJECT ROI"),
+  t("ROI EQUITY","EQUITY ROI"),
   28,
   44
 );
@@ -3061,7 +3061,7 @@ const drawFinalKPI = (
 
 drawFinalKPI(
   20,
-  t("ROI PROGETTO","PROJECT ROI"),
+  t("ROI EQUITY","EQUITY ROI"),
   `${roi.toFixed(1)}%`
 );
 
@@ -3246,7 +3246,7 @@ doc.text(
           price,
 
         realROI:
-          roi,
+          capRate,
 
         risk:
           risk,
@@ -3340,7 +3340,7 @@ function populateSimulations(){
     opt.value = index.toString();
 
     opt.innerText =
-      `${sim.city || "City"} – ROI ${(sim.roi || 0).toFixed(1)}%`;
+      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${(sim.roi || 0).toFixed(1)}%`;
 
     select.appendChild(opt);
 
