@@ -531,9 +531,9 @@ body.opening-bnb-page {
   font-weight: 850;
 }
 
-.opening-mistakes h3 {
+.opening-bnb-page .opening-section--navy .opening-mistakes h3 {
   margin: 0;
-  color: #fff;
+  color: #fff !important;
   font-size: 1rem;
 }
 
