@@ -228,7 +228,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📈 ROI
+                                📈 ${window.currentLang === "en" ? "Property ROI" : "ROI immobile"}
                             </span>
 
                             <strong>
@@ -843,7 +843,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📈 ROI
+                                📈 ${window.currentLang === "en" ? "Property ROI" : "ROI immobile"}
                             </span>
 
                             <strong>--</strong>
