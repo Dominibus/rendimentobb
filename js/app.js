@@ -622,6 +622,15 @@ await addDoc(collection(db,"analyses"),{
   risk:
     data.risk ?? 0,
 
+  riskBreakdown:
+    data.riskBreakdown ?? null,
+
+  ltv:
+    data.ltv ?? 0,
+
+  dscr:
+    data.dscr ?? 0,
+
     occupancy:
     data.occupancy ?? 0,
 
@@ -2925,6 +2934,12 @@ window.__MANUAL_ANALYSIS__ === true;
         )
       ),
     risk,
+    riskBreakdown:
+      result?.riskBreakdown ?? null,
+    ltv:
+      Number(result?.ltv ?? 0),
+    dscr:
+      Number(result?.dscr ?? 0),
     gross,
     net,
     occupancy: occupancyRate,
@@ -2991,6 +3006,15 @@ visualROI: Number(finalROI) || 0,
   // =====================================
 
 risk: riskScore,
+
+riskBreakdown:
+  result?.riskBreakdown ?? null,
+
+ltv:
+  Number(result?.ltv ?? 0),
+
+dscr:
+  Number(result?.dscr ?? 0),
 
 occupancy: occupancyRate,
 
@@ -7000,10 +7024,22 @@ doc.roundedRect(20,y,170,48,5,5,"F");
 
 doc.setFontSize(10);
 
+const pdfRiskBreakdown = d.riskBreakdown || null;
+const pdfRiskDetails = pdfRiskBreakdown
+  ? [
+      `${T("Base prudenziale","Prudential base")} +${safe(pdfRiskBreakdown.base)}`,
+      `${T("ROI equity","Equity ROI")} +${safe(pdfRiskBreakdown.roi)}`,
+      `${T("Occupazione","Occupancy")} +${safe(pdfRiskBreakdown.occupancy)}`,
+      `${T("Leva LTV","LTV leverage")} +${safe(pdfRiskBreakdown.leverage)}`,
+      `${T("Copertura DSCR","DSCR coverage")} +${safe(pdfRiskBreakdown.debtCoverage)}`,
+      `${T("Cashflow","Cashflow")} +${safe(pdfRiskBreakdown.cashflow)}`
+    ]
+  : null;
+
 doc.text(
-  T(
-    "L'analisi considera sostenibilità del cashflow, leva finanziaria, benchmark di mercato e stabilità operativa.",
-    "The analysis considers cashflow sustainability, leverage, market benchmark and operational stability."
+  pdfRiskDetails || T(
+    "L'analisi considera sostenibilità del cashflow, leva finanziaria, copertura del debito e stabilità operativa.",
+    "The analysis considers cashflow sustainability, leverage, debt coverage and operational stability."
   ),
   25,
   y + 15,
