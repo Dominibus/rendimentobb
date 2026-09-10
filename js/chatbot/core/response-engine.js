@@ -2606,6 +2606,58 @@ else if(
     response.confidence =
       0.94;
 
+    const riskBreakdown =
+      liveData.riskBreakdown || null;
+
+    const riskLabelsIT = {
+      base:"Base prudenziale",
+      roi:"ROI equity",
+      occupancy:"Occupazione",
+      leverage:"Leva LTV",
+      debtCoverage:"Copertura DSCR",
+      cashflow:"Cashflow"
+    };
+
+    const riskLabelsEN = {
+      base:"Prudential base",
+      roi:"Equity ROI",
+      occupancy:"Occupancy",
+      leverage:"LTV leverage",
+      debtCoverage:"DSCR coverage",
+      cashflow:"Cashflow"
+    };
+
+    const buildRiskDetails = labels => {
+      if(!riskBreakdown) return "";
+      return Object.entries(riskLabelsIT)
+        .map(([key]) => ({
+          label: labels[key],
+          value: Number(riskBreakdown[key] ?? 0)
+        }))
+        .filter(item => item.value > 0)
+        .map(item => `• ${item.label}: +${item.value}`)
+        .join("\n");
+    };
+
+    const riskDetailsIT = buildRiskDetails(riskLabelsIT);
+    const riskDetailsEN = buildRiskDetails(riskLabelsEN);
+
+    const riskMetricsIT = riskBreakdown
+      ? `\n\n🏦 LTV: ${Number(liveData.ltv ?? 0).toFixed(1)}% · DSCR: ${Number(liveData.dscr ?? 0).toFixed(2)}`
+      : "";
+
+    const riskMetricsEN = riskBreakdown
+      ? `\n\n🏦 LTV: ${Number(liveData.ltv ?? 0).toFixed(1)}% · DSCR: ${Number(liveData.dscr ?? 0).toFixed(2)}`
+      : "";
+
+    const riskDetailsBlockIT = riskDetailsIT
+      ? `\n\n🧩 Componenti del rischio:\n${riskDetailsIT}${riskMetricsIT}`
+      : "";
+
+    const riskDetailsBlockEN = riskDetailsEN
+      ? `\n\n🧩 Risk components:\n${riskDetailsEN}${riskMetricsEN}`
+      : "";
+
     if(risk >= 70){
 
       response.signals.push(
@@ -2619,7 +2671,7 @@ else if(
 📊 Risk score:
 ${risk}/100
 
-⚠️ Cashflow e sostenibilità potrebbero diventare instabili nel lungo periodo.`;
+⚠️ Cashflow e sostenibilità potrebbero diventare instabili nel lungo periodo.${riskDetailsBlockIT}`;
 
       response.textEN =
 
@@ -2628,7 +2680,7 @@ ${risk}/100
 📊 Risk score:
 ${risk}/100
 
-⚠️ Cashflow and sustainability may become unstable long-term.`;
+⚠️ Cashflow and sustainability may become unstable long-term.${riskDetailsBlockEN}`;
 
     }
 
@@ -2645,7 +2697,7 @@ ${risk}/100
 📊 Risk score:
 ${risk}/100
 
-💡 L'investimento sembra sostenibile ma richiede monitoraggio operativo.`;
+💡 L'investimento sembra sostenibile ma richiede monitoraggio operativo.${riskDetailsBlockIT}`;
 
       response.textEN =
 
@@ -2654,7 +2706,7 @@ ${risk}/100
 📊 Risk score:
 ${risk}/100
 
-💡 The investment appears sustainable but requires operational monitoring.`;
+💡 The investment appears sustainable but requires operational monitoring.${riskDetailsBlockEN}`;
 
     }
 
@@ -2700,8 +2752,8 @@ ${occupancy}%
 
 ${riskInsightIT}
 
-📈 ROI reale:
-${roi.toFixed(1)}%`;
+📈 ROI equity:
+${roi.toFixed(1)}%${riskDetailsBlockIT}`;
 
       response.textEN =
 
@@ -2715,8 +2767,8 @@ ${occupancy}%
 
 ${riskInsightEN}
 
-📈 Real ROI:
-${roi.toFixed(1)}%`;
+📈 Equity ROI:
+${roi.toFixed(1)}%${riskDetailsBlockEN}`;
 
     }
 
