@@ -2570,16 +2570,16 @@ drawFinancingKPI(
   );
 
 const riskLabel =
-  riskScore < 30
+  riskScore < 40
     ? t("RISCHIO BASSO","LOW RISK")
-    : riskScore < 60
+    : riskScore < 65
       ? t("RISCHIO MEDIO","MEDIUM RISK")
       : t("RISCHIO ALTO","HIGH RISK");
 
 const riskColor =
-  riskScore < 30
+  riskScore < 40
     ? green
-    : riskScore < 60
+    : riskScore < 65
       ? amber
       : red;
 
