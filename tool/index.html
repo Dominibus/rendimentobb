@@ -927,11 +927,11 @@ I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcola
          </label>
 
           <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
-            <option value="">Seleziona città</option>
-            <option value="milano">Milano</option>
-            <option value="roma">Roma</option>
-            <option value="napoli">Napoli</option>
-            <option value="firenze">Firenze</option>
+            <option value="" data-it="Seleziona città" data-en="Select city">Seleziona città</option>
+            <option value="milano" data-it="Milano" data-en="Milan">Milano</option>
+            <option value="roma" data-it="Roma" data-en="Rome">Roma</option>
+            <option value="napoli" data-it="Napoli" data-en="Naples">Napoli</option>
+            <option value="firenze" data-it="Firenze" data-en="Florence">Firenze</option>
           </select>
 
           <input  
@@ -1730,7 +1730,7 @@ window.updateInvestmentScore = function(score){
   if(!container) return;
 
   const lang =
-    localStorage.getItem("lang") === "en"
+    window.currentLang === "en"
       ? "en"
       : "it";
 
@@ -2093,3 +2093,8 @@ setTimeout(()=>{
     document.body.classList.remove("modal-open");
   }
 }, 500);
+
+</script>
+
+</body>
+</html>
