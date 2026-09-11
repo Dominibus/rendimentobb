@@ -1887,7 +1887,8 @@ function renderInvestmentVerdict(
 roi,
 risk = 50,
 cashflow = 0,
-occupancy = 70
+occupancy = 70,
+canonicalVerdict = null
 ){
 
 const box =
@@ -2020,6 +2021,31 @@ t(
 )
 );
 
+}
+
+// The score engine is the single source of truth for the recommendation.
+// Metric-based reasons above remain explanatory, but must never create a
+// verdict that contradicts the saved report, emails or PDF.
+const normalizedCanonicalVerdict = String(canonicalVerdict || "")
+  .trim()
+  .toUpperCase();
+
+if(["BUY", "ACQUISTA"].includes(normalizedCanonicalVerdict)){
+  verdict = "BUY";
+  color = "#10b981";
+  icon = "🟢";
+}
+else if(["WAIT", "ATTENDI"].includes(normalizedCanonicalVerdict)){
+  verdict = "WAIT";
+  color = "#f59e0b";
+  icon = "🟠";
+  confidence = Math.min(confidence, 82);
+}
+else if(["AVOID", "EVITA"].includes(normalizedCanonicalVerdict)){
+  verdict = "AVOID";
+  color = "#ef4444";
+  icon = "🔴";
+  confidence = Math.min(confidence, 82);
 }
 
 description = reasons
@@ -4415,7 +4441,8 @@ renderInvestmentVerdict(
   Number(window.lastAnalysisData.roi ?? 0),
   Math.round(Number(window.lastAnalysisData.risk ?? 0)),
   Number(window.lastAnalysisData.net ?? window.lastAnalysisData.cashflow ?? 0),
-  Number(window.lastAnalysisData.occupancy ?? 0)
+  Number(window.lastAnalysisData.occupancy ?? 0),
+  window.lastAnalysisData.verdict
 );
 
 renderInvestmentRanking(
@@ -9215,7 +9242,7 @@ if(!window.__rbToolLanguageRefreshBound){
     }
 
     renderRiskMeter(risk);
-    renderInvestmentVerdict(roi, risk, cashflow, occupancy);
+    renderInvestmentVerdict(roi, risk, cashflow, occupancy, data.verdict);
     renderInvestmentRanking(roi);
     renderUniversalKPI({
       net: cashflow,
