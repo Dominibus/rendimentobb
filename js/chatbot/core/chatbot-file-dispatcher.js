@@ -4,6 +4,14 @@
 
 window.rbFileDispatcher = (function(){
 
+    const debug = (...args) => {
+        if(window.RB_DEBUG === true) console.debug(...args);
+    };
+
+    const debugWarn = (...args) => {
+        if(window.RB_DEBUG === true) console.warn(...args);
+    };
+
     function dispatch(file){
 
         if(!file){
@@ -18,7 +26,7 @@ window.rbFileDispatcher = (function(){
             .pop()
             .toLowerCase();
 
-        console.log(
+        debug(
             "📂 FILE DISPATCHER",
             extension,
             file
@@ -50,7 +58,7 @@ window.rbFileDispatcher = (function(){
 
             default:
 
-                console.warn(
+                debugWarn(
                     "Unsupported file",
                     extension
                 );
@@ -61,7 +69,7 @@ window.rbFileDispatcher = (function(){
 
 function dispatchPDF(file){
 
-    console.log(
+    debug(
         "📄 PDF DETECTED",
         file.name
     );
@@ -77,14 +85,14 @@ function dispatchPDF(file){
 
     }
 
-    console.warn(
+    debugWarn(
         "Document Engine non disponibile."
     );
 
 }
     function dispatchImage(file){
 
-        console.log(
+        debug(
             "🖼 IMAGE DETECTED",
             file.name
         );
@@ -93,7 +101,7 @@ function dispatchPDF(file){
 
     function dispatchSpreadsheet(file){
 
-        console.log(
+        debug(
             "📊 EXCEL DETECTED",
             file.name
         );
@@ -102,7 +110,7 @@ function dispatchPDF(file){
 
     function dispatchDocument(file){
 
-        console.log(
+        debug(
             "📄 WORD DETECTED",
             file.name
         );
