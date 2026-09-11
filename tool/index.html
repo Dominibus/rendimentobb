@@ -1821,6 +1821,12 @@ window.updateInvestmentScore = function(score){
 
 <script>
 
+const toolDebug = (...args) => {
+  if(window.RB_DEBUG === true){
+    console.debug(...args);
+  }
+};
+
   window.isProUser = function(){
   const access = window.getUserAccess?.() || {};
   return !!(access.isPro || access.isAdmin);
@@ -1845,7 +1851,7 @@ window.applyMarketData = function(city){
   applyCityBackground(city);
 }
 
-  console.log("📍 City selected:", city);
+  toolDebug("📍 City selected:", city);
 };
 
 /* ================= KPI PREVIEW ================= */
@@ -1876,7 +1882,7 @@ function updatePreviewMetrics(roi,risk){
 /* ================= PAYWALL ================= */
 
 function applyPaywall(){
-  console.log("⛔ PAYWALL DISABLED → gestito SOLO da app.js");
+  toolDebug("⛔ PAYWALL DISABLED → gestito SOLO da app.js");
   return;
 }
 
@@ -1887,16 +1893,16 @@ function applyProAccess(){
   const access = window.getUserAccess?.();
 
   if(!access){
-    console.log("⏳ Access not ready");
+    toolDebug("⏳ Access not ready");
     return false;
   }
 
-  console.log("👤 ACCESS:", access);
+  toolDebug("👤 ACCESS:", access);
 
   if(access.isPro || access.isAdmin){
 
     document.body.classList.add("pro-user");
-    console.log("✅ PRO MODE ATTIVO");
+    toolDebug("✅ PRO MODE ATTIVO");
 
   }
 
@@ -1955,7 +1961,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 🔥 PRO / ADMIN NON DEVONO MAI VEDERE IL POPUP
     if(access.isPro || access.isAdmin){
-      console.log("✅ PRO USER → skip upgrade popup");
+      toolDebug("✅ PRO USER → skip upgrade popup");
       return;
     }
 
@@ -1987,14 +1993,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.handleUpgradeClick = function(){
 
-  console.log("🔥 CTA CLICK");
+  toolDebug("🔥 CTA CLICK");
 
   const isPro = window.getUserAccess().isPro;
 
   // ================= 🟢 UTENTE PRO =================
   if(isPro){
 
-    console.log("✅ PRO USER → scroll advanced");
+    toolDebug("✅ PRO USER → scroll advanced");
 
     const target = document.getElementById("advanced-analysis");
 
@@ -2009,7 +2015,7 @@ window.handleUpgradeClick = function(){
 
   // ================= 🔒 UTENTE FREE =================
 
-  console.log("🔒 FREE USER → open upgrade modal");
+  toolDebug("🔒 FREE USER → open upgrade modal");
 
   window.showUpgradeModalCustom(
     "🔥 Sblocca analisi completa",
@@ -2043,7 +2049,7 @@ window.closeUpgradeModal = function(){
 
 window.showUpgradeModalCustom = function(titleIT, titleEN){
 
-  console.log("🔥 OPEN UPGRADE MODAL");
+  toolDebug("🔥 OPEN UPGRADE MODAL");
 
   const modal = document.getElementById("upgrade-modal");
   if(!modal) return;
@@ -2067,7 +2073,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedCity = localStorage.getItem("selected_city");
 
 if(savedCity && typeof applyCityBackground === "function"){
-  console.log("🌆 Restore BG:", savedCity);
+  toolDebug("🌆 Restore BG:", savedCity);
   applyCityBackground(savedCity);
 }
 
