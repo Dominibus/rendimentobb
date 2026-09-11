@@ -25,6 +25,17 @@ test("normal user alerts do not emit warnings or traces in production", () => {
   const alertSource = appSource.slice(alertStart, alertEnd);
 
   assert.match(alertSource, /window\.RB_DEBUG === true/);
-  assert.match(alertSource, /console\.warn/);
+  assert.match(alertSource, /appDebugWarn/);
   assert.match(alertSource, /console\.trace/);
+});
+
+test("simulator fallback warnings are debug-only", () => {
+  assert.match(appSource, /const appDebugWarn =/);
+  assert.match(appSource, /window\.RB_DEBUG === true/);
+
+  const callsOutsideHelper = appSource
+    .replace(/const appDebugWarn = \([\s\S]*?\n};/, "")
+    .match(/console\.warn\s*\(/g) || [];
+
+  assert.equal(callsOutsideHelper.length, 0);
 });
