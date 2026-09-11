@@ -96,7 +96,7 @@ window.rbDocumentEvents = {
         ){
 
             if(window.RB_DEBUG === true){
-    console.log("DOCUMENT EVENT", event);
+    console.debug("DOCUMENT EVENT", event);
 }
 
         }
@@ -517,7 +517,7 @@ window.rbActiveExecutiveDocument = {
 
 window.rbAnalyzeUploadedPDF = async function(file){
 
-    console.log(
+    if(window.RB_DEBUG === true) console.debug(
         "📄 ANALYZE UPLOADED DOCUMENT",
         file
     );
@@ -554,7 +554,7 @@ window.rbAnalyzeUploadedPDF = async function(file){
 
             };
 
-    console.log(
+    if(window.RB_DEBUG === true) console.debug(
         "🧠 DOCUMENT TYPE",
         classification
     );
@@ -590,7 +590,7 @@ window.rbAnalyzeUploadedPDF = async function(file){
 
             const buffer = reader.result;
 
-            console.log(
+            if(window.RB_DEBUG === true) console.debug(
 
                 "📄 DOCUMENT LOADED",
 
