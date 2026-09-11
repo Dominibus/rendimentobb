@@ -980,7 +980,7 @@ border-radius:999px;
 font-weight:700;
 ">
 
-ROI ${roiRounded}%
+ROI ${formatNumber(roiRounded, "it", 1)}%
 
 </div>` : ""}
 
@@ -1015,11 +1015,7 @@ opacity:.92;
 line-height:1.5;
 ">
 
-${t(
-  detectedLang,
-  "Nuovo lead acquisito da RendimentoBB",
-  "New lead generated from RendimentoBB"
-)}
+Nuovo lead acquisito da RendimentoBB
 
 </div>
 
@@ -1101,7 +1097,7 @@ ${!isOperationalLead ? `<tr>
 
 <tr>
 <td><strong>🏦 DSCR</strong></td>
-<td>${canonicalDSCR.toFixed(2)}</td>
+<td>${formatNumber(canonicalDSCR, "it", 2)}</td>
 </tr>` : ""}
 
 ${!isPropertyUpdatesLead && !isMortgageLead ? `<tr>
