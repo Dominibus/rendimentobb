@@ -3842,6 +3842,9 @@ if(intent.intent === "pms_bookings"){
     isGuestIssueRequest ||
     /attenzion|anomali|problem|critic|attention|issue|warning/.test(bookingMessage);
 
+  const isTodayAttentionRequest =
+    /\boggi\b|\bodiern|\btoday\b/.test(bookingMessage);
+
   const isPricingRequest =
     /tariff|prezz|stagion|pricing|priced|\bprices?\b|\brates?\b|\badr\b|nightly|per night|a notte|convenient|worth/.test(
       bookingMessage
@@ -4023,12 +4026,30 @@ if(intent.intent === "pms_bookings"){
 
   if(isAttentionRequest){
 
-    const displayedAttentionBookings = isGuestIssueRequest
+    let displayedAttentionBookings = isGuestIssueRequest
       ? attentionBookings.filter(booking =>
           booking?.guestIssue?.active === true &&
           String(booking.guestIssue.status || "open") !== "resolved"
         )
       : attentionBookings;
+
+    if(isTodayAttentionRequest){
+      const immediateAttentionCodes = new Set([
+        "invalid_date_range",
+        "pending_booking",
+        "arrival_today",
+        "departure_today",
+        "missing_guest_name",
+        "missing_or_invalid_amount",
+        "guest_issue_urgent",
+        "guest_issue_open"
+      ]);
+
+      displayedAttentionBookings = displayedAttentionBookings.filter(booking =>
+        (Array.isArray(booking?.attentionCodes) ? booking.attentionCodes : [])
+          .some(code => immediateAttentionCodes.has(code))
+      );
+    }
 
     if(
       displayedAttentionBookings.length === 0
@@ -4448,7 +4469,7 @@ ${issueDetail ? `Report: ${issueDetail}\n` : ""}Action: ${actions || "Review the
 
     response.actions =
       displayedAttentionBookings
-        .slice(0, 3)
+        .slice(0, 5)
         .map(booking => {
           const attentionCodes = Array.isArray(booking.attentionCodes)
             ? booking.attentionCodes
