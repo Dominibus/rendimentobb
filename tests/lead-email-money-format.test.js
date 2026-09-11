@@ -21,12 +21,14 @@ vm.runInContext(
 
 test("Italian lead emails use grouped Italian currency", () => {
   assert.equal(context.formatMoney(17097.91, "it"), "17.097,91 €");
-  assert.equal(context.formatMoney(22500, "it"), "22.500 €");
+  assert.equal(context.formatMoney(14799.6, "it"), "14.799,60 €");
+  assert.equal(context.formatMoney(22500, "it"), "22.500,00 €");
 });
 
 test("English lead emails use grouped English currency", () => {
   assert.equal(context.formatMoney(17097.91, "en"), "€17,097.91");
-  assert.equal(context.formatMoney(22500, "en"), "€22,500");
+  assert.equal(context.formatMoney(14799.6, "en"), "€14,799.60");
+  assert.equal(context.formatMoney(22500, "en"), "€22,500.00");
 });
 
 test("both user and admin email templates use the shared formatter", () => {
