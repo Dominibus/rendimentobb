@@ -7,6 +7,11 @@ const responseSource = await readFile(
   "utf8"
 );
 
+const chatbotUISource = await readFile(
+  new URL("../js/chatbot/ui/chatbot-ui.js", import.meta.url),
+  "utf8"
+);
+
 test("today attention requests exclude future routine tasks", () => {
   assert.match(responseSource, /isTodayAttentionRequest/);
   assert.match(responseSource, /immediateAttentionCodes/);
@@ -29,4 +34,10 @@ test("attention responses can expose every action in the current result", () => 
   const attentionSource = responseSource.slice(attentionStart, attentionEnd);
 
   assert.match(attentionSource, /\.slice\(0, 5\)/);
+
+  const actionRendererStart = chatbotUISource.indexOf("function addResponseActions");
+  const actionRendererEnd = chatbotUISource.indexOf("// ⌨ SEND MESSAGE", actionRendererStart);
+  const actionRendererSource = chatbotUISource.slice(actionRendererStart, actionRendererEnd);
+
+  assert.match(actionRendererSource, /\.slice\(0, 5\)/);
 });
