@@ -9930,43 +9930,66 @@ window.openCurrentBookings = async function(){
 
   }
 
-  if(window.currentPropertyId){
-
-    openBookings(window.currentPropertyId);
-    return;
-
-  }
-
   if(!window.currentUser){
-
-    
     return;
-
   }
 
-  const snap = await getDocs(
-    query(
-      collection(db,"properties"),
-      where(
-        "uid",
-        "==",
-        window.currentUser.uid
+  const [propertiesSnap, bookingsSnap] = await Promise.all([
+    getDocs(
+      query(
+        collection(db,"properties"),
+        where("uid","==",window.currentUser.uid)
+      )
+    ),
+    getDocs(
+      query(
+        collection(db,"bookings"),
+        where("uid","==",window.currentUser.uid)
       )
     )
-  );
+  ]);
 
-  if(snap.empty){
-
+  if(propertiesSnap.empty){
     alert("Nessuna proprietà trovata.");
     return;
-
   }
 
-  const propertyId = snap.docs[0].id;
+  const propertyIds = new Set(
+    propertiesSnap.docs.map(docItem => docItem.id)
+  );
+
+  const bookingsByProperty = new Map();
+
+  bookingsSnap.docs.forEach(docItem => {
+    const booking = docItem.data() || {};
+    const propertyId = booking.propertyId;
+
+    if(!propertyId || !propertyIds.has(propertyId)) return;
+    if(isCancelledBooking(booking)) return;
+
+    bookingsByProperty.set(
+      propertyId,
+      (bookingsByProperty.get(propertyId) || 0) + 1
+    );
+  });
+
+  let propertyId = window.currentPropertyId;
+
+  // Il tab globale "Prenotazioni" non deve restare bloccato su una
+  // proprietà senza prenotazioni mentre la dashboard ne mostra altre.
+  if(
+    !propertyId ||
+    !propertyIds.has(propertyId) ||
+    !bookingsByProperty.has(propertyId)
+  ){
+    propertyId =
+      [...bookingsByProperty.entries()]
+        .sort((a,b) => b[1] - a[1])[0]?.[0] ||
+      propertiesSnap.docs[0].id;
+  }
 
   window.currentPropertyId = propertyId;
-
-  openBookings(propertyId);
+  await openBookings(propertyId);
 
 };
 
@@ -11077,6 +11100,7 @@ async function loadBookings(propertyId){
   if(snap.empty){
 
     renderTodayBookingOperations([]);
+    renderPMSCalendar([]);
 
     list.innerHTML = `
       <div style="
