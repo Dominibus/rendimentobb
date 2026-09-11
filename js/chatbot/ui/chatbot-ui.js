@@ -1585,7 +1585,7 @@ function showThinking(){
       "rb-quick-actions rb-context-actions";
 
     items
-      .slice(0, 3)
+      .slice(0, 5)
       .forEach(action => {
 
         if(
