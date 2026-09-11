@@ -810,7 +810,7 @@ function(memory = null){
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    console.debug(
         "AI CONTEXT:",
         memory
     );
@@ -1022,7 +1022,7 @@ if(executiveConfidence){
   
 if (window.RB_DEBUG) {
 
-    console.log(
+    console.debug(
         "SUMMARY IT:",
         summaryIT
     );
@@ -1031,7 +1031,7 @@ if (window.RB_DEBUG) {
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    console.debug(
         "SUMMARY EN:",
         summaryEN
     );
@@ -1049,7 +1049,7 @@ const finalSummary =
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    console.debug(
         "FINAL SUMMARY:",
         finalSummary
     );
@@ -1221,7 +1221,7 @@ compatibili con fascia alta.
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    console.debug(
         "AI SIGNALS:",
         signals
     );
@@ -2011,7 +2011,7 @@ assessment.recommendations =
   // 🧠 DEBUG
   // ===========================================
 
-  console.log(
+  if(window.RB_DEBUG === true) console.debug(
 
     "🧠 EXECUTIVE ASSESSMENT:",
 
