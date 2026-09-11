@@ -385,6 +385,20 @@ function formatYears(value){
   );
 }
 
+// Calendar days in the PMS must follow the host's local timezone.
+// UTC ISO timestamps remain appropriate for audit fields such as createdAt.
+function getLocalISODate(date = new Date()){
+  const localDate = date instanceof Date ? date : new Date(date);
+
+  if(Number.isNaN(localDate.getTime())) return "";
+
+  return [
+    localDate.getFullYear(),
+    String(localDate.getMonth() + 1).padStart(2, "0"),
+    String(localDate.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
 function formatDate(timestamp){
 
 if(!timestamp) return "-";
@@ -4943,7 +4957,7 @@ function calculateRenovationMetrics(){
   const overallStatus = document.getElementById("renovation-status")?.value || "planning";
   const startDate = document.getElementById("renovation-start-date")?.value || "";
   const endDate = document.getElementById("renovation-end-date")?.value || "";
-  const todayISO = new Date().toISOString().slice(0, 10);
+  const todayISO = getLocalISODate();
   const daysRemaining = endDate
     ? Math.ceil((Date.parse(`${endDate}T00:00:00Z`) - Date.parse(`${todayISO}T00:00:00Z`)) / 86400000)
     : null;
@@ -11714,10 +11728,7 @@ font-size:16px;
 window.currentBookingsData =
   bookingsData;
 
-const copilotToday =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+const copilotToday = getLocalISODate();
 
 const normalizedBookings =
   bookingsData.map(booking => {
@@ -12497,7 +12508,7 @@ async function loadPMSStats(){
       const planStart = String(plan.startDate || "");
       const planEnd = String(plan.endDate || "");
       const planStatus = String(plan.status || "planning");
-      const todayISO = new Date().toISOString().slice(0, 10);
+      const todayISO = getLocalISODate();
       const derivedControlCodes = [];
 
       if(planBudget > 0 && planSpent > planBudget) derivedControlCodes.push("over_budget");
@@ -12568,10 +12579,7 @@ async function loadPMSStats(){
     docItem => isPendingBooking(docItem.data())
   ).length;
 
-  const today =
-    new Date()
-      .toISOString()
-      .split("T")[0];
+  const today = getLocalISODate();
 
   confirmedBookingDocs.forEach(docItem=>{
 
