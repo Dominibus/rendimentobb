@@ -146,9 +146,10 @@ window.showToast = window.showToast || function(message, type = "info"){
 
 window.rbAlert = function(msg){
 
-  console.warn("🚫 ALERT BLOCCATO:", msg);
-
-  console.trace("📍 ALERT SOURCE");
+  if(window.RB_DEBUG === true){
+    console.warn("🚫 ALERT BLOCCATO:", msg);
+    console.trace("📍 ALERT SOURCE");
+  }
 
   if(typeof showToast === "function"){
     showToast(msg, "warning");
