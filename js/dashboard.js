@@ -309,7 +309,7 @@ getDashboardAccess();
 
 
 if(!dashboardAccess.plan){
-  console.warn(
+  dashboardDebug(
     "Plan non pronto → skip lock"
   );
   return;
@@ -718,7 +718,7 @@ async function loadDashboard(){
     window.__dashboardLoaded &&
     !window.__forceReload
   ){
-    console.warn(
+    dashboardDebug(
       "Dashboard già inizializzata → skip"
     );
     return;
@@ -738,7 +738,7 @@ async function loadDashboard(){
 
   if(!window.currentPlan){
 
-    console.warn(
+    dashboardDebug(
       "⏳ Plan non pronto → retry"
     );
 
@@ -848,7 +848,7 @@ if(
 
   if(!list){
 
-    console.error(
+    dashboardError(
       "analysis-list NON trovato"
     );
 
@@ -2769,7 +2769,7 @@ document.addEventListener("rb_language_changed", () => {
 
 // ================= INIT =================
 if(window.__dashboardAuthInit){
-  console.warn("Dashboard auth già inizializzato → skip");
+  dashboardDebug("Dashboard auth già inizializzato → skip");
 }else{
   window.__dashboardAuthInit = true;
 
@@ -3443,7 +3443,7 @@ await loadDashboard();
 
 }catch(err){
 
-  console.error(
+  dashboardError(
     "Delete error:",
     err
   );
@@ -3484,7 +3484,7 @@ try{
 
 }catch(err){
   btn.disabled = false;
-  console.error("Portfolio update error:", err);
+  dashboardError("Portfolio update error", err);
   alert(t(
     "Impossibile aggiornare il portafoglio. Riprova.",
     "Unable to update the portfolio. Please try again."
@@ -3592,7 +3592,7 @@ localStorage.setItem(
       })
     );
   }catch(error){
-    console.warn("Dashboard report PMS snapshot unavailable", error);
+    dashboardDebug("Dashboard report PMS snapshot unavailable", error);
   }
 
   const params = new URLSearchParams({
@@ -6478,7 +6478,7 @@ window.saveProperty = async function(){
 
   }catch(err){
 
-    console.error(
+    dashboardError(
       "PROPERTY SAVE ERROR:",
       err
     );
@@ -7314,7 +7314,7 @@ window.showBookingDetails = async function(booking){
 
     if(!modal){
 
-        console.error(
+        dashboardError(
             "❌ Booking modal not found"
         );
 
@@ -8691,7 +8691,7 @@ window.analyzeBookingAI = function(id){
 
     if(!booking){
 
-        console.warn(
+        dashboardDebug(
             "⚠️ Booking data missing"
         );
 
@@ -9703,7 +9703,7 @@ window.openBookings = async function(propertyId, bookingId = null){
     modal.style.display = "flex";
 
   }else{
-    console.error("❌ bookings-modal non trovato");
+    dashboardError("❌ bookings-modal non trovato");
     return;
   }
 
@@ -14035,7 +14035,7 @@ container
 
             }catch(error){
 
-              console.error(
+              dashboardError(
                 "Booking JSON ERROR",
                 error
               );
