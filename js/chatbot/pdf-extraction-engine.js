@@ -5,6 +5,14 @@
 
 "use strict";
 
+const rbPDFDebug = (...args) => {
+    if(window.RB_DEBUG === true) console.debug(...args);
+};
+
+const rbPDFDebugWarn = (...args) => {
+    if(window.RB_DEBUG === true) console.warn(...args);
+};
+
 window.rbExtractPDFText = async function(documentObject){
 
     try{
@@ -28,7 +36,7 @@ window.rbExtractPDFText = async function(documentObject){
             "function"
         ){
 
-            console.warn(
+            rbPDFDebugWarn(
                 "⚠️ PDF.js NOT AVAILABLE"
             );
 
@@ -122,7 +130,7 @@ window.rbExtractPDFText = async function(documentObject){
                 .join("\n\n")
                 .trim();
 
-        console.log(
+        rbPDFDebug(
             "📄 PDF TEXT READY",
             {
                 pages:
@@ -152,7 +160,7 @@ window.rbExtractPDFText = async function(documentObject){
             "function"
         ){
 
-            console.log(
+            rbPDFDebug(
                 "🧠 START PDF PARSER"
             );
 
@@ -160,7 +168,7 @@ window.rbExtractPDFText = async function(documentObject){
                 documentObject
             );
 
-            console.log(
+            rbPDFDebug(
                 "🧠 PDF PARSER COMPLETED"
             );
 
@@ -168,7 +176,7 @@ window.rbExtractPDFText = async function(documentObject){
 
         else{
 
-            console.warn(
+            rbPDFDebugWarn(
                 "⚠️ rbParseExecutivePDF NOT FOUND"
             );
 
@@ -180,10 +188,8 @@ window.rbExtractPDFText = async function(documentObject){
 
     catch(error){
 
-        console.warn(
-            "PDF Extraction Error",
-            error
-        );
+        console.error("PDF Extraction Error");
+        rbPDFDebugWarn(error);
 
         return documentObject;
 
