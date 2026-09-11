@@ -71,6 +71,7 @@ function formatMoney(value, lang){
   return new Intl.NumberFormat(lang === "en" ? "en-US" : "it-IT", {
     style: "currency",
     currency: "EUR",
+    useGrouping: true,
     minimumFractionDigits: 0,
     maximumFractionDigits: 2
   }).format(safe(value));
