@@ -52,6 +52,20 @@ test("break-even unit follows the selected language", () => {
   assert.match(appSource, /payback\.toFixed\(1\) \+ t\(" anni", " years"\)/);
 });
 
+test("new simulations render every executive panel before any language switch", () => {
+  const scoreMarker = "// Lo Score deve leggere esclusivamente lo snapshot della simulazione corrente.";
+  const memoryMarker = "// 🧠 CITY MEMORY ENGINE";
+  const start = appSource.indexOf(scoreMarker);
+  const end = appSource.indexOf(memoryMarker, start);
+  const initialRenderSource = appSource.slice(start, end);
+
+  assert.match(initialRenderSource, /renderInvestmentScore\s*\(/);
+  assert.match(initialRenderSource, /renderRiskMeter\s*\(/);
+  assert.match(initialRenderSource, /renderInvestmentVerdict\s*\(/);
+  assert.match(initialRenderSource, /renderInvestmentRanking\s*\(/);
+  assert.match(initialRenderSource, /renderROIMarketComparison\s*\(/);
+});
+
 test("every static Tool translation has both Italian and English", () => {
   const translatedTags = toolHTML.match(/<[^>]+data-(?:it|en)=[^>]*>/gs) || [];
   const incompleteTags = translatedTags.filter(tag =>
