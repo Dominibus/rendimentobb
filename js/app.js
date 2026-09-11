@@ -4404,6 +4404,28 @@ renderInvestmentScore(
   Math.round(Number(window.lastAnalysisData.risk ?? 0))
 );
 
+// Render every executive panel immediately after a new simulation.
+// Previously these panels were rebuilt only by the language-change event.
+renderRiskMeter(
+  Math.round(Number(window.lastAnalysisData.risk ?? 0))
+);
+
+renderInvestmentVerdict(
+  Number(window.lastAnalysisData.roi ?? 0),
+  Math.round(Number(window.lastAnalysisData.risk ?? 0)),
+  Number(window.lastAnalysisData.net ?? window.lastAnalysisData.cashflow ?? 0),
+  Number(window.lastAnalysisData.occupancy ?? 0)
+);
+
+renderInvestmentRanking(
+  Number(window.lastAnalysisData.roi ?? 0)
+);
+
+renderROIMarketComparison(
+  Number(window.lastAnalysisData.roi ?? 0),
+  String(window.lastAnalysisData.marketCity ?? window.lastAnalysisData.city ?? "roma").toLowerCase()
+);
+
 // =====================================
 // 🧠 CITY MEMORY ENGINE
 // SAFE VERSION — NO CONFLICTS
