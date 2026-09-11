@@ -72,7 +72,7 @@ function formatMoney(value, lang){
     style: "currency",
     currency: "EUR",
     useGrouping: true,
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(safe(value));
 }
