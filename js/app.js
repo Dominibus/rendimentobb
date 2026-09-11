@@ -6199,6 +6199,15 @@ const verdict =
       : "AVOID"
   );
 
+// Keep the canonical machine value for saved data, but localize the text
+// printed in the user-facing PDF.
+const pdfVerdictLabel =
+  verdict === "BUY"
+    ? T("ACQUISTA", "BUY")
+    : verdict === "WAIT" || verdict === "WATCH"
+      ? T("ATTENDI", verdict === "WATCH" ? "WATCH" : "WAIT")
+      : T("EVITA", "AVOID");
+
 const confidence =
   window.lastInvestmentScore?.confidence ||
   (
@@ -6240,7 +6249,7 @@ doc.setTextColor(...dark);
 
 doc.text(String(investmentScore),28,249);
 
-doc.text(verdict,82,249);
+doc.text(pdfVerdictLabel,82,249);
 
 doc.text(
   riskScore < 40
@@ -7298,7 +7307,7 @@ doc.setFontSize(18);
 doc.setTextColor(255);
 
 doc.text(
-  verdict,
+  pdfVerdictLabel,
   28,
   y + 18
 );
