@@ -35,6 +35,12 @@ let roiChartInstance = null;
 
 window.roiChartInstance = null;
 
+const appDebugWarn = (...args) => {
+  if(window.RB_DEBUG === true){
+    console.warn(...args);
+  }
+};
+
 // ================= FUNNEL STATE =================
 window.funnelState = {
   shown: false,
@@ -147,7 +153,7 @@ window.showToast = window.showToast || function(message, type = "info"){
 window.rbAlert = function(msg){
 
   if(window.RB_DEBUG === true){
-    console.warn("🚫 ALERT BLOCCATO:", msg);
+    appDebugWarn("🚫 ALERT BLOCCATO:", msg);
     console.trace("📍 ALERT SOURCE");
   }
 
@@ -211,7 +217,7 @@ function renderUniversalKPI(data = {}){
 
   // 🔒 SAFE CHECK (evita crash)
   if(net === null || net === undefined){
-  console.warn("⚠️ net mancante → continuo render");
+  appDebugWarn("⚠️ net mancante → continuo render");
 }
 
   // 🏠 HOME (qr_*)
@@ -401,7 +407,7 @@ else if(access.isFree){
 // =====================================
 
 if(!access){
-  console.warn("⛔ access non disponibile");
+  appDebugWarn("⛔ access non disponibile");
   // ❌ NON bloccare render
 }
 
@@ -2698,7 +2704,7 @@ function runPostAnalysis(result, context){
   try{
 
     if(!result){
-      console.warn("⛔ postAnalysis skipped → null result");
+      appDebugWarn("⛔ postAnalysis skipped → null result");
       return;
     }
 
@@ -3257,7 +3263,7 @@ if(
 }
 
 if(finalROI <= 0){
-  console.warn("⚠️ Low ROI → UI still rendered");
+  appDebugWarn("⚠️ Low ROI → UI still rendered");
 }
 
     // =====================================
@@ -3386,7 +3392,7 @@ if(finalROI <= 0){
 
     }catch(e){
 
-      console.warn(
+      appDebugWarn(
         "LeadScore fallback:",
         e
       );
@@ -3782,7 +3788,7 @@ window.calculate = async function(mode = false){
   mode === "ui_refresh";
 
   if(window.isCalculating && !mode){
-    console.warn("⛔ skip calculate (already running)");
+    appDebugWarn("⛔ skip calculate (already running)");
     return;
   }
 
@@ -3795,7 +3801,7 @@ if(
   !isAutoImport &&
   now - window.__LAST_CALCULATION__ < 1200
 ){
-  console.warn(
+  appDebugWarn(
     "⛔ calculate throttled"
   );
   return;
@@ -3831,7 +3837,7 @@ if(!window.firebaseReady){
 // 🔥 fallback SAFE
 if(!window.currentPlan){
 
-  console.warn("⚠️ currentPlan missing → fallback FREE");
+  appDebugWarn("⚠️ currentPlan missing → fallback FREE");
 
   window.currentPlan = "free";
 
@@ -5069,7 +5075,7 @@ function renderCityROIChart(){
   }
 
   if(typeof Chart === "undefined"){
-    console.warn("⏳ Chart.js non pronto → skip");
+    appDebugWarn("⏳ Chart.js non pronto → skip");
     return;
   }
 
@@ -5124,12 +5130,12 @@ function renderROIChart(roi){
   const canvas = document.getElementById("roiChart");
 
   if(!canvas){
-    console.warn("⛔ roiChart non trovato");
+    appDebugWarn("⛔ roiChart non trovato");
     return;
   }
 
   if(typeof Chart === "undefined"){
-    console.warn("⛔ Chart.js non caricato");
+    appDebugWarn("⛔ Chart.js non caricato");
     return;
   }
 
@@ -5543,7 +5549,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 window.initCityAutocomplete = function(){
 
   if(!window.google || !google.maps || !google.maps.places){
-    console.warn("⚠️ Google Places non caricato");
+    appDebugWarn("⚠️ Google Places non caricato");
     return;
   }
 
@@ -5634,7 +5640,7 @@ window.initCityAutocomplete = function(){
     };
 
     if(!map[city]){
-      console.warn("⚠️ City non mappata:", city);
+      appDebugWarn("⚠️ City non mappata:", city);
     }
 
     changeCityBackground(map[city] || city);
@@ -5691,7 +5697,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if(typeof analyzePropertyFromTool === "function"){
       analyzePropertyFromTool(finalUrl);
     } else {
-      console.warn("⚠️ analyzePropertyFromTool non trovata");
+      appDebugWarn("⚠️ analyzePropertyFromTool non trovata");
     }
   }, 300);
 
@@ -7974,7 +7980,7 @@ function waitForFirebaseReady(callback){
 
     if(attempts > 50){
       clearInterval(interval);
-      console.warn("⚠️ Firebase timeout → continuo comunque");
+      appDebugWarn("⚠️ Firebase timeout → continuo comunque");
       callback();
     }
 
