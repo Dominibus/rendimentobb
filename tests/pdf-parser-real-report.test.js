@@ -71,6 +71,29 @@ test("PDF parser ignores chart scale values in the feasibility report", async ()
   assert.equal(documentObject.analysis.verdict, "BUY");
 });
 
+test("PDF parser reads ROI when PDF.js places the value before the label", async () => {
+  const context = {
+    window: { RB_DEBUG: false },
+    console: { debug() {}, error() {} }
+  };
+  vm.createContext(context);
+  vm.runInContext(parserSource, context);
+
+  const documentObject = {
+    extractedText: `
+      59.4% ROI SUL CAPITALE PROPRIO 0% Benchmark locale 8.4% 40%
+      Prezzo immobile 80.000 € Importo richiesto 56.000 €
+      Cashflow annuo 14.254 € Indice rischio 23/100
+      Punteggio investimento 93/100 Raccomandazione finale ACQUISTA
+    `
+  };
+
+  await context.window.rbParseExecutivePDF(documentObject);
+
+  assert.equal(documentObject.analysis.roi, 59.4);
+  assert.equal(documentObject.analysis.equity, 24000);
+});
+
 test("PDF parser reads common labels from an external English report", async () => {
   const context = {
     window: { RB_DEBUG: false },
