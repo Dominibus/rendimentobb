@@ -38,9 +38,9 @@ window.rbChatAttachments = (function(){
             onFileSelected
         );
 
-        console.log(
-            "📎 ATTACHMENTS READY"
-        );
+        if(window.RB_DEBUG === true){
+            console.debug("📎 ATTACHMENTS READY");
+        }
 
     }
 
@@ -67,10 +67,9 @@ window.rbChatAttachments = (function(){
 
         }
 
-        console.log(
-            "📎 FILE SELECTED",
-            file
-        );
+        if(window.RB_DEBUG === true){
+            console.debug("📎 FILE SELECTED", file);
+        }
 
         window.rbFileDispatcher.dispatch(
          file
