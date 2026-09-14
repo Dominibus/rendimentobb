@@ -156,6 +156,21 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         }
 
+        function extractLastPercentage(regex){
+
+            const matches =
+                Array.from(text.matchAll(regex));
+
+            if(!matches.length){
+                return null;
+            }
+
+            return parsePercentage(
+                matches[matches.length - 1][1]
+            );
+
+        }
+
         function extractAmount(regex){
 
             return parseAmount(
@@ -180,6 +195,12 @@ window.rbParseExecutivePDF = async function(documentObject){
         // ===========================================
 
         const roi =
+
+            extractLastPercentage(
+
+                /(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY|ROI EQUITY)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)\s*%/gi
+
+            ) ??
 
             extractPercentage(
 
@@ -231,7 +252,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     extractAmount(
 
-        /(?:CAPITALE INVESTITO|CAPITALE PROPRIO|MEZZI PROPRI|INVESTIMENTO INIZIALE|(?<!ROI )EQUITY(?: INVESTED| CAPITAL)?)[^0-9€\-]{0,40}€?\s*(-?[\d.,]+)/i
+        /(?:CAPITALE INVESTITO|MEZZI PROPRI|INVESTIMENTO INIZIALE|(?<!ROI )EQUITY(?: INVESTED| CAPITAL)?)[^0-9€\-]{0,40}€?\s*(-?[\d.,]+)/i
 
     );
 
@@ -239,7 +260,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractAmount(
 
-                /(?:LOAN|MORTGAGE|MUTUO|FINANZIAMENTO)[^0-9\-]*(-?[\d.,]+)/i
+                /(?:IMPORTO RICHIESTO|REQUESTED LOAN|LOAN AMOUNT|LOAN|MORTGAGE|MUTUO|FINANZIAMENTO)[^0-9\-]*(-?[\d.,]+)/i
 
             );
 
@@ -296,7 +317,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     extractText(
 
-        /(?:(?:EXECUTIVE RECOMMENDATION|VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)\s*[:\-]?\s*)?(BUY|WAIT|NO[\s_-]?BUY|Operazione istituzionale|Institutional-grade opportunity|Investimento consigliato|Investment recommended|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
+        /(?:(?:EXECUTIVE RECOMMENDATION|RACCOMANDAZIONE FINALE|RECOMMENDATION|VERDETTO AI|VERDETTO|AI VERDICT|VERDICT|ESITO)\s*[:\-]?\s*)?(BUY|ACQUISTA|WAIT|ATTENDI|NO[\s_-]?BUY|AVOID|EVITA|Operazione istituzionale|Institutional-grade opportunity|Investimento consigliato|Investment recommended|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
 
     );
 
@@ -306,11 +327,11 @@ window.rbParseExecutivePDF = async function(documentObject){
                 .trim();
 
         const verdict =
-            /^(buy|operazione istituzionale|institutional-grade opportunity|investimento consigliato|investment recommended)$/.test(normalizedVerdict)
+            /^(buy|acquista|operazione istituzionale|institutional-grade opportunity|investimento consigliato|investment recommended)$/.test(normalizedVerdict)
                 ? "BUY"
-                : /^(wait|da valutare|to be reviewed)$/.test(normalizedVerdict)
+                : /^(wait|attendi|da valutare|to be reviewed)$/.test(normalizedVerdict)
                     ? "WAIT"
-                    : /^(no[\s_-]?buy|non consigliato|not recommended)$/.test(normalizedVerdict)
+                    : /^(no[\s_-]?buy|avoid|evita|non consigliato|not recommended)$/.test(normalizedVerdict)
                         ? "AVOID"
                         : null;
 
