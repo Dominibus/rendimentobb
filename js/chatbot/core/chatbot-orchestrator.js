@@ -4355,11 +4355,15 @@ const documentKnowledge = {
 
     activeReport:
 
-        window.lastExecutiveReport ||
+        window.rbDocumentManager?.getLast?.()?.analysis
 
-        window.rbActiveDocument ||
+            ? window.rbDocumentManager.getLast()
 
-        null,
+            : window.lastExecutiveReport ||
+
+              window.rbActiveDocument ||
+
+              null,
 
     uploadedReports:
 
