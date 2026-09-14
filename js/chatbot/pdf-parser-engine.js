@@ -198,6 +198,12 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractLastPercentage(
 
+                /(-?[\d]+(?:[.,]\d+)?)\s*%\s*(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY)/gi
+
+            ) ??
+
+            extractLastPercentage(
+
                 /(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)\s*%/gi
 
             ) ??
