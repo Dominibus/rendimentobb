@@ -9670,7 +9670,7 @@ window.openBookings = async function(propertyId, bookingId = null){
   // Salva la proprietà corrente
   if(propertyId){
     window.currentPropertyId = propertyId;
-    window.loadCurrentPropertyTouristTax();
+    await window.loadCurrentPropertyTouristTax(propertyId);
   }
 
   // Evidenzia la tab Prenotazioni
