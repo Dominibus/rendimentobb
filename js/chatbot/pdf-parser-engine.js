@@ -405,13 +405,12 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         };
 
-        console.log(
-
-            "🧠 PDF PARSER RESULT",
-
-            documentObject.analysis
-
-        );
+        if(window.RB_DEBUG === true){
+            console.debug(
+                "🧠 PDF PARSER RESULT",
+                documentObject.analysis
+            );
+        }
 
         return documentObject;
 
@@ -419,13 +418,11 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     catch(error){
 
-        console.warn(
+        console.error("PDF Parser Error");
 
-            "PDF Parser Error",
-
-            error
-
-        );
+        if(window.RB_DEBUG === true){
+            console.debug(error);
+        }
 
         return documentObject;
 
