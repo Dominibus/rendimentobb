@@ -196,6 +196,12 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const roi =
 
+            extractPercentage(
+
+                /(?:RETURN ON EQUITY|ROI ON EQUITY)[^0-9\-]{0,30}(?:EUR|€|\$)?\s*[\d.,]+\s+(-?[\d]+(?:[.,]\d+)?)\s*%/i
+
+            ) ??
+
             extractLastPercentage(
 
                 /(-?[\d]+(?:[.,]\d+)?)\s*%\s*(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY)/gi
@@ -245,6 +251,12 @@ window.rbParseExecutivePDF = async function(documentObject){
     );
 
         const investmentScore =
+
+            extractPercentage(
+
+                /(?:INVESTMENT SCORE|SCORE AI|PUNTEGGIO INVESTIMENTO|PUNTEGGIO AI)[^0-9\-]{0,30}(?:EUR|€|\$)?\s*[\d.,]+\s+(-?[\d]+(?:[.,]\d+)?)\s*\/\s*100/i
+
+            ) ??
 
             extractPercentage(
 
