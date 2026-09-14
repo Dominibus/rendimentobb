@@ -13,7 +13,9 @@ test("chatbot attachment diagnostics are silent in production", () => {
     "js/chatbot/pdf-extraction-engine.js",
     "js/chatbot/core/chatbot-file-dispatcher.js",
     "js/chatbot/document-engine.js",
-    "js/chatbot/reasoning-engine.js"
+    "js/chatbot/reasoning-engine.js",
+    "js/chatbot/ui/chatbot-attachments.js",
+    "js/chatbot/pdf-parser-engine.js"
   ];
 
   for (const file of files) {
@@ -24,4 +26,7 @@ test("chatbot attachment diagnostics are silent in production", () => {
   const pdf = read(files[0]);
   assert.match(pdf, /window\.RB_DEBUG === true/);
   assert.match(pdf, /console\.error\("PDF Extraction Error"\)/);
+
+  const parser = read("js/chatbot/pdf-parser-engine.js");
+  assert.match(parser, /console\.error\("PDF Parser Error"\)/);
 });
