@@ -38,3 +38,34 @@ test("PDF parser keeps ROI equity separate from invested capital", async () => {
   assert.equal(documentObject.analysis.risk, 23);
   assert.equal(documentObject.analysis.verdict, "BUY");
 });
+
+test("PDF parser ignores chart scale values in the feasibility report", async () => {
+  const context = {
+    window: { RB_DEBUG: false },
+    console: { debug() {}, error() {} }
+  };
+  vm.createContext(context);
+  vm.runInContext(parserSource, context);
+
+  const documentObject = {
+    extractedText: `
+      59.4% ROI sul capitale proprio 0% Benchmark locale 8.4% 40%
+      Punteggio investimento Esito Rischio Qualità dati 93 ACQUISTA Basso Completi
+      ROI SUL CAPITALE PROPRIO 59.4%
+      Prezzo immobile Ricavi annui Cashflow netto ROI equity
+      80.000 € 38.325 € 14.254 € 59.4%
+      Importo richiesto 56.000 € LTV 70.0% DSCR 5.90
+      Indice rischio 23/100 Valutazione Rischio basso
+      Raccomandazione finale ACQUISTA
+    `
+  };
+
+  await context.window.rbParseExecutivePDF(documentObject);
+
+  assert.equal(documentObject.analysis.roi, 59.4);
+  assert.equal(documentObject.analysis.propertyPrice, 80000);
+  assert.equal(documentObject.analysis.mortgage, 56000);
+  assert.equal(documentObject.analysis.equity, 24000);
+  assert.equal(documentObject.analysis.risk, 23);
+  assert.equal(documentObject.analysis.verdict, "BUY");
+});
