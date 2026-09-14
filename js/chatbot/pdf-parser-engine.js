@@ -198,7 +198,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractLastPercentage(
 
-                /(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY|ROI EQUITY)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)\s*%/gi
+                /(?:ROI SUL CAPITALE PROPRIO|ROI ON EQUITY|RETURN ON EQUITY)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)\s*%/gi
+
+            ) ??
+
+            extractPercentage(
+
+                /ROI EQUITY(?!\s+(?:DI MERCATO|OF MARKET|MARKET))[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)\s*%/i
 
             ) ??
 
@@ -236,7 +242,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractPercentage(
 
-                /(?:INVESTMENT SCORE|SCORE AI|SCORE|PUNTEGGIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+                /(?:INVESTMENT SCORE|SCORE AI|PUNTEGGIO INVESTIMENTO|PUNTEGGIO AI)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            ) ??
+
+            extractPercentage(
+
+                /(?:SCORE|PUNTEGGIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
 
             );
 
@@ -252,7 +264,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     extractAmount(
 
-        /(?:CAPITALE INVESTITO|MEZZI PROPRI|INVESTIMENTO INIZIALE|(?<!ROI )EQUITY(?: INVESTED| CAPITAL)?)[^0-9€\-]{0,40}€?\s*(-?[\d.,]+)/i
+        /(?:CAPITALE INVESTITO|MEZZI PROPRI|INVESTIMENTO INIZIALE|INVESTED CAPITAL|INITIAL INVESTMENT|OWN FUNDS|(?<!ROI )EQUITY(?: INVESTED| CAPITAL)?)[^0-9€\-]{0,40}€?\s*(-?[\d.,]+)/i
 
     );
 
