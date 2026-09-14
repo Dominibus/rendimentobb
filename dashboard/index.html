@@ -4131,6 +4131,13 @@ data-en=""
 aria-live="polite">
 </div>
 
+<div id="bookings-property-filter-wrap" style="display:none;max-width:420px;margin-top:-4px;">
+  <label for="bookings-property-filter" style="display:block;font-size:12px;font-weight:800;color:#475569;margin-bottom:6px;" data-it="Filtra per struttura" data-en="Filter by property">Filtra per struttura</label>
+  <select id="bookings-property-filter" onchange="filterBookingsByProperty(this.value)" style="width:100%;height:46px;border:1px solid #cbd5e1;border-radius:12px;padding:0 13px;background:#fff;color:#0f172a;font-weight:700;">
+    <option value="all" data-it="Tutte le strutture" data-en="All properties">Tutte le strutture</option>
+  </select>
+</div>
+
 <!-- ===================================== -->
 <!-- PMS GRID -->
 <!-- ===================================== -->
