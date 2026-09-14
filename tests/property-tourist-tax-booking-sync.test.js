@@ -9,7 +9,7 @@ const dashboardSource = await readFile(
 
 test("bookings wait for the selected property's tourist-tax configuration", () => {
   const openBookingsBlock = dashboardSource.match(
-    /window\.openBookings\s*=\s*async function\(propertyId, bookingId = null\)\{([\s\S]*?)\/\/ Evidenzia la tab Prenotazioni/
+    /window\.openBookings\s*=\s*async function\(propertyId, bookingId = null, viewAllProperties = false\)\{([\s\S]*?)\/\/ Evidenzia la tab Prenotazioni/
   )?.[1] || "";
 
   assert.match(
@@ -21,6 +21,6 @@ test("bookings wait for the selected property's tourist-tax configuration", () =
 test("global bookings visibility fix remains part of the dashboard baseline", () => {
   assert.match(
     dashboardSource,
-    /\[\.\.\.bookingsByProperty\.entries\(\)\][\s\S]*?await openBookings\(propertyId\)/
+    /\[\.\.\.bookingsByProperty\.entries\(\)\][\s\S]*?await openBookings\(propertyId, null, true\)/
   );
 });

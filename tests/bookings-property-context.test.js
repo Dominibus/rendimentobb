@@ -18,13 +18,13 @@ test("bookings panel exposes the selected property context in both languages", (
 test("booking cards display the current property name and city", () => {
   assert.match(
     dashboardSource,
-    /window\.currentPropertyData\.name, window\.currentPropertyData\.city/
+    /\[bookingProperty\.name, bookingProperty\.city\]/
   );
 });
 
 test("property context is refreshed only after the selected property is loaded", () => {
   const openBookingsBlock = dashboardSource.match(
-    /window\.openBookings\s*=\s*async function\(propertyId, bookingId = null\)\{([\s\S]*?)\/\/ Evidenzia la tab Prenotazioni/
+    /window\.openBookings\s*=\s*async function\(propertyId, bookingId = null, viewAllProperties = false\)\{([\s\S]*?)\/\/ Evidenzia la tab Prenotazioni/
   )?.[1] || "";
 
   assert.ok(

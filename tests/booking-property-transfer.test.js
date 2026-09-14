@@ -20,7 +20,7 @@ test("booking details load the current property and edit enables transfer", () =
 test("saving an edited booking persists the selected property", () => {
   assert.match(script, /const selectedPropertyId = document\.getElementById\("booking-property"\)\?\.value \|\| window\.currentPropertyId;/);
   assert.match(script, /propertyId: selectedPropertyId,/);
-  assert.match(script, /await loadBookings\(selectedPropertyId\);/);
+  assert.match(script, /await loadBookings\(returnToAllProperties \? "all" : selectedPropertyId\);/);
 });
 
 test("moving a booking checks conflicts in the destination property", () => {
@@ -28,5 +28,5 @@ test("moving a booking checks conflicts in the destination property", () => {
 });
 
 test("bookings visibility baseline remains intact", () => {
-  assert.match(script, /\[\.\.\.bookingsByProperty\.entries\(\)\][\s\S]*await openBookings\(propertyId\)/);
+  assert.match(script, /\[\.\.\.bookingsByProperty\.entries\(\)\][\s\S]*await openBookings\(propertyId, null, true\)/);
 });
