@@ -4292,6 +4292,29 @@ The Copilot will continue checking dates, status, amounts and guest information.
               : "Guest not specified"
           );
 
+        const propertyName =
+          String(
+            booking?.propertyName || ""
+          ).trim();
+
+        const propertyCity =
+          String(
+            booking?.propertyCity || ""
+          ).trim();
+
+        const propertyText =
+          [
+            propertyName,
+            propertyCity
+          ]
+            .filter(Boolean)
+            .join(" · ") ||
+          (
+            isItalian
+              ? "Struttura non indicata"
+              : "Property not specified"
+          );
+
         const checkin =
           formatBookingDate(
             booking?.checkin,
@@ -4379,11 +4402,13 @@ The Copilot will continue checking dates, status, amounts and guest information.
 
         return isItalian
           ? `⚠️ ${guestName}
+🏠 Struttura: ${propertyText}
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Problema: ${reasons || "È richiesta una verifica manuale."}
 ${issueDetail ? `Segnalazione: ${issueDetail}\n` : ""}Azione: ${actions || "Controlla i dettagli della prenotazione."}`
           : `⚠️ ${guestName}
+🏠 Property: ${propertyText}
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Issue: ${reasons || "A manual review is required."}
