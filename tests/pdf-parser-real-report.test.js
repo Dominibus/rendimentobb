@@ -131,3 +131,29 @@ test("PDF parser reads common labels from an external English report", async () 
   assert.equal(documentObject.analysis.investmentScore, 81);
   assert.equal(documentObject.analysis.verdict, "BUY");
 });
+
+test("PDF parser handles two-column external reports flattened by PDF.js", async () => {
+  const context = {
+    window: { RB_DEBUG: false },
+    console: { debug() {}, error() {} }
+  };
+  vm.createContext(context);
+  vm.runInContext(parserSource, context);
+
+  const documentObject = {
+    extractedText: `
+      PROPERTY PRICE INVESTED CAPITAL EUR 210,000 EUR 70,000
+      LOAN AMOUNT ANNUAL REVENUE EUR 140,000 EUR 42,000
+      NET CASH FLOW RETURN ON EQUITY EUR 12,600 18.0%
+      RISK SCORE OCCUPANCY RATE 34/100 72%
+      AVERAGE DAILY RATE INVESTMENT SCORE EUR 165 81/100
+      Recommendation BUY
+    `
+  };
+
+  await context.window.rbParseExecutivePDF(documentObject);
+
+  assert.equal(documentObject.analysis.roi, 18);
+  assert.equal(documentObject.analysis.investmentScore, 81);
+  assert.notEqual(documentObject.analysis.investmentScore, 165);
+});
