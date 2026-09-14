@@ -11918,6 +11918,17 @@ const copilotToday = getLocalISODate();
 const normalizedBookings =
   bookingsData.map(booking => {
 
+    const bookingProperty =
+      window.bookingPropertyDirectory?.get(
+        booking.propertyId
+      ) ||
+      (
+        booking.propertyId === window.currentPropertyId
+          ? window.currentPropertyData
+          : null
+      ) ||
+      {};
+
     const checkin =
       String(
         booking.checkin || ""
@@ -12124,6 +12135,16 @@ const normalizedBookings =
       propertyId:
         booking.propertyId ||
         propertyId,
+
+      propertyName:
+        String(
+          bookingProperty.name || ""
+        ),
+
+      propertyCity:
+        String(
+          bookingProperty.city || ""
+        ),
 
       guestName:
         booking.guestName ||
@@ -12679,6 +12700,15 @@ async function loadPMSStats(){
   const properties =
     propertiesSnap.size;
 
+  const pmsPropertyDirectory = new Map(
+    propertiesSnap.docs.map(
+      propertyDoc => [
+        propertyDoc.id,
+        propertyDoc.data() || {}
+      ]
+    )
+  );
+
   const renovationList = propertiesSnap.docs
     .map(propertyDoc => {
       const propertyData = propertyDoc.data() || {};
@@ -13000,6 +13030,11 @@ const normalizedPMSBookings =
         ...docItem.data()
       };
 
+      const bookingProperty =
+        pmsPropertyDirectory.get(
+          booking.propertyId
+        ) || {};
+
       const checkin =
         String(
           booking.checkin || ""
@@ -13202,6 +13237,16 @@ const normalizedPMSBookings =
 
         propertyId:
           booking.propertyId || "",
+
+        propertyName:
+          String(
+            bookingProperty.name || ""
+          ),
+
+        propertyCity:
+          String(
+            bookingProperty.city || ""
+          ),
 
         guestName:
           booking.guestName || "",
