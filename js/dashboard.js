@@ -5474,6 +5474,27 @@ window.getTouristTaxCurrencySymbol = function(currency){
   return currency === "USD" ? "$" : currency === "GBP" ? "£" : "€";
 };
 
+window.updateBookingsPropertyContext = function(){
+  const context = document.getElementById("bookings-property-context");
+  if(!context) return;
+
+  const property = window.currentPropertyData || {};
+  const name = String(property.name || "").trim();
+  const city = String(property.city || "").trim();
+  const propertyLabel = [name, city].filter(Boolean).join(" · ");
+
+  const italianLabel = propertyLabel
+    ? `🏠 Struttura: ${propertyLabel}`
+    : "🏠 Struttura selezionata";
+  const englishLabel = propertyLabel
+    ? `🏠 Property: ${propertyLabel}`
+    : "🏠 Selected property";
+
+  context.dataset.it = italianLabel;
+  context.dataset.en = englishLabel;
+  context.textContent = window.t(italianLabel, englishLabel);
+};
+
 window.updateBookingTouristTax = function(){
   const config = window.currentPropertyTouristTaxConfig;
   const box = document.getElementById("booking-tourist-tax-box");
@@ -9673,6 +9694,8 @@ window.openBookings = async function(propertyId, bookingId = null){
     await window.loadCurrentPropertyTouristTax(propertyId);
   }
 
+  window.updateBookingsPropertyContext();
+
   // Evidenzia la tab Prenotazioni
   document
     .querySelectorAll(".pms-tab")
@@ -11253,6 +11276,16 @@ line-height:1.2;
 ">
 ${escapeDashboardHTML(b.guestName)}
 </div>
+
+${window.currentPropertyData?.name ? `
+<div style="font-size:12px;color:#0f766e;margin-top:6px;font-weight:700;">
+🏠 ${escapeDashboardHTML(
+  [window.currentPropertyData.name, window.currentPropertyData.city]
+    .filter(Boolean)
+    .join(" · ")
+)}
+</div>
+` : ""}
 
 <div
 style="
