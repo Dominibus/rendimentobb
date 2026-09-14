@@ -56,6 +56,7 @@ test("PDF parser ignores chart scale values in the feasibility report", async ()
       80.000 € 38.325 € 14.254 € 59.4%
       Importo richiesto 56.000 € LTV 70.0% DSCR 5.90
       Indice rischio 23/100 Valutazione Rischio basso
+      ROI equity di mercato 8.4%
       Raccomandazione finale ACQUISTA
     `
   };
@@ -67,5 +68,43 @@ test("PDF parser ignores chart scale values in the feasibility report", async ()
   assert.equal(documentObject.analysis.mortgage, 56000);
   assert.equal(documentObject.analysis.equity, 24000);
   assert.equal(documentObject.analysis.risk, 23);
+  assert.equal(documentObject.analysis.verdict, "BUY");
+});
+
+test("PDF parser reads common labels from an external English report", async () => {
+  const context = {
+    window: { RB_DEBUG: false },
+    console: { debug() {}, error() {} }
+  };
+  vm.createContext(context);
+  vm.runInContext(parserSource, context);
+
+  const documentObject = {
+    extractedText: `
+      Property price €210,000
+      Invested capital €70,000
+      Loan amount €140,000
+      Annual revenue €42,000
+      Net cash flow €12,600
+      Return on equity 18.0%
+      Risk score 34/100
+      Occupancy rate 72%
+      Average daily rate €165
+      Investment score 81/100
+      Recommendation BUY
+    `
+  };
+
+  await context.window.rbParseExecutivePDF(documentObject);
+
+  assert.equal(documentObject.analysis.roi, 18);
+  assert.equal(documentObject.analysis.propertyPrice, 210000);
+  assert.equal(documentObject.analysis.equity, 70000);
+  assert.equal(documentObject.analysis.mortgage, 140000);
+  assert.equal(documentObject.analysis.gross, 42000);
+  assert.equal(documentObject.analysis.cashflow, 12600);
+  assert.equal(documentObject.analysis.risk, 34);
+  assert.equal(documentObject.analysis.occupancy, 72);
+  assert.equal(documentObject.analysis.investmentScore, 81);
   assert.equal(documentObject.analysis.verdict, "BUY");
 });
