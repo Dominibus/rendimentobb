@@ -5981,6 +5981,7 @@ window.openBookingModal = async function(){
     }
 
     const fields = {
+      property: document.getElementById("booking-property"),
       guest: document.getElementById("booking-guest"),
       guestPhone: document.getElementById("booking-guest-phone"),
       guestEmail: document.getElementById("booking-guest-email"),
@@ -6002,6 +6003,7 @@ window.openBookingModal = async function(){
 
     if(fields.status) fields.status.value = "arrival";
     if(fields.source) fields.source.value = "direct";
+    await window.loadBookingPropertyOptions?.(window.currentPropertyId, false);
     const pricingSeason = document.getElementById("booking-pricing-season");
     if(pricingSeason) pricingSeason.value = "auto";
 
@@ -7316,6 +7318,47 @@ window.openBookingForEdit = function(id){
 
 };
 
+window.loadBookingPropertyOptions = async function(selectedPropertyId, editable = false){
+  const field = document.getElementById("booking-property-field");
+  const select = document.getElementById("booking-property");
+  if(!field || !select || !window.currentUser) return;
+
+  field.style.display = "block";
+  select.disabled = true;
+
+  try{
+    const propertiesSnap = await getDocs(
+      query(
+        collection(db, "properties"),
+        where("uid", "==", window.currentUser.uid)
+      )
+    );
+
+    select.innerHTML = propertiesSnap.docs.map(propertyDoc => {
+      const property = propertyDoc.data() || {};
+      const label = [property.name, property.city].filter(Boolean).join(" · ") ||
+        window.t("Struttura senza nome", "Unnamed property");
+      return `<option value="${escapeDashboardHTML(propertyDoc.id)}">${escapeDashboardHTML(label)}</option>`;
+    }).join("");
+
+    select.value = selectedPropertyId || "";
+    select.disabled = !editable || propertiesSnap.empty;
+    select.style.background = select.disabled ? "#f8fafc" : "#ffffff";
+  }catch(error){
+    dashboardError("Booking property options load failed", error);
+    select.innerHTML = `<option value="${escapeDashboardHTML(selectedPropertyId || "")}">${window.t("Struttura attuale", "Current property")}</option>`;
+    select.value = selectedPropertyId || "";
+  }
+};
+
+window.changeBookingProperty = async function(){
+  if(!window.pmsEditingBooking) return;
+  const propertyId = document.getElementById("booking-property")?.value || "";
+  if(!propertyId) return;
+  await window.loadCurrentPropertyTouristTax(propertyId);
+  window.updateBookingTouristTax();
+};
+
 // =====================================
 // 📌 SHOW BOOKING DETAILS
 // =====================================
@@ -7372,6 +7415,10 @@ window.showBookingDetails = async function(booking){
     window.pmsEditingBooking = true;
 
 window.currentSelectedBooking = booking;
+    window.bookingOriginPropertyId = booking.propertyId || window.currentPropertyId;
+    await window.loadBookingPropertyOptions?.(window.bookingOriginPropertyId, false);
+    const bookingProperty = document.getElementById("booking-property");
+    if(bookingProperty) bookingProperty.onchange = window.changeBookingProperty;
 
     const guest =
         document.getElementById(
@@ -8157,6 +8204,8 @@ window.editBooking = function(){
     guest?.removeAttribute("readonly");
     checkin?.removeAttribute("readonly");
     checkout?.removeAttribute("readonly");
+    const property = document.getElementById("booking-property");
+    if(property) property.disabled = false;
 
     guest?.focus();
 
@@ -10156,7 +10205,9 @@ window.saveBooking = async function(){
 
 }
 
-if(!window.currentPropertyId){
+  const selectedPropertyId = document.getElementById("booking-property")?.value || window.currentPropertyId;
+
+if(!selectedPropertyId){
 
   alert(
     "Nessuna proprietà selezionata"
@@ -10165,6 +10216,10 @@ if(!window.currentPropertyId){
   return;
 
 }
+
+  if(window.currentPropertyId !== selectedPropertyId){
+    await window.loadCurrentPropertyTouristTax(selectedPropertyId);
+  }
 
   const guest =
     document.getElementById(
@@ -10254,8 +10309,19 @@ if(!window.currentPropertyId){
   const editingBookingId = window.pmsEditingBooking
     ? window.currentSelectedBooking?.id
     : null;
+  let conflictBookings = window.currentBookingsData || [];
+  if(selectedPropertyId !== window.bookingOriginPropertyId){
+    const conflictSnap = await getDocs(
+      query(
+        collection(db, "bookings"),
+        where("uid", "==", window.currentUser.uid),
+        where("propertyId", "==", selectedPropertyId)
+      )
+    );
+    conflictBookings = conflictSnap.docs.map(item => ({ id:item.id, ...item.data() }));
+  }
   const hasConflict = !["cancelled", "pending"].includes(status) &&
-    (window.currentBookingsData || []).some(existingBooking => {
+    conflictBookings.some(existingBooking => {
       if(existingBooking.id === editingBookingId) return false;
       if(!isConfirmedBooking(existingBooking)) return false;
 
@@ -10401,6 +10467,8 @@ if(!window.currentPropertyId){
 
         {
 
+            propertyId: selectedPropertyId,
+
             guestName: guest,
             guestContact,
             checkin,
@@ -10444,7 +10512,7 @@ if(!window.currentPropertyId){
         window.currentUser.uid,
 
       propertyId:
-        window.currentPropertyId,
+        selectedPropertyId,
 
       guestName:
         guest,
@@ -10507,7 +10575,7 @@ window.dispatchEvent(
     {
       detail:{
         propertyId:
-          window.currentPropertyId,
+          selectedPropertyId,
 
         guestName:
           guest,
@@ -10585,7 +10653,10 @@ window.dispatchEvent(
   closeBookingModal();
 
   try{
-    await loadBookings(window.currentPropertyId);
+    window.currentPropertyId = selectedPropertyId;
+    await window.loadCurrentPropertyTouristTax(selectedPropertyId);
+    window.updateBookingsPropertyContext?.();
+    await loadBookings(selectedPropertyId);
     await loadPMSStats();
     await loadProperties();
   }catch(error){
