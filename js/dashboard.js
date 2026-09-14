@@ -5478,6 +5478,15 @@ window.updateBookingsPropertyContext = function(){
   const context = document.getElementById("bookings-property-context");
   if(!context) return;
 
+  if(window.bookingsAllPropertiesView && window.bookingsPropertyFilter === "all"){
+    const italianLabel = "🏘️ Tutte le strutture";
+    const englishLabel = "🏘️ All properties";
+    context.dataset.it = italianLabel;
+    context.dataset.en = englishLabel;
+    context.textContent = window.t(italianLabel, englishLabel);
+    return;
+  }
+
   const property = window.currentPropertyData || {};
   const name = String(property.name || "").trim();
   const city = String(property.city || "").trim();
@@ -6003,7 +6012,10 @@ window.openBookingModal = async function(){
 
     if(fields.status) fields.status.value = "arrival";
     if(fields.source) fields.source.value = "direct";
-    await window.loadBookingPropertyOptions?.(window.currentPropertyId, false);
+    await window.loadBookingPropertyOptions?.(
+      window.currentPropertyId,
+      window.bookingsAllPropertiesView === true
+    );
     const pricingSeason = document.getElementById("booking-pricing-season");
     if(pricingSeason) pricingSeason.value = "auto";
 
@@ -9734,13 +9746,32 @@ color:#166534;
 // 📅 OPEN BOOKINGS
 // =====================================
 
-window.openBookings = async function(propertyId, bookingId = null){
+window.openBookings = async function(propertyId, bookingId = null, viewAllProperties = false){
+
+  window.bookingsAllPropertiesView = viewAllProperties === true;
+  window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
 
 
   // Salva la proprietà corrente
   if(propertyId){
     window.currentPropertyId = propertyId;
     await window.loadCurrentPropertyTouristTax(propertyId);
+  }
+
+  const propertyFilterWrap = document.getElementById("bookings-property-filter-wrap");
+  const propertyFilter = document.getElementById("bookings-property-filter");
+  if(propertyFilterWrap) propertyFilterWrap.style.display = viewAllProperties ? "block" : "none";
+  if(propertyFilter && viewAllProperties){
+    const directory = window.bookingPropertyDirectory || new Map();
+    propertyFilter.innerHTML = `
+      <option value="all">${window.t("Tutte le strutture", "All properties")}</option>
+      ${[...directory.entries()].map(([id, data]) => `
+        <option value="${escapeDashboardHTML(id)}">${escapeDashboardHTML(
+          [data.name, data.city].filter(Boolean).join(" · ") || window.t("Struttura senza nome", "Unnamed property")
+        )}</option>
+      `).join("")}
+    `;
+    propertyFilter.value = "all";
   }
 
   window.updateBookingsPropertyContext();
@@ -9782,7 +9813,7 @@ window.openBookings = async function(propertyId, bookingId = null){
   // Se esiste una proprietà caricata,
   // carica le prenotazioni
   if(window.currentPropertyId){
-    await loadBookings(window.currentPropertyId);
+    await loadBookings(viewAllProperties ? "all" : window.currentPropertyId);
 
     if(bookingId){
       window.openBookingForEdit(bookingId);
@@ -10030,6 +10061,10 @@ window.openCurrentBookings = async function(){
     propertiesSnap.docs.map(docItem => docItem.id)
   );
 
+  window.bookingPropertyDirectory = new Map(
+    propertiesSnap.docs.map(docItem => [docItem.id, docItem.data() || {}])
+  );
+
   const bookingsByProperty = new Map();
 
   bookingsSnap.docs.forEach(docItem => {
@@ -10061,8 +10096,21 @@ window.openCurrentBookings = async function(){
   }
 
   window.currentPropertyId = propertyId;
-  await openBookings(propertyId);
+  await openBookings(propertyId, null, true);
 
+};
+
+window.filterBookingsByProperty = async function(propertyId){
+  if(!window.bookingsAllPropertiesView) return;
+
+  window.bookingsPropertyFilter = propertyId || "all";
+  if(propertyId && propertyId !== "all"){
+    window.currentPropertyId = propertyId;
+    await window.loadCurrentPropertyTouristTax(propertyId);
+  }
+
+  window.updateBookingsPropertyContext();
+  await loadBookings(propertyId === "all" ? "all" : propertyId);
 };
 
 // =====================================
@@ -10206,6 +10254,9 @@ window.saveBooking = async function(){
 }
 
   const selectedPropertyId = document.getElementById("booking-property")?.value || window.currentPropertyId;
+  const returnToAllProperties =
+    window.bookingsAllPropertiesView === true &&
+    window.bookingsPropertyFilter === "all";
 
 if(!selectedPropertyId){
 
@@ -10655,8 +10706,13 @@ window.dispatchEvent(
   try{
     window.currentPropertyId = selectedPropertyId;
     await window.loadCurrentPropertyTouristTax(selectedPropertyId);
+    if(window.bookingsAllPropertiesView && !returnToAllProperties){
+      window.bookingsPropertyFilter = selectedPropertyId;
+      const propertyFilter = document.getElementById("bookings-property-filter");
+      if(propertyFilter) propertyFilter.value = selectedPropertyId;
+    }
     window.updateBookingsPropertyContext?.();
-    await loadBookings(selectedPropertyId);
+    await loadBookings(returnToAllProperties ? "all" : selectedPropertyId);
     await loadPMSStats();
     await loadProperties();
   }catch(error){
@@ -11170,20 +11226,17 @@ async function loadBookings(propertyId){
 
 }
 
-  const q =
-    query(
-      collection(db,"bookings"),
-      where(
-        "uid",
-        "==",
-        window.currentUser.uid
-      ),
-      where(
-        "propertyId",
-        "==",
-        propertyId
+  const showAllProperties = propertyId === "all";
+  const q = showAllProperties
+    ? query(
+        collection(db,"bookings"),
+        where("uid", "==", window.currentUser.uid)
       )
-    );
+    : query(
+        collection(db,"bookings"),
+        where("uid", "==", window.currentUser.uid),
+        where("propertyId", "==", propertyId)
+      );
 
   const snap =
     await getDocs(q);
@@ -11230,6 +11283,10 @@ let sourceStats = {};
   id: docItem.id,
   ...b
 });
+
+    const bookingProperty = showAllProperties
+      ? window.bookingPropertyDirectory?.get(b.propertyId)
+      : window.currentPropertyData;
 
     const isCancelled =
       isCancelledBooking(b);
@@ -11348,10 +11405,10 @@ line-height:1.2;
 ${escapeDashboardHTML(b.guestName)}
 </div>
 
-${window.currentPropertyData?.name ? `
+${bookingProperty?.name ? `
 <div style="font-size:12px;color:#0f766e;margin-top:6px;font-weight:700;">
 🏠 ${escapeDashboardHTML(
-  [window.currentPropertyData.name, window.currentPropertyData.city]
+  [bookingProperty.name, bookingProperty.city]
     .filter(Boolean)
     .join(" · ")
 )}
