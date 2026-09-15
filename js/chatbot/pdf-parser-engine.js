@@ -270,13 +270,81 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const propertyPrice =
+        const propertyPrice = (() => {
 
-            extractAmount(
+            const priceLabels =
+                "PROPERTY PRICE|ASKING PRICE|PREZZO IMMOBILE|VALORE IMMOBILE|PREZZO";
 
-                /(?:PROPERTY PRICE|PREZZO IMMOBILE|VALORE IMMOBILE|PREZZO)[^0-9\-]*(-?[\d.,]+)/i
+            const labeledCandidates = [
 
+                extractAmount(
+                    new RegExp(
+                        `(?:${priceLabels})[^0-9€$]{0,80}(?:EUR|€|\\$)\\s*(-?[\\d.,]+)`,
+                        "i"
+                    )
+                ),
+
+                extractAmount(
+                    new RegExp(
+                        `(?:${priceLabels})[^0-9]{0,80}(-?[\\d.,]+)\\s*(?:EUR|€|\\$)`,
+                        "i"
+                    )
+                ),
+
+                extractAmount(
+                    new RegExp(
+                        `(?:EUR|€|\\$)\\s*(-?[\\d.,]+)[^A-Z0-9]{0,30}(?:${priceLabels})`,
+                        "i"
+                    )
+                ),
+
+                extractAmount(
+                    new RegExp(
+                        `(-?[\\d.,]+)\\s*(?:EUR|€|\\$)[^A-Z0-9]{0,30}(?:${priceLabels})`,
+                        "i"
+                    )
+                )
+
+            ].find(
+                value =>
+                    Number.isFinite(value) &&
+                    value > 0
             );
+
+            if(labeledCandidates !== undefined){
+                return labeledCandidates;
+            }
+
+            // Some brochures place the price on a separate PDF text item/page.
+            // Use an unlabeled currency amount only for a generic document and
+            // only when it has the scale of a plausible property price.
+            if(documentObject.type !== "executive_report"){
+
+                const currencyAmounts =
+                    Array.from(
+                        text.matchAll(
+                            /(?:EUR|€|\$)\s*([0-9][\d.,]*)|([0-9][\d.,]*)\s*(?:EUR|€|\$)/gi
+                        )
+                    )
+                    .map(match =>
+                        parseAmount(
+                            match[1] ?? match[2]
+                        )
+                    )
+                    .filter(value =>
+                        Number.isFinite(value) &&
+                        value >= 10000
+                    );
+
+                if(currencyAmounts.length === 1){
+                    return currencyAmounts[0];
+                }
+
+            }
+
+            return null;
+
+        })();
 
         let equity =
 
