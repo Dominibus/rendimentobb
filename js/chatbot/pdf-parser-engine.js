@@ -234,7 +234,19 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
+        const riskOccupancyPair =
+            text.match(
+                /(?:RISK SCORE|INDICE RISCHIO)\s+(?:OCCUPANCY RATE|OCCUPAZIONE(?: MEDIA| PREVISTA)?)\s+(-?[\d]+(?:[.,]\d+)?)\s*\/\s*100\s+(-?[\d]+(?:[.,]\d+)?)\s*%/i
+            );
+
+        const loanRevenuePair =
+            text.match(
+                /(?:LOAN AMOUNT|IMPORTO RICHIESTO|MUTUO|FINANZIAMENTO)\s+(?:ANNUAL REVENUE|RICAVI ANNUI|FATTURATO LORDO)\s+(?:EUR|€|\$)?\s*(-?[\d.,]+)\s+(?:EUR|€|\$)?\s*(-?[\d.,]+)/i
+            );
+
         const risk =
+
+    parsePercentage(riskOccupancyPair?.[1]) ??
 
     extractPercentage(
 
@@ -243,6 +255,8 @@ window.rbParseExecutivePDF = async function(documentObject){
     );
 
         const occupancy =
+
+    parsePercentage(riskOccupancyPair?.[2]) ??
 
     extractPercentage(
 
@@ -356,6 +370,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const mortgage =
 
+            parseAmount(loanRevenuePair?.[1]) ??
+
             extractAmount(
 
                 /(?:IMPORTO RICHIESTO|REQUESTED LOAN|LOAN AMOUNT|LOAN|MORTGAGE|MUTUO|FINANZIAMENTO)[^0-9\-]*(-?[\d.,]+)/i
@@ -378,6 +394,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 }
 
         const gross =
+
+    parseAmount(loanRevenuePair?.[2]) ??
 
     extractAmount(
 
