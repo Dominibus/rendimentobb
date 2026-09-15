@@ -10917,6 +10917,139 @@ const isExecutivePDFReport =
     ?.reportType ===
     "executive_pdf";
 
+const isGroundedPropertyDocument =
+
+  pdfAnalysis
+    ?.reportType ===
+    "property_document";
+
+if(isGroundedPropertyDocument){
+
+  const facts =
+    pdfAnalysis.propertyFacts || {};
+
+  const presentFactsIT = [];
+  const presentFactsEN = [];
+
+  const addFact = (labelIT, labelEN, valueIT, valueEN = valueIT) => {
+    if(valueIT === null || valueIT === undefined || valueIT === "") return;
+    presentFactsIT.push(`• ${labelIT}: ${valueIT}`);
+    presentFactsEN.push(`• ${labelEN}: ${valueEN}`);
+  };
+
+  addFact("Prezzo dichiarato", "Declared price",
+    pdfAnalysis.propertyPrice !== null && pdfAnalysis.propertyPrice !== undefined
+      ? `€${Math.round(pdfAnalysis.propertyPrice).toLocaleString("it-IT")}`
+      : null,
+    pdfAnalysis.propertyPrice !== null && pdfAnalysis.propertyPrice !== undefined
+      ? `€${Math.round(pdfAnalysis.propertyPrice).toLocaleString("en-US")}`
+      : null
+  );
+  addFact("Superficie", "Surface", facts.surfaceSqm !== null ? `${facts.surfaceSqm} m²` : null);
+  addFact("Locali", "Rooms", facts.rooms);
+  addFact("Camere", "Bedrooms", facts.bedrooms);
+  addFact("Bagni", "Bathrooms", facts.bathrooms);
+  addFact("Piano", "Floor",
+    facts.floor !== null && facts.floor !== undefined
+      ? `${facts.floor}${facts.totalFloors ? ` di ${facts.totalFloors}` : ""}`
+      : null,
+    facts.floor !== null && facts.floor !== undefined
+      ? `${facts.floor}${facts.totalFloors ? ` of ${facts.totalFloors}` : ""}`
+      : null
+  );
+  addFact("Ascensore", "Elevator", facts.elevator === true ? "Sì" : null, facts.elevator === true ? "Yes" : null);
+  addFact("Balcone", "Balcony", facts.balcony === true ? "Sì" : null, facts.balcony === true ? "Yes" : null);
+  addFact("Terrazzo", "Terrace", facts.terrace === true ? "Sì" : null, facts.terrace === true ? "Yes" : null);
+  addFact("Stato", "Condition", facts.renovated === true ? "Ristrutturato" : null, facts.renovated === true ? "Renovated" : null);
+  addFact("Classe energetica", "Energy class", facts.energyClass);
+  addFact("Disponibilità", "Availability", facts.availableAtDeed === true ? "Libero al rogito" : null, facts.availableAtDeed === true ? "Available at deed" : null);
+
+  const factsIT = presentFactsIT.length
+    ? presentFactsIT.join("\n")
+    : "• Nessun dato strutturato riconosciuto con sufficiente affidabilità";
+
+  const factsEN = presentFactsEN.length
+    ? presentFactsEN.join("\n")
+    : "• No structured data recognized with sufficient confidence";
+
+  response.type = "document_grounded_summary";
+  response.confidence = 0.99;
+  response.signals.push("document_only_grounding");
+
+  response.textIT =
+`📄 Analisi del documento
+
+DATI ESTRATTI DAL DOCUMENTO
+
+${factsIT}
+
+DATI INSERITI DALL'UTENTE
+
+• Nessun dato aggiuntivo utilizzato
+
+BENCHMARK RENDIMENTOBB
+
+• Non applicati in questa fase
+
+STIME/CALCOLI RENDIMENTOBB
+
+• ROI: dato non disponibile
+• Occupazione: dato non disponibile
+• ADR: dato non disponibile
+• Cashflow: dato non disponibile
+• Rischio: dato non disponibile
+• Investment Score: dato non disponibile
+
+DATI MANCANTI PER L'ANALISI COMPLETA
+
+• ADR o tariffa media prevista
+• occupazione prevista
+• costi operativi mensili
+• capacità ricettiva/posti letto
+• struttura finanziaria: capitale proprio e mutuo
+• regime di gestione e commissioni
+
+Non ho generato KPI o giudizi d'investimento perché il documento non contiene dati finanziari sufficienti.`;
+
+  response.textEN =
+`📄 Document analysis
+
+DATA EXTRACTED FROM THE DOCUMENT
+
+${factsEN}
+
+USER-PROVIDED DATA
+
+• No additional data used
+
+RENDIMENTOBB BENCHMARKS
+
+• Not applied at this stage
+
+RENDIMENTOBB ESTIMATES/CALCULATIONS
+
+• ROI: data not available
+• Occupancy: data not available
+• ADR: data not available
+• Cashflow: data not available
+• Risk: data not available
+• Investment Score: data not available
+
+MISSING DATA FOR A COMPLETE ANALYSIS
+
+• expected ADR or average nightly rate
+• expected occupancy
+• monthly operating costs
+• guest capacity/bed spaces
+• financing structure: own capital and mortgage
+• management model and commissions
+
+I did not generate investment KPIs or a verdict because the document does not contain sufficient financial data.`;
+
+  return response;
+
+}
+
 if(!isExecutivePDFReport){
 
   response.textIT =
