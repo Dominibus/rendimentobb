@@ -1104,7 +1104,7 @@ newChatBtn.onclick = ()=>{
 
     html = html.replace(
 
-        /Investment Score:?/gi,
+        /^[ \t]*(?:📊[ \t]*)?Investment Score:?[ \t]*$/gim,
 
         `<div class="rb-section-title">
             📊 Investment Score
