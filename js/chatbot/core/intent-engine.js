@@ -1694,7 +1694,51 @@ if(
 
   });
 
-}  
+}
+
+// ===========================================
+// 📄 ACTIVE DOCUMENT FOLLOW-UP
+// Keep explicit references grounded on the uploaded document.
+// This route must win over remembered city/market context.
+// ===========================================
+
+const hasActiveDocument =
+  !!(
+    window.rbDocumentManager?.getLast?.() ||
+    window.rbActiveDocument
+  );
+
+if(
+  hasActiveDocument &&
+  has(
+    "questo documento",
+    "il documento",
+    "documento caricato",
+    "documento appena caricato",
+    "dal documento",
+    "nel documento",
+    "this document",
+    "the document",
+    "uploaded document",
+    "document just uploaded",
+    "from the document",
+    "in the document"
+  )
+){
+
+  applyIntent({
+
+    intent: "pdf_analysis",
+
+    category: "documents",
+
+    confidence: 1,
+
+    priority: 340
+
+  });
+
+}
 
 // ===========================================
 // 📊 REPORT INTERPRETATION
