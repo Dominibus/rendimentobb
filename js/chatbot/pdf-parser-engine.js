@@ -366,13 +366,143 @@ window.rbParseExecutivePDF = async function(documentObject){
                         : null;
 
         // ===========================================
+        // GROUNDED PROPERTY FACTS
+        // Generic brochures are not financial reports.
+        // Values below are extracted only when explicitly present in the PDF.
+        // ===========================================
+
+        const mainPropertyTable =
+            text.match(
+                /SUPERFICIE\s+LOCALI\s+CAMERE(?:\s+DA\s+LETTO)?\s+([\d.,]+)\s*(?:M[²2]|MQ|SQM)\s+([\d]+)\s+([\d]+)/i
+            );
+
+        const secondaryPropertyTable =
+            text.match(
+                /BAGNI\s+PIANO\s+CLASSE\s+ENERGETICA\s+([\d]+)\s+([\d]+)\s+(?:DI|OF)\s+([\d]+)(?:\s*,?\s*(?:CON|WITH)\s+(?:ASCENSORE|ELEVATOR|LIFT))?\s+([A-G](?:[1-4])?)(?:\s|$)/i
+            );
+
+        const propertyFacts = {
+
+            surfaceSqm:
+                parseAmount(
+                    matchValue(
+                        /(?:SUPERFICIE|SURFACE|AREA)[^0-9]{0,80}([\d.,]+)\s*(?:M[²2]|MQ|SQ\.?\s*FT|SQM)/i
+                    )
+                ) ??
+                parseAmount(
+                    matchValue(
+                        /([\d.,]+)\s*(?:M[²2]|MQ|SQM)\b/i
+                    )
+                ),
+
+            rooms:
+                parseAmount(mainPropertyTable?.[2]) ??
+                parseAmount(
+                    matchValue(/(?:LOCALI|ROOMS)\s*[:\-]?\s*([\d]+)/i)
+                ) ??
+                parseAmount(
+                    matchValue(/([\d]+)\s+(?:LOCALI|ROOMS)\b/i)
+                ),
+
+            bedrooms:
+                parseAmount(mainPropertyTable?.[3]) ??
+                parseAmount(
+                    matchValue(/(?:CAMERE(?:\s+DA\s+LETTO)?|BEDROOMS?)\s*[:\-]?\s*([\d]+)/i)
+                ) ??
+                parseAmount(
+                    matchValue(/([\d]+)\s+(?:CAMERE(?:\s+DA\s+LETTO)?|BEDROOMS?)\b/i)
+                ),
+
+            bathrooms:
+                parseAmount(secondaryPropertyTable?.[1]) ??
+                parseAmount(
+                    matchValue(/(?:BAGNI|BATHROOMS?)\s*[:\-]?\s*([\d]+)/i)
+                ) ??
+                parseAmount(
+                    matchValue(/([\d]+)\s+(?:BAGNI|BATHROOMS?)\b/i)
+                ),
+
+            floor:
+                parseAmount(secondaryPropertyTable?.[2]) ??
+                parseAmount(
+                    matchValue(/(?:PIANO|FLOOR)\s*[:\-]?\s*([\d]+)/i)
+                ),
+
+            totalFloors:
+                parseAmount(secondaryPropertyTable?.[3]) ??
+                parseAmount(
+                    matchValue(/(?:PIANO|FLOOR)\s*[:\-]?\s*[\d]+\s*(?:DI|OF)\s*([\d]+)/i)
+                ),
+
+            elevator:
+                /\b(?:ASCENSORE|ELEVATOR|LIFT)\b/i.test(text)
+                    ? true
+                    : null,
+
+            balcony:
+                /\b(?:BALCONE|BALCONY)\b/i.test(text)
+                    ? true
+                    : null,
+
+            terrace:
+                /\b(?:TERRAZZ[AO]|TERRACE)\b/i.test(text)
+                    ? true
+                    : null,
+
+            renovated:
+                /\b(?:RISTRUTTURAT[OA]|RENOVATED|REFURBISHED)\b/i.test(text)
+                    ? true
+                    : null,
+
+            energyClass:
+                secondaryPropertyTable?.[4] ??
+                extractText(
+                    /(?:CLASSE\s+ENERGETICA|ENERGY\s+CLASS)\s*[:\-]?\s*([A-G](?:[1-4])?)/i
+                ),
+
+            availableAtDeed:
+                /\bLIBER[OA]\s+AL\s+ROGITO\b/i.test(text)
+                    ? true
+                    : null
+
+        };
+
+        const financialEvidence = [
+            roi,
+            realROI,
+            risk,
+            occupancy,
+            investmentScore,
+            equity,
+            mortgage,
+            gross,
+            annualProfit,
+            cashflow,
+            adr,
+            verdict
+        ].filter(
+            value =>
+                value !== null &&
+                value !== undefined
+        ).length;
+
+        const isDeclaredExecutiveReport =
+            documentObject.type === "executive_report";
+
+        const isFinancialReport =
+            isDeclaredExecutiveReport ||
+            financialEvidence >= 2;
+
+        // ===========================================
         // ANALYSIS
         // ===========================================
 
         documentObject.analysis = {
 
             reportType:
-                "executive_pdf",
+                isFinancialReport
+                    ? "executive_pdf"
+                    : "property_document",
 
             roi:
                 roi,
@@ -411,7 +541,9 @@ window.rbParseExecutivePDF = async function(documentObject){
                 adr,
 
             verdict:
-                verdict
+                verdict,
+
+            propertyFacts
 
         };
 
@@ -435,9 +567,17 @@ window.rbParseExecutivePDF = async function(documentObject){
                     ([key, value]) =>
 
                         key !== "reportType" &&
+                        key !== "propertyFacts" &&
                         value !== null
 
                 ),
+
+            isFinancialReport,
+
+            financialEvidence,
+
+            grounding:
+                "document_only",
 
             extractedAt:
                 new Date().toISOString()
