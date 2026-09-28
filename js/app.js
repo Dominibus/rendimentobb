@@ -3090,6 +3090,8 @@ annualDebtService:
 
 occupancy: occupancyRate,
 
+taxCost: Number(result?.taxCost ?? 0),
+
 // =====================================
 // 🧠 CANONICAL SCORE & VERDICT
 // =====================================
@@ -4286,16 +4288,26 @@ window.rbChatbotLive = {
 // 💾 LAST ANALYSIS MEMORY
 // =====================================
 
+const executiveScoreData =
+  typeof window.rbGenerateInvestmentScore === "function"
+    ? window.rbGenerateInvestmentScore({
+        roi: Number(result?.roi ?? roi ?? 0),
+        risk: Number(risk ?? 0),
+        occupancy: Number(occupancy ?? 0),
+        mortgagePercent: Number(price > 0 ? (calculatedLoan / price) * 100 : 0),
+        cashflow: Number(net ?? 0),
+        city: marketCity || "roma"
+      })
+    : null;
+
 window.lastAnalysisData = {
 
-  // Preserve the score engine's decision from the current simulation.
-  // This snapshot is rebuilt for the executive panels; dropping these fields
-  // makes the AI card fall back to a conflicting ROI-only recommendation.
+  // This snapshot precedes runPostAnalysis: score the current simulation now.
   investmentScore:
-    window.lastAnalysisData?.investmentScore ?? null,
+    executiveScoreData?.score ?? null,
 
   verdict:
-    window.lastAnalysisData?.verdict ?? null,
+    executiveScoreData?.verdict ?? null,
 
   roi:
     result?.roi ??
@@ -4334,6 +4346,9 @@ window.lastAnalysisData = {
 
   netOperatingIncome:
     Number(result?.netOperatingIncome ?? result?.noi ?? 0),
+
+  taxCost:
+    Number(result?.taxCost ?? 0),
 
   capRate:
     Number(result?.capRate ?? 0),
