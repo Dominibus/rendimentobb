@@ -302,21 +302,15 @@ Includes:
 
       return window.t(
 
-`💡 Investor sblocca analisi finanziarie avanzate e dashboard investimenti.
-👑 PRO aggiunge PDF Executive, PMS prenotazioni e dashboard operativa B&B.:
+`🔓 Attualmente stai utilizzando il piano FREE.
 
-• AI avanzata
-• analisi rischio
-• PDF executive
-• simulazioni più realistiche.`,
+💡 Investor sblocca analisi finanziarie avanzate e dashboard investimenti.
+👑 PRO aggiunge PDF Executive, PMS prenotazioni e dashboard operativa B&B.`,
 
-`💡 Investor unlocks advanced financial analysis and the investment dashboard.
-👑 PRO adds Executive PDF, booking PMS and the operational B&B dashboard.:
+`🔓 You are currently using the FREE plan.
 
-• advanced AI
-• risk analysis
-• executive PDF
-• more realistic simulations.`
+💡 Investor unlocks advanced financial analysis and the investment dashboard.
+👑 PRO adds Executive PDF, booking PMS and the operational B&B dashboard.`
 
       );
 
