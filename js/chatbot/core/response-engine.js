@@ -51,6 +51,17 @@ rbDebugLog("RESPONSE ENGINE CALLED", {
     intent: intent?.intent || null
 });
 
+// Questions about the active property PDF take precedence over the page's
+// market or simulation context, including the automatic upload summary.
+const rbActivePropertyPDF = documentKnowledge?.activeDocument;
+const rbDocumentQuestion = String(message || "").toLowerCase();
+if(
+  rbActivePropertyPDF?.analysis?.reportType === "property_document" &&
+  /(documento|pdf|brochure|prezzo dell.?immobile|dati finanziari|document|property price|financial data)/.test(rbDocumentQuestion)
+){
+  intent = { ...intent, intent: "report_interpretation" };
+}
+
 // Route plan entitlement questions before PDF/report interpretation.
 // This also covers an intent classified as report_interpretation for a PDF question.
 const rbPlanQuestion = String(message || "").toLowerCase();
