@@ -5285,16 +5285,13 @@ function renderCashflowProjection(annualCashflow){
     return;
   }
 
-  const base = Math.max(
-    0,
-    Number(annualCashflow) || 0
-  );
+  const base = Number(annualCashflow) || 0;
 
   const values = Array.from(
     { length: 5 },
     (_, index) =>
       Math.round(
-        base * Math.pow(1.03, index)
+        base > 0 ? base * Math.pow(1.03, index) : base
       )
   );
 
