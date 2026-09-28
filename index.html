@@ -2829,8 +2829,7 @@ else if(mode === "investor"){
       : "Passa a Investor";
 
   ctaEl.onclick = ()=>{
-    window.location.href =
-      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
+    window.triggerUpgradeFlow({plan:'investor',source:'upgrade-modal'});
   };
 
 }
@@ -3009,7 +3008,7 @@ else if(mode === "pro"){
           </div>
 
           <button
-            onclick="window.location.href='https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02'"
+            onclick="triggerUpgradeFlow({plan:'pro',source:'upgrade-modal'})"
             class="btn"
             style="
               width:100%;
