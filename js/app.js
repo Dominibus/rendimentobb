@@ -4288,6 +4288,15 @@ window.rbChatbotLive = {
 
 window.lastAnalysisData = {
 
+  // Preserve the score engine's decision from the current simulation.
+  // This snapshot is rebuilt for the executive panels; dropping these fields
+  // makes the AI card fall back to a conflicting ROI-only recommendation.
+  investmentScore:
+    window.lastAnalysisData?.investmentScore ?? null,
+
+  verdict:
+    window.lastAnalysisData?.verdict ?? null,
+
   roi:
     result?.roi ??
     roi ??
