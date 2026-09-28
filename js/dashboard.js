@@ -14519,6 +14519,47 @@ Number(data.properties || 0);
 const bookings =
 Number(data.bookings || 0);
 
+const hasPMSPerformanceData =
+bookings > 0 || revenue > 0;
+
+if(!hasPMSPerformanceData){
+
+box.innerHTML = `
+<div style="
+background:#ffffff;
+border:1px solid #e2e8f0;
+border-radius:22px;
+padding:28px;
+box-shadow:0 12px 40px rgba(15,23,42,.08);
+">
+  <div style="
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#64748b;
+  margin-bottom:6px;
+  ">
+    ${t("Report Executive PMS", "PMS Executive Report")}
+  </div>
+
+  <h2 style="margin:0 0 10px;font-size:30px;font-weight:900;color:#0f172a;">
+    ${t("Performance operativa PMS", "PMS Operating Performance")}
+  </h2>
+
+  <p style="margin:0;color:#64748b;line-height:1.7;">
+    ${t(
+      "Dati PMS non disponibili. Registra almeno una prenotazione o un ricavo per generare score, valutazione e raccomandazioni operative.",
+      "PMS data is not available. Record at least one booking or revenue entry to generate a score, assessment and operating recommendations."
+    )}
+  </p>
+</div>
+`;
+
+return;
+
+}
+
 // =====================================
 // AI SCORE
 // =====================================
@@ -14868,8 +14909,8 @@ margin-bottom:6px;
 ">
 
 ${t(
-"Report Executive",
-"Executive Report"
+"Report Executive PMS",
+"PMS Executive Report"
 )}
 
 </div>
@@ -14882,8 +14923,8 @@ color:#0f172a;
 ">
 
 ${t(
-"Analisi delle performance",
-"Performance Analysis"
+"Performance operativa PMS",
+"PMS Operating Performance"
 )}
 
 </h2>
@@ -14895,8 +14936,8 @@ color:#64748b;
 ">
 
 ${t(
-"RendimentoBB monitora le performance della tua attività.",
-"RendimentoBB monitors your property's performance."
+"RendimentoBB monitora esclusivamente i dati operativi registrati nel PMS.",
+"RendimentoBB monitors only the operating data recorded in the PMS."
 )}
 
 </div>
