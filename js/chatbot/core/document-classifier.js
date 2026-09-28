@@ -35,9 +35,9 @@ if(
 
     name.includes("rendimentobb_report") ||
 
-    name.includes("rendimentobb") ||
+    (name.includes("rendimentobb") && name.includes("executive")) ||
 
-    name.includes("executive") ||
+    name.includes("executive-report") ||
 
     (
         name.includes("roi") &&
