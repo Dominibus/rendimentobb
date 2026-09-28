@@ -5943,7 +5943,7 @@ body.pro-user #profit-monthly::after{
 
   #market-comparison{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));
     gap:22px;
     width:100%;
     max-width:1000px;
@@ -5953,17 +5953,22 @@ body.pro-user #profit-monthly::after{
   /* 🔥 FORZA OGNI ELEMENTO INTERNO */
   #market-comparison > *{
     width:100%;
+    min-width:0;
     display:flex;
     justify-content:center;
   }
 
   /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
   #market-comparison .kpi-box,
-  #market-comparison .metric,
-  #market-comparison div{
+  #market-comparison .metric{
     width:100% !important;
     max-width:none !important;
     text-align:center;
+  }
+
+  #market-comparison .kpi-value{
+    font-size:clamp(14px,1.6vw,22px);
+    overflow-wrap:anywhere;
   }
 
   /* 🔥 BENCHMARK */
