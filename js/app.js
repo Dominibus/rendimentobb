@@ -1796,36 +1796,37 @@ else if(score > 40){
 
 // ================= INVESTMENT RANKING =================
 
-function renderInvestmentRanking(roi){
+function renderInvestmentRanking(roi, score = window.lastAnalysisData?.investmentScore){
 
 const container = document.getElementById("investment-ranking");
 if(!container) return;
 
-let percentile = 50;
-let label = t("Investimento medio","Average investment");
-
-if(roi > 15){
-percentile = 90;
-label = t("Investimento eccellente","Top investment opportunity");
-}
-else if(roi > 10){
-percentile = 75;
-label = t("Investimento forte","Strong investment");
-}
-else if(roi > 6){
-percentile = 60;
-label = t("Opportunità moderata","Moderate opportunity");
-}
+const numericScore = Number(score);
+const hasScore = score != null && Number.isFinite(numericScore);
+const band = !hasScore
+  ? t("Da calcolare", "Pending")
+  : numericScore >= 75
+    ? t("Alta", "High")
+    : numericScore > 40
+      ? t("Intermedia", "Intermediate")
+      : t("Bassa", "Low");
+const label = !hasScore
+  ? t("Valutazione non disponibile", "Assessment unavailable")
+  : numericScore >= 75
+    ? t("Investimento favorevole", "Favorable investment")
+    : numericScore > 40
+      ? t("Da ottimizzare", "Needs optimization")
+      : t("Investimento critico", "High concern investment");
 
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${t("Ranking investimento","Investment ranking")}</span>
-<strong>Top ${100-percentile}%</strong>
+<span>${t("Fascia di valutazione","Assessment band")}</span>
+<strong>${band}</strong>
 </div>
 
 <div class="kpi-box">
-<span>${t("Tipo investimento","Investment type")}</span>
+<span>${t("Profilo investimento","Investment profile")}</span>
 <strong>${label}</strong>
 </div>
 
@@ -2490,10 +2491,10 @@ function getROIColor(roi){
 }
 
 function getInvestmentBadge(roi){
-  if(roi >= 20) return t("🚀 Investimento TOP","🚀 Top investment");
-  if(roi >= 12) return t("🔥 Ottima opportunità","🔥 Great opportunity");
-  if(roi >= 8) return t("👍 Buon investimento","👍 Good investment");
-  return t("⚠️ Attenzione rischio","⚠️ Risk warning");
+  if(roi >= 20) return t("📈 ROI elevato","📈 High ROI");
+  if(roi >= 12) return t("📈 ROI interessante","📈 Promising ROI");
+  if(roi >= 8) return t("📊 ROI positivo","📊 Positive ROI");
+  return t("📊 ROI da valutare","📊 Review ROI");
 }
 
 function getInvestmentBadgeClass(roi){
