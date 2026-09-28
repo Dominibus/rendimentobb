@@ -10492,6 +10492,24 @@ if(!selectedPropertyId){
     return;
   }
 
+  if(cleaningRequired && cleaningDate && cleaningDate < checkout){
+    alert(t(
+      "La pulizia di turnover non può precedere il check-out.",
+      "Turnover cleaning cannot be scheduled before check-out."
+    ));
+    return;
+  }
+
+  const previousIssue = window.pmsEditingBooking
+    ? window.currentSelectedBooking?.guestIssue || {}
+    : {};
+  const urgentIssueChanged = !window.pmsEditingBooking ||
+    previousIssue.active !== true ||
+    (previousIssue.priority || "medium") !== guestIssue.priority ||
+    (previousIssue.status || "open") !== guestIssue.status ||
+    (previousIssue.category || "other") !== guestIssue.category ||
+    (previousIssue.note || "") !== guestIssue.note;
+
   const saveButton = document.getElementById("booking-save-button");
   if(saveButton){
     saveButton.disabled = true;
@@ -10648,6 +10666,7 @@ window.dispatchEvent(
 
   if(
     savedBookingId &&
+    urgentIssueChanged &&
     guestIssue.active === true &&
     guestIssue.priority === "urgent" &&
     guestIssue.status !== "resolved"
