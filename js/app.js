@@ -1576,26 +1576,38 @@ container.innerHTML = `
 
 // ================= OCCUPANCY SENSITIVITY =================
 
-function renderOccupancySensitivity(){
+function renderOccupancySensitivity(baseResult, inputs){
 
 const container = document.getElementById("occupancy-sensitivity");
 if(!container) return;
 
+if(!baseResult || !inputs || typeof calculateROI !== "function"){
+  container.innerHTML = "";
+  return;
+}
+
+const baseOccupancy = Math.max(0, Math.min(100, Number(inputs.occupancy) || 0));
+const lowerOccupancy = Math.max(0, baseOccupancy - 10);
+const higherOccupancy = Math.min(100, baseOccupancy + 10);
+const lower = calculateROI({...inputs, occupancy: lowerOccupancy});
+const higher = calculateROI({...inputs, occupancy: higherOccupancy});
+const formatROI = value => `${Number(value || 0).toFixed(1)}%`;
+
 container.innerHTML = `
 
 <div class="kpi-box">
-  <div class="kpi-label">-10%</div>
-  <div class="kpi-value">8.2%</div>
+  <div class="kpi-label">${lowerOccupancy}% ${t("occupazione", "occupancy")}</div>
+  <div class="kpi-value">${formatROI(lower.roi)}</div>
 </div>
 
 <div class="kpi-box">
-  <div class="kpi-label">${t("Base","Base")}</div>
-  <div class="kpi-value">10.5%</div>
+  <div class="kpi-label">${t("Base", "Base")} · ${baseOccupancy}%</div>
+  <div class="kpi-value">${formatROI(baseResult.roi)}</div>
 </div>
 
 <div class="kpi-box">
-  <div class="kpi-label">+10%</div>
-  <div class="kpi-value">12.8%</div>
+  <div class="kpi-label">${higherOccupancy}% ${t("occupazione", "occupancy")}</div>
+  <div class="kpi-value">${formatROI(higher.roi)}</div>
 </div>
 
 `;
@@ -5090,14 +5102,20 @@ runPostAnalysis(result,{
 
   renderRevenueForecast?.(gross);
 
-  renderOccupancySensitivity?.();
+  renderOccupancySensitivity?.(result, {
+    price, equity, priceNight, occupancy, expenses, expensesUnit,
+    commission, tax, loanAmount, interestRate, loanYears
+  });
 
 }else{
 
       renderMarketBenchmark?.(window.currentCity || "roma");
       renderMarketComparison?.(gross, window.currentCity);
       renderRevenueForecast?.(gross);
-      renderOccupancySensitivity?.();
+      renderOccupancySensitivity?.(result, {
+        price, equity, priceNight, occupancy, expenses, expensesUnit,
+        commission, tax, loanAmount, interestRate, loanYears
+      });
 
     }
 
