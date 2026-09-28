@@ -3925,6 +3925,32 @@ if(access.isPro || access.isAdmin){
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
 
+    const monthlyCostsInput =
+      isTool
+        ? document.getElementById("expenses")
+        : null;
+
+    if(
+      isTool &&
+      window.__MANUAL_ANALYSIS__ &&
+      monthlyCostsInput &&
+      String(monthlyCostsInput.value ?? "").trim() === ""
+    ){
+      monthlyCostsInput.setCustomValidity(
+        t(
+          "Inserisci i costi mensili stimati. Usa 0 solo se vuoi escluderli consapevolmente dall'analisi.",
+          "Enter estimated monthly costs. Use 0 only if you intentionally want to exclude them from the analysis."
+        )
+      );
+      monthlyCostsInput.reportValidity();
+      monthlyCostsInput.focus();
+      window.isCalculating = false;
+      window.__preventRecalculate = false;
+      return;
+    }
+
+    monthlyCostsInput?.setCustomValidity("");
+
     const price       = isTool ? getValueOrDefault("price", 100000) : getValueOrDefault("qr_price", 100000);
     const equityInput = getValue("equity");
 
@@ -3949,7 +3975,8 @@ if(equity < minEquity){
 
     const priceNight  = isTool ? getValueOrDefault("priceNight", 100) : getValueOrDefault("qr_night", 100);
     const occupancy   = isTool ? getValueOrDefault("occupancy", 65) : getValueOrDefault("qr_occ", 65);
-    const expenses    = isTool ? getValueOrDefault("expenses", 30) : getValueOrDefault("qr_cost", 30);
+    const expenses    = isTool ? getValueOrDefault("expenses", 0) : getValueOrDefault("qr_cost", 35);
+    const expensesUnit = isTool ? "monthly_eur" : "percentage";
 
     const commission  = getValueOrDefault("commission", 15);
     const tax         = getValueOrDefault("tax", 21);
@@ -3997,6 +4024,7 @@ const result = calculateROI({
   priceNight,
   occupancy,
   expenses,
+  expensesUnit,
   commission,
   tax,
   loanAmount,
