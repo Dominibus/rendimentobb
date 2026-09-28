@@ -6842,6 +6842,14 @@ row(
   eur(netOperatingIncome)
 );
 
+const incomeTaxCost = safe(d.taxCost);
+if(incomeTaxCost > 0){
+  row(
+    T("Imposte stimate sul risultato operativo", "Estimated income taxes on operating profit"),
+    eur(incomeTaxCost)
+  );
+}
+
 row(
   "Cap Rate",
   capRate.toFixed(2) + "%"
