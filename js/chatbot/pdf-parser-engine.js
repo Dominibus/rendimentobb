@@ -85,6 +85,10 @@ window.rbParseExecutivePDF = async function(documentObject){
                     // PDF text often leaves sentence punctuation next to amounts.
                     .replace(/[.,]+$/, "");
 
+            if(!/\d/.test(normalized)){
+                return null;
+            }
+
             if(
                 normalized.includes(".") &&
                 normalized.includes(",")
