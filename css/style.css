@@ -5954,8 +5954,7 @@ body.pro-user #profit-monthly::after{
   #market-comparison > *{
     width:100%;
     min-width:0;
-    display:flex;
-    justify-content:center;
+    display:block;
   }
 
   /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
