@@ -1411,9 +1411,14 @@ function renderMarketComparison(userRevenue, cityKey){
   const container = document.getElementById("market-comparison");
   if(!container) return;
 
-  // 🔥 sicurezza numeri
+  const city = String(cityKey || "").trim().toLowerCase();
+  const marketAvg = Number(window.RB_MARKET_DATA?.[city]?.annualRevenue);
+  if(!Number.isFinite(marketAvg) || marketAvg <= 0){
+    container.innerHTML = `<div class="kpi-box">${t("Benchmark locale non disponibile", "Local benchmark unavailable")}</div>`;
+    return;
+  }
+
   const revenue = window.safeNumber(userRevenue);
-  const marketAvg = 28500;
 
   const diff = revenue - marketAvg;
   
@@ -5096,7 +5101,7 @@ runPostAnalysis(result,{
   );
 
   renderMarketComparison?.(
-    gross * 0.6,
+    gross,
     window.currentCity
   );
 
