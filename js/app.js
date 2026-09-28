@@ -4307,7 +4307,13 @@ window.lastAnalysisData = {
     executiveScoreData?.score ?? null,
 
   verdict:
-    executiveScoreData?.verdict ?? null,
+    executiveScoreData
+      ? (Number(executiveScoreData.score) >= 75
+          ? "BUY"
+          : Number(executiveScoreData.score) > 40
+            ? "WAIT"
+            : "AVOID")
+      : null,
 
   roi:
     result?.roi ??
