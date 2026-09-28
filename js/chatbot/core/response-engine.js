@@ -51,6 +51,20 @@ rbDebugLog("RESPONSE ENGINE CALLED", {
     intent: intent?.intent || null
 });
 
+// Route plan entitlement questions before PDF/report interpretation.
+// This also covers an intent classified as report_interpretation for a PDF question.
+const rbPlanQuestion = String(message || "").toLowerCase();
+const rbAsksFreeFeatures =
+  /\bfree\b/.test(rbPlanQuestion) &&
+  /(include|includes|included|comprende|contiene|offre|features|funzioni)/.test(rbPlanQuestion);
+const rbAsksPlanPDF =
+  /\bpdf\b/.test(rbPlanQuestion) &&
+  /\b(free|investor)\b/.test(rbPlanQuestion) &&
+  /(inclus|disponib|available|include|access|puo|posso|can i|does|is the)/.test(rbPlanQuestion);
+if(rbAsksFreeFeatures || rbAsksPlanPDF){
+  intent = { ...intent, intent: "subscriptions" };
+}
+
 // ===============================================
 // 📄 PDF INTENT NORMALIZATION
 // Preserve the original document request
@@ -6259,11 +6273,20 @@ else if(
 const q =
   String(message || "")
   .toLowerCase();
+  // Give a direct answer to plan access questions.
+  if(rbAsksPlanPDF){
+    response.textIT = `No. Il piano Free e il piano Investor non includono il PDF Executive. È disponibile con PRO.`;
+    response.textEN = `No. Free and Investor do not include the Executive PDF. It is available with PRO.`;
+  }
+  else if(rbAsksFreeFeatures){
+    response.textIT = `🟢 Free è la demo gratuita per provare il simulatore. Investor aggiunge le analisi finanziarie avanzate e la dashboard investimenti. PRO aggiunge PDF Executive, PMS prenotazioni e dashboard operativa B&B.`;
+    response.textEN = `🟢 Free is the free demo for trying the simulator. Investor adds advanced financial analysis and the investment dashboard. PRO adds Executive PDF, booking PMS and the operational B&B dashboard.`;
+  }
   // =====================================
   // 💰 PREZZI
   // =====================================
 
-  if(
+  else if(
     q.includes("costo") ||
     q.includes("prezzo") ||
     q.includes("quanto costa") ||
