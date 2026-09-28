@@ -27,7 +27,11 @@ function calculateROI(input = {}){
   const priceNight   = safePositive(input.priceNight, 100);
   const occupancy    = Math.min(100, safePositive(input.occupancy, 65));
 
-  const expenses     = safePositive(input.expenses, 30);
+  const expenses     = safePositive(input.expenses, 0);
+  const expensesUnit =
+    input.expensesUnit === "percentage"
+      ? "percentage"
+      : "monthly_eur";
   const commission   = safePositive(input.commission, 15);
   const tax          = safePositive(input.tax, 21);
 
@@ -40,13 +44,13 @@ function calculateROI(input = {}){
 
   const fees = gross * (commission / 100);
 
-  // 🔥 gestione smart expenses
-  let yearlyExpenses = 0;
-  if(expenses <= 100){
-    yearlyExpenses = gross * (expenses / 100);
-  } else {
-    yearlyExpenses = expenses * 12;
-  }
+  // Expenses never infer their unit from the numeric value.
+  // The full simulator is canonical in EUR/month; percentage is accepted
+  // only when the caller declares it explicitly (e.g. the homepage preview).
+  const yearlyExpenses =
+    expensesUnit === "percentage"
+      ? gross * (Math.min(expenses, 100) / 100)
+      : expenses * 12;
 
   const operatingProfit = gross - fees - yearlyExpenses;
 
@@ -181,6 +185,10 @@ function calculateROI(input = {}){
     revenue: clean(gross),
 
     fees: clean(fees),
+    expenses: clean(expenses),
+    expensesUnit,
+    expensesMonthly:
+      clean(yearlyExpenses / 12),
     expensesYearly: clean(yearlyExpenses),
 
     operatingProfit: clean(operatingProfit),
