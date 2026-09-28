@@ -122,6 +122,29 @@ test("explicit zero commission and tax remain valid inputs", () => {
   assert.ok(result.netAfterMortgage > 9799.82);
 });
 
+test("monthly costs never change meaning when the amount is 100 euros or less", () => {
+  const result = calculateROI({
+    ...standardInput,
+    expenses: 80
+  });
+
+  assert.equal(result.expensesUnit, "monthly_eur");
+  assert.equal(result.expensesMonthly, 80);
+  assert.equal(result.expensesYearly, 960);
+});
+
+test("percentage costs are used only when explicitly declared by the caller", () => {
+  const result = calculateROI({
+    ...standardInput,
+    expenses: 35,
+    expensesUnit: "percentage"
+  });
+
+  assert.equal(result.expensesUnit, "percentage");
+  closeTo(result.expensesYearly, result.gross * 0.35, 1e-8);
+  closeTo(result.expensesMonthly, result.expensesYearly / 12, 1e-8);
+});
+
 test("consecutive simulations never inherit previous values", () => {
   const strong = calculateROI(standardInput);
   const weak = calculateROI({
