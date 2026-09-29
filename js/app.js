@@ -5019,7 +5019,13 @@ runPostAnalysis(result,{
     // ================= MARKET =================
     if(access.isFree){
 
-      renderMarketComparison?.(0, window.currentCity);
+      const marketComparison = document.getElementById("market-comparison");
+      if(marketComparison){
+        marketComparison.innerHTML = `<div class="kpi-box">${t(
+          "Confronto disponibile con Investor o Pro",
+          "Comparison available with Investor or Pro"
+        )}</div>`;
+      }
 
       document.querySelectorAll(`
         #market-comparison,
