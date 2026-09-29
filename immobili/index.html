@@ -1920,8 +1920,8 @@ if(goal === "roi"){
 
 recommendation =
 window.currentLang==="en"
-? "🎯 Recommended strategy: focus on Naples and secondary tourist cities. Highest ROI potential."
-: "🎯 Strategia consigliata: concentrati su Napoli e città turistiche secondarie. Massimo potenziale ROI.";
+? "Compare the example ROI with costs, local demand and the property's actual details."
+: "Confronta il ROI di esempio con costi, domanda locale e dati effettivi dell'immobile.";
 
 }
 
@@ -1929,8 +1929,8 @@ else if(goal === "cashflow"){
 
 recommendation =
 window.currentLang==="en"
-? "💰 Recommended strategy: look for larger properties with multiple rooms to maximize monthly cashflow."
-: "💰 Strategia consigliata: cerca immobili più grandi con più camere per massimizzare il cashflow mensile.";
+? "A larger property may bring higher revenue and higher operating costs. Test both assumptions."
+: "Più spazio può aumentare i ricavi ma anche i costi. Verifica entrambe le ipotesi.";
 
 }
 
@@ -1938,8 +1938,8 @@ else if(goal === "safe"){
 
 recommendation =
 window.currentLang==="en"
-? "🛡️ Recommended strategy: Rome and Florence offer more stable demand and lower volatility."
-: "🛡️ Strategia consigliata: Roma e Firenze offrono una domanda più stabile e minore volatilità.";
+? "Risk needs local demand, operating costs and property information that these examples do not include."
+: "Per stimare il rischio servono domanda locale, costi e dati dell'immobile assenti in questi esempi.";
 
 }
 
@@ -1947,8 +1947,8 @@ else{
 
 recommendation =
 window.currentLang==="en"
-? "📈 Recommended strategy: focus on areas with strong long-term appreciation potential."
-: "📈 Strategia consigliata: punta su zone con forte rivalutazione immobiliare nel lungo periodo.";
+? "Long-term value changes cannot be predicted from these illustrative scenarios."
+: "Questi scenari illustrativi non prevedono la rivalutazione futura degli immobili.";
 
 }
 
@@ -2366,8 +2366,8 @@ color:#0f172a;
 
 📊 ${
 window.currentLang==="en"
-? "Recommended Investment Strategy"
-: "Strategia investimento consigliata"
+? "Illustrative scenario overview"
+: "Riepilogo dello scenario illustrativo"
 }
 
 </h3>
@@ -2419,21 +2419,8 @@ window.currentLang==="en"
 
 </div>
 
-<div style="margin-bottom:20px">
-
-🛡️ ${
-window.currentLang==="en"
-? "Risk"
-: "Rischio"
-}:
-
-<strong>${
-first.risk ??
-Math.max(
-1,
-10 - Math.round(first.roi / 2)
-)
-}/10</strong>
+<div style="margin-bottom:20px;color:#64748b">
+${window.currentLang==="en" ? "Risk cannot be estimated from these example values." : "Il rischio non è stimabile dai soli valori di esempio."}
 </div>
 
 <hr style="margin:20px 0">
