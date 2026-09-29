@@ -3413,6 +3413,17 @@ function init(){
 
   loadSimulations();
 
+  if(!Number.isFinite(price) || price <= 0){
+    const report = document.querySelector(".report");
+    if(report){
+      report.textContent = lang === "en"
+        ? "Save a valid simulation in Analyze before opening the professional report."
+        : "Salva una simulazione valida in Analizza prima di aprire il report professionale.";
+      report.style.cssText = "display:block;max-width:760px;margin:48px auto;padding:32px;background:#fff;border-radius:16px;text-align:center;color:#0f172a;font-weight:600";
+    }
+    return;
+  }
+
   checkUserPlan();
   populateSimulations();
   renderData();
