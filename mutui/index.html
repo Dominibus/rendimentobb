@@ -1128,10 +1128,10 @@ color:#334155;
 ">
 
 <span
-data-it="Investment Score"
-data-en="Investment Score">
+data-it="Verifica completa"
+data-en="Full assessment">
 
-Investment Score
+Verifica completa
 
 </span>
 
@@ -1145,10 +1145,10 @@ margin-top:6px;
 ">
 
 <span
-data-it="Valutazione indicativa"
-data-en="Indicative assessment">
+data-it="Richiede costi e preventivo"
+data-en="Needs costs and lender quote">
 
-Valutazione indicativa
+Richiede costi e preventivo
 
 </span>
 
@@ -1606,14 +1606,6 @@ const roi = income > 0
   ? ((income - yearly) / income * 100)
   : 0;
 
-const score = Math.max(
-0,
-Math.min(
-100,
-Math.round(roi * 5)
-)
-);  
-
 /* ===== ALERT ===== */
 const alertBox = document.getElementById("roi-alert");
 alertBox.style.display="block";
@@ -1627,8 +1619,8 @@ if(roi < 0){
 }else{
   alertBox.className="roi-alert roi-good";
   alertBox.innerHTML = t(
-    "✅ Margine stimato positivo nello scenario inserito",
-    "✅ Positive estimated margin in the entered scenario"
+  "Il ricavo indicato supera la rata; verifica gli altri costi",
+  "Entered revenue exceeds loan payments; check other costs"
   );
 }
 
@@ -1646,8 +1638,7 @@ document.getElementById("yearly").innerText =
 document.getElementById("impact").innerText =
   lockValue(safeROI.toFixed(1), "%");
 
-document.getElementById("score").innerText =
-lockValue(score,"/100");
+document.getElementById("score").innerText = "—";
   
 if(options.scroll !== false){
   document.querySelector(".lead-box").scrollIntoView({
@@ -1767,8 +1758,8 @@ let verdict, color;
 
 if(roi < 5){
   verdict = t(
-    "❌ Scenario finanziariamente critico",
-    "❌ Financially critical scenario"
+    "⚠️ La rata assorbe quasi tutti i ricavi indicati",
+    "⚠️ Payments consume almost all entered revenue"
   );
   color = "#ef4444";
 }
@@ -1781,8 +1772,8 @@ else if(roi < 12){
 }
 else{
   verdict = t(
-    "✅ Margine stimato positivo",
-    "✅ Positive estimated margin"
+    "Ricavi superiori alla rata, prima degli altri costi",
+    "Revenue exceeds payments, before other costs"
   );
   color = "#10b981";
 }
@@ -1832,8 +1823,8 @@ else{
 
 advice =
 window.currentLang==="en"
-? "✅ The entered scenario shows a positive estimated margin. Verify costs and actual lender terms."
-: "✅ Lo scenario inserito mostra un margine stimato positivo. Verifica costi e condizioni effettive dell'intermediario.";
+? "Entered revenue exceeds loan payments. Check operating costs and actual lender terms before assessing sustainability."
+: "I ricavi indicati superano le rate. Verifica costi operativi e condizioni effettive prima di valutare la sostenibilità.";
 
 }
 
@@ -1884,8 +1875,8 @@ ${t(
 
 🎯 ${
 t(
-"Impatto sul ROI",
-"ROI impact"
+"Quota di ricavi dopo le rate",
+"Revenue after loan payments"
 )
 }
 
@@ -1893,8 +1884,8 @@ t(
 
 💰 ${
 t(
-"Cashflow positivo",
-"Positive cashflow"
+"Costi operativi da verificare",
+"Operating costs to check"
 )
 }
 
@@ -1902,16 +1893,16 @@ t(
 
 🏦 ${
 t(
-"Mutuo sostenibile",
-"Sustainable mortgage"
+"Preventivo bancario da richiedere",
+"Request a lender quote"
 )
 }
 
 <br><br>
 
 ${t(
-"Analisi basata su ROI, sostenibilità del debito, cashflow e impatto sul rendimento.",
-"Analysis based on ROI, debt sustainability, cashflow and investment impact."
+"Il confronto considera ricavi indicati e rate; non include costi di gestione, imposte e condizioni di un'offerta bancaria.",
+"This comparison uses entered revenue and loan payments; it excludes operating costs, taxes and lender offer terms."
 )}
 
 </div>
