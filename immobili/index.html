@@ -2244,55 +2244,9 @@ window.currentLang==="en"
 
 <br>
 
-🛡 ${
-window.currentLang==="en"
-? "Indicative risk"
-: "Rischio indicativo"
-}
-
-<br>
-
-<strong>
-
-${roi >= 16 ? "2/10" : roi >= 12 ? "4/10" : "6/10"}
-
-</strong>
-
-${roi >=16
-? (window.currentLang==="en"?"Low":"Basso")
-: roi>=12
-? (window.currentLang==="en"?"Medium":"Medio")
-: (window.currentLang==="en"?"High":"Alto")}
-
-</div>
-
-<div style="
-margin-top:10px;
-font-size:26px;
-font-weight:800;
-color:#0f172a;
-">
-
-${Math.min(
-100,
-Math.round(
-(roi * 5) +
-(100 - price / 5000)
-)
-)}/100
-
-</div>
-
-<div style="
-margin-top:4px;
-font-size:13px;
-font-weight:600;
-color:#10b981;
-">
-
 ${window.currentLang==="en"
-? "Indicative scenario score"
-: "Punteggio indicativo dello scenario"}
+? "Costs, risk and local demand still need verification."
+: "Costi, rischio e domanda locale sono ancora da verificare."}
 
 </div>
 
