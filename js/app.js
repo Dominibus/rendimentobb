@@ -1083,13 +1083,13 @@ if(oldModal){
       features_it: [
         "Simulazioni illimitate",
         "Analisi ROI avanzata",
-        "Confronto con mercato reale",
+        "Confronto con benchmark indicativi",
         "Indicatori base di rischio"
       ],
       features_en: [
         "Unlimited simulations",
         "Advanced ROI analysis",
-        "Real market comparison",
+        "Indicative market benchmark comparison",
         "Basic risk indicators"
       ],
 
@@ -1429,7 +1429,7 @@ const kpi1 = `
 const kpi2 = `
   <div class="kpi-box">
     <div class="kpi-label">
-      ${t("🏙 Media mercato","🏙 Market average")}
+      ${t("🏙 Riferimento indicativo","🏙 Indicative benchmark")}
     </div>
     <div class="kpi-value">
       ${formatCurrency(marketAvg)}
