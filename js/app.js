@@ -1093,11 +1093,11 @@ if(oldModal){
         "Basic risk indicators"
       ],
 
-      proof_it: "Usato da centinaia di investitori per evitare errori costosi",
-      proof_en: "Used by hundreds of investors to avoid costly mistakes",
+      proof_it: "Confronta più scenari prima di decidere",
+      proof_en: "Compare multiple scenarios before deciding",
 
-      cta_it: "Sblocca Investor ora – €19",
-      cta_en: "Unlock Investor now – €19",
+      cta_it: "Sblocca Investor – €19/mese",
+      cta_en: "Unlock Investor – €19/month",
 
       warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
       warning_en: "⚠️ Without advanced analysis you may overestimate returns",
@@ -1141,11 +1141,11 @@ if(oldModal){
         "Professional PDF report"
       ],
 
-      proof_it: "Strumenti usati da investitori e consulenti immobiliari",
-      proof_en: "Tools used by investors and real estate professionals",
+      proof_it: "Analizza rischio, mutuo e sostenibilità nello stesso report",
+      proof_en: "Review risk, mortgage and sustainability in one report",
 
-      cta_it: "Sblocca analisi completa – €29",
-      cta_en: "Unlock full analysis – €29",
+      cta_it: "Sblocca analisi completa – €29/mese",
+      cta_en: "Unlock full analysis – €29/month",
 
       warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
       warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
@@ -1190,35 +1190,7 @@ if(oldModal){
   // ================= 🔥 LOSS BOX =================
   const lossBox = document.createElement("div");
 
-  const estimatedLoss = Math.max(
-  0,
-  (window.lastAnalysisData?.net || 0) * 0.25
-);
-
-  if(
-  estimatedLoss > 1000 &&
-  estimatedLoss < 50000 &&
-  !access.canSeeFullAnalysis &&
-  safeROI > 6
-){
-    lossBox.innerHTML = `
-      <div style="
-        margin-bottom:16px;
-        padding:12px;
-        border-radius:10px;
-        background:rgba(239,68,68,0.08);
-        border:1px solid rgba(239,68,68,0.2);
-        font-size:14px;
-        font-weight:600;
-        color:#dc2626;
-      ">
-        💸 ${safeT(
-          `Potresti perdere fino a €${estimatedLoss.toLocaleString()} senza analisi completa`,
-          `You could lose up to €${estimatedLoss.toLocaleString()} without full analysis`
-        )}
-      </div>
-    `;
-  }
+  // Non attribuire una perdita in euro a una quota arbitraria del cashflow.
 
   // ================= FEATURES =================
   const list = document.createElement("div");
