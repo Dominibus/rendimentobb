@@ -1,24 +1,17 @@
 import Stripe from "stripe"; 
 import admin from "firebase-admin";
+import { getStripePrices } from "./stripe-plan-config.js";
 
 const stripe =
   new Stripe(
     process.env.STRIPE_SECRET_KEY
   );
 
-const PLAN_BY_PRICE_ID =
-  Object.freeze({
-
-    price_1TASiWCHMfsTxRqQTQqRzkg0:
-      "investor",
-
-    price_1TCcaCCHMfsTxRqQBVjFHVRo:
-      "pro",
-
-    price_1TCccSCHMfsTxRqQie5FtqqC:
-      "pro_yearly"
-
-  });
+const PLAN_BY_PRICE_ID = Object.freeze(
+  Object.fromEntries(
+    Object.entries(getStripePrices()).map(([plan, price]) => [price, plan])
+  )
+);
 
 // Stripe richiede il body grezzo
 // per verificare la firma.
@@ -396,10 +389,12 @@ export default async function handler(
           ?.price
           ?.id;
 
-      const plan =
-        PLAN_BY_PRICE_ID[
-          priceId
-        ];
+      const subscriptionId = getStripeId(session.subscription);
+      const subscription = subscriptionId
+        ? await stripe.subscriptions.retrieve(subscriptionId)
+        : null;
+      const subscriptionPriceId = getSubscriptionPriceId(subscription);
+      const plan = PLAN_BY_PRICE_ID[priceId];
 
       if(!uid){
 
@@ -423,11 +418,23 @@ export default async function handler(
 
       }
 
+      if (
+        session.mode !== "subscription" ||
+        !subscription ||
+        subscriptionPriceId !== priceId
+      ) {
+        return res.status(400).json({ error: "Subscription does not match checkout" });
+      }
+
+      const status = String(subscription.status || "");
+      const hasAccess = ["active", "trialing"].includes(status) &&
+        ["paid", "no_payment_required"].includes(session.payment_status);
+
       await updateUserPlan(
         db,
         uid,
         {
-          plan,
+          plan: hasAccess ? plan : "free",
 
           stripeSessionId:
             session.id,
@@ -437,13 +444,9 @@ export default async function handler(
               session.customer
             ),
 
-          subscriptionId:
-            getStripeId(
-              session.subscription
-            ),
+          subscriptionId,
 
-          subscriptionStatus:
-            "active",
+          subscriptionStatus: status,
 
           cancelAtPeriodEnd:
             false

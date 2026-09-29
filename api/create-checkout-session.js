@@ -1,13 +1,10 @@
 import Stripe from "stripe";
 import admin from "firebase-admin";
+import { getStripePrices } from "./stripe-plan-config.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const PRICE_BY_PLAN = Object.freeze({
-  investor: "price_1TASiWCHMfsTxRqQTQqRzkg0",
-  pro: "price_1TCcaCCHMfsTxRqQBVjFHVRo",
-  pro_yearly: "price_1TCccSCHMfsTxRqQie5FtqqC"
-});
+const PRICE_BY_PLAN = getStripePrices();
 
 function getFirebaseAdmin() {
   if (!admin.apps.length) {
