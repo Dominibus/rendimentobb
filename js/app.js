@@ -2724,6 +2724,13 @@ function runPostAnalysis(result, context){
 
     window.simulationExecuted = true;
 
+    const resultState = document.getElementById("tool-result-state");
+    if(resultState){
+      resultState.dataset.it = "Analisi aggiornata";
+      resultState.dataset.en = "Analysis updated";
+      resultState.textContent = t("Analisi aggiornata", "Analysis updated");
+    }
+
     // ================= SAFE VARIABLES =================
 
     const roi = Number(result?.roi || 0);
