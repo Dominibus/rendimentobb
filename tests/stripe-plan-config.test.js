@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getStripePrices } from "../api/stripe-plan-config.js";
+import { getStripePrices } from "../lib/stripe-plan-config.js";
 
 test("Stripe keys select matching live and sandbox price maps", () => {
   const live = getStripePrices({ STRIPE_SECRET_KEY: "sk_live_placeholder" });
