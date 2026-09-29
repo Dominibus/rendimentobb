@@ -1,6 +1,6 @@
 import Stripe from "stripe"; 
 import admin from "firebase-admin";
-import { getStripePrices } from "./stripe-plan-config.js";
+import { getStripePrices } from "../lib/stripe-plan-config.js";
 
 const stripe =
   new Stripe(
