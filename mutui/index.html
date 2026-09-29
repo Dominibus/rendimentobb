@@ -1075,10 +1075,10 @@ color:#334155;
 ">
 
 <span
-data-it="Impatto sul ROI"
-data-en="ROI Impact">
+data-it="Ricavi dopo la rata"
+data-en="Revenue after loan payments">
 
-Impatto sul ROI
+Ricavi dopo la rata
 
 </span>
 
@@ -1092,10 +1092,10 @@ margin-top:6px;
 ">
 
 <span
-data-it="Protezione del rendimento"
-data-en="Return Protection">
+data-it="Prima degli altri costi, non è ROI"
+data-en="Before other costs; this is not ROI">
 
-Protezione del rendimento
+Prima degli altri costi, non è ROI
 
 </span>
 
@@ -1675,31 +1675,7 @@ renderAdvisor(roi);
 }
 
 function lockValue(value, suffix=""){
-
-  const access = getAccess();
-
-  // 🔓 PRO
-  if(access.isPro){
-    return value + suffix;
-  }
-
-  // 🔥 converte sicurezza
-  const numeric = parseFloat(
-    String(value)
-      .replace("€","")
-      .replace("%","")
-      .replace(",",".")
-  ) || 0;
-
-  const fake = Math.round(numeric * 0.75);
-
-  // 💰 valuta €
-  if(String(value).includes("€")){
-    return "≈ €" + fake + " 🔒";
-  }
-
-  // 📊 percentuale
-  return "≈ " + fake + suffix + " 🔒";
+  return value + suffix;
 }
 
 /* ================= EXTRA ================= */
