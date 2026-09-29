@@ -3551,7 +3551,15 @@ function handleReportClick(){
   }
 
   // ✅ PRO → DASHBOARD REPORT
-  const data = window.bestInvestmentData || {};
+  const data = window.bestInvestmentData;
+  const price = Number(data?.propertyPrice ?? data?.price);
+  if(!data || !Number.isFinite(price) || price <= 0){
+    alert(t(
+      "Salva una simulazione valida prima di aprire il report professionale.",
+      "Save a valid simulation before opening the professional report."
+    ));
+    return;
+  }
   // 🔥 FIX CRITICO → salva simulazioni per report
 localStorage.setItem(
   "rb_simulations",
@@ -3596,7 +3604,7 @@ localStorage.setItem(
   }
 
   const params = new URLSearchParams({
-    price: data.price || 0,
+    price,
     roi: data.roi || 0,
     equity: data.equity || 0,
     risk: data.risk || 0,
