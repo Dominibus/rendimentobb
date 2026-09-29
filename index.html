@@ -623,10 +623,10 @@ Calcola rendimento
 
 <!-- SOCIAL PROOF -->
 <p 
-data-it="Stima immediata basata sui dati inseriti • Nessuna registrazione"
-data-en="Instant estimate based on your inputs • No registration required"
+data-it="Stima indicativa senza mutuo e imposte • Nessuna registrazione"
+data-en="Indicative estimate without financing and taxes • No registration required"
 style="margin-top:20px;font-size:14px;color:#64748b;text-align:center">
-Stima immediata basata sui dati inseriti • Nessuna registrazione
+Stima indicativa senza mutuo e imposte • Nessuna registrazione
 </p>
 
 </div>
@@ -636,12 +636,12 @@ Stima immediata basata sui dati inseriti • Nessuna registrazione
 
 <div class="investment-score">
 
-<div class="score-circle" id="investment_score">B</div>
+<div class="score-circle" id="investment_score">↗</div>
 
 <div class="score-label"
-data-it="Valutazione investimento"
-data-en="Investment rating">
-Valutazione investimento
+data-it="Anteprima investimento"
+data-en="Investment preview">
+Anteprima investimento
 </div>
 
 </div>
@@ -749,10 +749,10 @@ data-en="/year without full analysis">
 
 </div>
 
-<span 
-data-it="⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale"
-data-en="⚠️ Without full analysis you could lose up to 30% of your real profit">
-⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale
+<span
+data-it="⚠️ La stima rapida non include imposte, mutuo e altri costi"
+data-en="⚠️ The quick estimate excludes taxes, financing and other costs">
+⚠️ La stima rapida non include imposte, mutuo e altri costi
 </span>
 
 </div>
@@ -995,9 +995,9 @@ data-en="📄 Executive Report Preview">
 </div> 
 
 <h3
-data-it="Analisi completa di un investimento reale"
-data-en="Complete analysis of a real investment">
-Analisi completa di un investimento reale
+data-it="Esempio di report di investimento"
+data-en="Example investment report">
+Esempio di report di investimento
 </h3>
 
 <p style="margin-top:6px;font-size:13px;color:#64748b"
@@ -1050,9 +1050,9 @@ Classe
 
 <!-- 🔥 MICRO PSICOLOGIA -->
 <p class="free-only" style="margin-top:15px;font-size:14px;color:#64748b;text-align:center"
-data-it="Questo è un esempio reale. Ma non stai vedendo il rischio completo."
-data-en="This is a real example. But you're not seeing the full risk.">
-Questo è un esempio reale. Ma non stai vedendo il rischio completo.
+data-it="Esempio illustrativo: i valori non rappresentano una previsione o un investimento verificato."
+data-en="Illustrative example: these figures are not a forecast or a verified investment.">
+Esempio illustrativo: i valori non rappresentano una previsione o un investimento verificato.
 </p>
 
 <!-- CTA SNAPSHOT -->
@@ -2210,11 +2210,12 @@ rbLog("🔥 QUICK ROI ACCESS:", {
 
   if(typeof calculateROI === "function"){
     result = calculateROI({
-      price,
-      equity: price * 0.3,
+      price: investment,
+      equity: investment,
       priceNight: night,
       occupancy: occ,
       expenses: cost,
+      expensesUnit: "percentage",
       commission: 0,
       tax: 0,
       loanAmount: 0,
