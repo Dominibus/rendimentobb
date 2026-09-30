@@ -906,6 +906,7 @@ Assistente RendimentoBB
 }
 
       mobileNav.innerHTML = mobileHTML;
+      mobileNav.querySelectorAll('a.mobile-cta[href="/tool/"]').forEach(link => { link.previousElementSibling?.matches("hr") && link.previousElementSibling.remove(); link.remove(); });
 
       if(typeof applyStaticTranslations === "function"){
   applyStaticTranslations();
@@ -1079,6 +1080,7 @@ document.getElementById("logout").onclick = async ()=>{
 
 `;
 
+mobileNav.querySelectorAll('a.mobile-cta[href="/tool/"]').forEach(link => { link.previousElementSibling?.matches("hr") && link.previousElementSibling.remove(); link.remove(); });
 if(typeof applyStaticTranslations === "function"){
   applyStaticTranslations();
 }
