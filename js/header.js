@@ -258,11 +258,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="rb-left">
         <a href="/">
-          <img src="/img/logo-main.png" class="rb-logo">
+          <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
         </a>
       </div>
 
-      <nav class="rb-center">
+      <nav class="rb-center" aria-label="Navigazione principale">
   <a href="/tool/"
 data-it="Analizza"
 data-en="Analyze">
@@ -326,7 +326,7 @@ Guide
 
         <div id="user-area"></div>
 
-        <button id="rb-burger">☰</button>
+        <button id="rb-burger" aria-label="Menu">☰</button>
 
       </div>
 
