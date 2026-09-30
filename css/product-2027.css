@@ -180,3 +180,41 @@ body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary {
 body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover {
   background: var(--rb-green-hover) !important;
 }
+
+/* Compact vector brand and balanced navigation across shared headers. */
+.rb-header { background: #fff !important; backdrop-filter: none !important; box-shadow: 0 1px 0 #dce6df !important; }
+.rb-header .rb-inner { box-sizing: border-box; max-width: 1440px; width: calc(100% - 40px); min-height: 76px; padding: 12px 0; gap: 20px; }
+.rb-header .rb-left { flex: 0 0 auto; }
+.rb-header .rb-left > a { display: flex; align-items: center; }
+.rb-header .rb-logo { display: block; width: 180px !important; height: auto !important; max-height: none; object-fit: contain; }
+.rb-header .rb-center { gap: 18px; }
+.rb-header .rb-center a { color: #344c43 !important; opacity: 1; font-size: 13px; font-weight: 600; padding-block: 10px; }
+.rb-header .rb-center a:hover { color: #087f5b !important; }
+.rb-header .rb-center a::after { bottom: 4px; background: #087f5b; }
+.rb-header .rb-right, .rb-header .rb-user { gap: 8px !important; }
+.rb-header .rb-btn, .rb-header .rb-login, .rb-header #rb-header-ai-btn { box-sizing: border-box; border-radius: 10px !important; min-height: 40px; padding: 10px 14px; font-size: 13px; white-space: nowrap; box-shadow: none !important; transition: background-color .15s ease; }
+.rb-header .rb-btn.primary, .rb-header .rb-login { background: #087f5b !important; color: #fff !important; }
+.rb-header #rb-header-ai-btn { background: #eef5ef !important; color: #24533e !important; border: 1px solid #dce6df; }
+.rb-header .rb-btn.red { background: #fff1f0 !important; color: #a12c27 !important; border: 1px solid #f2d8d5; }
+.rb-header .rb-lang { border-radius: 10px; background: #f3f6f3; padding: 3px; }
+.rb-header .rb-lang button { color: #536960; min-height: 32px; border-radius: 7px; }
+.rb-header .rb-lang button.active { background: #087f5b; color: #fff; }
+@media (max-width: 1250px) and (min-width: 1051px) {
+  .rb-header .rb-logo { width: 160px !important; }
+  .rb-header .rb-center { gap: 12px; }
+}
+@media (max-width: 1050px) {
+  .rb-header .rb-center { display: none !important; }
+  .rb-header #rb-burger { display: block !important; flex: 0 0 40px; width: 40px !important; height: 40px !important; border: 1px solid #dce6df; border-radius: 10px; color: #142b25; font-size: 22px !important; cursor: pointer; }
+}
+@media (max-width: 768px) {
+  .rb-header .rb-inner { width: calc(100% - 24px); min-height: 64px; padding: 10px 0; gap: 8px !important; }
+  .rb-header .rb-logo { width: 138px !important; }
+  .rb-header .rb-lang { display: none; }
+  .rb-header .rb-right { gap: 6px !important; }
+  .rb-header .rb-btn, .rb-header .rb-login, .rb-header #rb-header-ai-btn { min-height: 38px; font-size: 12px !important; padding: 8px 10px !important; }
+}
+@media (max-width: 420px) {
+  .rb-header .rb-logo { width: 122px !important; }
+  .rb-header #rb-header-ai-btn { display: none !important; }
+}
