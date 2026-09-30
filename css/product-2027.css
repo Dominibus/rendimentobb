@@ -278,3 +278,70 @@ body.home-page .quick-roi-box .home-overlay-content strong { color: #142b25 !imp
   body.home-page .quick-roi-box { grid-template-columns: 1fr !important; padding: 20px !important; gap: 24px !important; }
   body.home-page .quick-roi-box > .investment-panel { grid-column: 1 !important; grid-row: auto !important; }
 }
+
+/* Product-wide surfaces: brand palette, readable forms and consistent cards. */
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .report-page) {
+  background: #f5f7f3 !important; color: #142b25;
+  --tool26-bg: #f5f7f3; --tool26-text: #142b25; --tool26-muted: #536960;
+  --tool26-green: #087f5b; --tool26-green-dark: #066447; --tool26-border: #dce6df;
+  --mt-bg: #f5f7f3; --mt-text: #142b25; --mt-muted: #536960;
+  --mt-green: #087f5b; --mt-green-dark: #066447; --mt-border: #dce6df;
+}
+body.tool-page section.tool-hero,
+body.mortgage-page section.hero-mutui,
+body.immobili-page section.hero,
+body.academy-page section.hero,
+body.about-page section.about-hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: #142b25 !important; isolation: isolate;
+}
+body.tool-page section.tool-hero > .hero-bg,
+body.mortgage-page section.hero-mutui::before,
+body.mortgage-page section.hero-mutui::after,
+body.immobili-page section.hero::before,
+body.immobili-page section.hero::after,
+body.academy-page section.hero::before,
+body.academy-page section.hero::after { display: none !important; }
+body.tool-page .tool-2026-hero-copy h1,
+body.mortgage-page section.hero-mutui h1,
+body.immobili-page section.hero h1,
+body.academy-page section.hero h1,
+body.about-page section.about-hero h1 { color: #142b25 !important; text-shadow: none !important; letter-spacing: -.04em; }
+body.tool-page .tool-2026-hero-copy p,
+body.mortgage-page section.hero-mutui p,
+body.immobili-page section.hero p,
+body.academy-page section.hero p,
+body.about-page section.about-hero p { color: #536960 !important; text-shadow: none !important; }
+body.tool-page .tool-2026-eyebrow,
+body.tool-page .tool-2026-market-status,
+body.mortgage-page section.hero-mutui > .container > div:first-child,
+body.mortgage-page section.hero-mutui .kpi-list,
+body.mortgage-page section.hero-mutui .kpi-list span,
+body.immobili-page section.hero .page-title > span,
+body.immobili-page section.hero .page-title > div,
+body.academy-page section.hero .hero-badge { color: #24533e !important; background: #edf5ee !important; border-color: #dce6df !important; text-shadow: none !important; }
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page) :is(.tool-card, .results-card, .executive-stat-card, .tool-box, .lead-box, .bank-card, .property-card, .about-card, .about-box, .legal-card) {
+  border: 1px solid #dce6df !important; border-radius: 18px !important;
+  box-shadow: 0 8px 26px rgb(20 43 37 / 4%) !important;
+}
+body.academy-page .cards > .card { border: 1px solid #dce6df !important; border-radius: 18px !important; box-shadow: none !important; }
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page) main :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+  box-sizing: border-box; max-width: 100%; min-height: 46px; border: 1px solid #cbd8ce !important; border-radius: 10px !important; background: #fff; color: #142b25;
+}
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .home-page) main :is(.btn-primary, .btn.btn-primary) {
+  background: #087f5b !important; color: #fff !important; border-radius: 11px !important; box-shadow: none !important; text-shadow: none !important;
+}
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .home-page) main .btn-primary :is(span,strong) { color: #fff !important; }
+body.home-page .quick-roi-box #hidden-roi-msg,
+body.home-page .quick-roi-box #roi-shock-block,
+body.home-page .quick-roi-box #money-loss { display: none !important; }
+body.home-page .quick-roi-box .roi-highlight > .free-only { display: none !important; }
+body.home-page .quick-roi-box .metric-card strong { color: #142b25 !important; font-variant-numeric: tabular-nums; }
+body.home-page .quick-roi-box #qr_roi { font-size: 34px !important; line-height: 1.2; }
+body.home-page .quick-roi-box #qr_roi > span { color: #142b25 !important; }
+body.home-page .quick-roi-box .metric-hint,
+body.home-page .quick-roi-box .metric-critical { color: #536960 !important; font-size: 12px; line-height: 1.5; }
+@media (max-width: 768px) {
+  body.mortgage-page section.hero-mutui { min-height: 0 !important; padding: 50px 20px 100px !important; }
+  body.immobili-page section.hero { min-height: 0 !important; }
+}
