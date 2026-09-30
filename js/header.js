@@ -326,7 +326,7 @@ Guide
 
         <div id="user-area"></div>
 
-        <button id="rb-burger" aria-label="Menu">☰</button>
+        <button id="rb-burger" aria-label="Menu" aria-controls="rb-mobile" aria-expanded="false">☰</button>
 
       </div>
 
@@ -336,7 +336,9 @@ Guide
 
 <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
-<div id="rb-mobile" class="rb-mobile-menu">
+<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" inert>
+  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu">×</button></div>
+  <div id="rb-mobile-account" class="rb-mobile-account"></div>
   <nav id="rb-mobile-nav">
 
     <a href="/tool/" 
@@ -580,7 +582,11 @@ function initHeaderInteractions(){
   }
 
   function openMenu(){
+    mobile.inert = false;
     mobile.classList.add("open");
+    burger.setAttribute("aria-expanded", "true");
+    mobile.scrollTop = 0;
+    document.getElementById("rb-mobile-close")?.focus();
 
     overlay.classList.add("open");
     overlay.style.opacity = "1";
@@ -591,6 +597,9 @@ function initHeaderInteractions(){
 
   function closeMenu(){
     mobile.classList.remove("open");
+    mobile.inert = true;
+    burger.setAttribute("aria-expanded", "false");
+    burger.focus();
 
     overlay.classList.remove("open");
     overlay.style.opacity = "0";
@@ -605,6 +614,20 @@ function initHeaderInteractions(){
   };
 
   overlay.onclick = closeMenu;
+  document.getElementById("rb-mobile-close").onclick = closeMenu;
+  mobile.addEventListener("click", (event) => {
+    if(event.target.closest("a")) closeMenu();
+  }, true);
+  document.addEventListener("keydown", (event) => {
+    if(!mobile.classList.contains("open")) return;
+    if(event.key === "Escape") { event.preventDefault(); closeMenu(); }
+    if(event.key === "Tab") {
+      const items = Array.from(mobile.querySelectorAll('a[href], button')).filter(el => el.getClientRects().length && !el.disabled);
+      const first = items[0], last = items[items.length - 1];
+      if(event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if(!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+  });
 
   document.querySelectorAll(
   ".rb-lang button, .rb-mobile-lang button"
@@ -743,6 +766,11 @@ if(
   const isPaid = isAdmin || access?.isInvestor || access?.isPro;
 
   const isProOnly = isPro && !isInvestor;
+  const accountSummary = document.getElementById("rb-mobile-account");
+  if(accountSummary) {
+    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? "PRO ANNUALE" : "PRO") : isInvestor ? "INVESTOR" : "FREE";
+    accountSummary.textContent = user ? `${window.currentLang === "en" ? "Your plan" : "Il tuo piano"} · ${label}` : (window.currentLang === "en" ? "Explore RendimentoBB" : "Esplora RendimentoBB");
+  }
 
   if(user){
 
