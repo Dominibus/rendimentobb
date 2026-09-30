@@ -218,3 +218,36 @@ body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover
   .rb-header .rb-logo { width: 122px !important; }
   .rb-header #rb-header-ai-btn { display: none !important; }
 }
+
+/* Shared account controls and mobile navigation, without legacy glow effects. */
+.rb-header #user-area { display: flex; align-items: center; gap: 8px; }
+.rb-header .rb-user .rb-btn, .rb-header .rb-user #dashboard-link { width: auto !important; min-width: 0 !important; min-height: 40px !important; height: auto !important; padding: 10px 14px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600; transform: none !important; box-shadow: none !important; }
+.rb-header .rb-user #dashboard-link { background: #087f5b !important; color: #fff !important; }
+.rb-header .rb-user .dashboard-label { font-size: 13px !important; }
+.rb-header .rb-user .badge-pro { display: inline-flex; align-items: center; margin: 0; min-height: 28px; padding: 0 9px; background: #edf5ee !important; color: #24533e !important; border: 1px solid #dce6df; border-radius: 7px; box-shadow: none !important; font-size: 10px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+#rb-mobile.rb-mobile-menu { box-sizing: border-box; width: min(380px, 92vw) !important; max-width: 380px !important; height: 100vh; height: 100dvh; padding: 0 20px max(24px, env(safe-area-inset-bottom)) !important; background: #fff !important; box-shadow: -12px 0 40px rgb(20 43 37 / 12%); overscroll-behavior: contain; visibility: hidden; transition: right .2s ease, visibility .2s ease; }
+#rb-mobile.rb-mobile-menu.open { visibility: visible; }
+.rb-mobile-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; position: sticky; top: 0; z-index: 1; background: #fff; padding: max(16px, env(safe-area-inset-top)) 0 16px; border-bottom: 1px solid #dce6df; }
+.rb-mobile-top img { width: 160px; height: auto; }
+#rb-mobile-close { width: 44px; height: 44px; border: 1px solid #dce6df; border-radius: 10px; background: #f5f7f3; color: #142b25; font-size: 28px; cursor: pointer; }
+.rb-mobile-account { padding: 18px 0 12px; color: #536960; font-size: 12px; font-weight: 600; }
+#rb-mobile #rb-mobile-nav { gap: 5px; }
+#rb-mobile #rb-mobile-nav a { display: flex; align-items: center; min-height: 46px; box-sizing: border-box; padding: 11px 14px !important; border: 1px solid transparent !important; border-radius: 10px !important; background: #fff !important; color: #142b25 !important; font-size: 14px !important; font-weight: 600; box-shadow: none !important; text-shadow: none !important; }
+#rb-mobile #rb-mobile-nav a:hover, #rb-mobile #rb-mobile-nav a:focus-visible { background: #eef5ef !important; color: #066447 !important; }
+#rb-mobile #rb-mobile-nav a.mobile-cta[href="/tool/"] { display: none; }
+#rb-mobile #rb-mobile-nav #mobile-ai-btn { background: #eef5ef !important; color: #24533e !important; }
+#rb-mobile #rb-mobile-nav #mobile-dashboard, #rb-mobile #rb-mobile-nav a[href="/login/"] { background: #087f5b !important; color: #fff !important; }
+#rb-mobile #rb-mobile-nav #mobile-logout { background: #fff1f0 !important; color: #a12c27 !important; }
+#rb-mobile #rb-mobile-nav hr { margin: 10px 0 !important; border-color: #dce6df; }
+#rb-mobile .rb-mobile-lang { display: block; margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid #dce6df; color: #536960 !important; font-size: 12px; }
+#rb-mobile .rb-mobile-lang > span { color: #536960 !important; }
+#rb-mobile .rb-mobile-lang-buttons { display: flex; gap: 8px; margin-top: 10px; }
+#rb-mobile .rb-mobile-lang-buttons button { min-width: 80px; min-height: 44px; padding: 10px 16px; border: 1px solid #dce6df; border-radius: 10px; background: #f5f7f3; color: #142b25; font: inherit; cursor: pointer; box-shadow: none; }
+#rb-mobile .rb-mobile-lang-buttons button.active { background: #087f5b; color: #fff; border-color: #087f5b; }
+.rb-menu-overlay { backdrop-filter: none !important; background: rgb(20 43 37 / 45%) !important; }
+@media (max-width: 768px) {
+  .rb-header #user-area { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #rb-mobile.rb-mobile-menu { transition: none; }
+}
