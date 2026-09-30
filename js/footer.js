@@ -27,9 +27,9 @@ Confronta scenari • Analizza ROI • Gestisci il tuo B&B.
 </p>
 
 <p
-data-it="Simula ROI, rischio e rendimento in meno di 30 secondi"
-data-en="Simulate ROI, risk and profit in under 30 seconds">
-Simula ROI, rischio e rendimento in meno di 30 secondi
+data-it="Dai dati del tuo immobile a uno scenario di investimento."
+data-en="From your property inputs to an investment scenario.">
+Dai dati del tuo immobile a uno scenario di investimento.
 </p>
 
 <a href="/tool/" class="btn btn-primary"

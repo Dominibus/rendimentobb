@@ -1891,10 +1891,10 @@ margin-bottom:16px;
 
 <link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-portal-v20-1">
 
-<link rel="stylesheet" href="/css/product-2027.css?v=20260930-9">
+<link rel="stylesheet" href="/css/product-2027.css?v=20260930-10">
 </head>
 
-<body class="dashboard-bg">
+<body class="dashboard-bg dashboard-page">
 
 <div id="pro-overlay" style="
 position:fixed;
@@ -2053,10 +2053,10 @@ z-index:9999;
     Analizza performance, rischio e crescita del tuo portfolio
     </p>
 
-    <div class="rb-hero-live"
-    data-it="Dati aggiornati"
-    data-en="Data updated">
-    Dati aggiornati
+    <div id="dashboard-data-source" class="rb-hero-live"
+    data-it="Dati del tuo account"
+    data-en="Your account data">
+    Dati del tuo account
     </div>
 
     <div class="rb-hero-badges">
@@ -2092,7 +2092,7 @@ z-index:9999;
     </div>
 
     <div class="rb-hero-card status good" id="db-status">
-      <span data-it="Stato" data-en="Status">Stato</span>
+      <span data-it="Livello ROI" data-en="ROI level">Livello ROI</span>
       <h2>—</h2>
     </div>
 
@@ -2114,6 +2114,7 @@ z-index:9999;
 🧪 DEMO DASHBOARD BANNER
 ===================================== -->
 
+<p class="rb-dashboard-scope-note" data-it="Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi." data-en="Analyses: saved scenarios. Portfolio: combined assumptions linked to confirmed investments. PMS: booking revenue before costs. These measures describe different scopes.">Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi.</p>
 <div
 id="demo-banner"
 style="
@@ -2670,15 +2671,15 @@ style="display:none;">
 <div class="analysis-card pro-pms-only">
 
   <h3
-  data-it="📈 Performance PMS"
-  data-en="📈 PMS Performance">
+  data-it="Ricavi PMS per mese"
+  data-en="PMS revenue by month">
 
-    📈 Performance PMS
+    Ricavi PMS per mese
 
   </h3>
 
   <canvas
-  id="pms-performance-chart"
+  id="pms-performance-chart" role="img" aria-label="Ricavi PMS mensili"
   height="120">
   </canvas>
 
@@ -3752,11 +3753,11 @@ Insight predittivi basati su performance e rischio
 <script type="module" src="/js/firebase-init.js"></script>
 
 <!-- 🧪 DEMO INVESTMENTS -->
-<script src="/js/demo/demo-investments.js"></script>  
+<script src="/js/demo/demo-investments.js?v=20260930-10"></script>  
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20260910-pms-email-preferences-v21-8-1"></script>
+<script type="module" src="/js/dashboard.js?v=20260930-10"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4595,7 +4596,7 @@ background:#fff;
       <input id="booking-taxable-guests" type="number" min="0" step="1" inputmode="numeric" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 12px;box-sizing:border-box;">
     </div>
     <div>
-      <label for="booking-tourist-tax-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <label for="booking-tourist-tax-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
       <select id="booking-tourist-tax-status" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 10px;background:white;">
         <option value="pending" data-it="Da riscuotere" data-en="To collect">Da riscuotere</option>
         <option value="collected" data-it="Riscossa" data-en="Collected">Riscossa</option>
@@ -4659,7 +4660,7 @@ background:#fff;
       </select>
     </div>
     <div class="booking-cleaning-field">
-      <label for="booking-cleaning-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <label for="booking-cleaning-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
       <select id="booking-cleaning-status" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 10px;background:white;">
         <option value="pending" data-it="Da pianificare" data-en="To schedule">Da pianificare</option>
         <option value="scheduled" data-it="Programmata" data-en="Scheduled">Programmata</option>
@@ -4715,7 +4716,7 @@ background:#fff;
       </select>
     </div>
     <div class="booking-guest-issue-field">
-      <label for="booking-guest-issue-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <label for="booking-guest-issue-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
       <select id="booking-guest-issue-status" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
         <option value="open" data-it="Aperta" data-en="Open">Aperta</option>
         <option value="in_progress" data-it="In gestione" data-en="In progress">In gestione</option>

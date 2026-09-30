@@ -1041,6 +1041,15 @@ window.isDemoData =
 window.isDemoDashboard =
   useDemoDashboard();
 
+document.body.classList.toggle("rb-demo-dashboard", window.isDemoDashboard);
+const sourceLabel = document.getElementById("dashboard-data-source");
+if(sourceLabel){
+  sourceLabel.dataset.it = window.isDemoDashboard ? "Dati dimostrativi" : "Dati del tuo account";
+  sourceLabel.dataset.en = window.isDemoDashboard ? "Illustrative data" : "Your account data";
+  sourceLabel.textContent = t(sourceLabel.dataset.it, sourceLabel.dataset.en);
+}
+
+
 if(useDemoDashboard()){
 
   analyses.length = 0;
@@ -1713,33 +1722,6 @@ renderCashflowChart();
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
-  // ================= DEMO DATA BADGE =================
-if(window.isDemoData){
-
-  const badge = document.createElement("div");
-
-  badge.innerHTML = `
-  <div style="
-    position:fixed;
-    top:100px;
-    right:30px;
-    opacity:0.85;
-    background:rgba(15,23,42,0.9);
-    color:white;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:12px;
-    z-index:999999;
-    backdrop-filter:blur(6px);
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  ">
-    🧪 ${t("Dati demo","Demo data")}
-  </div>
-  `;
-
-  document.body.appendChild(badge);
-}
-
 } // ✅ CHIUSURA loadDashboard  
 
 // ================= BEST INVESTMENT =================
@@ -2191,15 +2173,15 @@ if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
 if(dbStatus){
 
-  let status = t("Rischio","Risk");
+  let status = t("Basso","Low");
 let color = "#ef4444";
 
 if(avgROI >= 10){
-  status = t("Forte","Strong");
+  status = t("Elevato","High");
   color = "#10b981";
 }
 else if(avgROI >= 5){
-  status = t("Moderato","Moderate");
+  status = t("Positivo","Positive");
   color = "#f59e0b";
 }
 
@@ -10953,56 +10935,14 @@ async function loadBookings(propertyId){
   if(!list) return;
 
   if(isDemo()){
-
-  renderTodayBookingOperations([]);
-
-  list.innerHTML = `
-
-  <div class="analysis-card">
-
-    <strong>
-      Marco Rossi
-    </strong>
-
-    <br>
-
-    12/06 → 15/06
-
-    <br>
-
-    🏠 Airbnb
-
-    <br>
-
-    €336
-
-  </div>
-
-  <div class="analysis-card">
-
-    <strong>
-      John Smith
-    </strong>
-
-    <br>
-
-    18/06 → 22/06
-
-    <br>
-
-    🟦 Booking.com
-
-    <br>
-
-    €448
-
-  </div>
-
-  `;
-
-  return;
-
-}
+    const bookings = window.rbBuildDemoPMS().currentBookings;
+    renderTodayBookingOperations([]);
+    list.innerHTML = `<p class="rb-source-note">${t("Prenotazioni dimostrative del mese corrente · sola lettura", "Illustrative bookings for the current month · read only")}</p>` + bookings.map((item,index) => `
+      <div class="analysis-card"><strong>${t("Ospite demo", "Demo guest")} ${index+1}</strong>
+      <p>${item.checkin} → ${item.checkout}</p><span>${formatCurrency(item.totalAmount)} · ${item.nights} ${t("notti", "nights")}</span></div>
+    `).join("");
+    return;
+  }
 
   const showAllProperties = propertyId === "all";
   const q = showAllProperties
@@ -12404,50 +12344,39 @@ await loadBookings(
 async function loadPMSStats(){
 
   if(window.isDemoDashboard){
-
-  
-  const setText = (id,value)=>{
-
-    const el =
-      document.getElementById(id);
-
-    if(el){
-      el.innerText = value;
-    }
-
-  };
-
-  setText("pms-total-properties","1");
-  setText("pms-total-bookings","11");
-  setText("pms-total-revenue","€2.980");
-  setText("pms-occupancy","78%");
-  setText("pms-adr","€112");
-  setText("pms-revpar","€87");
-  setText("pms-avgstay","3.2");
-  setText("pms-guests","27");
-  setText("pms-arrivals-today","2");
-  setText("pms-departures-today","1");
-  setText("pms-guests-in-house","5");
-  setText("pms-checkin-today","2");
-  setText("pms-checkout-today","1");
-  setText("pms-pending-bookings","2");
-
-  renderPMSPerformanceChart([
-    { checkin:"2026-01-12", totalAmount:180 },
-    { checkin:"2026-02-09", totalAmount:220 },
-    { checkin:"2026-03-15", totalAmount:260 },
-    { checkin:"2026-04-18", totalAmount:310 },
-    { checkin:"2026-05-06", totalAmount:240 },
-    { checkin:"2026-06-21", totalAmount:330 },
-    { checkin:"2026-07-11", totalAmount:420 },
-    { checkin:"2026-08-17", totalAmount:380 },
-    { checkin:"2026-09-02", totalAmount:310 },
-    { checkin:"2026-10-14", totalAmount:330 }
-  ]);
-
-  return;
-
-}
+    const referenceDate = new Date();
+    const fixture = window.rbBuildDemoPMS(referenceDate);
+    const monthBookings = fixture.currentBookings;
+    const nights = monthBookings.reduce((sum, item) => sum + getBookingNightsInMonth(item.checkin, item.checkout, referenceDate), 0);
+    const revenue = monthBookings.reduce((sum, item) => sum + getBookingRevenueInMonth(item, referenceDate), 0);
+    const days = new Date(referenceDate.getFullYear(), referenceDate.getMonth()+1, 0).getDate();
+    const occupancy = Math.round(nights / days * 100);
+    const adr = nights ? revenue / nights : 0;
+    const today = `${referenceDate.getFullYear()}-${String(referenceDate.getMonth()+1).padStart(2,"0")}-${String(referenceDate.getDate()).padStart(2,"0")}`;
+    const arrivals = monthBookings.filter(item => item.checkin === today).length;
+    const departures = monthBookings.filter(item => item.checkout === today).length;
+    const inHouse = monthBookings.filter(item => item.checkin <= today && item.checkout > today).reduce((sum,item) => sum+item.guests,0);
+    const setText = (id,value) => { const element = document.getElementById(id); if(element) element.innerText=value; };
+    const values = {
+      "pms-total-properties":1, "pms-total-bookings":monthBookings.length,
+      "pms-total-revenue":formatCurrency(revenue), "pms-occupancy":formatPercent(occupancy),
+      "pms-adr":formatCurrency(adr), "pms-revpar":formatCurrency(revenue/days),
+      "pms-avgstay":(nights/monthBookings.length).toFixed(1),
+      "pms-guests":monthBookings.reduce((sum,item)=>sum+item.guests,0),
+      "pms-arrivals-today":arrivals, "pms-departures-today":departures,
+      "pms-guests-in-house":inHouse, "pms-checkin-today":arrivals,
+      "pms-checkout-today":departures, "pms-pending-bookings":0
+    };
+    Object.entries(values).forEach(([id,value]) => setText(id,value));
+    window.rbPMSData = {isDemo:true, properties:1, bookings:monthBookings.length,
+      revenue, occupancy, adr, revpar:revenue/days, guests:inHouse,
+      bookingList:monthBookings, attentionBookings:[], attentionCount:0,
+      arrivalsToday:arrivals, departuresToday:departures, guestsInHouse:inHouse,
+      arrivals, checkins:arrivals, checkouts:departures, pendingBookings:0};
+    renderPMSPerformanceChart(fixture.bookings);
+    window.dispatchEvent(new CustomEvent("rb_pms_data_updated", {detail:window.rbPMSData}));
+    return;
+  }
 
   if(!window.currentUser) return;
 

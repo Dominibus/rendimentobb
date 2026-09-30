@@ -176,3 +176,29 @@ createdAt:new Date(2026,4,15)
 }
 
 ];
+
+// Demo fixtures are illustrative assumptions, not market observations.
+window.demoAnalyses = window.demoAnalyses.map(item => {
+  const net = Math.round(item.equity * item.roi / 100);
+  return { ...item, net, annualProfit: net, cashflow: net,
+    realROI: net / item.price * 100,
+    expenses: item.gross - net, isDemo: true, source: "illustrative" };
+});
+
+// A single readonly booking fixture feeds demo PMS metrics and its revenue chart.
+window.rbBuildDemoPMS = function(referenceDate = new Date()) {
+  const year = referenceDate.getFullYear();
+  const rates = [90,92,98,103,108,115,128,132,112,105,98,110];
+  const lengths = [3,2,2,2,3,2,2,2,2,2,2];
+  const date = (month, day) => `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+  const bookings = rates.flatMap((rate, month) => {
+    let day = 1;
+    return lengths.map((nights, index) => {
+      const arrival = day; day += nights;
+      return {id:`demo-${month}-${index}`, propertyId:"demo-property",
+        guestName:`${index + 1}`, checkin:date(month,arrival), checkout:date(month,day),
+        nights, totalAmount:nights*rate, guests:2, source:"direct", status:"confirmed", isDemo:true};
+    });
+  });
+  return {year, bookings, currentBookings:bookings.filter(item => Number(item.checkin.slice(5,7))-1 === referenceDate.getMonth())};
+};

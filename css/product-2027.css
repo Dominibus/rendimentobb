@@ -469,3 +469,83 @@ body.rb-secondary-page .internal-links a { background: #fff !important; color: #
 body.rb-secondary-page :is(.hero, .hero-roi) .btn-primary { animation: none !important; }
 body.rb-academy-guide .highlight-box { color: #142b25 !important; }
 body.rb-academy-guide .highlight-box :is(li,div) { color: #142b25 !important; }
+
+/* FIX10 — finish inherited styles and clarify the free/demo experience. */
+body.market-page.rb-secondary-page main > section.hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  background-image: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%) !important;
+  min-height: 0 !important; padding: 56px 20px !important;
+}
+body.market-page.rb-secondary-page { padding-top: 0 !important; }
+body.market-page.rb-secondary-page .hero-market-snapshot { margin-top: 0 !important; padding: 0 20px 24px !important; }
+body.market-page.rb-secondary-page .rb-market-overview .feature-grid,
+body.market-page.rb-secondary-page .rb-market-method .feature-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+body.market-page.rb-secondary-page .rb-market-final .feature-grid,
+body.market-page.rb-secondary-page .rb-market-cities .feature-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; }
+body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-cities) .container > div:first-child { display: block !important; text-align: center; }
+body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-cities) .container > div:first-child > * { margin-inline: auto; }
+body.market-page.rb-secondary-page .rb-market-overview .container > div:first-child p { max-width: 680px; margin-top: 12px; }
+body.immobili-page main > section:not(.hero),
+body.immobili-page main > .property-grid { box-sizing: border-box; width: min(1120px,calc(100% - 40px)) !important; max-width: 1120px !important; margin: 44px auto !important; }
+body.immobili-page main > .section-info { padding: 24px; border: 1px solid #dce6df; border-radius: 18px; background: #fff; }
+body.immobili-page main > .property-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 16px !important; }
+body.immobili-page .property-card { min-width: 0; padding: 24px 18px !important; }
+body.immobili-page main > section:not(.hero) h2 { color: #142b25; }
+body.academy-page .cta-final { background: #edf5ee !important; color: #142b25 !important; border: 1px solid #dce6df; box-shadow: none !important; margin: 44px auto !important; }
+body.academy-page .cta-final h3 { color: #142b25 !important; }
+body.academy-page .cta-final a { background: #087f5b !important; color: #fff !important; border-radius: 10px; box-shadow: none; }
+body.dashboard-page .rb-hero { background: #edf5ee !important; color: #142b25 !important; border: 1px solid #dce6df; box-shadow: none !important; }
+body.dashboard-page .rb-hero :is(h1,p,.rb-hero-card:not(.status) h2,.rb-hero-card > span) { color: #142b25 !important; }
+body.dashboard-page .rb-hero .rb-hero-card.status { background: #fff !important; border: 1px solid #dce6df; box-shadow: none !important; color: #142b25 !important; }
+body.dashboard-page .rb-hero .rb-hero-card.status h2 { color: #142b25 !important; }
+body.dashboard-page .rb-hero-live { background: #fff !important; border: 1px solid #dce6df; color: #24533e !important; }
+body.dashboard-page #demo-banner { background: #fff !important; color: #142b25 !important; border: 1px solid #dce6df; padding: 22px !important; box-shadow: none !important; }
+body.dashboard-page #demo-banner :is(h2,p,span,div) { color: #142b25 !important; text-shadow: none !important; }
+body.dashboard-page .rb-dashboard-scope-note { color: #536960; font-size: 13px; line-height: 1.6; margin: 18px 0; }
+/* Locked data stays hidden. One compact plan comparison replaces repeated overlays. */
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #results,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis > .blur-content,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) .rb-tool-extra-upgrade,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #investment-metrics,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #smart-investment-alert { display: none !important; }
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis {
+  height: auto !important; min-height: 0 !important; padding: 24px !important; margin-top: 24px !important;
+  background: #edf5ee !important; border: 1px solid #dce6df; border-radius: 18px;
+}
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis > .locked-overlay {
+  position: static !important; inset: auto !important; width: auto !important; height: auto !important;
+  transform: none !important; padding: 0 !important; background: transparent !important; backdrop-filter: none !important; box-shadow: none !important;
+}
+body.tool-page #advanced-analysis .overlay-title { font-size: 22px; color: #142b25; }
+body.tool-page #advanced-analysis .overlay-text { color: #536960; line-height: 1.6; }
+body.tool-page .rb-tool-plan-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 12px 20px; background: #087f5b !important; color: #fff !important; border-radius: 10px; }
+.global-footer .footer-container { padding: 36px 24px 22px !important; max-width: 1200px; }
+.global-footer .footer-cta { margin: 0 !important; padding: 0 !important; }
+.global-footer .footer-cta h3 { margin: 0 0 8px; font-size: 22px; }
+.global-footer .footer-cta p:not(.footer-value) { display: none; }
+.global-footer .footer-cta .footer-value { margin: 0 0 14px; }
+.global-footer .footer-grid { margin-top: 30px !important; gap: 24px !important; }
+.global-footer .footer-col strong { margin-bottom: 10px; }
+.global-footer .footer-col a { margin-bottom: 8px; min-height: 22px; }
+.global-footer .footer-trust { margin-top: 24px !important; padding-top: 16px !important; }
+.global-footer .footer-extra-cta { display: none; }
+.global-footer .footer-socials { margin: 18px 0 !important; }
+.global-footer .footer-bottom { margin-top: 18px !important; padding-top: 16px !important; }
+/* Settings remain accessible after closing chat; the consent dialog itself is retained. */
+@media(max-width:768px) {
+  body:has(#rb-chatbot-window.open) .rb-consent-settings { visibility: hidden !important; pointer-events: none !important; }
+  body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-method,.rb-market-final,.rb-market-cities) .feature-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  body.immobili-page main > .property-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  body.immobili-page main > section:not(.hero), body.immobili-page main > .property-grid { width: calc(100% - 32px) !important; margin-block: 28px !important; }
+  .global-footer .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .global-footer .footer-col:first-child { grid-column: 1 / -1; }
+}
+@media(max-width:420px) {
+  body.immobili-page main > .property-grid { grid-template-columns: 1fr !important; }
+}
+
+@media(max-width:900px) { body.market-page.rb-secondary-page { padding-top: 64px !important; } }
+@media(min-width:901px) { body.market-page.rb-secondary-page #global-header { min-height: 76px !important; } }
+
+body.mortgage-page .rb-mortgage-empty { margin: 24px auto 0; max-width: 720px; padding: 18px 22px; border: 1px dashed #cbd8ce; border-radius: 12px; background: #fff; color: #536960; text-align: center; }
+body.mortgage-page:has(#banks .bank-card) .rb-mortgage-empty { display: none; }
