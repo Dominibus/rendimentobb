@@ -399,7 +399,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
 }
 
+        // In exported four-column KPI tables, labels precede all four values.
+        // Match the entire schema instead of taking the first amount after each label.
+        const feasibilityKPI = text.match(/PREZZO IMMOBILE\s+RICAVI ANNUI\s+CASHFLOW NETTO\s+ROI EQUITY\s+([\d.,]+)\s*€\s+([\d.,]+)\s*€\s+(-?[\d.,]+)\s*€\s+([\d.,]+)\s*%/i);
+
         const gross =
+
+    parseAmount(feasibilityKPI?.[2]) ??
 
     parseAmount(loanRevenuePair?.[2]) ??
 
@@ -419,6 +425,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const cashflow =
 
+            extractAmount(/(?:CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE))[^0-9\-]{0,30}(-?[\d.,]+)/i) ??
+            parseAmount(feasibilityKPI?.[3]) ??
             annualProfit ??
 
             extractAmount(

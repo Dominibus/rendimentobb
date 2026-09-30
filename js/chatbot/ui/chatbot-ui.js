@@ -1159,54 +1159,17 @@ newChatBtn.onclick = ()=>{
 
     : "rb-bot-message";
 
-if(role === "bot"){
-
-    div.innerHTML = `
-
-        <div class="rb-ai-card-header">
-
-            <div class="rb-ai-card-avatar">
-
-                🧠
-
-            </div>
-
-            <div class="rb-ai-card-info">
-
-                <div class="rb-ai-card-title">
-
-                    RendimentoBB AI Executive
-
-                </div>
-
-                <div class="rb-ai-card-status">
-
-                    <span class="rb-status-dot"></span>
-
-                    ${t("Pronto", "Ready")}
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="rb-ai-card-content">
-
-            ${
-                renderExecutiveMessage(text)
-            }
-
-        </div>
-
-    `;
-
-}else{
-
-    div.innerHTML =
-
-        escapeMessageText(text).replace(/\n/g,"<br>");
-
-}
+// One renderer for every assistant response: no legacy executive card.
+    if(role === "user"){
+        div.innerHTML = escapeMessageText(text).replace(/\n/g,"<br>");
+    }else{
+        div.innerHTML = renderExecutiveMessage(text);
+    }
+    const home = document.getElementById("rb-chat-home");
+    if(home) home.style.display = "none";
+    messages.style.display = "block";
+    const quick = document.getElementById("rb-quick-actions");
+    if(quick) quick.style.display = "flex";
 
     messages.appendChild(div);
 

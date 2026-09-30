@@ -111,6 +111,9 @@ if(rbCurrentPDF?.status === "ready" &&
     };
 }
 
+const rbGroundedPDFAnswer = window.rbBuildPDFResponse?.(message, rbCurrentPDF, analysisData);
+if(rbGroundedPDFAnswer) return rbGroundedPDFAnswer;
+
 // ===============================================
 // 📄 PDF INTENT NORMALIZATION
 // Preserve the original document request

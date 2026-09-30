@@ -21,6 +21,25 @@ async function(message){
       String(message || "")
         .trim();
 
+    // Handle explicit document requests once before the multi-intent/live pipeline.
+    const activePDF = window.rbDocumentManager?.getLast?.();
+    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
+    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
+        /(roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing)/i.test(text) &&
+        !/(simulazion|simulation|mercato|market|altra citt|another city)/i.test(text);
+    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
+    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
+    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
+        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
+        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
+            window.rbPDFConversationDocumentId = activePDF.id;
+            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
+            return {success:true,response,intent:{intent:"pdf_analysis"}};
+        }
+    }
+
+    window.rbPDFConversationDocumentId = null;
+
     // =========================================
     // 🧠 ENTITY EXTRACTION
     // =========================================

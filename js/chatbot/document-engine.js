@@ -515,6 +515,40 @@ window.rbActiveExecutiveDocument = {
 // 📄 ANALYZE UPLOADED DOCUMENT
 // ===============================================
 
+// Financial document answers use only the current PDF, never page defaults.
+window.rbBuildPDFResponse = function(message, doc, live = {}){
+    if(doc?.status !== "ready") return null;
+    const query = String(message || "").toLowerCase();
+    if(!/(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(query)) return null;
+    if(/\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/.test(query)) return null;
+    if(/(manc|missing|complet|sufficient)/i.test(query)) return null;
+    const a = doc.analysis || {};
+    const has = key => a[key] !== null && a[key] !== undefined && a[key] !== "" && Number.isFinite(Number(a[key]));
+    const labels = {propertyPrice:["Prezzo immobile","Property price"],roi:["ROI riportato","Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:["Cashflow annuo riportato","Reported annual cash flow"],gross:["Ricavi annui riportati","Reported annual revenue"],risk:["Rischio riportato","Reported risk"],occupancy:["Occupazione riportata","Reported occupancy"]};
+    const format = (key,value,lang) => ["roi","occupancy"].includes(key) ? `${Number(value)}%` : key === "risk" ? `${Number(value)}/100` : new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(Number(value));
+    const compare = /(confront|compar)/i.test(query);
+    const render = lang => {
+        const en = lang === "en";
+        const lines = [en ? `Source: ${doc.fileName}` : `Fonte: ${doc.fileName}`];
+        const keys = Object.keys(labels).filter(has);
+        if(!keys.length) lines.push(en ? "Text extracted, but insufficient financial data recognized for an investment analysis." : "Testo estratto, ma non ho riconosciuto dati finanziari sufficienti per analizzare l’investimento.");
+        for(const key of keys){
+            let line = `${labels[key][en ? 1 : 0]}: ${format(key,a[key],lang)}`;
+            // Compare only identically named metrics; do not substitute ROI on property for ROI on equity.
+            if(compare && key !== "roi" && live[key] !== null && live[key] !== undefined && live[key] !== "" && Number.isFinite(Number(live[key]))) line += en ? ` | current simulation: ${format(key,live[key],lang)}` : ` | simulazione attuale: ${format(key,live[key],lang)}`;
+            lines.push(line);
+        }
+        if(compare) lines.push(en ? "Only matching recognized metrics are compared. ROI requires the same calculation basis; missing simulation values are not estimated." : "Confronto solo indicatori omogenei riconosciuti. Per il ROI serve la stessa base di calcolo; i dati mancanti della simulazione non vengono stimati.");
+        else {
+            if(has("cashflow")) lines.push(Number(a.cashflow) > 0 ? (en ? "The reported annual cash flow is positive. Check which operating costs, taxes and loan payments the report includes." : "Il cashflow annuo riportato è positivo. Verifica quali costi operativi, imposte e rate del mutuo include il report.") : (en ? "The reported annual cash flow is zero or negative; check costs and financing." : "Il cashflow annuo riportato è nullo o negativo: verifica costi e finanziamento."));
+            if(has("mortgage") && has("propertyPrice") && Number(a.propertyPrice)>0) lines.push(en ? `Loan/property price ratio calculated from the PDF: ${(100*Number(a.mortgage)/Number(a.propertyPrice)).toFixed(1)}%.` : `Rapporto mutuo/prezzo calcolato dai valori del PDF: ${(100*Number(a.mortgage)/Number(a.propertyPrice)).toFixed(1)}%.`);
+        }
+        lines.push(en ? "These are reported figures and assumptions, not verified operating results. Missing metrics are not replaced with simulation defaults." : "Sono valori e ipotesi riportati nel documento, non risultati operativi verificati. Gli indicatori mancanti non vengono sostituiti con valori della simulazione.");
+        return lines.join("\n");
+    };
+    return {type:"document_grounded",confidence:1,textIT:render("it"),textEN:render("en"),suggestionsIT:["Quali dati mancano nel PDF?","Confrontalo con la simulazione"],suggestionsEN:["Which data are missing in the PDF?","Compare it with the simulation"],signals:["current_pdf_only"],metadata:{source:"extracted_pdf_text",fileName:doc.fileName,documentId:doc.id}};
+};
+
 window.rbAnalyzeUploadedPDF = async function(file){
     const say = (it, en) => window.addMessage?.("assistant", window.currentLang === "en" ? en : it);
     if(!file || !/\.pdf$/i.test(file.name || "")) return {success:false,error:"unsupported"};
@@ -522,15 +556,22 @@ window.rbAnalyzeUploadedPDF = async function(file){
         say("Il PDF supera 20 MB. Carica una versione più leggera.", "The PDF exceeds 20 MB. Upload a smaller version.");
         return {success:false,error:"too_large"};
     }
+    const uploadKey = JSON.stringify([file.name, file.size, file.lastModified ?? null]);
+    const pending = window.rbDocumentManager.getLast();
+    if(pending?.status === "reading" && pending.uploadKey === uploadKey){
+        say("Questo PDF è già in lettura. Attendi il risultato.", "This PDF is already being read. Please wait for the result.");
+        return {success:false,error:"already_reading",document:pending};
+    }
     const epoch = (window.rbDocumentEpoch || 0) + 1;
     window.rbDocumentEpoch = epoch;
     const isCurrent = () => epoch === window.rbDocumentEpoch;
     const classification = window.rbClassifyDocument?.(file) || {type:"generic_pdf",label:"PDF",confidence:0};
     const doc = window.rbCreateDocumentObject({file,type:classification.type,classification});
     doc.status = "reading";
+    doc.uploadKey = uploadKey;
     window.rbDocumentManager.add(doc);
     window.lastExecutiveReport = null;
-    say(`Leggo il PDF "${file.name}"…`, `Reading PDF "${file.name}"…`);
+    window.addMessage?.("assistant", window.currentLang === "en" ? `PDF received: "${file.name}". Reading…` : `PDF ricevuto: "${file.name}". Lettura in corso…`, false);
     try {
         doc.buffer = typeof file.arrayBuffer === "function" ? await file.arrayBuffer() : await new Promise((resolve,reject) => {
             const reader = new FileReader();
@@ -539,6 +580,20 @@ window.rbAnalyzeUploadedPDF = async function(file){
             reader.readAsArrayBuffer(file);
         });
         if(!isCurrent()) return {success:false,error:"cancelled"};
+        if(globalThis.crypto?.subtle){
+            const digest = await globalThis.crypto.subtle.digest("SHA-256", doc.buffer);
+            doc.contentHash = Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2,"0")).join("");
+        }
+        if(!isCurrent()) return {success:false,error:"cancelled"};
+        const existing = window.rbDocumentLibrary.find(other => other !== doc && other.status === "ready" && (doc.contentHash ? other.contentHash === doc.contentHash : other.uploadKey === uploadKey));
+        if(existing){
+            window.rbDocumentLibrary = window.rbDocumentLibrary.filter(other => other !== doc);
+            window.rbDocumentHistory = window.rbDocumentHistory.filter(other => other.id !== doc.id);
+            window.rbActiveDocument = existing;
+            window.lastDocumentInfo = {type:existing.type,label:existing.subtype,confidence:existing.confidence};
+            say(`Questo PDF è già stato letto. Uso i dati di "${existing.fileName}" senza ripetere l’analisi.`, `This PDF has already been read. Using "${existing.fileName}" without repeating the analysis.`);
+            return {success:true,duplicate:true,document:existing};
+        }
         if(typeof window.rbExtractPDFText === "function") await window.rbExtractPDFText(doc);
         if(!isCurrent()) return {success:false,error:"cancelled"};
         if(doc.extractionStatus !== "ready" || !doc.extractedText?.trim()){
@@ -561,17 +616,9 @@ window.rbAnalyzeUploadedPDF = async function(file){
         if(!isCurrent()) return {success:false,error:"cancelled"};
         const analysis = doc.analysis || {};
         const known = ["propertyPrice","roi","equity","mortgage","cashflow","gross","risk","occupancy"].filter(key => analysis[key] !== null && analysis[key] !== undefined);
-        const labels = {propertyPrice:["prezzo immobile","property price"],roi:["ROI","ROI"],equity:["capitale proprio","equity"],mortgage:["mutuo","loan"],cashflow:["cashflow","cash flow"],gross:["ricavi","revenue"],risk:["rischio","risk"],occupancy:["occupazione","occupancy"]};
-        const formatValue = key => {
-            const value = Number(analysis[key]);
-            if(!Number.isFinite(value)) return String(analysis[key]);
-            if(["roi","occupancy"].includes(key)) return `${value}%`;
-            if(key === "risk") return `${value}/100`;
-            return new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {style:"currency",currency:"EUR",maximumFractionDigits:2}).format(value);
-        };
-        const names = known.map(key => `${labels[key][window.currentLang === "en" ? 1 : 0]}: ${formatValue(key)}`).join("; ");
-        say(`PDF letto: ${doc.pageCount || 0} pagine. ${names ? "Dati riconosciuti: " + names + "." : "Testo estratto; non ho riconosciuto indicatori finanziari sufficienti."}\nFonte: ${file.name}. I valori mancanti non vengono stimati.`,
-            `PDF read: ${doc.pageCount || 0} pages. ${names ? "Recognized data: " + names + "." : "Text extracted; insufficient financial metrics recognized."}\nSource: ${file.name}. Missing values are not estimated.`);
+        window.rbPDFConversationDocumentId = doc.id;
+        const response = window.rbBuildPDFResponse("Riassumi questo PDF", doc);
+        window.addMessage?.("bot", `PDF letto: ${doc.pageCount || 0} ${window.currentLang === "en" ? "pages" : "pagine"}.\n${window.currentLang === "en" ? response.textEN : response.textIT}`);
         doc.dataQuality = {
             recognizedFields:known,
             missingFields:["propertyPrice","equity","gross","cashflow"].filter(key => analysis[key] === null || analysis[key] === undefined),
