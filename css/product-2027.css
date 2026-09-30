@@ -251,3 +251,30 @@ body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover
 @media (prefers-reduced-motion: reduce) {
   #rb-mobile.rb-mobile-menu { transition: none; }
 }
+
+/* Home simulator: intrinsic height, explicit initial state, unobstructed results. */
+body.home-page .quick-roi-box { border: 1px solid #dce6df; border-radius: 20px; box-shadow: none !important; }
+body.home-page .quick-roi-box > .investment-panel { display: flex !important; flex-direction: column; align-items: stretch; align-self: start !important; min-height: 0 !important; height: auto !important; gap: 0 !important; border: 1px solid #dce6df; background: #fafbf8; box-shadow: none !important; backdrop-filter: none; }
+body.home-page .quick-roi-box .investment-metrics { min-height: 0 !important; height: auto !important; max-width: none !important; padding-bottom: 0 !important; overflow: visible !important; }
+body.home-page .quick-roi-box .metric-card { box-shadow: none !important; border: 1px solid #dce6df; border-radius: 12px; }
+body.home-page .quick-roi-box .rb-quick-status { margin: 0 0 16px; color: #536960; font-size: 12px; line-height: 1.5; }
+body.home-page .rb-quick-empty { padding: 18px; border: 1px dashed #cbd8ce; border-radius: 12px; background: #fff; }
+body.home-page .rb-quick-empty h3 { margin: 0 0 8px; font-size: 21px; color: #142b25; }
+body.home-page .rb-quick-empty p { margin: 0; font-size: 14px; line-height: 1.6; color: #536960; }
+body.home-page .quick-roi-box:not(.rb-has-result) .investment-metrics,
+body.home-page .quick-roi-box:not(.rb-has-result) .investment-panel > h3,
+body.home-page .quick-roi-box .investment-score { display: none !important; }
+body.home-page .quick-roi-box.rb-has-result .rb-quick-empty { display: none; }
+body.home-page .quick-roi-box .property-analyzer { order: 2; margin: 20px 0 0 !important; padding-top: 18px; border-top: 1px solid #dce6df; }
+body.home-page .quick-roi-box .quick-roi-cta { order: 3; margin-top: 20px !important; }
+body.home-page .quick-roi-box .quick-roi-cta p:last-child { display: none; }
+body.home-page .quick-roi-box .home-blur-overlay { display: none !important; position: static !important; inset: auto !important; grid-column: 1 / -1; padding: 0 !important; margin-top: 6px; background: none !important; backdrop-filter: none !important; pointer-events: auto !important; }
+body.home-page .quick-roi-box.rb-has-result .home-blur-overlay.active { display: block !important; }
+body.home-page .quick-roi-box .home-overlay-content { width: auto !important; max-width: none !important; padding: 16px !important; color: #142b25 !important; background: #eef5ef !important; border: 1px solid #dce6df !important; border-radius: 12px; box-shadow: none !important; text-align: left; }
+body.home-page .quick-roi-box .home-overlay-content p { margin: 8px 0 12px; color: #536960 !important; font-size: 13px; line-height: 1.6; }
+body.home-page .quick-roi-box .home-overlay-content strong { color: #142b25 !important; }
+.rb-header .rb-user #dashboard-link .dashboard-label { color: #fff !important; text-shadow: none !important; }
+@media (max-width: 900px) {
+  body.home-page .quick-roi-box { grid-template-columns: 1fr !important; padding: 20px !important; gap: 24px !important; }
+  body.home-page .quick-roi-box > .investment-panel { grid-column: 1 !important; grid-row: auto !important; }
+}
