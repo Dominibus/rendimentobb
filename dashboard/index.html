@@ -1891,7 +1891,7 @@ margin-bottom:16px;
 
 <link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-portal-v20-1">
 
-<link rel="stylesheet" href="/css/product-2027.css?v=20260930-10">
+<link rel="stylesheet" href="/css/product-2027.css?v=20260930-11">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -2668,7 +2668,7 @@ style="display:none;">
 📈 PMS PERFORMANCE
 ===================================== -->
 
-<div class="analysis-card pro-pms-only">
+<div class="analysis-card pro-pms-only rb-pms-chart-card">
 
   <h3
   data-it="Ricavi PMS per mese"
@@ -3757,7 +3757,7 @@ Insight predittivi basati su performance e rischio
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20260930-10"></script>
+<script type="module" src="/js/dashboard.js?v=20260930-11"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4091,7 +4091,7 @@ Salva
 <!-- ===================================== -->
 
 <div
-id="bookings-modal"
+id="bookings-modal" role="dialog" aria-modal="true" aria-label="Prenotazioni"
 style="
 display:none;
 position:fixed;
@@ -4118,10 +4118,10 @@ gap:16px;
 ">
 
 <h2
-data-it="📅 Prenotazione"
-data-en="📅 Booking">
+data-it="Prenotazioni"
+data-en="Bookings">
 
-📅 Prenotazione
+Prenotazioni
 
 </h2>
 
@@ -4147,7 +4147,7 @@ aria-live="polite">
 <div
 style="
 display:grid;
-grid-template-columns:380px 1fr;
+grid-template-columns:260px minmax(0,1fr);
 gap:20px;
 align-items:start;
 ">
@@ -4219,16 +4219,7 @@ cursor:pointer;
 ➕ Nuova Prenotazione
 </h3>
 
-<div
-onclick="closeBookingsModal()"
-style="
-font-size:22px;
-font-weight:700;
-cursor:pointer;
-padding:4px 10px;
-">
-✕
-</div>
+<button type="button" class="rb-bookings-close" onclick="closeBookingsModal()" aria-label="Chiudi prenotazioni">✕</button>
 
 </div>
 
@@ -4596,7 +4587,7 @@ background:#fff;
       <input id="booking-taxable-guests" type="number" min="0" step="1" inputmode="numeric" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 12px;box-sizing:border-box;">
     </div>
     <div>
-      <label for="booking-tourist-tax-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
+      <label for="booking-tourist-tax-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
       <select id="booking-tourist-tax-status" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 10px;background:white;">
         <option value="pending" data-it="Da riscuotere" data-en="To collect">Da riscuotere</option>
         <option value="collected" data-it="Riscossa" data-en="Collected">Riscossa</option>
@@ -4660,7 +4651,7 @@ background:#fff;
       </select>
     </div>
     <div class="booking-cleaning-field">
-      <label for="booking-cleaning-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
+      <label for="booking-cleaning-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
       <select id="booking-cleaning-status" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 10px;background:white;">
         <option value="pending" data-it="Da pianificare" data-en="To schedule">Da pianificare</option>
         <option value="scheduled" data-it="Programmata" data-en="Scheduled">Programmata</option>
@@ -4716,7 +4707,7 @@ background:#fff;
       </select>
     </div>
     <div class="booking-guest-issue-field">
-      <label for="booking-guest-issue-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Livello ROI" data-en="ROI level">Livello ROI</label>
+      <label for="booking-guest-issue-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
       <select id="booking-guest-issue-status" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
         <option value="open" data-it="Aperta" data-en="Open">Aperta</option>
         <option value="in_progress" data-it="In gestione" data-en="In progress">In gestione</option>

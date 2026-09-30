@@ -13697,6 +13697,8 @@ const isStay = dayState.isStay;
 class="pms-calendar-day"
 data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
+data-calendar-state="${isCheckout ? "departure" : isCheckin ? "arrival" : isStay ? "stay" : "available"}"
+data-today="${isToday}"
 data-booking='${
   bookingInfo
     ? escapeDashboardHTML(

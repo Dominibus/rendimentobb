@@ -549,3 +549,50 @@ body.tool-page .rb-tool-plan-link { display: inline-flex; min-height: 44px; alig
 
 body.mortgage-page .rb-mortgage-empty { margin: 24px auto 0; max-width: 720px; padding: 18px 22px; border: 1px dashed #cbd8ce; border-radius: 12px; background: #fff; color: #536960; text-align: center; }
 body.mortgage-page:has(#banks .bank-card) .rb-mortgage-empty { display: none; }
+
+/* FIX11: dashboard contrast and coherent booking workspace. */
+body.dashboard-page :is(#db-roi,#db-profit,#db-investments,#db-status h2) {
+ color:#142b25 !important; text-shadow:none !important; opacity:1 !important;
+ font-variant-numeric:tabular-nums;
+}
+body.dashboard-page #roi-message {color:#17664e !important;text-shadow:none !important;}
+body.dashboard-page .rb-hero-card {background:#ffffffb8 !important;border:1px solid #dce6df !important;box-shadow:none !important;}
+body.dashboard-page .rb-hero-card:hover {transform:none;box-shadow:none !important;}
+body.dashboard-page .rb-hero-card > span {color:#40594e !important;}
+body.dashboard-page .rb-pms-chart-card {min-width:0;}
+body.dashboard-page #pms-performance-chart {display:block;width:100% !important;height:260px !important;}
+body.dashboard-page #bookings-modal {background:rgba(20,43,37,.55) !important;padding:20px;box-sizing:border-box;}
+body.dashboard-page #bookings-modal > div {width:min(1360px,100%) !important;max-height:calc(100dvh - 40px) !important;background:#f5f8f5 !important;border:1px solid #dce6df;border-radius:24px !important;padding:28px !important;box-sizing:border-box;color:#142b25;}
+body.dashboard-page #bookings-modal :is(h2,h3) {color:#142b25;letter-spacing:-.025em;}
+body.dashboard-page #bookings-modal #bookings-list {grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr)) !important;gap:16px !important;}
+body.dashboard-page #bookings-list > div {border:1px solid #dce6df !important;box-shadow:0 3px 12px rgba(20,43,37,.035) !important;border-radius:18px !important;margin-bottom:0 !important;}
+body.dashboard-page #bookings-list > div > div[style*="position:absolute"] {width:3px !important;}
+body.dashboard-page .booking-filters {display:flex;gap:8px;flex-wrap:wrap;padding:8px;background:white;border:1px solid #dce6df;border-radius:16px;}
+body.dashboard-page .booking-filter {min-height:44px;border:1px solid transparent !important;border-radius:11px !important;background:#f0f5f1 !important;color:#28493c !important;padding:10px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:650;}
+body.dashboard-page .booking-filter.active {background:#087f5b !important;color:white !important;}
+body.dashboard-page #bookings-modal :is(input,select,textarea) {background:white;color:#142b25;border-color:#cddcd2;border-radius:12px;box-sizing:border-box;}
+body.dashboard-page #bookings-modal :is(button,a,input,select,textarea):focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
+body.dashboard-page #booking-form-container {border:1px solid #dce6df;box-shadow:0 24px 70px rgba(20,43,37,.2);}
+body.dashboard-page #booking-calendar {min-height:0 !important;height:auto !important;overflow:visible !important;padding:18px !important;background:white !important;border:1px solid #dce6df !important;box-shadow:none !important;}
+body.dashboard-page #booking-calendar > div {border-left:0 !important;box-shadow:none !important;background:transparent !important;padding:0 !important;}
+body.dashboard-page #booking-calendar > div:last-child {gap:8px !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day {min-width:0;height:76px !important;border-radius:12px !important;color:#28493c !important;background:#f5f8f5 !important;border:1px solid #dce6df !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="stay"] {background:#e4f3eb !important;color:#17664e !important;border-color:#b9dfca !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="arrival"] {background:#eaf1fb !important;color:#214c87 !important;border-color:#bfcee6 !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="departure"] {background:#fff1e3 !important;color:#86400d !important;border-color:#edcba8 !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-today="true"] {outline:2px solid #087f5b;outline-offset:1px;box-shadow:none !important;}
+body.dashboard-page .calendar-legend {display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 18px;color:#40594e;font-size:12px;}
+@media(max-width:1000px) {
+ body.dashboard-page #bookings-modal [style*="grid-template-columns:260px"] {grid-template-columns:1fr !important;}
+}
+@media(max-width:768px) {
+ body.dashboard-page #bookings-modal {padding:8px !important;align-items:flex-start !important;}
+ body.dashboard-page #bookings-modal > div {width:100% !important;height:auto !important;max-height:calc(100dvh - 16px) !important;padding:18px !important;border-radius:18px !important;}
+ body.dashboard-page #booking-calendar {padding:12px !important;}
+ body.dashboard-page #booking-calendar > div:last-child {gap:4px !important;}
+ body.dashboard-page #booking-calendar .pms-calendar-day {height:58px !important;border-radius:8px !important;font-size:12px !important;}
+ body.dashboard-page #booking-calendar .pms-calendar-day > div > div:last-child:not(:first-child) {font-size:9px;}
+ body.dashboard-page .booking-filter {padding:9px 12px;}
+}
+
+body.dashboard-page .rb-bookings-close {width:44px;height:44px;border:1px solid #cddcd2;border-radius:12px;background:white;color:#142b25;font-size:20px;cursor:pointer;flex-shrink:0;}
