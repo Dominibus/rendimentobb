@@ -105,7 +105,7 @@ const canSeeFullSnapshot = ()=>{
 
         <div class="rb-ai-status">
             <span class="rb-status-dot"></span>
-            Online
+            ${t("Pronto", "Ready")}
         </div>
 
         <div class="rb-chat-title">
@@ -116,8 +116,7 @@ const canSeeFullSnapshot = ()=>{
 
         <div class="rb-chat-subtitle">
 
-            Executive Investment Advisor
-
+            ${t("Assistente per analisi e gestione", "Analysis and management assistant")}
         </div>
 
     </div>
@@ -181,8 +180,7 @@ HOME
 
                 <span class="rb-status-dot"></span>
 
-                Online
-
+                ${t("Pronto", "Ready")}
             </div>
 
             <div class="rb-ai-home-title">
@@ -193,8 +191,7 @@ HOME
 
             <div class="rb-ai-home-subtitle">
 
-                Executive Investment Advisor
-
+                ${t("Assistente per analisi e gestione", "Analysis and management assistant")}
             </div>
 
             ${
@@ -311,13 +308,13 @@ HOME
 
                     <div class="rb-empty-title">
 
-                        Nessuna simulazione disponibile
+                        ${t("Partiamo dai tuoi dati", "Start with your data")}
 
                     </div>
 
                     <div class="rb-empty-text">
 
-                        Avvia una simulazione oppure carica un PDF per ottenere un'analisi AI completa.
+                        ${t("Apri una simulazione o allega un PDF con testo. Ti aiuto a leggere i dati disponibili.", "Open a simulation or attach a text PDF. I can help interpret the available data.")}
 
                     </div>
 
@@ -524,7 +521,7 @@ MESSAGES
     <button
         id="rb-chat-attach"
         class="rb-chat-action-btn"
-        title="Allega file">
+        title="${t("Allega file", "Attach file")}" aria-label="${t("Allega file", "Attach file")}">
 
         ＋
 
@@ -533,7 +530,7 @@ MESSAGES
     <button
         id="rb-chat-voice"
         class="rb-chat-action-btn"
-        title="Parla">
+        title="${t("Parla", "Speak")}" aria-label="${t("Parla", "Speak")}">
 
         🎤
 
@@ -543,7 +540,7 @@ MESSAGES
 
         id="rb-chat-input"
 
-        type="text"
+        type="text" aria-label="${t("Messaggio", "Message")}"
 
         placeholder="${t(
             "Scrivi oppure parla...",
@@ -553,7 +550,7 @@ MESSAGES
     >
 
     <button
-        id="rb-chat-send">
+        id="rb-chat-send" aria-label="${t("Invia messaggio", "Send message")}">
 
         ➜
 
@@ -1191,8 +1188,7 @@ if(role === "bot"){
 
                     <span class="rb-status-dot"></span>
 
-                    Online
-
+                    ${t("Pronto", "Ready")}
                 </div>
 
             </div>

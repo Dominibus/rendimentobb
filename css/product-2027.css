@@ -345,3 +345,22 @@ body.home-page .quick-roi-box .metric-critical { color: #536960 !important; font
   body.mortgage-page section.hero-mutui { min-height: 0 !important; padding: 50px 20px 100px !important; }
   body.immobili-page section.hero { min-height: 0 !important; }
 }
+
+/* Contrast corrections verified against the deployed mortgage/property pages. */
+body.mortgage-page section.hero-mutui > .container { color: #142b25 !important; }
+body.mortgage-page section.hero-mutui > .container > div:last-child,
+body.mortgage-page section.hero-mutui > .container > div:last-child span { color: #536960 !important; text-shadow: none !important; }
+body.mortgage-page .ai-rate-box { background: #fff !important; border: 1px solid #dce6df !important; color: #142b25 !important; }
+body.mortgage-page .ai-rate-box > div { color: #536960 !important; text-shadow: none !important; }
+body.mortgage-page .ai-rate-box > div:first-child { color: #142b25 !important; }
+body.immobili-page section.hero.hero-bg.rome { background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important; background-image: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%) !important; min-height: 0 !important; padding: 48px 20px !important; }
+body.immobili-page section.hero.hero-bg.rome::before,
+body.immobili-page section.hero.hero-bg.rome::after { content: none !important; display: none !important; }
+body.immobili-page section.hero.hero-bg.rome .container { padding: 0 !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title h1 { color: #142b25 !important; text-shadow: none !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title :is(p,span,div) { color: #536960 !important; text-shadow: none !important; background: transparent !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title h1 span { color: #142b25 !important; }
+.global-footer p, .global-footer .footer-bottom { color: #b9c9c3 !important; }
+.global-footer a:not(.btn-primary):not(.btn-secondary) { color: #c9d8d2; }
+body.academy-page .cta-box { background: #edf5ee !important; border: 1px solid #dce6df; box-shadow: none !important; }
+body.academy-page .cta-box :is(h2,p) { color: #142b25 !important; text-shadow: none !important; }
