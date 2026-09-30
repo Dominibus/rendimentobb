@@ -559,6 +559,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         };
 
+        // Keep the unit in the evidence; convert square feet to square metres.
+        const surfaceEvidence = text.match(/(?:SUPERFICIE|SURFACE|AREA)[^0-9]{0,80}([\d.,]+)\s*(M[²2]|MQ|SQ\.?\s*FT|SQM)/i);
+        if(surfaceEvidence && /sq\.?\s*ft/i.test(surfaceEvidence[2])){
+            const sqft = parseAmount(surfaceEvidence[1]);
+            propertyFacts.surfaceSqm = sqft === null ? null : Math.round(sqft * 0.09290304 * 100) / 100;
+        }
+
         const financialEvidence = [
             roi,
             realROI,

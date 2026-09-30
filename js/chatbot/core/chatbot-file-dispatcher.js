@@ -1,126 +1,15 @@
-// ==========================================
-// 📂 CHATBOT FILE DISPATCHER
-// ==========================================
-
+/* Explicit file capabilities: never pretend an unsupported file was analyzed. */
 window.rbFileDispatcher = (function(){
-
-    const debug = (...args) => {
-        if(window.RB_DEBUG === true) console.debug(...args);
-    };
-
-    const debugWarn = (...args) => {
-        if(window.RB_DEBUG === true) console.warn(...args);
-    };
-
-    function dispatch(file){
-
-        if(!file){
-
-            return;
-
+    async function dispatch(file){
+        if(!file) return {success:false,error:"no_file"};
+        const extension = String(file.name || "").split(".").pop().toLowerCase();
+        if(extension === "pdf" && typeof window.rbAnalyzeUploadedPDF === "function"){
+            return window.rbAnalyzeUploadedPDF(file);
         }
-
-        const extension =
-            file.name
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-        debug(
-            "📂 FILE DISPATCHER",
-            extension,
-            file
-        );
-
-        switch(extension){
-
-            case "pdf":
-
-                return dispatchPDF(file);
-
-            case "png":
-            case "jpg":
-            case "jpeg":
-            case "webp":
-
-                return dispatchImage(file);
-
-            case "xls":
-            case "xlsx":
-            case "csv":
-
-                return dispatchSpreadsheet(file);
-
-            case "doc":
-            case "docx":
-
-                return dispatchDocument(file);
-
-            default:
-
-                debugWarn(
-                    "Unsupported file",
-                    extension
-                );
-
-        }
-
+        window.addMessage?.("assistant", window.currentLang === "en"
+          ? "This format is not supported yet. Upload a PDF with selectable text; images, scans, Word and Excel are not analyzed."
+          : "Questo formato non è ancora supportato. Carica un PDF con testo selezionabile; immagini, scansioni, Word ed Excel non vengono analizzati.");
+        return {success:false,error:"unsupported"};
     }
-
-function dispatchPDF(file){
-
-    debug(
-        "📄 PDF DETECTED",
-        file.name
-    );
-
-    if(
-        typeof window.rbAnalyzeUploadedPDF ===
-        "function"
-    ){
-
-        return window.rbAnalyzeUploadedPDF(
-            file
-        );
-
-    }
-
-    debugWarn(
-        "Document Engine non disponibile."
-    );
-
-}
-    function dispatchImage(file){
-
-        debug(
-            "🖼 IMAGE DETECTED",
-            file.name
-        );
-
-    }
-
-    function dispatchSpreadsheet(file){
-
-        debug(
-            "📊 EXCEL DETECTED",
-            file.name
-        );
-
-    }
-
-    function dispatchDocument(file){
-
-        debug(
-            "📄 WORD DETECTED",
-            file.name
-        );
-
-    }
-
-    return{
-
-        dispatch
-
-    };
-
+    return {dispatch};
 })();

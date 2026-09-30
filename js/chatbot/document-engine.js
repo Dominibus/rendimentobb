@@ -516,276 +516,77 @@ window.rbActiveExecutiveDocument = {
 // ===============================================
 
 window.rbAnalyzeUploadedPDF = async function(file){
-
-    if(window.RB_DEBUG === true) console.debug(
-        "📄 ANALYZE UPLOADED DOCUMENT",
-        file
-    );
-
-    if(!file){
-
-        return{
-
-            success:false,
-
-            error:"No file supplied."
-
-        };
-
+    const say = (it, en) => window.addMessage?.("assistant", window.currentLang === "en" ? en : it);
+    if(!file || !/\.pdf$/i.test(file.name || "")) return {success:false,error:"unsupported"};
+    if(file.size > 20 * 1024 * 1024){
+        say("Il PDF supera 20 MB. Carica una versione più leggera.", "The PDF exceeds 20 MB. Upload a smaller version.");
+        return {success:false,error:"too_large"};
     }
-
-    // ===========================================
-    // 🧠 DOCUMENT CLASSIFICATION
-    // ===========================================
-
-    const classification =
-
-        window.rbClassifyDocument
-
-            ? window.rbClassifyDocument(file)
-
-            : {
-
-                type:"generic",
-
-                label:"Generic Document",
-
-                confidence:0
-
+    const epoch = (window.rbDocumentEpoch || 0) + 1;
+    window.rbDocumentEpoch = epoch;
+    const isCurrent = () => epoch === window.rbDocumentEpoch;
+    const classification = window.rbClassifyDocument?.(file) || {type:"generic_pdf",label:"PDF",confidence:0};
+    const doc = window.rbCreateDocumentObject({file,type:classification.type,classification});
+    doc.status = "reading";
+    window.rbDocumentManager.add(doc);
+    window.lastExecutiveReport = null;
+    say(`Leggo il PDF "${file.name}"…`, `Reading PDF "${file.name}"…`);
+    try {
+        doc.buffer = typeof file.arrayBuffer === "function" ? await file.arrayBuffer() : await new Promise((resolve,reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error("read_failed"));
+            reader.readAsArrayBuffer(file);
+        });
+        if(!isCurrent()) return {success:false,error:"cancelled"};
+        if(typeof window.rbExtractPDFText === "function") await window.rbExtractPDFText(doc);
+        if(!isCurrent()) return {success:false,error:"cancelled"};
+        if(doc.extractionStatus !== "ready" || !doc.extractedText?.trim()){
+            doc.status = "unreadable";
+            doc.analysis = null;
+            doc.executiveContext = null;
+            const reason = doc.extractionStatus || "unavailable";
+            const messages = {
+                no_text:["Il PDF non contiene testo estraibile: potrebbe essere una scansione. Per ora carica un PDF con testo selezionabile.","The PDF has no extractable text and may be scanned. Please upload a PDF with selectable text."],
+                password_required:["Il PDF è protetto da password. Carica una copia non protetta.","The PDF is password protected. Upload an unprotected copy."],
+                too_many_pages:["Il PDF supera 100 pagine. Carica le pagine rilevanti.","The PDF exceeds 100 pages. Upload the relevant pages."],
+                too_much_text:["Il PDF contiene troppo testo. Carica una sezione più breve.","The PDF contains too much text. Upload a shorter section."],
+                unavailable:["Il lettore PDF non è disponibile. Riprova dopo aver aggiornato la pagina.","The PDF reader is unavailable. Refresh the page and try again."]
             };
-
-    if(window.RB_DEBUG === true) console.debug(
-        "🧠 DOCUMENT TYPE",
-        classification
-    );
-
-    // Compatibilità
-    window.lastDocumentInfo = classification;
-
-    // ===========================================
-    // 👤 UI FEEDBACK
-    // ===========================================
-
-    if(typeof window.addMessage === "function"){
-
-        window.addMessage(
-
-            "assistant",
-
-            "📄 Sto analizzando il documento..."
-
-        );
-
+            say(...(messages[reason] || ["Non riesco a leggere questo PDF. Verifica il file e riprova.","I could not read this PDF. Check the file and try again."]));
+            return {success:false,error:reason,document:doc};
+        }
+        doc.status = "ready";
+        if(typeof window.rbRunDocumentReasoning === "function") await window.rbRunDocumentReasoning(doc);
+        if(!isCurrent()) return {success:false,error:"cancelled"};
+        const analysis = doc.analysis || {};
+        const known = ["propertyPrice","roi","equity","mortgage","cashflow","gross","risk","occupancy"].filter(key => analysis[key] !== null && analysis[key] !== undefined);
+        const labels = {propertyPrice:["prezzo immobile","property price"],roi:["ROI","ROI"],equity:["capitale proprio","equity"],mortgage:["mutuo","loan"],cashflow:["cashflow","cash flow"],gross:["ricavi","revenue"],risk:["rischio","risk"],occupancy:["occupazione","occupancy"]};
+        const formatValue = key => {
+            const value = Number(analysis[key]);
+            if(!Number.isFinite(value)) return String(analysis[key]);
+            if(["roi","occupancy"].includes(key)) return `${value}%`;
+            if(key === "risk") return `${value}/100`;
+            return new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {style:"currency",currency:"EUR",maximumFractionDigits:2}).format(value);
+        };
+        const names = known.map(key => `${labels[key][window.currentLang === "en" ? 1 : 0]}: ${formatValue(key)}`).join("; ");
+        say(`PDF letto: ${doc.pageCount || 0} pagine. ${names ? "Dati riconosciuti: " + names + "." : "Testo estratto; non ho riconosciuto indicatori finanziari sufficienti."}\nFonte: ${file.name}. I valori mancanti non vengono stimati.`,
+            `PDF read: ${doc.pageCount || 0} pages. ${names ? "Recognized data: " + names + "." : "Text extracted; insufficient financial metrics recognized."}\nSource: ${file.name}. Missing values are not estimated.`);
+        doc.dataQuality = {
+            recognizedFields:known,
+            missingFields:["propertyPrice","equity","gross","cashflow"].filter(key => analysis[key] === null || analysis[key] === undefined),
+            source:"extracted_pdf_text",
+            pageCount:doc.pageCount || 0
+        };
+        window.rbDocumentEvents.emit("document_ready", doc);
+        return {success:true,document:doc,classification};
+    } catch(error){
+        if(!isCurrent()) return {success:false,error:"cancelled"};
+        doc.status = "failed"; doc.analysis = null; doc.executiveContext = null;
+        say("Non riesco a completare la lettura del PDF. Riprova con una copia valida.","I could not finish reading the PDF. Try a valid copy.");
+        return {success:false,error:"read_failed",document:doc};
+    } finally {
+        // The extracted text is sufficient for follow-up questions; release binary data.
+        doc.buffer = null;
     }
-
-    // ===========================================
-    // 📖 READ FILE
-    // ===========================================
-
-    return new Promise((resolve)=>{
-
-        const reader = new FileReader();
-
-        reader.onload = async function(){
-
-            const buffer = reader.result;
-
-            if(window.RB_DEBUG === true) console.debug(
-
-                "📄 DOCUMENT LOADED",
-
-                buffer
-
-            );
-
-            // ===================================
-            // CREATE DOCUMENT OBJECT
-            // ===================================
-
-            const documentObject =
-
-                window.rbCreateDocumentObject({
-
-                    file,
-
-                    type:
-
-                        classification.type ||
-
-                        "generic",
-
-                    classification,
-
-                    buffer
-
-                });
-
-            // ===================================
-            // METADATA
-            // ===================================
-
-            documentObject.metadata = {
-
-                uploadedAt:
-
-                    new Date().toISOString(),
-
-                fileName:
-
-                    file.name,
-
-                extension:
-
-                    file.name.split(".").pop(),
-
-                mimeType:
-
-                    file.type,
-
-                size:
-
-                    file.size
-
-            };
-
-            // ===================================
-            // AI SIGNALS
-            // ===================================
-
-            documentObject.aiSignals.push(
-
-                {
-
-                    type:"classification",
-
-                    confidence:
-
-                        classification.confidence,
-
-                    label:
-
-                        classification.label
-
-                }
-
-            );
-
-            // ===================================
-            // STORE DOCUMENT
-            // ===================================
-
-            window.rbDocumentManager.add(
-
-                documentObject
-
-            );
-
-            // ===================================
-            // EXECUTIVE REPORT
-            // ===================================
-
-            if(
-
-                classification.type ===
-
-                "executive_report"
-
-            ){
-
-                window.lastExecutiveReport =
-
-                    documentObject;
-
-            }
-
-            // ===================================
-// EXTRACTION
-// ===================================
-
-if(
-    typeof window.rbExtractPDFText ===
-    "function"
-){
-
-    await window.rbExtractPDFText(
-        documentObject
-    );
-
-}
-
-// ===================================
-// DOCUMENT REASONING
-// ===================================
-
-if(
-    typeof window.rbRunDocumentReasoning ===
-    "function"
-){
-
-    await window.rbRunDocumentReasoning(
-        documentObject
-    );
-
-}
-
-// ===================================
-// EVENTS
-// ===================================
-
-window.rbDocumentEvents.emit(
-    "document_uploaded",
-    documentObject
-);
-
-window.rbDocumentEvents.emit(
-    "document_ready",
-    documentObject
-);
-
-            // ===================================
-            // UI
-            // ===================================
-
-            if(typeof window.addMessage === "function"){
-
-                window.addMessage(
-
-                    "assistant",
-
-                    `✅ Documento "${file.name}" caricato correttamente.\n\nPosso analizzarlo, confrontarlo o rispondere alle tue domande.`
-
-                );
-
-            }
-
-            resolve({
-
-                success:true,
-
-                document:documentObject,
-
-                classification
-
-            });
-
-        };
-
-        reader.onerror = function(){
-
-            resolve({
-
-                success:false,
-
-                error:"File reading failed."
-
-            });
-
-        };
-
-        reader.readAsArrayBuffer(file);
-
-    });
-
 };
-
-// Production: nessun log

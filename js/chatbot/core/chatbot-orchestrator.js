@@ -4354,16 +4354,10 @@ const documentKnowledge = {
         null,
 
     activeReport:
-
-        window.rbDocumentManager?.getLast?.()?.analysis
-
+        window.rbDocumentManager?.getLast?.()?.analysis &&
+        !["reading","unreadable","failed"].includes(window.rbDocumentManager.getLast().status)
             ? window.rbDocumentManager.getLast()
-
-            : window.lastExecutiveReport ||
-
-              window.rbActiveDocument ||
-
-              null,
+            : (window.rbDocumentManager?.getLast?.() ? null : window.lastExecutiveReport || null),
 
     uploadedReports:
 

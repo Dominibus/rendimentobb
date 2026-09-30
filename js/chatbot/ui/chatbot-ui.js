@@ -1042,18 +1042,7 @@ newChatBtn.onclick = ()=>{
     // 🧹 CLEAR SAVED CONVERSATION
     // =======================================
 
-    if(window.rbChatMemory){
-
-        window.rbChatMemory.messages = [];
-
-        localStorage.setItem(
-  "rbChatMemory",
-  JSON.stringify(
-    window.rbChatMemory
-  )
-);
-
-    }
+    window.rbClearMemory?.();
 
     refreshHomeSnapshot();
 
@@ -1089,6 +1078,12 @@ newChatBtn.onclick = ()=>{
 
 };
 
+  function escapeMessageText(value){
+    return String(value || "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[char]));
+  }
+
   function renderExecutiveMessage(text){
 
     if(!text){
@@ -1097,7 +1092,7 @@ newChatBtn.onclick = ()=>{
 
     }
 
-    let html = String(text);
+    let html = escapeMessageText(text);
 
     html = html.replace(
 
@@ -1209,8 +1204,7 @@ if(role === "bot"){
 
     div.innerHTML =
 
-        String(text || "")
-            .replace(/\n/g,"<br>");
+        escapeMessageText(text).replace(/\n/g,"<br>");
 
 }
 
@@ -1257,7 +1251,7 @@ function showThinking(){
     div.id =
         "rb-thinking";
 
-    div.innerHTML = "🧠 Analizzo la richiesta...";
+    div.textContent = t("Leggo la richiesta e i dati disponibili…", "Reading your request and available data…");
 
     messages.appendChild(div);
 
@@ -1265,15 +1259,8 @@ function showThinking(){
         messages.scrollHeight;
 
     const steps = [
-
-        "🧠 Analizzo la richiesta...",
-
-        "📊 Elaboro i dati...",
-
-        "⚖️ Valuto l'investimento...",
-
-        "🎯 Genero la risposta..."
-
+        t("Leggo la richiesta e i dati disponibili…", "Reading your request and available data…"),
+        t("Preparo la risposta…", "Preparing the response…")
     ];
 
     let i = 0;
@@ -1386,122 +1373,17 @@ function showThinking(){
   // 🔄 SYNC CONVERSATION BETWEEN TABS
   // ===========================================
 
-  window.addEventListener(
-    "storage",
-    event => {
-
-      if(
-        event.key !== "rbChatMemory" ||
-        !event.newValue
-      ){
-
-        return;
-
-      }
-
-      try{
-
-        const updatedMemory =
-          JSON.parse(event.newValue);
-
-        const updatedMessages =
-          Array.isArray(updatedMemory?.messages)
-            ? updatedMemory.messages
-            : [];
-
-        window.rbChatMemory =
-          updatedMemory;
-
-        const home =
-          document.getElementById(
-            "rb-chat-home"
-          );
-
-        const quick =
-          document.getElementById(
-            "rb-quick-actions"
-          );
-
-        messages.innerHTML = "";
-
-        updatedMessages.forEach(item => {
-
-          const role =
-            item?.role === "bot"
-              ? "bot"
-              : item?.role === "user"
-                ? "user"
-                : null;
-
-          const text =
-            item?.message ??
-            item?.text ??
-            "";
-
-          if(
-            role &&
-            String(text).trim()
-          ){
-
-            addMessage(
-              role,
-              text,
-              false
-            );
-
-          }
-
-        });
-
-        if(updatedMessages.length){
-
-          if(home){
-
-            home.style.display = "none";
-
-          }
-
-          messages.style.display = "block";
-
-          if(quick){
-
-            quick.style.display = "flex";
-
-          }
-
-          messages.scrollTop =
-            messages.scrollHeight;
-
-        }else{
-
-          messages.style.display = "none";
-
-          if(home){
-
-            home.style.display = "block";
-
-          }
-
-          if(quick){
-
-            quick.style.display = "none";
-
-          }
-
-        }
-
-      }catch(error){
-
-        reportRuntimeError(
-  "Chat synchronization unavailable",
-  error
-);
-
-      }
-
-    }
-  );
-  
+  window.addEventListener("rb_chat_context_changed", () => {
+    messages.innerHTML = "";
+    const history = window.rbChatMemory?.messages || [];
+    history.forEach(item => { if(["user","bot","assistant"].includes(item.role)) addMessage(item.role, item.message, false); });
+    const home = document.getElementById("rb-chat-home");
+    if(home) home.style.display = history.length ? "none" : "block";
+    messages.style.display = history.length ? "block" : "none";
+    const quick = document.getElementById("rb-quick-actions");
+    if(quick) quick.style.display = history.length ? "flex" : "none";
+    refreshHomeSnapshot();
+  });
 
   // ===========================================
   // 💡 CONTEXTUAL SUGGESTIONS
@@ -1672,6 +1554,8 @@ function showThinking(){
 
     const text =
       input.value.trim();
+    if(!text) return;
+    const requestEpoch = window.rbDocumentEpoch || 0;
 
     // ========================================
     // 🔒 FREE MESSAGE LIMIT
@@ -1900,6 +1784,7 @@ debugLog(
     );
 
     thinking.element.remove();
+    if(requestEpoch !== (window.rbDocumentEpoch || 0)) return;
 
     addMessage(
         "bot",
@@ -2188,7 +2073,7 @@ window.addEventListener(
 
 `📄 Documento ricevuto
 
-<b>${file.fileName}</b>
+${file.fileName}
 
 🧠 Sto analizzando il contenuto...`
 
@@ -2203,85 +2088,13 @@ window.addEventListener(
 // 🧠 DOCUMENT READY
 // ===========================================
 
-document.addEventListener(
+document.addEventListener("rb:document_ready", event => {
+    if(event.detail?.status !== "ready") return;
+    addSuggestions(window.currentLang === "en"
+      ? ["Summarize this PDF", "Which data are missing?", "Compare it with the simulation"]
+      : ["Riassumi questo PDF", "Quali dati mancano nel PDF?", "Confrontalo con la simulazione"]);
+});
 
-    "rb:document_ready",
-
-    async(event)=>{
-
-        const doc = event.detail;
-
-        if(!doc){
-
-            return;
-
-        }
-
-        debugLog("Document ready for analysis");
-
-        addMessage(
-
-            "bot",
-
-`🧠 Documento classificato
-
-📄 ${doc.subtype}
-
-🎯 Confidence: ${doc.confidence}%`
-
-        );
-
-        if(
-
-            typeof window.rbProcessAIMessage ===
-            "function"
-
-        ){
-
-            const prompt =
-
-`Analizza automaticamente il documento appena caricato.
-
-Tipo documento:
-${doc.subtype}
-
-Nome file:
-${doc.fileName}
-
-Fornisci un Executive Summary.`;
-
-            const result =
-                await window.rbProcessAIMessage(
-                    prompt
-                );
-
-            const response =
-
-                Array.isArray(result?.response)
-
-                    ? result.response[0]
-
-                    : result?.response;
-
-            addMessage(
-
-                "bot",
-
-                response?.textIT ||
-
-                response?.text ||
-
-                "Analisi completata."
-
-            );
-
-        }
-
-    }
-
-);
-  
-  
   // ===========================================
   // 🚀 READY
   // ===========================================

@@ -479,6 +479,7 @@ onAuthStateChanged(auth, async (user) => {
   window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
 
   window.currentUser = user;
+  window.rbSyncChatIdentity?.(user?.uid || null);
   window.firebaseReady = false;
   window.userReady = false;
 

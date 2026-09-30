@@ -76,6 +76,41 @@ if(rbAsksFreeFeatures || rbAsksPlanPDF){
   intent = { ...intent, intent: "subscriptions" };
 }
 
+// A failed current upload must never be replaced by a previous report or live simulation.
+if(!rbAsksFreeFeatures && !rbAsksPlanPDF &&
+   ["reading","unreadable","failed"].includes(documentKnowledge?.activeDocument?.status) &&
+   /(pdf|document|file|brochure)/i.test(String(message || ""))){
+    const pending = documentKnowledge.activeDocument.status === "reading";
+    return {
+        type:"document_unavailable", confidence:0,
+        textIT:pending ? "La lettura del PDF è ancora in corso. Attendi il risultato prima di analizzarlo." : "Non ho testo leggibile dal PDF corrente. Non posso ricavarne un’analisi: carica un PDF con testo selezionabile.",
+        textEN:pending ? "The PDF is still being read. Wait for the result before analyzing it." : "The current PDF has no readable text. I cannot analyze it: upload a PDF with selectable text.",
+        suggestionsIT:[], suggestionsEN:[], signals:["document_unavailable"],
+        metadata:{source:"upload",fileName:documentKnowledge.activeDocument.fileName}
+    };
+}
+
+// A bounded, grounded answer for data completeness, without inventing estimates.
+const rbCurrentPDF = documentKnowledge?.activeDocument;
+if(rbCurrentPDF?.status === "ready" &&
+   /(pdf|document|file|brochure)/i.test(String(message || "")) &&
+   /(manc|missing|complet|sufficient)/i.test(String(message || ""))){
+    const fields = {
+        propertyPrice:["prezzo immobile","property price"],
+        equity:["capitale proprio","equity"],
+        gross:["ricavi annui","annual revenue"],
+        cashflow:["cashflow netto annuo","annual net cash flow"]
+    };
+    const missing = Object.keys(fields).filter(key => rbCurrentPDF.analysis?.[key] === null || rbCurrentPDF.analysis?.[key] === undefined);
+    return {
+        type:"document_data_quality",confidence:1,
+        textIT:`Fonte: ${rbCurrentPDF.fileName}.\n${missing.length ? "Non ho riconosciuto nel testo: " + missing.map(key=>fields[key][0]).join(", ") + "." : "Ho riconosciuto prezzo, capitale proprio, ricavi e cashflow."}\nNon riconosciuto non significa necessariamente assente dal documento. Verifica i campi: un cashflow riportato non dimostra da solo che siano inclusi tutti i costi e le rate del mutuo.`,
+        textEN:`Source: ${rbCurrentPDF.fileName}.\n${missing.length ? "Not recognized in the text: " + missing.map(key=>fields[key][1]).join(", ") + "." : "I recognized price, equity, revenue and cash flow."}\nUnrecognized does not necessarily mean absent from the document. Check the fields: a reported cash flow alone does not establish whether all costs and loan payments are included.`,
+        suggestionsIT:[],suggestionsEN:[],signals:["document_data_quality"],
+        metadata:{source:"extracted_pdf_text",fileName:rbCurrentPDF.fileName,missingFields:missing}
+    };
+}
+
 // ===============================================
 // 📄 PDF INTENT NORMALIZATION
 // Preserve the original document request

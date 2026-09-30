@@ -97,6 +97,33 @@ function createEmptyMemory(){
 window.rbChatMemory =
   createEmptyMemory();
 
+// Account-owned session memory. Legacy shared memory is deliberately discarded.
+let rbMemoryOwner = window.currentUser?.uid || undefined;
+const rbMemoryKey = "rb_chat_session_v2";
+function rbDropLegacyMemory(){
+  try { localStorage.removeItem("rbChatMemory"); sessionStorage.removeItem("rbChatMemory"); } catch {}
+}
+window.rbSaveMemory = function(){
+  rbDropLegacyMemory();
+  try { sessionStorage.setItem(rbMemoryKey, JSON.stringify({owner:rbMemoryOwner, memory:window.rbChatMemory})); } catch {}
+};
+window.rbSyncChatIdentity = function(uid){
+  const next = uid || null;
+  if(next === rbMemoryOwner) return;
+  const initial = rbMemoryOwner === undefined;
+  window.rbMessageCount = 0;
+  rbMemoryOwner = next;
+  if(initial){
+    window.rbDocumentEpoch = (window.rbDocumentEpoch || 0) + 1;
+    window.rbDocumentManager?.clear?.();
+    window.rbLoadMemory();
+    window.dispatchEvent?.(new CustomEvent("rb_chat_context_changed"));
+  } else {
+    // Drop derived analysis caches only on identity changes, not on a new chat.
+    ["rbChatbotData","rbChatbotLive","rbInvestmentMemory","rbCanonicalAnalysis","lastAnalysisData","lastAdvisorResult"].forEach(key => { window[key] = null; });
+    window.rbClearMemory();
+  }
+};
 // ===============================================
 // 💾 SAVE MESSAGE
 // ===============================================
@@ -439,10 +466,7 @@ if(
     // 💾 SAVE SESSION
     // ===========================================
 
-    localStorage.setItem(
-    "rbChatMemory",
-    JSON.stringify(memory)
-    );
+    window.rbSaveMemory();
 
     if(window.RB_DEBUG === true){
 
@@ -471,70 +495,29 @@ if(
 // ===============================================
 
 window.rbLoadMemory = function(){
-
-  try{
-
-    const saved =
-  localStorage.getItem(
-    "rbChatMemory"
-  ) ||
-  sessionStorage.getItem(
-    "rbChatMemory"
-  );
-
-    if(saved){
-
-      window.rbChatMemory =
-        JSON.parse(saved);
-
-      localStorage.setItem(
-  "rbChatMemory",
-  saved
-);
-
-sessionStorage.removeItem(
-  "rbChatMemory"
-);
-
-      // Production: nessun log
-
+  rbDropLegacyMemory();
+  if(rbMemoryOwner === undefined) return;
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(rbMemoryKey) || "null");
+    if(saved?.owner === rbMemoryOwner && saved?.memory && Array.isArray(saved.memory.messages)){
+      window.rbChatMemory = {...createEmptyMemory(), ...saved.memory};
+      window.rbChatMemory.messages = saved.memory.messages.slice(-50);
+    } else {
+      window.rbChatMemory = createEmptyMemory();
+      sessionStorage.removeItem(rbMemoryKey);
     }
-
-  }
-
-  catch(error){
-
-    console.error(
-      "❌ MEMORY LOAD ERROR:",
-      error
-    );
-
-  }
-
+  } catch { window.rbChatMemory = createEmptyMemory(); }
 };
-
-// ===============================================
-// 🧹 CLEAR MEMORY
-// ===============================================
-
 window.rbClearMemory = function(){
-
-  window.rbChatMemory =
-    createEmptyMemory();
-
-  localStorage.removeItem(
-  "rbChatMemory"
-);
-
-sessionStorage.removeItem(
-  "rbChatMemory"
-);
-
-  console.log(
-    "🧠 MEMORY CLEARED"
-  );
-
+  window.rbChatMemory = createEmptyMemory();
+  window.rbDocumentEpoch = (window.rbDocumentEpoch || 0) + 1;
+  window.rbDocumentManager?.clear?.();
+  window.rbSaveMemory();
+  window.dispatchEvent?.(new CustomEvent("rb_chat_context_changed"));
 };
+document.addEventListener("rb_auth_ready", event => {
+  window.rbSyncChatIdentity(event.detail?.user?.uid || null);
+});
 
 // ===============================================
 // 📊 GET CONTEXT

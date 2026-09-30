@@ -40,6 +40,7 @@ window.rbExtractPDFText = async function(documentObject){
                 "⚠️ PDF.js NOT AVAILABLE"
             );
 
+            documentObject.extractionStatus = "unavailable";
             return documentObject;
 
         }
@@ -82,7 +83,14 @@ window.rbExtractPDFText = async function(documentObject){
                 })
                 .promise;
 
+        if(pdfDocument.numPages > 100){
+            await pdfDocument.destroy?.();
+            documentObject.extractionStatus = "too_many_pages";
+            return documentObject;
+        }
         const extractedPages = [];
+        documentObject.textPages = [];
+        let textLength = 0;
 
         for(
             let pageNumber = 1;
@@ -114,6 +122,14 @@ window.rbExtractPDFText = async function(documentObject){
                     )
                     .trim();
 
+            documentObject.textPages.push({page:pageNumber, text:pageText});
+            textLength += pageText.length;
+            if(textLength > 250000){
+                await pdfDocument.destroy?.();
+                documentObject.extractionStatus = "too_much_text";
+                documentObject.textPages = [];
+                return documentObject;
+            }
             if(pageText){
 
                 extractedPages.push(
@@ -129,6 +145,11 @@ window.rbExtractPDFText = async function(documentObject){
             extractedPages
                 .join("\n\n")
                 .trim();
+
+        documentObject.extractionStatus = documentObject.extractedText ? "ready" : "no_text";
+        documentObject.pageCount = pdfDocument.numPages;
+        await pdfDocument.destroy?.();
+        if(!documentObject.extractedText) return documentObject;
 
         rbPDFDebug(
             "📄 PDF TEXT READY",
@@ -188,6 +209,7 @@ window.rbExtractPDFText = async function(documentObject){
 
     catch(error){
 
+        documentObject.extractionStatus = error?.name === "PasswordException" ? "password_required" : "failed";
         console.error("PDF Extraction Error");
         rbPDFDebugWarn(error);
 
