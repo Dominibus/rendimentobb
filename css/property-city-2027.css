@@ -68,3 +68,72 @@ body.rb-property-city main > section[style*="text-align:center"] { width: min(11
   body.rb-property-city main > section[style*="text-align:center"] { width: calc(100% - 32px); }
 }
 @media (prefers-reduced-motion: reduce) { body.rb-property-city .property-card { transition: none; } body.rb-property-city .property-card:hover { transform: none; } }
+
+/* Remove legacy section widths and 600px market grids. */
+body.immobili-page.rb-property-city main > section.section {
+  width: 100% !important; max-width: none !important; min-width: 0 !important;
+  margin: 0 !important; padding: 32px 0 !important;
+  border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  background: transparent !important; float: none !important;
+}
+body.immobili-page.rb-property-city main > section.section > .container {
+  display: block !important; width: min(1120px, calc(100% - 48px)) !important;
+  max-width: 1120px !important; margin: 0 auto !important; padding: 0 !important;
+  text-align: left !important; box-sizing: border-box;
+}
+body.immobili-page.rb-property-city .market-grid,
+body.immobili-page.rb-property-city .property-grid {
+  width: 100% !important; max-width: none !important;
+  margin-inline: 0 !important; box-sizing: border-box;
+}
+body.immobili-page.rb-property-city .market-card {
+  width: auto !important; max-width: none !important; min-width: 0 !important;
+  margin: 0 !important; height: auto !important; box-sizing: border-box;
+  backdrop-filter: none !important;
+}
+body.immobili-page.rb-property-city .market-card span {
+  overflow-wrap: anywhere; word-break: normal; white-space: normal;
+  font-size: clamp(20px, 2vw, 27px) !important; line-height: 1.25 !important;
+}
+body.immobili-page.rb-property-city .property-card {
+  display: flex !important; flex-direction: column; width: 100% !important;
+  max-width: none !important; margin: 0 !important; padding: 0 !important;
+  height: 100%; box-sizing: border-box;
+}
+body.immobili-page.rb-property-city .property-card .property-image {
+  display: block; width: 100% !important; max-width: none !important;
+  height: 210px !important; margin: 0 !important; padding: 0 !important;
+  border-radius: 0 !important; object-fit: cover;
+}
+body.immobili-page.rb-property-city .property-content {
+  display: flex; flex: 1; flex-direction: column; align-items: stretch;
+  width: 100%; min-width: 0; box-sizing: border-box; text-align: left;
+}
+body.immobili-page.rb-property-city .property-title { min-height: 50px; }
+body.immobili-page.rb-property-city .property-content > .btn-primary {
+  margin-top: auto !important; padding: 14px 18px !important; text-align: center;
+}
+body.immobili-page.rb-property-city .property-content > .btn-primary::before { content: none; }
+body.immobili-page.rb-property-city .property-data { overflow-wrap: anywhere; }
+body.immobili-page.rb-property-city .rb-city-hero-copy p { text-align: left !important; }
+@media (max-width: 768px) {
+  body.immobili-page.rb-property-city main > section.section > .container {
+    width: calc(100% - 32px) !important;
+  }
+  body.immobili-page.rb-property-city .market-card { padding: 20px 14px !important; }
+  body.immobili-page.rb-property-city .property-title { min-height: 0; }
+  body.immobili-page.rb-property-city .property-content > .btn-primary { margin-top: 20px !important; }
+}
+@media (max-width: 380px) {
+  body.immobili-page.rb-property-city .market-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+body.immobili-page.rb-property-city .rb-city-hero-layout {
+  width: min(1120px, calc(100% - 48px)) !important; max-width: 1120px !important;
+  padding: 0 !important; margin-inline: auto !important; box-sizing: border-box;
+}
+body.immobili-page.rb-property-city .rb-city-hero h1 {
+  max-width: none !important; font-size: clamp(34px, 4vw, 52px) !important;
+}
+@media (max-width: 768px) {
+  body.immobili-page.rb-property-city .rb-city-hero-layout { width: calc(100% - 32px) !important; }
+}

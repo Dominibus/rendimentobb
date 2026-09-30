@@ -29,3 +29,71 @@ body.rb-secondary-page .hero [data-en*="Indicative values"] {
 @media (max-width: 359px) {
   body.home-page section.hero.rb-home-hero .rb-canvas-flow { grid-template-columns: 1fr; }
 }
+
+/* ROI main and city content use the same centered content width. */
+body.rb-roi-page.rb-secondary-page main > section.section {
+  width: min(1120px, calc(100% - 48px)) !important; max-width: 1120px !important;
+  margin: 28px auto !important; padding: 32px !important;
+  border: 1px solid #dce6df !important; border-radius: 20px !important;
+  background: #fff !important; box-shadow: none !important; box-sizing: border-box;
+}
+body.rb-roi-page.rb-secondary-page .section > .container {
+  display: block; width: 100% !important; max-width: none !important;
+  padding: 0 !important; margin: 0 auto !important; box-sizing: border-box;
+}
+body.rb-roi-page.rb-secondary-page .market-grid {
+  display: grid !important; width: 100% !important; max-width: none !important;
+  margin: 0 auto !important; gap: 18px !important;
+}
+body.rb-roi-page.rb-secondary-page .roi-trust-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+body.rb-roi-page.rb-secondary-page .roi-data-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+body.rb-roi-page.rb-secondary-page .market-card {
+  width: auto !important; max-width: none !important; min-width: 0 !important;
+  padding: 24px 20px !important; margin: 0 !important; height: auto !important;
+  border: 1px solid #dce6df !important; border-radius: 16px !important;
+  box-shadow: none !important; backdrop-filter: none !important; box-sizing: border-box;
+}
+body.rb-roi-page.rb-secondary-page .market-card strong {
+  font-size: 20px !important; line-height: 1.3 !important; font-weight: 650 !important;
+  color: #142b25 !important; overflow-wrap: anywhere;
+}
+body.rb-roi-page.rb-secondary-page .market-card span {
+  color: #536960 !important; font-size: 13px !important; line-height: 1.5 !important;
+  font-weight: 400 !important; overflow-wrap: anywhere;
+}
+body.rb-roi-page.rb-secondary-page :is(.hero,.hero-roi) .container > div:has(> a.btn-primary) {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px;
+}
+body.rb-roi-page.rb-secondary-page :is(.hero,.hero-roi) :is(a.btn-primary,a.btn-outline) {
+  display: inline-flex !important; align-items: center; justify-content: center;
+  min-height: 52px; margin: 0 !important; padding: 14px 24px !important;
+  box-sizing: border-box; border-radius: 12px !important; line-height: 1.4;
+  font-size: 14px; font-weight: 600;
+}
+body.rb-roi-page.rb-secondary-page .hero-highlights {
+  display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(760px, 100%); margin: 24px auto 0 !important; gap: 14px;
+}
+body.rb-roi-page.rb-secondary-page .hero-highlight {
+  width: auto !important; min-width: 0; min-height: 100px; padding: 18px 12px;
+  background: #fff !important; border: 1px solid #dce6df; border-radius: 16px;
+}
+body.rb-roi-page.rb-secondary-page .hero-highlight p {
+  font-size: 13px !important; line-height: 1.5 !important; font-weight: 500 !important;
+}
+@media (max-width: 768px) {
+  body.rb-roi-page.rb-secondary-page main > section.section {
+    width: calc(100% - 32px) !important; padding: 24px 18px !important; margin: 20px auto !important;
+  }
+  body.rb-roi-page.rb-secondary-page .roi-trust-grid,
+  body.rb-roi-page.rb-secondary-page .roi-data-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  body.rb-roi-page.rb-secondary-page .roi-trust-grid > :last-child:nth-child(3) { grid-column: 1 / -1; }
+  body.rb-roi-page.rb-secondary-page .market-card { padding: 20px 14px !important; }
+  body.rb-roi-page.rb-secondary-page .hero-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 380px) {
+  body.rb-roi-page.rb-secondary-page .roi-trust-grid,
+  body.rb-roi-page.rb-secondary-page .roi-data-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+body.home-page .rb-header #user-area { display: flex; align-items: center; gap: 8px !important; }
+body.home-page .rb-canvas-flow span { font-family: inherit; }
