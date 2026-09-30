@@ -126,3 +126,57 @@ body.report-page .hero-metric strong { font-variant-numeric: tabular-nums; }
   html { scroll-behavior: auto !important; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* Home contrast: override the legacy photographic hero's white text rules. */
+body.home-page section.hero.rb-home-hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: var(--rb-ink) !important;
+}
+body.home-page section.hero.rb-home-hero::before,
+body.home-page section.hero.rb-home-hero::after {
+  content: none !important;
+  background: none !important;
+}
+body.home-page section.hero.rb-home-hero h1,
+body.home-page section.hero.rb-home-hero h1 span,
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas h3,
+body.home-page section.hero.rb-home-hero .rb-canvas-inputs dd {
+  color: var(--rb-ink) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero h1 .rb-home-accent,
+body.home-page section.hero.rb-home-hero .rb-home-eyebrow,
+body.home-page section.hero.rb-home-hero .rb-canvas-result strong {
+  color: var(--rb-green) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-lead,
+body.home-page section.hero.rb-home-hero .rb-home-proof,
+body.home-page section.hero.rb-home-hero .rb-home-paths-title,
+body.home-page section.hero.rb-home-hero .rb-canvas-subtitle,
+body.home-page section.hero.rb-home-hero .rb-canvas-note,
+body.home-page section.hero.rb-home-hero .rb-canvas-inputs dt,
+body.home-page section.hero.rb-home-hero .rb-canvas-result span,
+body.home-page section.hero.rb-home-hero .rb-canvas-flow span,
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas .rb-eyebrow {
+  color: var(--rb-muted) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas .rb-status-pill {
+  color: #326344 !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-benefits li,
+body.home-page section.hero.rb-home-hero .rb-home-benefits li span,
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-secondary {
+  color: var(--rb-ink) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary {
+  background: var(--rb-green) !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover {
+  background: var(--rb-green-hover) !important;
+}
