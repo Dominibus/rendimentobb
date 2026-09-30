@@ -615,7 +615,14 @@ function initHeaderInteractions(){
 
   overlay.onclick = closeMenu;
   document.getElementById("rb-mobile-close").onclick = closeMenu;
+  // Delegate because renderUser rebuilds the mobile navigation after auth/language changes.
   mobile.addEventListener("click", (event) => {
+    if(event.target.closest("#mobile-ai-btn")) {
+      event.preventDefault();
+      closeMenu();
+      document.getElementById("rb-header-ai-btn")?.click();
+      return;
+    }
     if(event.target.closest("a")) closeMenu();
   }, true);
   document.addEventListener("keydown", (event) => {
