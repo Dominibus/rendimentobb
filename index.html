@@ -631,6 +631,8 @@ Stima indicativa senza mutuo e imposte • Nessuna registrazione
 
 <!-- SCORE -->
 <div class="investment-panel">
+<p id="rb-quick-status" class="rb-quick-status" role="status" aria-live="polite" data-it="Pronto per la tua prima stima" data-en="Ready for your first estimate">Pronto per la tua prima stima</p>
+<div class="rb-quick-empty"><h3 data-it="Dai numeri al tuo investimento." data-en="Put numbers behind your investment.">Dai numeri al tuo investimento.</h3><p data-it="Inserisci i dati a sinistra e premi Calcola rendimento. I campi vuoti utilizzano i valori di esempio indicati." data-en="Enter your assumptions and select Calculate ROI. Empty fields use the example values shown.">Inserisci i dati a sinistra e premi Calcola rendimento. I campi vuoti utilizzano i valori di esempio indicati.</p></div>
 
 <div class="investment-score">
 
@@ -849,87 +851,7 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
 <!-- ================= OVERLAY ================= -->
 
-<div class="home-blur-overlay dynamic-overlay free-only">
-
-  <div class="home-overlay-content">
-
-    <!-- HEADLINE -->
-    <div class="overlay-title"
-      data-it="🔓 Stai prendendo una decisione senza dati completi"
-      data-en="🔓 You are making a decision without full data">
-      🔓 Stai prendendo una decisione senza dati completi
-    </div>
-
-    <!-- SUBTEXT -->
-    <div class="overlay-text"
-      data-it="Può sembrare profittevole… ma potresti perdere soldi reali"
-      data-en="It may look profitable… but you could lose real money">
-      Può sembrare profittevole… ma potresti perdere soldi reali
-    </div>
-
-    <!-- STAT -->
-    <div style="
-      margin-top:10px;
-      font-size:13px;
-      opacity:0.85;
-    "
-    data-it="Molti errori di valutazione nascono proprio in questa fase"
-    data-en="Many investment mistakes begin at this stage">
-      Molti errori di valutazione nascono proprio in questa fase
-    </div>
-
-    <!-- 🔥 MISSING HOOK -->
-    <div style="
-      margin-top:10px;
-      font-size:13px;
-      color:#f59e0b;
-      font-weight:600;
-    "
-    data-it="La versione gratuita mostra una stima. La versione Pro mostra se questo investimento vale davvero il tuo capitale."
-    data-en="The free version shows an estimate. The Pro version tells you whether this investment is actually worth your capital.">
-      La versione gratuita mostra una stima. La versione Pro mostra se questo investimento vale davvero il tuo capitale.
-    </div>
-
-    <!-- CTA -->
-    <button
-onclick="
-if(!window.currentUser){
-
-  window.location.href='/login/';
-
-}else{
-
-  document.getElementById('pricing')?.scrollIntoView({
-    behavior:'smooth'
-  });
-
-}
-"
-class="btn btn-primary"
-style="margin-top:16px">
-
-      <span
-        data-it="🔓 Sblocca analisi completa"
-        data-en="🔓 Unlock full analysis">
-        🔓 Sblocca analisi completa
-      </span>
-
-    </button>
-
-    <!-- TRUST -->
-    <div style="
-      margin-top:10px;
-      font-size:12px;
-      opacity:0.7;
-    "
-    data-it="ROI stimato • Break-even • Analisi rischio completa"
-    data-en="Estimated ROI • Break-even • Full risk analysis">
-      ROI stimato • Break-even • Analisi rischio completa
-    </div>
-
-  </div>
-
-</div>
+<div class="home-blur-overlay dynamic-overlay free-only"><div class="home-overlay-content"><strong data-it="Approfondisci lo scenario" data-en="Explore your scenario">Approfondisci lo scenario</strong><p data-it="Questa è una stima preliminare. Nel simulatore completo puoi includere mutuo, imposte e ipotesi di rischio." data-en="This is a preliminary estimate. The full simulator lets you include financing, taxes and risk assumptions.">Questa è una stima preliminare. Nel simulatore completo puoi includere mutuo, imposte e ipotesi di rischio.</p><a href="/tool/" class="btn btn-primary" data-it="Apri il simulatore completo →" data-en="Open the full simulator →">Apri il simulatore completo →</a></div></div>
 
 </div>
 
@@ -2143,6 +2065,12 @@ window.startAnalysis = function(){
 
 window.triggerROI = function(){
   window.userTriggeredSimulation = true;
+  document.querySelector(".quick-roi-box")?.classList.add("rb-has-result");
+  const status = document.getElementById("rb-quick-status");
+  if(status) {
+    status.removeAttribute("data-it"); status.removeAttribute("data-en");
+    status.textContent = window.currentLang === "en" ? "Estimate calculated · financing and taxes excluded" : "Stima calcolata · mutuo e imposte esclusi";
+  }
   quickROI();
 };
 
@@ -3543,6 +3471,6 @@ if(investorPlanButton){
 
 </div>
 
-<link rel="stylesheet" href="/css/product-2027.css?v=20260930-4">
+<link rel="stylesheet" href="/css/product-2027.css?v=20260930-5">
 </body>
 </html>
