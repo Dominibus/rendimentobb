@@ -650,6 +650,10 @@ window.rbParseExecutivePDF = async function(documentObject){
             verdict:
                 verdict,
 
+            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
+            cashflowBasis: /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(text) ? "after_mortgage" : "unknown",
+            financingRate: extractPercentage(/(?:TASSO IPOTIZZATO|ASSUMED INTEREST RATE)[^0-9]{0,30}([\d.,]+)\s*%/i),
+            debtService: extractAmount(/(?:RATA MUTUO ANNUA STIMATA|ESTIMATED ANNUAL LOAN PAYMENTS)[^0-9]{0,30}([\d.,]+)/i),
             propertyFacts
 
         };
@@ -675,6 +679,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
                         key !== "reportType" &&
                         key !== "propertyFacts" &&
+                        key !== "roiBasis" &&
+                        key !== "cashflowBasis" &&
                         value !== null
 
                 ),

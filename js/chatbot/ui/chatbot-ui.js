@@ -1085,58 +1085,32 @@ newChatBtn.onclick = ()=>{
   }
 
   function renderExecutiveMessage(text){
+    if(!text) return "";
+    // Shared safe formatting for document, live, support and PMS responses.
+    const inline = line => escapeMessageText(line).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+    const paragraphs = String(text).replace(/\r\n/g,"\n").split(/\n\s*\n+/);
+    return paragraphs.map(paragraph => {
+      const lines=paragraph.split("\n").map(line=>line.trim()).filter(Boolean);
+      return lines.map(line=>{
+        if(/^(Fonte|Source):/.test(line)) return `<div class="rb-message-source">${inline(line)}</div>`;
+        const plain=line.replace(/^#{1,3}\s*/,"").replace(/^\*\*|\*\*$/g,"");
+        const heading=/^(?:[📊🧠🎯✅]\s*)?(?:Investment Score|Executive Summary|Strategic Priorities|AI Decision|Interpretazione del report|Interpretation of the report|Dati riconosciuti nel PDF|Recognized PDF data):?$/i.test(plain);
+        if(heading || /^#{1,3}\s/.test(line)) return `<div class="rb-section-title">${inline(plain.replace(/^[📊🧠🎯✅]\s*/,""))}</div>`;
+        return `<div class="rb-message-line">${inline(line)}</div>`;
+      }).join("");
+    }).map(html=>`<div class="rb-message-paragraph">${html}</div>`).join("");
+  }
 
-    if(!text){
-
-        return "";
-
-    }
-
-    let html = escapeMessageText(text);
-
-    html = html.replace(
-
-        /^[ \t]*(?:📊[ \t]*)?Investment Score:?[ \t]*$/gim,
-
-        `<div class="rb-section-title">
-            📊 Investment Score
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /Executive Summary:?/gi,
-
-        `<div class="rb-section-title">
-            🧠 Executive Summary
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /Strategic Priorities:?/gi,
-
-        `<div class="rb-section-title">
-            🎯 Strategic Priorities
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /AI Decision:?/gi,
-
-        `<div class="rb-section-title">
-            ✅ AI Decision
-        </div>`
-
-    );
-
-    return html.replace(/\n/g,"<br>");
-
-}
+  function refreshQuickActions(){
+    const active = window.rbDocumentManager?.getLast?.();
+    const pdfFocus = active && window.rbPDFConversationDocumentId === active.id;
+    const labels = pdfFocus
+      ? [t("ROI del PDF","PDF ROI"),t("Cashflow del PDF","PDF cash flow"),t("Rischio del PDF","PDF risk"),t("Interpreta PDF","Interpret PDF")]
+      : ["ROI","Cashflow",t("Rischio","Risk"),t("Conviene?","Worth it?")];
+    document.querySelectorAll("#rb-quick-actions .rb-quick-btn").forEach((button,index)=>{
+      button.textContent=labels[index] || "";
+    });
+  }
 
   // ===========================================
   // 💬 ADD MESSAGE
@@ -1346,6 +1320,7 @@ function showThinking(){
     const quick = document.getElementById("rb-quick-actions");
     if(quick) quick.style.display = history.length ? "flex" : "none";
     refreshHomeSnapshot();
+    refreshQuickActions();
   });
 
   // ===========================================
@@ -1754,6 +1729,7 @@ debugLog(
         finalText
     );
 
+    refreshQuickActions();
     addSuggestions(
         finalSuggestions
     );
@@ -2053,9 +2029,10 @@ ${file.fileName}
 
 document.addEventListener("rb:document_ready", event => {
     if(event.detail?.status !== "ready") return;
+    refreshQuickActions();
     addSuggestions(window.currentLang === "en"
-      ? ["Summarize this PDF", "Which data are missing?", "Compare it with the simulation"]
-      : ["Riassumi questo PDF", "Quali dati mancano nel PDF?", "Confrontalo con la simulazione"]);
+      ? ["Interpret this PDF", "What about ROI?", "Which data are missing in the PDF?"]
+      : ["Interpretami il PDF", "E il ROI?", "Quali dati mancano nel PDF?"]);
 });
 
   // ===========================================

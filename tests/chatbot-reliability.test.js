@@ -68,8 +68,8 @@ test('uploaded PDF interpretation ignores conflicting live defaults',async()=>{
  vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);
  const doc={status:'ready',fileName:'roma.pdf',analysis:{roi:25.7,cashflow:10274,propertyPrice:160000,equity:40000,mortgage:120000,risk:23,gross:38325}};
  const response=c.window.rbGenerateResponse({message:'interpretami il pdf',documentKnowledge:{activeDocument:doc},analysisData:{roi:15,cashflow:0,risk:36,occupancy:65}});
- assert.equal(response.type,'document_grounded');assert.ok(response.textIT.includes('25.7%'));assert.ok(response.textIT.includes('10.274'));
- assert.ok(response.textIT.includes('75.0%'));assert.ok(!response.textIT.includes('15%'));assert.ok(!response.textIT.includes('65%'));
+ assert.equal(response.type,'document_grounded');assert.ok(response.textIT.includes('25,7%'));assert.ok(response.textIT.includes('10.274'));
+ assert.ok(response.textIT.includes('75,0%'));assert.ok(!response.textIT.includes('15%'));assert.ok(!response.textIT.includes('65%'));
  assert.ok(!response.textIT.includes('ACQUISTA'));
 });
 test('document orchestrator answers once without invoking the live pipeline',async()=>{
@@ -95,7 +95,7 @@ test('actual Roma feasibility PDF parses and answers with its financial values',
  await c.window.rbParseExecutivePDF(doc);
  assert.equal(doc.analysis.roi,25.7);assert.equal(doc.analysis.cashflow,10274);assert.equal(doc.analysis.propertyPrice,160000);assert.equal(doc.analysis.mortgage,120000);
  const answer=c.window.rbBuildPDFResponse('Interpretami il PDF',doc);
- assert.ok(answer.textIT.includes('25.7%'));assert.ok(answer.textIT.includes('10.274'));
+ assert.ok(answer.textIT.includes('25,7%'));assert.ok(answer.textIT.includes('10.274'));
 });
 
 test('financial follow-up stays on the PDF after upload',async()=>{
@@ -103,5 +103,52 @@ test('financial follow-up stays on the PDF after upload',async()=>{
  c.window.rbActiveDocument={id:'active',status:'ready',fileName:'roma.pdf',analysis:{roi:25.7,cashflow:10274}};
  c.window.rbPDFConversationDocumentId='active';c.window.lastAnalysisData={roi:15,cashflow:0};
  const result=await c.window.rbProcessAIMessage('E il ROI?');
- assert.equal(result.response.type,'document_grounded');assert.ok(result.response.textIT.includes('25.7%'));
+ assert.equal(result.response.type,'document_grounded');assert.ok(result.response.textIT.includes('25,7%'));
+});
+
+async function realPDFContext(){
+ const {c}=context(['pdf-parser-engine','document-engine']);
+ const doc={id:'roma-doc',status:'ready',type:'financial_report',fileName:'roma.pdf',extractedText:await read('tests/fixtures/roma-feasibility-pdf.txt')};
+ await c.window.rbParseExecutivePDF(doc);return {c,doc};
+}
+test('ROI question explains equity basis and arithmetic instead of repeating the summary',async()=>{
+ const {c,doc}=await realPDFContext();assert.equal(doc.analysis.equity,40000);
+ const r=c.window.rbBuildPDFResponse('E il ROI nel PDF?',doc);
+ assert.equal(r.metadata.answerMode,'roi');assert.ok(r.textIT.includes('25,7%'));assert.ok(r.textIT.includes('25,69%'));assert.ok(r.textIT.includes('6,42%'));
+ assert.ok(!r.textIT.includes('Prezzo immobile:'));assert.ok(!r.textIT.includes('Ricavi annui:'));
+});
+test('cash flow answer recognizes after-mortgage evidence and monthly average',async()=>{
+ const {c,doc}=await realPDFContext();const r=c.window.rbBuildPDFResponse('Cashflow del PDF',doc);
+ assert.equal(r.metadata.answerMode,'cashflow');assert.ok(r.textIT.includes('856,17'));assert.ok(r.textIT.includes('dopo il mutuo'));assert.ok(!r.textIT.includes('ROI sul capitale proprio:'));
+});
+test('loan answer uses extracted rate and annual payments',async()=>{
+ const {c,doc}=await realPDFContext();const r=c.window.rbBuildPDFResponse('Il mutuo nel PDF?',doc);
+ assert.equal(r.metadata.answerMode,'mortgage');assert.ok(r.textIT.includes('3,5%'));assert.ok(r.textIT.includes('8.351'));assert.ok(r.textIT.includes('75%'));
+});
+test('default quick questions all stay with the current PDF and never generate a new score',async()=>{
+ const {c,doc}=await realPDFContext();vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);vm.runInContext(await read('js/chatbot/core/chatbot-orchestrator.js'),c);
+ c.window.rbActiveDocument=doc;c.window.rbPDFConversationDocumentId=doc.id;c.window.lastAnalysisData={roi:15,cashflow:0,risk:70,occupancy:70};
+ for(const [question,mode] of [['Conviene?','interpretation'],['Rischio','risk'],['Cashflow','cashflow'],['ROI','roi']]){
+   const r=await c.window.rbProcessAIMessage(question);assert.equal(r.success,true);assert.equal(r.response.metadata.answerMode,mode);
+   assert.ok(!r.response.textIT.includes('WAIT'));assert.ok(!r.response.textIT.includes('70/100'));assert.ok(!r.response.textIT.includes('70%'));assert.ok(!r.response.textIT.includes('8-11%'));
+ }
+});
+test('unknown ROI basis is explicit rather than assumed equity',()=>{
+ const {c}=context(['document-engine']);const r=c.window.rbBuildPDFResponse('ROI del PDF',{status:'ready',fileName:'external.pdf',analysis:{roi:20,equity:40000,cashflow:8000}});
+ assert.ok(r.textIT.includes('base del ROI'));assert.ok(!r.textIT.includes('Verifica:'));
+});
+test('completeness answer recognizes that the actual PDF cash flow is after mortgage',async()=>{
+ const {c,doc}=await realPDFContext();vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);
+ const r=c.window.rbGenerateResponse({message:'Quali dati mancano nel PDF?',documentKnowledge:{activeDocument:doc}});
+ assert.ok(r.textIT.includes('cashflow è dopo il mutuo'));assert.ok(!r.textIT.includes('non chiarisce da solo'));
+});
+test('document quick actions label their source and reset with a cleared document',async()=>{
+ const source=await read('js/chatbot/ui/chatbot-ui.js');const start=source.indexOf('  function refreshQuickActions(){');const end=source.indexOf('  // ===========================================\n  // 💬 ADD MESSAGE',start);
+ const buttons=[{},{},{},{}];const c={window:{rbPDFConversationDocumentId:'A',rbDocumentManager:{getLast:()=>({id:'A',status:'ready'})}},document:{querySelectorAll:()=>buttons},t:(it)=>it};vm.createContext(c);vm.runInContext(source.slice(start,end),c);
+ c.refreshQuickActions();assert.equal(buttons[0].textContent,'ROI del PDF');assert.equal(buttons[3].textContent,'Interpreta PDF');
+ c.window.rbDocumentManager.getLast=()=>null;c.refreshQuickActions();assert.equal(buttons[0].textContent,'ROI');assert.equal(buttons[3].textContent,'Conviene?');
+});
+test('empty parsed document does not become analyzed because of basis metadata',async()=>{
+ const {c}=context(['pdf-parser-engine']);const doc={type:'generic_pdf',extractedText:'No financial or property data in this file.'};await c.window.rbParseExecutivePDF(doc);
+ assert.equal(doc.executiveContext.hasAnalysis,false);
 });

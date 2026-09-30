@@ -2372,3 +2372,24 @@ MOBILE AI HOME — COMPACT 2026
   #rb-chatbot-window .rb-chat-input-area { padding-bottom: max(14px, env(safe-area-inset-bottom)) !important; }
   #rb-chatbot-window #rb-chat-input { font-size: 16px; }
 }
+
+/* One message and action style for every chatbot response source. */
+#rb-chatbot-window .rb-bot-message,
+#rb-chatbot-window .rb-user-message { font-family: inherit !important; font-size: 14px !important; line-height: 1.65 !important; overflow-wrap: anywhere; text-shadow: none !important; }
+#rb-chatbot-window .rb-message-paragraph { margin: 0 0 12px; padding: 0; background: transparent; border: 0; box-shadow: none; }
+#rb-chatbot-window .rb-message-paragraph:last-child { margin-bottom: 0; }
+#rb-chatbot-window .rb-message-line { margin: 0; padding: 0; min-height: 0; color: inherit; font: inherit; }
+#rb-chatbot-window .rb-section-title { display: block; margin: 0 0 8px !important; padding: 0 !important; min-height: 0; background: transparent !important; border: 0 !important; box-shadow: none !important; color: #142b25 !important; font-size: 14px !important; font-weight: 650 !important; line-height: 1.45 !important; }
+#rb-chatbot-window .rb-message-source { margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e9e4; color: #536960; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+#rb-chatbot-window .rb-context-actions { display: flex !important; gap: 8px; margin: 0 0 18px; padding: 0 !important; border: 0; background: transparent; box-shadow: none; flex-wrap: wrap; }
+#rb-chatbot-window .rb-context-actions .rb-quick-btn { flex: 1 1 130px; white-space: normal; min-width: 0; text-align: left; font-size: 12px; line-height: 1.4; font-weight: 600; padding: 10px 12px; }
+#rb-chatbot-window #rb-quick-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-top: 1px solid #dce6df; background: #fff; overflow: visible; }
+#rb-chatbot-window .rb-quick-btn { font-family: inherit !important; font-size: 12px !important; line-height: 1.4 !important; min-height: 40px; padding: 10px 12px !important; font-weight: 600; transition: background .15s; }
+#rb-chatbot-window .rb-quick-btn:hover { background: #edf5ef !important; transform: none !important; }
+#rb-chatbot-window .rb-bot-message strong { font-weight: 650; color: #142b25; }
+@media (max-width: 600px) {
+  #rb-chatbot-window #rb-quick-actions { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #rb-chatbot-window #rb-quick-actions .rb-quick-btn { width: 100%; min-width: 0; white-space: normal; }
+}
+#rb-chatbot-window #rb-quick-actions[style*="display:none"],
+#rb-chatbot-window #rb-quick-actions[style*="display: none"] { display: none !important; }

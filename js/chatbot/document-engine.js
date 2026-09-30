@@ -524,29 +524,99 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
     if(/(manc|missing|complet|sufficient)/i.test(query)) return null;
     const a = doc.analysis || {};
     const has = key => a[key] !== null && a[key] !== undefined && a[key] !== "" && Number.isFinite(Number(a[key]));
-    const labels = {propertyPrice:["Prezzo immobile","Property price"],roi:["ROI riportato","Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:["Cashflow annuo riportato","Reported annual cash flow"],gross:["Ricavi annui riportati","Reported annual revenue"],risk:["Rischio riportato","Reported risk"],occupancy:["Occupazione riportata","Reported occupancy"]};
-    const format = (key,value,lang) => ["roi","occupancy"].includes(key) ? `${Number(value)}%` : key === "risk" ? `${Number(value)}/100` : new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:2}).format(Number(value));
+    const evidence = String(doc.extractedText || "").replace(/\s+/g," ");
+    const equityROI = a.roiBasis === "equity" || /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(evidence);
+    const propertyROI = a.roiBasis === "property";
+    const afterMortgage = a.cashflowBasis === "after_mortgage" || /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(evidence);
+    const keys = {propertyPrice:["Prezzo immobile","Property price"],roi:[equityROI ? "ROI sul capitale proprio" : propertyROI ? "ROI sul valore immobile" : "ROI riportato",equityROI ? "Return on equity" : propertyROI ? "ROI on property value" : "Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:[afterMortgage ? "Cashflow annuo dopo mutuo" : "Cashflow annuo riportato",afterMortgage ? "Annual cash flow after mortgage" : "Reported annual cash flow"],gross:["Ricavi annui","Annual revenue"],risk:["Indice rischio del report","Report risk index"],occupancy:["Occupazione riportata","Reported occupancy"]};
     const compare = /(confront|compar)/i.test(query);
+    const summarize = /(riassum|sintesi|riepilog|summar)/i.test(query);
+    const interpret = /(interpret|analizz|analyz|convien|worth|sostenib|sustainab)/i.test(query);
+    const requested = [
+      ["roi",/\broi\b|rendimento|return on equity/],
+      ["cashflow",/cashflow|cash flow|flusso di cassa/],
+      ["risk",/rischio|\brisk\b/],
+      ["mortgage",/mutuo|finanziamento|mortgage|\bloan\b/],
+      ["gross",/ricavi|revenue/],
+      ["equity",/capitale proprio|\bequity\b/],
+      ["propertyPrice",/prezzo|property price/],
+      ["occupancy",/occupazion|occupancy/]
+    ].filter(([,pattern])=>pattern.test(query)).map(([key])=>key);
+    const mode = compare ? "compare" : summarize ? "summary" : interpret || requested.length !== 1 ? "interpretation" : requested[0];
     const render = lang => {
-        const en = lang === "en";
-        const lines = [en ? `Source: ${doc.fileName}` : `Fonte: ${doc.fileName}`];
-        const keys = Object.keys(labels).filter(has);
-        if(!keys.length) lines.push(en ? "Text extracted, but insufficient financial data recognized for an investment analysis." : "Testo estratto, ma non ho riconosciuto dati finanziari sufficienti per analizzare l’investimento.");
-        for(const key of keys){
-            let line = `${labels[key][en ? 1 : 0]}: ${format(key,a[key],lang)}`;
-            // Compare only identically named metrics; do not substitute ROI on property for ROI on equity.
-            if(compare && key !== "roi" && live[key] !== null && live[key] !== undefined && live[key] !== "" && Number.isFinite(Number(live[key]))) line += en ? ` | current simulation: ${format(key,live[key],lang)}` : ` | simulazione attuale: ${format(key,live[key],lang)}`;
-            lines.push(line);
+        const en = lang === "en", locale = en ? "en-GB" : "it-IT";
+        const fixedPercent = (value,digits=1) => `${new Intl.NumberFormat(locale,{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(Number(value))}%`;
+        const number = (value,digits=2) => new Intl.NumberFormat(locale,{maximumFractionDigits:digits,useGrouping:true}).format(Number(value));
+        const money = value => new Intl.NumberFormat(locale,{style:"currency",currency:"EUR",minimumFractionDigits:0,maximumFractionDigits:2,useGrouping:true}).format(Number(value));
+        const percent = value => `${number(value)}%`;
+        const format = (key,value) => ["roi","occupancy"].includes(key) ? percent(value) : key === "risk" ? `${number(value)}/100` : money(value);
+        const source = en ? `Source: ${doc.fileName}` : `Fonte: ${doc.fileName}`;
+        const missing = key => en ? `I did not recognize ${keys[key][1].toLowerCase()} in this PDF. I cannot replace it with a default.` : `Non ho riconosciuto ${keys[key][0].toLowerCase()} nel PDF. Non lo sostituisco con un valore predefinito.`;
+        const lines=[];
+        const metric = key => has(key) ? `${keys[key][en?1:0]}: ${format(key,a[key])}.` : missing(key);
+        const loanRatio = has("mortgage") && has("propertyPrice") && Number(a.propertyPrice)>0 ? 100*Number(a.mortgage)/Number(a.propertyPrice) : null;
+        if(mode === "summary"){
+            lines.push(en ? "Recognized PDF data" : "Dati riconosciuti nel PDF");
+            const known=Object.keys(keys).filter(has);
+            if(!known.length) lines.push(en ? "Text extracted, but insufficient financial metrics recognized." : "Testo estratto, ma non ho riconosciuto indicatori finanziari sufficienti.");
+            for(const key of known) lines.push(metric(key));
+            lines.push(en ? "These are the document's figures and assumptions; missing values are not estimated." : "Sono dati e ipotesi del documento; i valori mancanti non vengono stimati.");
+        }else if(mode === "roi"){
+            lines.push(metric("roi"));
+            if(has("roi") && equityROI){
+                lines.push(en ? `Under the report assumptions, each €100 of equity produces about ${money(a.roi)} in annual net cash flow.` : `Nelle ipotesi del report, ogni 100 € di capitale proprio genera circa ${money(a.roi)} di cashflow netto annuo.`);
+                if(has("cashflow") && has("equity") && Number(a.equity)>0){
+                    const calculated=100*Number(a.cashflow)/Number(a.equity);
+                    lines.push(en ? `Check: ${money(a.cashflow)} ÷ ${money(a.equity)} × 100 = ${percent(calculated)}.` : `Verifica: ${money(a.cashflow)} ÷ ${money(a.equity)} × 100 = ${percent(calculated)}.`);
+                    lines.push(Math.abs(calculated-Number(a.roi))<=.15 ? (en ? "The calculation is consistent with the rounded ROI in the PDF." : "Il calcolo è coerente con il ROI arrotondato del PDF.") : (en ? "The calculation differs from the reported ROI: verify the report's calculation basis." : "Il calcolo differisce dal ROI riportato: verifica la base di calcolo del report."));
+                }
+                if(has("cashflow") && has("propertyPrice") && Number(a.propertyPrice)>0) lines.push(en ? `Cash flow/property price ratio: ${percent(100*Number(a.cashflow)/Number(a.propertyPrice))}. This uses a different denominator from return on equity.` : `Rapporto cashflow/prezzo immobile: ${percent(100*Number(a.cashflow)/Number(a.propertyPrice))}. Ha una base diversa dal ROI sul capitale proprio.`);
+            }else if(has("roi") && propertyROI) lines.push(en ? "The report identifies ROI on property value. This must not be treated as return on equity." : "Il report identifica il ROI sul valore dell’immobile. Non va confuso con il rendimento sul capitale proprio.");
+            else if(has("roi")) lines.push(en ? "The PDF does not identify the ROI calculation basis clearly enough; I cannot attribute it to equity or property value." : "Il PDF non identifica abbastanza chiaramente la base del ROI: non lo attribuisco al capitale proprio o al valore dell’immobile.");
+        }else if(mode === "cashflow"){
+            lines.push(metric("cashflow"));
+            if(has("cashflow")){
+                lines.push(en ? `Monthly average calculated as annual cash flow ÷ 12: ${money(Number(a.cashflow)/12)}. Actual monthly income may vary.` : `Media mensile calcolata come cashflow annuo ÷ 12: ${money(Number(a.cashflow)/12)}. I singoli mesi possono avere risultati diversi.`);
+                lines.push(afterMortgage ? (en ? "The report explicitly labels this cash flow as after mortgage payments." : "Il report indica esplicitamente che questo cashflow è dopo il mutuo.") : (en ? "The extracted text does not establish whether mortgage payments are included." : "Dal testo estratto non è chiaro se le rate del mutuo siano incluse."));
+            }
+        }else if(mode === "mortgage"){
+            lines.push(metric("mortgage"));
+            if(loanRatio!==null) lines.push(en ? `Loan/property price ratio: ${percent(loanRatio)}.` : `Rapporto mutuo/prezzo immobile: ${percent(loanRatio)}.`);
+            if(has("financingRate")) lines.push(en ? `Assumed interest rate: ${percent(a.financingRate)}.` : `Tasso ipotizzato: ${percent(a.financingRate)}.`);
+            if(has("debtService")) lines.push(en ? `Estimated annual loan payments: ${money(a.debtService)}.` : `Rate annue stimate: ${money(a.debtService)}.`);
+            lines.push(en ? "These are financing assumptions, not a bank offer or approval." : "Sono ipotesi di finanziamento, non un’offerta o un’approvazione bancaria.");
+        }else if(mode === "risk"){
+            lines.push(metric("risk"));
+            if(loanRatio!==null) lines.push(en ? `The loan covers ${percent(loanRatio)} of the property price, so changes in revenue and costs also affect equity returns.` : `Il mutuo copre il ${percent(loanRatio)} del prezzo: variazioni di ricavi e costi incidono anche sul rendimento del capitale proprio.`);
+            lines.push(en ? "This is the report's scenario index, not a probability of loss. Evaluate the underlying occupancy, cost and financing assumptions." : "È un indice dello scenario del report, non una probabilità di perdita. Va letto insieme alle ipotesi di occupazione, costi e finanziamento.");
+        }else if(Object.hasOwn(keys,mode)){
+            lines.push(metric(mode));
+            if(mode === "gross") lines.push(en ? "Gross revenue is not net cash flow: operating costs, taxes and financing must be accounted for separately." : "I ricavi lordi non sono il cashflow netto: costi operativi, imposte e finanziamento vanno considerati separatamente.");
+        }else if(mode === "compare"){
+            for(const key of Object.keys(keys).filter(has)){
+                let line=metric(key);
+                if(key!=="roi" && live[key]!==null && live[key]!==undefined && live[key]!=="" && Number.isFinite(Number(live[key]))) line+=en ? ` Current simulation: ${format(key,live[key])}.` : ` Simulazione attuale: ${format(key,live[key])}.`;
+                lines.push(line);
+            }
+            lines.push(en ? "Only matching recognized metrics are compared. ROI requires the same calculation basis; missing simulation values are not estimated." : "Confronto solo indicatori omogenei riconosciuti. Per il ROI serve la stessa base di calcolo; i dati mancanti della simulazione non vengono stimati.");
+        }else{
+            lines.push(en ? "Interpretation of the report" : "Interpretazione del report");
+            if(has("roi")) lines.push(metric("roi"));
+            if(has("cashflow")){
+                lines.push(en ? `The scenario reports ${money(a.cashflow)} in annual cash flow (${money(Number(a.cashflow)/12)} per month on average).` : `Lo scenario riporta ${money(a.cashflow)} di cashflow annuo (${money(Number(a.cashflow)/12)} al mese in media).`);
+                lines.push(Number(a.cashflow)>0 ? (en ? "The model has a positive surplus under the stated assumptions." : "Il modello produce un avanzo positivo nelle ipotesi indicate.") : (en ? "The model has no positive surplus under the stated assumptions." : "Il modello non produce un avanzo positivo nelle ipotesi indicate."));
+                if(afterMortgage) lines.push(en ? "The PDF explicitly states that cash flow is after mortgage payments." : "Il PDF specifica che il cashflow è dopo il mutuo.");
+            }
+            if(loanRatio!==null) lines.push(en ? `Calculated loan/property price ratio: ${fixedPercent(loanRatio)}. Financing increases sensitivity of equity returns to revenue and cost changes.` : `Rapporto mutuo/prezzo calcolato dai valori del PDF: ${fixedPercent(loanRatio)}. Il finanziamento rende il rendimento del capitale proprio sensibile a variazioni di ricavi e costi.`);
+            if(has("risk")) lines.push(metric("risk"));
+            if(!has("roi") && !has("cashflow")) lines.push(en ? "Insufficient recognized financial data to assess profitability." : "Non ho riconosciuto dati finanziari sufficienti per valutare la redditività.");
+            lines.push(en ? "Before relying on this scenario, check occupancy assumptions, recurring costs, taxes and acquisition costs against the actual property data." : "Per valutare lo scenario, confronta occupazione, costi ricorrenti, imposte e spese di acquisto con i dati effettivi dell’immobile.");
         }
-        if(compare) lines.push(en ? "Only matching recognized metrics are compared. ROI requires the same calculation basis; missing simulation values are not estimated." : "Confronto solo indicatori omogenei riconosciuti. Per il ROI serve la stessa base di calcolo; i dati mancanti della simulazione non vengono stimati.");
-        else {
-            if(has("cashflow")) lines.push(Number(a.cashflow) > 0 ? (en ? "The reported annual cash flow is positive. Check which operating costs, taxes and loan payments the report includes." : "Il cashflow annuo riportato è positivo. Verifica quali costi operativi, imposte e rate del mutuo include il report.") : (en ? "The reported annual cash flow is zero or negative; check costs and financing." : "Il cashflow annuo riportato è nullo o negativo: verifica costi e finanziamento."));
-            if(has("mortgage") && has("propertyPrice") && Number(a.propertyPrice)>0) lines.push(en ? `Loan/property price ratio calculated from the PDF: ${(100*Number(a.mortgage)/Number(a.propertyPrice)).toFixed(1)}%.` : `Rapporto mutuo/prezzo calcolato dai valori del PDF: ${(100*Number(a.mortgage)/Number(a.propertyPrice)).toFixed(1)}%.`);
-        }
-        lines.push(en ? "These are reported figures and assumptions, not verified operating results. Missing metrics are not replaced with simulation defaults." : "Sono valori e ipotesi riportati nel documento, non risultati operativi verificati. Gli indicatori mancanti non vengono sostituiti con valori della simulazione.");
+        if(mode!=="summary" && mode!=="compare") lines.push(en ? "This explains the PDF scenario; it does not verify actual operating results." : "Questa lettura spiega lo scenario del PDF; non verifica risultati operativi reali.");
+        lines.push(source);
         return lines.join("\n");
     };
-    return {type:"document_grounded",confidence:1,textIT:render("it"),textEN:render("en"),suggestionsIT:["Quali dati mancano nel PDF?","Confrontalo con la simulazione"],suggestionsEN:["Which data are missing in the PDF?","Compare it with the simulation"],signals:["current_pdf_only"],metadata:{source:"extracted_pdf_text",fileName:doc.fileName,documentId:doc.id}};
+    return {type:"document_grounded",confidence:1,textIT:render("it"),textEN:render("en"),suggestionsIT:mode==="summary" ? ["Interpretami il PDF","E il ROI?","Quali dati mancano nel PDF?"] : ["Riassumi questo PDF","Quali dati mancano nel PDF?"],suggestionsEN:mode==="summary" ? ["Interpret this PDF","What about ROI?","Which data are missing in the PDF?"] : ["Summarize this PDF","Which data are missing in the PDF?"],signals:["current_pdf_only"],metadata:{source:"extracted_pdf_text",fileName:doc.fileName,documentId:doc.id,answerMode:mode}};
 };
 
 window.rbAnalyzeUploadedPDF = async function(file){
