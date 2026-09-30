@@ -156,9 +156,11 @@ NON rompe altri componenti
 
 </style>
 
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20260930-9">
 </head>
 
-<body>
+<body class="rb-secondary-page rb-business-page">
 
 <div id="global-header"></div>
 
@@ -170,15 +172,15 @@ NON rompe altri componenti
 <div class="hero-content">
 
 <h1
-data-it="🤝 Partnership RendimentoBB"
-data-en="🤝 RendimentoBB Partnership">
-🤝 Partnership RendimentoBB
+data-it="Collabora con RendimentoBB"
+data-en="Partner with RendimentoBB">
+Collabora con RendimentoBB
 </h1>
 
 <p
-data-it="Ricevi clienti già pronti a investire in B&B"
-data-en="Get clients ready to invest in B&B properties">
-Ricevi clienti già pronti a investire in B&B
+data-it="Metti la tua esperienza al servizio di chi valuta un investimento B&B"
+data-en="Bring your expertise to people assessing a B&B investment">
+Metti la tua esperienza al servizio di chi valuta un investimento B&B
 </p>
 
 </div>
@@ -200,40 +202,40 @@ Perché collaborare con noi
 
 <div class="benefit">
 <strong
-data-it="🎯 Lead qualificati"
-data-en="🎯 Qualified leads">
-🎯 Lead qualificati
+data-it="Richieste contestualizzate"
+data-en="Contextual enquiries">
+Richieste contestualizzate
 </strong>
 <span
-data-it="Utenti che hanno già simulato ROI e sono pronti ad agire"
-data-en="Users who already simulated ROI and are ready to act">
-Utenti che hanno già simulato ROI e sono pronti ad agire
+data-it="Un percorso che collega analisi, esigenze e servizi professionali"
+data-en="A workflow connecting analysis, needs and professional services">
+Un percorso che collega analisi, esigenze e servizi professionali
 </span>
 </div>
 
 <div class="benefit">
 <strong
-data-it="📊 Dati reali"
-data-en="📊 Real data">
-📊 Dati reali
+data-it="Informazioni di scenario"
+data-en="Scenario information">
+Informazioni di scenario
 </strong>
 <span
-data-it="Ogni lead ha dati concreti su investimento e budget"
-data-en="Each lead includes real investment data and budget">
-Ogni lead ha dati concreti su investimento e budget
+data-it="Budget e ipotesi dichiarati dall’utente, da approfondire insieme"
+data-en="User-provided budgets and assumptions to assess together">
+Budget e ipotesi dichiarati dall’utente, da approfondire insieme
 </span>
 </div>
 
 <div class="benefit">
 <strong
-data-it="💰 Alta conversione"
-data-en="💰 High conversion">
-💰 Alta conversione
+data-it="Collaborazioni mirate"
+data-en="Focused partnerships">
+Collaborazioni mirate
 </strong>
 <span
-data-it="Clienti caldi, non traffico casuale"
-data-en="Warm clients, not random traffic">
-Clienti caldi, non traffico casuale
+data-it="Competenze, territorio e obiettivi al centro del confronto"
+data-en="Expertise, location and goals at the centre of each discussion">
+Competenze, territorio e obiettivi al centro del confronto
 </span>
 </div>
 
@@ -246,21 +248,24 @@ Diventa partner
 </h2>
 
 <p
-data-it="Collaboriamo con banche, broker mutui e agenzie immobiliari."
-data-en="We work with banks, mortgage brokers and real estate agencies.">
-Collaboriamo con banche, broker mutui e agenzie immobiliari.
+data-it="Proponi una collaborazione per servizi immobiliari, finanziari o di gestione."
+data-en="Propose a partnership for property, finance or management services.">
+Proponi una collaborazione per servizi immobiliari, finanziari o di gestione.
 </p>
 
-<input id="name"
+<label class="rb-form-label" for="name" data-it="Nome azienda" data-en="Company name">Nome azienda</label>
+<input id="name" autocomplete="organization"
 data-it-placeholder="Nome azienda"
 data-en-placeholder="Company name"
 placeholder="Nome azienda">
 
-<input id="email"
+<label class="rb-form-label" for="email" data-it="Email" data-en="Email">Email</label>
+<input id="email" type="email" autocomplete="email"
 data-it-placeholder="Email"
 data-en-placeholder="Email"
 placeholder="Email">
 
+<label class="rb-form-label" for="message" data-it="Servizio e area di attività" data-en="Service and area of operation">Servizio e area di attività</label>
 <textarea id="message"
 data-it-placeholder="Descrivi il tuo servizio"
 data-en-placeholder="Describe your service"
@@ -272,9 +277,9 @@ data-en="Send request">
 Invia richiesta
 </button>
 
-<div id="success" class="success"
-data-it="✅ Richiesta inviata. Ti contatteremo entro 24h"
-data-en="✅ Request sent. We will contact you within 24h">
+<div id="success" class="success" role="status" aria-live="polite"
+data-it="Richiesta ricevuta. Valuteremo la proposta e ti contatteremo via email."
+data-en="Request received. We will assess your proposal and contact you by email.">
 ✅ Richiesta inviata
 </div>
 
@@ -361,7 +366,5 @@ window.savePartner = async function(){
 };
 
 </script>
-
-<link rel="stylesheet" href="/css/product-2027.css?v=20260930-6">
 </body>
 </html>

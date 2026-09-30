@@ -364,3 +364,108 @@ body.immobili-page section.hero.hero-bg.rome .page-title h1 span { color: #142b2
 .global-footer a:not(.btn-primary):not(.btn-secondary) { color: #c9d8d2; }
 body.academy-page .cta-box { background: #edf5ee !important; border: 1px solid #dce6df; box-shadow: none !important; }
 body.academy-page .cta-box :is(h2,p) { color: #142b25 !important; text-shadow: none !important; }
+
+/* FIX09 — secondary pages share the product palette. All rules are scoped. */
+body.rb-secondary-page { background: #f5f7f3 !important; color: #142b25; }
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: #142b25 !important; min-height: 0 !important; padding: 64px 24px !important;
+  isolation: isolate;
+}
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero)::before,
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero)::after,
+body.rb-business-page .hero > .hero-bg { display: none !important; }
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) h1 {
+  color: #142b25 !important; -webkit-text-fill-color: #142b25 !important;
+  text-shadow: none !important; font-size: clamp(32px, 4.2vw, 54px) !important;
+  letter-spacing: -.045em; line-height: 1.08 !important;
+}
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) p {
+  color: #536960 !important; -webkit-text-fill-color: #536960 !important;
+  text-shadow: none !important; line-height: 1.65 !important;
+}
+body.rb-secondary-page :is(.hero-badge, .strategy-badge, .kpi-label, .hero-trust, .hero-highlight, .hero-highlights, .hero-stats > div, .opening-hero__proof span) {
+  color: #24533e !important; background: #edf5ee !important; border-color: #dce6df !important;
+  box-shadow: none !important; text-shadow: none !important; backdrop-filter: none !important;
+}
+body.rb-secondary-page .hero :is(.kpi-list, .kpi-list span, .hero-trust span) { color: #536960 !important; text-shadow: none !important; }
+body.rb-secondary-page :is(.hero-stats, .hero-highlights, .hero-trust) { flex-wrap: wrap; }
+body.rb-secondary-page :is(.hero-highlight p, .hero-stats span, .hero-stats strong) { color: #24533e !important; }
+body.rb-secondary-page .hero .container { padding-block: 0 !important; }
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card, .roi-kpi > div, .opening-step, .opening-signal, .opening-cost-grid > div) {
+  background: #fff !important; border: 1px solid #dce6df !important; border-radius: 16px !important;
+  box-shadow: 0 6px 22px rgb(20 43 37 / 4%) !important; backdrop-filter: none !important;
+}
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card) :is(h2,h3) { color: #142b25 !important; text-shadow: none !important; }
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card) p { color: #536960 !important; -webkit-text-fill-color: #536960 !important; }
+body.rb-secondary-page :is(.benefit, .market-card) span { color: #536960 !important; }
+body.rb-secondary-page :is(.cta-box, .premium-box, .highlight-box, .cta-section) {
+  background: #edf5ee !important; border: 1px solid #dce6df !important; border-radius: 18px !important;
+  box-shadow: none !important; color: #142b25 !important;
+}
+body.rb-secondary-page :is(.cta-box, .premium-box, .highlight-box, .cta-section) :is(h2,h3,p,strong,span) {
+  color: #142b25 !important; -webkit-text-fill-color: #142b25 !important; text-shadow: none !important;
+}
+body.rb-secondary-page :is(.premium-features span, .highlight-box, .hero-highlight) { border-color: #dce6df !important; }
+body.rb-secondary-page :is(.btn-primary, .btn-main, .opening-button--primary),
+body.rb-secondary-page :is(.cta-box, .premium-box) > a:not(.dashboard-btn),
+body.rb-business-page .card > button {
+  background: #087f5b !important; color: #fff !important; -webkit-text-fill-color: #fff !important;
+  border: 1px solid #087f5b !important; border-radius: 10px !important; box-shadow: none !important;
+  text-shadow: none !important; min-height: 46px;
+}
+body.rb-secondary-page :is(.btn-outline, .opening-button--ghost) {
+  background: #fff !important; color: #24533e !important; -webkit-text-fill-color: #24533e !important;
+  border: 1px solid #cbd8ce !important; box-shadow: none !important; border-radius: 10px !important;
+}
+body.rb-secondary-page :is(.btn-primary, .btn-main, .opening-button--primary) span { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+body.rb-secondary-page :is(.section, .academy-content) { background: transparent !important; }
+body.rb-secondary-page :is(.section > .container, .academy-content) { max-width: 1120px; }
+body.rb-business-page > .container { max-width: 1040px; padding: 32px 24px 64px; }
+body.rb-business-page .card { padding: 32px; }
+body.rb-business-page .benefit { padding: 20px; background: #fafbf8 !important; }
+body.rb-business-page .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+body.rb-business-page .benefit strong { color: #142b25 !important; }
+body.rb-business-page .rb-form-label { display: block; margin-top: 20px; font-size: 13px; font-weight: 650; color: #142b25; }
+body.rb-business-page :is(input,textarea) { box-sizing: border-box; margin-top: 6px; min-height: 46px; border: 1px solid #cbd8ce; background: #fff; color: #142b25; font: inherit; font-size: 16px; }
+body.rb-business-page textarea { min-height: 110px; resize: vertical; }
+body.rb-business-page .card > button { width: auto; padding: 12px 24px; }
+body.rb-business-page .success { color: #066447; }
+body.rb-business-page .trust { color: #536960; margin-top: 28px; }
+body.rb-secondary-page .opening-eyebrow--light { color: #066447; }
+body.opening-bnb-page {
+  --opening-bg: #f5f7f3; --opening-text: #142b25; --opening-muted: #536960;
+  --opening-border: #dce6df; --opening-green: #087f5b; --opening-green-dark: #066447;
+  --opening-navy: #142b25; --opening-navy-soft: #24533e;
+}
+body.rb-secondary-page .opening-hero__inner { gap: 36px; }
+body.rb-secondary-page .opening-hero__proof span { border: 1px solid #dce6df; }
+body.rb-success-page main > .section > .container { background: #fff; border: 1px solid #dce6df; border-radius: 20px; padding: 32px 24px; }
+body.rb-success-page main :is(h1,p) { color: #142b25 !important; }
+/* Login keeps its dedicated authentication flow and adopts the brand surfaces. */
+body.rb-login-page { background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important; color: #142b25; }
+body.rb-login-page .login-wrapper { box-sizing: border-box; }
+body.rb-login-page .login-card { box-sizing: border-box; background: #fff; color: #142b25; border: 1px solid #dce6df; border-radius: 20px; box-shadow: 0 12px 40px rgb(20 43 37 / 8%); padding: 32px 24px; }
+body.rb-login-page input { box-sizing: border-box; background: #fff; color: #142b25; font-size: 16px; border-color: #cbd8ce; }
+body.rb-login-page :is(.btn, .auth-tab.active, .lang-btn.active) { background: #087f5b; color: #fff; }
+body.rb-login-page .lang-switch { background: #edf5ee; }
+body.rb-login-page .lang-btn:not(.active) { color: #536960; }
+body.rb-login-page .back-home { color: #066447; }
+@media(max-width:768px) {
+  body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) { padding: 40px 20px !important; }
+  body.rb-secondary-page .hero-grid { grid-template-columns: 1fr !important; }
+  body.rb-business-page > .container { padding: 20px 16px 40px; }
+  body.rb-business-page .card { padding: 22px 18px; }
+  body.rb-business-page .grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 26px; }
+  body.rb-business-page .card > button { width: 100%; }
+  body.rb-secondary-page :is(.cta-box, .premium-box) { padding: 28px 20px !important; }
+  body.rb-secondary-page .roi-kpi { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 12px !important; }
+  body.rb-secondary-page .roi-kpi > div { min-width: 0; padding: 20px 12px; }
+  body.rb-secondary-page .hero-market-snapshot { margin-top: 0 !important; }
+  body.rb-secondary-page .opening-hero__inner { grid-template-columns: 1fr !important; }
+}
+
+body.rb-secondary-page .internal-links a { background: #fff !important; color: #066447 !important; -webkit-text-fill-color: #066447 !important; border: 1px solid #dce6df; border-radius: 8px; padding: 10px 14px; }
+body.rb-secondary-page :is(.hero, .hero-roi) .btn-primary { animation: none !important; }
+body.rb-academy-guide .highlight-box { color: #142b25 !important; }
+body.rb-academy-guide .highlight-box :is(li,div) { color: #142b25 !important; }
