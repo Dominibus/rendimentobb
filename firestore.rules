@@ -31,11 +31,52 @@ service cloud.firestore {
           "subscriptionId",
           "subscriptionStatus",
           "priceId",
-          "currentPeriodEnd"
+          "currentPeriodEnd",
+          "stripeLiveMode",
+          "lastStripeEventId",
+          "lastStripeEventCreated",
+          "cancelAtPeriodEnd",
+          "sandboxPlan",
+          "sandboxStripeSessionId",
+          "sandboxStripeCustomerId",
+          "sandboxSubscriptionId",
+          "sandboxSubscriptionStatus",
+          "sandboxCancelAtPeriodEnd",
+          "sandboxCurrentPeriodEnd",
+          "sandboxStripeLiveMode",
+          "sandboxLastStripeEventId",
+          "sandboxLastStripeEventCreated",
+          "sandboxUpdatedAt"
         ];
       }
 
       allow create: if isOwner()
+        && !request.resource.data.keys().hasAny([
+          "stripeSession",
+          "stripeSessionId",
+          "stripeCustomerId",
+          "customerId",
+          "subscription",
+          "subscriptionId",
+          "subscriptionStatus",
+          "priceId",
+          "currentPeriodEnd",
+          "stripeLiveMode",
+          "lastStripeEventId",
+          "lastStripeEventCreated",
+          "cancelAtPeriodEnd",
+          "sandboxPlan",
+          "sandboxStripeSessionId",
+          "sandboxStripeCustomerId",
+          "sandboxSubscriptionId",
+          "sandboxSubscriptionStatus",
+          "sandboxCancelAtPeriodEnd",
+          "sandboxCurrentPeriodEnd",
+          "sandboxStripeLiveMode",
+          "sandboxLastStripeEventId",
+          "sandboxLastStripeEventCreated",
+          "sandboxUpdatedAt"
+        ])
         && request.resource.data.email is string
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.plan is string

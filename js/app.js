@@ -1081,13 +1081,13 @@ if(oldModal){
       desc_en: "You're analyzing an investment with incomplete data. This is where most investors make mistakes.",
 
       features_it: [
-        "Simulazioni illimitate",
+        "Simulazioni e scenari salvati",
         "Analisi ROI avanzata",
         "Confronto con benchmark indicativi",
         "Indicatori base di rischio"
       ],
       features_en: [
-        "Unlimited simulations",
+        "Simulations and saved scenarios",
         "Advanced ROI analysis",
         "Indicative market benchmark comparison",
         "Basic risk indicators"

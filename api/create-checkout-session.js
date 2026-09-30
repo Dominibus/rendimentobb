@@ -1,3 +1,4 @@
+import { getPlanForScope } from "../js/account-plan.js";
 import Stripe from "stripe";
 import admin from "firebase-admin";
 import { getStripePrices } from "../lib/stripe-plan-config.js";
@@ -106,7 +107,7 @@ export default async function handler(req, res) {
 
     const currentPlan =
       String(
-        userSnapshot.data()?.plan || "free"
+        getPlanForScope(userSnapshot.data() || {}, process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_"))
       )
         .toLowerCase()
         .trim();

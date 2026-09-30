@@ -1,0 +1,128 @@
+/* RendimentoBB • product surfaces, September 2026.
+   Preserve existing application IDs, tab state and financial behavior. */
+:root {
+  --rb-ink: #142b25;
+  --rb-muted: #536960;
+  --rb-green: #087f5b;
+  --rb-green-hover: #066447;
+  --rb-line: #dce6df;
+  --rb-canvas: #f5f7f3;
+  --rb-surface: #fff;
+  --rb-radius: 20px;
+  --rb-shadow: 0 12px 36px rgb(20 43 37 / 5%);
+}
+html { scroll-padding-top: 100px; }
+body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, input, select, textarea { font: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid #087f5b;
+  outline-offset: 4px;
+}
+.rb-header .rb-inner {
+  width: min(1440px, calc(100% - 48px));
+  gap: 20px;
+  min-height: 76px;
+}
+.rb-header { background: rgb(255 255 255 / 96%); border-bottom: 1px solid var(--rb-line); box-shadow: none; }
+.rb-header .rb-logo { width: 140px; max-height: 48px; object-fit: contain; }
+.rb-header .rb-center { gap: 17px; flex-wrap: nowrap; }
+.rb-header .rb-center a { white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--rb-muted); }
+.rb-header .rb-center a:hover { color: var(--rb-green); }
+.rb-header .rb-right { gap: 10px; flex-shrink: 0; }
+.rb-header #user-area { gap: 8px; }
+.rb-header .rb-lang button { min-height: 34px; }
+body.home-page .rb-home-hero {
+  padding: 54px 0 32px;
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3;
+}
+body.home-page .rb-home-hero::before { opacity: .3; }
+body.home-page .rb-home-hero-grid { gap: 60px; min-height: 440px; }
+body.home-page .rb-home-hero h1 { font-size: clamp(38px, 4.8vw, 62px); color: var(--rb-ink); line-height: 1.06; font-weight: 650; }
+body.home-page .rb-home-lead { font-size: 18px; max-width: 530px; color: var(--rb-muted); }
+body.home-page .rb-home-eyebrow { background: transparent; border: 0; padding-left: 0; letter-spacing: .09em; color: var(--rb-green); }
+body.home-page .rb-home-benefits li { background: #fff; border: 1px solid var(--rb-line); font-weight: 600; box-shadow: none; }
+body.home-page .rb-home-primary { background: var(--rb-green); box-shadow: none; border-radius: 12px; min-height: 50px; }
+body.home-page .rb-home-primary:hover { background: var(--rb-green-hover); transform: translateY(-1px); }
+body.home-page .rb-home-secondary { border-radius: 12px; }
+body.home-page .rb-home-visual::before { content: none; }
+.rb-scenario-canvas {
+  width: 100%; max-width: 455px; padding: 25px;
+  background: var(--rb-surface); border: 1px solid var(--rb-line); border-radius: 24px;
+  box-shadow: 0 28px 70px rgb(20 43 37 / 9%); color: var(--rb-ink); text-align: left;
+}
+.rb-canvas-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.rb-eyebrow { font-size: 10px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; color: var(--rb-muted); }
+.rb-status-pill { padding: 5px 9px; border-radius: 6px; background: #edf5ee; color: #326344; font-size: 11px; font-weight: 600; }
+.rb-scenario-canvas h3 { margin: 18px 0 4px; font-size: 23px; letter-spacing: -.025em; color: var(--rb-ink); }
+.rb-canvas-subtitle { margin: 0; color: var(--rb-muted); font-size: 12px; }
+.rb-canvas-inputs { margin: 22px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rb-canvas-inputs div { border: 1px solid var(--rb-line); border-radius: 10px; padding: 12px; background: #fafbf8; }
+.rb-canvas-inputs dt { font-size: 11px; color: var(--rb-muted); margin-bottom: 5px; }
+.rb-canvas-inputs dd { margin: 0; font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.rb-canvas-result { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-block: 1px solid var(--rb-line); padding: 19px 0; }
+.rb-canvas-result strong { font-size: 40px; color: var(--rb-green); letter-spacing: -.055em; font-weight: 650; }
+.rb-canvas-result span { max-width: 130px; color: var(--rb-muted); font-size: 12px; line-height: 1.5; }
+.rb-canvas-flow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; color: var(--rb-muted); font-size: 11px; }
+.rb-canvas-note { font-size: 11px; line-height: 1.6; margin: 17px 0 0; color: var(--rb-muted); }
+body.home-page .rb-home-path-card,
+body.home-page .plan-card { border: 1px solid var(--rb-line); border-radius: var(--rb-radius); box-shadow: none; }
+body.home-page .plan-card.featured { border: 2px solid var(--rb-green); box-shadow: var(--rb-shadow); }
+body.home-page .plan-card .price { letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+body.home-page .plan-card li { line-height: 1.65; }
+body.dashboard-bg { background: var(--rb-canvas); color: var(--rb-ink); }
+body.dashboard-bg .dashboard-container { max-width: 1280px; }
+body.dashboard-bg .analysis-card,
+body.dashboard-bg .stats-card,
+body.dashboard-bg .db-card { border: 1px solid var(--rb-line); box-shadow: none; border-radius: 16px; }
+body.dashboard-bg .analysis-card h3 { color: var(--rb-ink); font-weight: 650; letter-spacing: -.015em; }
+body.dashboard-bg .metric strong,
+body.dashboard-bg .stats-card { font-variant-numeric: tabular-nums; }
+body.dashboard-bg .metric { gap: 16px; }
+body.dashboard-bg #dashboard-workspace-nav { border: 1px solid var(--rb-line); border-radius: 14px; background: #fff; box-shadow: none; padding: 6px; }
+body.dashboard-bg #dashboard-workspace-nav button { min-height: 44px; border-radius: 9px; font-size: 13px; }
+.rb-source-note {
+  width: min(1180px, calc(100% - 40px)); margin: 24px auto;
+  padding: 16px 20px; border: 1px solid var(--rb-line); border-left: 3px solid var(--rb-green);
+  border-radius: 12px; background: #f6faf5; color: var(--rb-ink); font-size: 13px;
+}
+.rb-source-note p { margin: 6px 0 0; font-size: 12px; line-height: 1.65; color: var(--rb-muted); }
+.rb-listing-worksheet { max-width: 760px; margin: 24px auto 0; padding: 28px; border: 1px solid var(--rb-line); border-radius: 20px; background: #fff; box-shadow: var(--rb-shadow); text-align: left; }
+.rb-listing-worksheet h4 { margin: 12px 0; font-size: 23px; letter-spacing: -.025em; color: var(--rb-ink); }
+.rb-listing-worksheet p { font-size: 13px; line-height: 1.65; color: var(--rb-muted); }
+.rb-listing-worksheet a { color: var(--rb-green); text-decoration: underline; text-underline-offset: 3px; }
+.rb-form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+.rb-form-grid label { font-size: 12px; font-weight: 600; color: var(--rb-ink); }
+.rb-form-grid input { display: block; box-sizing: border-box; width: 100%; min-height: 48px; margin-top: 8px; padding: 12px; border: 1px solid #cbd8ce; border-radius: 9px; background: #fafbf8; }
+body.immobili-page .btn-primary,
+body.mortgage-page .btn-primary { background: var(--rb-green); box-shadow: none; }
+body.report-page .report { border: 1px solid var(--rb-line); border-radius: 20px; box-shadow: var(--rb-shadow); }
+body.report-page .hero-metric strong { font-variant-numeric: tabular-nums; }
+@media (min-width: 769px) and (max-width: 1250px) {
+  .rb-header .rb-inner { width: calc(100% - 32px); gap: 14px; }
+  .rb-header .rb-logo { width: 115px; }
+  .rb-header .rb-center { gap: 12px; }
+  .rb-header .rb-center a[href="/aprire-bnb-conviene/"],
+  .rb-header .rb-center a[href="/about/"] { display: none; }
+}
+@media (max-width: 768px) {
+  .rb-header .rb-inner { width: calc(100% - 28px); min-height: 64px; gap: 8px; }
+  .rb-header .rb-logo { width: 105px; }
+  .rb-header .rb-center { display: none; }
+  .rb-header .rb-right { gap: 6px; }
+  body.home-page .rb-home-hero { padding-top: 34px; }
+  body.home-page .rb-home-hero-grid { grid-template-columns: 1fr; gap: 30px; min-height: auto; }
+  body.home-page .rb-home-hero h1 { font-size: clamp(34px, 8.8vw, 47px); }
+  body.home-page .rb-home-lead { font-size: 16px; }
+  body.home-page .rb-home-visual { min-height: auto; }
+  .rb-scenario-canvas { max-width: none; padding: 21px; }
+  .rb-form-grid { grid-template-columns: 1fr; }
+  .rb-listing-worksheet { padding: 20px; }
+  .rb-source-note { width: calc(100% - 32px); }
+  body.dashboard-bg .dashboard-container { width: calc(100% - 28px); }
+  body.dashboard-bg #dashboard-workspace-nav { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

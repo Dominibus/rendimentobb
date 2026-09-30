@@ -1,11 +1,14 @@
+import { stripeFieldName, buildStripeEntitlementUpdate } from "../lib/stripe-entitlements.js";
 import Stripe from "stripe"; 
 import admin from "firebase-admin";
-import { getStripePrices } from "../lib/stripe-plan-config.js";
+import { getStripePrices, assertStripeEventMode } from "../lib/stripe-plan-config.js";
 
 const stripe =
   new Stripe(
     process.env.STRIPE_SECRET_KEY
   );
+
+const IS_LIVE_STRIPE = process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_");
 
 const PLAN_BY_PRICE_ID = Object.freeze(
   Object.fromEntries(
@@ -161,7 +164,7 @@ async function findUserId(
       await db
         .collection("users")
         .where(
-          "stripeCustomerId",
+          stripeFieldName("stripeCustomerId", IS_LIVE_STRIPE),
           "==",
           customerId
         )
@@ -184,7 +187,7 @@ async function findUserId(
       await db
         .collection("users")
         .where(
-          "subscriptionId",
+          stripeFieldName("subscriptionId", IS_LIVE_STRIPE),
           "==",
           subscriptionId
         )
@@ -231,14 +234,12 @@ async function updateUserPlan(
 
       const lastEventCreated =
         Number(
-          currentData
-            ?.lastStripeEventCreated ||
+          currentData[stripeFieldName("lastStripeEventCreated", event.livemode)] ||
           0
         );
 
       const lastEventId =
-        currentData
-          ?.lastStripeEventId ||
+        currentData[stripeFieldName("lastStripeEventId", event.livemode)] ||
         null;
 
       if(
@@ -252,18 +253,8 @@ async function updateUserPlan(
       transaction.set(
         userRef,
         {
-          ...data,
-
-          lastStripeEventId:
-            event?.id || null,
-
-          lastStripeEventCreated:
-            incomingEventCreated,
-
-          updatedAt:
-            admin.firestore
-              .FieldValue
-              .serverTimestamp()
+          ...buildStripeEntitlementUpdate(data, event),
+          [stripeFieldName("updatedAt", event.livemode)]: admin.firestore.FieldValue.serverTimestamp()
         },
         {
           merge: true
@@ -348,6 +339,13 @@ export default async function handler(
           "Invalid webhook signature"
       });
 
+  }
+
+  try{
+    assertStripeEventMode(event);
+  }catch(error){
+    console.error("Stripe event environment mismatch");
+    return res.status(400).json({error: "Stripe event environment mismatch"});
   }
 
   try{

@@ -1,3 +1,5 @@
+import { resolveAccountPlan } from "./account-plan.js";
+import "./account-report-cache.js";
 // =============================== 
 // FIREBASE INIT – RENDIMENTOBB
 // VERSIONE SAAS MULTI PAGINA STABILE
@@ -239,7 +241,7 @@ let role = "user";
 if (docSnap.exists()) {
   const data = docSnap.data();
 
-  plan = data.plan || "free";
+  plan = resolveAccountPlan(data, window.location.hostname);
   role = data.role || "user";
   
   window.userName = data.name || "";
@@ -473,6 +475,8 @@ function updateUserUI(user) {
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
+
+  window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
 
   window.currentUser = user;
   window.firebaseReady = false;

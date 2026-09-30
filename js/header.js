@@ -757,7 +757,7 @@ if(isAdmin){
   badge = `<span class="badge-pro">ADMIN</span>`;
 }
 else if(access.isPro){
-  badge = `<span class="badge-pro">PRO</span>`;
+  badge = `<span class="badge-pro">${window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
 }
 else if(access.isInvestor){
   badge = `<span class="badge-pro">INVESTOR</span>`;
@@ -888,6 +888,7 @@ Assistente RendimentoBB
       if(mobileLogout){
         mobileLogout.onclick = async (e)=>{
           e.preventDefault();
+          window.RBReportCache?.clear(sessionStorage, localStorage);
           await signOut(auth);
           location.reload();
         };
@@ -935,7 +936,8 @@ Assistente RendimentoBB
 
    // LOGOUT
 document.getElementById("logout").onclick = async ()=>{
-  await signOut(auth);
+  window.RBReportCache?.clear(sessionStorage, localStorage);
+          await signOut(auth);
   location.reload();
 };
 

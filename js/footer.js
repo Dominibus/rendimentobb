@@ -183,9 +183,9 @@ Contatti
 <div class="footer-trust">
 
 <span
-data-it="✔ ROI reale e cashflow"
-data-en="✔ Real ROI and cashflow">
-✔ ROI reale e cashflow
+data-it="✔ ROI stimato e cashflow"
+data-en="✔ Estimated ROI and cashflow">
+✔ ROI stimato e cashflow
 </span>
 
 <span

@@ -1,3 +1,4 @@
+import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
@@ -251,44 +252,8 @@ function closeAllOverlays(){
 }
 
 // 🔥 POPUP PLAN CONTROL (NUOVO - PRECISO)
-function triggerPlanPopup(plan){
-
-  setTimeout(()=>{
-
-    // 🔒 evita duplicazioni
-    if(
-      document.getElementById("investor-overlay")
-    ){
-      return;
-    }
-
-    const currentPlan = String(plan || "").toLowerCase();
-
-    // 🔥 FREE + INVESTOR → STESSO OVERLAY (FORTE)
-    if(currentPlan === "free"){
-
-    if(typeof showInvestorOverlay === "function"){
-        showInvestorOverlay();
-    }
-
-}
-
-// 🟢 INVESTOR
-
-else if(currentPlan === "investor"){
-
-   
-}
-
-// 🟢 PRO / ADMIN
-    else{
-
-      
-    }
-
-  },1000);
-
-}
+// Upgrade prompts are opened by an explicit action, never on demo entry.
+function triggerPlanPopup(){ return; }
 // ================= CHART DATA =================
 
 let roiValues = [];
@@ -1815,55 +1780,6 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-if(
-  window.RB_USER?.isInvestor &&
-  !isPro()
-){
-
-  container.innerHTML = `
-
-  <div class="analysis-card">
-
-    <h3>
-    🏆 Best Investment
-    </h3>
-
-    <div style="
-    margin-top:20px;
-    text-align:center;
-    ">
-
-      <div style="
-      font-size:42px;
-      margin-bottom:10px;
-      ">
-      🔒
-      </div>
-
-      <div style="
-      color:#64748b;
-      margin-bottom:15px;
-      ">
-      Upgrade a PRO per vedere
-      il miglior investimento
-      del portafoglio.
-      </div>
-
-      <button
-      class="btn-primary"
-      onclick="goToUpgrade()">
-      🚀 Passa a PRO
-      </button>
-
-    </div>
-
-  </div>
-
-  `;
-
-  return;
-}  
-
 const pro = isPro();
 
 const investor =
@@ -1887,11 +1803,11 @@ font-size:11px;
 font-weight:600;
 box-shadow:0 4px 12px rgba(16,185,129,0.4);
 ">
-TOP ROI
+SCENARIO
 </div>
 
 <h3 style="margin-bottom:16px">
-🏆 ${t("Miglior investimento","Best investment")}
+🏆 ${t("Analisi selezionata","Selected analysis")}
 </h3>
 
 <!-- ROI -->
@@ -1923,16 +1839,16 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- 🔒 BLOCCO PRO -->
 ${
-isPro()
+(isPro() || isInvestor())
 ? `
-<!-- CONTENUTO PRO -->
+<!-- CONTENUTO PAID -->
 <div class="metric">
 <span>${t("Indice rischio","Risk score")}</span>
 <strong>${best.risk}/100</strong>
 </div>
 
 <div class="metric">
-<span>${t("Break-even investimento","Investment break-even")}</span>
+<span>${t("Recupero equity stimato","Estimated equity payback")}</span>
 <strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
@@ -1946,8 +1862,8 @@ color:#065f46;
 ">
 <strong>💡 Insight:</strong><br>
 ${t(
-"Questo investimento supera la media di mercato.",
-"This investment outperforms the market average."
+"Rendimento stimato dalle ipotesi salvate, da verificare prima di investire.",
+"Return estimated from saved assumptions; verify before investing."
 )}
 </div>
 `
@@ -2158,7 +2074,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
   container.innerHTML = `
     <div class="portfolio-manager__header">
       <div>
-        <span class="portfolio-manager__eyebrow">LIVE PORTFOLIO</span>
+        <span class="portfolio-manager__eyebrow">PATRIMONIO CONFERMATO</span>
         <h2>📂 ${t("Portafoglio investimenti", "Investment portfolio")}</h2>
         <p>${t(
           "Solo gli immobili confermati alimentano ROI, cashflow, equity e break-even.",
@@ -2231,13 +2147,13 @@ const trend = avgROI >= marketROI ? "↑" : "↓";
 
 // ================= CALCOLI =================
 const monthlyProfit = avgCashflow / 12;
-const yearlyProfit = totalCashflow;
+const yearlyProfit = avgCashflow;
 
 let breakEvenYears = "-";
 
 if(totalCashflow > 0){
   breakEvenYears =
-    (totalCapital / totalCashflow)
+    (avgROI > 0 ? 100 / avgROI : 0)
     .toFixed(1);
 }
 
@@ -2387,8 +2303,8 @@ let icon = "🟢";
 if(avgROI >= marketROI + 5){
 
 insight = t(
-"Il tuo portafoglio sta performando significativamente sopra la media del mercato. Le attuali condizioni suggeriscono una buona opportunità di espansione.",
-"Your portfolio is performing significantly above the market average. Current conditions suggest a strong opportunity for expansion."
+"Gli scenari salvati mostrano un rendimento stimato elevato. Verifica costi, finanziamento e ipotesi prudenti prima di decidere.",
+"Saved scenarios show a high estimated return. Check costs, financing and conservative assumptions before deciding."
 );
 
 }
@@ -2399,7 +2315,7 @@ icon = "🔵";
 
 insight = t(
 "Le performance sono superiori alla media del mercato. Mantieni la strategia attuale monitorando nuove opportunità.",
-"Performance is above market average. Maintain the current strategy while monitoring new investment opportunities."
+"Performance is above the illustrative reference. Maintain the current strategy while monitoring new investment opportunities."
 );
 
 }
@@ -2521,7 +2437,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")}
 </h3>
 
 <div style="
@@ -2576,7 +2492,7 @@ letter-spacing:-0.5px;
 color:#2563eb;
 ">
 ${
-isPro()
+(isPro() || isInvestor())
 ? `${investmentScore}/100`
 : "🔒"
 }
@@ -2597,8 +2513,8 @@ if(userRoiEl){
 
 if(performanceEl){
   performanceEl.textContent = avgROI >= marketROI
-    ? t("Sopra la media di mercato","Above market average")
-    : t("Sotto la media di mercato","Below market average");
+    ? t("Sopra il riferimento dimostrativo","Above the illustrative reference")
+    : t("Sotto il riferimento dimostrativo","Below the illustrative reference");
 
   performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
@@ -2620,7 +2536,7 @@ statsContainer.innerHTML = `
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
 <strong style="color:${isPro() ? "#10b981" : "#64748b"};">
-${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
+${window.currentPlan === "pro_yearly" ? t("PRO ANNUALE", "PRO ANNUAL") : isPro() ? "PRO" : window.currentPlan.toUpperCase()}
 </strong>
 </div>
 </div>
@@ -2628,7 +2544,7 @@ ${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
 <div class="analysis-card">
 
 <h3>
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")}
 </h3>
 
 <strong style="
@@ -2648,12 +2564,12 @@ color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 🔥 ${
 avgROI >= marketROI
 ? `+${(avgROI - marketROI).toFixed(1)}% ${t(
-"rispetto alla media mercato",
-"above market average"
+"rispetto al riferimento dimostrativo",
+"above the illustrative reference"
 )}`
 : `-${(marketROI - avgROI).toFixed(1)}% ${t(
-"sotto la media mercato",
-"below market average"
+"sotto il riferimento dimostrativo",
+"below the illustrative reference"
 )}`
 }
 
@@ -2664,7 +2580,7 @@ avgROI >= marketROI
 <div class="analysis-card">
 
 <h3>
-${t("Profitto annuo","Yearly profit")}
+${t("Profitto annuo medio per scenario","Average annual profit per scenario")}
 </h3>
 
 <strong>
@@ -2679,8 +2595,8 @@ color:#10b981;
 ">
 
 💰 ${t(
-"profitto stimato nei prossimi 12 mesi",
-"estimated profit over the next 12 months"
+"stima per singola analisi, non reddito del patrimonio",
+"estimate per analysis, not portfolio income"
 )}
 
 </div>
@@ -2688,7 +2604,7 @@ color:#10b981;
 </div>
 
 <div class="analysis-card">
-<h3>${t("Break-even","Break-even")}</h3>
+<h3>${t("Recupero equity indicativo","Illustrative equity payback")}</h3>
 <strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
@@ -2723,15 +2639,15 @@ function updateDynamicTexts(){
   if(avgROI >= 10){
 
     roiMsg.innerText = t(
-      "🔥 ROI sopra mercato (ottimo investimento)",
-      "🔥 Above market ROI (strong investment)"
+      "Rendimento dello scenario elevato",
+      "High estimated scenario return"
     );
 
   }else if(avgROI >= 5){
 
     roiMsg.innerText = t(
-      "📊 ROI nella media",
-      "📊 Average ROI"
+      "Rendimento dello scenario positivo",
+      "Positive estimated scenario return"
     );
 
   }else{
@@ -2797,7 +2713,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if(userDoc.exists()){
         const data = userDoc.data();
-        window.currentPlan = data.plan || "free";
+        window.currentPlan = resolveAccountPlan(data, window.location.hostname);
         window.rbNotificationPreferences = data.notificationPreferences || {};
       }else{
         window.currentPlan = "free";
@@ -2946,130 +2862,38 @@ function renderCityDistribution(analyses){
 // CASHFLOW PROJECTION CHART
 // ===============================
 
+let cashflowChartInstance = null;
 function renderCashflowChart(){
-
-const container = document.getElementById("cashflow-chart-container");
-if(!container) return;
-
-/* ricrea canvas */
-
-container.innerHTML = '<canvas id="cashflowChart"></canvas>';
-
-const canvas = document.getElementById("cashflowChart");
-canvas.height = 300;  
-const ctx = canvas.getContext("2d");
-
-/* dati demo */
-
-const avgROI = roiValues.length
-  ? roiValues.reduce((a,b)=>a+b,0) / roiValues.length
-  : 0;
-
-const avgInvestment = 120000;
-
-// profitto medio realistico
-const yearlyProfit = (avgInvestment * avgROI) / 100;
-
-// simulazione realistica 5 anni
-const yearlyCashflow = [
-  -avgInvestment * 0.1,
-  yearlyProfit * 0.3,
-  yearlyProfit * 0.6,
-  yearlyProfit,
-  yearlyProfit * 1.2
-];
-
-/* colori positivo/negativo */
-
-const colors = yearlyCashflow.map(v =>
-v >= 0 ? "#10b981" : "#ef4444"
-);
-
-/* linea break even */
-
-const breakEven = new Array(yearlyCashflow.length).fill(0);
-
-new Chart(ctx,{
-
-type:"bar",
-
-data:{
-labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
-
-datasets:[
-
-{
-label:t("Cashflow","Cashflow"),
-data:yearlyCashflow,
-
-backgroundColor:
-yearlyCashflow.map(v =>
-v >= 0
-? "#10b981"
-: "#ef4444"
-),
-
-borderRadius:14,
-borderSkipped:false
-},
-
-{
-label: t("Break-even","Break-even"),
-data:breakEven,
-borderColor:"#94a3b8",
-borderDash:[6,6],
-pointRadius:0
-},
-
-{
-label: t("Benchmark mercato","Market benchmark"),
-data:new Array(roiValues.length).fill(8.4),
-borderColor:"#f59e0b",
-borderDash:[4,4],
-pointRadius:0
-}  
-
-]
-
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false,
-
-plugins:{
-legend:{display:true},
-
-tooltip:{
-callbacks:{
-label:(ctx)=> ctx.raw + " €"
+  const container = document.getElementById("cashflow-chart-container");
+  if(!container) return;
+  if(cashflowChartInstance){ cashflowChartInstance.destroy(); cashflowChartInstance = null; }
+  const scenarios = (window.dashboardSimulations || []).slice(0, 10);
+  if(!scenarios.length){
+    container.textContent = t("Nessuno scenario salvato.", "No saved scenarios.");
+    return;
+  }
+  container.innerHTML = '<canvas id="cashflowChart"></canvas>';
+  const canvas = document.getElementById("cashflowChart");
+  canvas.height = 300;
+  const amounts = scenarios.map(item => Number(item.net ?? item.cashflow ?? item.annualProfit ?? 0));
+  cashflowChartInstance = new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: scenarios.map((item, index) => `${index + 1} · ${item.city || t("Scenario", "Scenario")}`),
+      datasets: [{
+        label: t("Profitto annuo stimato per scenario (€)", "Estimated annual profit per scenario (€)"),
+        data: amounts.map(value => Number.isFinite(value) ? value : 0),
+        backgroundColor: amounts.map(value => value >= 0 ? "#087f5b" : "#b4533c"),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false}, tooltip: {callbacks: {label: context => formatCurrency(context.parsed.y)}}},
+      scales: {y: {beginAtZero: true, title: {display: true, text: "€ / anno"}}}
+    }
+  });
 }
-}
-
-},
-
-scales:{
-y:{
-ticks:{
-callback:(v)=> v + " €"
-}
-},
-
-x:{
-grid:{
-display:false
-}
-}
-
-}
-
-}
-
-});
-
-}
-
-
 
 // ===============================
 // INVESTMENT INSIGHT ENGINE
@@ -3086,41 +2910,7 @@ const container = document.getElementById("investment-insight");
 if(!container) return;
   
 
-if(investor && !isPro()){
-
-  container.innerHTML = `
-  <div class="analysis-card">
-
-    <h3>Analisi strategica</h3>
-
-    <div style="
-    text-align:center;
-    padding:20px;
-    ">
-
-      <div style="
-      font-size:40px;
-      ">
-      🔒
-      </div>
-
-      <p>
-      Disponibile nel piano PRO
-      </p>
-
-      <button
-      class="btn-primary"
-      onclick="goToUpgrade()">
-      🚀 Upgrade PRO
-      </button>
-
-    </div>
-
-  </div>
-  `;
-
-  return;
-}  
+  
 
 const avgROI = count ? (totalROI/count) : 0;
 
@@ -3139,8 +2929,8 @@ title = t(
 );
 
 text = t(
-"Le simulazioni salvate hanno un ROI medio superiore alla media nazionale. Le opportunità analizzate mostrano un buon potenziale.",
-"Your saved simulations have an average ROI above the national benchmark. The analyzed opportunities show strong potential."
+"Le simulazioni salvate mostrano un ROI equity medio positivo. Confronta le singole ipotesi: la media non rappresenta il rendimento effettivo di un portafoglio.",
+"Saved simulations show a positive average equity ROI. Compare individual assumptions: this average is not actual portfolio performance."
 );
 
 }else if(avgROI > 0){
@@ -3151,8 +2941,8 @@ title = t(
 );
 
 text = t(
-"Il ROI medio simulato è positivo ma sotto la media nazionale. Valuta scenari con maggiore occupazione o un prezzo medio notte più efficace.",
-"The average simulated ROI is positive but below the national benchmark. Consider scenarios with higher occupancy or a more effective nightly rate."
+"Il ROI equity medio simulato è positivo. Verifica la sensibilità a costi, occupazione e tariffe prima di scegliere.",
+"The average simulated equity ROI is positive. Check sensitivity to costs, occupancy and rates before choosing."
 );
 
 }else{
@@ -3176,8 +2966,8 @@ let capitalText = "";
 if(totalCapital > 500000){
 
 capitalText = t(
-"Hai analizzato un capitale significativo. Diversificare tra più proprietà può ridurre il rischio.",
-"You analyzed significant capital. Diversifying across properties may reduce risk."
+"Hai confrontato numerose ipotesi di investimento. Le alternative salvate non rappresentano capitale posseduto.",
+"You have compared several investment assumptions. Saved alternatives do not represent owned capital."
 );
 
 }else{
@@ -3242,35 +3032,35 @@ adrNeeded * occupancyNeeded * 365 / 100
 
 container.innerHTML = `
 
-<h3>💡 ${t("Ottimizzazione investimento","Investment optimization")}</h3>
+<h3>💡 ${t("Ipotesi illustrative sui ricavi","Illustrative revenue assumptions")}</h3>
 
 <p style="margin-top:10px;color:#475569;font-size:14px">
 ${t(
-"Per raggiungere la redditività media del mercato B&B:",
-"To reach average B&B market profitability:"
+"Esempio aritmetico sui ricavi: non risolve il ROI o la rata del tuo scenario.",
+"Arithmetic revenue example: it does not solve your scenario ROI or mortgage payment."
 )}
 </p>
 
 <div class="metric">
-<span>${t("Occupazione minima richiesta","Minimum occupancy")}</span>
+<span>${t("Occupazione di esempio","Example occupancy")}</span>
 <strong>${occupancyNeeded}%</strong>
 </div>
 
 <div class="metric">
-<span>${t("Prezzo medio notte necessario","Required nightly rate")}</span>
+<span>${t("Prezzo notte di esempio","Example nightly rate")}</span>
 <strong>€${adrNeeded}</strong>
 </div>
 
 <div class="metric">
-<span>${t("Ricavo annuo target","Target yearly revenue")}</span>
+<span>${t("Ricavo annuo dello scenario","Scenario annual revenue")}</span>
 <strong>${formatCurrency(revenueNeeded)}</strong>
 </div>
 
 <div style="margin-top:12px;color:#64748b;font-size:13px">
 
 ${t(
-"Oppure ridurre il prezzo dell'immobile di circa",
-"Or reduce property price by about"
+"Variazione illustrativa del prezzo (non una proposta di acquisto)",
+"Illustrative price variation (not a purchase offer)"
 )}
 
 <strong>${priceReduction}%</strong>
@@ -3303,17 +3093,17 @@ const targetROI = 10;
 
 /* calcolo prezzo massimo */
 
-let maxPrice = best.price;
+let maxPrice = Number(best.equity || 0);
 
 if(best.roi !== 0){
 
-maxPrice = (best.price * best.roi) / targetROI;
+maxPrice = (Number(best.equity || 0) * best.roi) / targetROI;
 
 }
 
 container.innerHTML = `
 
-<h3>🎯 ${t("Prezzo massimo immobile","Maximum property price")}</h3>
+<h3>🎯 ${t("Equity teorica al ROI target","Theoretical equity at target ROI")}</h3>
 
 <div style="font-size:26px;font-weight:700;color:#2563eb">
 ${formatCurrency(maxPrice)}
@@ -3321,8 +3111,8 @@ ${formatCurrency(maxPrice)}
 
 <div style="font-size:13px;color:#64748b;margin-top:6px">
 ${t(
-"per raggiungere ROI target",
-"to reach target ROI"
+"a profitto invariato, con ROI target",
+"at unchanged profit, with target ROI"
 )} ${targetROI}%
 </div>
 
@@ -3495,33 +3285,7 @@ try{
 
 // ================= DOWNLOAD REPORT DASHBOARD =================
 
-function downloadReport(){
-
-  if(!window.bestInvestmentData){
-    alert(window.currentLang === "en"
-      ? "No analysis available"
-      : "Nessuna analisi disponibile");
-    return;
-  }
-
-  const data = window.bestInvestmentData;
-
-  const params = new URLSearchParams({
-    price: data.price || 0,
-    roi: data.roi || 0,
-    equity: data.equity || 0,
-    risk: data.risk || 0,
-    city:
-        data.realCity ||
-        data.city ||
-        "roma",
-    source: "dashboard" // 🔥 fondamentale
-  });
-
-  // 🚀 NUOVO FLOW → PDF DASHBOARD
-  window.location.href =
-    "/dashboard-report/?" + params.toString();
-}
+function downloadReport(){ handleReportClick(); }
 
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
 function handleReportClick(){
@@ -3560,11 +3324,8 @@ function handleReportClick(){
     ));
     return;
   }
-  // 🔥 FIX CRITICO → salva simulazioni per report
-localStorage.setItem(
-  "rb_simulations",
-  JSON.stringify(window.dashboardSimulations || [])
-);
+  const reportOwner = auth.currentUser?.uid;
+  if(!reportOwner) return;
 
   // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
   try{
@@ -3592,29 +3353,19 @@ localStorage.setItem(
           }))
         : []
     };
-    localStorage.setItem(
-      "rb_dashboard_report_context",
-      JSON.stringify({
-        generatedAt: new Date().toISOString(),
-        pms: reportPMS
-      })
+    window.RBReportCache.write(
+      reportOwner,
+      [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
+      {generatedAt: new Date().toISOString(), pms: reportPMS},
+      sessionStorage, localStorage
     );
   }catch(error){
     dashboardDebug("Dashboard report PMS snapshot unavailable", error);
+    alert(t("Impossibile preparare il report. Riprova dalla dashboard.", "Unable to prepare the report. Please retry from the dashboard."));
+    return;
   }
 
-  const params = new URLSearchParams({
-    price,
-    roi: data.roi || 0,
-    equity: data.equity || 0,
-    risk: data.risk || 0,
-    city:
-         data.realCity ||
-         data.city ||
-         "roma",
-    source: "dashboard",
-    ts: Date.now() // evita cache
-  });
+  const params = new URLSearchParams({source: "dashboard"});
 
   window.location.href =
     "/dashboard-report/?" + params.toString();
@@ -3740,7 +3491,7 @@ if(stats && market){
 stats.innerHTML = `
 <div>
 <div style="font-size:13px;color:#64748b">
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")}
 </div>
 <div style="font-size:22px;font-weight:600;color:#10b981">
 ${market.roi}%
@@ -3833,7 +3584,7 @@ subtitle: t(
 "Above-average ROI and positive cashflow"
 ),
 
-action: t("Procedere","Proceed"),
+action: t("Verificare le ipotesi","Verify assumptions"),
 
 message: t(
 "Investimento solido con ottimo equilibrio tra rendimento e rischio.",
@@ -3918,7 +3669,7 @@ margin-top:6px;
 ">
 ${
 verdict.type === "excellent"
-  ? `✅ ${t("COMPRA","BUY")}`
+  ? `✅ ${t("SCENARIO FAVOREVOLE","FAVORABLE SCENARIO")}`
   : verdict.type === "good"
   ? `⚙️ ${t("OTTIMIZZA","OPTIMIZE")}`
   : `❌ ${t("EVITA","AVOID")}`
@@ -3926,7 +3677,7 @@ verdict.type === "excellent"
 </div>
 
 ${
-!isPro()
+!(isPro() || isInvestor())
 ? `
 <div style="
 margin-top:16px;
@@ -3981,8 +3732,8 @@ ${
 verdict.type === "excellent"
 
 ? t(
-"Questo investimento supera gli standard di redditività utilizzati nelle valutazioni istituzionali.",
-"This investment exceeds the profitability standards commonly used in institutional evaluations."
+"Lo scenario ha indicatori favorevoli secondo il modello RendimentoBB. Non costituisce una valutazione bancaria.",
+"This scenario has favorable indicators under the RendimentoBB model. It is not a bank assessment."
 )
 
 : verdict.type === "good"
@@ -4010,7 +3761,7 @@ ${verdict.message}
 </div>
 
 ${
-!isPro()
+!(isPro() || isInvestor())
 ? `
 <div style="
 margin-top:16px;
@@ -4319,8 +4070,8 @@ function showInvestorOverlay(){
         font-weight:600;
       ">
         ${t(
-          "profitto reale che stai ignorando",
-          "real profit you are ignoring"
+          "profitto annuo dello scenario demo",
+          "annual profit of the demo scenario"
         )}
       </div>
 
@@ -4579,13 +4330,13 @@ function renderROIMarketComparison(count,totalROI){
   const color = isBetter ? "#10b981" : "#ef4444";
 
   const message = isBetter
-    ? t("Stai battendo il mercato","You are beating the market")
-    : t("Sei sotto la media di mercato","You are below market average");
+    ? t("Differenza rispetto al riferimento di esempio","Difference from the example reference")
+    : t("Sotto il riferimento di esempio","You are below the illustrative reference");
 
   const percentage = Math.abs(diff).toFixed(1);
 
   container.innerHTML = `
-<h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
+<h3>📊 ${t("Riferimento dimostrativo","Illustrative reference")}</h3>
 
 <div style="
 margin-top:14px;
@@ -6986,7 +6737,7 @@ ${data.address || "-"}
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-ADR
+${t("Tariffa base", "Base nightly rate")}
 </div>
 
 <div class="property-kpi-value">

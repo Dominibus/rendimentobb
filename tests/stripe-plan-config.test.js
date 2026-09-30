@@ -20,3 +20,17 @@ test("Stripe rejects unknown key modes", () => {
   assert.throws(() => getStripePrices({ STRIPE_SECRET_KEY: "" }), /Unrecognized/);
   assert.throws(() => getStripePrices({ STRIPE_SECRET_KEY: "rk_test_placeholder" }), /Unrecognized/);
 });
+
+import { assertStripeEventMode } from "../lib/stripe-plan-config.js";
+test("webhooks reject cross-mode events and test keys in production",()=>{
+  assert.doesNotThrow(()=>assertStripeEventMode({livemode:true},{STRIPE_SECRET_KEY:"sk_live_example",VERCEL_ENV:"production"}));
+  assert.doesNotThrow(()=>assertStripeEventMode({livemode:false},{STRIPE_SECRET_KEY:"sk_test_example",VERCEL_ENV:"preview"}));
+  assert.throws(()=>assertStripeEventMode({livemode:false},{STRIPE_SECRET_KEY:"sk_live_example"}));
+  assert.throws(()=>assertStripeEventMode({livemode:true},{STRIPE_SECRET_KEY:"sk_test_example"}));
+  assert.throws(()=>assertStripeEventMode({livemode:false},{STRIPE_SECRET_KEY:"sk_test_example",VERCEL_ENV:"production"}));
+  assert.throws(()=>assertStripeEventMode({},{STRIPE_SECRET_KEY:"sk_live_example"}));
+});
+
+test("checkout price configuration refuses test keys on production",()=>{
+ assert.throws(()=>getStripePrices({STRIPE_SECRET_KEY:"sk_test_example",VERCEL_ENV:"production"}));
+});

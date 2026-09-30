@@ -1441,10 +1441,10 @@ Analizza un immobile reale
 </h3>
 
 <p
-data-it="Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B."
-data-en="Paste a property link from Idealista, Immobiliare.it or other portals to estimate the B&B investment return.">
+data-it="Aggiungi il link come riferimento e inserisci i dati per simulare il rendimento B&B."
+data-en="Add a listing link as a reference and enter its details to simulate B&B returns.">
 
-Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B.
+Aggiungi il link come riferimento e inserisci i dati per simulare il rendimento B&B.
 
 </p>
 
@@ -1634,193 +1634,45 @@ document.addEventListener("DOMContentLoaded", () => {
 // ================= ANALYZE PROPERTY =================
 
 window.analyzeProperty = function(){
-
-const link = document.getElementById("property-link").value;
-
-if(!link){
-alert(
-window.currentLang==="en"
-? "Please paste a property link"
-: "Inserisci un link immobile"
-);
-return;
-}
-
-let portal = "Portale immobiliare";
-let id = "";
-let estimatedPrice = "";
-
-// ===== DETECTION =====
-if(link.includes("idealista")){
-portal = "Idealista";
-id = link.split("/").filter(Boolean).pop();
-}
-
-if(link.includes("immobiliare.it")){
-portal = "Immobiliare.it";
-id = link.split("/").filter(Boolean).pop();
-}
-
-// ===== PREVIEW =====
-
-const isEn =
-window.currentLang === "en";
-
-document.getElementById("property-preview").innerHTML = `
-
-<div style="
-background:#ecfdf5;
-padding:20px;
-border-radius:16px;
-margin-top:14px;
-border:1px solid #bbf7d0;
-text-align:left;
-">
-
-<div style="
-font-size:15px;
-font-weight:700;
-margin-bottom:12px;
-color:#065f46;
-">
-
-🏠 ${
-isEn
-? "Property detected"
-: "Immobile rilevato"
-}
-
-</div>
-
-<div style="
-height:180px;
-border-radius:12px;
-margin-bottom:15px;
-background-image:url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200');
-background-size:cover;
-background-position:center;
-">
-</div>
-
-<div style="margin-bottom:10px">
-
-<strong>
-${
-isEn
-? "Portal"
-: "Portale"
-}:
-</strong>
-
-${portal}
-
-</div>
-
-<div style="margin-bottom:20px">
-
-<strong>ID:</strong> ${id}
-
-</div>
-
-<div style="margin-bottom:20px">
-<strong>${
-window.currentLang==="en"
-? "Area"
-: "Zona"
-}:</strong>
-${city || "-"}
-</div>
-
-<div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:12px;
-">
-
-<input
-id="detected-price"
-type="number"
-placeholder="${
-isEn
-? "Property price €"
-: "Prezzo immobile €"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-<input
-id="detected-sqm"
-type="number"
-placeholder="${
-isEn
-? "Square meters"
-: "Metri quadri"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-<input
-id="detected-city"
-type="text"
-placeholder="${
-isEn
-? "City"
-: "Città"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-</div>
-
-<button
-onclick="analyzeDetectedProperty()"
-class="btn btn-primary"
-style="
-margin-top:15px;
-width:100%;
-">
-
-📊 ${
-isEn
-? "Analyze Investment"
-: "Analizza investimento"
-}
-
-</button>
-
-<div style="
-margin-top:15px;
-font-size:13px;
-color:#64748b;
-">
-
-${
-isEn
-? "Enter listing data and click Analyze Investment."
-: "Inserisci i dati dell'annuncio e premi Analizza investimento."
-}
-
-</div>
-
-</div>
-
-`;
-
-localStorage.setItem(
-  "property_link",
-  link
-);
-
+  const isEn = window.currentLang === "en";
+  const input = document.getElementById("property-link");
+  const preview = document.getElementById("property-preview");
+  let url;
+  try {
+    url = new URL(input.value.trim());
+    if(url.protocol !== "https:" || !url.hostname.includes(".")) throw new Error("Invalid URL");
+  } catch {
+    preview.textContent = isEn ? "Enter a complete HTTPS listing URL." : "Inserisci un link HTTPS completo dell’annuncio.";
+    input.setAttribute("aria-invalid", "true");
+    return;
+  }
+  input.removeAttribute("aria-invalid");
+  const host = url.hostname.toLowerCase();
+  const portal = host === "idealista.it" || host.endsWith(".idealista.it") ? "Idealista"
+    : host === "immobiliare.it" || host.endsWith(".immobiliare.it") ? "Immobiliare.it" : isEn ? "Property portal" : "Portale immobiliare";
+  preview.innerHTML = `
+    <div class="rb-listing-worksheet">
+      <span class="rb-eyebrow">${isEn ? "YOUR PROPERTY SCENARIO" : "IL TUO SCENARIO IMMOBILIARE"}</span>
+      <h4>${isEn ? "Add the listing details" : "Completa i dati dell’annuncio"}</h4>
+      <p>${isEn ? "The link is a reference. Prices, location, photos and availability are not imported or verified automatically." : "Il link è un riferimento. Prezzi, posizione, foto e disponibilità non vengono importati o verificati automaticamente."}</p>
+      <p><strong>${portal}</strong> · <a id="rb-listing-reference" target="_blank" rel="noopener noreferrer">${isEn ? "Open listing" : "Apri annuncio"} ↗</a></p>
+      <div class="rb-form-grid">
+        <label>${isEn ? "Purchase price (€)" : "Prezzo di acquisto (€)"}<input id="detected-price" type="number" min="1" inputmode="decimal" placeholder="150000"></label>
+        <label>${isEn ? "Area (m²)" : "Superficie (m²)"}<input id="detected-sqm" type="number" min="1" inputmode="decimal" placeholder="70"></label>
+        <label>${isEn ? "City" : "Città"}<input id="detected-city" type="text" maxlength="80" autocomplete="address-level2" placeholder="Roma"></label>
+      </div>
+      <button onclick="analyzeDetectedProperty()" class="btn btn-primary">${isEn ? "Build investment scenario" : "Costruisci lo scenario"} →</button>
+    </div>`;
+  document.getElementById("rb-listing-reference").href = url.href;
+  localStorage.setItem("property_link", url.href);
 };
+
+const incomingListing = new URLSearchParams(location.search).get("listing");
+if(incomingListing){
+  document.getElementById("property-link").value = incomingListing;
+  window.analyzeProperty();
+  document.getElementById("property-preview").scrollIntoView({block:"center"});
+}
 
 // =====================================
 // 📊 ANALYZE DETECTED PROPERTY
@@ -1847,12 +1699,12 @@ document.getElementById(
 "detected-city"
 )?.value || "";
 
-if(!price || !sqm){
+if(!Number.isFinite(price) || price <= 0 || !Number.isFinite(sqm) || sqm <= 0 || !city.trim()){
 
 alert(
 window.currentLang === "en"
-? "Please enter price and square meters"
-: "Inserisci prezzo e metri quadri"
+? "Enter a positive price, area and city"
+: "Inserisci prezzo e superficie positivi e la città"
 );
 
 return;
