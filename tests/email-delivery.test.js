@@ -15,7 +15,7 @@ function harness(file,failRecipient=''){
  };
  const db={collection,runTransaction:async fn=>fn({getAll:async(...refs)=>Promise.all(refs.map(r=>r.get())),get:r=>r.get(),set:(r,v)=>r.set(v),update:(r,v)=>r.update(v)})};
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
- const admin={apps:[{}],firestore,auth:()=>({verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com'}:{uid:'user-id',email:'user@example.test'}})};
+ const admin={apps:[{}],firestore,auth:()=>({verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
  const ctx={admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
@@ -46,7 +46,7 @@ test('user mail rejection remains visible on saved lead while admin notification
 });
 test('admin PATCH persists only supported CRM fields; unauthenticated and normal users are refused',async()=>{
  const h=harness('api/delete-lead.js');const ref=await h.collection('leads').add({email:'lead@example.test',roi:12});
- for(const token of ['', 'user']){const r=await h.run({leadId:ref.id,status:'won',adminNotes:'x'},'PATCH',token);assert.equal(r.status,token?403:401);}
+ for(const token of ['', 'user', 'unverified-admin']){const r=await h.run({leadId:ref.id,status:'won',adminNotes:'x'},'PATCH',token);assert.equal(r.status,token?403:401);}
  const bad=await h.run({leadId:ref.id,status:'owner',adminNotes:'x'},'PATCH','admin');assert.equal(bad.status,400);
  const good=await h.run({leadId:ref.id,status:'contacted',adminNotes:'Call tomorrow',roi:999},'PATCH','admin');assert.equal(good.status,200);
  const data=(await ref.get()).data();assert.equal(data.roi,12);assert.equal(data.status,'contacted');assert.equal(data.adminNotes,'Call tomorrow');

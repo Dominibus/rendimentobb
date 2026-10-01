@@ -13,6 +13,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
   if (!["DELETE", "PATCH"].includes(req.method)) {
     res.setHeader("Allow", "DELETE, PATCH");
     return res.status(405).json({ error: "Method not allowed" });
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
 
     const decoded = await admin.auth().verifyIdToken(token);
     const email = String(decoded.email || "").toLowerCase();
-    const isAdmin = decoded.admin === true || email === "rendimentobb@gmail.com";
+    const isAdmin = decoded.admin === true || (decoded.email_verified === true && email === "rendimentobb@gmail.com");
 
     if (!isAdmin) {
       return res.status(403).json({ error: "Admin access required" });

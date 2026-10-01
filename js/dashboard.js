@@ -2111,7 +2111,7 @@ const confirmedROI = confirmedCount
 const confirmedMonthlyCashflow = confirmedYearlyCashflow / 12;
 const confirmedBreakEven = confirmedYearlyCashflow > 0
   ? confirmedEquity / confirmedYearlyCashflow
-  : 0;
+  : null;
 
   window.__lastAvgROI = avgROI;
 
@@ -2226,7 +2226,7 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? (confirmedCount ? formatYears(confirmedBreakEven.toFixed(1)) : "--")
+      ? (confirmedCount ? (confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
