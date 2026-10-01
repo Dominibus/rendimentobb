@@ -1102,7 +1102,9 @@ if(oldModal){
       warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
       warning_en: "⚠️ Without advanced analysis you may overestimate returns",
 
-      action: () => startPlanPurchase("investor")
+      action: () => window.location.pathname.startsWith("/tool")
+        ? window.location.assign("/#pricing")
+        : startPlanPurchase("investor")
     };
   }
 
@@ -1150,7 +1152,9 @@ if(oldModal){
       warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
       warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
 
-      action: () => startPlanPurchase("pro")
+      action: () => window.location.pathname.startsWith("/tool")
+        ? window.location.assign("/#pricing")
+        : startPlanPurchase("pro")
     };
   }
 
