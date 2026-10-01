@@ -24,3 +24,6 @@ body.admin-leads-page{background:var(--rb-canvas);color:var(--rb-ink)}
 .lead-dialog-actions{display:flex;gap:12px;justify-content:space-between;margin-top:20px}.admin-leads-page #lead-save{background:var(--rb-green);color:#fff}.admin-leads-page #lead-delete{color:#9b2525;border-color:#e9caca}
 @media(max-width:1000px){.admin-leads-page .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.lead-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.lead-toolbar>label:first-child{grid-column:1/-1}}
 @media(max-width:600px){.admin-leads-page .container{padding:24px 14px 40px}.admin-leads-page h1{font-size:28px}.admin-leads-page .card{padding:16px}.admin-leads-page .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-leads-page .kpi{padding:16px}.lead-row{flex-direction:column;gap:10px}.lead-side{justify-content:flex-start;max-width:100%;min-width:0}.lead-actions{justify-content:flex-start}#lead-details{padding:18px}#lead-details dl>div{grid-template-columns:110px minmax(0,1fr)}}
+
+/* FIX24: restore native dialog centering after global margin reset. */
+#lead-details{position:fixed;inset:0;margin:auto}
