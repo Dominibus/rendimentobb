@@ -1,5 +1,5 @@
 import {auth,db} from './firebase-init.js';
-import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+import {onAuthStateChanged,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import {collection,getDocs,query,orderBy,limit} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 import {leadType,operationalLead,leadTime,selectLeads,leadCSV} from './admin-lead-model.js';
 const $=id=>document.getElementById(id);
@@ -12,8 +12,28 @@ let leads=[],category='all',page=1,pageSize=20,loading=false,selectedId=null,ref
 const selection=()=>selectLeads(leads,{category,search:$('lead-search').value,status:$('lead-status-filter').value,sort:$('lead-sort').value});
 function message(value){$('lead-feedback').textContent=value;}
 function reset(){leads=[];selectedId=null;clearInterval(refreshTimer);refreshTimer=null;$('lead-details').close();$('leadList').replaceChildren();renderKPI();message(t('Accesso riservato all’amministratore.','Administrator access required.'));}
+function verificationPanel(){
+ if($('lead-verification'))return;
+ const panel=document.createElement('div');panel.id='lead-verification';panel.className='card';
+ panel.innerHTML='<p>Per accedere ai lead, verifica l’email del tuo account amministratore.</p><button type="button" id="lead-send-verification">Invia email di verifica</button> <button type="button" id="lead-check-verification">Ho verificato: aggiorna accesso</button><p id="lead-verification-feedback" role="status"></p>';
+ $('lead-feedback').before(panel);message('Verifica email richiesta. I lead non sono stati cancellati.');
+ $('lead-send-verification').addEventListener('click',async()=>{
+ const user=auth.currentUser;if(!user||String(user.email||'').toLowerCase()!=='rendimentobb@gmail.com')return;
+ $('lead-send-verification').disabled=true;
+ try{await sendEmailVerification(user);$('lead-verification-feedback').textContent='Email inviata. Apri il link ricevuto, poi premi “Ho verificato”.';}
+ catch{$('lead-verification-feedback').textContent='Invio non riuscito. Attendi qualche minuto e riprova.';$('lead-send-verification').disabled=false;}
+ });
+ $('lead-check-verification').addEventListener('click',async()=>{
+ const user=auth.currentUser;if(!user)return;
+ try{await reload(user);await user.getIdToken(true);if(auth.currentUser?.uid!==user.uid)return;
+ if(user.emailVerified){panel.remove();await load();}else{$('lead-verification-feedback').textContent='Email ancora non verificata. Apri il link ricevuto prima di riprovare.';}}
+ catch{$('lead-verification-feedback').textContent='Aggiornamento non riuscito. Esci e accedi nuovamente.';}
+ });
+}
 async function load(){
  if(loading||!isAdmin(auth.currentUser))return;
+ if(String(auth.currentUser.email||'').toLowerCase()==='rendimentobb@gmail.com'&&!auth.currentUser.emailVerified){verificationPanel();return;}
+ $('lead-verification')?.remove();
  loading=true;$('lead-refresh').disabled=true;const owner=auth.currentUser.uid;
  try{
   const snap=await getDocs(query(collection(db,'leads'),orderBy('createdAt','desc'),limit(150)));
