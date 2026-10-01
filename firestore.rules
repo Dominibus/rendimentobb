@@ -9,6 +9,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isSignedIn()
+        && request.auth.token.email_verified == true
         && request.auth.token.email == "rendimentobb@gmail.com";
     }
 
@@ -77,6 +78,7 @@ service cloud.firestore {
           "sandboxLastStripeEventCreated",
           "sandboxUpdatedAt"
         ])
+        && (!request.resource.data.keys().hasAny(["isAdmin"]) || request.resource.data.isAdmin == false)
         && request.resource.data.email is string
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.plan is string
