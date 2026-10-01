@@ -1512,3 +1512,22 @@ body.dashboard-bg {
     transition: none !important;
   }
 }
+
+/* FIX21: contain native iOS date controls within mobile PMS grids. */
+@media (max-width: 768px) {
+  #booking-form-container input[type="date"] {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+    overflow: hidden;
+  }
+  #booking-form-container input[type="date"]::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: left;
+  }
+}
