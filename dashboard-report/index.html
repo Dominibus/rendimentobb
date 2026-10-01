@@ -1831,7 +1831,7 @@ ${euro(annualProfit)}
 <div class="kpi">
 <span>${lang==="en"?"Break-even":"Pareggio"}</span>
 <strong style="font-size:22px">
-${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
+${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
 </div>
 
@@ -2424,7 +2424,7 @@ drawPerformanceKPI(
 drawPerformanceKPI(
   20 + performanceKpiW + performanceKpiGap,
   t("BREAK-EVEN","BREAK-EVEN"),
-  `${breakEven.toFixed(1)} ${t("anni","years")}`
+  annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
 );
 
 drawPerformanceKPI(

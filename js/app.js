@@ -6191,7 +6191,7 @@ const coverBenchmarkByCity = {
 };
 const coverMarketKey = String(city).toLowerCase().trim();
 const coverHasLocalBenchmark = Object.prototype.hasOwnProperty.call(coverBenchmarkByCity, coverMarketKey);
-const coverBenchmark = coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4;
+const coverBenchmark = Number(window.RB_MARKET_DATA?.[coverMarketKey]?.roi ?? (coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4));
 const coverScaleMax = 40;
 const coverBarWidth = 120;
 const coverFillWidth = Math.min(Math.max(roi,0),coverScaleMax) / coverScaleMax * coverBarWidth;
@@ -6998,7 +6998,7 @@ const marketKey =
     .trim();
 
 const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(marketROIMap, marketKey);
-const marketROI = hasLocalBenchmark ? marketROIMap[marketKey] : 8.4;
+const marketROI = Number(window.RB_MARKET_DATA?.[marketKey]?.roi ?? (hasLocalBenchmark ? marketROIMap[marketKey] : 8.4));
 
 const benchmarkROI = marketROI;
 
@@ -7066,7 +7066,7 @@ doc.setTextColor(...green);
 doc.text(
 roi >= benchmarkROI
 ? "TOP"
-: T("Media","Average"),
+: T("Sotto la media","Below average"),
 145,
 y+19
 );
