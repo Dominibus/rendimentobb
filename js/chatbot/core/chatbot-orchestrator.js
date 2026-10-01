@@ -32,7 +32,7 @@ async function(message){
     const activePDF = window.rbDocumentManager?.getLast?.();
     const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
     const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
-        /(punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        /(indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
         !/(simulazion|simulation|mercato|market|altra citt|another city)/i.test(text);
     const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
     const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);

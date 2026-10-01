@@ -150,7 +150,7 @@
 
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
 
-    "/js/chatbot/document-engine.js?v=20261001-22",
+    "/js/chatbot/document-engine.js?v=20261001-28",
     "/js/chatbot/pdf-extraction-engine.js?v=20261001-22",
     "/js/chatbot/pdf-parser-engine.js?v=20261001-22",
     "/js/chatbot/core/document-classifier.js",
@@ -162,8 +162,8 @@
     "/js/chatbot/core/executive-response-builder.js",
     "/js/chatbot/core/response-engine.js?v=20261001-22",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
-    "/js/chatbot/core/portal-facts-engine.js?v=20261001-22",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261001-22",
+    "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261001-28",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",

@@ -532,6 +532,7 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
     const compare = /(confront|compar)/i.test(query);
     const summarize = /(riassum|sintesi|riepilog|summar)/i.test(query);
     const interpret = /(interpret|analizz|analyz|convien|worth|sostenib|sustainab)/i.test(query);
+    const allIndicators = /(?:tutti|tutte).*(?:indicatori|metriche)|all.*(?:indicators|metrics)/i.test(query);
     const requested = [
       ["investmentScore",/punteggio|score/],
       ["dscr",/dscr/],
@@ -544,7 +545,7 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
       ["equity",/capitale proprio|\bequity\b/],
       ["propertyPrice",/prezzo|property price/],
       ["occupancy",/occupazion|occupancy/]
-    ].filter(([key,pattern])=>pattern.test(key === "roi" ? query.replace(/benchmark\s+roi|roi\s+benchmark/g, "benchmark") : query)).map(([key])=>key);
+    ].filter(([key,pattern])=>(allIndicators && ["investmentScore","dscr","benchmarkROI","roi","cashflow","risk"].includes(key)) || pattern.test(key === "roi" ? query.replace(/benchmark\s+roi|roi\s+benchmark/g, "benchmark") : query)).map(([key])=>key);
     const mode = compare ? "compare" : summarize ? "summary" : interpret || !requested.length ? "interpretation" : requested.length > 1 ? "multiple" : requested[0];
     const render = lang => {
         const en = lang === "en", locale = en ? "en-GB" : "it-IT";
