@@ -521,18 +521,21 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
     const query = String(message || "").toLowerCase();
     if(!/(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(query)) return null;
     if(/\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/.test(query)) return null;
-    if(/(manc|missing|complet|sufficient)/i.test(query)) return null;
+    if(/(manc|missing|complet|sufficient|non.*riconosci|not.*recogniz)/i.test(query)) return null;
     const a = doc.analysis || {};
     const has = key => a[key] !== null && a[key] !== undefined && a[key] !== "" && Number.isFinite(Number(a[key]));
     const evidence = String(doc.extractedText || "").replace(/\s+/g," ");
     const equityROI = a.roiBasis === "equity" || /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(evidence);
     const propertyROI = a.roiBasis === "property";
     const afterMortgage = a.cashflowBasis === "after_mortgage" || /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(evidence);
-    const keys = {propertyPrice:["Prezzo immobile","Property price"],roi:[equityROI ? "ROI sul capitale proprio" : propertyROI ? "ROI sul valore immobile" : "ROI riportato",equityROI ? "Return on equity" : propertyROI ? "ROI on property value" : "Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:[afterMortgage ? "Cashflow annuo dopo mutuo" : "Cashflow annuo riportato",afterMortgage ? "Annual cash flow after mortgage" : "Reported annual cash flow"],gross:["Ricavi annui","Annual revenue"],risk:["Indice rischio del report","Report risk index"],occupancy:["Occupazione riportata","Reported occupancy"]};
+    const keys = {investmentScore:["Punteggio investimento del PDF","PDF investment score"],dscr:["DSCR del PDF","PDF DSCR"],benchmarkROI:["Benchmark ROI del PDF","PDF ROI benchmark"],propertyPrice:["Prezzo immobile","Property price"],roi:[equityROI ? "ROI sul capitale proprio" : propertyROI ? "ROI sul valore immobile" : "ROI riportato",equityROI ? "Return on equity" : propertyROI ? "ROI on property value" : "Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:[afterMortgage ? "Cashflow annuo dopo mutuo" : "Cashflow annuo riportato",afterMortgage ? "Annual cash flow after mortgage" : "Reported annual cash flow"],gross:["Ricavi annui","Annual revenue"],risk:["Indice rischio del report","Report risk index"],occupancy:["Occupazione riportata","Reported occupancy"]};
     const compare = /(confront|compar)/i.test(query);
     const summarize = /(riassum|sintesi|riepilog|summar)/i.test(query);
     const interpret = /(interpret|analizz|analyz|convien|worth|sostenib|sustainab)/i.test(query);
     const requested = [
+      ["investmentScore",/punteggio|score/],
+      ["dscr",/dscr/],
+      ["benchmarkROI",/benchmark/],
       ["roi",/\broi\b|rendimento|return on equity/],
       ["cashflow",/cashflow|cash flow|flusso di cassa/],
       ["risk",/rischio|\brisk\b/],
@@ -542,14 +545,14 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
       ["propertyPrice",/prezzo|property price/],
       ["occupancy",/occupazion|occupancy/]
     ].filter(([,pattern])=>pattern.test(query)).map(([key])=>key);
-    const mode = compare ? "compare" : summarize ? "summary" : interpret || requested.length !== 1 ? "interpretation" : requested[0];
+    const mode = /benchmark/.test(query) ? "benchmarkROI" : compare ? "compare" : summarize ? "summary" : interpret || requested.length !== 1 ? "interpretation" : requested[0];
     const render = lang => {
         const en = lang === "en", locale = en ? "en-GB" : "it-IT";
         const fixedPercent = (value,digits=1) => `${new Intl.NumberFormat(locale,{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(Number(value))}%`;
         const number = (value,digits=2) => new Intl.NumberFormat(locale,{maximumFractionDigits:digits,useGrouping:true}).format(Number(value));
         const money = value => new Intl.NumberFormat(locale,{style:"currency",currency:"EUR",minimumFractionDigits:0,maximumFractionDigits:2,useGrouping:true}).format(Number(value));
         const percent = value => `${number(value)}%`;
-        const format = (key,value) => ["roi","occupancy"].includes(key) ? percent(value) : key === "risk" ? `${number(value)}/100` : money(value);
+        const format = (key,value) => ["roi","occupancy","benchmarkROI"].includes(key) ? percent(value) : ["risk","investmentScore"].includes(key) ? `${number(value)}/100` : key === "dscr" ? number(value) : money(value);
         const source = en ? `Source: ${doc.fileName}` : `Fonte: ${doc.fileName}`;
         const missing = key => en ? `I did not recognize ${keys[key][1].toLowerCase()} in this PDF. I cannot replace it with a default.` : `Non ho riconosciuto ${keys[key][0].toLowerCase()} nel PDF. Non lo sostituisco con un valore predefinito.`;
         const lines=[];
@@ -561,6 +564,9 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
             if(!known.length) lines.push(en ? "Text extracted, but insufficient financial metrics recognized." : "Testo estratto, ma non ho riconosciuto indicatori finanziari sufficienti.");
             for(const key of known) lines.push(metric(key));
             lines.push(en ? "These are the document's figures and assumptions; missing values are not estimated." : "Sono dati e ipotesi del documento; i valori mancanti non vengono stimati.");
+        }else if(["investmentScore","dscr","benchmarkROI"].includes(mode)){
+            lines.push(metric(mode));
+            if(mode === "dscr" && has("dscr")) lines.push(en ? (Number(a.dscr)<1 ? "Below 1: modeled operating income does not cover annual debt service." : "At least 1: modeled operating income covers annual debt service; this is not a guarantee.") : (Number(a.dscr)<1 ? "Inferiore a 1: il reddito operativo simulato non copre le rate annue del debito." : "Almeno 1: il reddito operativo simulato copre le rate annue del debito; non è una garanzia."));
         }else if(mode === "roi"){
             lines.push(metric("roi"));
             if(has("roi") && equityROI){

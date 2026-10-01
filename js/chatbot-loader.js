@@ -114,7 +114,7 @@
   // =============================================
 
   const cssFiles = [
-    "/css/chatbot.css?v=20260930-17"
+    "/css/chatbot.css?v=20261001-20"
   ];
 
   const scripts = [
@@ -143,16 +143,16 @@
     "/js/chatbot/core/semantic-router.js",
     "/js/chatbot/core/entity-engine.js",
     "/js/chatbot/core/intent-engine.js?v=20260909-renovation-control-v21-4",
-    "/js/chatbot/core/memory-engine.js?v=20260930-17",
-    "/js/chatbot/core/conversation-engine.js?v=20260930-17",
+    "/js/chatbot/core/memory-engine.js?v=20261001-20",
+    "/js/chatbot/core/conversation-engine.js?v=20261001-20",
     "/js/chatbot/core/investor-profile-engine.js",
     "/js/chatbot/core/score-engine.js",
 
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
 
-    "/js/chatbot/document-engine.js?v=20260930-17",
-    "/js/chatbot/pdf-extraction-engine.js?v=20260930-17",
-    "/js/chatbot/pdf-parser-engine.js?v=20260930-17",
+    "/js/chatbot/document-engine.js?v=20261001-20",
+    "/js/chatbot/pdf-extraction-engine.js?v=20261001-20",
+    "/js/chatbot/pdf-parser-engine.js?v=20261001-20",
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/executive-narrative-engine.js",
@@ -160,15 +160,15 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260930-17",
-    "/js/chatbot/core/chatbot-file-dispatcher.js?v=20260930-17",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260930-17",
+    "/js/chatbot/core/response-engine.js?v=20261001-20",
+    "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-20",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261001-20",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
-    "/js/chatbot/ui/chatbot-attachments.js?v=20260930-17",
-    "/js/chatbot/ui/chatbot-ui.js?v=20260930-17",
+    "/js/chatbot/ui/chatbot-attachments.js?v=20261001-20",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261001-20",
 
     "/js/ai-engine.js"
   ];

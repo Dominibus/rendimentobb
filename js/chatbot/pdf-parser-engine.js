@@ -117,7 +117,7 @@ window.rbParseExecutivePDF = async function(documentObject){
             }
 
             else if(
-                /^\d{1,3}(\.\d{3})+$/.test(
+                /^-?\d{1,3}(\.\d{3})+$/.test(
                     normalized
                 )
             ){
@@ -128,7 +128,7 @@ window.rbParseExecutivePDF = async function(documentObject){
             }
 
             else if(
-                /^\d{1,3}(,\d{3})+$/.test(
+                /^-?\d{1,3}(,\d{3})+$/.test(
                     normalized
                 )
             ){
@@ -625,6 +625,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             investmentScore:
                 investmentScore,
+            dscr: extractPercentage(/DSCR\s*[:]?\s*(\d+(?:[.,]\d+)?)/i) ?? parsePercentage(text.match(/MUTUO\s+LTV\s+DSCR\s+[\d.,]+\s*€\s+[\d.,]+\s*%\s*(\d+(?:[.,]\d+)?)/i)?.[1]),
+            benchmarkROI: extractPercentage(/(?:ROI EQUITY DI MERCATO|MARKET EQUITY ROI|BENCHMARK LOCALE|LOCAL BENCHMARK)\s*[:]?\s*([\d.,]+)\s*%/i),
 
             propertyPrice:
                 propertyPrice,

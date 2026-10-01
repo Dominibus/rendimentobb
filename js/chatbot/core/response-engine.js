@@ -94,8 +94,11 @@ if(!rbAsksFreeFeatures && !rbAsksPlanPDF &&
 const rbCurrentPDF = documentKnowledge?.activeDocument;
 if(rbCurrentPDF?.status === "ready" &&
    /(pdf|document|file|brochure)/i.test(String(message || "")) &&
-   /(manc|missing|complet|sufficient)/i.test(String(message || ""))){
+   /(manc|missing|complet|sufficient|non.*riconosci|not.*recogniz)/i.test(String(message || ""))){
     const fields = {
+        investmentScore:["punteggio investimento","investment score"],
+        dscr:["DSCR","DSCR"],
+        benchmarkROI:["benchmark ROI","ROI benchmark"],
         propertyPrice:["prezzo immobile","property price"],
         equity:["capitale proprio","equity"],
         gross:["ricavi annui","annual revenue"],

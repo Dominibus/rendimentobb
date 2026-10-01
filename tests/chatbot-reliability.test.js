@@ -37,7 +37,7 @@ test('unreadable current PDF cannot use an old report or live scenario',async()=
 test('missing-field answers distinguish unrecognized values from absent values',async()=>{
  const c={window:{RB_DEBUG:false},console};vm.createContext(c);vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);
  const response=c.window.rbGenerateResponse({message:'Quali dati mancano nel PDF?',documentKnowledge:{activeDocument:{status:'ready',fileName:'brochure.pdf',analysis:{propertyPrice:210000,equity:null,gross:null,cashflow:null}}}});
- assert.equal(response.type,'document_data_quality');assert.equal(response.metadata.missingFields.length,3);assert.ok(response.textIT.includes('Non riconosciuto non significa'));
+ assert.equal(response.type,'document_data_quality');assert.equal(response.metadata.missingFields.length,6);assert.ok(response.textIT.includes('Non riconosciuto non significa'));
 });
 test('identity changes discard cached analysis; a new chat preserves current live input',()=>{
  const {c}=context(['core/memory-engine']);c.window.rbSyncChatIdentity('A');c.window.lastAnalysisData={roi:25};c.window.rbClearMemory();assert.equal(c.window.lastAnalysisData.roi,25);c.window.rbSyncChatIdentity('B');assert.equal(c.window.lastAnalysisData,null);
@@ -151,4 +151,21 @@ test('document quick actions label their source and reset with a cleared documen
 test('empty parsed document does not become analyzed because of basis metadata',async()=>{
  const {c}=context(['pdf-parser-engine']);const doc={type:'generic_pdf',extractedText:'No financial or property data in this file.'};await c.window.rbParseExecutivePDF(doc);
  assert.equal(doc.executiveContext.hasAnalysis,false);
+});
+
+ test('negative grouped amounts and document metrics stay grounded in Napoli PDF',async()=>{
+ const {c}=context(['pdf-parser-engine','document-engine']);
+ const doc={id:'napoli',status:'ready',fileName:'napoli.pdf',extractedText:await read('tests/fixtures/napoli-negative-pdf.txt')};
+ await c.window.rbParseExecutivePDF(doc);
+ assert.equal(doc.analysis.cashflow,-6678);assert.equal(doc.analysis.dscr,.94);assert.equal(doc.analysis.benchmarkROI,10.2);assert.equal(doc.analysis.investmentScore,0);
+ for(const [query,value] of [['Qual è il DSCR nel PDF?','0,94'],['Qual è il benchmark ROI nel PDF?','10,2%'],['Qual è il punteggio nel PDF?','0/100']]){const r=c.window.rbBuildPDFResponse(query,doc,{roi:99,dscr:9});assert.equal(r.type,'document_grounded');assert.ok(r.textIT.includes(value),r.textIT);}
+ });
+ test('PDF missing DSCR and score never use live defaults',()=>{
+ const {c}=context(['document-engine']);const doc={status:'ready',fileName:'minimal.pdf',analysis:{roi:2}};
+ for(const query of ['DSCR PDF','Punteggio PDF','Benchmark ROI PDF'])assert.ok(c.window.rbBuildPDFResponse(query,doc,{investmentScore:90,dscr:2}).textIT.includes('Non ho riconosciuto'));
+ });
+test('score DSCR benchmark and unrecognized follow-ups never leave the active PDF',async()=>{
+ const {c}=context(['document-engine']);vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);vm.runInContext(await read('js/chatbot/core/chatbot-orchestrator.js'),c);
+ c.window.rbActiveDocument={id:'active',status:'ready',fileName:'napoli.pdf',analysis:{investmentScore:0,dscr:.94,benchmarkROI:10.2,cashflow:-6678}};c.window.rbPDFConversationDocumentId='active';
+ for(const query of ['Qual è il punteggio dell’investimento?','Qual è il DSCR e cosa significa?','Qual è il benchmark ROI riportato nel PDF?','Quali dati non hai riconosciuto?']){const r=await c.window.rbProcessAIMessage(query);assert.ok(['document_grounded','document_data_quality'].includes(r.response.type),query);assert.equal(c.window.rbPDFConversationDocumentId,'active');}
 });
