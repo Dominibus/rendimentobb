@@ -1828,7 +1828,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261001-22"></script>
+<script type="module" src="/js/app.js?v=20261001-23"></script>
 
 <script>
 
@@ -2006,10 +2006,10 @@ window.handleUpgradeClick = function(){
 
   toolDebug("🔥 CTA CLICK");
 
-  const isPro = window.getUserAccess().isPro;
+  const hasFullAnalysis = !!window.getUserAccess()?.canSeeFullAnalysis;
 
   // ================= 🟢 UTENTE PRO =================
-  if(isPro){
+  if(hasFullAnalysis){
 
     toolDebug("✅ PRO USER → scroll advanced");
 

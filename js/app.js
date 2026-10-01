@@ -283,6 +283,7 @@ if(!window.currentPlan){
 
 if(
   access.isPro ||
+  access.isInvestor ||
   access.isAdmin
 ){
 
@@ -317,45 +318,6 @@ if(
       "blur-content",
       "locked",
       "locked-content",
-      "premium-lock"
-    );
-
-  });
-
-}
-
-// =====================================
-// 🟡 INVESTOR → PARTIAL ACCESS
-// =====================================
-
-else if(access.isInvestor){
-
-  
-
-  [
-    qrProfit, elAnnual,
-    qrMonth, elMonthly,
-    qrBreak, elBreak,
-    qrRev, elRevenue
-  ].forEach(el=>{
-
-    if(!el) return;
-
-    // 🔥 salva valore reale
-    if(
-      el.innerText &&
-      el.innerText !== "—"
-    ){
-      el.dataset.realValue = el.innerText;
-    }
-
-    // 🔥 investor vede KPI
-    el.style.filter = "none";
-    el.style.webkitFilter = "none";
-    el.style.opacity = "1";
-
-    el.classList.remove(
-      "locked",
       "premium-lock"
     );
 
@@ -411,55 +373,8 @@ if(!access){
   // ❌ NON bloccare render
 }
 
-// =====================================
-// 🟡 INVESTOR → teaser intelligente
-// =====================================
+document.querySelectorAll(".investor-upsell").forEach(el => el.remove());
 
-if(access.isInvestor){
-
-  const verdict = document.getElementById("investment-verdict");
-
-  if(
-    verdict &&
-    !verdict.querySelector(".investor-upsell")
-  ){
-
-    const upsell = document.createElement("div");
-
-    upsell.className = "investor-upsell";
-
-    upsell.innerHTML = `
-      <div style="
-        margin-top:15px;
-        padding:12px;
-        border-radius:10px;
-        background:rgba(16,185,129,0.08);
-        font-size:13px;
-        text-align:center;
-        color:#065f46;
-        font-weight:500;
-      ">
-        🔥 ${t(
-          "Stai vedendo solo una parte del potenziale reale",
-          "You are only seeing part of the real potential"
-        )}
-
-        <br>
-
-        <span style="opacity:.8;">
-          ${t(
-            "Sblocca analisi completa + AI insights",
-            "Unlock full analysis + AI insights"
-          )}
-        </span>
-      </div>
-    `;
-
-    verdict.appendChild(upsell);
-
-  }
-
-}
 }  
 
 }  
@@ -1502,7 +1417,7 @@ function renderROIMarketComparison(roi, cityKey){
 
   container.innerHTML = badge + `
     <div class="kpi-box">
-      <span>${t("ROI investimento","Your ROI")}</span>
+      <span>${t("ROI sul capitale proprio","Return on equity")}</span>
       <strong>${safeNumber(roi).toFixed(1)}%</strong>
     </div>
 

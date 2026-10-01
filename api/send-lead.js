@@ -771,7 +771,7 @@ const adminSuggestion = isPartnerLead
           ? "⚡ Lead qualificato. Inviare una mail personalizzata e pianificare un follow-up entro 24 ore."
           : "❄️ Lead a bassa priorità. Inserire nel funnel automatico e monitorare eventuali nuove interazioni.";
 
-const adminRows = [["Email",email],["Tipo richiesta",type.toUpperCase()],["Nome / azienda",name||"Non indicato"],["Telefono",phone||"Non indicato"],["Città",displayCity],["Provenienza",source],["Funnel",funnel],["Lingua utente",detectedLang.toUpperCase()],["Profilo / ruolo",role||"Non indicato"],["Messaggio",message||"Non indicato"]];
+const adminRows = [["Email",email],["Tipo richiesta",type.toUpperCase()],["Nome / azienda",name||"Non indicato"],["Telefono",phone||"Non indicato"],["Città",["partner","work","auth"].includes(type)?"Non indicata":displayCity],["Provenienza",source],["Funnel",funnel === "unknown"?"Non indicato":funnel],["Lingua utente",detectedLang.toUpperCase()],["Profilo / ruolo",role||"Non indicato"],["Messaggio",message||"Non indicato"]];
 if(!isOperationalLead){
   adminRows.push(["ROI",`ROI ${formatNumber(roiRounded, "it", 1)}%`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
 }
