@@ -596,3 +596,21 @@ body.dashboard-page .calendar-legend {display:flex;flex-wrap:wrap;gap:12px;margi
 }
 
 body.dashboard-page .rb-bookings-close {width:44px;height:44px;border:1px solid #cddcd2;border-radius:12px;background:white;color:#142b25;font-size:20px;cursor:pointer;flex-shrink:0;}
+
+/* FIX22: shared form sizing, including renovation dates on narrow screens. */
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) :is(input,select,textarea) {
+  box-sizing:border-box; min-width:0; max-width:100%; color:var(--rb-ink);
+  border-radius:12px; font:inherit;
+}
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) input[type="date"] {
+  width:100%; min-width:0; max-width:100%; -webkit-appearance:none; appearance:none; overflow:hidden;
+}
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) input[type="date"]::-webkit-date-and-time-value {text-align:left; min-width:0;}
+body.dashboard-page .property-modal-panel :is(button,input,select,textarea):focus-visible {outline:3px solid var(--rb-green);outline-offset:3px;}
+@media(max-width:640px) {
+  body.dashboard-page #renovation-modal [style*="grid-template-columns:repeat(auto-fit"] {grid-template-columns:minmax(0,1fr) !important;}
+  body.dashboard-page .property-modal-panel {box-sizing:border-box;max-width:100%;}
+  body.dashboard-page .property-modal-panel :is(input,select,button) {min-height:44px;}
+}
+
+body.tool-page [data-pdf-only]:not([data-pdf-allowed="true"]) {display:none !important;}

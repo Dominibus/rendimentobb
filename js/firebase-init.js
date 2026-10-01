@@ -50,6 +50,7 @@ window.firebaseAuth = auth;
 // ===============================
 
 window.currentUser = null;
+let rbAuthSnapshotOwner = null;
 window.currentPlan = null;
 window.firebaseReady = false;
 
@@ -70,14 +71,14 @@ window.getUserAccess = function(){
   const isLogged = !!window.currentUser;
 
   const isAdmin =
-    role === "admin";
+    isLogged && role === "admin";
 
   const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+    isLogged && (plan === "pro" ||
+    plan === "pro_yearly");
 
   const isInvestor =
-    plan === "investor";
+    isLogged && plan === "investor";
 
   const isFree =
     !isAdmin &&
@@ -93,7 +94,7 @@ window.getUserAccess = function(){
     isFree,
 
     canSeeFullAnalysis:
-      isAdmin || isPro,
+      isAdmin || isPro || isInvestor,
 
     canDownloadPDF:
       isAdmin || isPro,
@@ -234,6 +235,7 @@ console.log("🧠 USER STATE", {
 
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
+    if(auth.currentUser?.uid !== uid) return;
 
    let plan = "free";
 let role = "user";
@@ -478,6 +480,12 @@ onAuthStateChanged(auth, async (user) => {
 
   window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
 
+  if (rbAuthSnapshotOwner !== (user?.uid || null)) {
+    window.rbPMSData = null;
+    window.rbPMSInsight = null;
+    window.bestInvestmentData = null;
+  }
+  rbAuthSnapshotOwner = user?.uid || null;
   window.currentUser = user;
   window.rbSyncChatIdentity?.(user?.uid || null);
   window.firebaseReady = false;
@@ -491,6 +499,9 @@ onAuthStateChanged(auth, async (user) => {
     
     window.currentUser = null;
     window.currentPlan = "free";
+    window.userRole = "user";
+    window.isAdmin = () => false;
+    window.userProfile = {};
     window.userReady = false;
     window.firebaseReady = true;
     
@@ -551,6 +562,7 @@ document.body.classList.remove(
     // ===============================
 
     const freshSnap = await getDoc(userRef);
+    if(auth.currentUser?.uid !== user.uid) return;
     const userData = freshSnap.data();
 
     window.userProfile = {

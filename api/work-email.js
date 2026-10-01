@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 import crypto from "node:crypto";
+import { buildBrandedEmail, sendCheckedEmail } from "../lib/email-templates.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -39,7 +40,7 @@ function formatDate(value, lang){
     : `${match[3]}/${match[2]}/${match[1]}`;
 }
 
-function buildUrgentEmail({ lang, guestName, category, note, checkin, checkout }){
+function buildUrgentEmail({ lang, guestName, category, note, checkin, checkout, propertyName, bookingId }){
   const isEnglish = lang === "en";
   const categoryLabels = {
     maintenance:isEnglish ? "Maintenance" : "Manutenzione",
@@ -59,40 +60,9 @@ function buildUrgentEmail({ lang, guestName, category, note, checkin, checkout }
   const categoryLabel = isEnglish ? "Category" : "Categoria";
   const noteLabel = isEnglish ? "Issue details" : "Dettagli segnalazione";
   const ctaLabel = isEnglish ? "Open PMS activities" : "Apri attività PMS";
-  const text = [
-    title, intro,
-    `${isEnglish ? "Guest" : "Ospite"}: ${guestName}`,
-    `${periodLabel}: ${checkin} - ${checkout}`,
-    `${categoryLabel}: ${localizedCategory}`,
-    note ? `${noteLabel}: ${note}` : "",
-    "https://rendimentobb.it/dashboard/"
-  ].filter(Boolean).join("\n\n");
-
-  const html = `
-  <div style="margin:0;padding:32px 16px;background:#f1f5f9;font-family:Inter,Arial,sans-serif;color:#0f172a;">
-    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e2e8f0;">
-      <div style="padding:24px 28px;background:#0f172a;border-bottom:5px solid #10b981;">
-        <div style="font-size:22px;font-weight:900;color:#ffffff;">Rendimento<span style="color:#10b981;">BB</span></div>
-        <div style="margin-top:5px;font-size:12px;color:#94a3b8;">PMS · Host Operations</div>
-      </div>
-      <div style="padding:30px 28px;">
-        <div style="display:inline-block;padding:7px 11px;border-radius:999px;background:#fee2e2;color:#b91c1c;font-size:12px;font-weight:900;">🚨 ${escapeHTML(title)}</div>
-        <h1 style="margin:18px 0 8px;font-size:26px;line-height:1.25;">${escapeHTML(guestName)}</h1>
-        <p style="margin:0 0 22px;color:#475569;line-height:1.6;">${escapeHTML(intro)}</p>
-        <div style="padding:18px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;line-height:1.8;font-size:14px;">
-          <div><strong>${escapeHTML(periodLabel)}:</strong> ${escapeHTML(checkin)} → ${escapeHTML(checkout)}</div>
-          <div><strong>${escapeHTML(categoryLabel)}:</strong> ${escapeHTML(localizedCategory)}</div>
-          ${note ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;"><strong>${escapeHTML(noteLabel)}:</strong><br>${escapeHTML(note)}</div>` : ""}
-        </div>
-        <div style="margin-top:26px;text-align:center;">
-          <a href="https://rendimentobb.it/dashboard/" style="display:inline-block;padding:14px 22px;border-radius:12px;background:#10b981;color:#ffffff;text-decoration:none;font-weight:800;">${escapeHTML(ctaLabel)} →</a>
-        </div>
-        <p style="margin:24px 0 0;color:#94a3b8;font-size:11px;line-height:1.5;">${isEnglish ? "This operational email was generated from an urgent issue saved in your PMS." : "Questa email operativa è stata generata da una segnalazione urgente salvata nel tuo PMS."}</p>
-      </div>
-    </div>
-  </div>`;
-
-  return { title, text, html };
+  const rows=[[isEnglish?"Property":"Immobile",propertyName||"—"],[isEnglish?"Booking reference":"Riferimento prenotazione",bookingId],[isEnglish?"Guest":"Ospite",guestName],[periodLabel,`${checkin} → ${checkout}`],[categoryLabel,localizedCategory],[noteLabel,note||"—"]];
+  const email=buildBrandedEmail({lang,title,intro,rows,ctaLabel,ctaURL:"https://rendimentobb.it/dashboard/",eyebrow:isEnglish?"PMS · Host operations":"PMS · Operatività gestore",note:isEnglish?"Priority: urgent. Review the issue, contact the guest and record the outcome in the booking. This alert does not confirm that the issue was resolved.":"Priorità: urgente. Verifica la segnalazione, contatta l’ospite e registra l’esito nella prenotazione. Questo avviso non conferma la risoluzione del problema."});
+  return {title,...email};
 }
 
 export default async function handler(req, res) {
@@ -162,10 +132,14 @@ export default async function handler(req, res) {
 
     if(!shouldSend) return res.status(200).json({ success:true, duplicate:true });
 
+    const propertySnapshot = booking.propertyId ? await db.collection("properties").doc(booking.propertyId).get() : null;
+    const propertyName = propertySnapshot?.exists && propertySnapshot.data()?.uid === decoded.uid ? clean(propertySnapshot.data()?.name,120) : "";
     const guestName = clean(booking.guestName || (lang === "en" ? "Guest" : "Ospite"), 120);
     const email = buildUrgentEmail({
       lang,
       guestName,
+      propertyName,
+      bookingId,
       category:clean(issue.category || (lang === "en" ? "Other" : "Altro"), 80),
       note:clean(issue.note, 500),
       checkin:formatDate(booking.checkin, lang),
@@ -173,19 +147,16 @@ export default async function handler(req, res) {
     });
 
     try{
-      const result = await resend.emails.send({
+      const providerId = await sendCheckedEmail(resend,{
         from:"RendimentoBB PMS <analisi@rendimentobb.it>",
         to:[recipient],
         subject:`🚨 ${email.title} · ${guestName}`,
         text:email.text,
         html:email.html
-      });
-      if(result?.error){
-        throw new Error(result.error.message || "email_provider_error");
-      }
+      }, {idempotencyKey:`rb-pms-${signature}`});
       await notificationRef.set({
         status:"sent",
-        providerId:result?.data?.id || "",
+        providerId,
         sentAt:admin.firestore.FieldValue.serverTimestamp(),
         updatedAt:admin.firestore.FieldValue.serverTimestamp()
       }, { merge:true });

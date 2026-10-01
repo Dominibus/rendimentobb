@@ -544,8 +544,8 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
       ["equity",/capitale proprio|\bequity\b/],
       ["propertyPrice",/prezzo|property price/],
       ["occupancy",/occupazion|occupancy/]
-    ].filter(([,pattern])=>pattern.test(query)).map(([key])=>key);
-    const mode = /benchmark/.test(query) ? "benchmarkROI" : compare ? "compare" : summarize ? "summary" : interpret || requested.length !== 1 ? "interpretation" : requested[0];
+    ].filter(([key,pattern])=>pattern.test(key === "roi" ? query.replace(/benchmark\s+roi|roi\s+benchmark/g, "benchmark") : query)).map(([key])=>key);
+    const mode = compare ? "compare" : summarize ? "summary" : interpret || !requested.length ? "interpretation" : requested.length > 1 ? "multiple" : requested[0];
     const render = lang => {
         const en = lang === "en", locale = en ? "en-GB" : "it-IT";
         const fixedPercent = (value,digits=1) => `${new Intl.NumberFormat(locale,{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(Number(value))}%`;
@@ -564,6 +564,10 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
             if(!known.length) lines.push(en ? "Text extracted, but insufficient financial metrics recognized." : "Testo estratto, ma non ho riconosciuto indicatori finanziari sufficienti.");
             for(const key of known) lines.push(metric(key));
             lines.push(en ? "These are the document's figures and assumptions; missing values are not estimated." : "Sono dati e ipotesi del documento; i valori mancanti non vengono stimati.");
+        }else if(mode === "multiple"){
+            for(const key of requested) lines.push(metric(key));
+            if(requested.includes("dscr") && has("dscr")) lines.push(en ? (Number(a.dscr)<1 ? "DSCR below 1: modeled operating income does not cover annual debt service." : "DSCR at least 1: modeled operating income covers annual debt service; coverage should be stress-tested.") : (Number(a.dscr)<1 ? "DSCR inferiore a 1: il reddito operativo simulato non copre le rate annue del debito." : "DSCR almeno pari a 1: il reddito operativo simulato copre le rate annue; verifica la tenuta in scenari prudenti."));
+            if(requested.includes("benchmarkROI") && has("roi") && has("benchmarkROI")) lines.push(en ? `Reported ROI versus PDF benchmark: ${number(Number(a.roi)-Number(a.benchmarkROI))} percentage points. Compare their calculation bases before treating this as like-for-like.` : `ROI riportato rispetto al benchmark del PDF: ${number(Number(a.roi)-Number(a.benchmarkROI))} punti percentuali. Verifica che abbiano la stessa base di calcolo prima di considerarli omogenei.`);
         }else if(["investmentScore","dscr","benchmarkROI"].includes(mode)){
             lines.push(metric(mode));
             if(mode === "dscr" && has("dscr")) lines.push(en ? (Number(a.dscr)<1 ? "Below 1: modeled operating income does not cover annual debt service." : "At least 1: modeled operating income covers annual debt service; this is not a guarantee.") : (Number(a.dscr)<1 ? "Inferiore a 1: il reddito operativo simulato non copre le rate annue del debito." : "Almeno 1: il reddito operativo simulato copre le rate annue del debito; non è una garanzia."));
@@ -615,6 +619,12 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
             }
             if(loanRatio!==null) lines.push(en ? `Calculated loan/property price ratio: ${fixedPercent(loanRatio)}. Financing increases sensitivity of equity returns to revenue and cost changes.` : `Rapporto mutuo/prezzo calcolato dai valori del PDF: ${fixedPercent(loanRatio)}. Il finanziamento rende il rendimento del capitale proprio sensibile a variazioni di ricavi e costi.`);
             if(has("risk")) lines.push(metric("risk"));
+            if(has("investmentScore")) lines.push(metric("investmentScore"));
+            if(has("dscr")){
+                lines.push(metric("dscr"));
+                lines.push(en ? (Number(a.dscr)<1 ? "Debt coverage is insufficient in this scenario (DSCR below 1)." : "Debt service is covered in this scenario; test a reduction in revenue.") : (Number(a.dscr)<1 ? "La copertura del debito è insufficiente in questo scenario (DSCR inferiore a 1)." : "Il debito è coperto nello scenario: verifica anche una riduzione dei ricavi."));
+            }
+            if(has("benchmarkROI")) lines.push(metric("benchmarkROI"));
             if(!has("roi") && !has("cashflow")) lines.push(en ? "Insufficient recognized financial data to assess profitability." : "Non ho riconosciuto dati finanziari sufficienti per valutare la redditività.");
             lines.push(en ? "Before relying on this scenario, check occupancy assumptions, recurring costs, taxes and acquisition costs against the actual property data." : "Per valutare lo scenario, confronta occupazione, costi ricorrenti, imposte e spese di acquisto con i dati effettivi dell’immobile.");
         }

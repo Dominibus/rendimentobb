@@ -120,7 +120,7 @@ window.rbSyncChatIdentity = function(uid){
     window.dispatchEvent?.(new CustomEvent("rb_chat_context_changed"));
   } else {
     // Drop derived analysis caches only on identity changes, not on a new chat.
-    ["rbChatbotData","rbChatbotLive","rbInvestmentMemory","rbCanonicalAnalysis","lastAnalysisData","lastAdvisorResult"].forEach(key => { window[key] = null; });
+    ["rbChatbotData","rbChatbotLive","rbInvestmentMemory","rbCanonicalAnalysis","lastAnalysisData","lastAdvisorResult","rbPMSData","rbPMSInsight","bestInvestmentData"].forEach(key => { window[key] = null; });
     window.rbClearMemory();
   }
 };

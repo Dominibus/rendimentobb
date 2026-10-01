@@ -12,6 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="/js/lang.js"></script>
+<script src="/js/market-data.js?v=20261001-22"></script>
 <script src="/js/account-report-cache.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
@@ -638,7 +639,7 @@ body.report-page #global-footer .footer-bottom{
 </style>
 
 
-<link rel="stylesheet" href="/css/product-2027.css?v=20260930-10">
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 </head>
 
 <body class="report-page theme-light">
@@ -2753,10 +2754,10 @@ if(riskBreakdown){
     doc.setTextColor(...dark);
     doc.text(t("Confronto mercato","Market comparison"),20,20);
 
-    const localBenchmarks = { roma:8.4, milano:7.2, napoli:11.5, firenze:7.9 };
     const marketKey = String(city || "").toLowerCase().trim();
-    const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(localBenchmarks, marketKey);
-    const marketROI = hasLocalBenchmark ? localBenchmarks[marketKey] : 8.4;
+    const localROI = window.RB_MARKET_DATA?.[marketKey]?.roi;
+    const hasLocalBenchmark = Number.isFinite(Number(localROI)) && localROI != null;
+    const marketROI = hasLocalBenchmark ? Number(localROI) : 8.4;
 const diff = roi - marketROI;
 
 const comparisonColor =
@@ -3447,7 +3448,7 @@ window.addEventListener("pageshow", event => {
 </script>
 
 <!-- 🔥 MOBILE MENU ROOT -->
-<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>
+
   
 <!-- 🔥 UPGRADE MODAL (SAAS PREMIUM) -->
 <div id="upgradeModal" style="
@@ -3537,7 +3538,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20260930-17" defer></script>
+<script src="/js/chatbot-loader.js?v=20261001-22" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>

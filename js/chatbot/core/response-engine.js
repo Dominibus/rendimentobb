@@ -99,19 +99,23 @@ if(rbCurrentPDF?.status === "ready" &&
         investmentScore:["punteggio investimento","investment score"],
         dscr:["DSCR","DSCR"],
         benchmarkROI:["benchmark ROI","ROI benchmark"],
+        roi:["ROI","ROI"],
+        mortgage:["mutuo","mortgage"],
+        risk:["indice rischio","risk index"],
         propertyPrice:["prezzo immobile","property price"],
         equity:["capitale proprio","equity"],
         gross:["ricavi annui","annual revenue"],
         cashflow:["cashflow netto annuo","annual net cash flow"]
     };
-    const missing = Object.keys(fields).filter(key => rbCurrentPDF.analysis?.[key] === null || rbCurrentPDF.analysis?.[key] === undefined);
+    const missing = Object.keys(fields).filter(key => rbCurrentPDF.analysis?.[key] === null || rbCurrentPDF.analysis?.[key] === undefined || rbCurrentPDF.analysis?.[key] === "" || !Number.isFinite(Number(rbCurrentPDF.analysis?.[key])));
+    const recognized = Object.keys(fields).filter(key => !missing.includes(key));
     const afterMortgage = rbCurrentPDF.analysis?.cashflowBasis === "after_mortgage";
     const includedIT = afterMortgage ? "Il report specifica che il cashflow è dopo il mutuo." : "Il cashflow riportato non chiarisce da solo se le rate del mutuo siano incluse.";
     const includedEN = afterMortgage ? "The report explicitly states that cash flow is after mortgage payments." : "Reported cash flow alone does not clarify whether mortgage payments are included.";
     return {
         type:"document_data_quality",confidence:1,
-        textIT:`Fonte: ${rbCurrentPDF.fileName}.\n${missing.length ? "Non ho riconosciuto nel testo: " + missing.map(key=>fields[key][0]).join(", ") + "." : "Ho riconosciuto prezzo, capitale proprio, ricavi e cashflow."}\nNon riconosciuto non significa necessariamente assente dal documento. ${includedIT} Verifica anche le ipotesi di occupazione, tariffa media e le voci di costo dettagliate.`,
-        textEN:`Source: ${rbCurrentPDF.fileName}.\n${missing.length ? "Not recognized in the text: " + missing.map(key=>fields[key][1]).join(", ") + "." : "I recognized price, equity, revenue and cash flow."}\nUnrecognized does not necessarily mean absent from the document. ${includedEN} Also check occupancy, nightly-rate assumptions and detailed cost items.`,
+        textIT:`Fonte: ${rbCurrentPDF.fileName}.\n${missing.length ? "Non ho riconosciuto nel testo: " + missing.map(key=>fields[key][0]).join(", ") + "." : "Ho riconosciuto: " + recognized.map(key=>fields[key][0]).join(", ") + "."}\nNon riconosciuto non significa necessariamente assente dal documento. ${includedIT} Verifica anche le ipotesi di occupazione, tariffa media e le voci di costo dettagliate.`,
+        textEN:`Source: ${rbCurrentPDF.fileName}.\n${missing.length ? "Not recognized in the text: " + missing.map(key=>fields[key][1]).join(", ") + "." : "I recognized: " + recognized.map(key=>fields[key][1]).join(", ") + "."}\nUnrecognized does not necessarily mean absent from the document. ${includedEN} Also check occupancy, nightly-rate assumptions and detailed cost items.`,
         suggestionsIT:[],suggestionsEN:[],signals:["document_data_quality"],
         metadata:{source:"extracted_pdf_text",fileName:rbCurrentPDF.fileName,missingFields:missing}
     };

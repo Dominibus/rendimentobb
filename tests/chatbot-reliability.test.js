@@ -37,7 +37,7 @@ test('unreadable current PDF cannot use an old report or live scenario',async()=
 test('missing-field answers distinguish unrecognized values from absent values',async()=>{
  const c={window:{RB_DEBUG:false},console};vm.createContext(c);vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);
  const response=c.window.rbGenerateResponse({message:'Quali dati mancano nel PDF?',documentKnowledge:{activeDocument:{status:'ready',fileName:'brochure.pdf',analysis:{propertyPrice:210000,equity:null,gross:null,cashflow:null}}}});
- assert.equal(response.type,'document_data_quality');assert.equal(response.metadata.missingFields.length,6);assert.ok(response.textIT.includes('Non riconosciuto non significa'));
+ assert.equal(response.type,'document_data_quality');assert.equal(response.metadata.missingFields.length,9);assert.ok(response.metadata.missingFields.includes("roi"));assert.ok(response.metadata.missingFields.includes("risk"));assert.ok(response.textIT.includes('Non riconosciuto non significa'));
 });
 test('identity changes discard cached analysis; a new chat preserves current live input',()=>{
  const {c}=context(['core/memory-engine']);c.window.rbSyncChatIdentity('A');c.window.lastAnalysisData={roi:25};c.window.rbClearMemory();assert.equal(c.window.lastAnalysisData.roi,25);c.window.rbSyncChatIdentity('B');assert.equal(c.window.lastAnalysisData,null);
@@ -168,4 +168,14 @@ test('score DSCR benchmark and unrecognized follow-ups never leave the active PD
  const {c}=context(['document-engine']);vm.runInContext(await read('js/chatbot/core/response-engine.js'),c);vm.runInContext(await read('js/chatbot/core/chatbot-orchestrator.js'),c);
  c.window.rbActiveDocument={id:'active',status:'ready',fileName:'napoli.pdf',analysis:{investmentScore:0,dscr:.94,benchmarkROI:10.2,cashflow:-6678}};c.window.rbPDFConversationDocumentId='active';
  for(const query of ['Qual è il punteggio dell’investimento?','Qual è il DSCR e cosa significa?','Qual è il benchmark ROI riportato nel PDF?','Quali dati non hai riconosciuto?']){const r=await c.window.rbProcessAIMessage(query);assert.ok(['document_grounded','document_data_quality'].includes(r.response.type),query);assert.equal(c.window.rbPDFConversationDocumentId,'active');}
+});
+
+test('combined PDF question returns ROI, cashflow, risk, DSCR and benchmark without losing metrics',async()=>{
+ const {c}=context(['pdf-parser-engine','document-engine']);const doc={status:'ready',fileName:'napoli.pdf',extractedText:await read('tests/fixtures/napoli-negative-pdf.txt')};await c.window.rbParseExecutivePDF(doc);
+ const r=c.window.rbBuildPDFResponse('Nel PDF spiegami ROI, cashflow, rischio, DSCR e benchmark',doc);
+ assert.equal(r.metadata.answerMode,'multiple');for(const value of ['-4,2%','6.678','78/100','0,94','10,2%'])assert.ok(r.textIT.includes(value),value);assert.ok(r.textIT.includes('14,4'));assert.ok(r.textIT.includes('non copre'));
+});
+test('full PDF interpretation includes a valid zero score and debt coverage warning',async()=>{
+ const {c}=context(['pdf-parser-engine','document-engine']);const doc={status:'ready',fileName:'napoli.pdf',extractedText:await read('tests/fixtures/napoli-negative-pdf.txt')};await c.window.rbParseExecutivePDF(doc);
+ const r=c.window.rbBuildPDFResponse('Interpretami il PDF',doc);assert.ok(r.textIT.includes('0/100'));assert.ok(r.textIT.includes('0,94'));assert.ok(r.textIT.includes('10,2%'));assert.ok(r.textIT.includes('insufficiente'));
 });

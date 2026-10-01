@@ -5,6 +5,7 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 import crypto from "node:crypto";
+import { buildBrandedEmail, sendCheckedEmail } from "../lib/email-templates.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -49,301 +50,9 @@ function isLeadWorth(roi){
 }
 
 // ================= TEMPLATE =================
-function buildFunnelEmail({ roi, city, lang, stepType }){
-
-  const hasROI = roi > 0;
-
-  const tLocal = (it,en)=> lang==="en"?en:it;
-
-  let title = "";
-  let subtitle = "";
-  let urgency = "";
-  let warning = "";
-
-  if(stepType === "reminder_1"){
-
-    title = tLocal(
-      "Il tuo investimento potrebbe rendere molto di più",
-      "Your investment could perform much better"
-    );
-
-    subtitle = tLocal(
-      "L'analisi evidenzia gli indicatori che incidono davvero sulla sostenibilità dell'investimento.",
-      "The analysis highlights the indicators that truly affect the investment's sustainability."
-    );
-
-    urgency =
-      "📊 " +
-      tLocal(
-        "Confronta il tuo investimento con il mercato reale",
-        "Compare your investment with the real market"
-      );
-
-    warning = tLocal(
-      "Il ROI apparente spesso è molto diverso dal ROI reale dopo costi, tasse e mutuo.",
-      "Expected ROI is often very different from the real ROI after costs, taxes and financing."
-    );
-
-  }
-
-  if(stepType === "reminder_2"){
-
-    title = tLocal(
-      "Hai visto solo una parte dell'analisi",
-      "You have only seen part of the analysis"
-    );
-
-    subtitle = tLocal(
-      "La dashboard completa mostra dati che cambiano completamente la valutazione di un investimento.",
-      "The complete dashboard reveals insights that completely change investment decisions."
-    );
-
-    urgency =
-      "📊 " +
-      tLocal(
-        "Approfondisci cashflow, rischio e sostenibilità",
-        "Explore cash flow, risk and sustainability"
-      );
-
-    warning = tLocal(
-      "Investire senza vedere cashflow, rischio e benchmark aumenta la probabilità di errore.",
-      "Investing without cashflow, risk and benchmark analysis increases the probability of mistakes."
-    );
-
-  }
-
-  const roiBlock = hasROI
-  ? `
-  <div style="text-align:center;margin:36px 0;">
-
-    <div style="
-    font-size:14px;
-    color:#64748b;
-    letter-spacing:.5px;
-    text-transform:uppercase;
-    margin-bottom:8px;
-    ">
-
-      ${tLocal("ROI Stimato","Estimated ROI")}
-
-    </div>
-
-    <div style="
-    font-size:64px;
-    font-weight:900;
-    color:#10b981;
-    line-height:1;
-    ">
-
-      ${roi}%
-
-    </div>
-
-    <div style="
-    margin-top:10px;
-    color:#64748b;
-    font-size:16px;
-    ">
-
-      📍 ${city || "-"}
-
-    </div>
-
-    <div style="
-    margin-top:18px;
-    display:inline-block;
-    background:#ecfdf5;
-    color:#059669;
-    padding:8px 18px;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:700;
-    ">
-
-      🧠 ${tLocal(
-        "AI Executive Analysis Ready",
-        "AI Executive Analysis Ready"
-      )}
-
-    </div>
-
-  </div>
-  `
-  : "";
-
-  return `
-  <div style="
-  font-family:Inter,Arial,sans-serif;
-  background:#0f172a;
-  padding:40px;
-  ">
-
-    <div style="
-    max-width:680px;
-    margin:auto;
-    background:#ffffff;
-    border-radius:24px;
-    overflow:hidden;
-    ">
-
-      <div style="
-      padding:40px;
-      text-align:center;
-      ">
-
-        <img
-        src="https://rendimentobb.it/img/logo-main.png"
-        style="
-        width:130px;
-        margin-bottom:30px;
-        ">
-
-        <h2 style="
-        margin:0;
-        font-size:32px;
-        color:#0f172a;
-        line-height:1.2;
-        ">
-
-          ${title}
-
-        </h2>
-
-        <p style="
-        color:#64748b;
-        font-size:17px;
-        line-height:1.7;
-        margin:20px 0 10px;
-        ">
-
-          ${subtitle}
-
-        </p>
-
-        <div style="
-        display:inline-block;
-        margin-top:18px;
-        padding:10px 18px;
-        border-radius:999px;
-        background:#eff6ff;
-        color:#2563eb;
-        font-weight:700;
-        font-size:14px;
-        ">
-
-          ${urgency}
-
-        </div>
-
-        ${roiBlock}
-
-        <div style="
-        background:#fff7ed;
-        border:1px solid #fdba74;
-        color:#9a3412;
-        padding:18px;
-        border-radius:16px;
-        font-size:15px;
-        line-height:1.7;
-        margin-top:30px;
-        ">
-
-          ⚠️ ${warning}
-
-        </div>
-
-        <div style="
-        margin-top:28px;
-        background:#f8fafc;
-        border:1px solid #e2e8f0;
-        border-radius:16px;
-        padding:24px;
-        text-align:left;
-        ">
-
-          <div style="
-          font-size:15px;
-          font-weight:700;
-          margin-bottom:16px;
-          color:#0f172a;
-          ">
-
-            ${tLocal(
-              "Dashboard Executive include:",
-              "Executive Dashboard includes:"
-            )}
-
-          </div>
-
-          <ul style="
-          margin:0;
-          padding-left:20px;
-          color:#334155;
-          line-height:2;
-          ">
-
-            <li>✔ ${tLocal("ROI reale","Real ROI")}</li>
-            <li>✔ ${tLocal("Cashflow","Cashflow")}</li>
-            <li>✔ ${tLocal("AI Executive Score","AI Executive Score")}</li>
-            <li>✔ ${tLocal("Benchmark città","City benchmark")}</li>
-            <li>✔ ${tLocal("Break-even","Break-even")}</li>
-            <li>✔ ${tLocal("Simulazione mutuo","Mortgage simulation")}</li>
-            <li>✔ ${tLocal("Dashboard investimenti","Investment dashboard")}</li>
-            <li>✔ ${tLocal("Executive Report PDF","Executive PDF Report")}</li>
-
-          </ul>
-
-        </div>
-
-        <div style="
-        text-align:center;
-        margin:36px 0;
-        ">
-
-          <a
-          href="https://rendimentobb.it/dashboard"
-          style="
-          display:inline-block;
-          background:#10b981;
-          color:white;
-          padding:18px 34px;
-          border-radius:999px;
-          text-decoration:none;
-          font-weight:800;
-          font-size:16px;
-          ">
-
-            🚀 ${tLocal(
-              "Continua la tua analisi",
-              "Continue your analysis"
-            )}
-
-          </a>
-
-        </div>
-
-        <div style="
-        text-align:center;
-        color:#94a3b8;
-        font-size:13px;
-        line-height:1.7;
-        ">
-
-          <strong>Powered by RendimentoBB AI</strong><br>
-
-          ${tLocal(
-            "Investment Intelligence Platform",
-            "Investment Intelligence Platform"
-          )}
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-  `;
+function buildFunnelEmail({roi,city,lang,stepType}){
+  const en=lang === "en";
+  return buildBrandedEmail({lang,title:stepType === "reminder_1" ? (en?"Review your investment assumptions":"Rivedi le ipotesi del tuo investimento") : (en?"Continue your saved analysis":"Riprendi la tua analisi"),intro:en?"Review the scenario before moving forward: rental rates, occupancy, recurring costs and loan payments can change its results.":"Rivedi lo scenario prima di proseguire: tariffe, occupazione, costi ricorrenti e rate possono modificarne i risultati.",rows:[[en?"City":"Città",city||"—"],[en?"Recorded estimated ROI":"ROI stimato registrato",`${new Intl.NumberFormat(en?"en-GB":"it-IT",{maximumFractionDigits:1}).format(roi)}%`]],note:en?"This is a reminder about a simulation, not verified income or a current market appraisal. You can compare conservative assumptions in the simulator.":"Questo promemoria riguarda una simulazione, non incassi verificati o una perizia di mercato. Puoi confrontare ipotesi prudenti nel simulatore.",ctaLabel:en?"Open the simulator":"Apri il simulatore",ctaURL:"https://rendimentobb.it/tool/",secondaryLabel:en?"Contact us about these emails":"Contattaci per queste email",secondaryURL:"https://rendimentobb.it/contact.html",eyebrow:en?"Investment analysis · Reminder":"Analisi investimento · Promemoria"}).html;
 }
 
 // ================= HANDLER =================
@@ -377,7 +86,7 @@ export default async function handler(req, res){
       if(!isLeadWorth(roi)) continue;
 
       // ================= ANTI DOUBLE SEND =================
-      if(data.sending === true) continue;
+      if(data.sending === true && now - Number(data.sendingStartedAt || 0) < 10*60*1000) continue;
 
       const createdAt = data.createdAt?.toMillis?.() || now;
 
@@ -397,9 +106,13 @@ export default async function handler(req, res){
 
         // ================= LOCK =================
 
-        await db.collection("email_funnel").doc(doc.id).update({
-          sending:true
+        const funnelRef=db.collection("email_funnel").doc(doc.id);
+        const acquired=await db.runTransaction(async tx=>{
+          const fresh=await tx.get(funnelRef);const state=fresh.data()||{};
+          if((state.sentSteps||[]).includes(i) || (state.sending===true && now-Number(state.sendingStartedAt||0)<10*60*1000))return false;
+          tx.update(funnelRef,{sending:true,sendingStartedAt:now});return true;
         });
+        if(!acquired)continue;
 
         let subject = "";
 
@@ -407,9 +120,9 @@ export default async function handler(req, res){
 
           subject = lang==="en"
 
-          ? `📈 Your investment could perform better${roi>0?` • ROI ${roi}%`:""}`
+          ? `📈 Review your investment assumptions${roi>0?` • ROI ${roi}%`:""}`
 
-          : `📈 Il tuo investimento potrebbe rendere di più${roi>0?` • ROI ${roi}%`:""}`;
+          : `📈 Rivedi le ipotesi del tuo investimento${roi>0?` • ROI ${roi}%`:""}`;
 
         }
 
@@ -425,7 +138,7 @@ export default async function handler(req, res){
 
         try{
 
-          await resend.emails.send({
+          await sendCheckedEmail(resend,{
 
             from:"RendimentoBB <analisi@rendimentobb.it>",
 
@@ -459,7 +172,7 @@ https://rendimentobb.it/dashboard
 
             })
 
-          });
+          }, {idempotencyKey:`rb-funnel-${doc.id}-${i}`});
 
           sentSteps.push(i);
 

@@ -21,6 +21,13 @@ async function(message){
       String(message || "")
         .trim();
 
+    const portalResponse = window.rbBuildPortalResponse?.(text);
+    if(portalResponse){
+      window.rbPDFConversationDocumentId = null;
+      window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"portal_facts"}});
+      return {success:true,response:portalResponse,intent:{intent:"portal_facts"}};
+    }
+
     // Handle explicit document requests once before the multi-intent/live pipeline.
     const activePDF = window.rbDocumentManager?.getLast?.();
     const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);

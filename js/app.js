@@ -951,7 +951,7 @@ if(!window.currentUser){
   const access = window.getUserAccess?.() || {};
 
   // PRO / ADMIN
-  if(access.canSeeFullAnalysis){
+  if(access.isAdmin || hasPlan(requiredPlan)){
     return true;
   }
 
@@ -1041,7 +1041,7 @@ window.triggerHomeUpgradeFlow = function(data = {}){
 window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const access = window.getUserAccess?.() || {};
-  if(!access || access.canSeeFullAnalysis) return;
+  if(!access || access.canDownloadPDF) return;
 
   if(access.isInvestor) type = "pro";
 
@@ -2444,7 +2444,9 @@ if(!window.firebaseReady){
 
 const access = window.getUserAccess();
 
-btn.style.display = access.canSeeFullAnalysis ? "inline-block" : "none";
+btn.style.display = access.canDownloadPDF ? "inline-block" : "none";
+const pdfPanel = btn.closest("[data-pdf-only]");
+if(pdfPanel) pdfPanel.dataset.pdfAllowed = String(!!access.canDownloadPDF);
 
 if(window.RB_DEBUG === true){
 
@@ -2453,6 +2455,9 @@ if(window.RB_DEBUG === true){
 }
 
 }
+
+document.addEventListener("rb_auth_ready", updatePDFButton);
+window.addEventListener("rb_plan_ready", updatePDFButton);
 
 // ================= ANIMATION + UI BOOST =================  👈 AGGIUNGI QUI
 
@@ -5850,7 +5855,7 @@ const T = (it,en)=> isEN ? en : it;
 
 if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
-if(!access.canSeeFullAnalysis){ openUpgradeModal("pro"); return; }
+if(!access.canDownloadPDF){ openUpgradeModal("pro"); return; }
 
 if(!window.lastAnalysisData){
   showToast(T("Genera prima analisi","Run analysis first"));
@@ -8614,7 +8619,7 @@ function unlockProUI(){
   });
 
   // ================= SHOW PRO CONTENT =================
-  document.querySelectorAll(".pro-only").forEach(el=>{
+  document.querySelectorAll(".pro-only:not([data-pdf-only])").forEach(el=>{
     el.style.display = "block";
     el.style.opacity = "1";
   });

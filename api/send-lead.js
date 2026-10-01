@@ -5,6 +5,7 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 import crypto from "node:crypto";
+import { buildBrandedEmail, sendCheckedEmail } from "../lib/email-templates.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -286,7 +287,7 @@ export default async function handler(req, res){
         .limit(1)
         .get();
       if(!repeatedRequest.empty){
-        return res.status(200).json({ success:true, duplicate:true });
+        return res.status(200).json({ success:true, duplicate:true, leadSaved:true, emailDelivery:repeatedRequest.docs[0].data().emailDelivery || {} });
       }
     }
 
@@ -429,6 +430,7 @@ lastType:type,
 };
 
 if(isExistingLead){
+  delete leadPayload.status;
 
   await db
   .collection("leads")
@@ -437,7 +439,7 @@ if(isExistingLead){
 
 }else{
 
-  await db.collection("leads").add({
+  const savedLead = await db.collection("leads").add({
 
     ...leadPayload,
 
@@ -445,6 +447,7 @@ if(isExistingLead){
     admin.firestore.FieldValue.serverTimestamp()
 
   });
+  leadId = savedLead.id;
 
 }
 
@@ -571,182 +574,34 @@ if(type === "auth"){
   );
 }
 
-const userHtml = `
-<div style="font-family:Arial;padding:20px;color:#111">
-
-  <p>${t(detectedLang,"Ciao,","Hi,")}</p>
-
-  <div style="
-background:#f8fafc;
-padding:18px;
-border-radius:14px;
-margin:20px 0;
-border:1px solid #e2e8f0;
-">
-
-    <div style="
-    font-size:18px;
-    font-weight:700;
-    color:#10b981;
-    margin-bottom:10px;
-    ">
-
-      ${userHeading}
-
-    </div>
-
-    <div style="
-    font-size:14px;
-    color:#334155;
-    line-height:1.6;
-    ">
-
-${userDescription}
-
-    </div>
-
-  </div>
-
-${showInvestmentResults ? `<div style="
-display:flex;
-gap:16px;
-margin:24px 0;
-flex-wrap:wrap;
-">
-
-<div style="
-flex:1;
-min-width:180px;
-padding:20px;
-background:#f8fafc;
-border:1px solid #e2e8f0;
-border-radius:14px;
-text-align:center;
-">
-
-<div style="
-font-size:13px;
-color:#64748b;
-margin-bottom:6px;
-">
-
-${t(detectedLang, "ROI stimato", "Estimated ROI")}
-
-</div>
-
-<div style="
-font-size:28px;
-font-weight:800;
-color:#10b981;
-">
-
-${formatNumber(roiRounded, detectedLang, 1)}%
-
-</div>
-
-</div>
-
-${
-profit > 0
-? `
-<div style="
-flex:1;
-min-width:180px;
-padding:20px;
-background:#f8fafc;
-border:1px solid #e2e8f0;
-border-radius:14px;
-text-align:center;
-">
-
-<div style="
-font-size:13px;
-color:#64748b;
-margin-bottom:6px;
-">
-
-${t(
-detectedLang,
-"Profitto annuo",
-"Annual Profit"
-)}
-
-</div>
-
-<div style="
-font-size:28px;
-font-weight:800;
-color:#0f172a;
-">
-
-${formatMoney(profit, detectedLang)}
-
-</div>
-
-</div>
-`
-: ""
+const submitted = req.body || {};
+const provided = key => submitted[key] !== null && submitted[key] !== undefined && submitted[key] !== "";
+const userRows = [[t(detectedLang,"Email","Email"),email]];
+if(name) userRows.push([t(detectedLang,"Nome / azienda","Name / company"),name]);
+if(phone) userRows.push([t(detectedLang,"Telefono","Phone"),phone]);
+if(city !== "N/A" && !["partner","work","auth"].includes(type)) userRows.push([t(detectedLang,"Città","City"),displayCity]);
+if(role) userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]);
+if(message) userRows.push([t(detectedLang,"Messaggio inviato","Submitted message"),message]);
+if(type === "mutui"){
+  if(provided("price")) userRows.push([t(detectedLang,"Importo simulato","Modeled amount"),formatMoney(price,detectedLang)]);
+  if(years) userRows.push([t(detectedLang,"Durata","Term"),`${years} ${t(detectedLang,"anni","years")}`]);
+  if(rate) userRows.push([t(detectedLang,"Tasso ipotizzato","Assumed rate"),`${rate}%`]);
+  if(bank) userRows.push([t(detectedLang,"Banca indicata","Selected bank"),bank]);
 }
-
-</div>
-
-  ${
-profit > 0
-? `
-<p>
-  ${t(
-    detectedLang,
-    "Profitto annuo stimato:",
-    "Estimated yearly profit:"
-  )}
-  <strong>${formatMoney(profit, detectedLang)}</strong>
-</p>
-`
-: ""
+if(showInvestmentResults){
+  for(const [key,label,enLabel,val] of [
+    ["price","Prezzo immobile","Property price",formatMoney(price,detectedLang)],
+    ["equity","Capitale proprio","Equity",formatMoney(equity,detectedLang)],
+    ["roi","ROI stimato","Estimated ROI",`${formatNumber(roiRounded,detectedLang,1)}%`],
+    ["profit","Cashflow / profitto annuo simulato","Modeled annual cash flow / profit",formatMoney(profit, detectedLang)],
+    ["noi","Reddito operativo netto simulato","Modeled net operating income",formatMoney(noi,detectedLang)],
+    ["annualDebtService","Rate annue simulate","Modeled annual debt service",formatMoney(annualDebtService,detectedLang)],
+    ["dscr","DSCR simulato","Modeled DSCR",formatNumber(canonicalDSCR,detectedLang,2)]
+  ]) if(provided(key)) userRows.push([t(detectedLang,label,enLabel),val]);
 }
-` : ""}
-
-  <p>
-
-    ${
-      t(
-        detectedLang,
-        "Puoi continuare da qui:",
-        "You can continue here:"
-      )
-    }
-
-  </p>
-
-  <p>
-
-<a
-href="${cta}"
-style="
-display:inline-block;
-background:#10b981;
-color:white;
-padding:14px 22px;
-border-radius:999px;
-text-decoration:none;
-font-weight:700;
-">
-🚀 ${ctaLabel}
-</a>
-
-  </p>
-
-  <br>
-
-  <p style="font-size:12px;color:#666">
-
-    RendimentoBB<br>
-    https://rendimentobb.it
-
-  </p>
-
-</div>
-`;
+const userMail = buildBrandedEmail({lang:detectedLang,title:userHeading,intro:userDescription.replaceAll(htmlCity,displayCity),rows:userRows,
+  note:showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
+  ctaLabel,ctaURL:cta,eyebrow:t(detectedLang,"Conferma richiesta","Request confirmation")});
 
 // ================= SUBJECT =================
 
@@ -809,27 +664,17 @@ else if(type === "auth"){
 
 }
 
-await resend.emails.send({
-
-  from: "RendimentoBB <analisi@rendimentobb.it>",
-
-  to: [email],
-
-  subject,
-
-  html: userHtml,
-
-  text: `
-${t(
-  detectedLang,
-  "Abbiamo ricevuto la tua richiesta su RendimentoBB.",
-  "We received your request on RendimentoBB."
-)}
-
-${cta}
-`
-
-});
+const delivery = {};
+async function deliver(audience,payload){
+  try {
+    const providerId=await sendCheckedEmail(resend,payload,{idempotencyKey:`rb-lead-${hashRateKey(`${requestId || leadId}:${audience}:${requestId ? "" : Date.now()}`)}`});
+    delivery[audience]={status:"accepted",providerId};
+  } catch(error) {
+    delivery[audience]={status:"failed",reason:clean(error?.message,200)};
+  }
+  await db.collection("leads").doc(leadId).update({[`emailDelivery.${audience}`]:{...delivery[audience],updatedAt:admin.firestore.FieldValue.serverTimestamp()}});
+}
+await deliver("user",{from:"RendimentoBB <analisi@rendimentobb.it>",to:[email],replyTo:"rendimentobb@gmail.com",subject,html:userMail.html,text:userMail.text});
 
 // ================= ADMIN EMAIL =================
 
@@ -926,296 +771,20 @@ const adminSuggestion = isPartnerLead
           ? "⚡ Lead qualificato. Inviare una mail personalizzata e pianificare un follow-up entro 24 ore."
           : "❄️ Lead a bassa priorità. Inserire nel funnel automatico e monitorare eventuali nuove interazioni.";
 
-await resend.emails.send({
-
-from:"RendimentoBB Lead <lead@rendimentobb.it>",
-
-to:["rendimentobb@gmail.com"],
-
-subject: adminSubject,
-
-html:`
-
-<div style="
-font-family:Inter,Arial,sans-serif;
-background:#f8fafc;
-padding:35px;
-">
-
-<div style="
-max-width:760px;
-margin:auto;
-background:white;
-border-radius:22px;
-overflow:hidden;
-box-shadow:0 20px 60px rgba(15,23,42,.08);
-">
-
-<div style="
-background:${leadColor};
-padding:28px;
-color:white;
-">
-
-<div style="
-font-size:24px;
-font-weight:800;
-">
-
-${leadTitle}
-
-</div>
-
-<div style="
-margin-top:18px;
-display:flex;
-gap:14px;
-flex-wrap:wrap;
-">
-
-${!isOperationalLead ? `<div style="
-background:rgba(255,255,255,.18);
-padding:10px 16px;
-border-radius:999px;
-font-weight:700;
-">
-
-ROI ${formatNumber(roiRounded, "it", 1)}%
-
-</div>` : ""}
-
-${!isOperationalLead ? `<div style="
-background:rgba(255,255,255,.18);
-padding:10px 16px;
-border-radius:999px;
-font-weight:700;
-">
-
-€${value} Lead
-
-</div>` : ""}
-
-<div style="
-background:rgba(255,255,255,.18);
-padding:10px 16px;
-border-radius:999px;
-font-weight:700;
-">
-
-${htmlType}
-
-</div>
-
-</div>
-
-<div style="
-margin-top:12px;
-font-size:15px;
-opacity:.92;
-line-height:1.5;
-">
-
-Nuovo lead acquisito da RendimentoBB
-
-</div>
-
-</div>
-
-<div style="padding:32px;">
-
-<table
-width="100%"
-cellpadding="10"
-style="border-collapse:collapse;width:100%;">
-
-<tr>
-<td><strong>📧 Email</strong></td>
-<td>${htmlEmail}</td>
-</tr>
-
-${name ? `
-<tr>
-<td><strong>👤 Nome</strong></td>
-<td>${htmlName}</td>
-</tr>
-` : ""}
-
-${phone ? `
-<tr>
-<td><strong>📱 Telefono</strong></td>
-<td>${htmlPhone}</td>
-</tr>
-` : ""}
-
-${isPropertyUpdatesLead ? `<tr>
-<td><strong>🏙 Città richiesta</strong></td>
-<td>${htmlCity}</td>
-</tr>` : ""}
-
-${isMortgageLead ? `<tr>
-<td><strong>💶 Importo richiesto</strong></td>
-<td>${formatMoney(price, "it")}</td>
-</tr>
-<tr>
-<td><strong>📅 Durata</strong></td>
-<td>${years > 0 ? `${formatNumber(years, "it", 0)} anni` : "Non indicata"}</td>
-</tr>
-<tr>
-<td><strong>📉 Tasso simulato</strong></td>
-<td>${htmlRate ? `${htmlRate}%` : "Non indicato"}</td>
-</tr>` : ""}
-
-${!isOperationalLead ? `<tr>
-<td><strong>🏙 Città</strong></td>
-<td>${htmlCity}</td>
-</tr>
-
-<tr>
-<td><strong>📈 ROI</strong></td>
-<td><strong>${formatNumber(roiRounded, "it", 1)}%</strong></td>
-</tr>
-
-<tr>
-<td><strong>💰 Profitto</strong></td>
-<td>${formatMoney(profit, "it")}</td>
-</tr>
-
-<tr>
-<td><strong>🏦 Capitale</strong></td>
-<td>${formatMoney(equity, "it")}</td>
-</tr>
-
-<tr>
-<td><strong>🏠 Prezzo immobile</strong></td>
-<td>${formatMoney(price, "it")}</td>
-</tr>
-
-<tr>
-<td><strong>💳 Mutuo</strong></td>
-<td>${formatMoney(loan, "it")}</td>
-</tr>
-
-<tr>
-<td><strong>🏦 DSCR</strong></td>
-<td>${formatNumber(canonicalDSCR, "it", 2)}</td>
-</tr>` : ""}
-
-${!isPropertyUpdatesLead && !isMortgageLead ? `<tr>
-<td><strong>🎯 Lead Score</strong></td>
-<td>${label}</td>
-</tr>` : ""}
-
-<tr>
-<td><strong>🌍 Fonte</strong></td>
-<td>${htmlSource}</td>
-</tr>
-
-<tr>
-<td><strong>🧭 Funnel</strong></td>
-<td>${htmlFunnel}</td>
-</tr>
-
-${bank ? `
-<tr>
-<td><strong>🏦 ${isMortgageLead ? "Scenario" : "Banca"}</strong></td>
-<td>${htmlBank}</td>
-</tr>
-` : ""}
-
-${rate && !isMortgageLead ? `
-<tr>
-<td><strong>📉 Tasso</strong></td>
-<td>${htmlRate}%</td>
-</tr>
-` : ""}
-
-${role ? `
-<tr>
-<td><strong>💼 Ruolo</strong></td>
-<td>${htmlRole}</td>
-</tr>
-` : ""}
-
-${message ? `
-<tr>
-<td><strong>💬 Messaggio</strong></td>
-<td>${htmlMessage}</td>
-</tr>
-` : ""}
-
-</table>
-
-<div style="
-margin-top:30px;
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-">
-
-<a
-href="mailto:${encodeURIComponent(email)}"
-style="
-background:#10b981;
-color:white;
-padding:14px 22px;
-border-radius:999px;
-text-decoration:none;
-font-weight:700;
-display:inline-block;
-">
-
-✉️ Contatta Lead
-
-</a>
-
-<a
-href="https://rendimentobb.it/dashboard"
-style="
-background:#0f172a;
-color:white;
-padding:14px 22px;
-border-radius:999px;
-text-decoration:none;
-font-weight:700;
-display:inline-block;
-">
-
-📊 Apri Dashboard
-
-</a>
-
-</div>
-
-<div style="
-margin-top:28px;
-padding:18px;
-background:#ecfdf5;
-border:1px solid #bbf7d0;
-border-radius:14px;
-font-size:14px;
-line-height:1.7;
-">
-
-<strong>${isOperationalLead ? "✅ Azione consigliata" : "💡 Suggerimento operativo"}</strong><br><br>
-
-${adminSuggestion}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`
-
-});
+const adminRows = [["Email",email],["Tipo richiesta",type.toUpperCase()],["Nome / azienda",name||"Non indicato"],["Telefono",phone||"Non indicato"],["Città",displayCity],["Provenienza",source],["Funnel",funnel],["Lingua utente",detectedLang.toUpperCase()],["Profilo / ruolo",role||"Non indicato"],["Messaggio",message||"Non indicato"]];
+if(!isOperationalLead){
+  adminRows.push(["ROI",`ROI ${formatNumber(roiRounded, "it", 1)}%`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
+}
+if(isMortgageLead)adminRows.push(["Importo simulato",formatMoney(price,"it")],["Durata",`${years} anni`],["Tasso ipotizzato",rate?`${rate}%`:"Non indicato"],["Banca",bank||"Non indicato"]);
+const adminMail=buildBrandedEmail({lang:"it",title:leadTitle,intro:"Nuovo lead acquisito da RendimentoBB",rows:adminRows,note:`Suggerimento operativo: ${adminSuggestion}`,ctaLabel:"Apri Dashboard",ctaURL:"https://rendimentobb.it/dashboard-leads/",secondaryLabel:"Contatta Lead",secondaryURL:`mailto:${encodeURIComponent(email)}`,eyebrow:"Centro gestione lead · Admin"});
+await deliver("admin",{from:"RendimentoBB Lead <lead@rendimentobb.it>",to:["rendimentobb@gmail.com"],replyTo:email,subject:adminSubject,html:adminMail.html,text:adminMail.text});
 
 }
 
 return res.status(200).json({
   success: true,
+  leadSaved: true,
+  emailDelivery: delivery,
   value,
   score
 });

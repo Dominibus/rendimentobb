@@ -2692,6 +2692,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // ================= GET PLAN =================
       const userDoc = await getDoc(doc(db, "users", user.uid));
+      if(auth.currentUser?.uid !== user.uid) return;
 
       if(userDoc.exists()){
         const data = userDoc.data();
@@ -10944,6 +10945,8 @@ async function loadBookings(propertyId){
     return;
   }
 
+  if(!window.currentUser || !canUseFirestorePMS()) return;
+  const bookingsOwnerUid = window.currentUser.uid;
   const showAllProperties = propertyId === "all";
   const q = showAllProperties
     ? query(
@@ -10958,6 +10961,7 @@ async function loadBookings(propertyId){
 
   const snap =
     await getDocs(q);
+  if(window.currentUser?.uid !== bookingsOwnerUid || !canUseFirestorePMS()) return;
 
   const bookingsData = [];
   window.currentBookingsData = bookingsData;
@@ -11881,6 +11885,7 @@ const normalizedBookings =
         ),
 
       totalAmount,
+      amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 
       nightlyRate:
         calculatedNights > 0
@@ -11912,6 +11917,9 @@ const normalizedBookings =
             }
           : null,
 
+      touristTax: booking.touristTax || null,
+      guestRegistration: booking.guestRegistration || null,
+      cleaning: booking.cleaning || null,
       guestIssue: booking.guestIssue || null,
 
       validDateRange:
@@ -11945,6 +11953,10 @@ window.rbPMSData = {
 
   bookingList:
     normalizedBookings,
+  portalBookingList: showAllProperties ? normalizedBookings : [
+    ...(window.rbPMSData?.portalBookingList || []).filter(item => item.propertyId !== propertyId),
+    ...normalizedBookings
+  ],
 
   attentionBookings,
 
@@ -12368,7 +12380,7 @@ async function loadPMSStats(){
       "pms-checkout-today":departures, "pms-pending-bookings":0
     };
     Object.entries(values).forEach(([id,value]) => setText(id,value));
-    window.rbPMSData = {isDemo:true, properties:1, bookings:monthBookings.length,
+    window.rbPMSData = {isDemo:true, propertyList:[{id:"demo-property", name:"Immobile demo",city:"Roma",acquisitionPrice:null}], properties:1, bookings:monthBookings.length,
       revenue, occupancy, adr, revpar:revenue/days, guests:inHouse,
       bookingList:monthBookings, attentionBookings:[], attentionCount:0,
       arrivalsToday:arrivals, departuresToday:departures, guestsInHouse:inHouse,
@@ -12379,6 +12391,8 @@ async function loadPMSStats(){
   }
 
   if(!window.currentUser) return;
+  if(!canUseFirestorePMS()) return;
+  const pmsOwnerUid = window.currentUser.uid;
 
   const propertiesSnap =
     await getDocs(
@@ -12403,6 +12417,8 @@ async function loadPMSStats(){
         )
       )
     );
+
+  if(window.currentUser?.uid !== pmsOwnerUid || !canUseFirestorePMS()) return;
 
   const properties =
     propertiesSnap.size;
@@ -12971,6 +12987,7 @@ const normalizedPMSBookings =
           ),
 
         totalAmount,
+        amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 
         nightlyRate:
           calculatedNights > 0
@@ -13037,6 +13054,14 @@ window.rbPMSData = {
     window.rbPMSData || {}
   ),
 
+  ownerUid: pmsOwnerUid,
+  portalSnapshotReady: true,
+  propertyList: propertiesSnap.docs.map(item => {
+    const property = item.data() || {};
+    const rawPrice = property.investmentSnapshot?.propertyPrice;
+    return {id:item.id, name:String(property.name || ""), city:String(property.city || ""),
+      acquisitionPrice:rawPrice != null && rawPrice !== "" && Number.isFinite(Number(rawPrice)) ? Number(rawPrice) : null};
+  }),
   properties,
 
   renovationList,
@@ -13070,6 +13095,7 @@ window.rbPMSData = {
   // Complete booking memory for Copilot
   bookingList:
     normalizedPMSBookings,
+  portalBookingList: normalizedPMSBookings,
 
   attentionBookings:
     pmsAttentionBookings,
