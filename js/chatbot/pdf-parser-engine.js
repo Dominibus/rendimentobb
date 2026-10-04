@@ -435,13 +435,30 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const adr =
+        // ADR must be an adjacent, explicitly labelled amount. Do not scan
+        // narrative text for the next number: it can be a footer date.
+        function extractADR(){
+            const label = "\\b(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)\\b";
+            const amount = "([0-9]+(?:[.,][0-9]+)*)(?![0-9.,])";
+            const patterns = [
+                // Exported PMS table: ADR RevPAR 155 € 28 €.
+                new RegExp(label + "\\s+RevPAR\\s+" + amount + "\\s*€", "ig"),
+                new RegExp(label + "\\s*(?:[:=]\\s*)?€\\s*" + amount + "(?!\\s*[/:%–—-])", "ig"),
+                new RegExp(label + "\\s*(?:[:=]\\s*)?" + amount + "\\s*€", "ig"),
+                new RegExp(label + "\\s*\\(€\\)\\s*[:=]?\\s*" + amount + "(?!\\s*[/:%–—-])", "ig"),
+                // A colon/equal sign also makes a unitless value explicit.
+                new RegExp(label + "\\s*[:=]\\s*" + amount + "(?=\\s|$)(?!\\s*[/:%–—-])", "ig")
+            ];
+            for(const pattern of patterns){
+                for(const match of text.matchAll(pattern)){
+                    const value = parseAmount(match[1]);
+                    if(value !== null && value >= 0){ return value; }
+                }
+            }
+            return null;
+        }
 
-            extractAmount(
-
-                /(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)[^0-9\-]*(-?[\d.,]+)/i
-
-            );
+        const adr = extractADR();
 
         const extractedVerdict =
 

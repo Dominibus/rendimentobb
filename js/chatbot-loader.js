@@ -164,7 +164,7 @@
 
     "/js/chatbot/document-engine.js?v=20261004-rc02",
     "/js/chatbot/pdf-extraction-engine.js?v=20261004-rc02",
-    "/js/chatbot/pdf-parser-engine.js?v=20261001-22",
+    "/js/chatbot/pdf-parser-engine.js?v=20261004-rc07",
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/executive-narrative-engine.js",
