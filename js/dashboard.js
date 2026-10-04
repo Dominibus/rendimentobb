@@ -1,3 +1,4 @@
+import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
@@ -411,9 +412,17 @@ function isConfirmedBooking(booking){
 
 // Every availability decision reads the server; local lists are display data only.
 const runBookingOperation = createBookingOperationGuard();
+const mutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
 
 function bookingOperationError(error){
   const messages = {
+    "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
+    "booking/stale_version": ["La prenotazione è stata modificata altrove. Riapri il dettaglio prima di salvare.", "The booking was changed elsewhere. Reopen its details before saving."],
+    "booking/plan_required": ["Questa operazione PMS richiede un piano Investor o Pro attivo.", "This PMS operation requires an active Investor or Pro plan."],
+    "booking/unauthorized": ["Sessione non valida. Accedi nuovamente.", "Invalid session. Sign in again."],
+    "booking/invalid_payload": ["Verifica i dati della prenotazione prima di salvare.", "Check booking data before saving."],
+    "booking/too_many_requests": ["Troppe operazioni ravvicinate. Attendi un minuto e riprova.", "Too many operations. Wait a minute and try again."],
+    "booking/property_has_bookings": ["Questa proprietà ha prenotazioni nello storico. Non può essere eliminata lasciando prenotazioni scollegate.", "This property has booking history. It cannot be deleted leaving orphaned bookings."],
     "booking/conflict": ["Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.", "Dates unavailable: an overlapping booking already exists for this property."],
     "booking/invalid_existing_dates": ["Verifica le date delle prenotazioni esistenti di questa proprietà prima di confermare disponibilità.", "Check existing booking dates for this property before confirming availability."],
     "booking/invalid_dates": ["Il check-out deve essere successivo al check-in e le date devono essere valide.", "Check-out must be after check-in and dates must be valid."],
@@ -6625,49 +6634,22 @@ onclick="deleteProperty('${docItem.id}')">
 // 🏠 DELETE PROPERTY
 // =====================================
 
-window.deleteProperty =
-async function(id){
-
-  const ok =
-  confirm(
-    t(
-      "Eliminare proprietà?",
-      "Delete property?"
-    )
-  );
-
-if(!ok) return;
-
-  const propertyRef = doc(db, "properties", id);
-  const propertySnap = await getDoc(propertyRef);
-  const analysisId = propertySnap.exists()
-    ? propertySnap.data().analysisId
-    : null;
-
-  const linkedAnalysisSnap = analysisId
-    ? await getDoc(doc(db, "analyses", analysisId))
-    : null;
-
-  if(linkedAnalysisSnap?.exists()){
-    const batch = writeBatch(db);
-    batch.delete(propertyRef);
-    batch.update(
-      doc(db, "analyses", analysisId),
-      { isPortfolio: false, propertyId: null }
-    );
-    await batch.commit();
-  }else{
-    await deleteDoc(propertyRef);
-  }
-
-  await loadProperties();
-
-  await loadPMSStats();
-
-  window.__dashboardLoaded = false;
-  window.__forceReload = true;
-  await loadDashboard();
-
+window.deleteProperty = async function(id){
+  if(!id || !window.currentUser || !confirm(t("Eliminare proprietà?", "Delete property?"))) return;
+  return runBookingOperation(`property:${id}`,async()=>{
+    try{await mutatePMS("delete_property",{propertyId:id});}
+    catch(error){dashboardError("Property deletion failed",error);bookingOperationError(error);return;}
+    try{
+      await loadProperties();
+      await loadPMSStats();
+      window.__dashboardLoaded=false;
+      window.__forceReload=true;
+      await loadDashboard();
+    }catch(error){
+      dashboardError("Property deleted; refresh failed",error);
+      alert(t("Proprietà eliminata. Aggiorna la pagina per ricaricare i dati.", "Property deleted. Refresh the page to reload data."));
+    }
+  });
 };
 
 // =====================================
@@ -9799,107 +9781,16 @@ if(!selectedPropertyId){
     : "";
 
   try{
-  await verifyBookingAvailability({propertyId:selectedPropertyId, checkin, checkout, status}, editingBookingId);
-  if(
-    window.pmsEditingBooking &&
-    window.currentSelectedBooking?.id
-){
-
-    await updateDoc(
-
-        doc(
-            db,
-            "bookings",
-            window.currentSelectedBooking.id
-        ),
-
-        {
-
-            propertyId: selectedPropertyId,
-
-            guestName: guest,
-            guestContact,
-            checkin,
-            checkout,
-            guests,
-            totalAmount: total,
-
-            touristTax,
-            guestRegistration,
-            cleaning,
-            guestIssue,
-            pricingAssistant,
-
-            status,
-
-            source:
-                document.getElementById(
-                    "booking-source"
-                )?.value || "direct",
-
-            updatedAt:
-                serverTimestamp()
-
-        }
-
-    );
-
-   
-}else{
-
-  const createdBooking = await addDoc(
-
-    collection(
-      db,
-      "bookings"
-    ),
-
-    {
-
-      uid:
-        window.currentUser.uid,
-
-      propertyId:
-        selectedPropertyId,
-
-      guestName:
-        guest,
-
-      guestContact,
-
-      checkin,
-
-      checkout,
-
-      guests,
-
-      totalAmount:
-        total,
-
-      touristTax,
-      guestRegistration,
-      cleaning,
-      guestIssue,
-      pricingAssistant,
-
-      status,
-      
-source:
-  document.getElementById(
-    "booking-source"
-  )?.value || "direct",
-
-      createdAt:
-        serverTimestamp(),
-
-      updatedAt:
-        serverTimestamp()
-
-    }
-
-  );
-  savedBookingId = createdBooking.id;
-}
+  // The atomic API is authoritative; a separate availability preflight would
+  // reject a retry when the first request committed but its response was lost.
+  const result = await mutatePMS("save", {
+    bookingId: editingBookingId || null,
+    expectedVersion: editingBookingId ? Number(window.currentSelectedBooking?._pmsVersion || 0) : 0,
+    data:{propertyId:selectedPropertyId,guestName:guest,guestContact,checkin,checkout,guests,totalAmount:total,
+      touristTax,guestRegistration,cleaning,guestIssue,pricingAssistant,status,
+      source:document.getElementById("booking-source")?.value || "direct"}
+  });
+  savedBookingId = result.bookingId;
   }catch(error){
     dashboardError("Booking save failed", error);
     if(saveButton){
@@ -11398,6 +11289,7 @@ const normalizedBookings =
           booking.guests || 0
         ),
 
+      _pmsVersion: Number(booking._pmsVersion || 0),
       totalAmount,
       amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 
@@ -11686,8 +11578,8 @@ window.cancelBooking = async function(id){
   return runBookingOperation(`booking:${id}`, async () => {
     if(!confirm(t("Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.", "Cancel this booking? It will remain in history but will not count toward performance."))) return;
     try{
-      await readFreshBooking(id);
-      await updateDoc(doc(db, "bookings", id), {status:"cancelled", cancelledAt:serverTimestamp()});
+      const current = await readFreshBooking(id);
+      await mutatePMS("cancel",{bookingId:id,expectedVersion:Number(current._pmsVersion || 0)});
     }catch(error){ dashboardError("Booking cancellation failed", error); bookingOperationError(error); return; }
     await refreshAfterBookingMutation();
   });
@@ -11712,7 +11604,7 @@ window.advanceBookingStatus = async function(id, nextStatus){
       const current = await readFreshBooking(id);
       if(!canAdvanceBooking(current.status, nextStatus)) failBookingOperation("stale_status");
       await verifyBookingAvailability({...current, status:nextStatus}, id);
-      await updateDoc(doc(db, "bookings", id), {status:nextStatus, statusUpdatedAt:serverTimestamp()});
+      await mutatePMS("advance",{bookingId:id,nextStatus,expectedVersion:Number(current._pmsVersion || 0)});
     }catch(error){ dashboardError("Booking status update failed", error); bookingOperationError(error); return; }
     await refreshAfterBookingMutation();
     if(bookingDetailsWasOpen){
@@ -11726,36 +11618,16 @@ window.advanceBookingStatus = async function(id, nextStatus){
 // 🗑 DELETE BOOKING
 // =====================================
 
-window.deleteBooking =
-async function(id){
-
-  if(
-    !confirm(
-      window.t(
-        "Eliminare definitivamente questa prenotazione? L’operazione non può essere annullata.",
-        "Permanently delete this booking? This action cannot be undone."
-      )
-    )
-  ){
-    return;
-  }
-
-  await deleteDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    )
-  );
-
-  await loadPMSStats();
-
-await loadProperties();
-
-await loadBookings(
-  window.currentPropertyId
-);
-
+window.deleteBooking = async function(id){
+  if(!id || !window.currentUser) return;
+  return runBookingOperation(`booking:${id}`,async()=>{
+    if(!confirm(t("Eliminare definitivamente questa prenotazione? L’operazione non può essere annullata.", "Permanently delete this booking? This action cannot be undone."))) return;
+    try{
+      const current=await readFreshBooking(id);
+      await mutatePMS("delete",{bookingId:id,expectedVersion:Number(current._pmsVersion || 0)});
+    }catch(error){dashboardError("Booking deletion failed",error);bookingOperationError(error);return;}
+    await refreshAfterBookingMutation();
+  });
 };
 
 // =====================================
@@ -12361,6 +12233,7 @@ const normalizedPMSBookings =
             booking.guests || 0
           ),
 
+        _pmsVersion: Number(booking._pmsVersion || 0),
         totalAmount,
         amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 

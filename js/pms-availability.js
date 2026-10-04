@@ -1,4 +1,4 @@
-import {calendarDay, stayNights} from './pms-calendar.js?v=20261004-rc11';
+import {calendarDay, stayNights} from './pms-calendar.js';
 const statuses = new Set(['pending','arrival','checkin','checkout','completed','cancelled']);
 export function bookingStatus(value) {
   return value == null || value === '' ? 'arrival' : String(value).trim().toLowerCase();

@@ -19,12 +19,12 @@ test("booking details load the current property and edit enables transfer", () =
 
 test("saving an edited booking persists the selected property", () => {
   assert.match(script, /const selectedPropertyId = document\.getElementById\("booking-property"\)\?\.value \|\| window\.currentPropertyId;/);
-  assert.match(script, /propertyId: selectedPropertyId,/);
+  assert.match(script, /propertyId:\s*selectedPropertyId,/);
   assert.match(script, /await loadBookings\(returnToAllProperties \? "all" : selectedPropertyId\);/);
 });
 
-test("moving a booking checks conflicts in the destination property", () => {
-  assert.match(script, /await verifyBookingAvailability\(\{propertyId:selectedPropertyId, checkin, checkout, status\}, editingBookingId\)/);
+test("moving a booking sends its destination and version to the atomic API", () => {
+  assert.match(script, /mutatePMS\("save", \{[\s\S]*bookingId: editingBookingId \|\| null,[\s\S]*expectedVersion:[\s\S]*data:\{propertyId:selectedPropertyId/);
 });
 
 test("bookings visibility baseline remains intact", () => {

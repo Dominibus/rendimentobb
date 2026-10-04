@@ -56,7 +56,16 @@ test('operation guard unlocks after rejected writes and separates unrelated book
 });
 function runtime(rows=[],current={...occupied,uid:'u1',status:'pending'}){
   const notices=[],writes=[],reads=[],refreshes=[];
-  const ctx={evaluateAvailability,canAdvanceBooking,isKnownBookingStatus,createBookingOperationGuard,
+  const ctx={createPMSApiClient:()=>async(operation,values)=>{
+      if(operation === 'save'){
+        // Stub the server availability boundary; real atomic service tests are separate.
+        await ctx.verifyBookingAvailability(values.data,values.bookingId);
+        if(values.bookingId){await ctx.updateDoc({id:values.bookingId},values.data);return {bookingId:values.bookingId};}
+        const result=await ctx.addDoc({},values.data);return {bookingId:result.id};
+      }
+      await ctx.updateDoc({id:values.bookingId},{status:operation === 'cancel' ? 'cancelled' : values.nextStatus});
+      return {bookingId:values.bookingId};
+    },evaluateAvailability,canAdvanceBooking,isKnownBookingStatus,createBookingOperationGuard,
     db:{},window:{currentUser:{uid:'u1'},currentPropertyId:'p1',currentBookingsData:[],currentSelectedBooking:null},
     t:(it,en)=>ctx.lang==='en'?en:it,alert:m=>notices.push(m),confirm:()=>true,dashboardError:()=>{},
     doc:(db,type,id)=>({type,id}),collection:(db,type)=>({type}),where:(key,op,value)=>({key,value}),query:(ref,...filters)=>({ref,filters}),

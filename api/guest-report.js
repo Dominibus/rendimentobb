@@ -1,3 +1,4 @@
+import {createHostBookingHandler} from "../lib/pms-booking-service.js";
 import crypto from "node:crypto";
 import admin from "firebase-admin";
 
@@ -43,6 +44,12 @@ function validateAccess(booking, token){
     !["cancelled", "completed", "pending"].includes(status);
 }
 
+const hostBookingHandler = createHostBookingHandler({
+  getFirestore,
+  verifyToken: token => admin.auth().verifyIdToken(token, true),
+  timestamp: () => admin.firestore.FieldValue.serverTimestamp()
+});
+
 export default async function handler(req, res){
   res.setHeader("Cache-Control", "no-store, max-age=0");
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -52,6 +59,7 @@ export default async function handler(req, res){
   }
 
   const body = req.body || {};
+  if(body.action === "host_booking") return hostBookingHandler(req, res);
   const bookingId = cleanText(body.bookingId, 128);
   const token = cleanText(body.token, 256);
   const action = cleanText(body.action, 24);
@@ -118,7 +126,9 @@ export default async function handler(req, res){
         reportedAt: now,
         resolved: false
       };
-      transaction.update(bookingRef, { guestIssue, lastGuestReportAt: now });
+      transaction.update(bookingRef, { guestIssue, lastGuestReportAt: now,
+        _pmsVersion: (Number.isSafeInteger(freshBooking._pmsVersion) ? freshBooking._pmsVersion : 0) + 1
+      });
       transaction.set(reportRef, {
         bookingId,
         propertyId: freshBooking.propertyId || "",
