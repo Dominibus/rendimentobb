@@ -1,4 +1,4 @@
-import { financialNumber, summarizeInvestments, interpretPortfolio } from "./portfolio-kpi.js?v=20261004-rc09";
+import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
 import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
@@ -1310,6 +1310,8 @@ labels = [];
 
 const count = analyses.length;
 
+const highestSavedROI = highestScenarioROI(analyses);
+
 const portfolioAnalyses = analyses.filter(
   data => data.isPortfolio === true
 );
@@ -1331,21 +1333,7 @@ const totalCashflow = analyses.reduce(
 
 // ================= SORT =================
 
-analyses.sort((a,b)=>{
-
-const dateA =
-a.createdAt?.seconds
-? a.createdAt.seconds
-: 0;
-
-const dateB =
-b.createdAt?.seconds
-? b.createdAt.seconds
-: 0;
-
-return dateB - dateA;
-
-});
+analyses.sort((a,b)=> scenarioCreatedTime(b.createdAt) - scenarioCreatedTime(a.createdAt));
 
 // ================= PAGINATION DATA =================
 
@@ -1396,7 +1384,7 @@ const isNew =
 
 let badge = "";
 
-if(index === 0){
+if(highestSavedROI !== null && financialNumber(data.roi) === highestSavedROI){
   badge += `
   <div style="
     font-size:12px;
@@ -1404,7 +1392,7 @@ if(index === 0){
     margin-bottom:6px;
     font-weight:600;
   ">
-    🏆 Best ROI
+    🏆 ${t("ROI più alto tra gli scenari", "Highest ROI across scenarios")}
   </div>
   `;
 }
@@ -1747,8 +1735,9 @@ SCENARIO
 </div>
 
 <h3 style="margin-bottom:16px">
-🏆 ${t("Analisi selezionata","Selected analysis")}
+🕒 ${t("Analisi più recente","Latest analysis")}
 </h3>
+<p style="font-size:13px;color:#64748b">${scenarioContext(best)}</p>
 
 <!-- ROI -->
 <div style="
@@ -2952,49 +2941,30 @@ ${t(
 // ROI TARGET CALCULATOR
 // ===============================
 
+function scenarioContext(result){
+  if(!result) return t("Nessuna simulazione disponibile", "No simulation available");
+  const city = escapeDashboardHTML(String(result.city || t("Città non indicata", "City unspecified")));
+  const date = escapeDashboardHTML(formatDate(result.createdAt));
+  return `${t("Simulazione più recente", "Latest simulation")} · ${city} · ${date} · ROI equity ${formatPercent(result.roi)}`;
+}
+
 function renderROITargetCalculator(analyses){
-
-const container = document.getElementById("roi-target-calculator");
-if(!container) return;
-
-if(!analyses || analyses.length === 0){
-container.innerHTML="";
-return;
-}
-
-const best = analyses[0];
-
-/* ROI target */
-
-const targetROI = 10;
-
-/* calcolo prezzo massimo */
-
-let maxPrice = Number(best.equity || 0);
-
-if(best.roi !== 0){
-
-maxPrice = (Number(best.equity || 0) * best.roi) / targetROI;
-
-}
-
-container.innerHTML = `
-
-<h3>🎯 ${t("Equity teorica al ROI target","Theoretical equity at target ROI")}</h3>
-
-<div style="font-size:26px;font-weight:700;color:#2563eb">
-${formatCurrency(maxPrice)}
-</div>
-
-<div style="font-size:13px;color:#64748b;margin-top:6px">
-${t(
-"a profitto invariato, con ROI target",
-"at unchanged profit, with target ROI"
-)} ${targetROI}%
-</div>
-
-`;
-
+  const container = document.getElementById("roi-target-calculator");
+  if(!container) return;
+  const selected = analyses?.[0];
+  if(!selected){ container.innerHTML = ""; return; }
+  const targetROI = 10;
+  const result = targetEquity(selected,targetROI);
+  const value = result.status === "ready" ? formatCurrency(result.equity) : "--";
+  const explanation = result.status === "nonpositive"
+    ? t("Con cashflow nullo o negativo, un ROI positivo non è ottenibile riducendo soltanto l'equity a cashflow invariato. Rivedi ricavi, costi e finanziamento nel simulatore.", "With zero or negative cash flow, a positive ROI cannot be achieved solely by reducing equity at unchanged cash flow. Review revenue, costs and financing in the simulator.")
+    : result.status === "missing"
+    ? t("Servono equity positiva e cashflow annuo riconosciuto per calcolare il target. I dati mancanti non vengono stimati.", "Positive equity and a recognized annual cash flow are required to calculate the target. Missing data is not estimated.")
+    : t("Equity teorica = cashflow annuo salvato ÷ 10%. È un rapporto aritmetico, non una proposta di prezzo o mutuo: cambiare equity e finanziamento può cambiare il cashflow e richiede una nuova simulazione.", "Theoretical equity = saved annual cash flow ÷ 10%. This is an arithmetic ratio, not a price or mortgage offer: changing equity and financing can change cash flow and requires a new simulation.");
+  container.innerHTML = `<h3>🎯 ${t("Equity teorica al ROI target", "Theoretical equity at target ROI")}</h3>
+    <p style="font-size:13px;color:#64748b">${scenarioContext(selected)}</p>
+    <div style="font-size:26px;font-weight:700;color:#2563eb">${value}</div>
+    <p style="font-size:13px;color:#64748b;margin-top:6px">${explanation}</p>`;
 }
 
 // ===============================
@@ -3438,82 +3408,21 @@ subtitle.innerText = randomText;
 // ================= VERDICT ENGINE =================
 
 function generateInvestmentVerdict(result){
-
-if(!result) return null;
-
-const roi = result.roi || 0;
-const cashflow =
-  result.net ||
-  result.cashflow ||
-  0;
-const risk = result.risk || 50;
-
-// ================= EXCELLENT =================
-if(roi >= 10 && cashflow > 0 && risk < 70){
-return {
-type:"excellent",
-color:"#10b981",
-
-title: t("🔥 Ottimo investimento","🔥 Excellent investment"),
-
-subtitle: t(
-"ROI sopra la media e cashflow positivo",
-"Above-average ROI and positive cashflow"
-),
-
-action: t("Verificare le ipotesi","Verify assumptions"),
-
-message: t(
-"Investimento solido con ottimo equilibrio tra rendimento e rischio.",
-"Solid investment with strong balance between return and risk."
-)
-};
+  if(!result) return null;
+  const roi = financialNumber(result.roi);
+  const cashflow = financialNumber(result.net ?? result.cashflow);
+  const risk = financialNumber(result.risk);
+  if(roi === null || cashflow === null || risk === null || risk < 0 || risk > 100){
+    return {type:"incomplete",color:"#64748b",title:t("Dati dello scenario incompleti", "Incomplete scenario data"),subtitle:t("COMPLETA I DATI", "COMPLETE THE DATA"),action:t("Completa ROI, cashflow e rischio", "Complete ROI, cash flow and risk"),message:t("Non è possibile formulare una sintesi coerente con i dati riconosciuti. I valori mancanti non sono considerati zero.", "The recognized data does not support a coherent summary. Missing values are not treated as zero.")};
+  }
+  if(roi < 0 || cashflow < 0 || risk >= 70){
+    return {type:"risk",color:"#ef4444",title:t("Scenario con criticità", "Scenario with issues"),subtitle:t("VERIFICA PERDITE E RISCHIO", "REVIEW LOSSES AND RISK"),action:t("Rivedi le ipotesi prima di decidere", "Review assumptions before deciding"),message:t("Lo scenario ha ROI negativo, cashflow negativo o un indice di rischio elevato. Il solo ROI positivo non compensa queste criticità.", "The scenario has negative ROI, negative cash flow or a high risk index. Positive ROI alone does not offset these issues.")};
+  }
+  if(roi >= 10 && cashflow > 0){
+    return {type:"excellent",color:"#10b981",title:t("Scenario con indicatori positivi", "Scenario with positive indicators"),subtitle:t("SCENARIO FAVOREVOLE NEL MODELLO", "FAVORABLE SCENARIO UNDER THE MODEL"),action:t("Verifica le ipotesi prudenti", "Check conservative assumptions"),message:t("ROI equity almeno 10%, cashflow positivo e rischio inferiore a 70/100 nelle ipotesi salvate. Non è un confronto con dati di mercato verificati né una garanzia di rendimento.", "Equity ROI of at least 10%, positive cash flow and risk below 70/100 under saved assumptions. This is not a comparison with verified market data or a return guarantee.")};
+  }
+  return {type:"good",color:"#f59e0b",title:t("Scenario da approfondire", "Scenario to review"),subtitle:t("VERIFICA MARGINE E SOSTENIBILITÀ", "CHECK MARGIN AND SUSTAINABILITY"),action:t("Confronta uno scenario prudente", "Compare a conservative scenario"),message:t("ROI e cashflow non sono negativi, ma il margine richiede un approfondimento. Verifica costi, occupazione e finanziamento prima di decidere.", "ROI and cash flow are not negative, but the margin requires further review. Check costs, occupancy and financing before deciding.")};
 }
-
-// ================= GOOD =================
-if(roi >= 7){
-return {
-type:"good",
-color:"#f59e0b",
-
-title: t("📊 Buon investimento","📊 Good investment"),
-
-subtitle: t(
-"Margine interessante ma migliorabile",
-"Interesting margin but improvable"
-),
-
-action: t("Ottimizzare","Optimize"),
-
-message: t(
-"Buona opportunità ma migliorabile ottimizzando prezzo medio o occupazione.",
-"Good opportunity but can be improved by optimizing pricing or occupancy."
-)
-};
-}
-
-// ================= RISK =================
-return {
-type:"risk",
-color:"#ef4444",
-
-title: t("⚠️ Investimento rischioso","⚠️ Risky investment"),
-
-subtitle: t(
-"ROI basso o cashflow negativo",
-"Low ROI or negative cashflow"
-),
-
-action: t("Evitare","Avoid"),
-
-message: t(
-"Rendimento insufficiente o rischio elevato rispetto al mercato.",
-"Insufficient return or high risk compared to the market."
-)
-};
-
-}
-
 
 // ================= VERDICT RENDER =================
 
@@ -3523,11 +3432,12 @@ const container = document.getElementById("investment-verdict");
 if(!container) return;
 
 const verdict = generateInvestmentVerdict(result);
-if(!verdict) return;
+if(!verdict){ container.innerHTML = ""; return; }
 
 container.innerHTML = `
 
 <div style="display:flex;flex-direction:column;gap:10px;">
+<p style="font-size:13px;color:#64748b">${scenarioContext(result)} · ${t("Verdetto della singola simulazione, non del patrimonio", "Single-simulation assessment, not a portfolio assessment")}</p>
 
 <h2 style="
 font-size:30px;
@@ -3544,13 +3454,8 @@ font-weight:800;
 color:${verdict.color};
 margin-top:6px;
 ">
-${
-verdict.type === "excellent"
-  ? `✅ ${t("SCENARIO FAVOREVOLE","FAVORABLE SCENARIO")}`
-  : verdict.type === "good"
-  ? `⚙️ ${t("OTTIMIZZA","OPTIMIZE")}`
-  : `❌ ${t("EVITA","AVOID")}`
-}
+${verdict.subtitle}
+
 </div>
 
 ${
@@ -3566,15 +3471,15 @@ text-align:center;
 
 <div style="font-size:14px;font-weight:600;margin-bottom:8px">
 💡 ${t(
-  "Hai già il dato chiave",
-  "You already have the key data"
+  "Esplora lo scenario dimostrativo",
+  "Explore the illustrative scenario"
 )}
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-bottom:12px">
 ${t(
-  "Ti manca la strategia per trasformarlo in profitto reale",
-  "You are missing the strategy to turn it into real profit"
+  "Con Investor confronti le tue ipotesi e gestisci gli immobili nel PMS.",
+  "With Investor you compare your assumptions and manage properties in the PMS."
 )}
 </div>
 
@@ -3588,8 +3493,8 @@ font-weight:700;
 cursor:pointer;
 ">
 🚀 ${t(
-"Sblocca strategia e ROI reale",
-"Unlock strategy & real ROI"
+"Confronta Investor e Pro",
+"Compare Investor and Pro"
 )}
 </button>
 
@@ -3605,27 +3510,7 @@ line-height:1.6;
 font-weight:500;
 ">
 
-${
-verdict.type === "excellent"
-
-? t(
-"Lo scenario ha indicatori favorevoli secondo il modello RendimentoBB. Non costituisce una valutazione bancaria.",
-"This scenario has favorable indicators under the RendimentoBB model. It is not a bank assessment."
-)
-
-: verdict.type === "good"
-
-? t(
-"Il potenziale è elevato, ma alcuni parametri possono essere ottimizzati per incrementare rendimento e sostenibilità.",
-"The investment shows strong potential, but several parameters can be optimized to improve returns and sustainability."
-)
-
-: t(
-"L'investimento non raggiunge attualmente i requisiti minimi consigliati per un'operazione sostenibile.",
-"The investment currently does not meet the minimum requirements recommended for a sustainable operation."
-)
-
-}
+${t("Sintesi delle ipotesi salvate: non certifica incassi reali né costituisce una valutazione bancaria.", "Summary of saved assumptions: it does not certify actual receipts or constitute a bank assessment.")}
 
 </div>
 
@@ -3665,7 +3550,7 @@ color:white;
 font-weight:600;
 cursor:pointer;
 ">
-${t("Sblocca strategia PRO","Unlock PRO strategy")}
+${t("Confronta Investor e Pro","Compare Investor and Pro")}
 </button>
 
 </div>

@@ -40,3 +40,31 @@ export function interpretPortfolio(rows = []){
   }
   return {metrics,status,averageRisk,riskCount:risks.length,negativeCashflows};
 }
+
+export function highestScenarioROI(rows = []){
+  const values = rows.map(row=>financialNumber(row.roi)).filter(value=>value !== null);
+  return values.length ? Math.max(...values) : null;
+}
+
+export function targetEquity(row, targetROI = 10){
+  const equity = financialNumber(row?.equity);
+  const cashflow = financialNumber(row?.net ?? row?.cashflow);
+  const target = financialNumber(targetROI);
+  if(equity === null || equity <= 0 || cashflow === null || target === null || target <= 0){
+    return {status:'missing',equity:null};
+  }
+  if(cashflow <= 0) return {status:'nonpositive',equity:null};
+  const value = cashflow / (target / 100);
+  return Number.isFinite(value) ? {status:'ready',equity:value} : {status:'missing',equity:null};
+}
+
+export function scenarioCreatedTime(value){
+  if(value === null || value === undefined || value === '') return 0;
+  if(typeof value === 'object' && value.seconds !== undefined){
+    const seconds = financialNumber(value.seconds);
+    return seconds === null ? 0 : seconds * 1000;
+  }
+  if(typeof value !== 'string' && typeof value !== 'number' && !(value instanceof Date)) return 0;
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
