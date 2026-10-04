@@ -43,9 +43,8 @@ window.initRBChatbotUI = function(){
   // ===========================================
 
   const t = (it,en)=>
-
-    window.t
-      ? window.t(it,en)
+    (window.currentLang || window.RB_LANG?.current || "it") === "en"
+      ? (en || it)
       : it;
 
 // ===========================================
@@ -213,7 +212,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📍 Mercato
+                                📍 ${t("Mercato","Market")}
                             </span>
 
                             <strong>
@@ -270,7 +269,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                ⚠️ Rischio
+                                ⚠️ ${t("Rischio","Risk")}
                             </span>
 
                             <strong>
@@ -830,7 +829,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📍 Mercato
+                                📍 ${t("Mercato","Market")}
                             </span>
 
                             <strong>--</strong>
@@ -860,7 +859,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                ⚠️ Rischio
+                                ⚠️ ${t("Rischio","Risk")}
                             </span>
 
                             <strong>--</strong>
@@ -908,7 +907,7 @@ metrics[2].textContent =
         ? "€" +
           Math.round(Number(cashflow))
             .toLocaleString(
-                window.currentLanguage === "en"
+                window.currentLang === "en"
                     ? "en-US"
                     : "it-IT"
             )
@@ -974,7 +973,7 @@ if(SpeechRecognition){
     recognition = new SpeechRecognition();
 
     recognition.lang =
-        window.currentLanguage === "en"
+        window.currentLang === "en"
             ? "en-US"
             : "it-IT";
 
@@ -1817,7 +1816,7 @@ voiceBtn.onclick = ()=>{
     if(!recognition){
 
         alert(
-            "Speech Recognition non supportato da questo browser."
+            t("Il riconoscimento vocale non è supportato da questo browser.", "Speech recognition is not supported by this browser.")
         );
 
         return;
@@ -1836,6 +1835,7 @@ voiceBtn.onclick = ()=>{
 
 };
 
+if(recognition){
 recognition.onstart = ()=>{
 
     isListening = true;
@@ -1879,6 +1879,8 @@ recognition.onerror = ()=>{
     voiceBtn.textContent = "🎤";
 
 };  
+
+}
 
   debugLog("Chatbot send action initialized");
 
@@ -1924,7 +1926,7 @@ recognition.onerror = ()=>{
 
 const homeCards = document.querySelectorAll(".rb-home-card");
 
-const homePrompts = [
+const getHomePrompts = ()=> [
 
     t(
         "Analizza questo investimento",
@@ -1962,7 +1964,7 @@ homeCards.forEach((card,index)=>{
 
     card.onclick = ()=>{
 
-        input.value = homePrompts[index];
+        input.value = getHomePrompts()[index];
 
         sendMessage();
 
@@ -2038,6 +2040,54 @@ document.addEventListener("rb:document_ready", event => {
   // ===========================================
   // 🚀 READY
   // ===========================================
+
+  function refreshChatbotLanguage(){
+    // Reformat the existing UI; never recreate messages, files or event handlers.
+    refreshHomeSnapshot();
+    refreshQuickActions();
+    const texts = [
+      [".rb-chat-subtitle", "Assistente per analisi e gestione", "Analysis and management assistant"],
+      [".rb-ai-home-subtitle", "Assistente per analisi e gestione", "Analysis and management assistant"],
+      [".rb-empty-title", "Partiamo dai tuoi dati", "Start with your data"],
+      [".rb-empty-text", "Apri una simulazione o allega un PDF con testo. Ti aiuto a leggere i dati disponibili.", "Open a simulation or attach a text PDF. I can help interpret the available data."]
+    ];
+    texts.forEach(([selector,it,en])=>{
+      wrapper.querySelectorAll(selector).forEach(el=>{el.textContent=t(it,en);});
+    });
+    wrapper.querySelectorAll(".rb-ai-status").forEach(el=>{
+      el.childNodes.forEach(node=>{if(node.nodeType===3) node.textContent=" " + t("Pronto","Ready");});
+    });
+    const titles = [
+      ["Analizza investimento","Analyze investment"], ["Analizza PDF","Analyze PDF"],
+      ["Analizza ROI","Analyze ROI"], ["Mutuo","Mortgage"],
+      ["Mercato","Market"], ["Dashboard","Dashboard"]
+    ];
+    const descriptions = [
+      ["ROI • Cashflow • Rischio","ROI • Cash flow • Risk"], ["Executive Report","Executive Report"],
+      ["Performance investimento","Investment performance"], ["Leva • DSCR • LTV","Leverage • DSCR • LTV"],
+      ["Benchmark città","City benchmarks"], ["KPI e Report","KPIs and reports"]
+    ];
+    wrapper.querySelectorAll(".rb-home-title").forEach((el,i)=>{if(titles[i]) el.textContent=t(...titles[i]);});
+    wrapper.querySelectorAll(".rb-home-desc").forEach((el,i)=>{if(descriptions[i]) el.textContent=t(...descriptions[i]);});
+    const metricLabels = [["📍 Mercato","📍 Market"],["📈 ROI immobile","📈 Property ROI"],["💰 Cashflow","💰 Cash flow"],["⚠️ Rischio","⚠️ Risk"]];
+    wrapper.querySelectorAll(".rb-ai-metric-label").forEach((el,i)=>{if(metricLabels[i]) el.textContent=t(...metricLabels[i]);});
+    const city = window.lastAnalysisData?.realCity || window.lastAnalysisData?.marketCity || window.rbChatMemory?.lastCity;
+    const actionTitle=wrapper.querySelector(".rb-home-actions-title");
+    if(actionTitle) actionTitle.textContent=city?t("Continua l’analisi","Continue the analysis"):t("Come posso aiutarti?","How can I help?");
+    const actionContext=wrapper.querySelector(".rb-home-actions-context");
+    if(actionContext) actionContext.textContent=city?t("Contesto attivo: ","Active context: ")+String(city).toUpperCase():t("Scegli da dove iniziare","Choose where to start");
+    for(const [id,it,en] of [["rb-chat-attach","Allega file","Attach file"],["rb-chat-voice","Parla","Speak"],["rb-chat-new","Nuova chat","New chat"],["rb-chat-close","Minimizza","Minimize"]]){
+      const el=wrapper.querySelector("#"+id);
+      if(el){el.setAttribute("title",t(it,en));el.setAttribute("aria-label",t(it,en));}
+    }
+    input.setAttribute("placeholder",t("Scrivi oppure parla...","Write or speak..."));
+    input.setAttribute("aria-label",t("Messaggio","Message"));
+    wrapper.querySelector("#rb-chat-send")?.setAttribute("aria-label",t("Invia messaggio","Send message"));
+    if(recognition) recognition.lang=t("it-IT","en-US");
+  }
+
+  document.addEventListener("rb_language_changed", refreshChatbotLanguage);
+  refreshChatbotLanguage();
 
   debugLog("Chatbot UI ready");
 
