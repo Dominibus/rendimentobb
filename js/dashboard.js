@@ -1,4 +1,4 @@
-import { financialNumber, summarizeInvestments } from "./portfolio-kpi.js";
+import { financialNumber, summarizeInvestments, interpretPortfolio } from "./portfolio-kpi.js?v=20261004-rc09";
 import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
@@ -1480,7 +1480,7 @@ if(isNew){
   </strong>
 
   <div style="font-size:12px;color:#64748b;margin-top:4px;">
-    🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
+    🔒 ${t("Sblocca per vedere il cashflow stimato","Unlock to see estimated cash flow")}
   </div>
   `
   }
@@ -1500,7 +1500,7 @@ ${
           cursor:pointer;
           width:100%;
         ">
-          🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
+          🚀 ${t("Confronta Investor e Pro","Compare Investor and Pro")}
         </button>
       </div>
       `
@@ -1575,10 +1575,11 @@ renderPortfolioManager(portfolioAnalyses);
 
 // ================= CONTINUA RENDER =================
 
-renderInsight(count,totalROI,totalCapital);
+renderInsight(portfolioAnalyses);
+renderInvestmentIntelligence(portfolioAnalyses);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
-renderROIMarketComparison(count,totalROI);
+renderROIMarketComparison(portfolioAnalyses);
 renderRevenueSimulator(); 
 renderBestInvestment(analyses);
 
@@ -2277,7 +2278,7 @@ text-transform:uppercase;
 letter-spacing:.8px;
 ">
 
-Analisi strategica
+${t("Sintesi delle simulazioni salvate", "Saved simulations summary")}
 
 </div>
 
@@ -2827,100 +2828,48 @@ function renderCashflowChart(){
 // INVESTMENT INSIGHT ENGINE
 // ===============================
 
-function renderInsight(count,totalROI,totalCapital){
-
-const investor =
-String(window.currentPlan || "")
-.toLowerCase() === "investor";
-
-const container = document.getElementById("investment-insight");
-
-if(!container) return;
-  
-
-  
-
-const avgROI = count ? (totalROI/count) : 0;
-
-const marketROI = 8.4;
-
-let title = "";
-let text = "";
-
-// ROI insight
-
-if(avgROI >= marketROI){
-
-title = t(
-"📊 Ottima performance",
-"📊 Strong performance"
-);
-
-text = t(
-"Le simulazioni salvate mostrano un ROI equity medio positivo. Confronta le singole ipotesi: la media non rappresenta il rendimento effettivo di un portafoglio.",
-"Saved simulations show a positive average equity ROI. Compare individual assumptions: this average is not actual portfolio performance."
-);
-
-}else if(avgROI > 0){
-
-title = t(
-"📊 Performance moderata",
-"📊 Moderate performance"
-);
-
-text = t(
-"Il ROI equity medio simulato è positivo. Verifica la sensibilità a costi, occupazione e tariffe prima di scegliere.",
-"The average simulated equity ROI is positive. Check sensitivity to costs, occupancy and rates before choosing."
-);
-
-}else{
-
-title = t(
-"Analisi degli investimenti",
-"Investment analysis"
-);
-
-text = t(
-"Il ROI medio delle simulazioni è negativo. Valuta immobili con maggiore domanda turistica o costi più bassi.",
-"The average ROI of your simulations is negative. Consider properties with higher tourism demand or lower costs."
-);
-
+function portfolioNarrative(rows){
+  const facts = interpretPortfolio(rows);
+  const content = {
+    empty: [t("Portafoglio da costruire", "Build your portfolio"), t("Conferma una simulazione nel portafoglio o collegala a una proprietà PMS per attivare la sintesi.", "Confirm a simulation in your portfolio or link it to a PMS property to activate the summary."), "#64748b"],
+    incomplete: [t("Dati del patrimonio incompleti", "Incomplete portfolio data"), t("Completa ROI equity, capitale proprio e cashflow degli immobili confermati. Non è possibile interpretare il rendimento complessivo con i dati attuali.", "Complete equity ROI, invested equity and cash flow for confirmed properties. The current data does not support an overall return interpretation."), "#64748b"],
+    loss: [t("Patrimonio con rendimento negativo", "Portfolio with negative return"), t("ROI o cashflow complessivo sono negativi nelle ipotesi salvate. Verifica gli immobili in perdita, i costi e il finanziamento prima di considerare nuovi investimenti.", "Overall ROI or cash flow is negative under the saved assumptions. Review loss-making properties, costs and financing before considering new investments."), "#ef4444"],
+    balanced: [t("Patrimonio in equilibrio", "Portfolio at break-even"), t("Almeno uno tra ROI e cashflow complessivo è pari a zero. Non emerge un margine positivo su entrambi gli indicatori: verifica la tenuta in uno scenario prudente.", "At least one of overall ROI and cash flow is zero. Both indicators do not show a positive margin: check resilience under conservative assumptions."), "#f59e0b"],
+    attention: [t("Patrimonio positivo, criticità da verificare", "Positive portfolio, issues to review"), t("Il totale è positivo, ma almeno un immobile ha cashflow negativo o rischio elevato. L'aggregato può nascondere una criticità: verifica ogni immobile.", "The total is positive, but at least one property has negative cash flow or high risk. The aggregate can hide an issue: review each property."), "#f59e0b"],
+    positive: [t("Patrimonio con margine positivo stimato", "Portfolio with an estimated positive margin"), t("ROI e cashflow complessivo sono positivi nelle ipotesi salvate. Verifica costi, occupazione e finanziamento in scenari prudenti; il risultato non dimostra incassi reali.", "Overall ROI and cash flow are positive under the saved assumptions. Check costs, occupancy and financing under conservative scenarios; this does not establish actual receipts."), "#10b981"]
+  };
+  const [title,text,color] = content[facts.status];
+  return {...facts,title,text,color};
 }
 
-// capitale insight
-
-let capitalText = "";
-
-if(totalCapital > 500000){
-
-capitalText = t(
-"Hai confrontato numerose ipotesi di investimento. Le alternative salvate non rappresentano capitale posseduto.",
-"You have compared several investment assumptions. Saved alternatives do not represent owned capital."
-);
-
-}else{
-
-capitalText = t(
-"Analizzare più investimenti può aiutarti a identificare opportunità migliori.",
-"Analyzing more investments can help identify stronger opportunities."
-);
-
+function renderInsight(rows = []){
+  const container = document.getElementById("investment-insight");
+  if(!container) return;
+  const facts = portfolioNarrative(rows);
+  container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3>
+    <p style="margin-top:10px;color:#475569;font-size:14px">${facts.text}</p>
+    <p style="margin-top:8px;color:#64748b;font-size:13px">${t("Ambito: patrimonio confermato · ipotesi finanziarie salvate, non risultati operativi PMS.", "Scope: confirmed portfolio · saved financial assumptions, not PMS operating results.")}</p>`;
 }
 
-container.innerHTML = `
-
-<h3>${title}</h3>
-
-<p style="margin-top:10px;color:#475569;font-size:14px">
-${text}
-</p>
-
-<p style="margin-top:8px;color:#64748b;font-size:13px">
-${capitalText}
-</p>
-
-`;
-
+function renderInvestmentIntelligence(rows = []){
+  const container = document.getElementById("investment-intelligence-content");
+  const status = document.getElementById("investment-intelligence-status");
+  if(!container) return;
+  const facts = portfolioNarrative(rows);
+  if(status) status.textContent = facts.metrics.count ? t("● PATRIMONIO CONFERMATO", "● CONFIRMED PORTFOLIO") : t("● IN ATTESA DI DATI", "● AWAITING DATA");
+  if(!isPro() && !isInvestor()){
+    if(status) status.textContent = t("● ANTEPRIMA DEMO", "● DEMO PREVIEW");
+    container.innerHTML = `<p>${t("La demo mostra dati di esempio. Con Investor puoi interpretare il tuo patrimonio confermato e individuare immobili da verificare. Pro aggiunge PDF e dashboard-report.", "The demo shows sample data. With Investor you can interpret your confirmed portfolio and identify properties to review. Pro adds PDFs and dashboard reports.")}</p><button type="button" onclick="goToUpgrade()" style="background:#10b981;border:none;padding:10px 14px;border-radius:8px;color:white;font-weight:600;cursor:pointer;">${t("Confronta Investor e Pro", "Compare Investor and Pro")}</button>`;
+    return;
+  }
+  const {metrics} = facts;
+  container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
+    <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
+    <div class="metric"><span>${t("ROI equity ponderato", "Equity-weighted ROI")}</span><strong>${formatPercent(metrics.weightedROI)}</strong></div>
+    <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
+    <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
+    <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
+    <p style="font-size:13px;color:#64748b">${t("Fonte: simulazioni salvate collegate al patrimonio confermato. Rischio medio: media semplice degli indici disponibili, non probabilità di perdita o misura della diversificazione. I dati mancanti non sono stimati.", "Source: saved simulations linked to the confirmed portfolio. Average risk: simple mean of available indices, not a loss probability or a diversification measure. Missing data is not estimated.")}</p>`;
 }
 
 // ===============================
@@ -4163,176 +4112,31 @@ function unlockProContent(){
 }
 
 function renderUpgradeTrigger(best){
-
-  if(isPro()) return;
-
   const container = document.getElementById("upgrade-trigger");
   if(!container) return;
-
-  if(!best) return;
-  if(best.roi < 6) return;
-  if(isPro()) return;
-
-  const potentialProfit =
-  Number(best.net || 0);
-
+  container.style.display = "none";
+  container.innerHTML = "";
+  if(isPro() || isInvestor()) return;
   container.style.display = "block";
-
-  container.innerHTML = `
-  <div style="
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:white;
-  padding:22px;
-  border-radius:18px;
-  text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,0.25);
-  ">
-
-    <div style="font-size:20px;font-weight:700;margin-bottom:10px">
-⚠️ ${t(
-"Stai rischiando di perdere questo profitto",
-"You are risking losing this profit"
-)}
-</div>
-
-    <div style="
-    font-size:44px;
-    font-weight:900;
-    background:linear-gradient(135deg,#10b981,#34d399);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:10px;
-    ">
-      ${formatCurrency(potentialProfit)}
-    </div>
-
-    <div style="font-size:14px;opacity:0.85;margin-bottom:16px">
-      ${t("profitto annuo stimato","estimated yearly profit")}
-    </div>
-
-    <div style="
-    font-size:13px;
-    color:#94a3b8;
-    margin-bottom:18px;
-    ">
-      ⚠️ ${t(
-        "Stai perdendo i dati più importanti per guadagnare davvero",
-        "You are missing the most important data to actually profit"
-      )}
-    </div>
-
-    <button onclick="goToUpgrade()" style="
-    background:#10b981;
-    border:none;
-    padding:14px 20px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:15px;
-    ">
-      🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
-    </button>
-
-  </div>
-  `;
+  container.innerHTML = `<div style="background:linear-gradient(135deg,#0f172a,#1e293b);color:white;padding:22px;border-radius:18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.25);">
+    <div style="font-size:20px;font-weight:700;margin-bottom:10px">${t("Dalla demo al tuo patrimonio", "From the demo to your portfolio")}</div>
+    <div style="font-size:14px;opacity:0.85;margin-bottom:16px">${t("Qui esplori dati dimostrativi. Con Investor salvi le tue simulazioni, colleghi gli immobili e gestisci il PMS.", "Here you explore illustrative data. With Investor you save your simulations, link properties and manage the PMS.")}</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:18px">${t("Pro aggiunge PDF e dashboard-report. Le simulazioni sono stime, non promesse di guadagno.", "Pro adds PDFs and dashboard reports. Simulations are estimates, not earnings promises.")}</div>
+    <button type="button" onclick="goToUpgrade()" style="background:#10b981;border:none;padding:14px 20px;border-radius:12px;font-weight:700;cursor:pointer;font-size:15px;">${t("Confronta Investor e Pro", "Compare Investor and Pro")}</button>
+  </div>`;
 }
 
 // ================= ROI MARKET COMPARISON =================
 
-function renderROIMarketComparison(count,totalROI){
-
+function renderROIMarketComparison(rows = []){
   const container = document.getElementById("roi-market-comparison");
   if(!container) return;
-
-  if(count === 0){
-    container.innerHTML = "";
-    return;
-  }
-
-  const avgROI = totalROI / count;
-  const marketROI = 8.4;
-
-  const diff = avgROI - marketROI;
-  const isBetter = diff >= 0;
-
-  const color = isBetter ? "#10b981" : "#ef4444";
-
-  const message = isBetter
-    ? t("Differenza rispetto al riferimento di esempio","Difference from the example reference")
-    : t("Sotto il riferimento di esempio","You are below the illustrative reference");
-
-  const percentage = Math.abs(diff).toFixed(1);
-
-  container.innerHTML = `
-<h3>📊 ${t("Riferimento dimostrativo","Illustrative reference")}</h3>
-
-<div style="
-margin-top:14px;
-font-size:28px;
-font-weight:700;
-color:${color};
-">
-${isBetter ? "+" : "-"}${percentage}%
-</div>
-
-<div style="margin-top:6px;color:#64748b;font-size:14px">
-${message}
-</div>
-
-<div style="margin-top:16px">
-
-${
-canViewDashboard()
-? `
-<div style="
-padding:12px;
-border-radius:10px;
-background:rgba(16,185,129,0.08);
-font-size:13px;
-color:#065f46;
-">
-💡 ${t(
-"Il tuo investimento è sopra il benchmark nazionale.",
-"Your investment outperforms the national benchmark."
-)}
-</div>
-`
-: `
-<div style="
-margin-top:16px;
-padding:16px;
-border-radius:12px;
-background:linear-gradient(135deg,#f8fafc,#eef2f7);
-text-align:center;
-">
-
-<div style="font-size:20px;margin-bottom:6px">🔒</div>
-
-<div style="font-size:13px;color:#64748b;margin-bottom:10px">
-${t(
-"Sblocca confronto avanzato e analisi strategica",
-"Unlock advanced comparison and strategy"
-)}
-</div>
-
-<button onclick="goToUpgrade()" style="
-background:#10b981;
-border:none;
-padding:10px 14px;
-border-radius:8px;
-color:white;
-font-weight:600;
-cursor:pointer;
-">
-🚀 ${t("Sblocca PRO","Unlock PRO")}
-</button>
-
-</div>
-`
-}
-
-</div>
-`;
+  const metrics = summarizeInvestments(rows);
+  const reference = 8.4; // Existing illustrative value, not a verified market feed.
+  const diff = metrics.weightedROI === null ? null : metrics.weightedROI - reference;
+  container.innerHTML = `<h3>📊 ${t("Patrimonio e riferimento dimostrativo", "Portfolio and illustrative reference")}</h3>
+    <div style="margin-top:14px;font-size:28px;font-weight:700;color:${diff === null ? "#64748b" : diff >= 0 ? "#10b981" : "#ef4444"};">${diff === null ? "--" : `${diff >= 0 ? "+" : ""}${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", {maximumFractionDigits:1}).format(diff)} ${t("punti percentuali", "percentage points")}`}</div>
+    <p style="margin-top:6px;color:#64748b;font-size:14px">${diff === null ? t("Conferma gli immobili e completa ROI ed equity per rendere disponibile il confronto.", "Confirm properties and complete ROI and equity to enable the comparison.") : t("Scarto aritmetico tra ROI equity ponderato del patrimonio e riferimento di esempio 8,4%. Non è un benchmark nazionale verificato: prima di usarlo per decidere, verifica che la base di calcolo sia confrontabile.", "Arithmetic difference between portfolio equity-weighted ROI and the 8.4% sample reference. This is not a verified national benchmark: check that the calculation bases are comparable before using it for a decision.")}</p>`;
 }
 function lockInvestorPreview(){
 

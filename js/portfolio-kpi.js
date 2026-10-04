@@ -24,3 +24,19 @@ export function summarizeInvestments(rows = []){
     equity, cashflow, weightedROI, score:scores.length ? Math.round(mean(scores)) : null,
     coverage:{roi:rois.length,cashflow:cashflows.length,equity:equities.length,score:scores.length}};
 }
+
+export function interpretPortfolio(rows = []){
+  const metrics = summarizeInvestments(rows);
+  const risks = rows.map(row=>financialNumber(row.risk)).filter(value=>value !== null && value >= 0 && value <= 100);
+  const averageRisk = risks.length ? risks.reduce((sum,value)=>sum+value,0)/risks.length : null;
+  const negativeCashflows = rows.filter(row=>{const cash=financialNumber(row.net);return cash !== null && cash < 0;}).length;
+  let status = 'incomplete';
+  if(!metrics.count) status = 'empty';
+  else if(metrics.weightedROI !== null && metrics.cashflow !== null){
+    if(metrics.weightedROI < 0 || metrics.cashflow < 0) status = 'loss';
+    else if(metrics.weightedROI === 0 || metrics.cashflow === 0) status = 'balanced';
+    else if(negativeCashflows || risks.some(risk=>risk >= 70)) status = 'attention';
+    else status = 'positive';
+  }
+  return {metrics,status,averageRisk,riskCount:risks.length,negativeCashflows};
+}
