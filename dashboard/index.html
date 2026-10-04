@@ -731,6 +731,14 @@ box-shadow:
 
 }
 
+/* These narrative cards grow with their content; KPI tiles keep equal heights. */
+#dashboard-ai-insight,
+#dashboard-ai-insight > .analysis-card,
+#investment-intelligence-card{
+  height:auto;
+  min-height:0;
+}
+
   /* =====================================
 🔥 VERTICAL RHYTHM FIX
 ===================================== */
@@ -2707,7 +2715,7 @@ class="analysis-card"
 style="margin-top:24px;margin-bottom:28px;">
 </div>
 
-<div class="analysis-card" style="margin:28px 0;">
+<div id="investment-intelligence-card" class="analysis-card" style="margin:28px 0;">
 
 <div style="
 display:flex;
