@@ -4,6 +4,7 @@
 // ===============================================
 // ================= FIRESTORE ================
 import { calculateROI } from "./roi-engine.js";
+import { renderFreeSimulationPreview } from "./free-preview.js";
 
 import {
 renderMarketBenchmark
@@ -992,20 +993,20 @@ if(oldModal){
       title_it: "📊 Sblocca piano Investor",
       title_en: "📊 Unlock Investor Plan",
 
-      desc_it: "Stai analizzando un investimento con dati incompleti. Questo è il punto in cui molti investitori sbagliano.",
-      desc_en: "You're analyzing an investment with incomplete data. This is where most investors make mistakes.",
+      desc_it: "Hai provato il risultato base. Con Investor puoi approfondire lo scenario e gestire i tuoi immobili.",
+      desc_en: "You have tried the basic result. Investor lets you explore the scenario and manage your properties.",
 
       features_it: [
         "Simulazioni e scenari salvati",
         "Analisi ROI avanzata",
         "Confronto con benchmark indicativi",
-        "Indicatori base di rischio"
+        "Analisi rischio, portfolio e PMS"
       ],
       features_en: [
         "Simulations and saved scenarios",
         "Advanced ROI analysis",
         "Indicative market benchmark comparison",
-        "Basic risk indicators"
+        "Risk analysis, portfolio and PMS"
       ],
 
       proof_it: "Confronta più scenari prima di decidere",
@@ -1014,8 +1015,8 @@ if(oldModal){
       cta_it: "Sblocca Investor – €19/mese",
       cta_en: "Unlock Investor – €19/month",
 
-      warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
-      warning_en: "⚠️ Without advanced analysis you may overestimate returns",
+      warning_it: "PDF e dashboard-report sono inclusi in Pro.",
+      warning_en: "PDFs and dashboard reports are included in Pro.",
 
       action: () => window.location.pathname.startsWith("/tool")
         ? window.location.assign("/#pricing")
@@ -4018,7 +4019,7 @@ const visualROI =
 window.realROI = realROI;
 
 // 🔥 render chart con cap visivo
-renderROIChart(visualROI);
+renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI);
 
 // 🔥 testo reale
 const roiText = realROI.toFixed(1) + "%";
@@ -4940,8 +4941,11 @@ runPostAnalysis(result,{
   ) / 12
 
 });
+    renderFreeSimulationPreview(result, {access, document, lang:window.currentLang});
+
     // ================= MARKET =================
     if(access.isFree){
+      renderMarketBenchmark(window.currentCity);
 
       const marketComparison = document.getElementById("market-comparison");
       if(marketComparison){
@@ -4952,7 +4956,6 @@ runPostAnalysis(result,{
       }
 
       document.querySelectorAll(`
-        #market-comparison,
         #revenue-forecast,
         #occupancy-sensitivity,
         #investment-ranking,
@@ -9335,6 +9338,8 @@ if(!window.__rbToolLanguageRefreshBound){
       badge.textContent = getInvestmentBadge(roi);
       badge.className = getInvestmentBadgeClass(roi);
     }
+
+    renderFreeSimulationPreview(data, {access:window.getUserAccess?.(), document, lang:window.currentLang});
 
     const resultCity = document.getElementById("tool-result-city");
     if(resultCity){
