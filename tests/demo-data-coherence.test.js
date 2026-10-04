@@ -13,7 +13,7 @@ function context(date='2026-09-30T12:00:00') {
     Chart:class {static getChart(){return null;} constructor(canvas,config){ctx.chart=config;}},
     t:(it)=>it,formatCurrency:n=>String(n),formatPercent:n=>String(n)};
   vm.createContext(ctx);vm.runInContext(demo,ctx);
-  const helpers=dashboard.slice(dashboard.indexOf('function getBookingNightsInMonth'),dashboard.indexOf('// ================= INVESTMENT SCORE'));
+  const helpers=dashboard.slice(dashboard.indexOf('function getBookingNightsInMonth'),dashboard.indexOf('// Every availability decision reads the server'));
   const chart=dashboard.slice(dashboard.indexOf('function renderPMSPerformanceChart('),dashboard.indexOf('function getDayBookingState'));
   const stats=dashboard.slice(dashboard.indexOf('async function loadPMSStats(){'),dashboard.indexOf('  if(!window.currentUser) return;',dashboard.indexOf('async function loadPMSStats(){')))+'}';
   vm.runInContext(helpers+'\n'+chart+'\n'+stats,ctx);

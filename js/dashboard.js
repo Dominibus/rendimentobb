@@ -1,3 +1,4 @@
+import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
 import { resolveAccountPlan } from "./account-plan.js";
@@ -14,6 +15,8 @@ collection,
 query,
 where,
 getDocs,
+getDocsFromServer,
+getDocFromServer,
 getDoc,
 orderBy,
 deleteDoc,
@@ -404,6 +407,61 @@ function isPendingBooking(booking){
 
 function isConfirmedBooking(booking){
   return !isCancelledBooking(booking) && !isPendingBooking(booking);
+}
+
+// Every availability decision reads the server; local lists are display data only.
+const runBookingOperation = createBookingOperationGuard();
+
+function bookingOperationError(error){
+  const messages = {
+    "booking/conflict": ["Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.", "Dates unavailable: an overlapping booking already exists for this property."],
+    "booking/invalid_existing_dates": ["Verifica le date delle prenotazioni esistenti di questa proprietà prima di confermare disponibilità.", "Check existing booking dates for this property before confirming availability."],
+    "booking/invalid_dates": ["Il check-out deve essere successivo al check-in e le date devono essere valide.", "Check-out must be after check-in and dates must be valid."],
+    "booking/invalid_status": ["Stato della prenotazione non valido.", "Invalid booking status."],
+    "booking/stale_status": ["Lo stato è cambiato. Aggiorna le prenotazioni prima di procedere.", "The status has changed. Refresh bookings before continuing."],
+    "booking/not_found": ["Prenotazione o proprietà non più disponibile. Aggiorna la pagina.", "Booking or property is no longer available. Refresh the page."]
+  };
+  const message = messages[error?.code] || ["Impossibile verificare o salvare i dati sul server. Controlla la connessione e riprova.", "Unable to verify or save data on the server. Check your connection and try again."];
+  alert(t(...message));
+}
+
+function failBookingOperation(code){
+  const error = new Error(code);
+  error.code = `booking/${code}`;
+  throw error;
+}
+
+async function readFreshBooking(id){
+  if(!window.currentUser || !id) failBookingOperation("not_found");
+  const snapshot = await getDocFromServer(doc(db, "bookings", id));
+  if(!snapshot.exists() || snapshot.data().uid !== window.currentUser.uid) failBookingOperation("not_found");
+  return {...snapshot.data(), id:snapshot.id};
+}
+
+async function verifyBookingAvailability(candidate, editingBookingId = null){
+  const property = await getDocFromServer(doc(db, "properties", candidate.propertyId));
+  if(!property.exists() || property.data().uid !== window.currentUser?.uid) failBookingOperation("not_found");
+  if(editingBookingId) await readFreshBooking(editingBookingId);
+  const snapshot = await getDocsFromServer(query(
+    collection(db, "bookings"),
+    where("uid", "==", window.currentUser.uid),
+    where("propertyId", "==", candidate.propertyId)
+  ));
+  const decision = evaluateAvailability(candidate, snapshot.docs.map(item => ({...item.data(), id:item.id})), editingBookingId);
+  if(!decision.available) failBookingOperation(decision.reason);
+}
+
+async function refreshAfterBookingMutation(){
+  // A refresh error must never imply a successful write should be repeated.
+  window.rbPMSMemory = null;
+  try{
+    await loadPMSStats();
+    await loadProperties();
+    await loadBookings(window.bookingsAllPropertiesView && window.bookingsPropertyFilter === "all" ? "all" : window.currentPropertyId);
+  }catch(error){
+    dashboardError("Booking updated but dashboard refresh failed", error);
+    alert(t("Modifica salvata. Aggiorna la pagina per vedere i dati aggiornati.", "Change saved. Refresh the page to see updated data."));
+  }
 }
 
 // ================= INVESTMENT SCORE =================
@@ -9498,7 +9556,7 @@ function updateBookingTotal(){
 // 📅 SAVE BOOKING
 // =====================================
 
-window.saveBooking = async function(){
+async function performSaveBooking(){
 
   if(!window.currentUser){
 
@@ -9569,9 +9627,6 @@ if(!selectedPropertyId){
       "booking-status"
     )?.value || "arrival";
 
-  const arrival = new Date(`${checkin}T00:00:00`);
-  const departure = new Date(`${checkout}T00:00:00`);
-
   if(!guest){
     alert(t("Inserisci il nome dell’ospite.", "Enter the guest name."));
     return;
@@ -9613,38 +9668,8 @@ if(!selectedPropertyId){
   const editingBookingId = window.pmsEditingBooking
     ? window.currentSelectedBooking?.id
     : null;
-  let conflictBookings = window.currentBookingsData || [];
-  if(selectedPropertyId !== window.bookingOriginPropertyId){
-    const conflictSnap = await getDocs(
-      query(
-        collection(db, "bookings"),
-        where("uid", "==", window.currentUser.uid),
-        where("propertyId", "==", selectedPropertyId)
-      )
-    );
-    conflictBookings = conflictSnap.docs.map(item => ({ id:item.id, ...item.data() }));
-  }
-  const hasConflict = !["cancelled", "pending"].includes(status) &&
-    conflictBookings.some(existingBooking => {
-      if(existingBooking.id === editingBookingId) return false;
-      if(!isConfirmedBooking(existingBooking)) return false;
-
-      const existingArrival = new Date(`${existingBooking.checkin}T00:00:00`);
-      const existingDeparture = new Date(`${existingBooking.checkout}T00:00:00`);
-
-      if(
-        Number.isNaN(existingArrival.getTime()) ||
-        Number.isNaN(existingDeparture.getTime())
-      ) return false;
-
-      return arrival < existingDeparture && departure > existingArrival;
-    });
-
-  if(hasConflict){
-    alert(t(
-      "Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.",
-      "Dates unavailable: an overlapping booking already exists for this property."
-    ));
+  if(!isKnownBookingStatus(status)){
+    bookingOperationError({code:"booking/invalid_status"});
     return;
   }
 
@@ -9774,6 +9799,7 @@ if(!selectedPropertyId){
     : "";
 
   try{
+  await verifyBookingAvailability({propertyId:selectedPropertyId, checkin, checkout, status}, editingBookingId);
   if(
     window.pmsEditingBooking &&
     window.currentSelectedBooking?.id
@@ -9880,10 +9906,7 @@ source:
       saveButton.disabled = false;
       saveButton.textContent = t("💾 Salva Prenotazione", "💾 Save Booking");
     }
-    alert(t(
-      "Impossibile salvare la prenotazione. Riprova.",
-      "Unable to save the booking. Please try again."
-    ));
+    bookingOperationError(error);
     return;
   }
 
@@ -9991,6 +10014,19 @@ window.dispatchEvent(
     dashboardError("Booking saved but dashboard refresh failed", error);
   }
 
+};
+
+window.saveBooking = function(){
+  const key = window.pmsEditingBooking && window.currentSelectedBooking?.id
+    ? `booking:${window.currentSelectedBooking.id}` : "new-booking";
+  return runBookingOperation(key, async () => {
+    try{ return await performSaveBooking(); }
+    catch(error){ dashboardError("Booking save failed", error); bookingOperationError(error); }
+    finally{
+      const button = document.getElementById("booking-save-button");
+      if(button){ button.disabled = false; button.textContent = t("💾 Salva Prenotazione", "💾 Save Booking"); }
+    }
+  });
 };
 
 // =====================================
@@ -11645,136 +11681,45 @@ btn.dataset.filter
 // 🚫 CANCEL BOOKING (KEEP HISTORY)
 // =====================================
 
-window.cancelBooking =
-async function(id){
-
-  if(
-    !confirm(
-      window.t(
-        "Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.",
-        "Cancel this booking? It will remain in history but will not count toward performance."
-      )
-    )
-  ){
-    return;
-  }
-
-  await updateDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    ),
-    {
-      status: "cancelled",
-      cancelledAt: serverTimestamp()
-    }
-  );
-
-  await loadPMSStats();
-  await loadProperties();
-  await loadBookings(
-    window.currentPropertyId
-  );
-
+window.cancelBooking = async function(id){
+  if(!id || !window.currentUser) return;
+  return runBookingOperation(`booking:${id}`, async () => {
+    if(!confirm(t("Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.", "Cancel this booking? It will remain in history but will not count toward performance."))) return;
+    try{
+      await readFreshBooking(id);
+      await updateDoc(doc(db, "bookings", id), {status:"cancelled", cancelledAt:serverTimestamp()});
+    }catch(error){ dashboardError("Booking cancellation failed", error); bookingOperationError(error); return; }
+    await refreshAfterBookingMutation();
+  });
 };
 
 // =====================================
 // ➡️ ADVANCE BOOKING STATUS
 // =====================================
-
-window.advanceBookingStatus =
-async function(id, nextStatus){
-
-  const statusLabels = {
-    arrival: window.t("In Arrivo", "Arriving"),
-    checkin: window.t("Check-In", "Check-In"),
-    checkout: window.t("Check-Out", "Check-Out"),
-    completed: window.t("Completato", "Completed")
+window.advanceBookingStatus = async function(id, nextStatus){
+  const labels = {
+    arrival:t("In Arrivo", "Arriving"), checkin:"Check-In", checkout:"Check-Out", completed:t("Completato", "Completed")
   };
-
-  if(!id || !statusLabels[nextStatus]) return;
-
-  const currentBooking =
-    (window.currentBookingsData || [])
-      .find(booking => booking.id === id);
-  const isRequestConfirmation =
-    String(currentBooking?.status || "").toLowerCase() === "pending" &&
-    nextStatus === "arrival";
-
-  if(isRequestConfirmation){
-    const requestedArrival = new Date(`${currentBooking.checkin}T00:00:00`);
-    const requestedDeparture = new Date(`${currentBooking.checkout}T00:00:00`);
-    const hasConflict = (window.currentBookingsData || []).some(booking => {
-      if(booking.id === id || !isConfirmedBooking(booking)) return false;
-      const existingArrival = new Date(`${booking.checkin}T00:00:00`);
-      const existingDeparture = new Date(`${booking.checkout}T00:00:00`);
-      if(
-        Number.isNaN(existingArrival.getTime()) ||
-        Number.isNaN(existingDeparture.getTime())
-      ) return false;
-      return requestedArrival < existingDeparture && requestedDeparture > existingArrival;
-    });
-
-    if(hasConflict){
-      alert(window.t(
-        "Impossibile confermare: nel frattempo le date richieste risultano occupate. Modifica le date o annulla la richiesta.",
-        "Cannot confirm: the requested dates are now occupied. Change the dates or cancel the request."
-      ));
-      return;
+  if(!id || !window.currentUser || !labels[nextStatus]) return;
+  return runBookingOperation(`booking:${id}`, async () => {
+    const bookingDetailsWasOpen = window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none";
+    const confirmation = nextStatus === "arrival"
+      ? t("Confermare la richiesta e trasformarla in prenotazione?", "Confirm this request and convert it into a booking?")
+      : t(`Aggiornare la prenotazione allo stato ${labels[nextStatus]}?`, `Update this booking to ${labels[nextStatus]}?`);
+    if(!confirm(confirmation)) return;
+    try{
+      // Read after confirmation: the user may leave the dialog open for minutes.
+      const current = await readFreshBooking(id);
+      if(!canAdvanceBooking(current.status, nextStatus)) failBookingOperation("stale_status");
+      await verifyBookingAvailability({...current, status:nextStatus}, id);
+      await updateDoc(doc(db, "bookings", id), {status:nextStatus, statusUpdatedAt:serverTimestamp()});
+    }catch(error){ dashboardError("Booking status update failed", error); bookingOperationError(error); return; }
+    await refreshAfterBookingMutation();
+    if(bookingDetailsWasOpen){
+      const refreshed = (window.currentBookingsData || []).find(booking => booking.id === id);
+      if(refreshed) await window.showBookingDetails(refreshed);
     }
-  }
-
-  const bookingDetailsWasOpen =
-    window.currentSelectedBooking?.id === id &&
-    document.getElementById("booking-form-container")?.style.display !== "none";
-
-  if(
-    !confirm(
-      window.t(
-        isRequestConfirmation
-          ? "Confermare la richiesta e trasformarla in prenotazione?"
-          : `Aggiornare la prenotazione allo stato ${statusLabels[nextStatus]}?`,
-        isRequestConfirmation
-          ? "Confirm this request and convert it into a booking?"
-          : `Update this booking to ${statusLabels[nextStatus]}?`
-      )
-    )
-  ){
-    return;
-  }
-
-  await updateDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    ),
-    {
-      status: nextStatus,
-      statusUpdatedAt: serverTimestamp()
-    }
-  );
-
-  await loadPMSStats();
-  await loadProperties();
-  await loadBookings(
-    window.currentPropertyId
-  );
-
-  // The Copilot must read the freshly rebuilt rbPMSData after a status change.
-  window.rbPMSMemory = null;
-
-  if(bookingDetailsWasOpen){
-    const refreshedBooking =
-      (window.currentBookingsData || [])
-        .find(booking => booking.id === id);
-
-    if(refreshedBooking){
-      await window.showBookingDetails(refreshedBooking);
-    }
-  }
-
+  });
 };
 
 // =====================================

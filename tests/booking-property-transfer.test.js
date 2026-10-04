@@ -24,7 +24,7 @@ test("saving an edited booking persists the selected property", () => {
 });
 
 test("moving a booking checks conflicts in the destination property", () => {
-  assert.match(script, /if\(selectedPropertyId !== window\.bookingOriginPropertyId\)[\s\S]*where\("propertyId", "==", selectedPropertyId\)/);
+  assert.match(script, /await verifyBookingAvailability\(\{propertyId:selectedPropertyId, checkin, checkout, status\}, editingBookingId\)/);
 });
 
 test("bookings visibility baseline remains intact", () => {
