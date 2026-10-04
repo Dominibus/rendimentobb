@@ -1,3 +1,4 @@
+import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
 import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
@@ -413,7 +414,28 @@ function isConfirmedBooking(booking){
 
 // Every availability decision reads the server; local lists are display data only.
 const runBookingOperation = createBookingOperationGuard();
-const mutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
+const rawMutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
+
+const mutatePMS = async (...args)=>{
+  const result=await rawMutatePMS(...args);
+  if(result.taskEmailEventIds?.length && window.rbNotificationPreferences?.pmsTaskEmail===true){
+    try{
+      const token=await window.currentUser.getIdToken();
+      const response=await fetch("/api/work-email",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({action:"task_updates",bookingId:result.bookingId,eventIds:result.taskEmailEventIds,lang:window.RB_LANG?.current==="en"?"en":"it"})});
+      if(!response.ok || !(await response.json()).success) throw Error("email_failed");
+    }catch(error){
+      dashboardError("Task email failed",error);
+      alert(t("Modifica salvata. Email attività non inviata: verifica la configurazione email e che il tuo indirizzo sia verificato.", "Change saved. Task email was not sent: check email configuration and that your email address is verified."));
+    }
+  }
+  return result;
+};
+function renderBookingTaskTracking(booking=window.currentSelectedBooking){
+  const container=document.getElementById("booking-task-tracking");
+  if(!container)return;
+  container.style.display=booking?"block":"none";
+  container.innerHTML=booking?taskTrackingHTML(booking,t,window.RB_LANG?.current || "it"):"";
+}
 
 function bookingOperationError(error){
   const messages = {
@@ -5489,6 +5511,7 @@ window.openBookingModal = async function(){
         false;
 
     window.currentSelectedBooking = null;
+renderBookingTaskTracking(null);
 
 
     setTimeout(()=>{
@@ -5518,6 +5541,7 @@ window.closeBookingForm = function(){
 
     window.pmsEditingBooking = false;
     window.currentSelectedBooking = null;
+renderBookingTaskTracking(null);
 
     setBookingToggleState(false);
 
@@ -5541,6 +5565,7 @@ window.closeBookingForm = function(){
 
         window.pmsEditingBooking = false;
         window.currentSelectedBooking = null;
+renderBookingTaskTracking(null);
 
         setBookingToggleState(false);
 
@@ -6787,6 +6812,7 @@ window.showBookingDetails = async function(booking){
     window.pmsEditingBooking = true;
 
 window.currentSelectedBooking = booking;
+renderBookingTaskTracking(booking);
     window.bookingOriginPropertyId = booking.propertyId || window.currentPropertyId;
     await window.loadBookingPropertyOptions?.(window.bookingOriginPropertyId, false);
     const bookingProperty = document.getElementById("booking-property");
@@ -9981,6 +10007,7 @@ function renderPMSPortalAlerts(pmsData = {}){
   const operationalCount = alerts.length + arrivalsToday + departuresToday;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
   const emailToggle = `
+    <button type="button" onclick="togglePMSTaskEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsTaskEmail===true?window.t("Email attività attive", "Task emails on"):window.t("Attiva email attività", "Enable task emails")}</button>
     <button type="button" onclick="togglePMSUrgentEmail()" style="border:1px solid ${urgentEmailEnabled ? "#a7f3d0" : "#cbd5e1"};border-radius:999px;background:${urgentEmailEnabled ? "#ecfdf5" : "#f8fafc"};color:${urgentEmailEnabled ? "#047857" : "#64748b"};padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;">
       ${urgentEmailEnabled ? "✉️ " + window.t("Email urgenti attive", "Urgent emails on") : "🔕 " + window.t("Email urgenti disattivate", "Urgent emails off")}
     </button>`;
@@ -10032,6 +10059,16 @@ function renderPMSPortalAlerts(pmsData = {}){
       </button>
     </div>`;
 }
+
+window.togglePMSTaskEmail = async function(){
+  if(!window.currentUser || isDemo())return;
+  const next=window.rbNotificationPreferences?.pmsTaskEmail!==true;
+  try{
+    await updateDoc(doc(db,"users",window.currentUser.uid),{"notificationPreferences.pmsTaskEmail":next});
+    window.rbNotificationPreferences={...(window.rbNotificationPreferences || {}),pmsTaskEmail:next};
+    renderPMSPortalAlerts(window.rbPMSData || {});
+  }catch(error){dashboardError("Task email preference failed",error);alert(t("Impossibile aggiornare la preferenza email.","Unable to update email preference."));}
+};
 
 window.togglePMSUrgentEmail = async function(){
   if(!window.currentUser || window.currentUser.uid === "demo-user") return;
@@ -10822,6 +10859,7 @@ ${b.status !== "pending" && b.cleaning ? (() => {
   `;
 })() : ""}
 
+${taskProgressBadge({...b,id:docItem.id},t)}
 ${b.status !== "pending" && b.guestIssue?.active === true ? (() => {
   const issueStatus = b.guestIssue.status || "open";
   const issuePriority = b.guestIssue.priority || "medium";
@@ -11254,6 +11292,7 @@ const normalizedBookings =
       cleaning: booking.cleaning || null,
       guestIssue: booking.guestIssue || null,
       autopilotTasks: booking.autopilotTasks || {},
+      autopilotEvents: booking.autopilotEvents || [],
 
       validDateRange:
         Boolean(
@@ -12202,6 +12241,7 @@ const normalizedPMSBookings =
 
         guestIssue: booking.guestIssue || null,
         autopilotTasks: booking.autopilotTasks || {},
+      autopilotEvents: booking.autopilotEvents || [],
 
         validDateRange:
           Boolean(
@@ -15004,3 +15044,5 @@ document.addEventListener("DOMContentLoaded",()=>{
     showPMSTab("dashboard");
 
 });
+
+document.addEventListener("rb_language_changed",()=>renderBookingTaskTracking());

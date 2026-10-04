@@ -1,3 +1,4 @@
+import {sendTaskUpdates} from "../lib/pms-task-email.js";
 import { Resend } from "resend";
 import admin from "firebase-admin";
 import crypto from "node:crypto";
@@ -76,7 +77,12 @@ export default async function handler(req, res) {
     const token = getBearerToken(req);
     if(!token) return res.status(401).json({ success:false, error:"unauthorized" });
 
-    const decoded = await admin.auth().verifyIdToken(token);
+    const decoded = await admin.auth().verifyIdToken(token, true);
+    if(req.body?.action === "task_updates"){
+      const result=await sendTaskUpdates({db,resend,decoded,body:req.body,timestamp:()=>admin.firestore.FieldValue.serverTimestamp()});
+      const {httpStatus,...payload}=result;
+      return res.status(httpStatus || 200).json(payload);
+    }
     const bookingId = clean(req.body?.bookingId, 160);
     const lang = req.body?.lang === "en" ? "en" : "it";
     if(!bookingId) return res.status(400).json({ success:false, error:"booking_required" });

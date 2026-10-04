@@ -177,3 +177,8 @@ test('unrelated host edit preserves guest issue provenance and claimed state',as
  const db=seed({'bookings/a':{...existing,guestIssue:issue}});const input={...data,guestIssue:issue};await execute(db,request({bookingId:'a',expectedVersion:1,data:input}));let row=db.documents.get('bookings/a');
  await execute(db,taskRequest(row,{taskCode:'issue',taskFingerprint:row.autopilotTasks.issue.fingerprint}));row=db.documents.get('bookings/a');await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...input,totalAmount:400}}));row=db.documents.get('bookings/a');assert.equal(row.guestIssue.source,'guest_portal');assert.equal(row.guestIssue.reportedAt,issue.reportedAt);assert.equal(row.autopilotTasks.issue.status,'in_progress');
 });
+test('task claim and source resolution record authenticated actor and emit exact notification IDs',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));let row=db.documents.get('bookings/a');
+ const claim=await execute(db,taskRequest(row,{actor:{email:'forged@example.test'}}));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.takenBy.email,auth.email);assert.equal(claim.taskEmailEventIds.length,1);assert.equal(row.autopilotEvents.at(-1).id,claim.taskEmailEventIds[0]);
+ const result=await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...data,guestRegistration:{documentsReceived:2,authorityStatus:'submitted'}}}));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.resolvedBy.uid,auth.uid);assert.equal(result.taskEmailEventIds.length,2);assert.ok(result.taskEmailEventIds.every(id=>row.autopilotEvents.some(event=>event.id===id)));
+});
