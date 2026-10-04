@@ -5659,6 +5659,56 @@ window.initCityAutocomplete = function(){
   }, 800);
 
 })();
+// ================= PROPERTY LISTING SECURITY =================
+
+function getSafePropertyListingURL(value){
+  const raw = String(value ?? "").trim();
+  if(!/^https?:\/\//i.test(raw) || /[\u0000-\u001f\u007f]/.test(raw)) return "";
+
+  try{
+    const url = new URL(raw);
+    if(!["http:", "https:"].includes(url.protocol) || !url.hostname || url.username || url.password){
+      return "";
+    }
+    return url.href;
+  }catch{
+    return "";
+  }
+}
+
+function renderPropertyListingSource(value){
+  const box = document.getElementById("property-source");
+  if(!box) return;
+
+  const link = getSafePropertyListingURL(value);
+  const note = document.createElement("div");
+  note.style.marginTop = "6px";
+  note.style.fontSize = "13px";
+  note.style.color = "#64748b";
+
+  if(!link){
+    note.textContent = t(
+      "Link annuncio non valido. Inserisci un indirizzo completo http:// o https://, oppure compila i dati manualmente.",
+      "Invalid listing link. Enter a complete http:// or https:// address, or fill in the details manually."
+    );
+    box.replaceChildren(note);
+    return;
+  }
+
+  const title = document.createElement("strong");
+  title.textContent = t("📍 Immobile analizzato", "📍 Analyzed property");
+  const anchor = document.createElement("a");
+  anchor.href = link;
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  anchor.textContent = link;
+  note.textContent = t(
+    "Inserisci i dati dell'annuncio per simulare il rendimento.",
+    "Enter the listing details to simulate returns."
+  );
+  box.replaceChildren(title, document.createElement("br"), anchor, note);
+}
+
 // ================= AUTO LOAD PROPERTY FROM TOOL (NUOVO) =================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -5668,7 +5718,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const savedUrl = localStorage.getItem("listing_url");
 
-  const finalUrl = urlFromQuery || savedUrl;
+  const requestedUrl = urlFromQuery || savedUrl;
+  const finalUrl = getSafePropertyListingURL(requestedUrl);
+
+  if(requestedUrl && !finalUrl){
+    localStorage.removeItem("property_link");
+    localStorage.removeItem("listing_url");
+    renderPropertyListingSource(requestedUrl);
+    return;
+  }
 
   if(finalUrl){
 
@@ -7658,7 +7716,7 @@ doc.save(`RendimentoBB-Fattibilita-${city}-${roi.toFixed(1)}ROI.pdf`);
 
 function handleAutoCityRedirect(){
 
-  const link = localStorage.getItem("property_link");
+  const link = getSafePropertyListingURL(localStorage.getItem("property_link"));
 
   if(!link) return;
 
@@ -7828,25 +7886,18 @@ priceField.value = storedPrice;
 
 async function loadPropertyFromLink(){
 
-const link = localStorage.getItem("property_link");
+const storedLink = localStorage.getItem("property_link");
+if(!storedLink) return;
+const link = getSafePropertyListingURL(storedLink);
+if(!link){
+  localStorage.removeItem("property_link");
+  renderPropertyListingSource(storedLink);
+  return;
+}
 
 // ===== MOSTRA LINK ANALIZZATO =====
 
-const linkBox = document.getElementById("property-source");
-
-if(!link) return;
-
-if(linkBox){
-
-linkBox.innerHTML = `
-<strong>📍 Immobile analizzato</strong><br>
-<a href="${link}" target="_blank">${link}</a>
-
-<div style="margin-top:6px;font-size:13px;color:#64748b;">
-Inserisci i dati dell'annuncio per simulare il rendimento.
-</div>
-`;
-}
+renderPropertyListingSource(link);
 
 
 
@@ -7907,7 +7958,7 @@ genova: "genova",
 palermo: "palermo"
 };
 
-const propertyLink = localStorage.getItem("property_link") || "";
+const propertyLink = link;
 
 for(const key in cityMap){
 
