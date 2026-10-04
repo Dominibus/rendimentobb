@@ -1,3 +1,4 @@
+import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
 import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
@@ -383,52 +384,13 @@ window.currentLang === "it" ? "it-IT" : "en-US"
 }
 
 function getBookingNightsInMonth(checkin, checkout, referenceDate = new Date()){
-  if(!checkin || !checkout) return 0;
-
-  const arrival = new Date(`${checkin}T00:00:00`);
-  const departure = new Date(`${checkout}T00:00:00`);
-  const monthStart = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    1
-  );
-  const monthEnd = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth() + 1,
-    1
-  );
-
-  if(
-    Number.isNaN(arrival.getTime()) ||
-    Number.isNaN(departure.getTime()) ||
-    departure <= arrival
-  ) return 0;
-
-  const overlapStart = arrival > monthStart ? arrival : monthStart;
-  const overlapEnd = departure < monthEnd ? departure : monthEnd;
-
-  return Math.max(
-    0,
-    Math.round((overlapEnd - overlapStart) / (1000 * 60 * 60 * 24))
-  );
+  return nightsInMonth(checkin, checkout, referenceDate);
 }
 
 function getBookingRevenueInMonth(booking, referenceDate = new Date()){
-  const occupiedNights = getBookingNightsInMonth(
-    booking?.checkin,
-    booking?.checkout,
-    referenceDate
-  );
-  if(!occupiedNights) return 0;
-
-  const arrival = new Date(`${booking.checkin}T00:00:00`);
-  const departure = new Date(`${booking.checkout}T00:00:00`);
-  const totalNights = Math.round(
-    (departure - arrival) / (1000 * 60 * 60 * 24)
-  );
-
-  if(!Number.isFinite(totalNights) || totalNights <= 0) return 0;
-
+  const occupiedNights = getBookingNightsInMonth(booking?.checkin, booking?.checkout, referenceDate);
+  const totalNights = calendarBookingNights(booking);
+  if(!occupiedNights || !totalNights) return 0;
   return Number(booking.totalAmount || 0) * occupiedNights / totalNights;
 }
 
@@ -4705,13 +4667,9 @@ window.getBookingStayMetrics = () => {
     return null;
   }
 
-  const nights = Math.ceil((end - start) / 86400000);
-  let weekendNights = 0;
-  const cursor = new Date(start);
-  while(cursor < end){
-    if(cursor.getDay() === 5 || cursor.getDay() === 6) weekendNights += 1;
-    cursor.setDate(cursor.getDate() + 1);
-  }
+  const nights = stayNights(checkin, checkout);
+  if(!nights) return null;
+  const weekendNights = weekendStayNights(checkin, checkout);
 
   return { checkin, checkout, start, end, nights, weekendNights };
 };
@@ -4754,7 +4712,7 @@ window.updateBookingPricingSuggestion = function(){
   const lengthFactor = metrics.nights >= 14 ? 0.92 : metrics.nights >= 7 ? 0.95 : metrics.nights === 1 ? 1.10 : 1;
   const today = new Date();
   today.setHours(12, 0, 0, 0);
-  const leadDays = Math.ceil((metrics.start - today) / 86400000);
+  const leadDays = calendarDayDifference(getLocalISODate(today), metrics.checkin);
   const leadFactor = leadDays >= 0 && leadDays <= 3 ? 0.92 : leadDays >= 60 ? 1.03 : 1;
 
   const rawSuggestedADR = referenceADR * seasonFactor * weekendFactor * lengthFactor * leadFactor;
@@ -4912,10 +4870,7 @@ window.updateBookingTouristTax = function(){
 
   let stayNights = 0;
   if(checkin && checkout){
-    stayNights = Math.max(0, Math.ceil(
-      (new Date(`${checkout}T00:00:00`) - new Date(`${checkin}T00:00:00`)) /
-      (1000 * 60 * 60 * 24)
-    ));
+    stayNights = calendarBookingNights({checkin, checkout});
   }
 
   const maxNights = Math.max(0, Number(config.maxTaxableNights || 0));
@@ -6080,21 +6035,7 @@ Number(
   booking.guests || 0
 );
 
-  const nights =
-    Math.max(
-      1,
-      Math.ceil(
-        (
-          new Date(
-            booking.checkout
-          ) -
-          new Date(
-            booking.checkin
-          )
-        ) /
-        (1000*60*60*24)
-      )
-    );
+  const nights = calendarBookingNights(booking);
 
   totalNights += nights;
   occupiedNightsThisMonth += getBookingNightsInMonth(
@@ -7010,22 +6951,7 @@ window.currentSelectedBooking = booking;
         );
 
 
-    const bookingNights =
-        Number(booking.nights) ||
-        (
-            booking.checkin && booking.checkout
-            ? Math.max(
-                0,
-                Math.ceil(
-                    (
-                        new Date(`${booking.checkout}T00:00:00`) -
-                        new Date(`${booking.checkin}T00:00:00`)
-                    ) /
-                    (1000 * 60 * 60 * 24)
-                )
-            )
-            : 0
-        );
+    const bookingNights = calendarBookingNights(booking);
 
 
 
@@ -7612,22 +7538,7 @@ window.getBookingExecutiveAnalysis = function(booking){
         ? "en"
         : "it";
 
-    const nights =
-        Number(booking.nights) ||
-        (
-            booking.checkin && booking.checkout
-            ? Math.max(
-                0,
-                Math.ceil(
-                    (
-                        new Date(`${booking.checkout}T00:00:00`) -
-                        new Date(`${booking.checkin}T00:00:00`)
-                    ) /
-                    (1000 * 60 * 60 * 24)
-                )
-            )
-            : 0
-        );
+    const nights = calendarBookingNights(booking);
 
     const revenue =
         Number(booking.totalAmount || 0);
@@ -8178,24 +8089,7 @@ window.analyzeBookingAI = function(id){
     // ===============================
 
 
-    const nights =
-    booking.nights ||
-    (
-        booking.checkin &&
-        booking.checkout
-        ?
-        Math.ceil(
-            (
-                new Date(booking.checkout)
-                -
-                new Date(booking.checkin)
-            )
-            /
-            (1000 * 60 * 60 * 24)
-        )
-        :
-        0
-    );
+    const nights = calendarBookingNights(booking);
 
 
 
@@ -9511,20 +9405,7 @@ function updateBookingTotal(){
     return;
   }
 
-  const start =
-    new Date(checkin);
-
-  const end =
-    new Date(checkout);
-
-  const nights =
-    Math.max(
-      1,
-      Math.ceil(
-        (end - start) /
-        (1000 * 60 * 60 * 24)
-      )
-    );
+  const nights = stayNights(checkin, checkout);
 
   const propertyCard =
     document.querySelector(
@@ -9707,11 +9588,7 @@ if(!selectedPropertyId){
   };
 
   if(
-    !checkin ||
-    !checkout ||
-    Number.isNaN(arrival.getTime()) ||
-    Number.isNaN(departure.getTime()) ||
-    departure <= arrival
+    stayNights(checkin, checkout) === 0
   ){
     alert(t(
       "Il check-out deve essere successivo al check-in.",
@@ -10653,16 +10530,7 @@ let sourceStats = {};
     const source =
   b.source || "Unknown";
 
-    const nights = Math.max(
-      1,
-      Math.ceil(
-        (
-          new Date(b.checkout) -
-          new Date(b.checkin)
-        ) /
-        (1000 * 60 * 60 * 24)
-      )
-    );
+    const nights = calendarBookingNights(b);
 
 if(isConfirmed && !sourceStats[source]){
 
@@ -11301,33 +11169,9 @@ const normalizedBookings =
     const checkoutDate =
       new Date(checkout);
 
-    const hasValidDates =
-      checkin &&
-      checkout &&
-      !Number.isNaN(
-        checkinDate.getTime()
-      ) &&
-      !Number.isNaN(
-        checkoutDate.getTime()
-      ) &&
-      checkoutDate >
-      checkinDate;
+    const hasValidDates = stayNights(checkin, checkout) > 0;
 
-    const calculatedNights =
-      hasValidDates
-        ? Math.ceil(
-            (
-              checkoutDate -
-              checkinDate
-            ) /
-            (
-              1000 *
-              60 *
-              60 *
-              24
-            )
-          )
-        : 0;
+    const calculatedNights = stayNights(checkin, checkout);
 
     const totalAmount =
       Number(
@@ -12149,17 +11993,7 @@ async function loadPMSStats(){
         b.totalAmount || 0
       );
 
-    const nights =
-      Math.max(
-        1,
-        Math.ceil(
-          (
-            new Date(b.checkout) -
-            new Date(b.checkin)
-          ) /
-          (1000 * 60 * 60 * 24)
-        )
-      );
+    const nights = calendarBookingNights(b);
 
     totalNights += nights;
     const nightsThisMonth = getBookingNightsInMonth(
@@ -12394,33 +12228,9 @@ const normalizedPMSBookings =
       const checkoutDate =
         new Date(checkout);
 
-      const hasValidDates =
-        checkin &&
-        checkout &&
-        !Number.isNaN(
-          checkinDate.getTime()
-        ) &&
-        !Number.isNaN(
-          checkoutDate.getTime()
-        ) &&
-        checkoutDate >
-          checkinDate;
+      const hasValidDates = stayNights(checkin, checkout) > 0;
 
-      const calculatedNights =
-        hasValidDates
-          ? Math.ceil(
-              (
-                checkoutDate -
-                checkinDate
-              ) /
-              (
-                1000 *
-                60 *
-                60 *
-                24
-              )
-            )
-          : 0;
+      const calculatedNights = stayNights(checkin, checkout);
 
       const totalAmount =
         Number(

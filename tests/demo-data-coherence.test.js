@@ -1,3 +1,4 @@
+import {bookingNights as calendarBookingNights, nightsInMonth} from '../js/pms-calendar.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -7,7 +8,7 @@ const dashboard = readFileSync(new URL('../js/dashboard.js',import.meta.url),'ut
 function context(date='2026-09-30T12:00:00') {
   class FixedDate extends Date { constructor(...args){super(...(args.length?args:[date]));} }
   const elements=new Map();
-  const ctx={Date:FixedDate,Intl,console,document:{getElementById(id){if(!elements.has(id))elements.set(id,{getContext(){return {};}});return elements.get(id);}},
+  const ctx={Date:FixedDate,Intl,console,calendarBookingNights,nightsInMonth,document:{getElementById(id){if(!elements.has(id))elements.set(id,{getContext(){return {};}});return elements.get(id);}},
     window:{currentLang:'it',isDemoDashboard:true,devicePixelRatio:1,dispatchEvent(){}},CustomEvent:class {},
     Chart:class {static getChart(){return null;} constructor(canvas,config){ctx.chart=config;}},
     t:(it)=>it,formatCurrency:n=>String(n),formatPercent:n=>String(n)};
