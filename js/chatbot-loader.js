@@ -78,6 +78,18 @@
   // =============================================
 
   function loadScript(src) {
+    // PDF.js is an ES module. Await its export before loading document tools.
+    if(src === "/js/vendor/pdfjs/pdf.min.mjs"){
+      return import(src)
+        .then(pdfjs => {
+          window.pdfjsLib = pdfjs;
+        })
+        .catch(() => {
+          window.pdfjsLib = null;
+          reportLoadError("PDF reader");
+        });
+    }
+
     return new Promise((resolve) => {
       const existing = document.querySelector(
         `script[src="${src}"]`
@@ -148,10 +160,10 @@
     "/js/chatbot/core/investor-profile-engine.js",
     "/js/chatbot/core/score-engine.js",
 
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+    "/js/vendor/pdfjs/pdf.min.mjs",
 
-    "/js/chatbot/document-engine.js?v=20261001-28",
-    "/js/chatbot/pdf-extraction-engine.js?v=20261001-22",
+    "/js/chatbot/document-engine.js?v=20261004-rc02",
+    "/js/chatbot/pdf-extraction-engine.js?v=20261004-rc02",
     "/js/chatbot/pdf-parser-engine.js?v=20261001-22",
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",

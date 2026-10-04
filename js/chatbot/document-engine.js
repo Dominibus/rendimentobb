@@ -693,7 +693,8 @@ window.rbAnalyzeUploadedPDF = async function(file){
                 password_required:["Il PDF è protetto da password. Carica una copia non protetta.","The PDF is password protected. Upload an unprotected copy."],
                 too_many_pages:["Il PDF supera 100 pagine. Carica le pagine rilevanti.","The PDF exceeds 100 pages. Upload the relevant pages."],
                 too_much_text:["Il PDF contiene troppo testo. Carica una sezione più breve.","The PDF contains too much text. Upload a shorter section."],
-                unavailable:["Il lettore PDF non è disponibile. Riprova dopo aver aggiornato la pagina.","The PDF reader is unavailable. Refresh the page and try again."]
+                unavailable:["Il lettore PDF non è disponibile. Riprova dopo aver aggiornato la pagina.","The PDF reader is unavailable. Refresh the page and try again."],
+                timeout:["La lettura del PDF ha superato il tempo disponibile. Carica una sezione più breve o riprova con un altro file.","PDF reading took too long. Upload a shorter section or try another file."]
             };
             say(...(messages[reason] || ["Non riesco a leggere questo PDF. Verifica il file e riprova.","I could not read this PDF. Check the file and try again."]));
             return {success:false,error:reason,document:doc};

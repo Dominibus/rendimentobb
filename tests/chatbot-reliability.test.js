@@ -8,7 +8,7 @@ const sources = Object.fromEntries(await Promise.all(files.map(async f=>[f,await
 function storage(){const m=new Map();return {getItem:k=>m.get(k)||null,setItem:(k,v)=>m.set(k,v),removeItem:k=>m.delete(k)};}
 function context(selected,options={}){
  const events={};const messages=[];
- const c={window:{currentLang:'it',RB_DEBUG:false,addMessage:(role,text)=>messages.push(text),dispatchEvent(){}},document:{addEventListener:(n,cb)=>events[n]=cb,dispatchEvent(){}},CustomEvent:class{constructor(type,init={}){this.type=type;this.detail=init.detail;}},localStorage:storage(),sessionStorage:storage(),crypto:{randomUUID:()=>String(Math.random())},console:{log(){},debug(){},warn(){},error(){}},...options};
+ const c={setTimeout,clearTimeout,window:{currentLang:'it',RB_DEBUG:false,addMessage:(role,text)=>messages.push(text),dispatchEvent(){}},document:{addEventListener:(n,cb)=>events[n]=cb,dispatchEvent(){}},CustomEvent:class{constructor(type,init={}){this.type=type;this.detail=init.detail;}},localStorage:storage(),sessionStorage:storage(),crypto:{randomUUID:()=>String(Math.random())},console:{log(){},debug(){},warn(){},error(){}},...options};
  vm.createContext(c);for(const f of selected)vm.runInContext(sources[f],c);return {c,messages,events};
 }
 test('legacy unowned memory is discarded',()=>{const local=storage();local.setItem('rbChatMemory',JSON.stringify({messages:[{message:'secret'}]}));const {c}=context(['core/memory-engine'],{localStorage:local});assert.equal(c.window.rbChatMemory.messages.length,0);assert.equal(local.getItem('rbChatMemory'),null);});
