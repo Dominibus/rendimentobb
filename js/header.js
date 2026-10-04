@@ -689,35 +689,29 @@ const aiBtn =
   );
 
 if(aiBtn){
-
+  let pendingOpen = false;
   aiBtn.onclick = ()=>{
-
-
-    // aspetta chatbot render
-    setTimeout(()=>{
-
-      const chatbot =
-        document.getElementById(
-          "rb-chatbot-window"
-        );
-
-      if(!chatbot){
-
-        console.warn(
-          "❌ chatbot window missing"
-        );
-
-        return;
-
-      }
-
+    const chatbot = document.getElementById("rb-chatbot-window");
+    if(chatbot){
       chatbot.classList.toggle("open");
-
-
-    }, 50);
-
+      return;
+    }
+    // Keep one open request while the shared loader is still initializing.
+    if(pendingOpen) return;
+    pendingOpen = true;
+    let timer;
+    const onReady = ()=>{
+      clearTimeout(timer);
+      document.removeEventListener("rb_chatbot_ready", onReady);
+      pendingOpen = false;
+      document.getElementById("rb-chatbot-window")?.classList.add("open");
+    };
+    document.addEventListener("rb_chatbot_ready", onReady, {once:true});
+    timer = setTimeout(()=>{
+      document.removeEventListener("rb_chatbot_ready", onReady);
+      pendingOpen = false;
+    }, 15000);
   };
-
 }
 
 }  
