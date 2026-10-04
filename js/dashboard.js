@@ -1,3 +1,4 @@
+import { financialNumber, summarizeInvestments } from "./portfolio-kpi.js";
 import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
@@ -327,6 +328,7 @@ dashboardAccess.isInvestor;
 // ================= UTIL =================
 
 function formatCurrency(value){
+if(financialNumber(value) === null) return "--";
 
 return new Intl.NumberFormat(
 window.currentLang === "it" ? "it-IT" : "en-US",
@@ -336,6 +338,7 @@ window.currentLang === "it" ? "it-IT" : "en-US",
 }
 
 function formatPercent(value){
+  if(financialNumber(value) === null) return "--";
   return new Intl.NumberFormat(
     window.currentLang === "it" ? "it-IT" : "en-US",
     { maximumFractionDigits: 1 }
@@ -443,48 +446,8 @@ function isConfirmedBooking(booking){
 
 // ================= INVESTMENT SCORE =================
 
-function calculateInvestmentScore(avgROI,analyses){
-
-if(!analyses?.length) return 0;
-
-const savedScores = analyses
-  .map(data => Number(data.investmentScore || 0))
-  .filter(score => score > 0 && score <= 100);
-
-if(savedScores.length){
-  return Math.round(
-    savedScores.reduce((sum, score) => sum + score, 0) /
-    savedScores.length
-  );
-}
-
-let score = 50;
-
-/* ROI influence */
-
-if(avgROI > 15) score += 30;
-else if(avgROI > 8) score += 20;
-else if(avgROI > 3) score += 10;
-else if(avgROI < 0) score -= 20;
-
-const riskValues = analyses
-  .map(data => Number(data.risk || 0))
-  .filter(risk => risk > 0 && risk <= 100);
-
-if(riskValues.length){
-  const avgRisk = riskValues.reduce((sum, risk) => sum + risk, 0) / riskValues.length;
-  if(avgRisk <= 30) score += 15;
-  else if(avgRisk <= 50) score += 8;
-  else if(avgRisk >= 70) score -= 15;
-}
-
-/* clamp */
-
-if(score > 100) score = 100;
-if(score < 0) score = 0;
-
-return Math.round(score);
-
+function calculateInvestmentScore(avgROI, analyses){
+  return summarizeInvestments(analyses || []).score;
 }
 
 // ===============================
@@ -508,7 +471,7 @@ roiChartInstance = null;
 }
 
 const avgROI =
-roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
+summarizeInvestments(roiValues.map(roi => ({roi}))).averageROI;
 
 const avgLine =
 new Array(roiValues.length).fill(avgROI);
@@ -577,7 +540,7 @@ size:13
 },
 
 callbacks:{
-label:(ctx)=> "ROI: " + ctx.raw.toFixed(1) + "%"
+label:(ctx)=> "ROI: " + formatPercent(ctx.raw)
 }
 }
 
@@ -846,24 +809,19 @@ const analyses = querySnapshot.docs.map(doc => {
     id: doc.id,
 
     roi:
-      data.roi || 0,
+      financialNumber(data.roi),
 
     visualROI:
       data.visualROI || 0,
 
     realROI:
-      data.realROI || 0,
+      financialNumber(data.realROI),
 
     price:
-      data.propertyPrice ||
-      data.price ||
-      0,
+      financialNumber(data.propertyPrice ?? data.price),
 
         equity:
-      Number(
-        data.equity ??
-        0
-      ),
+      financialNumber(data.equity),
 
     loan:
       Number(
@@ -961,10 +919,10 @@ const analyses = querySnapshot.docs.map(doc => {
       data.occupancy || 0,
 
     net:
-      data.net || 0,
+      financialNumber(data.netAfterMortgage ?? data.net ?? data.cashflow),
 
     risk:
-  data.risk ?? 0,
+  financialNumber(data.risk),
 
     riskBreakdown:
       data.riskBreakdown ?? null,
@@ -1006,7 +964,7 @@ const analyses = querySnapshot.docs.map(doc => {
       Number(data.annualDebtService ?? data.mortgageYearly ?? 0),
 
     investmentScore:
-  data.investmentScore ?? 0,
+  financialNumber(data.investmentScore),
 
     isPortfolio:
       data.isPortfolio === true,
@@ -1423,8 +1381,7 @@ const visibleAnalyses =
       adr * occupancy * 365 / 100
     );  
 
-    const yearlyProfit =
-  Number(data.net || 0);
+    const yearlyProfit = financialNumber(data.net);
 
     const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
 
@@ -1492,13 +1449,13 @@ if(isNew){
       <div class="metric">
         <span>${t("ROI annuale","Annual ROI")}</span>
         <strong class="${roiClass}">
-          ${roi.toFixed(1)}%
+          ${formatPercent(roi)}
         </strong>
       </div>
 
       <div class="metric">
         <span>${t("Indice rischio","Risk score")}</span>
-        <strong>${data.risk}/100</strong>
+        <strong>${financialNumber(data.risk) === null ? "--" : `${data.risk}/100`}</strong>
       </div>
 
       <div class="metric">
@@ -1799,7 +1756,7 @@ font-weight:800;
 color:${roiColor};
 margin-bottom:12px;
 ">
-${best.roi.toFixed(1)}%
+${formatPercent(best.roi)}
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-bottom:18px">
@@ -1826,7 +1783,7 @@ ${
 <!-- CONTENUTO PAID -->
 <div class="metric">
 <span>${t("Indice rischio","Risk score")}</span>
-<strong>${best.risk}/100</strong>
+<strong>${financialNumber(best.risk) === null ? "--" : `${best.risk}/100`}</strong>
 </div>
 
 <div class="metric">
@@ -1898,7 +1855,7 @@ return;
 
 /* top 3 ROI */
 
-const top = [...analyses]
+const top = analyses.filter(data => financialNumber(data.roi) !== null)
 .sort((a,b)=> b.roi - a.roi)
 .slice(0,3);
 
@@ -1919,7 +1876,7 @@ html += `
 <div class="metric">
 <span>${medal} ${t("Investimento","Investment")} ${index+1}</span>
 <strong style="color:${roiColor}">
-${inv.roi.toFixed(1)}%
+${formatPercent(inv.roi)}
 </strong>
 </div>
 
@@ -2000,6 +1957,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
   const linkedCount = portfolioAnalyses.filter(data => Boolean(data.propertyId)).length;
   const manualCount = portfolioAnalyses.length - linkedCount;
 
+  const dataCoverage = summarizeInvestments(portfolioAnalyses).coverage;
   const summary = portfolioAnalyses.length
     ? t(
         `${portfolioAnalyses.length} ${portfolioAnalyses.length === 1 ? "immobile confermato" : "immobili confermati"} · ${linkedCount} PMS · ${manualCount} ${manualCount === 1 ? "manuale" : "manuali"}`,
@@ -2011,11 +1969,11 @@ function renderPortfolioManager(portfolioAnalyses = []){
     const linked = Boolean(data.propertyId);
     const rawCity = String(data.city || t("Città non indicata", "City not specified"));
     const city = escapeDashboardHTML(rawCity.charAt(0).toUpperCase() + rawCity.slice(1));
-    const price = Number(data.price || 0);
-    const equity = Number(data.equity || 0);
-    const roi = Number(data.roi || 0);
-    const yearlyCashflow = Number(data.net || 0);
-    const risk = Number(data.risk || 0);
+    const price = financialNumber(data.price);
+    const equity = financialNumber(data.equity);
+    const roi = financialNumber(data.roi);
+    const yearlyCashflow = financialNumber(data.net);
+    const risk = financialNumber(data.risk);
     const complete = price > 0 && equity > 0 && Number.isFinite(roi) && Number.isFinite(yearlyCashflow);
 
     return `
@@ -2036,7 +1994,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
           <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
           <div><span>ROI</span><strong>${formatPercent(roi)}</strong></div>
-          <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow / 12)}</strong></div>
+          <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
           <div><span>${t("Rischio", "Risk")}</span><strong>${Number.isFinite(risk) ? `${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", { maximumFractionDigits: 0 }).format(risk)}/100` : "--"}</strong></div>
         </div>
 
@@ -2063,7 +2021,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
           "Only confirmed properties feed ROI, cash flow, equity and break-even."
         )}</p>
       </div>
-      <strong class="portfolio-manager__summary">${summary}</strong>
+      <strong class="portfolio-manager__summary">${summary}${portfolioAnalyses.length ? t(` · ROI ${dataCoverage.roi}/${portfolioAnalyses.length} · cashflow ${dataCoverage.cashflow}/${portfolioAnalyses.length} · equity ${dataCoverage.equity}/${portfolioAnalyses.length}`, ` · ROI ${dataCoverage.roi}/${portfolioAnalyses.length} · cash flow ${dataCoverage.cashflow}/${portfolioAnalyses.length} · equity ${dataCoverage.equity}/${portfolioAnalyses.length}`) : ""}</strong>
     </div>
     ${cards || `
       <div class="portfolio-manager__empty">
@@ -2082,34 +2040,17 @@ function renderPortfolioManager(portfolioAnalyses = []){
 function renderStats(count,totalROI,totalCapital,totalCashflow,portfolioAnalyses = []){
 
 // ================= SAFE CALC =================
-const avgROI = count ? (totalROI / count) : 0;
-const avgROIRounded = avgROI.toFixed(1);
-const avgCashflow = count ? (totalCashflow / count) : 0;
-
-const confirmedCount = portfolioAnalyses.length;
-const confirmedEquity = portfolioAnalyses.reduce(
-  (sum, data) => sum + Number(data.equity || 0),
-  0
-);
-const confirmedYearlyCashflow = portfolioAnalyses.reduce(
-  (sum, data) => sum + Number(data.net || 0),
-  0
-);
-const confirmedROI = confirmedCount
-  ? (
-      confirmedEquity > 0
-        ? portfolioAnalyses.reduce(
-            (sum, data) => sum + (Number(data.roi || 0) * Number(data.equity || 0)),
-            0
-          ) / confirmedEquity
-        : portfolioAnalyses.reduce(
-            (sum, data) => sum + Number(data.roi || 0),
-            0
-          ) / confirmedCount
-    )
-  : 0;
-const confirmedMonthlyCashflow = confirmedYearlyCashflow / 12;
-const confirmedBreakEven = confirmedYearlyCashflow > 0
+const scenarioMetrics = summarizeInvestments(window.dashboardSimulations || []);
+const portfolioMetrics = summarizeInvestments(portfolioAnalyses);
+const avgROI = scenarioMetrics.averageROI;
+const avgROIRounded = avgROI === null ? null : avgROI.toFixed(1);
+const avgCashflow = scenarioMetrics.averageCashflow;
+const confirmedCount = portfolioMetrics.count;
+const confirmedEquity = portfolioMetrics.equity;
+const confirmedYearlyCashflow = portfolioMetrics.cashflow;
+const confirmedROI = portfolioMetrics.weightedROI;
+const confirmedMonthlyCashflow = confirmedYearlyCashflow === null ? null : confirmedYearlyCashflow / 12;
+const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity !== null
   ? confirmedEquity / confirmedYearlyCashflow
   : null;
 
@@ -2128,12 +2069,12 @@ const marketROI = cityMarket.roi;
 const trend = avgROI >= marketROI ? "↑" : "↓";
 
 // ================= CALCOLI =================
-const monthlyProfit = avgCashflow / 12;
+const monthlyProfit = avgCashflow === null ? null : avgCashflow / 12;
 const yearlyProfit = avgCashflow;
 
 let breakEvenYears = "-";
 
-if(totalCashflow > 0){
+if(avgCashflow > 0 && avgROI > 0){
   breakEvenYears =
     (avgROI > 0 ? 100 / avgROI : 0)
     .toFixed(1);
@@ -2153,9 +2094,7 @@ document.getElementById(
 );  
 
 if(dbRoi){
-  dbRoi.innerText = avgROI > 0
-    ? formatPercent(avgROIRounded)
-    : "--";
+  dbRoi.innerText = formatPercent(avgROIRounded);
 }
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
@@ -2173,7 +2112,7 @@ if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
 if(dbStatus){
 
-  let status = t("Basso","Low");
+  let status = avgROI === null ? t("Dati non disponibili", "Data unavailable") : t("Basso","Low");
 let color = "#ef4444";
 
 if(avgROI >= 10){
@@ -2205,7 +2144,7 @@ const canViewDashboardData =
 
 if(kpiRoi){
   kpiRoi.innerText = confirmedCount
-    ? formatPercent(confirmedROI.toFixed(1))
+    ? formatPercent(confirmedROI === null ? null : confirmedROI.toFixed(1))
     : "--";
 }
 
@@ -2226,14 +2165,14 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? (confirmedCount ? (confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
+      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
 if(roiEl){
   roiEl.textContent = confirmedCount
-    ? formatPercent(confirmedROI.toFixed(1))
+    ? formatPercent(confirmedROI === null ? null : confirmedROI.toFixed(1))
     : "--";
 }
 
@@ -2282,7 +2221,11 @@ let insight = "";
 let color = "#10b981";
 let icon = "🟢";
 
-if(avgROI >= marketROI + 5){
+if(avgROI === null){
+insight = t("Dati ROI non disponibili: completa le simulazioni salvate.", "ROI data unavailable: complete your saved simulations.");
+color = "#64748b"; icon = "⚪";
+}
+else if(avgROI >= marketROI + 5){
 
 insight = t(
 "Gli scenari salvati mostrano un rendimento stimato elevato. Verifica costi, finanziamento e ipotesi prudenti prima di decidere.",
@@ -2345,7 +2288,7 @@ font-weight:800;
 color:${color};
 ">
 
-${icon} ${investmentScore}/100
+${icon} ${investmentScore === null ? "--" : `${investmentScore}/100`}
 
 </h3>
 
@@ -2357,7 +2300,7 @@ font-weight:700;
 color:${color};
 ">
 
-${avgROIRounded}% ROI
+${formatPercent(avgROIRounded)} ROI
 
 </div>
 
@@ -2405,7 +2348,7 @@ font-size:34px;
 font-weight:900;
 letter-spacing:-0.5px;
 ">
-${formatCurrency(totalCapital)}
+${formatCurrency(scenarioMetrics.price)}
 </div>
 </div>
 
@@ -2419,7 +2362,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("ROI equity medio degli scenari","Average scenario equity ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenarioMetrics.coverage.roi}/${scenarioMetrics.count}
 </h3>
 
 <div style="
@@ -2428,7 +2371,7 @@ font-weight:900;
 letter-spacing:-0.5px;
 color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
-${avgROIRounded}% ${trend}
+${formatPercent(avgROIRounded)} ${avgROI === null ? "" : trend}
 </div>
 </div>
 
@@ -2464,7 +2407,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("Investment Score","Investment Score")}
+${t("Investment Score","Investment Score")} · ${scenarioMetrics.coverage.score}/${scenarioMetrics.count}
 </h3>
 
 <div style="
@@ -2475,7 +2418,7 @@ color:#2563eb;
 ">
 ${
 (isPro() || isInvestor())
-? `${investmentScore}/100`
+? (investmentScore === null ? "--" : `${investmentScore}/100`)
 : "🔒"
 }
 </div>
@@ -2494,7 +2437,7 @@ if(userRoiEl){
 }
 
 if(performanceEl){
-  performanceEl.textContent = avgROI >= marketROI
+  performanceEl.textContent = avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
     ? t("Sopra il riferimento dimostrativo","Above the illustrative reference")
     : t("Sotto il riferimento dimostrativo","Below the illustrative reference");
 
@@ -2526,14 +2469,14 @@ ${window.currentPlan === "pro_yearly" ? t("PRO ANNUALE", "PRO ANNUAL") : isPro()
 <div class="analysis-card">
 
 <h3>
-${t("ROI equity medio degli scenari","Average scenario equity ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenarioMetrics.coverage.roi}/${scenarioMetrics.count}
 </h3>
 
 <strong style="
 font-size:22px;
 color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
-${avgROIRounded}%
+${formatPercent(avgROIRounded)}
 </strong>
 
 <div style="
@@ -2544,7 +2487,7 @@ color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
 
 🔥 ${
-avgROI >= marketROI
+avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
 ? `+${(avgROI - marketROI).toFixed(1)}% ${t(
 "rispetto al riferimento dimostrativo",
 "above the illustrative reference"
@@ -2613,12 +2556,14 @@ setTimeout(()=>{
 
 function updateDynamicTexts(){
 
-  const avgROI = window.__lastAvgROI || 0;
+  const avgROI = financialNumber(window.__lastAvgROI);
   const roiMsg = document.getElementById("roi-message");
 
   if(!roiMsg) return;
 
-  if(avgROI >= 10){
+  if(avgROI === null){
+    roiMsg.innerText = t("Dati ROI non disponibili", "ROI data unavailable");
+  }else if(avgROI >= 10){
 
     roiMsg.innerText = t(
       "Rendimento dello scenario elevato",
