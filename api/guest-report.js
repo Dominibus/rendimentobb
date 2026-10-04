@@ -1,5 +1,6 @@
 import {createHostBookingHandler} from "../lib/pms-booking-service.js";
 import crypto from "node:crypto";
+import {reconcilePMSTasks} from "../js/pms-tasks.js";
 import admin from "firebase-admin";
 
 const ALLOWED_CATEGORIES = new Set(["maintenance", "cleaning", "access", "noise", "comfort", "other"]);
@@ -127,6 +128,7 @@ export default async function handler(req, res){
         resolved: false
       };
       transaction.update(bookingRef, { guestIssue, lastGuestReportAt: now,
+        autopilotTasks: reconcilePMSTasks({...freshBooking,guestIssue},freshBooking.autopilotTasks || {},now),
         _pmsVersion: (Number.isSafeInteger(freshBooking._pmsVersion) ? freshBooking._pmsVersion : 0) + 1
       });
       transaction.set(reportRef, {

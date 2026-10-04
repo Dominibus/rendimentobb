@@ -30,7 +30,7 @@ export class MemoryFirestore {
     throw Error('contention');
   }
 }
-class Ref {constructor(db,path){this.db=db;this.path=path;this.id=path.split('/').at(-1);}}
+class Ref {constructor(db,path){this.db=db;this.path=path;this.id=path.split('/').at(-1);}async get(){return snapshot(this,this.db.documents.get(this.path));}}
 class Collection {constructor(db,name){this.db=db;this.name=name;}doc(id){return new Ref(this.db,`${this.name}/${id}`);}where(field,op,value){if(op!=='==')throw Error('unsupported');return new Query(this.db,this.name,[[field,value]]);}}
 class Query {constructor(db,name,filters){this.db=db;this.collectionName=name;this.filters=filters;}where(field,op,value){return new Query(this.db,this.collectionName,[...this.filters,[field,value]]);}}
 function snapshot(ref,data){return {ref,id:ref.id,exists:data!==undefined,data:()=>structuredClone(data)};}

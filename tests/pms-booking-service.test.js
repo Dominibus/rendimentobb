@@ -140,3 +140,40 @@ test('rules close direct occupancy writes and preserve owner guest link manageme
   assert.match(booking,/allow create, delete: if false/);assert.match(booking,/hasOnly\(\["guestPortal"\]\)/);
   const properties=rules.slice(rules.indexOf('match /properties/'),rules.indexOf('match /bookings/'));assert.match(properties,/allow delete: if false/);
 });
+test('new booking persists generated obligations atomically',async()=>{
+ const db=seed(),result=await execute(db,request());const row=db.documents.get(`bookings/${result.bookingId}`);assert.equal(row.autopilotTasks.documents.status,'open');assert.equal(row.autopilotTasks.cleaning.status,'open');
+});
+const taskRequest=(row,overrides={})=>request({operation:'task',bookingId:'a',expectedVersion:row._pmsVersion,data:undefined,taskCode:'documents',taskStatus:'in_progress',taskFingerprint:row.autopilotTasks.documents.fingerprint,...overrides});
+test('taking charge survives later save and source resolution closes the task',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));let row=db.documents.get('bookings/a');
+ await execute(db,taskRequest(row));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.status,'in_progress');
+ await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...data,totalAmount:350}}));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.status,'in_progress');
+ await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...data,guestRegistration:{documentsReceived:2,authorityStatus:'submitted'}}}));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.status,'resolved');assert.equal(row.autopilotTasks.authority.status,'resolved');
+});
+test('task operation cannot manually resolve an obligation or accept forged code',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));const row=db.documents.get('bookings/a');
+ for(const overrides of [{taskStatus:'resolved'},{taskCode:'__proto__'},{taskCode:'unknown'}]) await assert.rejects(execute(db,taskRequest(row,overrides)),e=>e.code==='invalid_request');
+});
+test('stale task facts and resolved obligations cannot be claimed',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));const row=db.documents.get('bookings/a');
+ await assert.rejects(execute(db,taskRequest(row,{taskFingerprint:'old'})),e=>e.code==='stale_task');
+ await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...data,guestRegistration:{documentsReceived:2,authorityStatus:'submitted'}}}));const next=db.documents.get('bookings/a');
+ await assert.rejects(execute(db,taskRequest(row,{expectedVersion:next._pmsVersion})),e=>e.code==='task_resolved');
+});
+test('simultaneous task change and booking edit cannot overwrite each other',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));const row=db.documents.get('bookings/a');
+ const results=await Promise.allSettled([execute(db,taskRequest(row)),execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...data,totalAmount:400}}))]);
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(results.find(r=>r.status==='rejected').reason.code,'stale_version');
+});
+test('duplicate task delivery executes once and reopen retains underlying obligation',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));let row=db.documents.get('bookings/a');const body=taskRequest(row);await execute(db,body);assert.equal((await execute(db,body)).duplicate,true);
+ row=db.documents.get('bookings/a');await execute(db,taskRequest(row,{taskStatus:'open'}));row=db.documents.get('bookings/a');assert.equal(row.autopilotTasks.documents.status,'open');assert.equal(row.guestRegistration.documentsReceived,0);
+});
+test('cancel atomically resolves recorded obligations without deleting history',async()=>{
+ const db=seed({'bookings/a':existing});await execute(db,request({bookingId:'a',expectedVersion:1}));const row=db.documents.get('bookings/a');await execute(db,request({operation:'cancel',bookingId:'a',expectedVersion:row._pmsVersion,data:undefined}));assert.ok(Object.values(db.documents.get('bookings/a').autopilotTasks).every(t=>t.status==='resolved'));
+});
+test('unrelated host edit preserves guest issue provenance and claimed state',async()=>{
+ const issue={active:true,status:'open',category:'maintenance',priority:'urgent',note:'Guest reported issue',reportedAt:'2026-10-04T10:00:00Z',source:'guest_portal'};
+ const db=seed({'bookings/a':{...existing,guestIssue:issue}});const input={...data,guestIssue:issue};await execute(db,request({bookingId:'a',expectedVersion:1,data:input}));let row=db.documents.get('bookings/a');
+ await execute(db,taskRequest(row,{taskCode:'issue',taskFingerprint:row.autopilotTasks.issue.fingerprint}));row=db.documents.get('bookings/a');await execute(db,request({bookingId:'a',expectedVersion:row._pmsVersion,data:{...input,totalAmount:400}}));row=db.documents.get('bookings/a');assert.equal(row.guestIssue.source,'guest_portal');assert.equal(row.guestIssue.reportedAt,issue.reportedAt);assert.equal(row.autopilotTasks.issue.status,'in_progress');
+});

@@ -1,3 +1,4 @@
+import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
 import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
@@ -417,6 +418,8 @@ const mutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()
 function bookingOperationError(error){
   const messages = {
     "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
+    "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
+    "booking/stale_task": ["I dati dell’attività sono cambiati. Aggiorna le prenotazioni.", "Task details changed. Refresh bookings."],
     "booking/stale_version": ["La prenotazione è stata modificata altrove. Riapri il dettaglio prima di salvare.", "The booking was changed elsewhere. Reopen its details before saving."],
     "booking/plan_required": ["Questa operazione PMS richiede un piano Investor o Pro attivo.", "This PMS operation requires an active Investor or Pro plan."],
     "booking/unauthorized": ["Sessione non valida. Accedi nuovamente.", "Invalid session. Sign in again."],
@@ -9934,7 +9937,7 @@ function renderPMSPortalAlerts(pmsData = {}){
   const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
   const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
   const alerts = bookingList.flatMap(booking => {
-    if(["completed", "cancelled"].includes(String(booking.status || "").toLowerCase())) return [];
+    if(["pending", "cancelled"].includes(String(booking.status || "").toLowerCase())) return [];
     const tasks = [];
     const guestName = booking.guestName || window.t("Ospite", "Guest");
     const addTask = (code, label) => tasks.push({ code, bookingId:booking.id, guestName, label });
@@ -9960,7 +9963,7 @@ function renderPMSPortalAlerts(pmsData = {}){
           : window.t("Prepara comunicazione autorità", "Prepare authority report")
       );
     }
-    if(booking.touristTax?.enabled === true && String(booking.touristTax.status || "pending") === "pending"){
+    if(booking.touristTax?.enabled === true && Number(booking.touristTax.amount)>0 && String(booking.touristTax.status || "pending") === "pending"){
       addTask("tourist_tax_pending", window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"));
     }
     const cleaning = booking.cleaning || { required:true, status:"pending" };
@@ -10110,112 +10113,25 @@ function renderTodayBookingOperations(bookings = []){
   ];
   const pendingOperations = arrivalsToday.length + departuresToday.length;
 
-  const operationalBookings = activeBookings.filter(
-    booking => !["completed", "cancelled"].includes(
-      String(booking.status || "").toLowerCase()
-    )
-  );
-  const priorityTasks = operationalBookings.flatMap(booking => {
-    const tasks = [];
-    const guestName = booking.guestName || window.t("Ospite", "Guest");
-    const totalGuests = Math.max(0, Number(booking.guests || 0));
-    const registration = booking.guestRegistration || {};
-    const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
-    const missingDocuments = Math.max(0, totalGuests - documentsReceived);
-
-    const guestIssue = booking.guestIssue || {};
-    if(
-      guestIssue.active === true &&
-      String(guestIssue.status || "open") !== "resolved"
-    ){
-      const issuePriorityLabels = {
-        low: window.t("priorità bassa", "low priority"),
-        medium: window.t("priorità media", "medium priority"),
-        high: window.t("priorità alta", "high priority"),
-        urgent: window.t("urgente", "urgent")
-      };
-      tasks.push({
-        priority: guestIssue.priority === "urgent" ? 0 : 1,
-        icon: guestIssue.priority === "urgent" ? "🚨" : "🛎️",
-        date: today,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `Segnalazione ospite · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`,
-          `Guest issue · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`
-        )
-      });
+  const labels = {
+    documents: ["🪪",window.t("Documenti ospiti mancanti", "Missing guest documents")],
+    authority: ["📤",window.t("Comunicazione autorità da gestire", "Authority report to manage")],
+    tax: ["🏛️",window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect")],
+    cleaning: ["🧹",window.t("Pulizia e turnover da gestire", "Cleaning and turnover to manage")],
+    issue: ["🛎️",window.t("Segnalazione ospite aperta", "Open guest issue")]
+  };
+  const priorityTasks = bookings.flatMap(booking=>visiblePMSTasks(booking).map(task=>{
+    let label=labels[task.code][1];
+    if(task.code==="documents"){
+      const count=Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0));
+      label=window.t(`${count} documenti ospiti mancanti`, `${count} guest documents missing`);
     }
-
-    if(missingDocuments > 0){
-      tasks.push({
-        priority: 1,
-        icon: "🪪",
-        date: booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `${missingDocuments} documenti ospiti mancanti`,
-          `${missingDocuments} guest documents missing`
-        )
-      });
-    }
-
-    if(!["submitted", "not_required"].includes(registration.authorityStatus)){
-      tasks.push({
-        priority: 2,
-        icon: "📤",
-        date: booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: registration.authorityStatus === "ready"
-          ? window.t("Invia comunicazione autorità", "Submit authority report")
-          : window.t("Prepara comunicazione autorità", "Prepare authority report")
-      });
-    }
-
-    if(booking.touristTax?.enabled && booking.touristTax.status === "pending"){
-      const symbol = window.getTouristTaxCurrencySymbol(booking.touristTax.currency);
-      tasks.push({
-        priority: 3,
-        icon: "🏛️",
-        date: booking.touristTax.collectionTime === "checkout"
-          ? booking.checkout
-          : booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `Riscuoti tassa di soggiorno ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`,
-          `Collect tourist tax ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`
-        )
-      });
-    }
-
-    const cleaning = booking.cleaning || {
-      required: true,
-      status: "pending",
-      scheduledDate: booking.checkout
-    };
-    if(cleaning.required !== false && cleaning.status !== "completed"){
-      tasks.push({
-        priority: 4,
-        icon: "🧹",
-        date: cleaning.scheduledDate || booking.checkout,
-        bookingId: booking.id,
-        guestName,
-        label: cleaning.status === "scheduled"
-          ? window.t(
-              `Pulizia programmata${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`,
-              `Cleaning scheduled${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`
-            )
-          : window.t("Pianifica pulizia e turnover", "Schedule cleaning and turnover")
-      });
-    }
-
-    return tasks;
-  }).sort((first, second) =>
-    String(first.date || "9999-12-31").localeCompare(String(second.date || "9999-12-31")) ||
-    first.priority - second.priority
+    if(task.code==="tax") label+=` · ${window.getTouristTaxCurrencySymbol(booking.touristTax.currency)}${Number(booking.touristTax.amount).toFixed(2)}`;
+    if(task.code==="cleaning" && booking.cleaning?.assignee) label+=` · ${booking.cleaning.assignee}`;
+    return {...task,date:task.dueDate,icon:task.priority===0?"🚨":labels[task.code][0],label};
+  })).sort((first,second)=>
+    (first.priority===0?0:1)-(second.priority===0?0:1) ||
+    String(first.date || "9999-12-31").localeCompare(String(second.date || "9999-12-31")) || first.priority-second.priority
   );
 
   const formatTaskTiming = date => {
@@ -10237,20 +10153,17 @@ function renderTodayBookingOperations(bookings = []){
         <strong style="font-size:12px;color:#92400e;">⚠️ ${window.t("Attività prioritarie", "Priority tasks")}</strong>
         <span style="font-size:11px;font-weight:800;color:#92400e;">${priorityTasks.length}</span>
       </div>
-      <div style="display:grid;gap:7px;">
-        ${priorityTasks.slice(0, 5).map(task => `
-          <button
-            type="button"
-            onclick="openBookingForEdit('${task.bookingId}')"
-            style="width:100%;padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;color:#0f172a;"
-          >
-            <span style="text-align:left;font-size:12px;line-height:1.35;">
-              ${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}
-            </span>
-            <span style="flex:0 0 auto;font-size:10px;font-weight:800;color:${task.date <= today ? "#dc2626" : "#0369a1"};">
-              ${formatTaskTiming(task.date)} →
-            </span>
-          </button>
+      <div style="display:grid;gap:7px;max-height:360px;overflow-y:auto;">
+        ${priorityTasks.map(task => `
+          <div style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <button type="button" onclick="openBookingForEdit('${escapeDashboardHTML(task.bookingId)}')" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
+              ${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}<br>
+              <span style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
+            </button>
+            <button type="button" onclick="setPMSTaskStatus('${escapeDashboardHTML(task.bookingId)}','${task.code}','${task.status==='in_progress'?'open':'in_progress'}')" style="border:1px solid #a7f3d0;border-radius:9px;padding:8px 10px;background:${task.status==='in_progress'?'#ecfdf5':'#fff'};color:#047857;font-size:11px;font-weight:800;cursor:pointer;">
+              ${task.status==='in_progress'?window.t("In carico · Riapri", "In progress · Reopen"):window.t("Prendi in carico", "Take charge")}
+            </button>
+          </div>
         `).join("")}
       </div>
     </div>
@@ -10335,7 +10248,7 @@ function renderTodayBookingOperations(bookings = []){
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
         <div>
           <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("Operatività di oggi", "Today's operations")}</div>
-          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Scadenze e attività ordinate per urgenza", "Deadlines and tasks sorted by urgency")}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Prendi in carico le attività. Per risolverle, aggiorna i dati della prenotazione.", "Take charge of tasks. To resolve them, update the booking details.")}</div>
         </div>
         <span style="padding:7px 11px;border-radius:999px;background:${totalOpenOperations ? "#fef3c7" : "#e2e8f0"};color:${totalOpenOperations ? "#92400e" : "#475569"};font-size:11px;font-weight:800;">
           ${totalOpenOperations
@@ -10363,6 +10276,19 @@ function renderTodayBookingOperations(bookings = []){
     </div>
   `;
 }
+
+window.setPMSTaskStatus = async function(bookingId,taskCode,taskStatus){
+  if(!window.currentUser || isDemo()) return;
+  return runBookingOperation(`booking:${bookingId}`,async()=>{
+    try{
+      const current=await readFreshBooking(bookingId);
+      const task=visiblePMSTasks({...current,id:bookingId}).find(item=>item.code===taskCode);
+      if(!task) failBookingOperation("task_resolved");
+      await mutatePMS("task",{bookingId,expectedVersion:Number(current._pmsVersion || 0),taskCode,taskStatus,taskFingerprint:task.fingerprint});
+      await refreshAfterBookingMutation(current.propertyId);
+    }catch(error){dashboardError("PMS task update failed",error);bookingOperationError(error);}
+  });
+};
 
 async function loadBookings(propertyId){
 
@@ -11327,6 +11253,7 @@ const normalizedBookings =
       guestRegistration: booking.guestRegistration || null,
       cleaning: booking.cleaning || null,
       guestIssue: booking.guestIssue || null,
+      autopilotTasks: booking.autopilotTasks || {},
 
       validDateRange:
         Boolean(
@@ -12274,6 +12201,7 @@ const normalizedPMSBookings =
         cleaning: booking.cleaning || null,
 
         guestIssue: booking.guestIssue || null,
+        autopilotTasks: booking.autopilotTasks || {},
 
         validDateRange:
           Boolean(
