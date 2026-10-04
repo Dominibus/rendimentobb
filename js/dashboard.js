@@ -1,3 +1,4 @@
+import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
 import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
@@ -40,6 +41,8 @@ const cityImages = {
 // 🔥 AUTH (CORRETTO)
 import {
 getAuth,
+sendEmailVerification,
+reload,
 onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -420,12 +423,15 @@ const mutatePMS = async (...args)=>{
   const result=await rawMutatePMS(...args);
   if(result.taskEmailEventIds?.length && window.rbNotificationPreferences?.pmsTaskEmail===true){
     try{
-      const token=await window.currentUser.getIdToken();
+      await reload(window.currentUser);
+      const token=await window.currentUser.getIdToken(true);
       const response=await fetch("/api/work-email",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({action:"task_updates",bookingId:result.bookingId,eventIds:result.taskEmailEventIds,lang:window.RB_LANG?.current==="en"?"en":"it"})});
-      if(!response.ok || !(await response.json()).success) throw Error("email_failed");
+      const payload=await response.json();
+      if(!response.ok || !payload.success) throw Error(payload.error || "email_failed");
     }catch(error){
       dashboardError("Task email failed",error);
-      alert(t("Modifica salvata. Email attività non inviata: verifica la configurazione email e che il tuo indirizzo sia verificato.", "Change saved. Task email was not sent: check email configuration and that your email address is verified."));
+      renderPMSPortalAlerts(window.rbPMSData || {});
+      alert(error.message==="verified_email_required" ? t("Modifica salvata. Verifica il tuo indirizzo email dal Centro avvisi host: premi Invia email di verifica, apri il link ricevuto e premi Ho verificato: aggiorna. Poi esegui una nuova presa in carico.", "Change saved. Verify your email in the Host alert centre: send the verification email, open the received link and select I have verified: refresh. Then claim a new task.") : t("Modifica salvata. Invio email attività non riuscito. Codice: ", "Change saved. Task email failed. Code: ")+error.message);
     }
   }
   return result;
@@ -9953,7 +9959,48 @@ window.saveBooking = function(){
 // 📅 LOAD BOOKINGS
 // =====================================
 
+
+const pmsEmailVerification=createEmailVerification({getUser:()=>auth.currentUser,send:sendEmailVerification,reload});
+let pmsVerificationFeedback='';
+function renderPMSEmailVerification(){
+  const panel=document.getElementById("pms-email-verification");
+  if(!panel)return;
+  const user=auth.currentUser;
+  panel.style.display=user && !isDemo()?"block":"none";
+  if(!user || isDemo()){panel.replaceChildren();return;}
+  const verified=user.emailVerified===true;
+  const buttonStyle="border:1px solid #a7f3d0;border-radius:12px;background:#fff;color:#047857;padding:10px 12px;font-weight:800;cursor:pointer;white-space:normal;";
+  panel.innerHTML=`<div style="padding:14px 16px;border:1px solid #cddcd2;border-radius:15px;background:#f0fdf4;margin-bottom:12px;overflow-wrap:anywhere;">
+    <strong>${verified?t("Indirizzo email verificato", "Email address verified"):t("Verifica email per le notifiche attività", "Verify email for task notifications")}</strong>
+    <div style="font-size:12px;margin:6px 0;">${escapeDashboardHTML(user.email || '')}</div>
+    ${verified?'':`<p style="font-size:13px;margin:8px 0;">${t("Per ricevere le email di presa in carico e risoluzione, conferma il tuo indirizzo. Le attività restano salvate anche senza verifica.", "To receive task claim and resolution emails, confirm your address. Tasks remain saved without verification.")}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" onclick="sendPMSEmailVerification()" style="${buttonStyle}">${t("Invia email di verifica", "Send verification email")}</button>
+      <button type="button" onclick="checkPMSEmailVerification()" style="${buttonStyle}">${t("Ho verificato: aggiorna", "I have verified: refresh")}</button>
+    </div>`}
+    <p role="status" aria-live="polite" style="font-size:13px;margin:8px 0 0;">${escapeDashboardHTML(pmsVerificationFeedback)}</p>
+  </div>`;
+}
+async function runPMSEmailVerification(action){
+  const panel=document.getElementById("pms-email-verification");
+  panel?.querySelectorAll('button').forEach(button=>button.disabled=true);
+  try{
+    const result=await pmsEmailVerification[action]();
+    pmsVerificationFeedback=result==='verified'?t("Verifica confermata. Le nuove notifiche attività possono essere inviate se la preferenza è attiva.", "Verification confirmed. New task notifications can be sent when the preference is enabled."):
+      result==='sent'?t("Email di verifica inviata. Controlla anche lo spam, apri il link e premi Ho verificato: aggiorna. Le notifiche precedentemente bloccate non vengono reinviate automaticamente.", "Verification email sent. Check spam too, open the link and select I have verified: refresh. Previously blocked notifications are not resent automatically."):
+      t("Indirizzo ancora non verificato: apri il link ricevuto e riprova.", "Address not yet verified: open the received link and try again.");
+  }catch(error){
+    pmsVerificationFeedback=['verification_cooldown','verification_busy','auth/too-many-requests'].includes(error.code || error.message)?t("Attendi almeno un minuto prima di richiedere un nuovo invio.", "Wait at least one minute before requesting another email."):t("Operazione non riuscita. Riprova; se persiste, esci e accedi nuovamente.", "Operation failed. Try again; if it persists, sign out and sign in again.");
+    dashboardError("Email verification failed",error);
+  }
+  renderPMSEmailVerification();
+}
+window.sendPMSEmailVerification=()=>runPMSEmailVerification('send');
+window.checkPMSEmailVerification=()=>runPMSEmailVerification('check');
+document.addEventListener('rb_language_changed',()=>{pmsVerificationFeedback='';renderPMSEmailVerification();});
+
 function renderPMSPortalAlerts(pmsData = {}){
+  renderPMSEmailVerification();
   const container = document.getElementById("pms-portal-alerts");
   if(!container) return;
 
