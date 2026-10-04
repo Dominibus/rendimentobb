@@ -12,7 +12,7 @@ for(const route of ['immobili','immobili/napoli','immobili/roma','immobili/milan
 async function headerHarness(){
  const source=await read('js/header.js');const start=source.indexOf('if(aiBtn){',source.indexOf('// 🤖 HEADER AI BUTTON'));const end=source.indexOf('\n}\n\n}  ',start)+2;
  const listeners=new Set(),timers=new Map();let next=0,chatbot=null;const classes=new Set();
- const c={aiBtn:{},document:{getElementById:()=>chatbot,addEventListener:(event,cb)=>{assert.equal(event,'rb_chatbot_ready');listeners.add(cb);},removeEventListener:(event,cb)=>listeners.delete(cb)},setTimeout:cb=>{timers.set(++next,cb);return next;},clearTimeout:id=>timers.delete(id)};
+ const c={ensureSharedChatbot(){},aiBtn:{},document:{getElementById:()=>chatbot,addEventListener:(event,cb)=>{assert.equal(event,'rb_chatbot_ready');listeners.add(cb);},removeEventListener:(event,cb)=>listeners.delete(cb)},setTimeout:cb=>{timers.set(++next,cb);return next;},clearTimeout:id=>timers.delete(id)};
  vm.createContext(c);vm.runInContext(source.slice(start,end),c);
  return {click:()=>c.aiBtn.onclick(),mount:()=>{chatbot={classList:{add:k=>classes.add(k),toggle:k=>classes.has(k)?classes.delete(k):classes.add(k)}};},ready:()=>{for(const cb of [...listeners])cb();},expire:()=>{for(const cb of [...timers.values()])cb();},classes,listeners,timers};
 }
