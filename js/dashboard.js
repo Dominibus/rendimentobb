@@ -10155,12 +10155,12 @@ function renderTodayBookingOperations(bookings = []){
       </div>
       <div style="display:grid;gap:7px;max-height:360px;overflow-y:auto;">
         ${priorityTasks.map(task => `
-          <div style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <button type="button" onclick="openBookingForEdit('${escapeDashboardHTML(task.bookingId)}')" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
-              ${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}<br>
-              <span style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
+          <div class="pms-task-row" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+            <button class="pms-task-open" type="button" onclick="openBookingForEdit('${escapeDashboardHTML(task.bookingId)}')" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
+              <span class="pms-task-label">${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}</span>
+              <span class="pms-task-timing" style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
             </button>
-            <button type="button" onclick="setPMSTaskStatus('${escapeDashboardHTML(task.bookingId)}','${task.code}','${task.status==='in_progress'?'open':'in_progress'}')" style="border:1px solid #a7f3d0;border-radius:9px;padding:8px 10px;background:${task.status==='in_progress'?'#ecfdf5':'#fff'};color:#047857;font-size:11px;font-weight:800;cursor:pointer;">
+            <button class="pms-task-state" type="button" onclick="setPMSTaskStatus('${escapeDashboardHTML(task.bookingId)}','${task.code}','${task.status==='in_progress'?'open':'in_progress'}')" style="border:1px solid #a7f3d0;border-radius:9px;padding:8px 10px;background:${task.status==='in_progress'?'#ecfdf5':'#fff'};color:#047857;font-size:11px;font-weight:800;cursor:pointer;">
               ${task.status==='in_progress'?window.t("In carico · Riapri", "In progress · Reopen"):window.t("Prendi in carico", "Take charge")}
             </button>
           </div>

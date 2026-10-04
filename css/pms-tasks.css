@@ -1,0 +1,60 @@
+/* Scoped override of the global inline-flex/nowrap button normalizer. */
+#booking-today-operations .pms-task-row {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#booking-today-operations button[onclick^="openBookingForEdit"] {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  height:auto !important;
+  box-sizing:border-box;
+  white-space:normal !important;
+  overflow-wrap:break-word;
+  word-break:normal;
+  text-align:left !important;
+}
+#booking-today-operations button[onclick^="openBookingForEdit"] > span {
+  display:block !important;
+  width:auto !important;
+  min-width:0 !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word;
+  flex:none !important;
+}
+#booking-today-operations .pms-task-open {
+  padding:4px !important;
+  border-radius:6px !important;
+  line-height:1.5;
+}
+#booking-today-operations .pms-task-open .pms-task-timing {
+  margin-top:5px;
+  line-height:1.5;
+}
+#booking-today-operations .pms-task-state {
+  display:block !important;
+  width:auto !important;
+  min-height:44px;
+  min-width:0;
+  white-space:normal !important;
+  overflow-wrap:normal;
+  word-break:normal;
+  box-sizing:border-box;
+  text-align:center;
+}
+@media(max-width:640px) {
+  #booking-today-operations .pms-task-row {
+    grid-template-columns:minmax(0,1fr);
+    align-items:start;
+  }
+  #booking-today-operations .pms-task-state {
+    width:100% !important;
+  }
+}
