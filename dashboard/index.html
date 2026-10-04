@@ -4427,35 +4427,20 @@ data-en-placeholder="Guest email (optional)"
 style="height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 16px;font-size:15px;background:#fff;">
 </div>
 
-<div
-style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-">
-
-<input
-id="booking-checkin"
-type="date"
-style="
-height:52px;
-border:1px solid #dbe3ee;
-border-radius:14px;
-padding:0 16px;
-font-size:15px;
-">
-
-<input
-id="booking-checkout"
-type="date"
-style="
-height:52px;
-border:1px solid #dbe3ee;
-border-radius:14px;
-padding:0 16px;
-font-size:15px;
-">
-
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;">
+  <div style="min-width:0;">
+    <label for="booking-checkin" style="display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;" data-it="Arrivo · Check-in" data-en="Arrival · Check-in">Arrivo · Check-in</label>
+    <input id="booking-checkin" type="date" aria-describedby="booking-dates-help"
+      style="width:100%;min-width:0;box-sizing:border-box;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 10px;font-size:15px;background:#fff;">
+  </div>
+  <div style="min-width:0;">
+    <label for="booking-checkout" style="display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;" data-it="Partenza · Check-out" data-en="Departure · Check-out">Partenza · Check-out</label>
+    <input id="booking-checkout" type="date" aria-describedby="booking-dates-help"
+      style="width:100%;min-width:0;box-sizing:border-box;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 10px;font-size:15px;background:#fff;">
+  </div>
+  <p id="booking-dates-help" style="grid-column:1 / -1;margin:0;font-size:12px;line-height:1.5;color:#64748b;"
+    data-it="Tocca ciascun campo per scegliere la data dal calendario. La partenza deve essere successiva all’arrivo."
+    data-en="Tap each field to choose a date from the calendar. Departure must be after arrival.">Tocca ciascun campo per scegliere la data dal calendario. La partenza deve essere successiva all’arrivo.</p>
 </div>
 
 <div
