@@ -4723,6 +4723,9 @@ document.addEventListener(
 // =====================================
 
 window.loadCurrentPropertyTouristTax = async function(propertyId = window.currentPropertyId){
+  const viewVersion = window.rbBookingViewVersion || 0;
+  const propertyRequest = (window.rbPropertyLoadVersion || 0) + 1;
+  window.rbPropertyLoadVersion = propertyRequest;
   if(!propertyId){
     window.currentPropertyTouristTaxConfig = null;
     window.currentPropertyData = null;
@@ -4741,6 +4744,7 @@ window.loadCurrentPropertyTouristTax = async function(propertyId = window.curren
   const propertySnap = await getDoc(
     doc(db, "properties", propertyId)
   );
+  if(viewVersion !== (window.rbBookingViewVersion || 0) || propertyRequest !== window.rbPropertyLoadVersion) return null;
   const propertyData = propertySnap.exists() ? propertySnap.data() : null;
   window.currentPropertyId = propertyId;
   window.currentPropertyData = propertyData;
@@ -5415,8 +5419,13 @@ window.revokeGuestIssuePortalLink = async function(){
 };
 
 window.openBookingModal = async function(){
+    const viewVersion = (window.rbBookingViewVersion || 0) + 1;
+    window.rbBookingViewVersion = viewVersion;
+    const previousForm = document.getElementById('booking-form-container');
+    if(previousForm) previousForm.style.display = 'none';
 
     await window.loadCurrentPropertyTouristTax();
+    if(viewVersion !== window.rbBookingViewVersion) return;
 
     const form =
         document.getElementById(
@@ -5457,6 +5466,7 @@ window.openBookingModal = async function(){
       window.currentPropertyId,
       window.bookingsAllPropertiesView === true
     );
+    if(viewVersion !== window.rbBookingViewVersion) return;
     const pricingSeason = document.getElementById("booking-pricing-season");
     if(pricingSeason) pricingSeason.value = "auto";
 
@@ -5535,7 +5545,7 @@ renderBookingTaskTracking(null);
 
     setTimeout(()=>{
 
-        updateBookingTotal();
+        if(viewVersion === window.rbBookingViewVersion && form.style.display !== "none") updateBookingTotal();
 
     },100);
 
@@ -5546,6 +5556,7 @@ renderBookingTaskTracking(null);
 // =====================================
 
 window.closeBookingForm = function(){
+    window.rbBookingViewVersion = (window.rbBookingViewVersion || 0) + 1;
 
     const form =
         document.getElementById(
@@ -5571,6 +5582,7 @@ renderBookingTaskTracking(null);
       // =====================================
 
       window.closeBookingModal = function(){
+        window.rbBookingViewVersion = (window.rbBookingViewVersion || 0) + 1;
 
         const form =
         document.getElementById(
@@ -6743,6 +6755,7 @@ window.openBookingForEdit = async function(id, section){
 };
 
 window.loadBookingPropertyOptions = async function(selectedPropertyId, editable = false){
+  const viewVersion = window.rbBookingViewVersion || 0;
   const field = document.getElementById("booking-property-field");
   const select = document.getElementById("booking-property");
   if(!field || !select || !window.currentUser) return;
@@ -6758,6 +6771,7 @@ window.loadBookingPropertyOptions = async function(selectedPropertyId, editable 
       )
     );
 
+    if(viewVersion !== (window.rbBookingViewVersion || 0)) return;
     select.innerHTML = propertiesSnap.docs.map(propertyDoc => {
       const property = propertyDoc.data() || {};
       const label = [property.name, property.city].filter(Boolean).join(" · ") ||
@@ -6769,6 +6783,7 @@ window.loadBookingPropertyOptions = async function(selectedPropertyId, editable 
     select.disabled = !editable || propertiesSnap.empty;
     select.style.background = select.disabled ? "#f8fafc" : "#ffffff";
   }catch(error){
+    if(viewVersion !== (window.rbBookingViewVersion || 0)) return;
     dashboardError("Booking property options load failed", error);
     select.innerHTML = `<option value="${escapeDashboardHTML(selectedPropertyId || "")}">${window.t("Struttura attuale", "Current property")}</option>`;
     select.value = selectedPropertyId || "";
@@ -6788,10 +6803,15 @@ window.changeBookingProperty = async function(){
 // =====================================
 
 window.showBookingDetails = async function(booking){
+    const viewVersion = (window.rbBookingViewVersion || 0) + 1;
+    window.rbBookingViewVersion = viewVersion;
+    const previousForm = document.getElementById('booking-form-container');
+    if(previousForm) previousForm.style.display = 'none';
 
     await window.loadCurrentPropertyTouristTax(
       booking.propertyId || window.currentPropertyId
     );
+    if(viewVersion !== window.rbBookingViewVersion) return;
 
 
     const modal =
@@ -6832,9 +6852,7 @@ window.showBookingDetails = async function(booking){
     }
 
 
-    modal.style.display = "flex";
-    setBookingToggleState(true);
-    revealBookingForm(modal);
+
 
 
     window.pmsEditingBooking = true;
@@ -6843,6 +6861,7 @@ window.currentSelectedBooking = booking;
 renderBookingTaskTracking(booking);
     window.bookingOriginPropertyId = booking.propertyId || window.currentPropertyId;
     await window.loadBookingPropertyOptions?.(window.bookingOriginPropertyId, false);
+    if(viewVersion !== window.rbBookingViewVersion) return;
     const bookingProperty = document.getElementById("booking-property");
     if(bookingProperty) bookingProperty.onchange = window.changeBookingProperty;
 
@@ -7592,6 +7611,9 @@ onclick="deleteBooking('${booking.id || ""}')">
 
 `;
   
+    modal.style.display = 'flex';
+    setBookingToggleState(true);
+    revealBookingForm(modal);
 };
 
 // =====================================
@@ -9114,6 +9136,7 @@ color:#166534;
 // =====================================
 
 window.openBookings = async function(propertyId, bookingId = null, viewAllProperties = false){
+  window.closeBookingForm?.();
 
   window.bookingsAllPropertiesView = viewAllProperties === true;
   window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
@@ -9189,6 +9212,9 @@ window.openBookings = async function(propertyId, bookingId = null, viewAllProper
 
   // Ricollega gli eventi del form
   setTimeout(()=>{
+    const form = document.getElementById('booking-form-container');
+    if(!form || form.dataset.pmsEventsReady === 'true') return;
+    form.dataset.pmsEventsReady = 'true';
 
     document
       .getElementById("booking-checkin")
@@ -11640,6 +11666,7 @@ window.advanceBookingStatus = async function(id, nextStatus){
   };
   if(!id || !window.currentUser || !labels[nextStatus]) return;
   return runBookingOperation(`booking:${id}`, async () => {
+    const bookingDetailsVersion = window.rbBookingViewVersion || 0;
     const bookingDetailsWasOpen = window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none";
     const confirmation = nextStatus === "arrival"
       ? t("Confermare la richiesta e trasformarla in prenotazione?", "Confirm this request and convert it into a booking?")
@@ -11653,7 +11680,7 @@ window.advanceBookingStatus = async function(id, nextStatus){
       await mutatePMS("advance",{bookingId:id,nextStatus,expectedVersion:Number(current._pmsVersion || 0)});
     }catch(error){ dashboardError("Booking status update failed", error); bookingOperationError(error); return; }
     await refreshAfterBookingMutation();
-    if(bookingDetailsWasOpen){
+    if(bookingDetailsWasOpen && bookingDetailsVersion === (window.rbBookingViewVersion || 0) && window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none"){
       const refreshed = (window.currentBookingsData || []).find(booking => booking.id === id);
       if(refreshed) await window.showBookingDetails(refreshed);
     }
