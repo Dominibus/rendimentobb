@@ -10015,48 +10015,16 @@ function renderPMSPortalAlerts(pmsData = {}){
     : [];
   const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
   const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
-  const alerts = bookingList.flatMap(booking => {
-    if(["pending", "cancelled"].includes(String(booking.status || "").toLowerCase())) return [];
-    const tasks = [];
-    const guestName = booking.guestName || window.t("Ospite", "Guest");
-    const addTask = (code, label) => tasks.push({ code, bookingId:booking.id, guestName, label });
-    const issue = booking.guestIssue || {};
-    if(issue.active === true && String(issue.status || "open") !== "resolved"){
-      addTask(
-        String(issue.priority || "medium") === "urgent" ? "guest_issue_urgent" : "guest_issue_open",
-        String(issue.priority || "medium") === "urgent"
-          ? window.t("Segnalazione ospite urgente", "Urgent guest issue")
-          : window.t("Segnalazione ospite aperta", "Open guest issue")
-      );
-    }
-    const registration = booking.guestRegistration || {};
-    const missingDocuments = Math.max(0, Number(booking.guests || 0) - Number(registration.documentsReceived || 0));
-    if(missingDocuments > 0){
-      addTask("guest_documents_missing", window.t(`${missingDocuments} documenti ospiti mancanti`, `${missingDocuments} guest documents missing`));
-    }
-    if(!["submitted", "not_required"].includes(String(registration.authorityStatus || "pending"))){
-      addTask(
-        "authority_report_pending",
-        registration.authorityStatus === "ready"
-          ? window.t("Invia comunicazione autorità", "Submit authority report")
-          : window.t("Prepara comunicazione autorità", "Prepare authority report")
-      );
-    }
-    if(booking.touristTax?.enabled === true && Number(booking.touristTax.amount)>0 && String(booking.touristTax.status || "pending") === "pending"){
-      addTask("tourist_tax_pending", window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"));
-    }
-    const cleaning = booking.cleaning || { required:true, status:"pending" };
-    if(cleaning.required !== false && String(cleaning.status || "pending") !== "completed"){
-      addTask(
-        cleaning.status === "scheduled" ? "cleaning_scheduled" : "cleaning_to_schedule",
-        cleaning.status === "scheduled"
-          ? window.t("Pulizia programmata", "Cleaning scheduled")
-          : window.t("Pulizia da pianificare", "Cleaning to schedule")
-      );
-    }
-    return tasks;
+  const today=checklistDay();
+  const allTasks=dailyChecklist(bookingList,today,'all');
+  const alerts=dailyChecklist(bookingList,today).map(task=>{
+    const booking=bookingList.find(row=>row.id===task.bookingId);
+    const labels={documents:window.t(`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} documenti ospiti mancanti`,`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} guest documents missing`),authority:window.t('Comunicazione autorità da gestire','Authority report to manage'),tax:window.t('Tassa di soggiorno da riscuotere','Tourist tax to collect'),cleaning:window.t('Pulizia da completare','Cleaning to complete'),issue:task.priority===0?window.t('Segnalazione ospite urgente','Urgent guest issue'):window.t('Segnalazione ospite aperta','Open guest issue')};
+    const timing=task.group==='overdue'?window.t('Scaduta · verifica','Overdue · review'):task.group==='today'?window.t('Oggi','Today'):task.group==='undated'?window.t('Senza data · verifica','No date · review'):window.t('Problema aperto','Open issue');
+    return {...task,label:labels[task.code],timing};
   });
-  const urgentCount = alerts.filter(alert => alert.code === "guest_issue_urgent").length;
+  const urgentCount=alerts.filter(task=>task.code==='issue' && task.priority===0).length;
+  const upcomingCount=allTasks.filter(task=>task.group==='upcoming').length;
   const operationalCount = alerts.length + arrivalsToday + departuresToday;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
   const emailToggle = `
@@ -10071,9 +10039,9 @@ function renderPMSPortalAlerts(pmsData = {}){
       <div style="padding:15px 16px;border:1px solid #a7f3d0;border-radius:15px;background:#ecfdf5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div>
           <div style="font-size:14px;font-weight:900;color:#065f46;">✅ ${window.t("Centro avvisi host", "Host alert centre")}</div>
-          <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessuna attività urgente: operatività sotto controllo.", "No urgent tasks: operations are under control.")}</div>
+          <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessun problema o attività in scadenza oggi.", "No open issues or tasks due today.")}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${window.t("Tutto aggiornato", "All up to date")}</span></div>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${upcomingCount ? window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`) : window.t("Tutto aggiornato", "All up to date")}</span></div>
       </div>`;
     return;
   }
@@ -10084,7 +10052,9 @@ function renderPMSPortalAlerts(pmsData = {}){
   const summaryParts = [];
   if(arrivalsToday) summaryParts.push(window.t(`${arrivalsToday} arrivi oggi`, `${arrivalsToday} arrivals today`));
   if(departuresToday) summaryParts.push(window.t(`${departuresToday} partenze oggi`, `${departuresToday} departures today`));
-  if(alerts.length) summaryParts.push(window.t(`${alerts.length} attività PMS`, `${alerts.length} PMS tasks`));
+  if(alerts.length) summaryParts.push(window.t(`${alerts.length} attività da gestire`, `${alerts.length} tasks to manage`));
+
+  if(upcomingCount)summaryParts.push(window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`));
 
   container.innerHTML = `
     <div style="padding:15px 16px;border:1px solid ${palette.border};border-radius:15px;background:${palette.background};">
@@ -10104,15 +10074,33 @@ function renderPMSPortalAlerts(pmsData = {}){
       ${alerts.length ? `
         <div style="display:grid;gap:7px;margin-top:11px;">
           ${alerts.slice(0,3).map(alert => `
-            <div style="padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
-              <strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}
-            </div>`).join("")}
+            <button type="button" class="pms-alert-open" data-booking-id="${escapeDashboardHTML(alert.bookingId)}" onclick="openPMSAlertBooking(this.dataset.bookingId,this)" style="padding:10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
+              <span><strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}</span>
+              <span style="font-size:11px;margin-top:4px;">${escapeDashboardHTML(alert.timing)} · ${alert.status==='in_progress'?window.t('In carico','In progress'):window.t('Da gestire','To manage')} · ${window.t('Apri prenotazione →','Open booking →')}</span>
+            </button>`).join("")}
         </div>` : ""}
-      <button type="button" onclick="openCurrentBookings()" style="margin-top:12px;border:0;border-radius:10px;background:#0f172a;color:white;padding:10px 14px;font-size:12px;font-weight:900;cursor:pointer;">
+      <button type="button" onclick="openPMSDailyChecklist()" style="margin-top:12px;border:0;border-radius:10px;background:#0f172a;color:white;padding:10px 14px;font-size:12px;font-weight:900;cursor:pointer;">
         ${window.t("Apri attività PMS →", "Open PMS tasks →")}
       </button>
     </div>`;
 }
+
+window.openPMSDailyChecklist=async function(){
+  window.rbChecklistFilter='daily';window.rbChecklistSearch='';
+  await window.openCurrentBookings();
+};
+window.openPMSAlertBooking=async function(id,button){
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
+  try{
+    await window.openPMSDailyChecklist();
+    if(!(window.currentBookingsData || []).some(booking=>booking.id===id)){
+      alert(window.t('La prenotazione non è più disponibile. La checklist è stata aggiornata.','This booking is no longer available. The checklist has been refreshed.'));return;
+    }
+    window.openBookingForEdit(id);
+  }catch(error){dashboardError('PMS alert booking failed',error);alert(window.t('Impossibile aprire la prenotazione. Riprova.','Unable to open the booking. Please retry.'));}
+  finally{if(button)button.disabled=false;}
+};
 
 window.togglePMSReminderEmail = async function(){
   if(!window.currentUser || isDemo())return;
