@@ -9807,16 +9807,6 @@ if(!selectedPropertyId){
     return;
   }
 
-  const previousIssue = window.pmsEditingBooking
-    ? window.currentSelectedBooking?.guestIssue || {}
-    : {};
-  const urgentIssueChanged = !window.pmsEditingBooking ||
-    previousIssue.active !== true ||
-    (previousIssue.priority || "medium") !== guestIssue.priority ||
-    (previousIssue.status || "open") !== guestIssue.status ||
-    (previousIssue.category || "other") !== guestIssue.category ||
-    (previousIssue.note || "") !== guestIssue.note;
-
   const saveButton = document.getElementById("booking-save-button");
   if(saveButton){
     saveButton.disabled = true;
@@ -9880,7 +9870,6 @@ window.dispatchEvent(
 
   if(
     savedBookingId &&
-    urgentIssueChanged &&
     guestIssue.active === true &&
     guestIssue.priority === "urgent" &&
     guestIssue.status !== "resolved"
@@ -9910,7 +9899,11 @@ window.dispatchEvent(
           ? "sent"
           : notificationResult.duplicate
             ? "duplicate"
-            : "";
+            : notificationResult.queued
+              ? "queued"
+              : notificationResult.success === false
+                ? "failed"
+                : "";
       }
     }catch(error){
       urgentEmailStatus = "failed";
@@ -9927,10 +9920,10 @@ window.dispatchEvent(
   t(
     status === "pending"
       ? "Richiesta salvata"
-      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "disabled" ? " · Email urgenti disattivate" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
+      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "disabled" ? " · Email urgenti disattivate" : urgentEmailStatus === "queued" ? " · Email urgente in coda per il recupero" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
     status === "pending"
       ? "Request saved"
-      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "disabled" ? " · Urgent emails disabled" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
+      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "disabled" ? " · Urgent emails disabled" : urgentEmailStatus === "queued" ? " · Urgent email queued for recovery" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
   )
 );
 

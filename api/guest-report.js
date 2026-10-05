@@ -152,7 +152,7 @@ export default async function handler(req, res){
         const owner = await admin.auth().getUser(booking.uid);
         if(owner.emailVerified && !owner.disabled){
           await sendUrgentHostNotification({
-            db, resend:new Resend(process.env.RESEND_API_KEY),
+            db, resend:new Resend(process.env.RESEND_API_KEY),getAuthUser:uid=>admin.auth().getUser(uid),
             decoded:{uid:owner.uid,email:owner.email},
             body:{bookingId,lang:body.lang === "en" ? "en" : "it"},
             timestamp:()=>admin.firestore.FieldValue.serverTimestamp()

@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       const {httpStatus,...payload}=result;
       return res.status(httpStatus || 200).json(payload);
     }
-    const result = await sendUrgentHostNotification({db,resend,decoded,body:req.body,timestamp:()=>admin.firestore.FieldValue.serverTimestamp()});
+    const result = await sendUrgentHostNotification({db,resend,decoded,body:req.body,getAuthUser:uid=>admin.auth().getUser(uid),timestamp:()=>admin.firestore.FieldValue.serverTimestamp()});
     const {httpStatus,...payload}=result;
     return res.status(httpStatus || 200).json(payload);
   }catch(error){
