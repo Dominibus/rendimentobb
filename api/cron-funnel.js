@@ -1,3 +1,4 @@
+import {queueDailyReminders} from "../lib/pms-reminders.js";
 // ===============================
 // 🚀 EMAIL FUNNEL – ULTRA SAAS FINAL
 // ===============================
@@ -71,10 +72,13 @@ export default async function handler(req, res){
   try{
 
     const now = Date.now();
-    let pmsNotifications,pmsError=false;
+    let pmsNotifications,pmsReminders,pmsError=false;
     try{
+      try{
+      pmsReminders=process.env.VERCEL_ENV && process.env.VERCEL_ENV!=='production' ? {skipped:true,reason:'production_only'} : await queueDailyReminders({db,getAuthUser:uid=>admin.auth().getUser(uid),timestamp:()=>admin.firestore.FieldValue.serverTimestamp(),now});
+      }catch{pmsReminders={errors:1};console.error('PMS reminder generation failed');}
       pmsNotifications=process.env.VERCEL_ENV && process.env.VERCEL_ENV!=='production' ? {checked:0,sent:0,retry:0,manualReview:0,suppressed:0,errors:0,skipped:true,reason:'production_only'} : await drainTaskNotifications({db,resend,getAuthUser:uid=>admin.auth().getUser(uid),timestamp:()=>admin.firestore.FieldValue.serverTimestamp(),now});
-      pmsError=pmsNotifications.errors>0;
+      pmsError=pmsNotifications.errors>0 || (pmsReminders.errors || 0)>0;
       await db.collection('_pms_jobs').doc('task_notifications').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),success:!pmsError,...pmsNotifications});
     }catch{
       pmsError=true;
@@ -219,7 +223,7 @@ https://rendimentobb.it/dashboard
 
     }
 
-    return res.status(pmsError?503:200).json({success:!pmsError,pmsNotifications:pmsNotifications || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
+    return res.status(pmsError?503:200).json({success:!pmsError,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
 
   }
 

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {dailyChecklist,checklistDay} from '../js/pms-daily-checklist.js';
 import {derivePMSTasks,reconcilePMSTasks,visiblePMSTasks} from '../js/pms-tasks.js';
 const booking={id:'b1',guestName:'Guest',status:'arrival',guests:2,checkin:'2026-10-06',checkout:'2026-10-08',guestRegistration:{documentsReceived:0,authorityStatus:'pending'},cleaning:{required:true,status:'pending'},touristTax:{enabled:true,amount:20,currency:'EUR',status:'pending'},guestIssue:{active:true,status:'open',priority:'urgent',note:'Leak',reportedAt:'2026-10-04T09:00:00Z'}};
 test('five obligations derive from booking facts with stable codes and due dates',()=>{
@@ -40,7 +41,7 @@ test('invalid due date stays undated rather than inventing a deadline',()=>{asse
 test('operations render translated persistent controls and keep urgent issue first',()=>{
  const source=readFileSync(new URL('../js/dashboard.js',import.meta.url),'utf8');
  for(const lang of ['it','en']){
-  const container={innerHTML:''};const ctx={visiblePMSTasks,document:{getElementById:()=>container},escapeDashboardHTML:s=>String(s).replace(/</g,'&lt;'),isConfirmedBooking:()=>true,window:{t:(it,en)=>lang==='en'?en:it,getTouristTaxCurrencySymbol:()=> '€'},Intl,Date};vm.createContext(ctx);
+  const container={innerHTML:''};const ctx={visiblePMSTasks,dailyChecklist,checklistDay,document:{getElementById:()=>container},escapeDashboardHTML:s=>String(s).replace(/</g,'&lt;'),isConfirmedBooking:()=>true,window:{rbChecklistFilter:"all",t:(it,en)=>lang==='en'?en:it,getTouristTaxCurrencySymbol:()=> '€'},Intl,Date};vm.createContext(ctx);
   vm.runInContext(source.slice(source.indexOf('function renderTodayBookingOperations'),source.indexOf('window.setPMSTaskStatus')),ctx);
   const states=reconcilePMSTasks(booking,{},'first');states.documents.status='in_progress';ctx.renderTodayBookingOperations([{...booking,guestName:'<Guest>',autopilotTasks:states}]);
   assert.match(container.innerHTML,lang==='en'?/Take charge/:/Prendi in carico/);assert.match(container.innerHTML,lang==='en'?/In progress · Reopen/:/In carico · Riapri/);assert.match(container.innerHTML,/&lt;Guest>/);

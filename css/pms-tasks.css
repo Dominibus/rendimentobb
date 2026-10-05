@@ -58,3 +58,5 @@
     width:100% !important;
   }
 }
+
+.pms-checklist-controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}.pms-checklist-controls label{display:grid;gap:5px;flex:1 1 180px;font-size:12px;font-weight:700;color:#475569}.pms-checklist-controls input,.pms-checklist-controls select{min-width:0;width:100%;min-height:44px;padding:9px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;box-sizing:border-box;font-size:14px}

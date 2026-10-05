@@ -1,3 +1,4 @@
+import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261005-rc22';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
@@ -10059,6 +10060,7 @@ function renderPMSPortalAlerts(pmsData = {}){
   const operationalCount = alerts.length + arrivalsToday + departuresToday;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
   const emailToggle = `
+    <button type="button" onclick="togglePMSReminderEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsReminderEmail===true?window.t("Promemoria giornalieri attivi", "Daily reminders on"):window.t("Attiva promemoria giornalieri", "Enable daily reminders")}</button>
     <button type="button" onclick="togglePMSTaskEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsTaskEmail===true?window.t("Email attività attive", "Task emails on"):window.t("Attiva email attività", "Enable task emails")}</button>
     <button type="button" onclick="togglePMSUrgentEmail()" style="border:1px solid ${urgentEmailEnabled ? "#a7f3d0" : "#cbd5e1"};border-radius:999px;background:${urgentEmailEnabled ? "#ecfdf5" : "#f8fafc"};color:${urgentEmailEnabled ? "#047857" : "#64748b"};padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;">
       ${urgentEmailEnabled ? "✉️ " + window.t("Email urgenti attive", "Urgent emails on") : "🔕 " + window.t("Email urgenti disattivate", "Urgent emails off")}
@@ -10112,6 +10114,17 @@ function renderPMSPortalAlerts(pmsData = {}){
     </div>`;
 }
 
+window.togglePMSReminderEmail = async function(){
+  if(!window.currentUser || isDemo())return;
+  const next=window.rbNotificationPreferences?.pmsReminderEmail!==true;
+  try{
+    await updateDoc(doc(db,"users",window.currentUser.uid),{"notificationPreferences.pmsReminderEmail":next});
+    window.rbNotificationPreferences={...(window.rbNotificationPreferences || {}),pmsReminderEmail:next};
+    renderPMSPortalAlerts(window.rbPMSData || {});
+    if(next)alert(t("Promemoria attivati: il controllo giornaliero riepiloga le attività aperte in scadenza oggi e domani. Massimo un riepilogo al giorno.","Reminders enabled: the daily check summarizes open tasks due today and tomorrow. At most one summary per day."));
+  }catch(error){dashboardError("Reminder preference failed",error);alert(t("Impossibile aggiornare la preferenza email.","Unable to update email preference."));}
+};
+
 window.togglePMSTaskEmail = async function(){
   if(!window.currentUser || isDemo())return;
   const next=window.rbNotificationPreferences?.pmsTaskEmail!==true;
@@ -10150,12 +10163,11 @@ function renderTodayBookingOperations(bookings = []){
   const container = document.getElementById("booking-today-operations");
   if(!container) return;
 
-  const now = new Date();
-  const today = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0")
-  ].join("-");
+  window.rbChecklistBookings=bookings;
+  const today=checklistDay();
+  const filter=window.rbChecklistFilter || 'daily';
+  const search=window.rbChecklistSearch || '';
+
 
   const activeBookings = bookings.filter(
     booking => isConfirmedBooking(booking)
@@ -10209,7 +10221,10 @@ function renderTodayBookingOperations(bookings = []){
     cleaning: ["🧹",window.t("Pulizia e turnover da gestire", "Cleaning and turnover to manage")],
     issue: ["🛎️",window.t("Segnalazione ospite aperta", "Open guest issue")]
   };
-  const priorityTasks = bookings.flatMap(booking=>visiblePMSTasks(booking).map(task=>{
+  const byId=new Map(bookings.map(booking=>[booking.id,booking]));
+  const allTasks=dailyChecklist(bookings,today,'all');
+  const priorityTasks = dailyChecklist(bookings,today,filter,search).map(task=>{
+    const booking=byId.get(task.bookingId);
     let label=labels[task.code][1];
     if(task.code==="documents"){
       const count=Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0));
@@ -10218,10 +10233,7 @@ function renderTodayBookingOperations(bookings = []){
     if(task.code==="tax") label+=` · ${window.getTouristTaxCurrencySymbol(booking.touristTax.currency)}${Number(booking.touristTax.amount).toFixed(2)}`;
     if(task.code==="cleaning" && booking.cleaning?.assignee) label+=` · ${booking.cleaning.assignee}`;
     return {...task,date:task.dueDate,icon:task.priority===0?"🚨":labels[task.code][0],label};
-  })).sort((first,second)=>
-    (first.priority===0?0:1)-(second.priority===0?0:1) ||
-    String(first.date || "9999-12-31").localeCompare(String(second.date || "9999-12-31")) || first.priority-second.priority
-  );
+  });
 
   const formatTaskTiming = date => {
     if(!date) return window.t("Senza scadenza", "No due date");
@@ -10239,11 +10251,12 @@ function renderTodayBookingOperations(bookings = []){
   const priorityTasksHtml = priorityTasks.length ? `
     <div style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#fff;border:1px solid #fde68a;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px;">
-        <strong style="font-size:12px;color:#92400e;">⚠️ ${window.t("Attività prioritarie", "Priority tasks")}</strong>
+        <strong style="font-size:12px;color:#92400e;">⚠️ ${window.t("Checklist prenotazioni", "Booking checklist")}</strong>
         <span style="font-size:11px;font-weight:800;color:#92400e;">${priorityTasks.length}</span>
       </div>
       <div style="display:grid;gap:7px;max-height:360px;overflow-y:auto;">
-        ${priorityTasks.map(task => `
+        ${priorityTasks.map((task,index) => `
+          ${index===0 || priorityTasks[index-1].group!==task.group ? `<div style="font-size:12px;font-weight:800;color:#475569;margin-top:8px;">${({issues:window.t("Problemi aperti","Open issues"),overdue:window.t("Scadute da verificare","Overdue · review"),today:window.t("Da gestire oggi","Due today"),undated:window.t("Senza data · verifica prenotazione","No date · review booking"),upcoming:window.t("Prossime attività","Upcoming tasks")})[task.group]}</div>` : ""}
           <div class="pms-task-row" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
             <button class="pms-task-open" type="button" onclick="openBookingForEdit('${escapeDashboardHTML(task.bookingId)}')" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
               <span class="pms-task-label">${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}</span>
@@ -10256,8 +10269,8 @@ function renderTodayBookingOperations(bookings = []){
         `).join("")}
       </div>
     </div>
-  ` : "";
-  const totalOpenOperations = pendingOperations + priorityTasks.length;
+  ` : `<p role="status" style="font-size:13px;color:#475569;">${window.t("Nessuna attività per questa selezione.","No tasks match this selection.")}</p>`;
+  const totalOpenOperations = pendingOperations + allTasks.filter(task=>task.group!=="upcoming").length;
 
   const upcomingOperations = activeBookings.flatMap(booking => {
     const status = String(booking.status || "").toLowerCase();
@@ -10336,7 +10349,7 @@ function renderTodayBookingOperations(bookings = []){
     <div style="padding:16px;border:1px solid ${totalOpenOperations ? "#fde68a" : "#e2e8f0"};border-radius:16px;background:${totalOpenOperations ? "#fffbeb" : "#f8fafc"};">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
         <div>
-          <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("Operatività di oggi", "Today's operations")}</div>
+          <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("La tua checklist quotidiana", "Your daily checklist")}</div>
           <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Prendi in carico le attività. Per risolverle, aggiorna i dati della prenotazione.", "Take charge of tasks. To resolve them, update the booking details.")}</div>
         </div>
         <span style="padding:7px 11px;border-radius:999px;background:${totalOpenOperations ? "#fef3c7" : "#e2e8f0"};color:${totalOpenOperations ? "#92400e" : "#475569"};font-size:11px;font-weight:800;">
@@ -10360,11 +10373,19 @@ function renderTodayBookingOperations(bookings = []){
           </div>
         `).join("")}
       </div>
+      <div class="pms-checklist-controls">
+        <label>${window.t("Mostra","Show")}<select aria-label="${window.t('Filtro checklist','Checklist filter')}" onchange="setPMSChecklistFilter(this.value)">${[['daily',window.t('Oggi e avvisi','Today and alerts')],['all',window.t('Tutte le attività','All tasks')],['issue',window.t('Problemi ospiti','Guest issues')],['documents',window.t('Documenti mancanti','Missing documents')],['authority',window.t('Comunicazioni autorità','Authority reports')],['tax',window.t('Tassa di soggiorno','Tourist tax')],['cleaning',window.t('Pulizie','Cleaning')],['in_progress',window.t('In carico','In progress')]].map(([value,label])=>`<option value="${value}" ${filter===value?'selected':''}>${label}</option>`).join('')}</select></label>
+        <label>${window.t('Cerca ospite','Find guest')}<input type="search" value="${escapeDashboardHTML(search)}" placeholder="${window.t('Nome ospite','Guest name')}" onchange="setPMSChecklistSearch(this.value)" /></label>
+      </div>
+      <p style="font-size:12px;color:#64748b;">${window.t('Le attività scompaiono quando aggiorni i dati che le risolvono. La presa in carico indica chi sta intervenendo, non il completamento.','Tasks disappear when you update the underlying booking details. Taking charge does not complete a task.')}</p>
       ${priorityTasksHtml}
       ${reminderHtml}
     </div>
   `;
 }
+
+window.setPMSChecklistFilter=function(value){window.rbChecklistFilter=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
+window.setPMSChecklistSearch=function(value){window.rbChecklistSearch=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
 
 window.setPMSTaskStatus = async function(bookingId,taskCode,taskStatus){
   if(!window.currentUser || isDemo()) return;
