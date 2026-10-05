@@ -1,3 +1,5 @@
+import {Resend} from "resend";
+import {sendUrgentHostNotification} from "../lib/pms-urgent-email.js";
 import {createHostBookingHandler} from "../lib/pms-booking-service.js";
 import crypto from "node:crypto";
 import {reconcilePMSTasks} from "../js/pms-tasks.js";
@@ -143,6 +145,23 @@ export default async function handler(req, res){
       });
     });
 
+    // The report has committed. Notification failure must not encourage the guest
+    // to submit the same report again or undo the saved operational task.
+    if(priority === "urgent"){
+      try{
+        const owner = await admin.auth().getUser(booking.uid);
+        if(owner.emailVerified && !owner.disabled){
+          await sendUrgentHostNotification({
+            db, resend:new Resend(process.env.RESEND_API_KEY),
+            decoded:{uid:owner.uid,email:owner.email},
+            body:{bookingId,lang:body.lang === "en" ? "en" : "it"},
+            timestamp:()=>admin.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      }catch(error){
+        console.error("Guest report urgent email failed", error?.message || error);
+      }
+    }
     return res.status(201).json({ success: true });
   }catch(error){
     if(error?.message === "LINK_INVALID"){

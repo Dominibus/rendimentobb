@@ -1,3 +1,4 @@
+import {reconcilePMSTasks} from '../js/pms-tasks.js';
 import {drainTaskNotifications} from '../lib/pms-notification-queue.js';
 import {makeTaskNotification,taskNotificationId} from '../lib/pms-notification-queue.js';
 import test from 'node:test';
@@ -19,8 +20,8 @@ function harness(file,failRecipient=''){
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
- vm.createContext(ctx);let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
+ const ctx={reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
+ vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,collection,ctx};
 }
@@ -105,4 +106,21 @@ test('PMS recovery error is visible but does not prevent the existing funnel fro
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.drainTaskNotifications=async()=>{throw Error('database unavailable');};
  await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.error,'pms_recovery_failed');assert.equal(h.sent.length,1);
+});
+
+async function seedPublicUrgent(h){
+ const token='a'.repeat(64);
+ await h.collection('bookings').doc('booking-public').set({uid:'user-id',propertyId:'property-1',guestName:'Mario',status:'checkin',checkin:'2026-10-05',checkout:'2026-10-06',guestPortal:{enabled:true,tokenHash:crypto.createHash('sha256').update(token).digest('hex'),expiresAt:'2099-01-01T00:00:00Z'}});
+ return {action:'submit',bookingId:'booking-public',token,category:'maintenance',priority:'urgent',note:'Test public urgent air conditioning'};
+}
+test('public report delivers through the real shared urgent service and subsequent host send is deduplicated',async()=>{
+ const h=harness('api/guest-report.js'),body=await seedPublicUrgent(h);
+ const result=await h.run(body);assert.equal(result.status,201);assert.equal(h.sent.length,1);assert.equal(h.sent[0].payload.to[0],'owner@example.test');assert.ok(h.sent[0].payload.text.includes(body.note));
+ const duplicate=await h.ctx.sendUrgentHostNotification({db:h.ctx.admin.firestore(),resend:new h.ctx.Resend(),decoded:{uid:'user-id',email:'owner@example.test'},body:{bookingId:body.bookingId},timestamp:()=> 'time'});
+ assert.equal(duplicate.duplicate,true);assert.equal(h.sent.length,1);
+});
+test('public urgent service honors disabled preference and records rejection without failing the report',async()=>{
+ const disabled=harness('api/guest-report.js'),body=await seedPublicUrgent(disabled);await disabled.collection('users').doc('user-id').set({notificationPreferences:{pmsUrgentEmail:false}});
+ assert.equal((await disabled.run(body)).status,201);assert.equal(disabled.sent.length,0);
+ const failed=harness('api/guest-report.js','owner@example.test');await seedPublicUrgent(failed);assert.equal((await failed.run(body)).status,201);assert.equal(failed.sent.length,1);assert.equal([...failed.stores.get('_pms_notifications').values()][0].status,'failed');assert.equal((await failed.collection('bookings').doc(body.bookingId).get()).data().guestIssue.status,'open');
 });
