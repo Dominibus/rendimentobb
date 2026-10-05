@@ -6766,6 +6766,17 @@ window.loadBookingPropertyOptions = async function(selectedPropertyId, editable 
   field.style.display = "block";
   select.disabled = true;
 
+  // Existing booking details use a locked property selector. The property
+  // was just loaded for its tax rule: avoid fetching the entire directory.
+  if(!editable && window.currentPropertyId === selectedPropertyId && window.currentPropertyData){
+    const property = window.currentPropertyData;
+    const label = [property.name, property.city].filter(Boolean).join(' · ') || window.t('Struttura attuale','Current property');
+    select.innerHTML = `<option value="${escapeDashboardHTML(selectedPropertyId)}">${escapeDashboardHTML(label)}</option>`;
+    select.value = selectedPropertyId;
+    select.style.background = '#f8fafc';
+    return;
+  }
+
   try{
     const propertiesSnap = await getDocs(
       query(
