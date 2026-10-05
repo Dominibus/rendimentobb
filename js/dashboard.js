@@ -6722,16 +6722,24 @@ window.closeBookingsModal = function(){
 // ✏️ OPEN BOOKING FROM SAVED LIST
 // =====================================
 
-window.openBookingForEdit = function(id){
-
-  const booking =
-    (window.currentBookingsData || [])
-      .find(item => item.id === id);
-
+window.openBookingForEdit = async function(id, section){
+  const booking = (window.currentBookingsData || []).find(item => item.id === id);
   if(!booking) return;
-
-  window.showBookingDetails(booking);
-
+  await window.showBookingDetails(booking);
+  const sections = {
+    documents: 'booking-guest-registration-box', authority: 'booking-guest-registration-box',
+    tax: 'booking-tourist-tax-box', cleaning: 'booking-cleaning-box', issue: 'booking-guest-issue-box'
+  };
+  const targetId = sections[section];
+  if(!targetId) return;
+  window.requestAnimationFrame(() => {
+    const form = document.getElementById('booking-form-container');
+    const target = document.getElementById(targetId);
+    if(!form || form.style.display === 'none' || window.currentSelectedBooking?.id !== id || !target || target.style.display === 'none') return;
+    target.scrollIntoView({behavior:'instant', block:'start', inline:'nearest'});
+    target.setAttribute('tabindex','-1');
+    target.focus({preventScroll:true});
+  });
 };
 
 window.loadBookingPropertyOptions = async function(selectedPropertyId, editable = false){
@@ -10080,7 +10088,7 @@ function renderPMSPortalAlerts(pmsData = {}){
       ${alerts.length ? `
         <div style="display:grid;gap:7px;margin-top:11px;">
           ${alerts.slice(0,3).map(alert => `
-            <button type="button" class="pms-alert-open" data-booking-id="${escapeDashboardHTML(alert.bookingId)}" onclick="openPMSAlertBooking(this.dataset.bookingId,this)" style="padding:10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
+            <button type="button" class="pms-alert-open" data-booking-id="${escapeDashboardHTML(alert.bookingId)}" data-task-code="${escapeDashboardHTML(alert.code)}" onclick="openPMSAlertBooking(this.dataset.bookingId,this,this.dataset.taskCode)" style="padding:10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
               <span><strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}</span>
               <span style="font-size:11px;margin-top:4px;">${escapeDashboardHTML(alert.timing)} · ${alert.status==='in_progress'?window.t('In carico','In progress'):window.t('Da gestire','To manage')} · ${window.t('Apri prenotazione →','Open booking →')}</span>
             </button>`).join("")}
@@ -10095,7 +10103,7 @@ window.openPMSDailyChecklist=async function(){
   window.rbChecklistFilter='daily';window.rbChecklistSearch='';window.rbOperationFilter='due';
   await window.openCurrentBookings();
 };
-window.openPMSAlertBooking=async function(id,button){
+window.openPMSAlertBooking=async function(id,button,section){
   if(button?.disabled)return;
   if(button)button.disabled=true;
   try{
@@ -10103,7 +10111,7 @@ window.openPMSAlertBooking=async function(id,button){
     if(!(window.currentBookingsData || []).some(booking=>booking.id===id)){
       alert(window.t('La prenotazione non è più disponibile. La checklist è stata aggiornata.','This booking is no longer available. The checklist has been refreshed.'));return;
     }
-    window.openBookingForEdit(id);
+    await window.openBookingForEdit(id,section);
   }catch(error){dashboardError('PMS alert booking failed',error);alert(window.t('Impossibile aprire la prenotazione. Riprova.','Unable to open the booking. Please retry.'));}
   finally{if(button)button.disabled=false;}
 };
@@ -10249,7 +10257,7 @@ function renderTodayBookingOperations(bookings = []){
         ${priorityTasks.map((task,index) => `
           ${index===0 || priorityTasks[index-1].group!==task.group ? `<div style="font-size:12px;font-weight:800;color:#475569;margin-top:8px;">${({issues:window.t("Problemi aperti","Open issues"),overdue:window.t("Scadute da verificare","Overdue · review"),today:window.t("Da gestire oggi","Due today"),undated:window.t("Senza data · verifica prenotazione","No date · review booking"),upcoming:window.t("Prossime attività","Upcoming tasks")})[task.group]}</div>` : ""}
           <div class="pms-task-row" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
-            <button class="pms-task-open" type="button" onclick="openBookingForEdit('${escapeDashboardHTML(task.bookingId)}')" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
+            <button class="pms-task-open" type="button" data-booking-id="${escapeDashboardHTML(task.bookingId)}" data-task-code="${escapeDashboardHTML(task.code)}" onclick="openBookingForEdit(this.dataset.bookingId,this.dataset.taskCode)" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
               <span class="pms-task-label">${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}</span>
               <span class="pms-task-timing" style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
             </button>

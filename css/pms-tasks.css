@@ -64,3 +64,9 @@
 #pms-portal-alerts .pms-alert-open{display:block!important;width:100%!important;min-height:44px;height:auto!important;white-space:normal!important;text-align:left!important;cursor:pointer;box-sizing:border-box;overflow-wrap:anywhere}#pms-portal-alerts .pms-alert-open span{display:block!important;white-space:normal!important}#pms-portal-alerts .pms-alert-open:disabled{opacity:.6;cursor:wait}
 
 #booking-today-operations .pms-operation-card,#booking-today-operations .pms-operation-open{display:block!important;width:100%!important;height:auto!important;min-height:44px;white-space:normal!important;text-align:left!important;cursor:pointer;box-sizing:border-box}#booking-today-operations .pms-operation-open{padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc;color:#0f172a;overflow-wrap:anywhere}#booking-today-operations .pms-operation-card[aria-pressed="true"]{outline:2px solid #047857;outline-offset:2px}
+
+/* Operational sections reached from the checklist: visible keyboard focus. */
+#booking-guest-registration-box:focus, #booking-tourist-tax-box:focus,
+#booking-cleaning-box:focus, #booking-guest-issue-box:focus {
+  outline: 3px solid #059669; outline-offset: 3px; scroll-margin-block: 14px;
+}
