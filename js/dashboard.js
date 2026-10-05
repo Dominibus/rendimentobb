@@ -1,3 +1,4 @@
+import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261005-rc22';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
@@ -10023,9 +10024,12 @@ function renderPMSPortalAlerts(pmsData = {}){
     const timing=task.group==='overdue'?window.t('Scaduta · verifica','Overdue · review'):task.group==='today'?window.t('Oggi','Today'):task.group==='undated'?window.t('Senza data · verifica','No date · review'):window.t('Problema aperto','Open issue');
     return {...task,label:labels[task.code],timing};
   });
+  const dueOperations=bookingOperations(bookingList,today);
+  alerts.push(...dueOperations.map(row=>({...row,label:row.code==='arrival'?window.t('Arrivo da registrare','Arrival to register'):window.t('Check-out da registrare','Check-out to register'),timing:row.overdue?window.t('Arretrato · verifica','Overdue · review'):window.t('Oggi','Today')})));
+  alerts.sort((a,b)=>(a.priority===0?0:1)-(b.priority===0?0:1) || String(a.dueDate || '9999').localeCompare(String(b.dueDate || '9999')) || a.priority-b.priority);
   const urgentCount=alerts.filter(task=>task.code==='issue' && task.priority===0).length;
   const upcomingCount=allTasks.filter(task=>task.group==='upcoming').length;
-  const operationalCount = alerts.length + arrivalsToday + departuresToday;
+  const operationalCount = alerts.length;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
   const emailToggle = `
     <button type="button" onclick="togglePMSReminderEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsReminderEmail===true?window.t("Promemoria giornalieri attivi", "Daily reminders on"):window.t("Attiva promemoria giornalieri", "Enable daily reminders")}</button>
@@ -10052,7 +10056,9 @@ function renderPMSPortalAlerts(pmsData = {}){
   const summaryParts = [];
   if(arrivalsToday) summaryParts.push(window.t(`${arrivalsToday} arrivi oggi`, `${arrivalsToday} arrivals today`));
   if(departuresToday) summaryParts.push(window.t(`${departuresToday} partenze oggi`, `${departuresToday} departures today`));
-  if(alerts.length) summaryParts.push(window.t(`${alerts.length} attività da gestire`, `${alerts.length} tasks to manage`));
+  if(alerts.length) summaryParts.push(window.t(`${alerts.length} operazioni e attività da gestire`, `${alerts.length} operations and tasks to manage`));
+  const overdueOperations=dueOperations.filter(row=>row.overdue).length;
+  if(overdueOperations)summaryParts.push(window.t(`${overdueOperations} arrivi/check-out arretrati`,`${overdueOperations} overdue arrivals/check-outs`));
 
   if(upcomingCount)summaryParts.push(window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`));
 
@@ -10086,7 +10092,7 @@ function renderPMSPortalAlerts(pmsData = {}){
 }
 
 window.openPMSDailyChecklist=async function(){
-  window.rbChecklistFilter='daily';window.rbChecklistSearch='';
+  window.rbChecklistFilter='daily';window.rbChecklistSearch='';window.rbOperationFilter='due';
   await window.openCurrentBookings();
 };
 window.openPMSAlertBooking=async function(id,button){
@@ -10160,20 +10166,15 @@ function renderTodayBookingOperations(bookings = []){
   const activeBookings = bookings.filter(
     booking => isConfirmedBooking(booking)
   );
-  const arrivalsToday = activeBookings.filter(
-    booking => booking.checkin === today &&
-      String(booking.status || "").toLowerCase() === "arrival"
-  );
-  const guestsInHouse = activeBookings.filter(
-    booking => String(booking.status || "").toLowerCase() === "checkin"
-  );
-  const departuresToday = activeBookings.filter(
-    booking => booking.checkout === today &&
-      String(booking.status || "").toLowerCase() === "checkin"
-  );
+  const dueOperations=bookingOperations(activeBookings,today);
+  const arrivalsToday=dueOperations.filter(row=>row.code==='arrival');
+  const departuresToday=dueOperations.filter(row=>row.code==='departure');
+  const guestsInHouse=activeBookings.filter(booking=>String(booking.status || '').toLowerCase()==='checkin');
+  const selectedOperations=operationSelection(activeBookings,today,window.rbOperationFilter || 'due');
 
   const operationCards = [
     {
+      filter:"arrival",
       icon: "🛬",
       label: window.t("Arrivi da gestire", "Arrivals to manage"),
       count: arrivalsToday.length,
@@ -10182,8 +10183,9 @@ function renderTodayBookingOperations(bookings = []){
       background: "#eff6ff"
     },
     {
+      filter:"in_house",
       icon: "🏠",
-      label: window.t("Ospiti in struttura", "Guests in house"),
+      label: window.t("Ospiti con check-in registrato", "Guests with recorded check-in"),
       count: guestsInHouse.reduce(
         (total, booking) => total + Number(booking.guests || 0), 0
       ),
@@ -10192,6 +10194,7 @@ function renderTodayBookingOperations(bookings = []){
       background: "#ecfdf5"
     },
     {
+      filter:"departure",
       icon: "🛫",
       label: window.t("Partenze da registrare", "Departures to register"),
       count: departuresToday.length,
@@ -10350,7 +10353,7 @@ function renderTodayBookingOperations(bookings = []){
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;">
         ${operationCards.map(card => `
-          <div style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
+          <button type="button" class="pms-operation-card" onclick="setPMSOperationFilter('${card.filter}')" aria-pressed="${window.rbOperationFilter===card.filter}" style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
             <div style="font-size:12px;font-weight:700;color:${card.color};">${card.icon} ${card.label}</div>
             <div style="font-size:24px;line-height:1;font-weight:900;color:#0f172a;margin-top:9px;">${card.count}</div>
             <div style="font-size:11px;color:#64748b;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -10358,9 +10361,15 @@ function renderTodayBookingOperations(bookings = []){
                 ? escapeDashboardHTML(card.names.join(", "))
                 : window.t("Nessuna attività", "No activity")}
             </div>
-          </div>
+            <div style="font-size:11px;margin-top:6px;">${window.t('Mostra prenotazioni →','Show bookings →')}</div>
+          </button>
         `).join("")}
       </div>
+      <section style="margin-top:12px;padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><strong>${window.t('Arrivi e partenze da verificare','Arrivals and departures to review')}</strong><button type="button" onclick="setPMSOperationFilter('due')">${window.t('Oggi e arretrati','Today and overdue')}</button></div>
+        <p style="font-size:12px;color:#64748b;">${window.t('Conteggi dai dati registrati: controlla gli arretrati prima di aggiornare lo stato.','Counts reflect saved records: review overdue bookings before changing status.')}</p>
+        <div style="display:grid;gap:7px;max-height:230px;overflow:auto;">${selectedOperations.length?selectedOperations.map(row=>`<button type="button" class="pms-operation-open" data-booking-id="${escapeDashboardHTML(row.bookingId)}" onclick="openBookingForEdit(this.dataset.bookingId)"><strong>${escapeDashboardHTML(row.guestName)}</strong> · ${row.code==='arrival'?window.t('Arrivo da registrare','Arrival to register'):row.code==='departure'?window.t('Check-out da registrare','Check-out to register'):window.t('Check-in registrato','Recorded check-in')}<span style="display:block;font-size:12px;color:${row.overdue?'#b91c1c':'#475569'};">${escapeDashboardHTML(row.dueDate || '—')} · ${row.overdue?window.t('Arretrato · verifica prenotazione','Overdue · review booking'):row.code==='in_house'?window.t('Partenza prevista','Expected departure'):window.t('Oggi','Today')} →</span></button>`).join(''):window.t('Nessuna prenotazione per questa selezione.','No bookings match this selection.')}</div>
+      </section>
       <div class="pms-checklist-controls">
         <label>${window.t("Mostra","Show")}<select aria-label="${window.t('Filtro checklist','Checklist filter')}" onchange="setPMSChecklistFilter(this.value)">${[['daily',window.t('Oggi e avvisi','Today and alerts')],['all',window.t('Tutte le attività','All tasks')],['issue',window.t('Problemi ospiti','Guest issues')],['documents',window.t('Documenti mancanti','Missing documents')],['authority',window.t('Comunicazioni autorità','Authority reports')],['tax',window.t('Tassa di soggiorno','Tourist tax')],['cleaning',window.t('Pulizie','Cleaning')],['in_progress',window.t('In carico','In progress')]].map(([value,label])=>`<option value="${value}" ${filter===value?'selected':''}>${label}</option>`).join('')}</select></label>
         <label>${window.t('Cerca ospite','Find guest')}<input type="search" value="${escapeDashboardHTML(search)}" placeholder="${window.t('Nome ospite','Guest name')}" onchange="setPMSChecklistSearch(this.value)" /></label>
@@ -10371,6 +10380,8 @@ function renderTodayBookingOperations(bookings = []){
     </div>
   `;
 }
+
+window.setPMSOperationFilter=function(value){window.rbOperationFilter=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
 
 window.setPMSChecklistFilter=function(value){window.rbChecklistFilter=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
 window.setPMSChecklistSearch=function(value){window.rbChecklistSearch=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
