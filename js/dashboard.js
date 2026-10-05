@@ -5419,6 +5419,7 @@ window.revokeGuestIssuePortalLink = async function(){
 };
 
 window.openBookingModal = async function(){
+    if(window.closeBookingForm?.() === false) return false;
     const viewVersion = (window.rbBookingViewVersion || 0) + 1;
     window.rbBookingViewVersion = viewVersion;
     const previousForm = document.getElementById('booking-form-container');
@@ -5531,6 +5532,8 @@ window.openBookingModal = async function(){
     setBookingToggleState(true);
 
 
+    updateBookingTotal();
+    window.captureBookingFormBaseline?.();
     form.style.display =
         "flex";
     revealBookingForm(form);
@@ -5543,11 +5546,7 @@ window.openBookingModal = async function(){
 renderBookingTaskTracking(null);
 
 
-    setTimeout(()=>{
 
-        if(viewVersion === window.rbBookingViewVersion && form.style.display !== "none") updateBookingTotal();
-
-    },100);
 
 };
 
@@ -5555,7 +5554,25 @@ renderBookingTaskTracking(null);
 // ❌ CLOSE BOOKING FORM ONLY
 // =====================================
 
-window.closeBookingForm = function(){
+function bookingFormSnapshot(){
+  const form = document.getElementById('booking-form-container');
+  return JSON.stringify(Array.from(form?.querySelectorAll('input,select,textarea') || []).map(field => [field.id,field.type === 'checkbox' || field.type === 'radio' ? field.checked : field.value]));
+}
+window.captureBookingFormBaseline = function(){ window.rbBookingFormBaseline = bookingFormSnapshot(); };
+window.hasUnsavedBookingChanges = function(){
+  const form = document.getElementById('booking-form-container');
+  return !!form && form.style.display !== 'none' && typeof window.rbBookingFormBaseline === 'string' && window.rbBookingFormBaseline !== bookingFormSnapshot();
+};
+window.canLeaveBookingForm = function(){
+  return !window.hasUnsavedBookingChanges() || confirm(window.t('Ci sono modifiche non salvate. Vuoi uscire e scartarle? Premi Annulla per tornare alla scheda e salvarle.','There are unsaved changes. Leave and discard them? Press Cancel to return to the booking and save them.'));
+};
+window.addEventListener?.('beforeunload', event => {
+  if(!window.hasUnsavedBookingChanges()) return;
+  event.preventDefault(); event.returnValue = '';
+});
+
+window.closeBookingForm = function(discardConfirmed = false){
+    if(!discardConfirmed && !window.canLeaveBookingForm()) return false;
     window.rbBookingViewVersion = (window.rbBookingViewVersion || 0) + 1;
 
     const form =
@@ -5573,7 +5590,9 @@ window.closeBookingForm = function(){
     window.currentSelectedBooking = null;
 renderBookingTaskTracking(null);
 
+    window.rbBookingFormBaseline = null;
     setBookingToggleState(false);
+    return true;
 
 };
       
@@ -5581,25 +5600,8 @@ renderBookingTaskTracking(null);
       // ❌ BOOKING FORM CLOSE
       // =====================================
 
-      window.closeBookingModal = function(){
-        window.rbBookingViewVersion = (window.rbBookingViewVersion || 0) + 1;
-
-        const form =
-        document.getElementById(
-          "booking-form-container"
-        );
-
-        if(!form) return;
-
-        form.style.display =
-        "none";
-
-        window.pmsEditingBooking = false;
-        window.currentSelectedBooking = null;
-renderBookingTaskTracking(null);
-
-        setBookingToggleState(false);
-
+      window.closeBookingModal = function(discardConfirmed = false){
+        return window.closeBookingForm(discardConfirmed);
       };
 
     },1500);
@@ -6716,6 +6718,7 @@ window.deleteProperty = async function(id){
 // =====================================
 
 window.closeBookingsModal = function(){
+  if(window.closeBookingForm?.() === false) return;
 
   const modal =
     document.getElementById(
@@ -6726,7 +6729,7 @@ window.closeBookingsModal = function(){
     modal.style.display = "none";
   }
 
-  window.closeBookingForm?.();
+
 
 };
 
@@ -6737,7 +6740,7 @@ window.closeBookingsModal = function(){
 window.openBookingForEdit = async function(id, section){
   const booking = (window.currentBookingsData || []).find(item => item.id === id);
   if(!booking) return;
-  await window.showBookingDetails(booking);
+  if(await window.showBookingDetails(booking) === false) return;
   const sections = {
     documents: 'booking-guest-registration-box', authority: 'booking-guest-registration-box',
     tax: 'booking-tourist-tax-box', cleaning: 'booking-cleaning-box', issue: 'booking-guest-issue-box'
@@ -6803,6 +6806,7 @@ window.changeBookingProperty = async function(){
 // =====================================
 
 window.showBookingDetails = async function(booking){
+    if(window.closeBookingForm?.() === false) return false;
     const viewVersion = (window.rbBookingViewVersion || 0) + 1;
     window.rbBookingViewVersion = viewVersion;
     const previousForm = document.getElementById('booking-form-container');
@@ -7611,6 +7615,7 @@ onclick="deleteBooking('${booking.id || ""}')">
 
 `;
   
+    window.captureBookingFormBaseline?.();
     modal.style.display = 'flex';
     setBookingToggleState(true);
     revealBookingForm(modal);
@@ -9136,7 +9141,7 @@ color:#166534;
 // =====================================
 
 window.openBookings = async function(propertyId, bookingId = null, viewAllProperties = false){
-  window.closeBookingForm?.();
+  if(window.closeBookingForm?.() === false) return false;
 
   window.bookingsAllPropertiesView = viewAllProperties === true;
   window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
@@ -9417,6 +9422,7 @@ window.openBookingFromCopilot = async function(
 // =====================================
 
 window.openCurrentBookings = async function(){
+  if(window.closeBookingForm?.() === false) return false;
 
   if(isDemo() || !canUseFirestorePMS()){
 
@@ -9963,7 +9969,7 @@ window.dispatchEvent(
   )
 );
 
-  closeBookingModal();
+  closeBookingModal(true);
 
   try{
     window.currentPropertyId = selectedPropertyId;
@@ -10127,13 +10133,13 @@ function renderPMSPortalAlerts(pmsData = {}){
 
 window.openPMSDailyChecklist=async function(){
   window.rbChecklistFilter='daily';window.rbChecklistSearch='';window.rbOperationFilter='due';
-  await window.openCurrentBookings();
+  return await window.openCurrentBookings();
 };
 window.openPMSAlertBooking=async function(id,button,section){
   if(button?.disabled)return;
   if(button)button.disabled=true;
   try{
-    await window.openPMSDailyChecklist();
+    if(await window.openPMSDailyChecklist() === false) return;
     if(!(window.currentBookingsData || []).some(booking=>booking.id===id)){
       alert(window.t('La prenotazione non è più disponibile. La checklist è stata aggiornata.','This booking is no longer available. The checklist has been refreshed.'));return;
     }
@@ -11665,6 +11671,9 @@ window.advanceBookingStatus = async function(id, nextStatus){
     arrival:t("In Arrivo", "Arriving"), checkin:"Check-In", checkout:"Check-Out", completed:t("Completato", "Completed")
   };
   if(!id || !window.currentUser || !labels[nextStatus]) return;
+  if(window.currentSelectedBooking?.id === id && window.hasUnsavedBookingChanges?.()){
+    alert(t("Salva o scarta le modifiche prima di cambiare lo stato della prenotazione.","Save or discard your edits before changing booking status.")); return;
+  }
   return runBookingOperation(`booking:${id}`, async () => {
     const bookingDetailsVersion = window.rbBookingViewVersion || 0;
     const bookingDetailsWasOpen = window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none";
