@@ -1,3 +1,5 @@
+import {drainTaskNotifications} from '../lib/pms-notification-queue.js';
+import {makeTaskNotification,taskNotificationId} from '../lib/pms-notification-queue.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -10,14 +12,14 @@ function harness(file,failRecipient=''){
  const collection=name=>{
   if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);
   const ref=id=>({id,get:async()=>({exists:store.has(id),data:()=>store.get(id)}),set:async(value,options)=>{if(options?.merge){const current=store.get(id)||{};apply(current,value);store.set(id,current);}else store.set(id,{...value});},update:async value=>{if(!store.has(id))throw Error('missing');apply(store.get(id),value);},delete:async()=>store.delete(id)});
-  const query=(constraints=[],max=Infinity)=>({where:(key,op,value)=>query([...constraints,[key,value]],max),limit:n=>query(constraints,n),get:async()=>{const docs=[...store].filter(([,v])=>constraints.every(([k,x])=>v[k]===x)).slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
+  const query=(constraints=[],max=Infinity)=>({where:(key,op,value)=>query([...constraints,[key,op,value]],max),orderBy:()=>query(constraints,max),limit:n=>query(constraints,n),get:async()=>{const docs=[...store].filter(([,v])=>constraints.every(([k,op,x])=>op==='=='?v[k]===x:typeof v[k]==='number' && v[k]<=x)).slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
   return {...query(),doc:ref,add:async data=>{const id=`mock-lead-${String(++sequence).padStart(12,'0')}`;store.set(id,{...data});return ref(id);}};
  };
  const db={collection,runTransaction:async fn=>fn({getAll:async(...refs)=>Promise.all(refs.map(r=>r.get())),get:r=>r.get(),set:(r,v)=>r.set(v),update:(r,v)=>r.update(v)})};
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
- const admin={apps:[{}],firestore,auth:()=>({verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
+ const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
+ const ctx={drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,collection,ctx};
@@ -78,4 +80,29 @@ test('successful funnel reminder is branded and cannot be sent again as the same
  await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'<b>Roma</b>',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);assert.ok(h.sent[0].payload.html.includes('&lt;b&gt;Roma'));assert.ok(h.sent[0].payload.html.includes('#087f5b'));
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
+});
+
+function seedQueuedCronMail(h){
+ const uid='user-id',email='owner@example.test',event={id:'c'.repeat(64)+'.documents.in_progress',code:'documents',status:'in_progress',actor:{uid,name:'Owner'},at:new Date().toISOString()};
+ const booking={uid,propertyId:'pms-property',guestName:'Mario',checkin:'2026-10-10',checkout:'2026-10-12',status:'arrival'};
+ const id=taskNotificationId(uid,event.id);
+ const rows={'users':{[uid]:{plan:'pro',notificationPreferences:{pmsTaskEmail:true}}},'bookings':{'pms-booking':booking},'properties':{'pms-property':{uid,name:'Home'}},'_pms_notifications':{[id]:makeTaskNotification({uid,bookingId:'pms-booking',booking,event,propertyName:'Home',recipient:email,lang:'it',sandbox:false,now:Date.now()-1000,timestamp:()=> 'time'})}};
+ for(const [collection,docs] of Object.entries(rows))h.stores.set(collection,new Map(Object.entries(docs)));
+ return id;
+}
+test('cron endpoint requires its secret before touching the PMS queue',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';seedQueuedCronMail(h);
+ for(const token of ['', 'wrong-secret'])assert.equal((await h.run({},'GET',token)).status,401);
+ assert.equal(h.sent.length,0);assert.equal((await h.run({},'POST','mock-secret')).status,405);
+});
+test('authenticated cron drains durable PMS notifications and records safe job counters',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';const id=seedQueuedCronMail(h);
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);assert.equal(r.body.pmsNotifications.sent,1);
+ assert.equal(h.stores.get('_pms_notifications').get(id).status,'sent');assert.equal(h.stores.get('_pms_jobs').get('task_notifications').sent,1);
+ await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
+});
+test('PMS recovery error is visible but does not prevent the existing funnel from running',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.drainTaskNotifications=async()=>{throw Error('database unavailable');};
+ await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.error,'pms_recovery_failed');assert.equal(h.sent.length,1);
 });

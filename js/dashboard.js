@@ -420,7 +420,7 @@ const runBookingOperation = createBookingOperationGuard();
 const rawMutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
 
 const mutatePMS = async (...args)=>{
-  const result=await rawMutatePMS(...args);
+  const result=await rawMutatePMS(args[0],{...args[1],notificationLang:window.RB_LANG?.current==="en"?"en":"it"});
   if(result.taskEmailEventIds?.length && window.rbNotificationPreferences?.pmsTaskEmail===true){
     try{
       await reload(window.currentUser);
@@ -431,7 +431,7 @@ const mutatePMS = async (...args)=>{
     }catch(error){
       dashboardError("Task email failed",error);
       renderPMSPortalAlerts(window.rbPMSData || {});
-      alert(error.message==="verified_email_required" ? t("Modifica salvata. Verifica il tuo indirizzo email dal Centro avvisi host: premi Invia email di verifica, apri il link ricevuto e premi Ho verificato: aggiorna. Poi esegui una nuova presa in carico.", "Change saved. Verify your email in the Host alert centre: send the verification email, open the received link and select I have verified: refresh. Then claim a new task.") : t("Modifica salvata. Invio email attività non riuscito. Codice: ", "Change saved. Task email failed. Code: ")+error.message);
+      alert(error.message==="verified_email_required" ? t("Modifica salvata. Verifica il tuo indirizzo email dal Centro avvisi host: premi Invia email di verifica, apri il link ricevuto e premi Ho verificato: aggiorna. Poi esegui una nuova presa in carico.", "Change saved. Verify your email in the Host alert centre: send the verification email, open the received link and select I have verified: refresh. Then claim a new task.") : result.taskNotificationsQueued>0 ? t("Modifica salvata. La notifica resta registrata per il recupero automatico del server; con la configurazione attuale il controllo è giornaliero.", "Change saved. The notification is recorded for automatic server recovery; the current schedule checks daily.") : t("Modifica salvata. Invio email attività non riuscito. Codice: ", "Change saved. Task email failed. Code: ")+error.message);
     }
   }
   return result;

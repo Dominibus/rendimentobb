@@ -10,7 +10,7 @@ export class MemoryFirestore {
           if(writes.length) throw Error("Transaction reads must precede writes");
           this.reads.push(ref.path || ref.collectionName);
           if(ref instanceof Query){
-            const rows=[...this.documents].filter(([key,value])=>key.startsWith(ref.collectionName+'/') && ref.filters.every(([field,expected])=>value[field] === expected));
+            const rows=[...this.documents].filter(([key,value])=>key.startsWith(ref.collectionName+'/') && ref.matches(value));
             return {docs:rows.map(([key,value])=>{reads.set(key,this.versions.get(key)||0);return snapshot(new Ref(this,key),value);})};
           }
           reads.set(ref.path,this.versions.get(ref.path)||0);
@@ -31,6 +31,15 @@ export class MemoryFirestore {
   }
 }
 class Ref {constructor(db,path){this.db=db;this.path=path;this.id=path.split('/').at(-1);}async get(){return snapshot(this,this.db.documents.get(this.path));}}
-class Collection {constructor(db,name){this.db=db;this.name=name;}doc(id){return new Ref(this.db,`${this.name}/${id}`);}where(field,op,value){if(op!=='==')throw Error('unsupported');return new Query(this.db,this.name,[[field,value]]);}}
-class Query {constructor(db,name,filters){this.db=db;this.collectionName=name;this.filters=filters;}where(field,op,value){return new Query(this.db,this.collectionName,[...this.filters,[field,value]]);}}
+class Collection {constructor(db,name){this.db=db;this.name=name;}doc(id){return new Ref(this.db,`${this.name}/${id}`);}where(field,op,value){return new Query(this.db,this.name,[[field,op,value]]);}}
+
+class Query {
+ constructor(db,name,filters){this.db=db;this.collectionName=name;this.filters=filters;this.maximum=Infinity;}
+ matches(row){return this.filters.every(([field,op,value])=>op==='=='?row[field]===value:op==='<='?typeof row[field]==='number' && row[field]<=value:false);}
+ where(field,op,value){return new Query(this.db,this.collectionName,[...this.filters,[field,op,value]]);}
+ orderBy(field){this.order=field;return this;}
+ limit(value){this.maximum=value;return this;}
+ async get(){let rows=[...this.db.documents].filter(([key,value])=>key.startsWith(this.collectionName+'/') && this.matches(value));if(this.order)rows.sort((a,b)=>a[1][this.order]-b[1][this.order]);return {docs:rows.slice(0,this.maximum).map(([key,value])=>snapshot(new Ref(this.db,key),value))};}
+}
+
 function snapshot(ref,data){return {ref,id:ref.id,exists:data!==undefined,data:()=>structuredClone(data)};}

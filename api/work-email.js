@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
     const decoded = await admin.auth().verifyIdToken(token, true);
     if(req.body?.action === "task_updates"){
-      const result=await sendTaskUpdates({db,resend,decoded,body:req.body,timestamp:()=>admin.firestore.FieldValue.serverTimestamp()});
+      const result=await sendTaskUpdates({db,resend,decoded,body:req.body,getAuthUser:uid=>admin.auth().getUser(uid),timestamp:()=>admin.firestore.FieldValue.serverTimestamp()});
       const {httpStatus,...payload}=result;
       return res.status(httpStatus || 200).json(payload);
     }
