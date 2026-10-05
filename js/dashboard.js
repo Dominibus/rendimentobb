@@ -69,6 +69,16 @@ const setBookingToggleState = isOpen => {
   toggle.setAttribute("aria-expanded", String(isOpen));
 };
 
+// On mobile the form is inline above the saved cards, inside a scrolling modal.
+// Reveal it after layout so taps from cards and operational tasks are visible.
+function revealBookingForm(form){
+  if(!form || !window.matchMedia("(max-width: 720px)").matches) return;
+  window.requestAnimationFrame(() => {
+    if(form.style.display === "none") return;
+    form.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });
+  });
+}
+
 // =====================================
 // PRODUCTION LOGGING
 // =====================================
@@ -5511,6 +5521,7 @@ window.openBookingModal = async function(){
 
     form.style.display =
         "flex";
+    revealBookingForm(form);
 
 
     window.pmsEditingBooking =
@@ -6813,6 +6824,7 @@ window.showBookingDetails = async function(booking){
 
     modal.style.display = "flex";
     setBookingToggleState(true);
+    revealBookingForm(modal);
 
 
     window.pmsEditingBooking = true;
