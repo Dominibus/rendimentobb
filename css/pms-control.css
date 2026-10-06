@@ -145,3 +145,16 @@ body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:wh
   .pms-task-row {gap:10px;}
   .pms-booking-flag {min-height:36px;}
 }
+
+/* RC37: Autopilot accessible from the booking checklist. */
+.pms-autopilot-access {margin:0 0 16px;padding:16px;border:1px solid #b7d5c9;border-radius:14px;background:#edf7f2;color:#14523b;min-width:0;}
+.pms-autopilot-access strong {font-size:16px;line-height:1.5;}
+.pms-autopilot-access p {margin:5px 0 12px;font-size:13px;line-height:1.6;color:#36594b;overflow-wrap:anywhere;}
+.pms-autopilot-periods {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.pms-autopilot-periods button {min-width:0;min-height:48px;padding:12px;border:1px solid #a5c6b8;border-radius:10px;background:white;color:#14523b;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;white-space:normal;cursor:pointer;}
+.pms-autopilot-periods button:hover {background:#dcefe5;}
+.pms-autopilot-periods button:focus-visible {outline:3px solid #059669;outline-offset:3px;}
+@media(max-width:600px) {.pms-autopilot-periods {grid-template-columns:minmax(0,1fr);} .pms-autopilot-access {padding:14px;}}
+
+/* Keep the assistant visible above the bookings dialog without closing its filters. */
+body.dashboard-page #rb-chatbot-window.open {z-index:1000001 !important;}

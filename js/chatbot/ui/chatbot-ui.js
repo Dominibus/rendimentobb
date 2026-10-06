@@ -1814,7 +1814,7 @@ debugLog(
       return;
     }
     autopilotRequestPending=true;
-    input.value=mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
+    input.value=mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):mode==='tomorrow'?t('Prepara gli arrivi di domani','Prepare tomorrow’s arrivals'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
     try{await sendMessage();}finally{autopilotRequestPending=false;}
   };
 

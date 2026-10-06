@@ -10496,6 +10496,12 @@ function renderTodayBookingOperations(bookings = []){
         </span>
         <span class="pms-future-count">${window.t(`Attività future: ${allTasks.filter(task=>task.group==='upcoming').length}`, `Future tasks: ${allTasks.filter(task=>task.group==='upcoming').length}`)}</span>
       </div>
+      <section class="pms-autopilot-access" aria-label="${window.t('PMS Autopilot','PMS Autopilot')}">
+        <div><strong>✦ PMS Autopilot</strong><p>${window.t('Considera tutte le strutture caricate, anche quando la lista è filtrata per un immobile. Le scorciatoie aprono la prenotazione indicata.','Includes all loaded properties, even when the list is filtered to one property. Shortcuts open the named booking.')}</p></div>
+        <div class="pms-autopilot-periods">
+          ${[['daily',window.t('Oggi · Priorità','Today · Priorities')],['tomorrow',window.t('Domani · Arrivi','Tomorrow · Arrivals')],['week',window.t('Prossimi 7 giorni','Next 7 days')]].map(([mode,label])=>`<button type="button" data-autopilot-period="${mode}" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot(this.dataset.autopilotPeriod)}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${label}</button>`).join('')}
+        </div>
+      </section>
       <div class="pms-shortcuts">
         ${operationCards.map(card => `
           <button type="button" class="pms-operation-card" onclick="setPMSOperationFilter('${card.filter}')" aria-pressed="${window.rbOperationFilter===card.filter}" style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
