@@ -1901,7 +1901,7 @@ margin-bottom:16px;
 
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 <link rel="stylesheet" href="/css/pms-tasks.css?v=20261005-rc28">
-<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc30">
+<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc31">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -3770,7 +3770,7 @@ Insight predittivi basati su performance e rischio
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261006-rc30"></script>
+<script type="module" src="/js/dashboard.js?v=20261006-rc31"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4417,6 +4417,7 @@ font-size:20px;
   <div style="font-size:11px;color:#64748b;margin-top:6px;" data-it="In modifica puoi trasferire la prenotazione a un'altra struttura." data-en="While editing, you can move the booking to another property.">In modifica puoi trasferire la prenotazione a un'altra struttura.</div>
 </div>
 
+<label class="pms-field-label" for="booking-guest" data-it="Nome ospite" data-en="Guest name">Nome ospite</label>
 <input
 id="booking-guest"
 type="text"
@@ -4445,7 +4446,7 @@ data-en-placeholder="Guest email (optional)"
 style="height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 16px;font-size:15px;background:#fff;">
 </div>
 
-<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;">
+<div class="pms-stay-dates" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;">
   <div style="min-width:0;">
     <label for="booking-checkin" style="display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;" data-it="Arrivo · Check-in" data-en="Arrival · Check-in">Arrivo · Check-in</label>
     <input id="booking-checkin" type="date" aria-describedby="booking-dates-help"

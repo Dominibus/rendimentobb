@@ -7636,7 +7636,7 @@ cursor:pointer;
 "
 onclick="deleteBooking('${booking.id || ""}')">
 
-🗑️
+${window.t('Elimina prenotazione', 'Delete booking')}
 
 </button>
 
