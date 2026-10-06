@@ -17,8 +17,8 @@
     if(!id)return false;
     const target=document.getElementById(id);
     if(!target)return false;
-    if(id==='rb-simulation-summary' && window.simulationExecuted!==true){
-      setStatus('Completa i dati e avvia l’analisi per ottenere le stime.','Complete the inputs and run the analysis to obtain estimates.');
+    if(id==='rb-simulation-summary' && (window.simulationExecuted!==true || (typeof window.rbGetInvestmentAnalysisState==='function' && window.rbGetInvestmentAnalysisState().status!=='current'))){
+      setStatus('Avvia o aggiorna l’analisi con i dati attuali per leggere le stime.','Run or update the analysis with the current inputs to read the estimates.');
       return false;
     }
     target.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});

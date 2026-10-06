@@ -4,6 +4,8 @@
 // ===============================================
 // ================= FIRESTORE ================
 import { calculateROI } from "./roi-engine.js";
+import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
+const investmentAnalysisState = createInvestmentAnalysisState(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
 import { renderFreeSimulationPreview } from "./free-preview.js";
 
@@ -3755,6 +3757,7 @@ if(!window.currentPlan){
   return;
 }
 
+  investmentAnalysisState.invalidate();
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
@@ -3925,6 +3928,7 @@ const loanAmount =
 
 // Production: nessun log
 
+const investmentInputSignature = investmentAnalysisState.capture();
 const result = calculateROI({
   price,
   equity,
@@ -5029,6 +5033,10 @@ if(window.firebaseReady && isFreeUser && roi > 10){
  
   triggerFunnel({ roi });
 
+}
+
+if(isTool && window.simulationExecuted === true){
+  investmentAnalysisState.publish(result, {equity}, investmentInputSignature);
 }
 
 } catch(err){

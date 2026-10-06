@@ -30,7 +30,7 @@ test('results shortcut is absent before execution and guarded again at click tim
  const s=setup();const q=s.window.rbInvestmentAutopilotQuestions.next[0];
  assert.equal(s.window.rbBuildInvestmentAutopilotResponse(q).actions.some(a=>a.target==='results'),false);
  assert.equal(s.window.rbOpenInvestmentAction({type:'open_investment_section',target:'results'}),false);assert.deepEqual(s.focused,[]);
- s.window.simulationExecuted=true;const a=s.window.rbBuildInvestmentAutopilotResponse(q).actions.find(a=>a.target==='results');assert.ok(a);assert.equal(s.window.rbOpenInvestmentAction(a),true);assert.deepEqual(s.focused,['rb-simulation-summary']);
+ s.window.simulationExecuted=true;s.window.rbGetInvestmentAnalysisState=()=>({status:'current',tier:'free',calculatedAt:Date.now(),metrics:{roi:0,roiBasis:'property',annualCashflow:0,monthlyCashflow:0}});const a=s.window.rbBuildInvestmentAutopilotResponse(q).actions.find(a=>a.target==='results');assert.ok(a);assert.equal(s.window.rbOpenInvestmentAction(a),true);assert.deepEqual(s.focused,['rb-simulation-summary']);
 });
 test('arbitrary field identifiers cannot focus unrelated portal controls',()=>{
  const s=setup();s.window.rbOpenInvestmentAction({type:'open_investment_section',target:'inputs',field:'delete-account'});assert.deepEqual(s.focused,['price']);
