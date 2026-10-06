@@ -10663,7 +10663,7 @@ font-weight:800;
 color:#0f172a;
 line-height:1.2;
 ">
-${escapeDashboardHTML(b.guestName)}
+<span class="pms-card-guest">${escapeDashboardHTML(b.guestName)}</span>
 </div>
 
 ${bookingProperty?.name ? `
@@ -10804,7 +10804,7 @@ Check-In
 font-weight:700;
 color:#0f172a;
 ">
-${escapeDashboardHTML(b.checkin)}
+<span class="pms-card-date">${escapeDashboardHTML(b.checkin)}</span>
 </div>
 </div>
 
@@ -10827,7 +10827,7 @@ Check-Out
 font-weight:700;
 color:#0f172a;
 ">
-${escapeDashboardHTML(b.checkout)}
+<span class="pms-card-date">${escapeDashboardHTML(b.checkout)}</span>
 </div>
 </div>
 
@@ -11063,6 +11063,7 @@ ${!isCancelled ? (() => {
 
   return `
   <button
+  class="pms-card-next-action"
   onclick="advanceBookingStatus('${docItem.id}', '${nextStep.status}')"
   style="
   width:100%;
@@ -11125,7 +11126,7 @@ color:#047857;
 font-weight:700;
 cursor:pointer;
 ">
-${window.t("Modifica", "Edit")}
+${window.t("Apri scheda", "Open details")}
 </button>
 
 <button
@@ -14629,8 +14630,8 @@ margin-bottom:14px;
 ">
 
 ${t(
-"Azioni consigliate",
-"Recommended Actions"
+"Strumenti per gli scenari di investimento",
+"Investment scenario tools"
 )}
 
 </div>
@@ -14644,7 +14645,7 @@ gap:14px;
 
 
 <button
-onclick="window.openWhatIf && window.openWhatIf('adr')"
+onclick="window.openPMSInvestmentTool('revenue-simulator')"
 style="
 padding:20px;
 min-height:150px;
@@ -14679,8 +14680,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Aumenta ADR",
-"Increase ADR"
+"Simula ricavi",
+"Simulate revenue"
 )}
 
 </div>
@@ -14694,7 +14695,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-+5% pricing simulation
+${t("Apri gli scenari: occupazione e prezzo notte", "Open scenarios: occupancy and nightly rate")}
 
 </div>
 
@@ -14703,7 +14704,7 @@ word-break:break-word;
 
 
 <button
-onclick="window.openWhatIf && window.openWhatIf('mortgage')"
+onclick="window.location.assign('/mutui/')"
 style="
 padding:20px;
 min-height:150px;
@@ -14738,8 +14739,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Ottimizza mutuo",
-"Optimize mortgage"
+"Apri strumenti mutuo",
+"Open mortgage tools"
 )}
 
 </div>
@@ -14753,7 +14754,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("Analisi LTV / capitale proprio","LTV / equity analysis")}
+${t("Vai alla pagina Mutui", "Go to the Mortgage page")}
 
 </div>
 
@@ -14762,7 +14763,7 @@ ${t("Analisi LTV / capitale proprio","LTV / equity analysis")}
 
 
 <button
-onclick="window.openMarketComparison && window.openMarketComparison()"
+onclick="window.openPMSInvestmentTool('roi-market-comparison')"
 style="
 padding:20px;
 min-height:150px;
@@ -14797,8 +14798,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Confronta mercato",
-"Compare market"
+"Confronta ROI",
+"Compare ROI"
 )}
 
 </div>
@@ -14812,7 +14813,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("Roma vs Milano vs Napoli","Rome vs Milan vs Naples")}
+${t("ROI del patrimonio e riferimento illustrativo", "Portfolio ROI and illustrative reference")}
 
 </div>
 
@@ -14872,7 +14873,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("PDF Executive","Executive PDF")}
+${t("PDF della dashboard e degli scenari", "Dashboard and scenario PDF")}
 
 </div>
 
@@ -15069,6 +15070,19 @@ document.addEventListener("rb_language_changed", () => {
 // =====================================
 // 🏨 PMS TABS
 // =====================================
+
+window.openPMSInvestmentTool = function(sectionId){
+  if(!["revenue-simulator", "roi-market-comparison"].includes(sectionId)) return false;
+  const section = document.getElementById(sectionId);
+  if(!section) return false;
+  window.showPMSTab("roi");
+  requestAnimationFrame(()=>{
+    section.scrollIntoView({behavior:"smooth",block:"start"});
+    section.setAttribute("tabindex","-1");
+    section.focus({preventScroll:true});
+  });
+  return true;
+};
 
 window.showPMSTab = function(tab){
 
