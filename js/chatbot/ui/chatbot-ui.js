@@ -1405,6 +1405,7 @@ function showThinking(){
 
         if(
           ![
+            "open_investment_section",
             "open_booking",
             "open_pms_task",
             "open_pms_checklist",
@@ -1413,7 +1414,7 @@ function showThinking(){
             "manage_arrival",
             "manage_departure"
           ].includes(action?.type) ||
-          (!action.bookingId && !["open_pms_checklist","open_pms_all_tasks"].includes(action.type))
+          (!action.bookingId && !["open_pms_checklist","open_pms_all_tasks","open_investment_section"].includes(action.type))
         ){
           return;
         }
@@ -1429,6 +1430,17 @@ function showThinking(){
             : action.labelIT;
 
         actionButton.onclick = async ()=>{
+          if(action.type==='open_investment_section'){
+            actionButton.disabled=true;
+            try{
+              if(await window.rbOpenInvestmentAction?.(action))windowEl.classList.remove('open');
+              else addMessage('bot',t('Questa sezione non è disponibile qui. Apri il simulatore e riprova.','This section is not available here. Open the simulator and try again.'),false);
+            }catch(error){
+              reportRuntimeError('Investment shortcut unavailable',error);
+              addMessage('bot',t('Non riesco ad aprire la sezione. Riprova.','I cannot open this section. Please try again.'),false);
+            }finally{actionButton.disabled=false;}
+            return;
+          }
           const pmsHandler={open_pms_task:'openPMSAutopilotTask',open_pms_checklist:'openPMSDailyChecklist',
             open_pms_arrival:'openPMSUpcomingArrival',open_pms_all_tasks:'openPMSAllTasks'}[action.type];
           if(typeof window[pmsHandler || 'openBookingFromCopilot']!=='function'){

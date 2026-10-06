@@ -21,3 +21,15 @@ body.home-page .rb-home-experience{background:#f5faf7!important}
  body.home-page .rb-investment-hub,body.tool-page .rb-investment-hub{padding:15px}
  .rb-hub-links{margin:12px 0}.rb-hub-assistant{padding:12px}
 }
+
+/* Align input/result cards without the legacy vertical offsets. */
+body.tool-page .simulator-grid{align-items:start!important}
+body.tool-page .simulator-left,body.tool-page .simulator-right{align-self:start!important;top:auto!important;transform:none!important}
+body.tool-page .simulator-left .tool-card,body.tool-page .simulator-right .roi-dashboard{margin-top:0!important;height:auto!important}
+body.home-page .rb-home-experience{padding-top:30px!important}
+@media(max-width:760px){.rb-investment-hub h2{font-size:21px}.rb-hub-links a{min-height:74px}.rb-investment-hub header p{font-size:13px}}
+
+body.tool-page .simulator-container{margin-bottom:0!important}
+body.tool-page .tool-hero{padding-bottom:28px!important}
+body.tool-page #results{margin-top:24px!important}
+body.tool-page #rb-simulation-summary{scroll-margin-top:100px}

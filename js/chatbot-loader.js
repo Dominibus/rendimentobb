@@ -175,15 +175,15 @@
     "/js/chatbot/core/response-engine.js?v=20261001-22",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",
-    "/js/chatbot/core/pms-autopilot-engine.js?v=20261006-rc40",
-    "/js/chatbot/core/investment-autopilot-engine.js?v=20261006-rc40",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261006-rc40",
+    "/js/chatbot/core/pms-autopilot-engine.js?v=20261006-rc41",
+    "/js/chatbot/core/investment-autopilot-engine.js?v=20261006-rc41",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261006-rc41",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261001-22",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261006-rc40",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261006-rc41",
 
     "/js/ai-engine.js"
   ];
