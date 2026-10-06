@@ -11,6 +11,18 @@ export function updateSimulationROILabel({access, document, lang='it'}={}){
 // Free gets a useful result from the current calculation, without premium panels.
 export function renderFreeSimulationPreview(data, {access, document, lang='it'}={}){
   updateSimulationROILabel({access,document,lang});
+  if(document && (access?.isInvestor || access?.isPro || access?.isAdmin)){
+    const formatROI=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value))
+      ? new Intl.NumberFormat(lang==='en'?'en-GB':'it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}).format(Number(value))+'%'
+      : '—';
+    const main=document.getElementById('roi-live');
+    if(main)main.textContent=formatROI(data?.roi);
+    for(const id of ['roi-preview-live','roi-card-live']){
+      const element=document.getElementById(id);
+      if(element)element.textContent=formatROI(data?.realROI);
+    }
+    return;
+  }
   if(!access?.isFree || access.isInvestor || access.isPro || access.isAdmin || !document) return;
   const number=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
   const roi=number(data?.realROI);
