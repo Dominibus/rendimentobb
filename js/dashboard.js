@@ -10260,7 +10260,7 @@ window.togglePMSReminderEmail = async function(){
     await updateDoc(doc(db,"users",window.currentUser.uid),{"notificationPreferences.pmsReminderEmail":next});
     window.rbNotificationPreferences={...(window.rbNotificationPreferences || {}),pmsReminderEmail:next};
     renderPMSPortalAlerts(window.rbPMSData || {});
-    if(next)alert(t("Promemoria attivati: il controllo giornaliero riepiloga le attività aperte in scadenza oggi e domani. Massimo un riepilogo al giorno.","Reminders enabled: the daily check summarizes open tasks due today and tomorrow. At most one summary per day."));
+    if(next)alert(t("Promemoria attivati: il controllo giornaliero riepiloga fino a 20 attività e operazioni aperte con data superata, di oggi e di domani. Le segnalazioni ospiti hanno avvisi separati. Massimo un riepilogo al giorno, all’esecuzione del controllo programmato.","Reminders enabled: the daily check summarizes up to 20 open tasks and operations that are overdue, due today or tomorrow. Guest issues use separate alerts. At most one summary per day, when the scheduled check runs."));
   }catch(error){dashboardError("Reminder preference failed",error);alert(t("Impossibile aggiornare la preferenza email.","Unable to update email preference."));}
 };
 
