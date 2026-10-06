@@ -1901,7 +1901,7 @@ margin-bottom:16px;
 
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 <link rel="stylesheet" href="/css/pms-tasks.css?v=20261005-rc28">
-<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc29">
+<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc30">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -3770,7 +3770,7 @@ Insight predittivi basati su performance e rischio
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261006-rc29"></script>
+<script type="module" src="/js/dashboard.js?v=20261006-rc30"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4130,6 +4130,8 @@ flex-direction:column;
 gap:16px;
 ">
 
+<header class="pms-window-header">
+<button type="button" class="rb-bookings-close" onclick="closeBookingsModal()" aria-label="Chiudi prenotazioni" data-it-aria-label="Chiudi prenotazioni" data-en-aria-label="Close bookings">✕</button>
 <h2
 data-it="Prenotazioni"
 data-en="Bookings">
@@ -4152,6 +4154,7 @@ aria-live="polite">
     <option value="all" data-it="Tutte le strutture" data-en="All properties">Tutte le strutture</option>
   </select>
 </div>
+</header>
 
 <!-- ===================================== -->
 <!-- PMS GRID -->
@@ -4235,7 +4238,6 @@ cursor:pointer;
 ➕ Nuova Prenotazione
 </h3>
 
-<button type="button" class="rb-bookings-close" onclick="closeBookingsModal()" aria-label="Chiudi prenotazioni">✕</button>
 
 </div>
 
@@ -4256,6 +4258,15 @@ max-width:700px;
 margin:0 auto 24px auto;
 
 ">
+
+<nav class="pms-detail-nav" aria-label="Sezioni prenotazione">
+  <button type="button" onclick="goToBookingSection('stay')" data-it="Soggiorno" data-en="Stay">Soggiorno</button>
+  <button type="button" onclick="goToBookingSection('documents')" data-it="Documenti" data-en="Documents">Documenti</button>
+  <button type="button" onclick="goToBookingSection('tax')" data-it="Tassa" data-en="Tax">Tassa</button>
+  <button type="button" onclick="goToBookingSection('cleaning')" data-it="Pulizie" data-en="Cleaning">Pulizie</button>
+  <button type="button" onclick="goToBookingSection('issue')" data-it="Assistenza" data-en="Assistance">Assistenza</button>
+</nav>
+<p id="booking-section-message" role="status" class="pms-section-message"></p>
 
 <div
 style="
@@ -4397,6 +4408,7 @@ font-size:20px;
 
 </div>
 
+<h4 id="booking-stay-heading" class="pms-section-heading" tabindex="-1" data-it="Soggiorno e contatti" data-en="Stay and contacts">Soggiorno e contatti</h4>
 <div id="booking-property-field" style="display:none;">
   <label for="booking-property" style="display:block;font-size:12px;font-weight:800;color:#475569;margin-bottom:6px;" data-it="Struttura" data-en="Property">Struttura</label>
   <select id="booking-property" disabled style="width:100%;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 14px;font-size:15px;background:#f8fafc;color:#0f172a;">
@@ -4486,6 +4498,7 @@ font-size:15px;
 
 </div>
 
+<details class="pms-pricing-details"><summary data-it="Analisi e suggerimento tariffa" data-en="Rate analysis and suggestion">Analisi e suggerimento tariffa</summary>
 <section id="booking-pricing-box" class="booking-pricing-box" style="display:none;" aria-labelledby="booking-pricing-title">
   <div class="booking-pricing-head">
     <div>
@@ -4533,6 +4546,7 @@ font-size:15px;
     ✓ Conferma e applica tariffa
   </button>
 </section>
+</details>
 
 <select
 id="booking-status"
@@ -4744,12 +4758,8 @@ background:#fff;
 </div>
 
 <div
-style="
-display:flex;
-justify-content:flex-end;
-gap:12px;
-margin-top:10px;
-">
+class="pms-detail-actions"
+style="display:flex;justify-content:flex-end;gap:12px;margin-top:10px;">
 
 <button
 class="btn-dashboard"

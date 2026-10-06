@@ -20,6 +20,31 @@ body.dashboard-page #bookings-modal > div > [style*="grid-template-columns:260px
 .pms-arrival-details {margin-top:14px;border:1px solid #dce6df;border-radius:12px;background:#fff;}
 .pms-arrival-details summary strong {float:right;}
 .pms-task-action {display:block;color:#047857;font-weight:800;margin-top:5px;}
+.pms-future-count {font-size:12px;color:#64748b;}
+#booking-today-operations .pms-task-open {font-size:14px !important;}
+#booking-today-operations .pms-task-timing {font-size:12px !important;}
+.pms-window-header {position:sticky;top:-28px;z-index:4;background:#f5f8f5;padding:14px 0;border-bottom:1px solid #dce6df;}
+.pms-window-header h2 {margin:0 60px 12px 0;}
+.pms-window-header .rb-bookings-close {position:absolute;right:0;top:12px;}
+.pms-window-header #bookings-property-context {margin:0 0 12px !important;}
+body.dashboard-page #booking-form-container {
+  position:fixed !important;inset:20px 20px 20px auto !important;transform:none !important;
+  width:min(760px,calc(100vw - 40px)) !important;max-width:none !important;
+  max-height:calc(100dvh - 40px) !important;height:auto !important;
+  margin:0 !important;padding:20px !important;overflow-y:auto !important;overflow-x:hidden !important;
+  z-index:1000001 !important;box-sizing:border-box;overscroll-behavior:contain;
+}
+.pms-detail-actions {order:-2;position:sticky;top:-20px;z-index:6;background:#fff;padding:12px 0;margin:0 !important;border-bottom:1px solid #dce6df;flex-shrink:0;}
+.pms-detail-nav {order:-1;position:sticky;top:48px;z-index:5;background:#fff;display:flex;gap:6px;padding:8px 0;border-bottom:1px solid #dce6df;flex-wrap:wrap;flex-shrink:0;}
+body.dashboard-page #booking-form-container .pms-detail-nav button {padding:9px 10px;border:1px solid #dce6df;background:#f3f7f4;color:#285044;border-radius:9px;cursor:pointer;font-size:13px !important;min-height:40px;}
+.pms-section-heading {font-size:17px;color:#142b25;margin:6px 0 0;}
+.pms-section-message {font-size:13px;color:#92400e;margin:0;}
+.pms-section-message:empty {display:none;}
+body.dashboard-page #booking-form-container :is(#booking-stay-heading,#booking-guest-registration-box,#booking-tourist-tax-box,#booking-cleaning-box,#booking-guest-issue-box) {scroll-margin-top:155px;}
+.pms-pricing-details {border:1px solid #dce6df;border-radius:12px;background:#f8fafc;}
+.pms-pricing-details summary {padding:12px;cursor:pointer;color:#284a3e;font-weight:700;font-size:13px;}
+.pms-pricing-details #booking-pricing-box {margin:0;border:0;}
+#booking-form-container > div:first-of-type {gap:12px;}
 .pms-shortcuts-note {font-size:12px;line-height:1.5;color:#64748b;margin:12px 0 0;}
 body.dashboard-page #bookings-list {grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr)) !important;}
 body.dashboard-page #bookings-list .pms-booking-card {padding:16px !important;margin-bottom:0 !important;border-radius:16px !important;box-shadow:0 3px 12px #142b2508 !important;}
@@ -29,10 +54,14 @@ body.dashboard-page #bookings-list .pms-booking-card {padding:16px !important;ma
 .pms-booking-flag[data-urgent="true"] {background:#fff1f2;border-color:#fda4af;color:#9f1239;}
 .pms-booking-extra {margin-top:10px;border-top:1px solid #e2e8f0;}
 .pms-booking-extra summary {padding:10px 0;font-size:12px;}
-body.dashboard-page #toggle-booking-form {background:#087f5b;color:white;padding:12px 16px;border-radius:12px;font-size:14px;}
+body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:white !important;padding:12px 16px !important;border-radius:12px;font-size:14px;}
 .pms-performance summary:focus-visible,.pms-arrival-details summary:focus-visible,.pms-booking-extra summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
 @media(max-width:1100px) {.pms-shortcuts {grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:600px) {
+  .pms-window-header {top:-18px;}
+  body.dashboard-page #booking-form-container {inset:0 !important;width:100vw !important;max-height:100dvh !important;height:100dvh !important;border-radius:0 !important;padding:16px !important;padding-bottom:max(20px,env(safe-area-inset-bottom)) !important;}
+  .pms-detail-actions {top:-16px;}
+  .pms-detail-nav {top:48px;}
   .pms-shortcuts {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
   .pms-performance-content {grid-template-columns:1fr;}
   .pms-shortcuts button {min-height:106px;}

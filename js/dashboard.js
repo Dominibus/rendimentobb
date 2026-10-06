@@ -6737,6 +6737,22 @@ window.closeBookingsModal = function(){
 // ✏️ OPEN BOOKING FROM SAVED LIST
 // =====================================
 
+window.goToBookingSection = function(section){
+  const form=document.getElementById('booking-form-container');
+  if(!form || form.style.display==='none') return false;
+  const ids={stay:'booking-stay-heading',documents:'booking-guest-registration-box',tax:'booking-tourist-tax-box',cleaning:'booking-cleaning-box',issue:'booking-guest-issue-box'};
+  const target=document.getElementById(ids[section]);
+  const message=document.getElementById('booking-section-message');
+  if(!target || target.style.display==='none'){
+    if(message) message.textContent=window.t('Questa sezione non si applica alla prenotazione con i dati attuali.','This section does not apply to the booking with its current details.');
+    return false;
+  }
+  if(message) message.textContent='';
+  target.scrollIntoView({behavior:'instant',block:'start',inline:'nearest'});
+  target.setAttribute('tabindex','-1');target.focus({preventScroll:true});
+  return true;
+};
+
 window.openBookingForEdit = async function(id, section){
   const booking = (window.currentBookingsData || []).find(item => item.id === id);
   if(!booking) return;
@@ -10396,12 +10412,9 @@ function renderTodayBookingOperations(bookings = []){
           <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Prendi in carico le attività. Per risolverle, aggiorna i dati della prenotazione.", "Take charge of tasks. To resolve them, update the booking details.")}</div>
         </div>
         <span style="padding:7px 11px;border-radius:999px;background:${totalOpenOperations ? "#fef3c7" : "#e2e8f0"};color:${totalOpenOperations ? "#92400e" : "#475569"};font-size:11px;font-weight:800;">
-          ${totalOpenOperations
-            ? totalOpenOperations === 1
-              ? window.t("1 attività aperta", "1 open task")
-              : window.t(`${totalOpenOperations} attività aperte`, `${totalOpenOperations} open tasks`)
-            : window.t("Tutto sotto controllo", "All under control")}
+          ${window.t(`Oggi e arretrati: ${totalOpenOperations}`, `Today and overdue: ${totalOpenOperations}`)}
         </span>
+        <span class="pms-future-count">${window.t(`Attività future: ${allTasks.filter(task=>task.group==='upcoming').length}`, `Future tasks: ${allTasks.filter(task=>task.group==='upcoming').length}`)}</span>
       </div>
       <div class="pms-shortcuts">
         ${operationCards.map(card => `
@@ -10440,9 +10453,9 @@ function renderTodayBookingOperations(bookings = []){
   `;
 }
 
-window.setPMSOperationFilter=function(value){window.rbOperationFilter=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
+window.setPMSOperationFilter=function(value){window.rbOperationFilter=value;window.rbChecklistFilter='daily';renderTodayBookingOperations(window.rbChecklistBookings || []);};
 
-window.setPMSChecklistFilter=function(value){window.rbChecklistFilter=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
+window.setPMSChecklistFilter=function(value){window.rbChecklistFilter=value;window.rbOperationFilter=null;renderTodayBookingOperations(window.rbChecklistBookings || []);};
 window.setPMSChecklistSearch=function(value){window.rbChecklistSearch=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
 
 window.setPMSTaskStatus = async function(bookingId,taskCode,taskStatus){
