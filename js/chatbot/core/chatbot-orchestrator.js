@@ -28,6 +28,13 @@ async function(message){
       return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
     }
 
+    const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
+    if(investmentResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'investment_autopilot'}});
+      return {success:true,response:investmentResponse,intent:{intent:'investment_autopilot'}};
+    }
+
     const portalResponse = window.rbBuildPortalResponse?.(text);
     if(portalResponse){
       window.rbPDFConversationDocumentId = null;

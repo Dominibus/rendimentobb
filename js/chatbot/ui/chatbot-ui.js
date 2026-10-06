@@ -1818,6 +1818,22 @@ debugLog(
     try{await sendMessage();}finally{autopilotRequestPending=false;}
   };
 
+  window.rbAskInvestmentAutopilot=async function(mode='guide'){
+    windowEl.classList.add('open');
+    if(autopilotRequestPending)return;
+    if(input.value.trim()){
+      input.focus();
+      addMessage('bot',t('Hai una domanda in bozza: inviala o svuota il campo, poi premi di nuovo Autopilot.','You have a draft question: send it or clear the field, then press Autopilot again.'),false);
+      return;
+    }
+    const questions=window.rbInvestmentAutopilotQuestions;
+    if(!questions)return;
+    autopilotRequestPending=true;
+    const pair=questions[mode] || questions.guide;
+    input.value=t(pair[0],pair[1]);
+    try{await sendMessage();}finally{autopilotRequestPending=false;}
+  };
+
   sendBtn.onclick =
     sendMessage;
 

@@ -8,7 +8,7 @@ const launcher=source.slice(source.indexOf('let autopilotRequestPending=false;')
 function setup({draft='',english=false,send}={}){
   const sent=[],messages=[];
   const input={value:draft,focus(){this.focused=true;}};
-  const window={};
+  const window={rbInvestmentAutopilotQuestions:{guide:['Autopilot investimento: da dove inizio?','Investment Autopilot: where do I start?'],inputs:['Autopilot investimento: controlla i dati','Investment Autopilot: check inputs']}};
   vm.runInNewContext(launcher,{window,input,windowEl:{classList:{add(){}}},t:(it,en)=>english?en:it,addMessage:(_,text)=>messages.push(text),sendMessage:async()=>{sent.push(input.value);input.value='';if(send)await send();}});
   return {window,input,sent,messages};
 }
@@ -40,4 +40,12 @@ test('repeated clicks do not send a second request while the first is pending',a
   await state.window.rbAskPMSAutopilot('week');
   assert.equal(state.sent.length,1);
   resolve();await first;
+});
+
+test('investment launcher preserves drafts and sends the English input-check question',async()=>{
+ const draft=setup({draft:'Da inviare'});await draft.window.rbAskInvestmentAutopilot('inputs');assert.equal(draft.input.value,'Da inviare');assert.equal(draft.sent.length,0);
+ const en=setup({english:true});await en.window.rbAskInvestmentAutopilot('inputs');assert.equal(en.sent[0],'Investment Autopilot: check inputs');
+});
+test('PMS and investment launchers share duplicate-request protection',async()=>{
+ let resolve;const state=setup({send:()=>new Promise(r=>{resolve=r;})});const first=state.window.rbAskInvestmentAutopilot('inputs');await state.window.rbAskPMSAutopilot('week');assert.equal(state.sent.length,1);resolve();await first;
 });
