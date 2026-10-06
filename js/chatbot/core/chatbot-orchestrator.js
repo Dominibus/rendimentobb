@@ -21,6 +21,13 @@ async function(message){
       String(message || "")
         .trim();
 
+    const autopilotResponse=await window.rbBuildPMSAutopilotResponse?.(text);
+    if(autopilotResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'pms_autopilot_daily'}});
+      return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
+    }
+
     const portalResponse = window.rbBuildPortalResponse?.(text);
     if(portalResponse){
       window.rbPDFConversationDocumentId = null;

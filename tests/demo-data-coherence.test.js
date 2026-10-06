@@ -15,7 +15,7 @@ function context(date='2026-09-30T12:00:00') {
   vm.createContext(ctx);vm.runInContext(demo,ctx);
   const helpers=dashboard.slice(dashboard.indexOf('function getBookingNightsInMonth'),dashboard.indexOf('// Every availability decision reads the server'));
   const chart=dashboard.slice(dashboard.indexOf('function renderPMSPerformanceChart('),dashboard.indexOf('function getDayBookingState'));
-  const stats=dashboard.slice(dashboard.indexOf('async function loadPMSStats(){'),dashboard.indexOf('  if(!window.currentUser) return;',dashboard.indexOf('async function loadPMSStats(){')))+'}';
+  const stats=dashboard.slice(dashboard.indexOf('async function loadPMSStats('),dashboard.indexOf('  if(!window.currentUser) return;',dashboard.indexOf('async function loadPMSStats(')))+'}';
   vm.runInContext(helpers+'\n'+chart+'\n'+stats,ctx);
   return {ctx,elements};
 }

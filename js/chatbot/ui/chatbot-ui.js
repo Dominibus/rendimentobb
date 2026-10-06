@@ -1406,10 +1406,12 @@ function showThinking(){
         if(
           ![
             "open_booking",
+            "open_pms_task",
+            "open_pms_checklist",
             "manage_arrival",
             "manage_departure"
           ].includes(action?.type) ||
-          !action.bookingId
+          (!action.bookingId && action.type!=="open_pms_checklist")
         ){
           return;
         }
@@ -1427,6 +1429,8 @@ function showThinking(){
         actionButton.onclick = async ()=>{
 
           if(
+            action.type==='open_pms_task'?typeof window.openPMSAutopilotTask!=="function":
+            action.type==='open_pms_checklist'?typeof window.openPMSDailyChecklist!=="function":
             typeof window.openBookingFromCopilot !== "function"
           ){
             return;
@@ -1437,6 +1441,8 @@ function showThinking(){
           try{
 
             const opened =
+              action.type==='open_pms_task'?await window.openPMSAutopilotTask(action.bookingId,action.section):
+              action.type==='open_pms_checklist'?(await window.openPMSDailyChecklist()!==false):
               await window.openBookingFromCopilot(
                 action.bookingId,
                 action.attentionCodes,
@@ -1799,6 +1805,20 @@ debugLog(
   // ===========================================
   // 🚀 EVENTS
   // ===========================================
+
+  let autopilotRequestPending=false;
+  window.rbAskPMSAutopilot=async function(){
+    windowEl.classList.add('open');
+    if(autopilotRequestPending)return;
+    if(input.value.trim()){
+      input.focus();
+      addMessage('bot',t('Hai una domanda in bozza: inviala o svuota il campo, poi premi di nuovo Autopilot.','You have a draft question: send it or clear the field, then press Autopilot again.'),false);
+      return;
+    }
+    autopilotRequestPending=true;
+    input.value=t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
+    try{await sendMessage();}finally{autopilotRequestPending=false;}
+  };
 
   sendBtn.onclick =
     sendMessage;

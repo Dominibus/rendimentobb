@@ -1,5 +1,6 @@
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
+import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc35';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
@@ -6755,14 +6756,14 @@ window.goToBookingSection = function(section){
 
 window.openBookingForEdit = async function(id, section){
   const booking = (window.currentBookingsData || []).find(item => item.id === id);
-  if(!booking) return;
-  if(await window.showBookingDetails(booking) === false) return;
+  if(!booking) return false;
+  if(await window.showBookingDetails(booking) === false) return false;
   const sections = {
     documents: 'booking-guest-registration-box', authority: 'booking-guest-registration-box',
     tax: 'booking-tourist-tax-box', cleaning: 'booking-cleaning-box', issue: 'booking-guest-issue-box'
   };
   const targetId = sections[section];
-  if(!targetId) return;
+  if(!targetId) return true;
   window.requestAnimationFrame(() => {
     const form = document.getElementById('booking-form-container');
     const target = document.getElementById(targetId);
@@ -6771,6 +6772,7 @@ window.openBookingForEdit = async function(id, section){
     target.setAttribute('tabindex','-1');
     target.focus({preventScroll:true});
   });
+  return true;
 };
 
 window.loadBookingPropertyOptions = async function(selectedPropertyId, editable = false){
@@ -9448,7 +9450,7 @@ window.openBookingFromCopilot = async function(
 // 📅 OPEN CURRENT BOOKINGS
 // =====================================
 
-window.openCurrentBookings = async function(){
+window.openCurrentBookings = async function({fresh=false}={}){
   if(window.closeBookingForm?.() === false) return false;
 
   if(isDemo() || !canUseFirestorePMS()){
@@ -9463,14 +9465,15 @@ window.openCurrentBookings = async function(){
     return;
   }
 
+  const readBookings=fresh?getDocsFromServer:getDocs;
   const [propertiesSnap, bookingsSnap] = await Promise.all([
-    getDocs(
+    readBookings(
       query(
         collection(db,"properties"),
         where("uid","==",window.currentUser.uid)
       )
     ),
-    getDocs(
+    readBookings(
       query(
         collection(db,"bookings"),
         where("uid","==",window.currentUser.uid)
@@ -10073,19 +10076,32 @@ window.sendPMSEmailVerification=()=>runPMSEmailVerification('send');
 window.checkPMSEmailVerification=()=>runPMSEmailVerification('check');
 document.addEventListener('rb_language_changed',()=>{pmsVerificationFeedback='';renderPMSEmailVerification();});
 
+window.rbRefreshPMSForAutopilot=async function(){
+  const owner=window.currentUser?.uid;
+  await loadPMSStats({fresh:true});
+  const data=window.rbPMSData;
+  const demo=isDemo() || !canUseFirestorePMS();
+  if(!data || window.currentUser?.uid!==owner || (demo?data.isDemo!==true:
+    (!canUseFirestorePMS() || !data.portalSnapshotReady || data.ownerUid!==owner)))return null;
+  const bookings=data.portalBookingList || data.bookingList;
+  if(!Array.isArray(bookings))return null;
+  return {plan:buildPMSDailyPlan(bookings,checklistDay()),isDemo:demo,
+    syncedAt:data.lastBookingsSync?new Date(data.lastBookingsSync).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT',{timeZone:'Europe/Rome'}):null};
+};
+
 function renderPMSPortalAlerts(pmsData = {}){
   renderPMSEmailVerification();
   const container = document.getElementById("pms-portal-alerts");
   if(!container) return;
 
-  const bookingList = Array.isArray(pmsData.bookingList)
-    ? pmsData.bookingList
+  const bookingList = Array.isArray(pmsData.portalBookingList || pmsData.bookingList)
+    ? (pmsData.portalBookingList || pmsData.bookingList)
     : [];
   const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
   const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
   const today=checklistDay();
-  const allTasks=dailyChecklist(bookingList,today,'all');
-  const alerts=dailyChecklist(bookingList,today).map(task=>{
+  const plan=buildPMSDailyPlan(bookingList,today);
+  const alerts=plan.tasks.map(task=>{
     const booking=bookingList.find(row=>row.id===task.bookingId);
     const labels={documents:window.t(`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} documenti ospiti mancanti`,`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} guest documents missing`),authority:window.t('Comunicazione autorità da gestire','Authority report to manage'),tax:window.t('Tassa di soggiorno da riscuotere','Tourist tax to collect'),cleaning:window.t('Pulizia da completare','Cleaning to complete'),issue:task.priority===0?window.t('Segnalazione ospite urgente','Urgent guest issue'):window.t('Segnalazione ospite aperta','Open guest issue')};
     const timing=task.group==='overdue'?window.t('Scaduta · verifica','Overdue · review'):task.group==='today'?window.t('Oggi','Today'):task.group==='undated'?window.t('Senza data · verifica','No date · review'):window.t('Problema aperto','Open issue');
@@ -10093,14 +10109,16 @@ function renderPMSPortalAlerts(pmsData = {}){
     const actions={documents:window.t('Verifica documenti →','Review documents →'),authority:window.t('Verifica comunicazione →','Review report →'),tax:window.t('Gestisci tassa →','Manage tax →'),cleaning:window.t('Apri pulizia →','Open cleaning →'),issue:window.t('Gestisci problema →','Manage issue →')};
     return {...task,label:labels[task.code],timing,reason:reasons[task.code],action:actions[task.code],propertyName:booking.propertyName || ''};
   });
-  const dueOperations=bookingOperations(bookingList,today);
+  const dueOperations=plan.operations;
   alerts.push(...dueOperations.map(row=>({...row,label:row.code==='arrival'?window.t('Arrivo da registrare','Arrival to register'):window.t('Check-out da registrare','Check-out to register'),timing:row.overdue?window.t('Arretrato · verifica','Overdue · review'):window.t('Oggi','Today'),reason:row.code==='arrival'?window.t('La data di arrivo è raggiunta; lo stato è ancora In arrivo.','The arrival date is reached; the status is still Arriving.'):window.t('La data di partenza è raggiunta; lo stato è ancora Check-in.','The departure date is reached; the status is still Check-in.'),action:window.t('Verifica soggiorno →','Review stay →'),propertyName:bookingList.find(b=>b.id===row.bookingId)?.propertyName || ''})));
-  alerts.sort((a,b)=>(a.priority===0?0:1)-(b.priority===0?0:1) || String(a.dueDate || '9999').localeCompare(String(b.dueDate || '9999')) || a.priority-b.priority);
+  const priorityOrder=new Map(plan.items.map((item,index)=>[`${item.bookingId}:${item.code}`,index]));
+  alerts.sort((a,b)=>priorityOrder.get(`${a.bookingId}:${a.code}`)-priorityOrder.get(`${b.bookingId}:${b.code}`));
   const urgentCount=alerts.filter(task=>task.code==='issue' && task.priority===0).length;
-  const upcomingCount=allTasks.filter(task=>task.group==='upcoming').length;
+  const upcomingCount=plan.counts.upcoming;
   const operationalCount = alerts.length;
   const overdueCount=alerts.filter(item=>item.dueDate && item.dueDate<today).length;
   const inProgressCount=alerts.filter(item=>item.status==='in_progress').length;
+  const autopilotButton=`<button type="button" class="pms-day-autopilot" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot()}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('✦ Autopilot · Cosa gestire prima?','✦ Autopilot · What should I manage first?')}</button>`;
   const overviewMetrics=[[window.t('Da gestire','To manage'),operationalCount],[window.t('Urgenti','Urgent'),urgentCount],[window.t('Con data superata','Past due date'),overdueCount],[window.t('In carico','In progress'),inProgressCount]];
   const overviewHtml=`<div class="pms-day-metrics">${overviewMetrics.map(([label,count],index)=>`<div${index===1 && count>0?' data-urgent="true"':''}><span>${label}</span><strong>${count}</strong></div>`).join('')}</div>`;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
@@ -10120,6 +10138,7 @@ function renderPMSPortalAlerts(pmsData = {}){
         </div>
         <span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${upcomingCount ? window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`) : window.t("Tutto aggiornato", "All up to date")}</span>
         ${overviewHtml}
+        ${autopilotButton}
         <button type="button" class="pms-day-all" onclick="openPMSAllTasks()">${window.t('Vedi tutte le attività →','View all tasks →')}</button>
         <details class="pms-email-settings"><summary>${window.t('Preferenze email e promemoria','Email and reminder preferences')}</summary><div>${emailToggle}</div></details>
       </div>`;
@@ -10154,6 +10173,7 @@ function renderPMSPortalAlerts(pmsData = {}){
         </span></div>
       </div>
       ${overviewHtml}
+      ${autopilotButton}
       <p class="pms-day-caption">${window.t('Il totale conta attività e operazioni, non prenotazioni. Urgenze, attività con data superata e attività in carico sono comprese nel totale. Le segnalazioni aperte compaiono anche per soggiorni futuri.','The total counts tasks and operations, not bookings. Urgent, past-due and in-progress tasks are included in the total. Open guest issues are included even for future stays.')}</p>
       ${alerts.length ? `
         <div style="display:grid;gap:7px;margin-top:11px;">
@@ -10174,13 +10194,24 @@ function renderPMSPortalAlerts(pmsData = {}){
     </div>`;
 }
 
+window.openPMSAutopilotTask=async function(id,section){
+  if(!['documents','authority','tax','cleaning','issue','arrival','departure'].includes(section))return false;
+  if(await window.openPMSDailyChecklist({fresh:true})===false)return false;
+  const freshPlan=buildPMSDailyPlan(window.currentBookingsData || [],checklistDay());
+  if(![...freshPlan.items,...freshPlan.preparation].some(item=>item.bookingId===id && item.code===section)){
+    alert(window.t('Questa attività non è più presente nelle priorità. La checklist è stata aggiornata: chiedi un nuovo riepilogo all’Autopilot.','This task is no longer in the priorities. The checklist was refreshed: ask Autopilot for a new summary.'));
+    return false;
+  }
+  return await window.openBookingForEdit(id,section)!==false;
+};
+
 window.openPMSAllTasks=async function(){
   window.rbChecklistFilter='all';window.rbChecklistSearch='';window.rbOperationFilter=null;
   return await window.openCurrentBookings();
 };
-window.openPMSDailyChecklist=async function(){
+window.openPMSDailyChecklist=async function({fresh=false}={}){
   window.rbChecklistFilter='daily';window.rbChecklistSearch='';window.rbOperationFilter='due';
-  return await window.openCurrentBookings();
+  return await window.openCurrentBookings({fresh});
 };
 window.openPMSAlertBooking=async function(id,button,section){
   if(button?.disabled)return;
@@ -11777,7 +11808,7 @@ window.deleteBooking = async function(id){
 // 📊 PMS DASHBOARD KPI
 // =====================================
 
-async function loadPMSStats(){
+async function loadPMSStats({fresh=false}={}){
 
   if(window.isDemoDashboard){
     const referenceDate = new Date();
@@ -11817,9 +11848,10 @@ async function loadPMSStats(){
   if(!window.currentUser) return;
   if(!canUseFirestorePMS()) return;
   const pmsOwnerUid = window.currentUser.uid;
+  const readStats=fresh?getDocsFromServer:getDocs;
 
   const propertiesSnap =
-    await getDocs(
+    await readStats(
       query(
         collection(db,"properties"),
         where(
@@ -11831,7 +11863,7 @@ async function loadPMSStats(){
     );
 
   const bookingsSnap =
-    await getDocs(
+    await readStats(
       query(
         collection(db,"bookings"),
         where(
@@ -12448,6 +12480,7 @@ window.rbPMSData = {
   ),
 
   ownerUid: pmsOwnerUid,
+  isDemo:false,
   portalSnapshotReady: true,
   propertyList: propertiesSnap.docs.map(item => {
     const property = item.data() || {};

@@ -4,8 +4,9 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {dailyChecklist} from '../js/pms-daily-checklist.js';
+import {buildPMSDailyPlan} from '../js/pms-daily-plan.js';
 const source=readFileSync(new URL('../js/dashboard.js',import.meta.url),'utf8');
-function harness(lang='it'){const container={innerHTML:''},calls=[];const ctx={dailyChecklist,bookingOperations,operationSelection,checklistDay:()=> '2026-10-05',renderPMSEmailVerification:()=>{},document:{getElementById:()=>container},escapeDashboardHTML:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;'),window:{t:(it,en)=>lang==='en'?en:it},alert:m=>calls.push(m),dashboardError:()=>{}};vm.createContext(ctx);vm.runInContext(source.slice(source.indexOf('function renderPMSPortalAlerts'),source.indexOf('window.togglePMSReminderEmail')),ctx);return {ctx,container,calls};}
+function harness(lang='it'){const container={innerHTML:''},calls=[];const ctx={buildPMSDailyPlan,dailyChecklist,bookingOperations,operationSelection,checklistDay:()=> '2026-10-05',renderPMSEmailVerification:()=>{},document:{getElementById:()=>container},escapeDashboardHTML:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;'),window:{t:(it,en)=>lang==='en'?en:it},alert:m=>calls.push(m),dashboardError:()=>{}};vm.createContext(ctx);vm.runInContext(source.slice(source.indexOf('function renderPMSPortalAlerts'),source.indexOf('window.togglePMSReminderEmail')),ctx);return {ctx,container,calls};}
 const base={id:'b1',guestName:'Carlo',status:'arrival',guests:2,checkin:'2026-10-05',checkout:'2026-10-11',cleaning:{required:false},guestRegistration:{documentsReceived:0,authorityStatus:'submitted'}};
 test('daily overview counts pending facts and operations while keeping future tasks separate',()=>{
  const {ctx,container}=harness();
