@@ -25,7 +25,7 @@
     ].filter(c=>c[0]);
     const text=en=>{
       const lines=[en?'Investment Autopilot · Your next step':'Autopilot investimento · Il tuo prossimo passo'];
-      if(mode==='guide' || !isTool){
+      if(mode==='guide' || (!isTool && mode!=='assumptions')){
         lines.push(en?'1. Open the simulator and choose your location.':'1. Apri il simulatore e scegli la località.',en?'2. Enter purchase price, equity, nightly rate, occupancy and monthly costs.':'2. Inserisci prezzo, capitale, tariffa notte, occupazione e costi mensili.',en?'3. Run the analysis and read the results available with your plan.':'3. Avvia l’analisi e leggi i risultati disponibili per il tuo piano.',en?'4. Open the dashboard to organize your properties and bookings.':'4. Apri la Dashboard per organizzare strutture e prenotazioni.');
       }else if(mode==='inputs'){
         lines.push(en?'Checks on the values currently entered in the form:':'Controlli sui valori attualmente inseriti nel modulo:',...(checks.length?checks.map(c=>c[en?2:1]):[en?'No missing or out-of-range values found in these five fields. This does not validate the investment.':'Nessun valore mancante o fuori intervallo rilevato in questi cinque campi. Questo non convalida l’investimento.']),en?'After changing inputs, run the analysis again: previous results may refer to different assumptions.':'Dopo aver modificato i dati, avvia nuovamente l’analisi: i risultati precedenti possono riferirsi a ipotesi diverse.');

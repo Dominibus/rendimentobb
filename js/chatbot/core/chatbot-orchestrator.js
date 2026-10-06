@@ -21,18 +21,18 @@ async function(message){
       String(message || "")
         .trim();
 
-    const autopilotResponse=await window.rbBuildPMSAutopilotResponse?.(text);
-    if(autopilotResponse){
-      window.rbPDFConversationDocumentId=null;
-      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'pms_autopilot_daily'}});
-      return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
-    }
-
     const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
     if(investmentResponse){
       window.rbPDFConversationDocumentId=null;
       window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'investment_autopilot'}});
       return {success:true,response:investmentResponse,intent:{intent:'investment_autopilot'}};
+    }
+
+    const autopilotResponse=await window.rbBuildPMSAutopilotResponse?.(text);
+    if(autopilotResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'pms_autopilot_daily'}});
+      return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
     }
 
     const portalResponse = window.rbBuildPortalResponse?.(text);

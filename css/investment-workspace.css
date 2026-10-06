@@ -11,3 +11,13 @@ body.tool-page .rb-investment-hub{position:relative;z-index:3}
 body.tool-page .tool-hero{padding-top:28px!important}
 body.tool-page .simulator-left .tool-card,body.tool-page .roi-dashboard{border-color:#dce6e5!important;box-shadow:0 12px 30px #143b3210!important}
 @media(max-width:760px){.rb-hub-links a{min-height:88px}.rb-hub-links strong{font-size:14px}.rb-hub-links span{font-size:12px}}
+
+/* Keep solid surfaces behind content, including Safari page captures. */
+body.tool-page .tool-hero{background:linear-gradient(145deg,#f2f8f5,#e7f0ed)!important;background-attachment:scroll!important}
+body.home-page .rb-home-experience{background:#f5faf7!important}
+@media(max-width:760px){
+ body.home-page .rb-home-experience,body.tool-page .tool-hero{isolation:isolate}
+ body.home-page .rb-home-experience .rb-home-experience-heading{position:relative;background:#f5faf7}
+ body.home-page .rb-investment-hub,body.tool-page .rb-investment-hub{padding:15px}
+ .rb-hub-links{margin:12px 0}.rb-hub-assistant{padding:12px}
+}
