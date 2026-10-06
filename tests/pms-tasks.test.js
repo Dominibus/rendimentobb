@@ -46,7 +46,8 @@ test('operations render translated persistent controls and keep urgent issue fir
   vm.runInContext(source.slice(source.indexOf('function renderTodayBookingOperations'),source.indexOf('window.setPMSTaskStatus')),ctx);
   const states=reconcilePMSTasks(booking,{},'first');states.documents.status='in_progress';ctx.renderTodayBookingOperations([{...booking,guestName:'<Guest>',autopilotTasks:states}]);
   assert.match(container.innerHTML,lang==='en'?/Take charge/:/Prendi in carico/);assert.match(container.innerHTML,lang==='en'?/In progress · Reopen/:/In carico · Riapri/);assert.match(container.innerHTML,/&lt;Guest>/);
-  assert.ok(container.innerHTML.indexOf("'issue'")<container.innerHTML.indexOf("'documents'"));assert.match(container.innerHTML,/max-height:360px;overflow-y:auto/);
+  const taskCodes=Array.from(container.innerHTML.matchAll(/data-task-code="([^"]+)"/g),match=>match[1]);
+  assert.equal(taskCodes[0],'issue');assert.ok(taskCodes.indexOf('issue')<taskCodes.indexOf('documents'));assert.match(container.innerHTML,/max-height:360px;overflow-y:auto/);
  }
 });
 test('task action sends fresh server revision and source fingerprint then refreshes',async()=>{

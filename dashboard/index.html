@@ -1901,6 +1901,7 @@ margin-bottom:16px;
 
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 <link rel="stylesheet" href="/css/pms-tasks.css?v=20261005-rc28">
+<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc29">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -3769,7 +3770,7 @@ Insight predittivi basati su performance e rischio
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261005-rc28"></script>
+<script type="module" src="/js/dashboard.js?v=20261006-rc29"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4164,8 +4165,10 @@ gap:20px;
 align-items:start;
 ">
 
-<!-- LEFT COLUMN -->
-<div>
+<!-- Secondary performance figures stay available without preceding daily tasks. -->
+<details class="pms-performance">
+<summary data-it="Risultati e canali" data-en="Results and channels">Risultati e canali</summary>
+<div class="pms-performance-content">
 
 <div
 id="booking-summary"
@@ -4195,6 +4198,7 @@ margin-bottom:15px;
 </div>
 
 </div>
+</details>
 
 <!-- RIGHT COLUMN -->
 <div>
