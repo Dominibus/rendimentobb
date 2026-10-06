@@ -7585,8 +7585,8 @@ if(!actions){
 actions.innerHTML = `
 
 <button
-data-it="✏️ Modifica"
-data-en="✏️ Edit"
+data-it="✏️ Abilita modifica"
+data-en="✏️ Enable editing"
 style="
 flex:1;
 padding:12px;
@@ -7599,7 +7599,7 @@ cursor:pointer;
 "
 onclick="editBooking('${booking.id || ""}')">
 
-${window.t("✏️ Modifica", "✏️ Edit")}
+${window.t("✏️ Abilita modifica", "✏️ Enable editing")}
 
 </button>
 
@@ -10315,7 +10315,7 @@ function renderTodayBookingOperations(bookings = []){
       <div style="display:grid;gap:7px;max-height:360px;overflow-y:auto;">
         ${priorityTasks.map((task,index) => `
           ${index===0 || priorityTasks[index-1].group!==task.group ? `<div style="font-size:12px;font-weight:800;color:#475569;margin-top:8px;">${({issues:window.t("Problemi aperti","Open issues"),overdue:window.t("Scadute da verificare","Overdue · review"),today:window.t("Da gestire oggi","Due today"),undated:window.t("Senza data · verifica prenotazione","No date · review booking"),upcoming:window.t("Prossime attività","Upcoming tasks")})[task.group]}</div>` : ""}
-          <div class="pms-task-row" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+          <div class="pms-task-row" data-urgent="${task.priority === 0}" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
             <button class="pms-task-open" type="button" data-booking-id="${escapeDashboardHTML(task.bookingId)}" data-task-code="${escapeDashboardHTML(task.code)}" onclick="openBookingForEdit(this.dataset.bookingId,this.dataset.taskCode)" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
               <span class="pms-task-label">${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}</span>
               <span class="pms-task-timing" style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
@@ -10380,6 +10380,8 @@ function renderTodayBookingOperations(bookings = []){
 
     reminderHtml = `
       <div
+        class="pms-next-reminder"
+        data-upcoming="${daysUntil > 1}"
         role="button"
         tabindex="0"
         title="${window.t("Apri la prenotazione", "Open booking")}: ${escapeDashboardHTML(nextOperation.guestName)}"

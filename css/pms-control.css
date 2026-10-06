@@ -21,6 +21,16 @@ body.dashboard-page #bookings-modal > div > [style*="grid-template-columns:260px
 .pms-arrival-details summary strong {float:right;}
 .pms-task-action {display:block;color:#047857;font-weight:800;margin-top:5px;}
 .pms-future-count {font-size:12px;color:#64748b;}
+/* Keep the full report in the page flow, below the chart on desktop. */
+body.dashboard-page #executive-summary {height:auto !important;max-height:none !important;overflow:visible !important;grid-column:1 / -1 !important;grid-row:3;}
+body.dashboard-page #pms-dashboard-section > .analysis-card:last-child {grid-column:1 / -1;grid-row:2;}
+#booking-today-operations .pms-task-row[data-urgent="true"] {border-color:#fda4af !important;background:#fff1f2 !important;border-left:4px solid #e11d48 !important;}
+#booking-today-operations .pms-next-reminder[data-upcoming="true"] {background:#f8fafc !important;color:#334155 !important;border:1px solid #dce6df;box-shadow:none !important;}
+#booking-today-operations .pms-next-reminder[data-upcoming="true"] div {color:#475569 !important;}
+@media(max-width:900px) {
+  body.dashboard-page .rb-hero::before,body.dashboard-page .rb-hero::after {display:none !important;content:none !important;}
+  body.dashboard-page #executive-summary,body.dashboard-page #pms-dashboard-section > .analysis-card:last-child {grid-row:auto;}
+}
 #booking-today-operations .pms-task-open {font-size:14px !important;}
 #booking-today-operations .pms-task-timing {font-size:12px !important;}
 .pms-window-header {position:sticky;top:-28px;z-index:4;background:#f5f8f5;padding:14px 0;border-bottom:1px solid #dce6df;}
