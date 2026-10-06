@@ -12,9 +12,9 @@ test("Executive PDF localizes the canonical verdict without changing it", () => 
   const end = appSource.indexOf("// SAVE", start);
   const pdfSource = appSource.slice(start, end);
 
-  assert.match(pdfSource, /T\("ACQUISTA", "BUY"\)/);
-  assert.match(pdfSource, /T\("ATTENDI", verdict === "WATCH" \? "WATCH" : "WAIT"\)/);
-  assert.match(pdfSource, /T\("EVITA", "AVOID"\)/);
+  assert.match(pdfSource, /T\("Favorevole", "Favourable"\)/);
+  assert.match(pdfSource, /T\("Da verificare", "Review"\)/);
+  assert.match(pdfSource, /T\("Critico", "Critical"\)/);
   assert.match(pdfSource, /doc\.text\(pdfVerdictLabel,82,249\)/);
   assert.match(pdfSource, /doc\.text\(\s*pdfVerdictLabel,\s*28,/);
 });

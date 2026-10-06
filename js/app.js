@@ -4,10 +4,11 @@
 // ===============================================
 // ================= FIRESTORE ================
 import { calculateROI } from "./roi-engine.js";
+import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
-import { renderFreeSimulationPreview } from "./free-preview.js";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261006-rc45";
 
 import {
 renderMarketBenchmark
@@ -5895,6 +5896,8 @@ const profit = safe(
   d.profit
 );
 
+const occupancy = d.occupancy == null ? null : Number(d.occupancy);
+
 const price = safe(
 
   d.propertyPrice ??
@@ -5954,23 +5957,12 @@ const pct = v => {
 };
 
 // ================= RATING =================
-let rating = T("Moderato","Moderate");
-
-if(roi >= 25){
-  rating = T("Eccellente","Outstanding");
-}
-else if(roi >= 18){
-  rating = T("Qualità istituzionale","Investment Grade");
-}
-else if(roi >= 12){
-  rating = T("Opportunità solida","Strong Opportunity");
-}
-else if(roi >= 8){
-  rating = T("Stabile","Stable");
-}
-else{
-  rating = T("Speculativo","Speculative");
-}
+const pdfCommentary = buildPDFScenarioCommentary({
+  cashflow: profit,
+  annualDebtService: Number(d.annualDebtService ?? d.mortgageYearly),
+  dscr: d.dscr == null ? null : Number(d.dscr)
+}, T);
+const rating = pdfCommentary.rating;
 
 // ================= COLORS =================
 const green = [16,185,129];
@@ -6249,10 +6241,10 @@ const verdict =
 // printed in the user-facing PDF.
 const pdfVerdictLabel =
   verdict === "BUY"
-    ? T("ACQUISTA", "BUY")
+    ? T("Favorevole", "Favourable")
     : verdict === "WAIT" || verdict === "WATCH"
-      ? T("ATTENDI", verdict === "WATCH" ? "WATCH" : "WAIT")
-      : T("EVITA", "AVOID");
+      ? T("Da verificare", "Review")
+      : T("Critico", "Critical");
 
 const confidence =
   window.lastInvestmentScore?.confidence ||
@@ -6283,9 +6275,9 @@ doc.setTextColor(...gray);
 doc.setFontSize(7);
 
 doc.text(T("Punteggio investimento","Investment score"),28,239);
-doc.text(T("Esito","Verdict"),82,239);
+doc.text(T("Esito modello","Model outcome"),82,239);
 doc.text(T("Rischio","Risk"),122,239);
-doc.text(T("Qualità dati","Data quality"),154,239);
+doc.text(T("Fonte dati","Data source"),154,239);
 
 // VALUES
 
@@ -6308,7 +6300,7 @@ doc.text(
 );
 
 doc.text(
-  T("Completi","Complete"),
+  T("Ipotesi","Assumptions"),
   154,
   249
 );
@@ -6681,31 +6673,7 @@ doc.setFontSize(9);
 
 doc.setTextColor(...gray);
 
-let executiveInsight =
-T(
-"Investimento con buona sostenibilità finanziaria. Il cashflow previsto supporta una gestione stabile e la redditività risulta coerente con il mercato analizzato.",
-"Investment shows good financial sustainability. Expected cashflow supports stable operations and profitability is consistent with the analysed market."
-);
-
-if(roi >= 18){
-
-executiveInsight =
-T(
-"Investimento ad alta redditività con ottimo equilibrio tra rendimento e rischio. Opportunità molto competitiva per il mercato selezionato.",
-"High-return investment with an excellent balance between profitability and risk. Highly competitive opportunity for the selected market."
-);
-
-}
-
-else if(roi < 8){
-
-executiveInsight =
-T(
-"Il rendimento previsto risulta inferiore al benchmark di mercato. Si consiglia di rivalutare prezzo di acquisto, ADR o livello di occupazione.",
-"Expected return is below the market benchmark. Review purchase price, ADR or occupancy assumptions."
-);
-
-}
+const executiveInsight = pdfCommentary.insight;
 
 doc.text(
 executiveInsight,
@@ -6876,21 +6844,7 @@ const financingColor =
       ? [16,185,129]
       : [200,50,50];
 
-const financingLabel =
-  !hasFinancing
-    ? T(
-        "Nessun finanziamento rilevato",
-        "No financing detected"
-      )
-    : financingSustainable
-      ? T(
-           "Finanziamento stimato sostenibile",
-           "Estimated financing is sustainable"
-         )
-      : T(
-          "Copertura del debito insufficiente",
-          "Insufficient debt coverage"
-        );
+const financingLabel = buildPDFScenarioCommentary({cashflow: profit, annualDebtService, dscr}, T).financingLabel;
 
 doc.setFillColor(
   ...financingColor
@@ -7020,8 +6974,8 @@ doc.setTextColor(...green);
 
 doc.text(
 roi >= benchmarkROI
-? "TOP"
-: T("Sotto la media","Below average"),
+? T("Sopra riferimento","Above reference")
+: T("Sotto riferimento","Below reference"),
 145,
 y+19
 );
@@ -7150,11 +7104,11 @@ doc.setTextColor(...dark);
 const marketBenchmarkComment =
   roi > marketROI
     ? T(
-        "L'operazione supera significativamente il benchmark medio di mercato.",
-        "The investment significantly outperforms the average market benchmark."
+        "Il ROI simulato supera il riferimento indicativo. Verifica la comparabilità delle ipotesi.",
+        "Simulated ROI exceeds the indicative reference. Check that the assumptions are comparable."
       )
     : T(
-        "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
+        "Il ROI simulato è pari o inferiore al riferimento indicativo; il confronto non verifica il mercato.",
         "The investment performs in line with or below average market benchmark."
       );
 
@@ -7286,8 +7240,8 @@ doc.setTextColor(...dark);
 
 doc.text(
   T(
-    "Raccomandazione finale",
-    "Final Recommendation"
+    "Valutazione del modello",
+    "Model assessment"
   ),
   20,
   y
@@ -7341,8 +7295,8 @@ doc.setTextColor(...dark);
 
 doc.text(
   T(
-    "Punti di forza",
-    "Executive Strengths"
+    "Elementi da valutare",
+    "Assessment points"
   ),
   20,
   y
@@ -7391,17 +7345,17 @@ if (monthly >= 1500) {
 
   insights.push(
     T(
-      "Il cashflow mensile offre un'elevata capacità di generare liquidità.",
-      "Monthly cashflow provides excellent liquidity generation."
+      "Il cashflow mensile simulato è positivo; verifica il margine anche con ricavi inferiori.",
+      "Simulated monthly cashflow is positive; also check the buffer with lower revenue."
     )
   );
 
-} else if (monthly > 0) {
+} else if (profit > 0) {
 
   insights.push(
     T(
-      "Il cashflow mensile rimane positivo e contribuisce alla sostenibilità operativa dell'investimento.",
-      "Monthly cashflow remains positive and supports the investment's operational sustainability."
+      "Il cashflow mensile è positivo nelle ipotesi inserite, senza verifica dei risultati effettivi.",
+      "Monthly cashflow is positive under the entered assumptions; actual results are not verified."
     )
   );
 
@@ -7409,29 +7363,29 @@ if (monthly >= 1500) {
 
   insights.push(
     T(
-      "Il cashflow mensile risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
-      "Monthly cashflow is negative and may compromise investment sustainability."
+      profit < 0 ? "Il cashflow mensile simulato è negativo: rivedi ricavi, costi e finanziamento." : "Il cashflow simulato è in pareggio: manca un margine per imprevisti.",
+      profit < 0 ? "Simulated monthly cashflow is negative: review revenue, costs and financing." : "Simulated cashflow breaks even: there is no buffer for unforeseen costs."
     )
   );
 
 }
 
 // Risk
-if (riskScore <= 30) {
+if (riskScore < 40) {
 
   insights.push(
     T(
-      "Il livello di rischio è contenuto rispetto ai parametri analizzati.",
-      "Risk exposure remains low compared to analysed metrics."
+      "L’indice del modello rientra nella fascia bassa; non misura tutti i rischi dell’immobile.",
+      "The model index is in the low band; it does not measure all property risks."
     )
   );
 
-} else if (riskScore <= 60) {
+} else if (riskScore < 65) {
 
   insights.push(
     T(
-      "Il rischio è moderato e richiede monitoraggio operativo.",
-      "Risk is moderate and requires operational monitoring."
+      "L’indice del modello rientra nella fascia moderata: verifica le ipotesi più sensibili.",
+      "The model index is in the moderate band: check the most sensitive assumptions."
     )
   );
 
@@ -7439,8 +7393,8 @@ if (riskScore <= 30) {
 
   insights.push(
     T(
-      "Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento.",
-      "Operational risk is high and may reduce investment stability."
+      "L’indice del modello rientra nella fascia alta: approfondisci leva, ricavi e costi.",
+      "The model index is in the high band: examine leverage, revenue and costs."
     )
   );
 
@@ -7489,20 +7443,20 @@ if (roi < 20) {
 
   nextSteps.push(
     T(
-      "Valutare una riduzione del prezzo di acquisto o un aumento dei ricavi previsti.",
-      "Consider negotiating a lower purchase price or increasing projected revenue."
+      "Confrontare prezzo, tariffa e occupazione con dati effettivi; non aumentare le ipotesi solo per migliorare il ROI.",
+      "Check price, rate and occupancy against actual data; do not raise assumptions just to improve ROI."
     )
   );
 
 }
 
 // Occupancy
-if (occupancy < 65) {
+if (Number.isFinite(occupancy) && occupancy < 65) {
 
   nextSteps.push(
     T(
-      "Incrementare il tasso di occupazione attraverso una strategia di pricing più efficace.",
-      "Increase occupancy through a more effective pricing strategy."
+      "Verificare occupazione e stagionalità con immobili comparabili e costi di acquisizione ospiti.",
+      "Check occupancy and seasonality against comparable properties and guest acquisition costs."
     )
   );
 
@@ -7537,8 +7491,8 @@ if (nextSteps.length === 0) {
 
   nextSteps.push(
     T(
-      "L'investimento presenta parametri solidi: monitorare periodicamente i risultati operativi.",
-      "The investment shows solid metrics: periodically monitor operating performance."
+      "Verificare le ipotesi con dati effettivi e confrontare uno scenario più prudente prima di decidere.",
+      "Check assumptions against actual data and compare a more cautious scenario before deciding."
     )
   );
 
@@ -7563,6 +7517,14 @@ nextSteps.forEach(step => {
 });
 
 y += 10;
+
+doc.setFontSize(8);
+doc.setTextColor(...gray);
+doc.text(T(
+  "Esito del modello su ipotesi: non è una raccomandazione di acquisto né una verifica dell'immobile. Il rischio è un indice del modello, non una probabilità di perdita.",
+  "Model outcome based on assumptions: not a purchase recommendation or a property verification. Risk is a model index, not a probability of loss."
+),20,y,{maxWidth:170});
+y += 16;
 
 // ================= REPORT SIGNATURE =================
 

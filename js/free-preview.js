@@ -1,5 +1,16 @@
+// Keep the main KPI label aligned with the metric allowed for this plan.
+export function updateSimulationROILabel({access, document, lang='it'}={}){
+  const label=document?.getElementById('roi-main-basis');
+  if(!label)return;
+  const paid=Boolean(access?.isInvestor || access?.isPro || access?.isAdmin);
+  const it=paid?'ROI sul capitale proprio':'ROI immobile';
+  const en=paid?'Return on equity':'Property ROI';
+  label.dataset.it=it;label.dataset.en=en;label.textContent=lang==='en'?en:it;
+}
+
 // Free gets a useful result from the current calculation, without premium panels.
 export function renderFreeSimulationPreview(data, {access, document, lang='it'}={}){
+  updateSimulationROILabel({access,document,lang});
   if(!access?.isFree || access.isInvestor || access.isPro || access.isAdmin || !document) return;
   const number=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
   const roi=number(data?.realROI);
