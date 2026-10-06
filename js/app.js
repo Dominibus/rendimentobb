@@ -4,6 +4,7 @@
 // ===============================================
 // ================= FIRESTORE ================
 import { calculateROI } from "./roi-engine.js";
+import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
 import { renderFreeSimulationPreview } from "./free-preview.js";
 
 import {
@@ -1443,30 +1444,12 @@ function renderRevenueForecast(baseRevenue){
 const container = document.getElementById("revenue-forecast");
 if(!container) return;
 
-container.innerHTML = `
-
+container.innerHTML = buildRevenueScenarios(baseRevenue, t).map(scenario => `
 <div class="kpi-box">
-  <div class="kpi-label">${t("Scenario basso","Low")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue * 0.8)}
-  </div>
+  <div class="kpi-label">${scenario.label}</div>
+  <div class="kpi-value">${formatCurrency(scenario.value)}</div>
 </div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${t("Scenario base","Base")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue)}
-  </div>
-</div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${t("Scenario alto","High")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue * 1.2)}
-  </div>
-</div>
-
-`;
+`).join("");
 
 }
 
@@ -6583,8 +6566,8 @@ doc.setTextColor(...gray);
 
 doc.text(
   T(
-    "Scenari previsionali basati su occupazione e mercato",
-    "Forecast scenarios based on occupancy and market"
+    "Ricavi illustrativi: -20% / base / +20%. Non sono previsioni di mercato.",
+    "Illustrative revenue: -20% / base / +20%. Not market forecasts."
   ),
   20,
   y + 6
@@ -6592,27 +6575,10 @@ doc.text(
 
 y += 18;
 
-const cashflowScenarios = [
-  {
-    label:T("Prudente","Low"),
-    value: revenue * 0.85,
-    color:[239,68,68]
-  },
-  {
-    label:T("Base","Base"),
-    value: revenue,
-    color:[59,130,246]
-  },
-  {
-    label:T("Espansivo","High"),
-    value: revenue * 1.10,
-    color:[16,185,129]
-  }
-];
+const revenueScenarios = buildRevenueScenarios(revenue, T);
+const maxVal = revenueScenarios[2]?.value || 1;
 
-const maxVal = revenue * 1.15;
-
-cashflowScenarios.forEach(s=>{
+revenueScenarios.forEach(s=>{
 
   // LABEL
   doc.setFontSize(9);
@@ -6621,7 +6587,7 @@ cashflowScenarios.forEach(s=>{
   doc.text(
     s.label,
     20,
-    y + 4
+    y - 3
   );
 
   // BG BAR
@@ -6668,7 +6634,7 @@ cashflowScenarios.forEach(s=>{
     y + 5
   );
 
-  y += 16;
+  y += 21;
 
 });
 
@@ -7282,50 +7248,19 @@ doc.setFontSize(11);
 doc.setTextColor(...dark);
 
 doc.text(
-  T("Scenari rendimento","Performance scenarios"),
+  T("Come leggere gli scenari", "How to read the scenarios"),
   20,
   y
 );
+y += 10;
+const scenarioExplanation = doc.splitTextToSize(T(
+  "I ricavi illustrativi della sezione performance variano del -20% e +20% rispetto alla base. Il cashflow riportato sopra appartiene solo allo scenario base. Per confrontare altri cashflow e ROI, modifica le ipotesi e avvia una nuova analisi: costi, imposte e mutuo non variano in proporzione ai ricavi.",
+  "The illustrative revenue in the performance section varies by -20% and +20% from the base. The cashflow above belongs only to the base scenario. To compare other cashflows and ROIs, change the assumptions and run a new analysis: costs, taxes and debt payments do not vary in proportion to revenue."
+), 170);
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+doc.text(scenarioExplanation, 20, y);
 
-y += 12;
-
-const cashflowFinalScenarios = [
-  {
-    label:T("Prudente","Low"),
-    value:profit * 0.8,
-    color:[239,68,68]
-  },
-  {
-    label:T("Base","Base"),
-    value:profit,
-    color:[245,158,11]
-  },
-  {
-    label:T("Espansivo","High"),
-    value:profit * 1.2,
-    color:[16,185,129]
-  }
-];
-
-cashflowFinalScenarios.forEach(s=>{
-
-  doc.setFillColor(...s.color);
-
-  doc.roundedRect(20,y,90,10,4,4,"F");
-
-  doc.setTextColor(255);
-
-  doc.setFontSize(9);
-
-  doc.text(
-    s.label + " " + eur(s.value),
-    25,
-    y + 7
-  );
-
-  y += 16;
-
-});
 
 footer();
 
