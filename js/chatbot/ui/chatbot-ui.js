@@ -1434,7 +1434,17 @@ function showThinking(){
             actionButton.disabled=true;
             try{
               if(await window.rbOpenInvestmentAction?.(action))windowEl.classList.remove('open');
-              else addMessage('bot',t('Questa sezione non è disponibile qui. Apri il simulatore e riprova.','This section is not available here. Open the simulator and try again.'),false);
+              else {
+                const state=action.target==='results' ? window.rbGetInvestmentAnalysisState?.().status : null;
+                const message=state==='stale'
+                  ? t('Hai modificato i dati dopo l’analisi. Premi “Avvia / aggiorna analisi”, poi “Analizza investimento”. Dopo il calcolo, chiedimi di leggere nuovamente l’analisi.','You changed the inputs after the analysis. Press “Run / update analysis”, then “Analyze investment”. After the calculation, ask me to read the analysis again.')
+                  : state==='pending'
+                    ? t('L’analisi o l’account si sta ancora caricando. Attendi il completamento e riprova.','The analysis or account is still loading. Wait until it completes and try again.')
+                    : state==='missing'
+                      ? t('Avvia prima l’analisi con i dati attuali: premi “Avvia / aggiorna analisi”, poi “Analizza investimento”.','Run an analysis with the current inputs first: press “Run / update analysis”, then “Analyze investment”.')
+                      : t('Questa sezione non è disponibile qui. Apri il simulatore e riprova.','This section is not available here. Open the simulator and try again.');
+                addMessage('bot',message,false);
+              }
             }catch(error){
               reportRuntimeError('Investment shortcut unavailable',error);
               addMessage('bot',t('Non riesco ad aprire la sezione. Riprova.','I cannot open this section. Please try again.'),false);

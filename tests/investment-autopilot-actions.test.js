@@ -42,3 +42,17 @@ test('chat renders and dispatches investment actions, then closes after successf
  vm.runInNewContext(source.slice(a,b)+'\naddResponseActions([{type:"open_investment_section",target:"inputs",labelIT:"Rivedi i dati",labelEN:"Review inputs"}],"it");',{document,messages,window:{rbOpenInvestmentAction:action=>{received=action;return true;}},windowEl:{classList:{remove(){closed++;}}},reportRuntimeError(){},addMessage(){},t:(it)=>it});
  const button=nodes.find(n=>n.textContent==='Rivedi i dati');assert.ok(button);await button.onclick();assert.equal(received.target,'inputs');assert.equal(closed,1);assert.equal(button.disabled,false);
 });
+test('blocked result shortcuts explain stale, pending and missing state in both languages',async()=>{
+ const source=read('js/chatbot/ui/chatbot-ui.js');const a=source.indexOf('  function addResponseActions(');const b=source.indexOf('  async function sendMessage()',a);
+ for(const state of ['stale','pending','missing'])for(const lang of ['it','en']){
+  const nodes=[],replies=[];let closed=0;
+  const document={createElement:()=>({children:[],appendChild(child){this.children.push(child);nodes.push(child);}})};
+  vm.runInNewContext(source.slice(a,b)+'\naddResponseActions([{type:"open_investment_section",target:"results",labelIT:"Vai ai risultati",labelEN:"Go to results"}],"'+lang+'");',{
+   document,messages:{appendChild(){},scrollHeight:0},window:{rbOpenInvestmentAction:()=>false,rbGetInvestmentAnalysisState:()=>({status:state})},
+   windowEl:{classList:{remove(){closed++;}}},reportRuntimeError(){throw Error('Unexpected runtime failure');},addMessage:(role,message)=>replies.push(message),t:(it,en)=>lang==='en'?en:it
+  });
+  const button=nodes.find(n=>n.type==='button');await button.onclick();assert.equal(closed,0);assert.equal(button.disabled,false);assert.equal(replies.length,1);
+  assert.doesNotMatch(replies[0],/Apri il simulatore|Open the simulator/);
+  assert.match(replies[0],state==='pending'?/caricando|loading/:/Analizza investimento|Analyze investment/);
+ }
+});
