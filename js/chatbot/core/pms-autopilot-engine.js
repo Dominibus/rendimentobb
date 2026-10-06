@@ -1,9 +1,11 @@
 (function(){
   'use strict';
   const normalize=text=>String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const wantsHorizon=text=>/(prossim[ia].*(7|sette|giorni|settimana)|next.*(7|seven|days|week)|arriv.*(domani|prepar|pront)|arrivals?.*(tomorrow|prepar|ready)|prepar.*domani|prepare.*tomorrow)/.test(normalize(text));
   window.rbIsPMSAutopilotQuestion=function(text){
     const query=normalize(text);
-    if(/\b(pdf|brochure|simulatore|simulation|roi|mutuo|mortgage)\b/.test(query))return false;
+    if(/\b(pdf|brochure|simulatore|simulation|roi|mutuo|mortgage|password|login|registrarmi|subscription)\b/.test(query))return false;
+    if(wantsHorizon(query))return true;
     return /checklist|riepilogo operativo|daily (plan|tasks|priorities)|what (should|do) i (do|manage)|cosa (devo |posso )?(fare|gestire)|da dove (parto|inizio)|tutto sotto controllo|what needs attention|priorita.*(oggi|prenot|pms)|autopilot.*(oggi|domani|priorita|pms)|\b(urgenti|urgenze|urgent)\b|documenti.*manc|missing.*documents|documents.*missing|pulizi.*(complet|gestire|fare)|cleaning.*(pending|complete)|cosa.*(manca|da gestire)/.test(query);
   };
 
@@ -17,6 +19,7 @@
     try{snapshot=await window.rbRefreshPMSForAutopilot();}catch{return unavailable;}
     if(!snapshot?.plan)return unavailable;
     const plan=snapshot.plan,query=normalize(message);
+    if(wantsHorizon(query))return buildHorizonResponse(snapshot,query);
     const filter=/\b(urgenti|urgenze|urgent)\b/.test(query)?'urgent':/documenti|documents/.test(query)?'documents':/pulizi|cleaning/.test(query)?'cleaning':null;
     const selected=plan.items.filter(item=>!filter || (filter==='urgent'?item.code==='issue' && item.priority===0:item.code===filter));
     const preview=selected.slice(0,3);
@@ -48,7 +51,49 @@
       labelIT:`${labels[item.code][0]} · ${item.guestName || 'Ospite'}`,labelEN:`${labels[item.code][1]} · ${item.guestName || 'Guest'}`}));
     actions.push({type:'open_pms_checklist',labelIT:'Apri checklist di oggi',labelEN:"Open today's checklist"});
     return {type:'pms_autopilot_daily',confidence:1,textIT:text(false),textEN:text(true),actions,
-      suggestionsIT:['Cosa devo fare oggi?','Quali documenti mancano?','Quali sono le urgenze?'],
-      suggestionsEN:['What should I do today?','Which documents are missing?','What is urgent?']};
+      suggestionsIT:['Cosa devo fare oggi?','Quali documenti mancano?','Prossimi 7 giorni nel PMS'],
+      suggestionsEN:['What should I do today?','Which documents are missing?','Next 7 days in the PMS']};
   };
+
+  function buildHorizonResponse(snapshot,query){
+    const plan=snapshot.plan;
+    const tomorrowOnly=/domani|tomorrow/.test(query);
+    const end=tomorrowOnly?plan.tomorrow:plan.week.end;
+    const arrivals=plan.week.arrivals.filter(row=>row.checkin<=end);
+    const tasks=plan.week.tasks.filter(item=>item.dueDate<=end);
+    const needsPreparation=arrivals.filter(row=>row.pending.length || row.guestDataIncomplete);
+    const ordered=[...needsPreparation,...arrivals.filter(row=>!row.pending.length && !row.guestDataIncomplete)];
+    const taskLabels={documents:['Documenti mancanti','Missing documents'],authority:['Comunicazione da verificare','Report to review'],tax:['Tassa da riscuotere','Tax to collect'],cleaning:['Pulizia da completare','Cleaning to complete'],issue:['Segnalazione aperta','Open issue']};
+    const pendingLabel=(item,en)=>`${taskLabels[item.code][en?1:0]}${item.code==='documents'?` (${item.missingDocuments})`:''}${item.status==='in_progress'?(en?' · In progress':' · In carico'):''}`;
+    const preview=ordered.slice(0,3);
+    const taskPreview=tasks.slice(0,3);
+    const text=en=>[
+      snapshot.isDemo?(en?'PMS Autopilot · DEMO preparation':'PMS Autopilot · Preparazione DEMO'):
+        tomorrowOnly?(en?'PMS Autopilot · Prepare for tomorrow':'PMS Autopilot · Preparati per domani'):(en?'PMS Autopilot · Next 7 days':'PMS Autopilot · Prossimi 7 giorni'),
+      `${plan.tomorrow} → ${end} · ${en?'All loaded properties':'Tutte le strutture caricate'}`,
+      en?`${arrivals.length} expected arrivals · ${needsPreparation.length} with pre-arrival checks pending · ${tasks.length} future tasks due in this period.`:
+        `${arrivals.length} arrivi previsti · ${needsPreparation.length} con verifiche pre-arrivo da gestire · ${tasks.length} attività future in scadenza nel periodo.`,
+      en?'Arrivals count bookings; future tasks count individual tasks. These figures are separate from today’s total and must not be added together.':
+        'Gli arrivi contano prenotazioni; le attività future contano singole attività. Questi numeri sono separati dal totale di oggi e non vanno sommati tra loro.',
+      preview.length?(en?'Pre-arrival preparation:':'Preparazione degli arrivi:'):(en?'No future arrivals found in this period. This does not mean today’s tasks are complete.':'Nessun arrivo futuro rilevato nel periodo. Questo non significa che le attività di oggi siano completate.'),
+      ...preview.map((row,index)=>`${index+1}. ${row.guestName || (en?'Guest name missing':'Nome ospite mancante')} · ${row.propertyName || (en?'Property name missing':'Struttura senza nome')}\n${en?'Expected arrival':'Arrivo previsto'}: ${row.checkin}\n${row.pending.length?row.pending.map(item=>pendingLabel(item,en)).join(' · '):(en?'No pre-arrival tasks found in saved data.':'Nessuna pendenza pre-arrivo rilevata nei dati salvati.')}${row.guestDataIncomplete?`\n${en?'Review guest name and guest count.':'Verifica nome ospite e numero degli ospiti.'}`:''}`),
+      arrivals.length>preview.length?(en?`${arrivals.length-preview.length} more arrivals: see the booking list.`:`Altri ${arrivals.length-preview.length} arrivi: consulta l’elenco prenotazioni.`):'',
+      taskPreview.length?(en?'Upcoming task dates:':'Scadenze delle attività future:'):'',
+      ...taskPreview.map(item=>`${item.dueDate} · ${item.guestName || (en?'Guest':'Ospite')} · ${item.propertyName} · ${pendingLabel(item,en)}`),
+      tasks.length>taskPreview.length?(en?`${tasks.length-taskPreview.length} more tasks in the complete checklist.`:`Altre ${tasks.length-taskPreview.length} attività nella checklist completa.`):'',
+      en?'A cleaning scheduled after check-out belongs to turnover, not to preparation for this arrival. The review uses saved facts, not a forecast.':
+        'Una pulizia prevista dopo il check-out riguarda il turnover, non la preparazione di questo arrivo. La verifica usa i dati salvati, non una previsione.',
+      plan.invalidDates?(en?`${plan.invalidDates} bookings have dates to review; date-based checks may be incomplete.`:`${plan.invalidDates} prenotazioni hanno date da verificare: i controlli sulle scadenze possono essere incompleti.`):'',
+      snapshot.syncedAt?`${en?'Bookings last loaded':'Ultimo caricamento prenotazioni'}: ${snapshot.syncedAt}`:''
+    ].filter(Boolean).join('\n\n');
+    const actions=preview.map(row=>({type:'open_pms_arrival',bookingId:row.bookingId,
+      labelIT:`Prepara arrivo · ${row.guestName || 'Ospite'}`,labelEN:`Prepare arrival · ${row.guestName || 'Guest'}`}));
+    const nextTask=needsPreparation.flatMap(row=>row.pending).find(item=>item.code!=='issue') || tasks[0];
+    if(nextTask)actions.push({type:'open_pms_task',bookingId:nextTask.bookingId,section:nextTask.code,
+      labelIT:`${taskLabels[nextTask.code][0]} · ${nextTask.guestName || 'Ospite'}`,labelEN:`${taskLabels[nextTask.code][1]} · ${nextTask.guestName || 'Guest'}`} );
+    actions.push({type:'open_pms_all_tasks',labelIT:'Apri tutte le attività',labelEN:'Open all tasks'});
+    return {type:'pms_autopilot_horizon',confidence:1,textIT:text(false),textEN:text(true),actions,
+      suggestionsIT:['Prepara gli arrivi di domani','Prossimi 7 giorni nel PMS','Cosa devo fare oggi?'],
+      suggestionsEN:["Prepare tomorrow’s arrivals",'Next 7 days in the PMS','What should I do today?']};
+  }
 })();

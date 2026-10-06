@@ -1408,10 +1408,12 @@ function showThinking(){
             "open_booking",
             "open_pms_task",
             "open_pms_checklist",
+            "open_pms_arrival",
+            "open_pms_all_tasks",
             "manage_arrival",
             "manage_departure"
           ].includes(action?.type) ||
-          (!action.bookingId && action.type!=="open_pms_checklist")
+          (!action.bookingId && !["open_pms_checklist","open_pms_all_tasks"].includes(action.type))
         ){
           return;
         }
@@ -1427,12 +1429,9 @@ function showThinking(){
             : action.labelIT;
 
         actionButton.onclick = async ()=>{
-
-          if(
-            action.type==='open_pms_task'?typeof window.openPMSAutopilotTask!=="function":
-            action.type==='open_pms_checklist'?typeof window.openPMSDailyChecklist!=="function":
-            typeof window.openBookingFromCopilot !== "function"
-          ){
+          const pmsHandler={open_pms_task:'openPMSAutopilotTask',open_pms_checklist:'openPMSDailyChecklist',
+            open_pms_arrival:'openPMSUpcomingArrival',open_pms_all_tasks:'openPMSAllTasks'}[action.type];
+          if(typeof window[pmsHandler || 'openBookingFromCopilot']!=='function'){
             return;
           }
 
@@ -1441,8 +1440,7 @@ function showThinking(){
           try{
 
             const opened =
-              action.type==='open_pms_task'?await window.openPMSAutopilotTask(action.bookingId,action.section):
-              action.type==='open_pms_checklist'?(await window.openPMSDailyChecklist()!==false):
+              pmsHandler?(await window[pmsHandler](action.bookingId,action.section)!==false):
               await window.openBookingFromCopilot(
                 action.bookingId,
                 action.attentionCodes,
@@ -1807,7 +1805,7 @@ debugLog(
   // ===========================================
 
   let autopilotRequestPending=false;
-  window.rbAskPMSAutopilot=async function(){
+  window.rbAskPMSAutopilot=async function(mode='daily'){
     windowEl.classList.add('open');
     if(autopilotRequestPending)return;
     if(input.value.trim()){
@@ -1816,7 +1814,7 @@ debugLog(
       return;
     }
     autopilotRequestPending=true;
-    input.value=t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
+    input.value=mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
     try{await sendMessage();}finally{autopilotRequestPending=false;}
   };
 

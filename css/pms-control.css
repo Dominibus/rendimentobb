@@ -106,6 +106,18 @@ body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:wh
 .pms-performance summary:focus-visible,.pms-arrival-details summary:focus-visible,.pms-booking-extra summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
 .pms-day-autopilot {display:block;width:100%;margin:12px 0;padding:13px 16px;min-height:48px;border:1px solid #b7d5c9;border-radius:12px;background:#edf7f2;color:#14523b;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;text-align:left;white-space:normal;cursor:pointer;}
 .pms-day-autopilot:hover {background:#dcefe5;}
+.pms-week {width:100%;margin:12px 0;border:1px solid #dce6df;border-radius:12px;background:#f8fbf9;}
+.pms-week > summary {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:14px;min-height:48px;cursor:pointer;color:#14523b;font-size:14px;font-weight:700;list-style:revert;}
+.pms-week > summary small {font-size:12px;color:#475569;font-weight:600;}
+.pms-week-content {padding:0 14px 14px;}
+.pms-week-arrivals {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;}
+.pms-week-arrival {padding:12px;border:1px solid #dce6df;background:#fff;border-radius:10px;min-width:0;overflow-wrap:anywhere;}
+.pms-week-arrival[data-pending="true"] {border-color:#e8d5a0;}
+.pms-week-arrival strong,.pms-week-arrival span {display:block;line-height:1.5;}
+.pms-week-arrival span,.pms-week-arrival p {font-size:13px;color:#475569;line-height:1.6;}
+.pms-week-arrival button {min-height:44px;padding:10px 12px;border:1px solid #b7d5c9;border-radius:8px;background:#edf7f2;color:#14523b;font-weight:700;white-space:normal;cursor:pointer;}
+.pms-week-arrival button:disabled {opacity:.6;cursor:wait;}
+.pms-week :is(summary,button):focus-visible {outline:3px solid #059669;outline-offset:3px;}
 .pms-day-autopilot:focus-visible {outline:3px solid #059669;outline-offset:3px;}
 #rb-chatbot-window .rb-context-actions .rb-quick-btn {min-height:48px;overflow-wrap:anywhere;}
 @media(max-width:1100px) {.pms-shortcuts {grid-template-columns:repeat(3,minmax(0,1fr));}}
