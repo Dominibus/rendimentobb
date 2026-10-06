@@ -21,6 +21,22 @@ body.dashboard-page #bookings-modal > div > [style*="grid-template-columns:260px
 .pms-arrival-details summary strong {float:right;}
 .pms-task-action {display:block;color:#047857;font-weight:800;margin-top:5px;}
 .pms-future-count {font-size:12px;color:#64748b;}
+.pms-day-metrics {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px;width:100%;}
+.pms-day-metrics > div {padding:12px;border:1px solid #dce6df;border-radius:12px;background:#f5f8f5;}
+.pms-day-metrics span {display:block;font-size:12px;font-weight:700;color:#475569;}
+.pms-day-metrics strong {display:block;font-size:24px;color:#142b25;margin-top:6px;}
+.pms-day-metrics [data-urgent="true"],#pms-portal-alerts .pms-alert-open[data-urgent="true"] {background:#fff1f2 !important;border-color:#fda4af !important;}
+.pms-day-caption {font-size:12px;line-height:1.5;color:#64748b;margin:10px 0;}
+.pms-day-property,.pms-day-reason,.pms-day-timing,.pms-day-action {display:block;margin-top:5px;line-height:1.5;}
+.pms-day-property {font-size:12px;color:#475569;font-weight:700;}
+.pms-day-reason {font-size:13px;color:#475569;}
+.pms-day-timing {font-size:12px;color:#64748b;}
+.pms-day-action {font-size:13px;color:#047857;font-weight:800;}
+.pms-day-all {margin-top:12px;border:0;border-radius:10px;background:#087f5b;color:#fff;padding:12px 16px;font-size:14px;font-weight:800;cursor:pointer;min-height:44px;}
+.pms-email-settings {margin-top:14px;border-top:1px solid #dce6df;padding-top:12px;width:100%;}
+.pms-email-settings summary {font-size:13px;color:#475569;cursor:pointer;font-weight:700;padding:5px 0;}
+.pms-email-settings > div {display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+#pms-portal-alerts button:focus-visible,.pms-email-settings summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
 body.dashboard-page #executive-summary {background:#fff !important;border:1px solid #dce6df !important;box-shadow:0 4px 18px #142b2508 !important;padding:16px !important;}
 body.dashboard-page #executive-summary::before,body.dashboard-page #executive-summary::after {display:none !important;content:none !important;}
 body.dashboard-page #executive-summary > div {box-shadow:none !important;}
@@ -90,6 +106,8 @@ body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:wh
 .pms-performance summary:focus-visible,.pms-arrival-details summary:focus-visible,.pms-booking-extra summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
 @media(max-width:1100px) {.pms-shortcuts {grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:600px) {
+  .pms-day-metrics {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .pms-day-all {width:100%;}
   body.dashboard-page #executive-summary {padding:10px !important;}
   body.dashboard-page #executive-summary > div {padding:18px !important;border-radius:14px !important;}
   .pms-card-guest {font-size:20px;}
