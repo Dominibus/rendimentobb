@@ -141,3 +141,86 @@ test('downgraded owner can read and delete their own saved analysis', async () =
   await assertFails(updateDoc(doc(db, 'analyses', 'old-analysis'), { roi: 20 }));
   await assertSucceeds(deleteDoc(doc(db, 'analyses', 'old-analysis')));
 });
+
+// RC50 real payload and boundary tests.
+const analysisPayload = uid => ({uid,propertyPrice:150000,equity:30000,gross:27375,expenses:6000,roi:-4.2,visualROI:-4.2,realROI:-0.84,net:-1260,risk:78,riskBreakdown:{base:10,roi:25,occupancy:15,leverage:10,debtCoverage:15,cashflow:10},ltv:80,dscr:0.94,noi:5000,netOperatingIncome:5000,capRate:3.33,annualDebtService:6260,occupancy:50,investmentScore:0,verdict:'AVOID',marketCity:'roma',realCity:'Roma',createdAt:new Date(),createdAtClient:new Date()});
+const propertyPayload = uid => ({uid,name:'Casa test',city:'Roma',address:'Via test 1',priceNight:150,touristTaxConfig:{enabled:true,ratePerGuestNight:5,currency:'EUR',maxTaxableNights:10,minimumTaxableAge:12,collectionTime:'checkin'},analysisId:null,investmentSnapshot:null,createdAt:new Date(),updatedAt:new Date()});
+test('RC50 full simulator payload accepts negative ROI, cashflow, NOI and DSCR',async()=>{
+ const db=dbFor('pro');
+ await assertSucceeds(setDoc(doc(db,'analyses','negative-scenario'),{...analysisPayload('pro'),dscr:-1,noi:-5000,netOperatingIncome:-5000}));
+ await assertSucceeds(setDoc(doc(db,'properties','full-property'),propertyPayload('pro')));
+});
+test('RC50 analyses reject unknown fields, wrong types and non-finite numbers',async()=>{
+ const db=dbFor('pro');
+ for(const patch of [{isAdmin:true},{roi:'20'},{roi:NaN},{net:Infinity},{risk:101},{occupancy:-1},{ltv:101},{marketCity:'x'.repeat(201)},{riskBreakdown:{unexpected:1}},{createdAt:'2026-10-07'},{isPortfolio:'true'}])
+  await assertFails(setDoc(doc(db,'analyses','invalid-analysis'),{...analysisPayload('pro'),...patch}));
+ await assertFails(updateDoc(doc(db,'analyses','pro'),{roi:'25'}));
+});
+test('RC50 properties reject unknown fields, empty names, negative prices and oversized text',async()=>{
+ const db=dbFor('pro');
+ for(const patch of [{admin:true},{name:' '},{name:123},{name:'x'.repeat(201)},{address:'x'.repeat(501)},{priceNight:-1},{priceNight:NaN},{priceNight:'100'},{investmentSnapshot:{risk:101}},{renovationPlan:[]}])
+  await assertFails(setDoc(doc(db,'properties','invalid-property'),{...propertyPayload('pro'),...patch}));
+ await assertFails(updateDoc(doc(db,'properties','pro'),{priceNight:-10}));
+});
+test('RC50 tourist tax validates type, range, currency and collection time',async()=>{
+ const db=dbFor('pro'),base=propertyPayload('pro');
+ for(const patch of [{ratePerGuestNight:-1},{ratePerGuestNight:0},{enabled:'true'},{currency:'XXX'},{maxTaxableNights:1.5},{minimumTaxableAge:121},{collectionTime:'automatic'},{secret:'unexpected'}])
+  await assertFails(setDoc(doc(db,'properties','invalid-tax'),{...base,touristTaxConfig:{...base.touristTaxConfig,...patch}}));
+ await assertSucceeds(setDoc(doc(db,'properties','supported-tax'),{...base,touristTaxConfig:{...base.touristTaxConfig,currency:'GBP',collectionTime:'checkout'}}));
+});
+test('RC50 cross-account, missing and path-shaped references are denied',async()=>{
+ const db=dbFor('pro');
+ for(const id of ['investor','missing-analysis','pro/other',''])
+  await assertFails(setDoc(doc(db,'properties','invalid-link'),{...propertyPayload('pro'),analysisId:id}));
+ for(const id of ['investor','missing-property','pro/other',''])
+  await assertFails(updateDoc(doc(db,'analyses','pro'),{propertyId:id}));
+ await assertFails(updateDoc(doc(db,'properties','pro'),{analysisId:'investor'}));
+});
+test('RC50 getAfter accepts property and analysis created together by the same owner',async()=>{
+ const db=dbFor('investor'),batch=writeBatch(db);
+ batch.set(doc(db,'analyses','new-batch-analysis'),{...analysisPayload('investor'),propertyId:'new-batch-property',isPortfolio:true});
+ batch.set(doc(db,'properties','new-batch-property'),{...propertyPayload('investor'),analysisId:'new-batch-analysis',investmentSnapshot:{roi:-4.2,annualCashflow:-1260,occupancy:50,risk:78}});
+ await assertSucceeds(batch.commit());
+});
+test('RC50 batches can switch or remove existing owner links',async()=>{
+ const db=dbFor('investor');
+ await assertSucceeds(setDoc(doc(db,'analyses','second-analysis'),analysisPayload('investor')));
+ const batch=writeBatch(db);
+ batch.update(doc(db,'properties','new-batch-property'),{analysisId:'second-analysis',investmentSnapshot:{roi:-4.2}});
+ batch.update(doc(db,'analyses','new-batch-analysis'),{propertyId:null,isPortfolio:false});
+ batch.update(doc(db,'analyses','second-analysis'),{propertyId:'new-batch-property',isPortfolio:true});
+ await assertSucceeds(batch.commit());
+ const unlink=writeBatch(db);
+ unlink.update(doc(db,'properties','new-batch-property'),{analysisId:null,investmentSnapshot:null});
+ unlink.update(doc(db,'analyses','second-analysis'),{propertyId:null,isPortfolio:false});
+ await assertSucceeds(unlink.commit());
+});
+test('RC50 legacy fields and invalid untouched values allow unrelated corrections',async()=>{
+ await env.withSecurityRulesDisabled(async context=>{
+  const db=context.firestore();
+  await setDoc(doc(db,'properties','legacy-property'),{uid:'pro',name:'Legacy',oldField:{version:1},priceNight:'150',analysisId:'deleted-analysis'});
+  await setDoc(doc(db,'analyses','legacy-analysis'),{uid:'pro',roi:'-4.2',oldField:'legacy'});
+ });
+ const db=dbFor('pro');
+ await assertSucceeds(updateDoc(doc(db,'properties','legacy-property'),{name:'Corretto'}));
+ await assertSucceeds(updateDoc(doc(db,'properties','legacy-property'),{priceNight:150}));
+ await assertSucceeds(updateDoc(doc(db,'analyses','legacy-analysis'),{isPortfolio:true}));
+ await assertFails(updateDoc(doc(db,'properties','legacy-property'),{oldField:'new'}));
+ await assertFails(updateDoc(doc(db,'analyses','legacy-analysis'),{oldField:'new'}));
+});
+test('RC50 creation timestamps cannot be overwritten',async()=>{
+ const db=dbFor('pro');
+ await assertFails(updateDoc(doc(db,'analyses','negative-scenario'),{createdAt:new Date('2030-01-01')}));
+ await assertFails(updateDoc(doc(db,'properties','full-property'),{createdAt:new Date('2030-01-01')}));
+});
+test('RC50 full property editor update preserves renovation and refreshes owner snapshot',async()=>{
+ const db=dbFor('pro');
+ await assertSucceeds(setDoc(doc(db,'properties','editor-existing'),{...propertyPayload('pro'),renovationPlan:{notes:'Conservare',items:[{description:'Bagno',actualCost:1000}]}}));
+ const {createdAt,...edit}=propertyPayload('pro');
+ await assertSucceeds(updateDoc(doc(db,'properties','editor-existing'),{...edit,name:'Casa aggiornata',priceNight:180,analysisId:'negative-scenario',investmentSnapshot:{propertyPrice:150000,equity:30000,roi:-4.2,realROI:-0.84,annualCashflow:-1260,risk:78,occupancy:50,city:'Roma'}}));
+ const saved=(await getDoc(doc(db,'properties','editor-existing'))).data();
+ assert.equal(saved.renovationPlan.notes,'Conservare');
+ assert.equal(saved.investmentSnapshot.roi,-4.2);
+ const {uid,createdAt:analysisCreated,createdAtClient,...values}=analysisPayload('pro');
+ await assertSucceeds(updateDoc(doc(db,'analyses','negative-scenario'),values));
+});
