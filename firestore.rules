@@ -13,6 +13,35 @@ service cloud.firestore {
         && request.auth.token.email == "rendimentobb@gmail.com";
     }
 
+    // Entitlements come from the protected account document, never client state.
+    // Reads remain owner-only even after downgrade. Sandbox billing does not
+    // grant production writes in this shared database.
+    function hasPaidAccountData(data) {
+      let plan = data.get("plan", "free");
+      let sessionId = data.get("stripeSessionId", "");
+      let liveMode = data.get("stripeLiveMode", null);
+      return plan is string
+        && plan.trim().lower() in ["investor", "pro", "pro_yearly"]
+        && liveMode != false
+        && (
+          sessionId == null
+          || (sessionId is string
+            && (liveMode == true || !sessionId.matches("cs_test_.*")))
+        );
+    }
+
+    function canWritePaidData() {
+      return isSignedIn() && (
+        isAdmin()
+        || (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && hasPaidAccountData(
+            get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+          )
+        )
+      );
+    }
+
     match /users/{userId} {
       function isOwner() {
         return isSignedIn() && request.auth.uid == userId;
@@ -109,7 +138,7 @@ service cloud.firestore {
     }
 
     match /analyses/{analysisId} {
-      allow create: if isSignedIn()
+      allow create: if canWritePaidData()
         && request.resource.data.uid is string
         && request.resource.data.uid == request.auth.uid;
 
@@ -117,7 +146,7 @@ service cloud.firestore {
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid;
 
-      allow update: if isSignedIn()
+      allow update: if canWritePaidData()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid
         && request.resource.data.uid is string
@@ -129,7 +158,7 @@ service cloud.firestore {
     }
 
     match /properties/{propertyId} {
-      allow create: if isSignedIn()
+      allow create: if canWritePaidData()
         && request.resource.data.uid is string
         && request.resource.data.uid == request.auth.uid;
 
@@ -137,7 +166,7 @@ service cloud.firestore {
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid;
 
-      allow update: if isSignedIn()
+      allow update: if canWritePaidData()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid
         && request.resource.data.uid is string
@@ -159,7 +188,8 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["guestPortal"])
         && request.resource.data.guestPortal is map
         && request.resource.data.guestPortal.keys().hasOnly(["enabled", "tokenHash", "expiresAt", "createdAt", "revokedAt"])
-        && request.resource.data.guestPortal.enabled is bool;
+        && request.resource.data.guestPortal.enabled is bool
+        && (canWritePaidData() || request.resource.data.guestPortal.enabled == false);
     }
 
     match /leads/{docId} {

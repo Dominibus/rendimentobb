@@ -486,6 +486,9 @@ return;
 
 async function saveAnalysis(data){
 
+  // The Free simulator stays local; Firestore also enforces the entitlement.
+  if(!window.getUserAccess?.().isPaid) return;
+
   if(window.__savingAnalysis){
   
   return;
