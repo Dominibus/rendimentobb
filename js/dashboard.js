@@ -2067,7 +2067,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
             : t("Questa simulazione contribuisce ai totali del portafoglio.", "This simulation contributes to portfolio totals.")}
           </span>
           ${linked
-            ? `<span class="portfolio-manager__locked">🔒 ${t("Gestisci dal PMS", "Manage in PMS")}</span>`
+            ? `<button type="button" class="btn-dashboard" data-property-id="${escapeDashboardHTML(data.propertyId)}" onclick="openPropertyEditor(this.dataset.propertyId)">✏️ ${t("Modifica immobile", "Edit property")}</button>`
             : `<button class="portfolio-analysis portfolio-manager__remove" data-id="${escapeDashboardHTML(data.id)}" data-active="true" data-linked="false">${t("Rimuovi dal portafoglio", "Remove from portfolio")}</button>`}
         </div>
       </article>
@@ -4212,7 +4212,7 @@ modal.style.display = "flex";
 
 window.openPropertyEditor = async function(id){
 
-  if(!window.currentUser) return;
+  if(!window.currentUser || !id || !canUseFirestorePMS()) return;
 
   const propertySnap = await getDoc(doc(db, "properties", id));
   if(!propertySnap.exists()) return;
@@ -5659,7 +5659,7 @@ document.addEventListener("rb_plan_ready", ()=>{
     .toLowerCase();
 
   if(
-    plan === "demo"
+    plan === "demo" || plan === "free"
   ){
 
     window.isDemoData = true;
@@ -6660,9 +6660,7 @@ border-radius:12px;
 data-property-id="${escapeDashboardHTML(docItem.id)}"
 onclick="openPropertyEditor(this.dataset.propertyId)">
 
-${investment
-  ? t("Modifica dati", "Edit details")
-  : t("Collega analisi", "Link analysis")}
+✏️ ${t("Modifica immobile", "Edit property")}
 
 </button>
 
