@@ -1494,7 +1494,7 @@ if(isNew){
 
       <div class="metric">
         <span>${t("Città","City")}</span>
-        <strong>${data.city.charAt(0).toUpperCase() + data.city.slice(1)}</strong>
+        <strong>${escapeDashboardHTML(String(data.city ?? "").charAt(0).toUpperCase() + String(data.city ?? "").slice(1))}</strong>
       </div>
 
       <div class="metric">
@@ -1575,7 +1575,7 @@ window.isDemoData
 <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
   <button
     class="portfolio-analysis"
-    data-id="${data.id}"
+    data-id="${escapeDashboardHTML(data.id)}"
     data-active="${data.isPortfolio ? "true" : "false"}"
     data-linked="${data.propertyId ? "true" : "false"}"
     ${data.propertyId ? "disabled" : ""}
@@ -1599,7 +1599,7 @@ window.isDemoData
   ${canDelete() && !data.propertyId ? `
   <button
     class="delete-analysis"
-    data-id="${data.id}"
+    data-id="${escapeDashboardHTML(data.id)}"
     style="
       background:#ef4444;
       color:white;
@@ -1968,8 +1968,8 @@ header.innerHTML=`
 
 <h2>
 ${t("Benvenuto","Welcome")}
-<strong class="account-email" title="${window.currentUser.email}">
-${window.currentUser.email}
+<strong class="account-email" title="${escapeDashboardHTML(window.currentUser.email)}">
+${escapeDashboardHTML(window.currentUser.email)}
 </strong>
 </h2>
 
@@ -2518,13 +2518,13 @@ statsContainer.innerHTML = `
 
 <div class="metric">
 <span>${t("Utente","User")}</span>
-<strong>${window.currentUser.email}</strong>
+<strong>${escapeDashboardHTML(window.currentUser.email)}</strong>
 </div>
 
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
 <strong style="color:${isPro() ? "#10b981" : "#64748b"};">
-${window.currentPlan === "pro_yearly" ? t("PRO ANNUALE", "PRO ANNUAL") : isPro() ? "PRO" : window.currentPlan.toUpperCase()}
+${window.currentPlan === "pro_yearly" ? t("PRO ANNUALE", "PRO ANNUAL") : isPro() ? "PRO" : escapeDashboardHTML(window.currentPlan.toUpperCase())}
 </strong>
 </div>
 </div>
@@ -6267,7 +6267,7 @@ color:#0f172a;
 line-height:1.2;
 ">
 
-${data.name || "-"}
+${escapeDashboardHTML(data.name || "-")}
 
 </h3>
 
@@ -6280,7 +6280,7 @@ align-items:center;
 gap:6px;
 ">
 
-📍 ${data.city || "-"}
+📍 ${escapeDashboardHTML(data.city || "-")}
 
 </div>
 
@@ -6413,7 +6413,7 @@ margin-bottom:18px;
 
 <span>
 
-${data.address || "-"}
+${escapeDashboardHTML(data.address || "-")}
 
 </span>
 
@@ -6428,7 +6428,7 @@ ${t("Tariffa base", "Base nightly rate")}
 </div>
 
 <div class="property-kpi-value">
-€${data.priceNight || 0}
+€${escapeDashboardHTML(data.priceNight || 0)}
 </div>
 
 </div>
@@ -6602,7 +6602,7 @@ opacity:.92;
 
 <div>
 <strong>ADR</strong>
-<span>€${data.priceNight || 0}</span>
+<span>€${escapeDashboardHTML(data.priceNight || 0)}</span>
 </div>
 
 </div>
@@ -6627,7 +6627,8 @@ height:48px;
 font-weight:700;
 border-radius:12px;
 "
-onclick="openBookings('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openBookings(this.dataset.propertyId)">
 
 📅 ${t(
 "Prenotazioni",
@@ -6639,7 +6640,8 @@ onclick="openBookings('${docItem.id}')">
 <button
 class="btn-dashboard"
 style="flex:1;min-width:150px;height:48px;font-weight:700;border-radius:12px;border:1px solid #8b5cf6;background:#faf5ff;color:#6d28d9;"
-onclick="openRenovationPlanner('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openRenovationPlanner(this.dataset.propertyId)">
 
 🛠️ ${renovation
   ? t("Ristrutturazione", "Renovation")
@@ -6655,7 +6657,8 @@ height:48px;
 font-weight:700;
 border-radius:12px;
 "
-onclick="openPropertyEditor('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openPropertyEditor(this.dataset.propertyId)">
 
 ${investment
   ? t("Modifica dati", "Edit details")
@@ -6674,7 +6677,8 @@ background:#fee2e2;
 color:#dc2626;
 "
 
-onclick="deleteProperty('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="deleteProperty(this.dataset.propertyId)">
 
 🗑️
 

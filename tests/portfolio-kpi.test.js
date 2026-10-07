@@ -28,15 +28,24 @@ test('incomplete portfolio does not report a partial total as complete',()=>{
 test('empty portfolio is unknown; recorded zero cashflow remains zero',()=>{
  assert.equal(summarizeInvestments([]).cashflow,null);assert.equal(summarizeInvestments([{net:0}]).cashflow,0);
 });
-function render(rows,portfolio=rows,{paid=true,lang="it"}={}){
+function render(rows,portfolio=rows,{paid=true,lang="it",email='test@example.invalid'}={}){
  const elements=new Map();const document={getElementById:id=>{if(!elements.has(id))elements.set(id,{style:{},querySelector:()=>null});return elements.get(id);},querySelectorAll:()=>[]};
- const c={financialNumber,summarizeInvestments,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email:'test@example.invalid'}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
+ const c={financialNumber,summarizeInvestments,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
  vm.createContext(c);
  const utilities=source.slice(source.indexOf('function formatCurrency('),source.indexOf('// Calendar days'));
  const score=source.slice(source.indexOf('function calculateInvestmentScore('),source.indexOf('// ===============================\n// ROI CHART'));
  const stats=source.slice(source.indexOf('function renderStats('),source.indexOf('function updateDynamicTexts('));
- vm.runInContext(utilities+score+stats,c);c.renderStats(rows.length,0,0,0,portfolio);return elements;
+ const escapeStart=source.indexOf('const escapeDashboardHTML = value =>');
+ const escaping=source.slice(escapeStart,source.indexOf('// =====================================',escapeStart));
+ vm.runInContext(escaping+utilities+score+stats,c);c.renderStats(rows.length,0,0,0,portfolio);return elements;
 }
+test('account statistics render email as text instead of HTML',()=>{
+ const rows=[{investmentScore:0,roi:0,equity:30000,net:0,price:150000}];
+ const elements=render(rows,rows,{email:'<img src=x onerror="window.__injected=1">& account'});
+ const html=elements.get('dashboard-stats').innerHTML;
+ assert.doesNotMatch(html,/<img\b/i);
+ assert.match(html,/&lt;img src=x onerror=&quot;window.__injected=1&quot;&gt;&amp; account/);
+});
 test('dashboard render integrates score zero, negative ROI and weighted portfolio',()=>{
  const e=render([{investmentScore:0,roi:-4.2,equity:30000,net:-1260,price:150000},{investmentScore:86,roi:10,equity:30000,net:3000,price:150000}]);
  assert.match(e.get('dashboard-kpi').innerHTML,/43\/100/);assert.match(e.get('dashboard-kpi').innerHTML,/2\/2/);assert.match(e.get('portfolio-roi').textContent,/2,9%/);
