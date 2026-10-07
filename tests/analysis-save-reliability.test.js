@@ -1,3 +1,4 @@
+import {readInvestmentAssumptions,buildInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -12,13 +13,13 @@ const post=source.slice(postStart,source.indexOf('    // 🤖 CHATBOT LIVE ANALY
 function setup(){
  const writes=[];let writer=async data=>{writes.push(data)};
  const window={getUserAccess:()=>({isPaid:true}),currentUser:{uid:'investor'},firebaseReady:true,currentCity:'roma',__MANUAL_ANALYSIS__:true,dispatchEvent:()=>{}};
- const c={window,console:{error:()=>{}},db:{},collection:()=>({}),addDoc:(_ref,data)=>writer(data),
+ const c={readInvestmentAssumptions,window,console:{error:()=>{}},db:{},collection:()=>({}),addDoc:(_ref,data)=>writer(data),
   document:{getElementById:()=>null},sessionStorage:{getItem:()=>null},localStorage:{getItem:()=>null},serverTimestamp:()=> 'timestamp',Event:class {},appDebugWarn:()=>{}};
  vm.createContext(c);vm.runInContext(save+'\n'+post,c);
  return {c,window,writes,setWriter:fn=>writer=fn};
 }
 const input={price:150000,equity:30000,priceNight:150,occupancy:70,expenses:800,expensesUnit:'monthly_eur',commission:15,tax:21,loanAmount:120000,interestRate:3.5,loanYears:20};
-function run(s,i=input){const result=calculateROI(i);s.c.runPostAnalysis(result,{...i,gross:result.gross,net:result.netAfterMortgage});return result;}
+function run(s,i=input){const result=calculateROI(i);s.c.runPostAnalysis(result,{...i,gross:result.gross,net:result.netAfterMortgage,assumptions:buildInvestmentAssumptions(result,i,'simulator')});return result;}
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 test('Firebase readiness and missing account cannot strand the save lock',async()=>{
  for(const mode of ['firebase','account']){
@@ -40,7 +41,7 @@ test('concurrent saves retain one write until the pending write completes',async
 });
 test('completed tool scenario persists actual monthly costs and canonical negative metrics',async()=>{
  const s=setup();const result=run(s,{...input,expenses:2500});await flush();const d=s.writes[0];
- assert.equal(d.expenses,2500);assert.ok(d.roi<0);assert.equal(d.roi,result.roi);assert.equal(d.net,result.netAfterMortgage);
+ assert.equal(d.expenses,2500);assert.equal(d.assumptions.expenses,2500);assert.equal(d.assumptions.loanAmount,input.loanAmount);assert.ok(d.roi<0);assert.equal(d.roi,result.roi);assert.equal(d.net,result.netAfterMortgage);
  for(const field of ['realROI','gross','dscr','noi','netOperatingIncome','annualDebtService','risk','occupancy'])assert.equal(d[field],result[field],field);
  assert.equal(d.propertyPrice,result.price);assert.equal(d.equity,result.equity);
  // Reloaded persisted JSON keeps the same cost/cashflow/ROI values.

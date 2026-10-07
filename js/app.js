@@ -3,6 +3,7 @@
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
+import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261007-rc54";
 import { calculateROI } from "./roi-engine.js";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
@@ -514,6 +515,7 @@ const safeRealCity =
 await addDoc(collection(db,"analyses"),{
 
   uid: window.currentUser.uid,
+  ...(readInvestmentAssumptions(data.assumptions) ? {assumptions: readInvestmentAssumptions(data.assumptions)} : {}),
 
   propertyPrice:
     data.propertyPrice ?? 0,
@@ -2887,6 +2889,7 @@ window.__MANUAL_ANALYSIS__ === true;
       Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
     gross,
     expenses: monthlyCosts, // Canonical EUR/month from the completed engine result.
+    assumptions: context?.assumptions,
     net,
     occupancy: occupancyRate,
 
@@ -4877,13 +4880,11 @@ if(riskPreview){
     // 🤖 POST ANALYSIS AI
     // =====================================
 
-     const loan =
-  Math.max(
-    0,
-    (price || 0) - (equity || 0)
-  );
+     const loan = Number(result?.loan ?? loanAmount ?? 0);
 
 runPostAnalysis(result,{
+
+  assumptions: buildInvestmentAssumptions(result, {commission, tax, interestRate, loanYears}, isTool ? "simulator" : "home_preview"),
 
   price,
 

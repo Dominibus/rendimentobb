@@ -1,3 +1,4 @@
+import {readInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -56,7 +57,7 @@ test('dashboard render missing values never emits null, NaN or fabricated zero s
 });
 test('Firestore normalization preserves absence before aggregation',()=>{
  const start=source.indexOf('const analyses = querySnapshot.docs.map');const end=source.indexOf('\n});',start)+4;const mapping=source.slice(start,end);
- const c={querySnapshot:{docs:[{id:'a',data:()=>({roi:0,investmentScore:0,risk:0})},{id:'b',data:()=>({})}]},financialNumber,dashboardDebug:()=>{},Date,Number,Math};vm.createContext(c);const rows=vm.runInContext(mapping+'\nanalyses',c);
+ const c={readInvestmentAssumptions,querySnapshot:{docs:[{id:'a',data:()=>({roi:0,investmentScore:0,risk:0})},{id:'b',data:()=>({})}]},financialNumber,dashboardDebug:()=>{},Date,Number,Math};vm.createContext(c);const rows=vm.runInContext(mapping+'\nanalyses',c);
  assert.equal(rows[0].roi,0);assert.equal(rows[0].investmentScore,0);assert.equal(rows[1].roi,null);assert.equal(rows[1].investmentScore,null);assert.equal(rows[1].net,null);assert.equal(rows[1].equity,null);
 });
 
@@ -70,4 +71,13 @@ test('portfolio cards flag missing values rather than showing measured zeros',()
  const utilities=source.slice(source.indexOf('function formatCurrency('),source.indexOf('// Calendar days'));
  const manager=source.slice(source.indexOf('function renderPortfolioManager('),source.indexOf('// ================= STATS ================='));
  vm.runInContext(utilities+manager,c);c.renderPortfolioManager([{price:150000,equity:30000}]);assert.match(elements.innerHTML,/Dati da completare/);assert.match(elements.innerHTML,/ROI<\/span><strong>--/);assert.match(elements.innerHTML,/ROI 0\/1/);assert.doesNotMatch(elements.innerHTML,/null|NaN/);
+});
+
+test('new snapshot normalization retains actual loan, rate, term and saved debt service',()=>{
+ const start=source.indexOf('const analyses = querySnapshot.docs.map');const end=source.indexOf('\n});',start)+4;
+ const assumptions={schemaVersion:1,calculationVersion:'roi-monthly-v1',source:'simulator',expensesUnit:'monthly_eur',propertyPrice:150000,equity:30000,loanAmount:90000,priceNight:150,occupancy:70,expenses:2500,commission:15,tax:21,interestRate:4.1,loanYears:25};
+ const c={readInvestmentAssumptions,querySnapshot:{docs:[{id:'actual',data:()=>({propertyPrice:150000,equity:30000,annualDebtService:6000,assumptions})},{id:'zero',data:()=>({annualDebtService:0,assumptions:{...assumptions,loanAmount:0,interestRate:0}})}]},financialNumber,dashboardDebug:()=>{},Date,Number,Math};
+ const rows=vm.runInNewContext(source.slice(start,end)+'\nanalyses',c);
+ assert.equal(rows[0].loan,90000);assert.equal(rows[0].mortgageAmount,90000);assert.equal(rows[0].interestRate,4.1);assert.equal(rows[0].loanYears,25);assert.equal(rows[0].mortgageYearly,6000);assert.equal(rows[0].monthlyMortgage,500);assert.equal(rows[0].assumptions.expenses,2500);
+ assert.equal(rows[1].loan,0);assert.equal(rows[1].interestRate,0);assert.equal(rows[1].mortgageYearly,0);
 });

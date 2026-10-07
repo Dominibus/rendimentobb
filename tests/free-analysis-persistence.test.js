@@ -1,3 +1,4 @@
+import {readInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -8,7 +9,7 @@ const fn = source.slice(start, source.indexOf('// 🔒 LOCK OVERLAY', start)).re
 
 test('Free analysis does not write Firestore or leave a saving lock', async () => {
   let writes = 0;
-  const c = { window: { getUserAccess: () => ({ isPaid: false }), firebaseReady: true, currentUser: { uid: 'free' } },
+  const c = { readInvestmentAssumptions, window: { getUserAccess: () => ({ isPaid: false }), firebaseReady: true, currentUser: { uid: 'free' } },
     addDoc: async () => writes++, console };
   vm.createContext(c); vm.runInContext(fn, c);
   await c.saveAnalysis({ roi: -0.9 });
@@ -16,7 +17,7 @@ test('Free analysis does not write Firestore or leave a saving lock', async () =
 });
 test('paid analysis still persists and clears the saving lock', async () => {
   const writes = [];
-  const c = { window: { getUserAccess: () => ({ isPaid: true }), firebaseReady: true, currentUser: { uid: 'investor' } },
+  const c = { readInvestmentAssumptions, window: { getUserAccess: () => ({ isPaid: true }), firebaseReady: true, currentUser: { uid: 'investor' } },
     addDoc: async (ref, data) => writes.push(data), collection: () => ({}), db: {},
     sessionStorage: { getItem: () => null }, localStorage: { getItem: () => null },
     document: { getElementById: () => null }, serverTimestamp: () => 'test-time',

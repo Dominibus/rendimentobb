@@ -1,3 +1,4 @@
+import { readInvestmentAssumptions, investmentAssumptionsHTML } from "./investment-assumptions.js?v=20261007-rc54";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
 import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
@@ -861,6 +862,7 @@ if(
 const analyses = querySnapshot.docs.map(doc => {
 
   const data = doc.data();
+  const assumptions = readInvestmentAssumptions(data.assumptions);
 
   const realCity =
     data.realCity ||
@@ -898,6 +900,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     loan:
       Number(
+        assumptions?.loanAmount ??
         data.loan ??
         data.loanAmount ??
         data.mortgageAmount ??
@@ -917,6 +920,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     mortgageAmount:
       Number(
+        assumptions?.loanAmount ??
         data.mortgageAmount ??
         data.loanAmount ??
         data.loan ??
@@ -936,6 +940,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     mortgageYearly:
       Number(
+        data.annualDebtService ??
         data.mortgageYearly ??
         (
           Number(
@@ -952,6 +957,7 @@ const analyses = querySnapshot.docs.map(doc => {
         data.monthlyMortgagePayment ??
         (
           Number(
+            data.annualDebtService ??
             data.mortgageYearly ??
             0
           ) / 12
@@ -964,6 +970,7 @@ const analyses = querySnapshot.docs.map(doc => {
         data.monthlyMortgage ??
         (
           Number(
+            data.annualDebtService ??
             data.mortgageYearly ??
             0
           ) / 12
@@ -972,18 +979,22 @@ const analyses = querySnapshot.docs.map(doc => {
 
     interestRate:
       Number(
+        assumptions?.interestRate ??
         data.interestRate ??
         3.5
       ),
 
     loanYears:
       Number(
+        assumptions?.loanYears ??
         data.loanYears ??
         20
       ),
 
     gross:
       data.gross || 0,
+
+    assumptions,
 
     expenses:
       data.expenses || 0,
@@ -1546,6 +1557,8 @@ if(isNew){
   `
   }
 </div>
+
+${window.isDemoData ? "" : investmentAssumptionsHTML(data.assumptions, window.currentLang)}
 
 ${
 !canViewProfit()

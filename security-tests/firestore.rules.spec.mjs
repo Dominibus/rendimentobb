@@ -224,3 +224,43 @@ test('RC50 full property editor update preserves renovation and refreshes owner 
  const {uid,createdAt:analysisCreated,createdAtClient,...values}=analysisPayload('pro');
  await assertSucceeds(updateDoc(doc(db,'analyses','negative-scenario'),values));
 });
+
+const assumptionsPayload = () => ({schemaVersion:1,calculationVersion:'roi-monthly-v1',source:'simulator',expensesUnit:'monthly_eur',propertyPrice:150000,equity:30000,loanAmount:120000,priceNight:150,occupancy:70,expenses:2500,commission:15,tax:21,interestRate:3.5,loanYears:20});
+test('full analysis with complete assumptions is allowed, linking preserves immutable snapshot',async()=>{
+ const db=dbFor('pro');const ref=doc(db,'analyses','snapshot-full');
+ await assertSucceeds(setDoc(ref,{...analysisPayload('pro'),assumptions:assumptionsPayload()}));
+ await assertSucceeds(updateDoc(ref,{isPortfolio:true,propertyId:'pro'}));
+ await assertFails(updateDoc(ref,{'assumptions.expenses':0}));
+ await assertFails(updateDoc(ref,{assumptions:null}));
+ await assertFails(updateDoc(doc(db,'analyses','pro'),{assumptions:assumptionsPayload()}));
+});
+test('snapshot schema rejects unknown keys, missing fields, wrong types and nonfinite values',async()=>{
+ const db=dbFor('pro');let i=0;
+ for(const patch of [{extra:1},{schemaVersion:2},{source:'unknown'},{expensesUnit:'yearly_eur'},{occupancy:101},{interestRate:NaN},{loanAmount:Infinity},{loanYears:0},{tax:'21'},{commission:-1},{expensesUnit:'percentage',expenses:101}]){
+  await assertFails(setDoc(doc(db,'analyses','snapshot-invalid-'+i++),{uid:'pro',assumptions:{...assumptionsPayload(),...patch}}));
+ }
+ const incomplete=assumptionsPayload();delete incomplete.tax;
+ await assertFails(setDoc(doc(db,'analyses','snapshot-missing'),{uid:'pro',assumptions:incomplete}));
+});
+test('home percentage and zero-cost snapshots allowed; Free and other owners remain blocked',async()=>{
+ const a={...assumptionsPayload(),source:'home_preview',expensesUnit:'percentage',expenses:35};
+ await assertSucceeds(setDoc(doc(dbFor('investor'),'analyses','snapshot-home'),{uid:'investor',assumptions:a}));
+ await assertSucceeds(setDoc(doc(dbFor('pro'),'analyses','snapshot-zero'),{uid:'pro',assumptions:{...assumptionsPayload(),expenses:0,loanAmount:0,interestRate:0,tax:0,commission:0}}));
+ await assertFails(setDoc(doc(dbFor('free'),'analyses','snapshot-free'),{uid:'free',assumptions:a}));
+ await assertFails(getDoc(doc(dbFor('investor'),'analyses','snapshot-full')));
+});
+test('compact creation validation still denies nonnumeric financial and risk fields',async()=>{
+ const db=dbFor('pro');let i=0;
+ for(const field of ['propertyPrice','equity','gross','expenses','annualDebtService','roi','visualROI','realROI','net','dscr','noi','netOperatingIncome','capRate','risk','ltv','occupancy','investmentScore']){
+  for(const value of [false,null,'0',{},[]])await assertFails(setDoc(doc(db,'analyses','bad-numeric-'+i++),{uid:'pro',[field]:value}));
+ }
+ for(const value of [false,null,'0',{},[],NaN,Infinity,-1,101])await assertFails(setDoc(doc(db,'analyses','bad-breakdown-'+i++),{uid:'pro',riskBreakdown:{base:value}}));
+});
+test('full snapshot survives atomic property creation and analysis link',async()=>{
+ const db=dbFor('pro');const a=doc(db,'analyses','snapshot-batch');const p=doc(db,'properties','snapshot-property');const batch=writeBatch(db);
+ batch.set(a,{...analysisPayload('pro'),assumptions:assumptionsPayload(),isPortfolio:true,propertyId:p.id});
+ batch.set(p,{...propertyPayload('pro'),analysisId:a.id});
+ await assertSucceeds(batch.commit());
+ const saved=await assertSucceeds(getDoc(a));assert.equal(saved.data().assumptions.expenses,2500);
+ await assertSucceeds(updateDoc(p,{name:'Immobile aggiornato'}));
+});

@@ -1,3 +1,4 @@
+import {investmentAssumptionsHTML} from '../../js/investment-assumptions.js';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
@@ -16,6 +17,7 @@ if (!analysisTemplate || propertiesStart < 0 || propertiesEnd < 0 || headerStart
 }
 
 const base = overrides => ({
+  investmentAssumptionsHTML,
   window: { currentUser: { uid: 'test-owner', email: 'test@example.com' }, currentPlan: 'pro' },
   t: (it, en) => it,
   formatCurrency: value => `${Number(value) || 0} €`,
