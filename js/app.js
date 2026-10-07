@@ -3,7 +3,13 @@
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
+import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261007-rc54";
 import { calculateROI } from "./roi-engine.js";
+import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
+import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
+const investmentAnalysisState = createInvestmentAnalysisState(window, document);
+import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261006-rc46";
 
 import {
 renderMarketBenchmark
@@ -283,6 +289,7 @@ if(!window.currentPlan){
 
 if(
   access.isPro ||
+  access.isInvestor ||
   access.isAdmin
 ){
 
@@ -317,45 +324,6 @@ if(
       "blur-content",
       "locked",
       "locked-content",
-      "premium-lock"
-    );
-
-  });
-
-}
-
-// =====================================
-// 🟡 INVESTOR → PARTIAL ACCESS
-// =====================================
-
-else if(access.isInvestor){
-
-  
-
-  [
-    qrProfit, elAnnual,
-    qrMonth, elMonthly,
-    qrBreak, elBreak,
-    qrRev, elRevenue
-  ].forEach(el=>{
-
-    if(!el) return;
-
-    // 🔥 salva valore reale
-    if(
-      el.innerText &&
-      el.innerText !== "—"
-    ){
-      el.dataset.realValue = el.innerText;
-    }
-
-    // 🔥 investor vede KPI
-    el.style.filter = "none";
-    el.style.webkitFilter = "none";
-    el.style.opacity = "1";
-
-    el.classList.remove(
-      "locked",
       "premium-lock"
     );
 
@@ -411,55 +379,8 @@ if(!access){
   // ❌ NON bloccare render
 }
 
-// =====================================
-// 🟡 INVESTOR → teaser intelligente
-// =====================================
+document.querySelectorAll(".investor-upsell").forEach(el => el.remove());
 
-if(access.isInvestor){
-
-  const verdict = document.getElementById("investment-verdict");
-
-  if(
-    verdict &&
-    !verdict.querySelector(".investor-upsell")
-  ){
-
-    const upsell = document.createElement("div");
-
-    upsell.className = "investor-upsell";
-
-    upsell.innerHTML = `
-      <div style="
-        margin-top:15px;
-        padding:12px;
-        border-radius:10px;
-        background:rgba(16,185,129,0.08);
-        font-size:13px;
-        text-align:center;
-        color:#065f46;
-        font-weight:500;
-      ">
-        🔥 ${t(
-          "Stai vedendo solo una parte del potenziale reale",
-          "You are only seeing part of the real potential"
-        )}
-
-        <br>
-
-        <span style="opacity:.8;">
-          ${t(
-            "Sblocca analisi completa + AI insights",
-            "Unlock full analysis + AI insights"
-          )}
-        </span>
-      </div>
-    `;
-
-    verdict.appendChild(upsell);
-
-  }
-
-}
 }  
 
 }  
@@ -566,22 +487,15 @@ return;
 
 async function saveAnalysis(data){
 
-  if(window.__savingAnalysis){
-  
-  return;
-}
+  // The Free simulator stays local; Firestore also enforces the entitlement.
+  if(!window.getUserAccess?.().isPaid) return false;
 
-window.__savingAnalysis = true;
-
-  if(!window.firebaseReady){
-    
-    return;
+  // Readiness checks precede the lock: an early attempt must remain retryable.
+  if(window.__savingAnalysis || !window.firebaseReady || !window.currentUser?.uid){
+    return false;
   }
 
-  if(!window.currentUser || !window.currentUser.uid){
-    
-    return;
-  }
+  window.__savingAnalysis = true;
 
   try{
 
@@ -601,6 +515,7 @@ const safeRealCity =
 await addDoc(collection(db,"analyses"),{
 
   uid: window.currentUser.uid,
+  ...(readInvestmentAssumptions(data.assumptions) ? {assumptions: readInvestmentAssumptions(data.assumptions)} : {}),
 
   propertyPrice:
     data.propertyPrice ?? 0,
@@ -682,14 +597,13 @@ window.dispatchEvent(
 
 
 
-    window.__savingAnalysis = false;
+    return true;
 
   }catch(e){
-
-    window.__savingAnalysis = false;
-    
     console.error("Errore salvataggio:", e);
-  
+    return false;
+  }finally{
+    window.__savingAnalysis = false;
   }
 
 }
@@ -951,7 +865,7 @@ if(!window.currentUser){
   const access = window.getUserAccess?.() || {};
 
   // PRO / ADMIN
-  if(access.canSeeFullAnalysis){
+  if(access.isAdmin || hasPlan(requiredPlan)){
     return true;
   }
 
@@ -1041,7 +955,7 @@ window.triggerHomeUpgradeFlow = function(data = {}){
 window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const access = window.getUserAccess?.() || {};
-  if(!access || access.canSeeFullAnalysis) return;
+  if(!access || access.canDownloadPDF) return;
 
   if(access.isInvestor) type = "pro";
 
@@ -1077,32 +991,34 @@ if(oldModal){
       title_it: "📊 Sblocca piano Investor",
       title_en: "📊 Unlock Investor Plan",
 
-      desc_it: "Stai analizzando un investimento con dati incompleti. Questo è il punto in cui molti investitori sbagliano.",
-      desc_en: "You're analyzing an investment with incomplete data. This is where most investors make mistakes.",
+      desc_it: "Hai provato il risultato base. Con Investor puoi approfondire lo scenario e gestire i tuoi immobili.",
+      desc_en: "You have tried the basic result. Investor lets you explore the scenario and manage your properties.",
 
       features_it: [
-        "Simulazioni illimitate",
+        "Simulazioni e scenari salvati",
         "Analisi ROI avanzata",
-        "Confronto con mercato reale",
-        "Indicatori base di rischio"
+        "Confronto con benchmark indicativi",
+        "Analisi rischio, portfolio e PMS"
       ],
       features_en: [
-        "Unlimited simulations",
+        "Simulations and saved scenarios",
         "Advanced ROI analysis",
-        "Real market comparison",
-        "Basic risk indicators"
+        "Indicative market benchmark comparison",
+        "Risk analysis, portfolio and PMS"
       ],
 
-      proof_it: "Usato da centinaia di investitori per evitare errori costosi",
-      proof_en: "Used by hundreds of investors to avoid costly mistakes",
+      proof_it: "Confronta più scenari prima di decidere",
+      proof_en: "Compare multiple scenarios before deciding",
 
-      cta_it: "Sblocca Investor ora – €19",
-      cta_en: "Unlock Investor now – €19",
+      cta_it: "Sblocca Investor – €19/mese",
+      cta_en: "Unlock Investor – €19/month",
 
-      warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
-      warning_en: "⚠️ Without advanced analysis you may overestimate returns",
+      warning_it: "PDF e dashboard-report sono inclusi in Pro.",
+      warning_en: "PDFs and dashboard reports are included in Pro.",
 
-      action: () => startPlanPurchase("investor")
+      action: () => window.location.pathname.startsWith("/tool")
+        ? window.location.assign("/#pricing")
+        : startPlanPurchase("investor")
     };
   }
 
@@ -1141,16 +1057,18 @@ if(oldModal){
         "Professional PDF report"
       ],
 
-      proof_it: "Strumenti usati da investitori e consulenti immobiliari",
-      proof_en: "Tools used by investors and real estate professionals",
+      proof_it: "Analizza rischio, mutuo e sostenibilità nello stesso report",
+      proof_en: "Review risk, mortgage and sustainability in one report",
 
-      cta_it: "Sblocca analisi completa – €29",
-      cta_en: "Unlock full analysis – €29",
+      cta_it: "Sblocca analisi completa – €29/mese",
+      cta_en: "Unlock full analysis – €29/month",
 
       warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
       warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
 
-      action: () => startPlanPurchase("pro")
+      action: () => window.location.pathname.startsWith("/tool")
+        ? window.location.assign("/#pricing")
+        : startPlanPurchase("pro")
     };
   }
 
@@ -1190,35 +1108,7 @@ if(oldModal){
   // ================= 🔥 LOSS BOX =================
   const lossBox = document.createElement("div");
 
-  const estimatedLoss = Math.max(
-  0,
-  (window.lastAnalysisData?.net || 0) * 0.25
-);
-
-  if(
-  estimatedLoss > 1000 &&
-  estimatedLoss < 50000 &&
-  !access.canSeeFullAnalysis &&
-  safeROI > 6
-){
-    lossBox.innerHTML = `
-      <div style="
-        margin-bottom:16px;
-        padding:12px;
-        border-radius:10px;
-        background:rgba(239,68,68,0.08);
-        border:1px solid rgba(239,68,68,0.2);
-        font-size:14px;
-        font-weight:600;
-        color:#dc2626;
-      ">
-        💸 ${safeT(
-          `Potresti perdere fino a €${estimatedLoss.toLocaleString()} senza analisi completa`,
-          `You could lose up to €${estimatedLoss.toLocaleString()} without full analysis`
-        )}
-      </div>
-    `;
-  }
+  // Non attribuire una perdita in euro a una quota arbitraria del cashflow.
 
   // ================= FEATURES =================
   const list = document.createElement("div");
@@ -1457,7 +1347,7 @@ const kpi1 = `
 const kpi2 = `
   <div class="kpi-box">
     <div class="kpi-label">
-      ${t("🏙 Media mercato","🏙 Market average")}
+      ${t("🏙 Riferimento indicativo","🏙 Indicative benchmark")}
     </div>
     <div class="kpi-value">
       ${formatCurrency(marketAvg)}
@@ -1526,7 +1416,7 @@ function renderROIMarketComparison(roi, cityKey){
 
   container.innerHTML = badge + `
     <div class="kpi-box">
-      <span>${t("ROI investimento","Your ROI")}</span>
+      <span>${t("ROI sul capitale proprio","Return on equity")}</span>
       <strong>${safeNumber(roi).toFixed(1)}%</strong>
     </div>
 
@@ -1551,30 +1441,12 @@ function renderRevenueForecast(baseRevenue){
 const container = document.getElementById("revenue-forecast");
 if(!container) return;
 
-container.innerHTML = `
-
+container.innerHTML = buildRevenueScenarios(baseRevenue, t).map(scenario => `
 <div class="kpi-box">
-  <div class="kpi-label">${t("Scenario basso","Low")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue * 0.8)}
-  </div>
+  <div class="kpi-label">${scenario.label}</div>
+  <div class="kpi-value">${formatCurrency(scenario.value)}</div>
 </div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${t("Scenario base","Base")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue)}
-  </div>
-</div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${t("Scenario alto","High")}</div>
-  <div class="kpi-value">
-    ${formatCurrency(baseRevenue * 1.2)}
-  </div>
-</div>
-
-`;
+`).join("");
 
 }
 
@@ -2468,7 +2340,9 @@ if(!window.firebaseReady){
 
 const access = window.getUserAccess();
 
-btn.style.display = access.canSeeFullAnalysis ? "inline-block" : "none";
+btn.style.display = access.canDownloadPDF ? "inline-block" : "none";
+const pdfPanel = btn.closest("[data-pdf-only]");
+if(pdfPanel) pdfPanel.dataset.pdfAllowed = String(!!access.canDownloadPDF);
 
 if(window.RB_DEBUG === true){
 
@@ -2477,6 +2351,9 @@ if(window.RB_DEBUG === true){
 }
 
 }
+
+document.addEventListener("rb_auth_ready", updatePDFButton);
+window.addEventListener("rb_plan_ready", updatePDFButton);
 
 // ================= ANIMATION + UI BOOST =================  👈 AGGIUNGI QUI
 
@@ -2752,6 +2629,13 @@ function runPostAnalysis(result, context){
 
     window.simulationExecuted = true;
 
+    const resultState = document.getElementById("tool-result-state");
+    if(resultState){
+      resultState.dataset.it = "Analisi aggiornata";
+      resultState.dataset.en = "Analysis updated";
+      resultState.textContent = t("Analisi aggiornata", "Analysis updated");
+    }
+
     // ================= SAFE VARIABLES =================
 
     const roi = Number(result?.roi || 0);
@@ -2796,6 +2680,7 @@ if(window.RB_DEBUG === true){
 
     const monthlyCosts =
       Number(
+        result?.expensesMonthly ??
         expenses ??
         result?.monthlyCosts ??
         0
@@ -2888,35 +2773,19 @@ if(window.RB_DEBUG === true){
 
     // ================= SAVE DEDUP =================
 
+    // Include the calculated scenario and account, not just rounded ROI.
     const analysisHash = JSON.stringify({
-      roi: finalROI.toFixed(2),
-      city: market,
-      price: propertyPrice,
-      ts: Math.floor(Date.now() / 15000)
+      uid: window.currentUser?.uid ?? null,
+      result,
+      context,
+      market,
+      realCity: realCityInput
     });
 
     const now = Date.now();
-
-const shouldSave =
-
-!window.__LAST_SAVED_ANALYSIS__ ||
-
-window.__LAST_SAVED_ANALYSIS__ !== analysisHash ||
-
-(
-  now -
-  (window.__LAST_SAVE_TIME__ || 0)
-) > 15000;
-
-// salva hash + timestamp
-if(shouldSave){
-
-  window.__LAST_SAVED_ANALYSIS__ =
-    analysisHash;
-
-  window.__LAST_SAVE_TIME__ =
-    now;
-}
+    const shouldSave =
+      window.__LAST_SAVED_ANALYSIS__ !== analysisHash ||
+      now - (window.__LAST_SAVE_TIME__ || 0) > 15000;
 
     // ================= CANONICAL SCORE FOR SAVE =================
 
@@ -3019,6 +2888,8 @@ window.__MANUAL_ANALYSIS__ === true;
     annualDebtService:
       Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
     gross,
+    expenses: monthlyCosts, // Canonical EUR/month from the completed engine result.
+    assumptions: context?.assumptions,
     net,
     occupancy: occupancyRate,
 
@@ -3033,6 +2904,12 @@ marketCity: market,
       realCityInput ||
       market ||
       "roma"
+  }).then(saved => {
+    // A failed/blocked write must not suppress an immediate manual retry.
+    if(saved){
+      window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+      window.__LAST_SAVE_TIME__ = now;
+    }
   });
 
   
@@ -3868,6 +3745,7 @@ if(!window.currentPlan){
   return;
 }
 
+  investmentAnalysisState.invalidate();
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
@@ -4038,6 +3916,7 @@ const loanAmount =
 
 // Production: nessun log
 
+const investmentInputSignature = investmentAnalysisState.capture();
 const result = calculateROI({
   price,
   equity,
@@ -4115,7 +3994,7 @@ const visualROI =
 window.realROI = realROI;
 
 // 🔥 render chart con cap visivo
-renderROIChart(visualROI);
+renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI);
 
 // 🔥 testo reale
 const roiText = realROI.toFixed(1) + "%";
@@ -5001,13 +4880,11 @@ if(riskPreview){
     // 🤖 POST ANALYSIS AI
     // =====================================
 
-     const loan =
-  Math.max(
-    0,
-    (price || 0) - (equity || 0)
-  );
+     const loan = Number(result?.loan ?? loanAmount ?? 0);
 
 runPostAnalysis(result,{
+
+  assumptions: buildInvestmentAssumptions(result, {commission, tax, interestRate, loanYears}, isTool ? "simulator" : "home_preview"),
 
   price,
 
@@ -5037,13 +4914,21 @@ runPostAnalysis(result,{
   ) / 12
 
 });
+    renderFreeSimulationPreview(result, {access, document, lang:window.currentLang});
+
     // ================= MARKET =================
     if(access.isFree){
+      renderMarketBenchmark(window.currentCity);
 
-      renderMarketComparison?.(0, window.currentCity);
+      const marketComparison = document.getElementById("market-comparison");
+      if(marketComparison){
+        marketComparison.innerHTML = `<div class="kpi-box">${t(
+          "Confronto disponibile con Investor o Pro",
+          "Comparison available with Investor or Pro"
+        )}</div>`;
+      }
 
       document.querySelectorAll(`
-        #market-comparison,
         #revenue-forecast,
         #occupancy-sensitivity,
         #investment-ranking,
@@ -5134,6 +5019,10 @@ if(window.firebaseReady && isFreeUser && roi > 10){
  
   triggerFunnel({ roi });
 
+}
+
+if(isTool && window.simulationExecuted === true){
+  investmentAnalysisState.publish(result, {equity}, investmentInputSignature);
 }
 
 } catch(err){
@@ -5750,6 +5639,56 @@ window.initCityAutocomplete = function(){
   }, 800);
 
 })();
+// ================= PROPERTY LISTING SECURITY =================
+
+function getSafePropertyListingURL(value){
+  const raw = String(value ?? "").trim();
+  if(!/^https?:\/\//i.test(raw) || /[\u0000-\u001f\u007f]/.test(raw)) return "";
+
+  try{
+    const url = new URL(raw);
+    if(!["http:", "https:"].includes(url.protocol) || !url.hostname || url.username || url.password){
+      return "";
+    }
+    return url.href;
+  }catch{
+    return "";
+  }
+}
+
+function renderPropertyListingSource(value){
+  const box = document.getElementById("property-source");
+  if(!box) return;
+
+  const link = getSafePropertyListingURL(value);
+  const note = document.createElement("div");
+  note.style.marginTop = "6px";
+  note.style.fontSize = "13px";
+  note.style.color = "#64748b";
+
+  if(!link){
+    note.textContent = t(
+      "Link annuncio non valido. Inserisci un indirizzo completo http:// o https://, oppure compila i dati manualmente.",
+      "Invalid listing link. Enter a complete http:// or https:// address, or fill in the details manually."
+    );
+    box.replaceChildren(note);
+    return;
+  }
+
+  const title = document.createElement("strong");
+  title.textContent = t("📍 Immobile analizzato", "📍 Analyzed property");
+  const anchor = document.createElement("a");
+  anchor.href = link;
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  anchor.textContent = link;
+  note.textContent = t(
+    "Inserisci i dati dell'annuncio per simulare il rendimento.",
+    "Enter the listing details to simulate returns."
+  );
+  box.replaceChildren(title, document.createElement("br"), anchor, note);
+}
+
 // ================= AUTO LOAD PROPERTY FROM TOOL (NUOVO) =================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -5759,7 +5698,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const savedUrl = localStorage.getItem("listing_url");
 
-  const finalUrl = urlFromQuery || savedUrl;
+  const requestedUrl = urlFromQuery || savedUrl;
+  const finalUrl = getSafePropertyListingURL(requestedUrl);
+
+  if(requestedUrl && !finalUrl){
+    localStorage.removeItem("property_link");
+    localStorage.removeItem("listing_url");
+    renderPropertyListingSource(requestedUrl);
+    return;
+  }
 
   if(finalUrl){
 
@@ -5861,7 +5808,7 @@ const T = (it,en)=> isEN ? en : it;
 
 if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
-if(!access.canSeeFullAnalysis){ openUpgradeModal("pro"); return; }
+if(!access.canDownloadPDF){ openUpgradeModal("pro"); return; }
 
 if(!window.lastAnalysisData){
   showToast(T("Genera prima analisi","Run analysis first"));
@@ -5934,6 +5881,8 @@ const profit = safe(
   d.profit
 );
 
+const occupancy = d.occupancy == null ? null : Number(d.occupancy);
+
 const price = safe(
 
   d.propertyPrice ??
@@ -5993,23 +5942,12 @@ const pct = v => {
 };
 
 // ================= RATING =================
-let rating = T("Moderato","Moderate");
-
-if(roi >= 25){
-  rating = T("Eccellente","Outstanding");
-}
-else if(roi >= 18){
-  rating = T("Qualità istituzionale","Investment Grade");
-}
-else if(roi >= 12){
-  rating = T("Opportunità solida","Strong Opportunity");
-}
-else if(roi >= 8){
-  rating = T("Stabile","Stable");
-}
-else{
-  rating = T("Speculativo","Speculative");
-}
+const pdfCommentary = buildPDFScenarioCommentary({
+  cashflow: profit,
+  annualDebtService: Number(d.annualDebtService ?? d.mortgageYearly),
+  dscr: d.dscr == null ? null : Number(d.dscr)
+}, T);
+const rating = pdfCommentary.rating;
 
 // ================= COLORS =================
 const green = [16,185,129];
@@ -6202,7 +6140,7 @@ const coverBenchmarkByCity = {
 };
 const coverMarketKey = String(city).toLowerCase().trim();
 const coverHasLocalBenchmark = Object.prototype.hasOwnProperty.call(coverBenchmarkByCity, coverMarketKey);
-const coverBenchmark = coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4;
+const coverBenchmark = Number(window.RB_MARKET_DATA?.[coverMarketKey]?.roi ?? (coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4));
 const coverScaleMax = 40;
 const coverBarWidth = 120;
 const coverFillWidth = Math.min(Math.max(roi,0),coverScaleMax) / coverScaleMax * coverBarWidth;
@@ -6288,10 +6226,10 @@ const verdict =
 // printed in the user-facing PDF.
 const pdfVerdictLabel =
   verdict === "BUY"
-    ? T("ACQUISTA", "BUY")
+    ? T("Favorevole", "Favourable")
     : verdict === "WAIT" || verdict === "WATCH"
-      ? T("ATTENDI", verdict === "WATCH" ? "WATCH" : "WAIT")
-      : T("EVITA", "AVOID");
+      ? T("Da verificare", "Review")
+      : T("Critico", "Critical");
 
 const confidence =
   window.lastInvestmentScore?.confidence ||
@@ -6322,9 +6260,9 @@ doc.setTextColor(...gray);
 doc.setFontSize(7);
 
 doc.text(T("Punteggio investimento","Investment score"),28,239);
-doc.text(T("Esito","Verdict"),82,239);
+doc.text(T("Esito modello","Model outcome"),82,239);
 doc.text(T("Rischio","Risk"),122,239);
-doc.text(T("Qualità dati","Data quality"),154,239);
+doc.text(T("Fonte dati","Data source"),154,239);
 
 // VALUES
 
@@ -6347,7 +6285,7 @@ doc.text(
 );
 
 doc.text(
-  T("Completi","Complete"),
+  T("Ipotesi","Assumptions"),
   154,
   249
 );
@@ -6613,8 +6551,8 @@ doc.setTextColor(...gray);
 
 doc.text(
   T(
-    "Scenari previsionali basati su occupazione e mercato",
-    "Forecast scenarios based on occupancy and market"
+    "Ricavi illustrativi: -20% / base / +20%. Non sono previsioni di mercato.",
+    "Illustrative revenue: -20% / base / +20%. Not market forecasts."
   ),
   20,
   y + 6
@@ -6622,27 +6560,10 @@ doc.text(
 
 y += 18;
 
-const cashflowScenarios = [
-  {
-    label:T("Prudente","Low"),
-    value: revenue * 0.85,
-    color:[239,68,68]
-  },
-  {
-    label:T("Base","Base"),
-    value: revenue,
-    color:[59,130,246]
-  },
-  {
-    label:T("Espansivo","High"),
-    value: revenue * 1.10,
-    color:[16,185,129]
-  }
-];
+const revenueScenarios = buildRevenueScenarios(revenue, T);
+const maxVal = revenueScenarios[2]?.value || 1;
 
-const maxVal = revenue * 1.15;
-
-cashflowScenarios.forEach(s=>{
+revenueScenarios.forEach(s=>{
 
   // LABEL
   doc.setFontSize(9);
@@ -6651,7 +6572,7 @@ cashflowScenarios.forEach(s=>{
   doc.text(
     s.label,
     20,
-    y + 4
+    y - 3
   );
 
   // BG BAR
@@ -6698,7 +6619,7 @@ cashflowScenarios.forEach(s=>{
     y + 5
   );
 
-  y += 16;
+  y += 21;
 
 });
 
@@ -6737,31 +6658,7 @@ doc.setFontSize(9);
 
 doc.setTextColor(...gray);
 
-let executiveInsight =
-T(
-"Investimento con buona sostenibilità finanziaria. Il cashflow previsto supporta una gestione stabile e la redditività risulta coerente con il mercato analizzato.",
-"Investment shows good financial sustainability. Expected cashflow supports stable operations and profitability is consistent with the analysed market."
-);
-
-if(roi >= 18){
-
-executiveInsight =
-T(
-"Investimento ad alta redditività con ottimo equilibrio tra rendimento e rischio. Opportunità molto competitiva per il mercato selezionato.",
-"High-return investment with an excellent balance between profitability and risk. Highly competitive opportunity for the selected market."
-);
-
-}
-
-else if(roi < 8){
-
-executiveInsight =
-T(
-"Il rendimento previsto risulta inferiore al benchmark di mercato. Si consiglia di rivalutare prezzo di acquisto, ADR o livello di occupazione.",
-"Expected return is below the market benchmark. Review purchase price, ADR or occupancy assumptions."
-);
-
-}
+const executiveInsight = pdfCommentary.insight;
 
 doc.text(
 executiveInsight,
@@ -6932,21 +6829,7 @@ const financingColor =
       ? [16,185,129]
       : [200,50,50];
 
-const financingLabel =
-  !hasFinancing
-    ? T(
-        "Nessun finanziamento rilevato",
-        "No financing detected"
-      )
-    : financingSustainable
-      ? T(
-           "Finanziamento stimato sostenibile",
-           "Estimated financing is sustainable"
-         )
-      : T(
-          "Copertura del debito insufficiente",
-          "Insufficient debt coverage"
-        );
+const financingLabel = buildPDFScenarioCommentary({cashflow: profit, annualDebtService, dscr}, T).financingLabel;
 
 doc.setFillColor(
   ...financingColor
@@ -7009,7 +6892,7 @@ const marketKey =
     .trim();
 
 const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(marketROIMap, marketKey);
-const marketROI = hasLocalBenchmark ? marketROIMap[marketKey] : 8.4;
+const marketROI = Number(window.RB_MARKET_DATA?.[marketKey]?.roi ?? (hasLocalBenchmark ? marketROIMap[marketKey] : 8.4));
 
 const benchmarkROI = marketROI;
 
@@ -7076,8 +6959,8 @@ doc.setTextColor(...green);
 
 doc.text(
 roi >= benchmarkROI
-? "TOP"
-: T("Media","Average"),
+? T("Sopra riferimento","Above reference")
+: T("Sotto riferimento","Below reference"),
 145,
 y+19
 );
@@ -7206,11 +7089,11 @@ doc.setTextColor(...dark);
 const marketBenchmarkComment =
   roi > marketROI
     ? T(
-        "L'operazione supera significativamente il benchmark medio di mercato.",
-        "The investment significantly outperforms the average market benchmark."
+        "Il ROI simulato supera il riferimento indicativo. Verifica la comparabilità delle ipotesi.",
+        "Simulated ROI exceeds the indicative reference. Check that the assumptions are comparable."
       )
     : T(
-        "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
+        "Il ROI simulato è pari o inferiore al riferimento indicativo; il confronto non verifica il mercato.",
         "The investment performs in line with or below average market benchmark."
       );
 
@@ -7312,50 +7195,19 @@ doc.setFontSize(11);
 doc.setTextColor(...dark);
 
 doc.text(
-  T("Scenari rendimento","Performance scenarios"),
+  T("Come leggere gli scenari", "How to read the scenarios"),
   20,
   y
 );
+y += 10;
+const scenarioExplanation = doc.splitTextToSize(T(
+  "I ricavi illustrativi della sezione performance variano del -20% e +20% rispetto alla base. Il cashflow riportato sopra appartiene solo allo scenario base. Per confrontare altri cashflow e ROI, modifica le ipotesi e avvia una nuova analisi: costi, imposte e mutuo non variano in proporzione ai ricavi.",
+  "The illustrative revenue in the performance section varies by -20% and +20% from the base. The cashflow above belongs only to the base scenario. To compare other cashflows and ROIs, change the assumptions and run a new analysis: costs, taxes and debt payments do not vary in proportion to revenue."
+), 170);
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+doc.text(scenarioExplanation, 20, y);
 
-y += 12;
-
-const cashflowFinalScenarios = [
-  {
-    label:T("Prudente","Low"),
-    value:profit * 0.8,
-    color:[239,68,68]
-  },
-  {
-    label:T("Base","Base"),
-    value:profit,
-    color:[245,158,11]
-  },
-  {
-    label:T("Espansivo","High"),
-    value:profit * 1.2,
-    color:[16,185,129]
-  }
-];
-
-cashflowFinalScenarios.forEach(s=>{
-
-  doc.setFillColor(...s.color);
-
-  doc.roundedRect(20,y,90,10,4,4,"F");
-
-  doc.setTextColor(255);
-
-  doc.setFontSize(9);
-
-  doc.text(
-    s.label + " " + eur(s.value),
-    25,
-    y + 7
-  );
-
-  y += 16;
-
-});
 
 footer();
 
@@ -7373,8 +7225,8 @@ doc.setTextColor(...dark);
 
 doc.text(
   T(
-    "Raccomandazione finale",
-    "Final Recommendation"
+    "Valutazione del modello",
+    "Model assessment"
   ),
   20,
   y
@@ -7428,8 +7280,8 @@ doc.setTextColor(...dark);
 
 doc.text(
   T(
-    "Punti di forza",
-    "Executive Strengths"
+    "Elementi da valutare",
+    "Assessment points"
   ),
   20,
   y
@@ -7478,17 +7330,17 @@ if (monthly >= 1500) {
 
   insights.push(
     T(
-      "Il cashflow mensile offre un'elevata capacità di generare liquidità.",
-      "Monthly cashflow provides excellent liquidity generation."
+      "Il cashflow mensile simulato è positivo; verifica il margine anche con ricavi inferiori.",
+      "Simulated monthly cashflow is positive; also check the buffer with lower revenue."
     )
   );
 
-} else if (monthly > 0) {
+} else if (profit > 0) {
 
   insights.push(
     T(
-      "Il cashflow mensile rimane positivo e contribuisce alla sostenibilità operativa dell'investimento.",
-      "Monthly cashflow remains positive and supports the investment's operational sustainability."
+      "Il cashflow mensile è positivo nelle ipotesi inserite, senza verifica dei risultati effettivi.",
+      "Monthly cashflow is positive under the entered assumptions; actual results are not verified."
     )
   );
 
@@ -7496,29 +7348,29 @@ if (monthly >= 1500) {
 
   insights.push(
     T(
-      "Il cashflow mensile risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
-      "Monthly cashflow is negative and may compromise investment sustainability."
+      profit < 0 ? "Il cashflow mensile simulato è negativo: rivedi ricavi, costi e finanziamento." : "Il cashflow simulato è in pareggio: manca un margine per imprevisti.",
+      profit < 0 ? "Simulated monthly cashflow is negative: review revenue, costs and financing." : "Simulated cashflow breaks even: there is no buffer for unforeseen costs."
     )
   );
 
 }
 
 // Risk
-if (riskScore <= 30) {
+if (riskScore < 40) {
 
   insights.push(
     T(
-      "Il livello di rischio è contenuto rispetto ai parametri analizzati.",
-      "Risk exposure remains low compared to analysed metrics."
+      "L’indice del modello rientra nella fascia bassa; non misura tutti i rischi dell’immobile.",
+      "The model index is in the low band; it does not measure all property risks."
     )
   );
 
-} else if (riskScore <= 60) {
+} else if (riskScore < 65) {
 
   insights.push(
     T(
-      "Il rischio è moderato e richiede monitoraggio operativo.",
-      "Risk is moderate and requires operational monitoring."
+      "L’indice del modello rientra nella fascia moderata: verifica le ipotesi più sensibili.",
+      "The model index is in the moderate band: check the most sensitive assumptions."
     )
   );
 
@@ -7526,8 +7378,8 @@ if (riskScore <= 30) {
 
   insights.push(
     T(
-      "Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento.",
-      "Operational risk is high and may reduce investment stability."
+      "L’indice del modello rientra nella fascia alta: approfondisci leva, ricavi e costi.",
+      "The model index is in the high band: examine leverage, revenue and costs."
     )
   );
 
@@ -7576,20 +7428,20 @@ if (roi < 20) {
 
   nextSteps.push(
     T(
-      "Valutare una riduzione del prezzo di acquisto o un aumento dei ricavi previsti.",
-      "Consider negotiating a lower purchase price or increasing projected revenue."
+      "Confrontare prezzo, tariffa e occupazione con dati effettivi; non aumentare le ipotesi solo per migliorare il ROI.",
+      "Check price, rate and occupancy against actual data; do not raise assumptions just to improve ROI."
     )
   );
 
 }
 
 // Occupancy
-if (occupancy < 65) {
+if (Number.isFinite(occupancy) && occupancy < 65) {
 
   nextSteps.push(
     T(
-      "Incrementare il tasso di occupazione attraverso una strategia di pricing più efficace.",
-      "Increase occupancy through a more effective pricing strategy."
+      "Verificare occupazione e stagionalità con immobili comparabili e costi di acquisizione ospiti.",
+      "Check occupancy and seasonality against comparable properties and guest acquisition costs."
     )
   );
 
@@ -7624,8 +7476,8 @@ if (nextSteps.length === 0) {
 
   nextSteps.push(
     T(
-      "L'investimento presenta parametri solidi: monitorare periodicamente i risultati operativi.",
-      "The investment shows solid metrics: periodically monitor operating performance."
+      "Verificare le ipotesi con dati effettivi e confrontare uno scenario più prudente prima di decidere.",
+      "Check assumptions against actual data and compare a more cautious scenario before deciding."
     )
   );
 
@@ -7650,6 +7502,14 @@ nextSteps.forEach(step => {
 });
 
 y += 10;
+
+doc.setFontSize(8);
+doc.setTextColor(...gray);
+doc.text(T(
+  "Esito del modello su ipotesi: non è una raccomandazione di acquisto né una verifica dell'immobile. Il rischio è un indice del modello, non una probabilità di perdita.",
+  "Model outcome based on assumptions: not a purchase recommendation or a property verification. Risk is a model index, not a probability of loss."
+),20,y,{maxWidth:170});
+y += 16;
 
 // ================= REPORT SIGNATURE =================
 
@@ -7749,7 +7609,7 @@ doc.save(`RendimentoBB-Fattibilita-${city}-${roi.toFixed(1)}ROI.pdf`);
 
 function handleAutoCityRedirect(){
 
-  const link = localStorage.getItem("property_link");
+  const link = getSafePropertyListingURL(localStorage.getItem("property_link"));
 
   if(!link) return;
 
@@ -7919,25 +7779,18 @@ priceField.value = storedPrice;
 
 async function loadPropertyFromLink(){
 
-const link = localStorage.getItem("property_link");
+const storedLink = localStorage.getItem("property_link");
+if(!storedLink) return;
+const link = getSafePropertyListingURL(storedLink);
+if(!link){
+  localStorage.removeItem("property_link");
+  renderPropertyListingSource(storedLink);
+  return;
+}
 
 // ===== MOSTRA LINK ANALIZZATO =====
 
-const linkBox = document.getElementById("property-source");
-
-if(!link) return;
-
-if(linkBox){
-
-linkBox.innerHTML = `
-<strong>📍 Immobile analizzato</strong><br>
-<a href="${link}" target="_blank">${link}</a>
-
-<div style="margin-top:6px;font-size:13px;color:#64748b;">
-Inserisci i dati dell'annuncio per simulare il rendimento.
-</div>
-`;
-}
+renderPropertyListingSource(link);
 
 
 
@@ -7998,7 +7851,7 @@ genova: "genova",
 palermo: "palermo"
 };
 
-const propertyLink = localStorage.getItem("property_link") || "";
+const propertyLink = link;
 
 for(const key in cityMap){
 
@@ -8625,7 +8478,7 @@ function unlockProUI(){
   });
 
   // ================= SHOW PRO CONTENT =================
-  document.querySelectorAll(".pro-only").forEach(el=>{
+  document.querySelectorAll(".pro-only:not([data-pdf-only])").forEach(el=>{
     el.style.display = "block";
     el.style.opacity = "1";
   });
@@ -9375,6 +9228,8 @@ if(!window.__rbToolLanguageRefreshBound){
       badge.textContent = getInvestmentBadge(roi);
       badge.className = getInvestmentBadgeClass(roi);
     }
+
+    renderFreeSimulationPreview(data, {access:window.getUserAccess?.(), document, lang:window.currentLang});
 
     const resultCity = document.getElementById("tool-result-city");
     if(resultCity){

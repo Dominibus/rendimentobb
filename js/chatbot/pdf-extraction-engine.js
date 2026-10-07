@@ -15,6 +15,10 @@ const rbPDFDebugWarn = (...args) => {
 
 window.rbExtractPDFText = async function(documentObject){
 
+    let loadingTask = null;
+    let timeoutId = null;
+    let pdfDocument = null;
+
     try{
 
         if(
@@ -25,6 +29,12 @@ window.rbExtractPDFText = async function(documentObject){
             return documentObject;
 
         }
+
+        documentObject.extractedText = "";
+        documentObject.textPages = [];
+        documentObject.pageCount = 0;
+        documentObject.analysis = null;
+        documentObject.executiveContext = null;
 
         // ===========================================
         // PDF.JS AVAILABILITY
@@ -40,6 +50,7 @@ window.rbExtractPDFText = async function(documentObject){
                 "⚠️ PDF.js NOT AVAILABLE"
             );
 
+            documentObject.extractionStatus = "unavailable";
             return documentObject;
 
         }
@@ -51,7 +62,7 @@ window.rbExtractPDFText = async function(documentObject){
         window.pdfjsLib
             .GlobalWorkerOptions
             .workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+            "/js/vendor/pdfjs/pdf.worker.min.mjs";
 
         // ===========================================
         // SAFE PDF BUFFER
@@ -74,15 +85,31 @@ window.rbExtractPDFText = async function(documentObject){
         // REAL PDF TEXT EXTRACTION
         // ===========================================
 
-        const pdfDocument =
+        loadingTask = window.pdfjsLib.getDocument({
+            data: pdfData,
+            isEvalSupported: false,
+            disableFontFace: true,
+            useWasm: false,
+            standardFontDataUrl: "/js/vendor/pdfjs/standard_fonts/"
+        });
 
-            await window.pdfjsLib
-                .getDocument({
-                    data: pdfData
-                })
-                .promise;
+        // One deadline covers loading and every page, not a new deadline per page.
+        const timeout = new Promise((resolve, reject) => {
+            timeoutId = setTimeout(() => {
+                const error = new Error("PDF reading deadline exceeded");
+                error.name = "PDFReadTimeoutError";
+                reject(error);
+            }, 60000);
+        });
+        pdfDocument = await Promise.race([loadingTask.promise, timeout]);
 
+        if(pdfDocument.numPages > 100){
+            documentObject.extractionStatus = "too_many_pages";
+            return documentObject;
+        }
         const extractedPages = [];
+        documentObject.textPages = [];
+        let textLength = 0;
 
         for(
             let pageNumber = 1;
@@ -92,13 +119,13 @@ window.rbExtractPDFText = async function(documentObject){
 
             const page =
 
-                await pdfDocument.getPage(
+                await Promise.race([pdfDocument.getPage(
                     pageNumber
-                );
+                ), timeout]);
 
             const textContent =
 
-                await page.getTextContent();
+                await Promise.race([page.getTextContent(), timeout]);
 
             const pageText =
 
@@ -114,6 +141,13 @@ window.rbExtractPDFText = async function(documentObject){
                     )
                     .trim();
 
+            documentObject.textPages.push({page:pageNumber, text:pageText});
+            textLength += pageText.length;
+            if(textLength > 250000){
+                documentObject.extractionStatus = "too_much_text";
+                documentObject.textPages = [];
+                return documentObject;
+            }
             if(pageText){
 
                 extractedPages.push(
@@ -129,6 +163,11 @@ window.rbExtractPDFText = async function(documentObject){
             extractedPages
                 .join("\n\n")
                 .trim();
+
+        documentObject.extractionStatus = documentObject.extractedText ? "ready" : "no_text";
+        documentObject.pageCount = pdfDocument.numPages;
+        clearTimeout(timeoutId);
+        if(!documentObject.extractedText) return documentObject;
 
         rbPDFDebug(
             "📄 PDF TEXT READY",
@@ -188,11 +227,31 @@ window.rbExtractPDFText = async function(documentObject){
 
     catch(error){
 
+        documentObject.extractedText = "";
+        documentObject.textPages = [];
+        documentObject.pageCount = 0;
+        documentObject.analysis = null;
+        documentObject.executiveContext = null;
+        documentObject.extractionStatus = error?.name === "PasswordException"
+            ? "password_required"
+            : error?.name === "PDFReadTimeoutError" ? "timeout" : "failed";
         console.error("PDF Extraction Error");
         rbPDFDebugWarn(error);
 
         return documentObject;
 
+    }
+
+    finally{
+        if(timeoutId !== null) clearTimeout(timeoutId);
+        if(loadingTask){
+            try{
+                if(typeof loadingTask.destroy === "function") await loadingTask.destroy();
+                else await pdfDocument?.destroy?.();
+            }catch(error){
+                rbPDFDebugWarn("PDF worker cleanup failed", error);
+            }
+        }
     }
 
 };

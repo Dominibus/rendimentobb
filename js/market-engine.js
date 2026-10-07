@@ -55,6 +55,19 @@ function getSafeCity(inputCity){
 
 export function renderMarketBenchmark(inputCity){
 
+  const access = window.getUserAccess?.() || {};
+  if(access.isFree && !access.isInvestor && !access.isPro && !access.isAdmin){
+    for(const id of ["benchmark-price", "benchmark-occupancy", "benchmark-revenue"]){
+      const el = document.getElementById(id);
+      if(el) el.textContent = "Investor / Pro";
+    }
+    const comparison = document.getElementById("market-comparison");
+    if(comparison) comparison.textContent = window.currentLang === "en"
+      ? "Indicative benchmark comparison available with Investor or Pro"
+      : "Confronto con benchmark indicativi disponibile con Investor o Pro";
+    return;
+  }
+
   // 🔒 anti loop
   if(window.__marketRendering) return;
   window.__marketRendering = true;

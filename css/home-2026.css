@@ -1277,3 +1277,25 @@ body.home-page #pricing .pricing-subtitle {
     margin-top: 0 !important;
   }
 }
+
+/* FIX12: pricing headings and badges must not overlap. */
+body.home-page #pricing .pricing-subtitle {
+ color:#40594e !important;line-height:1.65 !important;
+ margin:16px auto 46px !important;padding:0 16px;
+}
+body.home-page #pricing .pricing-subtitle span {color:inherit !important;}
+body.home-page #pricing .plan-card,
+body.home-page #pricing .plan-card:hover {transform:none !important;}
+body.home-page #pricing .plan-card > h3 {color:#142b25 !important;text-shadow:none !important;position:relative;}
+body.home-page #pricing .plan-card > .badge:not(.secondary) {
+ top:-15px !important;white-space:nowrap;line-height:1.4;
+}
+body.home-page #pricing .plan-annual > .badge.secondary {
+ position:static !important;transform:none !important;align-self:center;
+ display:block;width:fit-content;margin:0 auto 14px !important;
+ background:#fff0ce !important;color:#714508 !important;line-height:1.4;
+}
+@media(max-width:760px) {
+ body.home-page #pricing .pricing-subtitle {margin-bottom:36px !important;}
+ body.home-page #pricing .pricing-grid {row-gap:34px !important;}
+}

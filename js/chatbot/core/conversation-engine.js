@@ -204,21 +204,14 @@ window.rbBuildConversationContext = function({
     // 📊 ANALYSIS STATE
     // ===========================================
 
-    const hasAnalysis =
-
-        Boolean(
-
-            advisor ||
-
-            memory?.lastROI ||
-
-            window.lastAnalysisData?.realROI ||
-
-            window.lastAnalysisData?.roi ||
-
-            executiveContext?.liveData
-
-        );
+    const hasValues = value => value && typeof value === "object" &&
+        ["roi","realROI","net","cashflow","propertyPrice","equity","occupancy"]
+          .some(key => value[key] !== null && value[key] !== undefined &&
+             value[key] !== "" && Number.isFinite(Number(value[key])));
+    const hasAnalysis = Boolean(
+        hasValues(advisor) || hasValues(window.lastAnalysisData) ||
+        hasValues(executiveContext?.liveData)
+    );
 
     // ===========================================
     // 🧠 CONVERSATION GOAL

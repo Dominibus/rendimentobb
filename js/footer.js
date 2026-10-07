@@ -10,26 +10,26 @@ const footer = `
 <div class="footer-cta">
 
 <h3
-data-it="Scopri se il tuo investimento è profittevole"
-data-en="Find out if your investment is profitable">
-Scopri se il tuo investimento è profittevole
+data-it="Esplora i numeri del tuo investimento"
+data-en="Explore your investment numbers">
+Esplora i numeri del tuo investimento
 </h3>
 
 <p
 class="footer-value"
 
-data-it="Trova immobili • Analizza ROI • Gestisci il tuo B&B da un'unica piattaforma."
+data-it="Confronta scenari • Analizza ROI • Gestisci il tuo B&B."
 
-data-en="Find properties • Analyze ROI • Manage your B&B from one platform.">
+data-en="Compare scenarios • Analyze ROI • Manage your B&B.">
 
-Trova immobili • Analizza ROI • Gestisci il tuo B&B da un'unica piattaforma.
+Confronta scenari • Analizza ROI • Gestisci il tuo B&B.
 
 </p>
 
 <p
-data-it="Simula ROI, rischio e rendimento in meno di 30 secondi"
-data-en="Simulate ROI, risk and profit in under 30 seconds">
-Simula ROI, rischio e rendimento in meno di 30 secondi
+data-it="Dai dati del tuo immobile a uno scenario di investimento."
+data-en="From your property inputs to an investment scenario.">
+Dai dati del tuo immobile a uno scenario di investimento.
 </p>
 
 <a href="/tool/" class="btn btn-primary"
@@ -48,9 +48,9 @@ Avvia simulazione
 <strong>RendimentoBB</strong>
 
 <p
-data-it="Motore decisionale per investimenti B&B basato su dati reali."
-data-en="Decision engine for B&B investments based on real data.">
-Motore decisionale per investimenti B&B basato su dati reali.
+data-it="Strumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti."
+data-en="Tools for property analysis and B&B operations, with clear assumptions and results.">
+Strumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti.
 </p>
 
 </div>
@@ -183,9 +183,9 @@ Contatti
 <div class="footer-trust">
 
 <span
-data-it="✔ ROI reale e cashflow"
-data-en="✔ Real ROI and cashflow">
-✔ ROI reale e cashflow
+data-it="✔ ROI stimato e cashflow"
+data-en="✔ Estimated ROI and cashflow">
+✔ ROI stimato e cashflow
 </span>
 
 <span
@@ -206,9 +206,9 @@ data-en="✔ Dashboard, analytics and PMS">
 <div class="footer-extra-cta">
 
 <p
-data-it="Sei una banca o agenzia? Ricevi clienti pronti a investire."
-data-en="Are you a bank or agency? Get clients ready to invest.">
-Sei una banca o agenzia? Ricevi clienti pronti a investire.
+data-it="Sei un professionista del settore? Scopri le possibilità di collaborazione."
+data-en="Work in the sector? Explore partnership opportunities.">
+Sei un professionista del settore? Scopri le possibilità di collaborazione.
 </p>
 
 <a href="/partner/" class="btn btn-secondary"
@@ -222,7 +222,7 @@ Diventa partner
 <!-- 🔥 SOCIALS -->
 <div class="footer-socials">
 
-<a href="https://www.linkedin.com/company/rendimentobb//"
+<a href="https://www.linkedin.com/company/rendimentobb/"
 target="_blank"
 rel="noopener">
 LinkedIn

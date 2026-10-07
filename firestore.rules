@@ -9,7 +9,195 @@ service cloud.firestore {
 
     function isAdmin() {
       return isSignedIn()
+        && request.auth.token.email_verified == true
         && request.auth.token.email == "rendimentobb@gmail.com";
+    }
+
+    // Entitlements come from the protected account document, never client state.
+    // Reads remain owner-only even after downgrade. Sandbox billing does not
+    // grant production writes in this shared database.
+    function hasPaidAccountData(data) {
+      let plan = data.get("plan", "free");
+      let sessionId = data.get("stripeSessionId", "");
+      let liveMode = data.get("stripeLiveMode", null);
+      return plan is string
+        && plan.trim().lower() in ["investor", "pro", "pro_yearly"]
+        && liveMode != false
+        && (
+          sessionId == null
+          || (sessionId is string
+            && (liveMode == true || !sessionId.matches("cs_test_.*")))
+        );
+    }
+
+    function canWritePaidData() {
+      return isSignedIn() && (
+        isAdmin()
+        || (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && hasPaidAccountData(
+            get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+          )
+        )
+      );
+    }
+
+    // RC50: bounded client fields. Legacy fields may remain unchanged, but
+    // cannot be introduced/modified. Financial values are user scenarios,
+    // not certified server calculations; negative returns remain valid.
+    function boundedNumber(v, low, high) {
+      return v is number && v >= low && v <= high;
+    }
+    function boundedText(v, limit) {
+      return v is string && v.size() <= limit;
+    }
+    function validReference(id, collectionName) {
+      return id == null || (id is string && id.size() > 0 && id.size() <= 128
+        && !id.matches(".*[/].*")
+        && getAfter(/databases/$(database)/documents/$(collectionName)/$(id)).data.uid == request.auth.uid);
+    }
+    function validRiskBreakdown(v) {
+      return v == null || (v is map
+        && v.keys().hasOnly(["base", "roi", "occupancy", "leverage", "debtCoverage", "cashflow"])
+        && (v.get("base", 0) >= 0 && v.get("base", 0) <= 100)
+        && (v.get("roi", 0) >= 0 && v.get("roi", 0) <= 100)
+        && (v.get("occupancy", 0) >= 0 && v.get("occupancy", 0) <= 100)
+        && (v.get("leverage", 0) >= 0 && v.get("leverage", 0) <= 100)
+        && (v.get("debtCoverage", 0) >= 0 && v.get("debtCoverage", 0) <= 100)
+        && (v.get("cashflow", 0) >= 0 && v.get("cashflow", 0) <= 100)
+      );
+    }
+    function validTouristTax(v) {
+      return v is map
+        && v.keys().hasOnly(["enabled", "ratePerGuestNight", "currency", "maxTaxableNights", "minimumTaxableAge", "collectionTime"])
+        && v.get("enabled", null) is bool
+        && boundedNumber(v.get("ratePerGuestNight", null), 0, 10000)
+        && (!v.enabled || v.ratePerGuestNight > 0)
+        && v.get("currency", "EUR") in ["EUR", "USD", "GBP", "CHF"]
+        && v.get("maxTaxableNights", 0) is int
+        && boundedNumber(v.get("maxTaxableNights", 0), 0, 3650)
+        && v.get("minimumTaxableAge", 0) is int
+        && boundedNumber(v.get("minimumTaxableAge", 0), 0, 120)
+        && v.get("collectionTime", "checkin") in ["checkin", "checkout"];
+    }
+    function validSnapshot(v) {
+      return v == null || (v is map
+        && v.keys().hasOnly(["propertyPrice", "equity", "roi", "realROI", "annualCashflow", "risk", "occupancy", "city"])
+        && (!v.keys().hasAny(["propertyPrice"]) || (v.propertyPrice is number && v.propertyPrice >= 0 && v.propertyPrice <= 1000000000000))
+        && (!v.keys().hasAny(["equity"]) || (v.equity is number && v.equity >= 0 && v.equity <= 1000000000000))
+        && (!v.keys().hasAny(["roi"]) || (v.roi is number && v.roi >= -1000000000000 && v.roi <= 1000000000000))
+        && (!v.keys().hasAny(["realROI"]) || (v.realROI is number && v.realROI >= -1000000000000 && v.realROI <= 1000000000000))
+        && (!v.keys().hasAny(["annualCashflow"]) || (v.annualCashflow is number && v.annualCashflow >= -1000000000000 && v.annualCashflow <= 1000000000000))
+        && (!v.keys().hasAny(["risk"]) || (v.risk is number && v.risk >= 0 && v.risk <= 100))
+        && (!v.keys().hasAny(["occupancy"]) || (v.occupancy is number && v.occupancy >= 0 && v.occupancy <= 100))
+        && (!v.keys().hasAny(["city"]) || (v.city is string && v.city.size() <= 200))
+      );
+    }
+    function validInvestmentAssumptions(a) {
+      let snapshot = a;
+      return snapshot is map
+        && snapshot.keys().hasOnly(["schemaVersion", "calculationVersion", "source", "expensesUnit", "propertyPrice", "equity", "loanAmount", "priceNight", "occupancy", "expenses", "commission", "tax", "interestRate", "loanYears"])
+        && snapshot.schemaVersion == 1
+        && snapshot.calculationVersion == "roi-monthly-v1"
+        && snapshot.source in ["simulator", "home_preview"]
+        && snapshot.expensesUnit in ["monthly_eur", "percentage"]
+        && snapshot.propertyPrice is number && snapshot.propertyPrice >= 0 && snapshot.propertyPrice <= 1000000000000
+        && snapshot.equity is number && snapshot.equity >= 0 && snapshot.equity <= 1000000000000
+        && snapshot.loanAmount is number && snapshot.loanAmount >= 0 && snapshot.loanAmount <= 1000000000000
+        && snapshot.priceNight is number && snapshot.priceNight >= 0 && snapshot.priceNight <= 1000000000000
+        && snapshot.occupancy is number && snapshot.occupancy >= 0 && snapshot.occupancy <= 100
+        && snapshot.expenses is number && snapshot.expenses >= 0 && snapshot.expenses <= 1000000000000
+        && (a.expensesUnit != "percentage" || snapshot.expenses <= 100)
+        && snapshot.commission is number && snapshot.commission >= 0 && snapshot.commission <= 100
+        && snapshot.tax is number && snapshot.tax >= 0 && snapshot.tax <= 100
+        && snapshot.interestRate is number && snapshot.interestRate >= 0 && snapshot.interestRate <= 100
+        && snapshot.loanYears is number && snapshot.loanYears > 0 && snapshot.loanYears <= 100;
+    }
+    function analysisFields() {
+      return ["assumptions", "uid", "propertyPrice", "equity", "gross", "expenses", "roi", "visualROI", "realROI", "net", "risk", "riskBreakdown", "ltv", "dscr", "noi", "netOperatingIncome", "capRate", "annualDebtService", "occupancy", "investmentScore", "verdict", "marketCity", "realCity", "city", "createdAt", "createdAtClient", "isPortfolio", "propertyId"];
+    }
+    function validAnalysis(d, k) {
+      let fields = k;
+      return fields.hasOnly(analysisFields())
+        && (!fields.hasAny(["assumptions"]) || validInvestmentAssumptions(d.assumptions))
+        && (!fields.hasAny(["propertyPrice"]) || (d.propertyPrice is number && d.propertyPrice >= 0 && d.propertyPrice <= 1000000000000))
+        && (!fields.hasAny(["equity"]) || (d.equity is number && d.equity >= 0 && d.equity <= 1000000000000))
+        && (!fields.hasAny(["gross"]) || (d.gross is number && d.gross >= 0 && d.gross <= 1000000000000))
+        && (!fields.hasAny(["expenses"]) || (d.expenses is number && d.expenses >= 0 && d.expenses <= 1000000000000))
+        && (!fields.hasAny(["annualDebtService"]) || (d.annualDebtService is number && d.annualDebtService >= 0 && d.annualDebtService <= 1000000000000))
+        && (!fields.hasAny(["roi"]) || (d.roi is number && d.roi >= -1000000000000 && d.roi <= 1000000000000))
+        && (!fields.hasAny(["visualROI"]) || (d.visualROI is number && d.visualROI >= -1000000000000 && d.visualROI <= 1000000000000))
+        && (!fields.hasAny(["realROI"]) || (d.realROI is number && d.realROI >= -1000000000000 && d.realROI <= 1000000000000))
+        && (!fields.hasAny(["net"]) || (d.net is number && d.net >= -1000000000000 && d.net <= 1000000000000))
+        && (!fields.hasAny(["dscr"]) || (d.dscr is number && d.dscr >= -1000000000000 && d.dscr <= 1000000000000))
+        && (!fields.hasAny(["noi"]) || (d.noi is number && d.noi >= -1000000000000 && d.noi <= 1000000000000))
+        && (!fields.hasAny(["netOperatingIncome"]) || (d.netOperatingIncome is number && d.netOperatingIncome >= -1000000000000 && d.netOperatingIncome <= 1000000000000))
+        && (!fields.hasAny(["capRate"]) || (d.capRate is number && d.capRate >= -1000000000000 && d.capRate <= 1000000000000))
+        && (!fields.hasAny(["risk"]) || (d.risk is number && d.risk >= 0 && d.risk <= 100))
+        && (!fields.hasAny(["ltv"]) || (d.ltv is number && d.ltv >= 0 && d.ltv <= 100))
+        && (!fields.hasAny(["occupancy"]) || (d.occupancy is number && d.occupancy >= 0 && d.occupancy <= 100))
+        && (!fields.hasAny(["investmentScore"]) || (d.investmentScore is number && d.investmentScore >= 0 && d.investmentScore <= 100))
+        && (!fields.hasAny(["marketCity"]) || (d.marketCity is string && d.marketCity.size() <= 200))
+        && (!fields.hasAny(["realCity"]) || (d.realCity is string && d.realCity.size() <= 200))
+        && (!fields.hasAny(["city"]) || (d.city is string && d.city.size() <= 200))
+        && (!fields.hasAny(["riskBreakdown"]) || validRiskBreakdown(d.get("riskBreakdown", null)))
+        && (!fields.hasAny(["verdict"]) || d.get("verdict", null) == null || boundedText(d.verdict, 40))
+        && (!fields.hasAny(["createdAt"]) || d.get("createdAt", null) is timestamp)
+        && (!fields.hasAny(["createdAtClient"]) || d.get("createdAtClient", null) is timestamp)
+        && (!fields.hasAny(["isPortfolio"]) || d.get("isPortfolio", null) is bool)
+        && (!fields.hasAny(["propertyId"]) || validReference(d.get("propertyId", null), "properties"));
+    }
+    // Creation uses bounded comparisons directly to keep the complete payload
+    // below Firestore's evaluation limit. Non-numeric comparisons deny the write.
+    // Defaults validate absent optional fields; they do not populate the document.
+    function validNewAnalysis(d) {
+      let data = d;
+      let snapshot = data.get("assumptions", null);
+      return data.keys().hasOnly(analysisFields())
+        && (data.get("propertyPrice", 0) >= 0 && data.get("propertyPrice", 0) <= 1000000000000)
+        && (data.get("equity", 0) >= 0 && data.get("equity", 0) <= 1000000000000)
+        && (data.get("gross", 0) >= 0 && data.get("gross", 0) <= 1000000000000)
+        && (data.get("expenses", 0) >= 0 && data.get("expenses", 0) <= 1000000000000)
+        && (data.get("annualDebtService", 0) >= 0 && data.get("annualDebtService", 0) <= 1000000000000)
+        && (data.get("roi", 0) >= -1000000000000 && data.get("roi", 0) <= 1000000000000)
+        && (data.get("visualROI", 0) >= -1000000000000 && data.get("visualROI", 0) <= 1000000000000)
+        && (data.get("realROI", 0) >= -1000000000000 && data.get("realROI", 0) <= 1000000000000)
+        && (data.get("net", 0) >= -1000000000000 && data.get("net", 0) <= 1000000000000)
+        && (data.get("dscr", 0) >= -1000000000000 && data.get("dscr", 0) <= 1000000000000)
+        && (data.get("noi", 0) >= -1000000000000 && data.get("noi", 0) <= 1000000000000)
+        && (data.get("netOperatingIncome", 0) >= -1000000000000 && data.get("netOperatingIncome", 0) <= 1000000000000)
+        && (data.get("capRate", 0) >= -1000000000000 && data.get("capRate", 0) <= 1000000000000)
+        && (data.get("risk", 0) >= 0 && data.get("risk", 0) <= 100)
+        && (data.get("ltv", 0) >= 0 && data.get("ltv", 0) <= 100)
+        && (data.get("occupancy", 0) >= 0 && data.get("occupancy", 0) <= 100)
+        && (data.get("investmentScore", 0) >= 0 && data.get("investmentScore", 0) <= 100)
+        && boundedText(data.get("marketCity", ""), 200)
+        && boundedText(data.get("realCity", ""), 200)
+        && boundedText(data.get("city", ""), 200)
+        && validRiskBreakdown(data.get("riskBreakdown", null))
+        && (data.get("verdict", null) == null || boundedText(data.verdict, 40))
+        && (!data.keys().hasAny(["createdAt"]) || data.createdAt is timestamp)
+        && (!data.keys().hasAny(["createdAtClient"]) || data.createdAtClient is timestamp)
+        && data.get("isPortfolio", false) is bool
+        && validReference(data.get("propertyId", null), "properties")
+        && (!data.keys().hasAny(["assumptions"]) || validInvestmentAssumptions(snapshot));
+    }
+    function propertyFields() {
+      return ["uid", "name", "city", "address", "priceNight", "touristTaxConfig", "analysisId", "investmentSnapshot", "createdAt", "updatedAt", "renovationPlan"];
+    }
+    function validProperty(d, k) {
+      return k.hasOnly(propertyFields())
+        && (!k.hasAny(["name"]) || (boundedText(d.get("name", null), 200) && d.name.trim().size() > 0))
+        && (!k.hasAny(["city"]) || (d.city is string && d.city.size() <= 200))
+        && (!k.hasAny(["address"]) || (d.address is string && d.address.size() <= 500))
+        && (!k.hasAny(["priceNight"]) || (d.priceNight is number && d.priceNight >= 0 && d.priceNight <= 1000000))
+        && (!k.hasAny(["touristTaxConfig"]) || validTouristTax(d.get("touristTaxConfig", null)))
+        && (!k.hasAny(["analysisId"]) || validReference(d.get("analysisId", null), "analyses"))
+        && (!k.hasAny(["investmentSnapshot"]) || validSnapshot(d.get("investmentSnapshot", null)))
+        && (!k.hasAny(["createdAt"]) || d.get("createdAt", null) is timestamp)
+        && (!k.hasAny(["updatedAt"]) || d.get("updatedAt", null) is timestamp)
+        // Work-item lists require a dedicated server validator in a later patch.
+        && (!k.hasAny(["renovationPlan"]) || d.get("renovationPlan", null) is map);
     }
 
     match /users/{userId} {
@@ -31,11 +219,53 @@ service cloud.firestore {
           "subscriptionId",
           "subscriptionStatus",
           "priceId",
-          "currentPeriodEnd"
+          "currentPeriodEnd",
+          "stripeLiveMode",
+          "lastStripeEventId",
+          "lastStripeEventCreated",
+          "cancelAtPeriodEnd",
+          "sandboxPlan",
+          "sandboxStripeSessionId",
+          "sandboxStripeCustomerId",
+          "sandboxSubscriptionId",
+          "sandboxSubscriptionStatus",
+          "sandboxCancelAtPeriodEnd",
+          "sandboxCurrentPeriodEnd",
+          "sandboxStripeLiveMode",
+          "sandboxLastStripeEventId",
+          "sandboxLastStripeEventCreated",
+          "sandboxUpdatedAt"
         ];
       }
 
       allow create: if isOwner()
+        && !request.resource.data.keys().hasAny([
+          "stripeSession",
+          "stripeSessionId",
+          "stripeCustomerId",
+          "customerId",
+          "subscription",
+          "subscriptionId",
+          "subscriptionStatus",
+          "priceId",
+          "currentPeriodEnd",
+          "stripeLiveMode",
+          "lastStripeEventId",
+          "lastStripeEventCreated",
+          "cancelAtPeriodEnd",
+          "sandboxPlan",
+          "sandboxStripeSessionId",
+          "sandboxStripeCustomerId",
+          "sandboxSubscriptionId",
+          "sandboxSubscriptionStatus",
+          "sandboxCancelAtPeriodEnd",
+          "sandboxCurrentPeriodEnd",
+          "sandboxStripeLiveMode",
+          "sandboxLastStripeEventId",
+          "sandboxLastStripeEventCreated",
+          "sandboxUpdatedAt"
+        ])
+        && (!request.resource.data.keys().hasAny(["isAdmin"]) || request.resource.data.isAdmin == false)
         && request.resource.data.email is string
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.plan is string
@@ -66,19 +296,22 @@ service cloud.firestore {
     }
 
     match /analyses/{analysisId} {
-      allow create: if isSignedIn()
+      allow create: if canWritePaidData()
         && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && validNewAnalysis(request.resource.data);
 
       allow read: if isSignedIn()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid;
 
-      allow update: if isSignedIn()
+      allow update: if canWritePaidData()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid
         && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["uid", "createdAt", "createdAtClient", "assumptions"])
+        && validAnalysis(request.resource.data, request.resource.data.diff(resource.data).affectedKeys());
 
       allow delete: if isSignedIn()
         && resource.data.uid is string
@@ -86,43 +319,42 @@ service cloud.firestore {
     }
 
     match /properties/{propertyId} {
-      allow create: if isSignedIn()
+      allow create: if canWritePaidData()
         && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && validProperty(request.resource.data, request.resource.data.keys())
+        && request.resource.data.keys().hasAll(["uid", "name"]);
 
       allow read: if isSignedIn()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid;
 
-      allow update: if isSignedIn()
+      allow update: if canWritePaidData()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid
         && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["uid", "createdAt", "createdAtClient"])
+        && validProperty(request.resource.data, request.resource.data.diff(resource.data).affectedKeys());
 
-      allow delete: if isSignedIn()
-        && resource.data.uid is string
-        && resource.data.uid == request.auth.uid;
+      allow delete: if false; // Server checks booking history and links atomically.
     }
 
     match /bookings/{bookingId} {
-      allow create: if isSignedIn()
-        && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
-
       allow read: if isSignedIn()
         && resource.data.uid is string
         && resource.data.uid == request.auth.uid;
 
+      // Dates, property, status and deletion go through authenticated transactions.
+      allow create, delete: if false;
       allow update: if isSignedIn()
-        && resource.data.uid is string
         && resource.data.uid == request.auth.uid
-        && request.resource.data.uid is string
-        && request.resource.data.uid == request.auth.uid;
-
-      allow delete: if isSignedIn()
-        && resource.data.uid is string
-        && resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["guestPortal"])
+        && request.resource.data.guestPortal is map
+        && request.resource.data.guestPortal.keys().hasOnly(["enabled", "tokenHash", "expiresAt", "createdAt", "revokedAt"])
+        && request.resource.data.guestPortal.enabled is bool
+        && (canWritePaidData() || request.resource.data.guestPortal.enabled == false);
     }
 
     match /leads/{docId} {

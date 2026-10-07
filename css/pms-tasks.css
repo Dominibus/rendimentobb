@@ -1,0 +1,72 @@
+/* Scoped override of the global inline-flex/nowrap button normalizer. */
+#booking-today-operations .pms-task-row {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#booking-today-operations button[onclick^="openBookingForEdit"] {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  height:auto !important;
+  box-sizing:border-box;
+  white-space:normal !important;
+  overflow-wrap:break-word;
+  word-break:normal;
+  text-align:left !important;
+}
+#booking-today-operations button[onclick^="openBookingForEdit"] > span {
+  display:block !important;
+  width:auto !important;
+  min-width:0 !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word;
+  flex:none !important;
+}
+#booking-today-operations .pms-task-open {
+  padding:4px !important;
+  border-radius:6px !important;
+  line-height:1.5;
+}
+#booking-today-operations .pms-task-open .pms-task-timing {
+  margin-top:5px;
+  line-height:1.5;
+}
+#booking-today-operations .pms-task-state {
+  display:block !important;
+  width:auto !important;
+  min-height:44px;
+  min-width:0;
+  white-space:normal !important;
+  overflow-wrap:normal;
+  word-break:normal;
+  box-sizing:border-box;
+  text-align:center;
+}
+@media(max-width:640px) {
+  #booking-today-operations .pms-task-row {
+    grid-template-columns:minmax(0,1fr);
+    align-items:start;
+  }
+  #booking-today-operations .pms-task-state {
+    width:100% !important;
+  }
+}
+
+.pms-checklist-controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}.pms-checklist-controls label{display:grid;gap:5px;flex:1 1 180px;font-size:12px;font-weight:700;color:#475569}.pms-checklist-controls input,.pms-checklist-controls select{min-width:0;width:100%;min-height:44px;padding:9px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;box-sizing:border-box;font-size:14px}
+
+#pms-portal-alerts .pms-alert-open{display:block!important;width:100%!important;min-height:44px;height:auto!important;white-space:normal!important;text-align:left!important;cursor:pointer;box-sizing:border-box;overflow-wrap:anywhere}#pms-portal-alerts .pms-alert-open span{display:block!important;white-space:normal!important}#pms-portal-alerts .pms-alert-open:disabled{opacity:.6;cursor:wait}
+
+#booking-today-operations .pms-operation-card,#booking-today-operations .pms-operation-open{display:block!important;width:100%!important;height:auto!important;min-height:44px;white-space:normal!important;text-align:left!important;cursor:pointer;box-sizing:border-box}#booking-today-operations .pms-operation-open{padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc;color:#0f172a;overflow-wrap:anywhere}#booking-today-operations .pms-operation-card[aria-pressed="true"]{outline:2px solid #047857;outline-offset:2px}
+
+/* Operational sections reached from the checklist: visible keyboard focus. */
+#booking-guest-registration-box:focus, #booking-tourist-tax-box:focus,
+#booking-cleaning-box:focus, #booking-guest-issue-box:focus {
+  outline: 3px solid #059669; outline-offset: 3px; scroll-margin-block: 14px;
+}

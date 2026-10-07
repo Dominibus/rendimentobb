@@ -21,6 +21,46 @@ async function(message){
       String(message || "")
         .trim();
 
+    const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
+    if(investmentResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'investment_autopilot'}});
+      return {success:true,response:investmentResponse,intent:{intent:'investment_autopilot'}};
+    }
+
+    const autopilotResponse=await window.rbBuildPMSAutopilotResponse?.(text);
+    if(autopilotResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'pms_autopilot_daily'}});
+      return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
+    }
+
+    const portalResponse = window.rbBuildPortalResponse?.(text);
+    if(portalResponse){
+      window.rbPDFConversationDocumentId = null;
+      window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"portal_facts"}});
+      return {success:true,response:portalResponse,intent:{intent:"portal_facts"}};
+    }
+
+    // Handle explicit document requests once before the multi-intent/live pipeline.
+    const activePDF = window.rbDocumentManager?.getLast?.();
+    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
+    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
+        /(indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        !/(simulazion|simulation|mercato|market|altra citt|another city)/i.test(text);
+    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
+    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
+    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
+        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
+        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
+            window.rbPDFConversationDocumentId = activePDF.id;
+            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
+            return {success:true,response,intent:{intent:"pdf_analysis"}};
+        }
+    }
+
+    window.rbPDFConversationDocumentId = null;
+
     // =========================================
     // 🧠 ENTITY EXTRACTION
     // =========================================
@@ -4354,16 +4394,10 @@ const documentKnowledge = {
         null,
 
     activeReport:
-
-        window.rbDocumentManager?.getLast?.()?.analysis
-
+        window.rbDocumentManager?.getLast?.()?.analysis &&
+        !["reading","unreadable","failed"].includes(window.rbDocumentManager.getLast().status)
             ? window.rbDocumentManager.getLast()
-
-            : window.lastExecutiveReport ||
-
-              window.rbActiveDocument ||
-
-              null,
+            : (window.rbDocumentManager?.getLast?.() ? null : window.lastExecutiveReport || null),
 
     uploadedReports:
 

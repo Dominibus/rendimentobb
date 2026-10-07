@@ -73,6 +73,9 @@
 
   window.rbOpenHomePanel =
     openHomePanel;
+  window.addEventListener("hashchange", () => {
+    if(window.location.hash === "#pricing") openHomePanel("pricing", true);
+  });
 
   // =====================================
   // CURRENT PRICING PLAN
@@ -373,8 +376,8 @@
         });
 
       openHomePanel(
-        "simulator",
-        false
+        window.location.hash === "#pricing" ? "pricing" : "simulator",
+        window.location.hash === "#pricing"
       );
 
       syncCurrentPricingPlan();

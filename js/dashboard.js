@@ -1,3 +1,15 @@
+import { readInvestmentAssumptions, investmentAssumptionsHTML } from "./investment-assumptions.js?v=20261007-rc54";
+import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
+import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
+import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
+import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
+import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
+import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
+import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
+import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
+import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
+import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
+import { resolveAccountPlan } from "./account-plan.js";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
@@ -11,6 +23,8 @@ collection,
 query,
 where,
 getDocs,
+getDocsFromServer,
+getDocFromServer,
 getDoc,
 orderBy,
 deleteDoc,
@@ -31,6 +45,8 @@ const cityImages = {
 // 🔥 AUTH (CORRETTO)
 import {
 getAuth,
+sendEmailVerification,
+reload,
 onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -56,6 +72,16 @@ const setBookingToggleState = isOpen => {
   toggle.textContent = t(italianLabel, englishLabel);
   toggle.setAttribute("aria-expanded", String(isOpen));
 };
+
+// On mobile the form is inline above the saved cards, inside a scrolling modal.
+// Reveal it after layout so taps from cards and operational tasks are visible.
+function revealBookingForm(form){
+  if(!form || !window.matchMedia("(max-width: 720px)").matches) return;
+  window.requestAnimationFrame(() => {
+    if(form.style.display === "none") return;
+    form.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });
+  });
+}
 
 // =====================================
 // PRODUCTION LOGGING
@@ -251,44 +277,8 @@ function closeAllOverlays(){
 }
 
 // 🔥 POPUP PLAN CONTROL (NUOVO - PRECISO)
-function triggerPlanPopup(plan){
-
-  setTimeout(()=>{
-
-    // 🔒 evita duplicazioni
-    if(
-      document.getElementById("investor-overlay")
-    ){
-      return;
-    }
-
-    const currentPlan = String(plan || "").toLowerCase();
-
-    // 🔥 FREE + INVESTOR → STESSO OVERLAY (FORTE)
-    if(currentPlan === "free"){
-
-    if(typeof showInvestorOverlay === "function"){
-        showInvestorOverlay();
-    }
-
-}
-
-// 🟢 INVESTOR
-
-else if(currentPlan === "investor"){
-
-   
-}
-
-// 🟢 PRO / ADMIN
-    else{
-
-      
-    }
-
-  },1000);
-
-}
+// Upgrade prompts are opened by an explicit action, never on demo entry.
+function triggerPlanPopup(){ return; }
 // ================= CHART DATA =================
 
 let roiValues = [];
@@ -362,6 +352,7 @@ dashboardAccess.isInvestor;
 // ================= UTIL =================
 
 function formatCurrency(value){
+if(financialNumber(value) === null) return "--";
 
 return new Intl.NumberFormat(
 window.currentLang === "it" ? "it-IT" : "en-US",
@@ -371,6 +362,7 @@ window.currentLang === "it" ? "it-IT" : "en-US",
 }
 
 function formatPercent(value){
+  if(financialNumber(value) === null) return "--";
   return new Intl.NumberFormat(
     window.currentLang === "it" ? "it-IT" : "en-US",
     { maximumFractionDigits: 1 }
@@ -415,52 +407,13 @@ window.currentLang === "it" ? "it-IT" : "en-US"
 }
 
 function getBookingNightsInMonth(checkin, checkout, referenceDate = new Date()){
-  if(!checkin || !checkout) return 0;
-
-  const arrival = new Date(`${checkin}T00:00:00`);
-  const departure = new Date(`${checkout}T00:00:00`);
-  const monthStart = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    1
-  );
-  const monthEnd = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth() + 1,
-    1
-  );
-
-  if(
-    Number.isNaN(arrival.getTime()) ||
-    Number.isNaN(departure.getTime()) ||
-    departure <= arrival
-  ) return 0;
-
-  const overlapStart = arrival > monthStart ? arrival : monthStart;
-  const overlapEnd = departure < monthEnd ? departure : monthEnd;
-
-  return Math.max(
-    0,
-    Math.round((overlapEnd - overlapStart) / (1000 * 60 * 60 * 24))
-  );
+  return nightsInMonth(checkin, checkout, referenceDate);
 }
 
 function getBookingRevenueInMonth(booking, referenceDate = new Date()){
-  const occupiedNights = getBookingNightsInMonth(
-    booking?.checkin,
-    booking?.checkout,
-    referenceDate
-  );
-  if(!occupiedNights) return 0;
-
-  const arrival = new Date(`${booking.checkin}T00:00:00`);
-  const departure = new Date(`${booking.checkout}T00:00:00`);
-  const totalNights = Math.round(
-    (departure - arrival) / (1000 * 60 * 60 * 24)
-  );
-
-  if(!Number.isFinite(totalNights) || totalNights <= 0) return 0;
-
+  const occupiedNights = getBookingNightsInMonth(booking?.checkin, booking?.checkout, referenceDate);
+  const totalNights = calendarBookingNights(booking);
+  if(!occupiedNights || !totalNights) return 0;
   return Number(booking.totalAmount || 0) * occupiedNights / totalNights;
 }
 
@@ -476,50 +429,99 @@ function isConfirmedBooking(booking){
   return !isCancelledBooking(booking) && !isPendingBooking(booking);
 }
 
+// Every availability decision reads the server; local lists are display data only.
+const runBookingOperation = createBookingOperationGuard();
+const rawMutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
+
+const mutatePMS = async (...args)=>{
+  const result=await rawMutatePMS(args[0],{...args[1],notificationLang:window.RB_LANG?.current==="en"?"en":"it"});
+  if(result.taskEmailEventIds?.length && window.rbNotificationPreferences?.pmsTaskEmail===true){
+    try{
+      await reload(window.currentUser);
+      const token=await window.currentUser.getIdToken(true);
+      const response=await fetch("/api/work-email",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({action:"task_updates",bookingId:result.bookingId,eventIds:result.taskEmailEventIds,lang:window.RB_LANG?.current==="en"?"en":"it"})});
+      const payload=await response.json();
+      if(!response.ok || !payload.success) throw Error(payload.error || "email_failed");
+    }catch(error){
+      dashboardError("Task email failed",error);
+      renderPMSPortalAlerts(window.rbPMSData || {});
+      alert(error.message==="verified_email_required" ? t("Modifica salvata. Verifica il tuo indirizzo email dal Centro avvisi host: premi Invia email di verifica, apri il link ricevuto e premi Ho verificato: aggiorna. Poi esegui una nuova presa in carico.", "Change saved. Verify your email in the Host alert centre: send the verification email, open the received link and select I have verified: refresh. Then claim a new task.") : result.taskNotificationsQueued>0 ? t("Modifica salvata. La notifica resta registrata per il recupero automatico del server; con la configurazione attuale il controllo è giornaliero.", "Change saved. The notification is recorded for automatic server recovery; the current schedule checks daily.") : t("Modifica salvata. Invio email attività non riuscito. Codice: ", "Change saved. Task email failed. Code: ")+error.message);
+    }
+  }
+  return result;
+};
+function renderBookingTaskTracking(booking=window.currentSelectedBooking){
+  const container=document.getElementById("booking-task-tracking");
+  if(!container)return;
+  container.style.display=booking?"block":"none";
+  container.innerHTML=booking?taskTrackingHTML(booking,t,window.RB_LANG?.current || "it"):"";
+}
+
+function bookingOperationError(error){
+  const messages = {
+    "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
+    "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
+    "booking/stale_task": ["I dati dell’attività sono cambiati. Aggiorna le prenotazioni.", "Task details changed. Refresh bookings."],
+    "booking/stale_version": ["La prenotazione è stata modificata altrove. Riapri il dettaglio prima di salvare.", "The booking was changed elsewhere. Reopen its details before saving."],
+    "booking/plan_required": ["Questa operazione PMS richiede un piano Investor o Pro attivo.", "This PMS operation requires an active Investor or Pro plan."],
+    "booking/unauthorized": ["Sessione non valida. Accedi nuovamente.", "Invalid session. Sign in again."],
+    "booking/invalid_payload": ["Verifica i dati della prenotazione prima di salvare.", "Check booking data before saving."],
+    "booking/too_many_requests": ["Troppe operazioni ravvicinate. Attendi un minuto e riprova.", "Too many operations. Wait a minute and try again."],
+    "booking/property_has_bookings": ["Questa proprietà ha prenotazioni nello storico. Non può essere eliminata lasciando prenotazioni scollegate.", "This property has booking history. It cannot be deleted leaving orphaned bookings."],
+    "booking/conflict": ["Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.", "Dates unavailable: an overlapping booking already exists for this property."],
+    "booking/invalid_existing_dates": ["Verifica le date delle prenotazioni esistenti di questa proprietà prima di confermare disponibilità.", "Check existing booking dates for this property before confirming availability."],
+    "booking/invalid_dates": ["Il check-out deve essere successivo al check-in e le date devono essere valide.", "Check-out must be after check-in and dates must be valid."],
+    "booking/invalid_status": ["Stato della prenotazione non valido.", "Invalid booking status."],
+    "booking/stale_status": ["Lo stato è cambiato. Aggiorna le prenotazioni prima di procedere.", "The status has changed. Refresh bookings before continuing."],
+    "booking/not_found": ["Prenotazione o proprietà non più disponibile. Aggiorna la pagina.", "Booking or property is no longer available. Refresh the page."]
+  };
+  const message = messages[error?.code] || ["Impossibile verificare o salvare i dati sul server. Controlla la connessione e riprova.", "Unable to verify or save data on the server. Check your connection and try again."];
+  alert(t(...message));
+}
+
+function failBookingOperation(code){
+  const error = new Error(code);
+  error.code = `booking/${code}`;
+  throw error;
+}
+
+async function readFreshBooking(id){
+  if(!window.currentUser || !id) failBookingOperation("not_found");
+  const snapshot = await getDocFromServer(doc(db, "bookings", id));
+  if(!snapshot.exists() || snapshot.data().uid !== window.currentUser.uid) failBookingOperation("not_found");
+  return {...snapshot.data(), id:snapshot.id};
+}
+
+async function verifyBookingAvailability(candidate, editingBookingId = null){
+  const property = await getDocFromServer(doc(db, "properties", candidate.propertyId));
+  if(!property.exists() || property.data().uid !== window.currentUser?.uid) failBookingOperation("not_found");
+  if(editingBookingId) await readFreshBooking(editingBookingId);
+  const snapshot = await getDocsFromServer(query(
+    collection(db, "bookings"),
+    where("uid", "==", window.currentUser.uid),
+    where("propertyId", "==", candidate.propertyId)
+  ));
+  const decision = evaluateAvailability(candidate, snapshot.docs.map(item => ({...item.data(), id:item.id})), editingBookingId);
+  if(!decision.available) failBookingOperation(decision.reason);
+}
+
+async function refreshAfterBookingMutation(){
+  // A refresh error must never imply a successful write should be repeated.
+  window.rbPMSMemory = null;
+  try{
+    await loadPMSStats();
+    await loadProperties();
+    await loadBookings(window.bookingsAllPropertiesView && window.bookingsPropertyFilter === "all" ? "all" : window.currentPropertyId);
+  }catch(error){
+    dashboardError("Booking updated but dashboard refresh failed", error);
+    alert(t("Modifica salvata. Aggiorna la pagina per vedere i dati aggiornati.", "Change saved. Refresh the page to see updated data."));
+  }
+}
+
 // ================= INVESTMENT SCORE =================
 
-function calculateInvestmentScore(avgROI,analyses){
-
-if(!analyses?.length) return 0;
-
-const savedScores = analyses
-  .map(data => Number(data.investmentScore || 0))
-  .filter(score => score > 0 && score <= 100);
-
-if(savedScores.length){
-  return Math.round(
-    savedScores.reduce((sum, score) => sum + score, 0) /
-    savedScores.length
-  );
-}
-
-let score = 50;
-
-/* ROI influence */
-
-if(avgROI > 15) score += 30;
-else if(avgROI > 8) score += 20;
-else if(avgROI > 3) score += 10;
-else if(avgROI < 0) score -= 20;
-
-const riskValues = analyses
-  .map(data => Number(data.risk || 0))
-  .filter(risk => risk > 0 && risk <= 100);
-
-if(riskValues.length){
-  const avgRisk = riskValues.reduce((sum, risk) => sum + risk, 0) / riskValues.length;
-  if(avgRisk <= 30) score += 15;
-  else if(avgRisk <= 50) score += 8;
-  else if(avgRisk >= 70) score -= 15;
-}
-
-/* clamp */
-
-if(score > 100) score = 100;
-if(score < 0) score = 0;
-
-return Math.round(score);
-
+function calculateInvestmentScore(avgROI, analyses){
+  return summarizeInvestments(analyses || []).score;
 }
 
 // ===============================
@@ -543,7 +545,7 @@ roiChartInstance = null;
 }
 
 const avgROI =
-roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
+summarizeInvestments(roiValues.map(roi => ({roi}))).averageROI;
 
 const avgLine =
 new Array(roiValues.length).fill(avgROI);
@@ -612,7 +614,7 @@ size:13
 },
 
 callbacks:{
-label:(ctx)=> "ROI: " + ctx.raw.toFixed(1) + "%"
+label:(ctx)=> "ROI: " + formatPercent(ctx.raw)
 }
 }
 
@@ -860,6 +862,7 @@ if(
 const analyses = querySnapshot.docs.map(doc => {
 
   const data = doc.data();
+  const assumptions = readInvestmentAssumptions(data.assumptions);
 
   const realCity =
     data.realCity ||
@@ -881,27 +884,23 @@ const analyses = querySnapshot.docs.map(doc => {
     id: doc.id,
 
     roi:
-      data.roi || 0,
+      financialNumber(data.roi),
 
     visualROI:
       data.visualROI || 0,
 
     realROI:
-      data.realROI || 0,
+      financialNumber(data.realROI),
 
     price:
-      data.propertyPrice ||
-      data.price ||
-      0,
+      financialNumber(data.propertyPrice ?? data.price),
 
         equity:
-      Number(
-        data.equity ??
-        0
-      ),
+      financialNumber(data.equity),
 
     loan:
       Number(
+        assumptions?.loanAmount ??
         data.loan ??
         data.loanAmount ??
         data.mortgageAmount ??
@@ -921,6 +920,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     mortgageAmount:
       Number(
+        assumptions?.loanAmount ??
         data.mortgageAmount ??
         data.loanAmount ??
         data.loan ??
@@ -940,6 +940,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     mortgageYearly:
       Number(
+        data.annualDebtService ??
         data.mortgageYearly ??
         (
           Number(
@@ -956,6 +957,7 @@ const analyses = querySnapshot.docs.map(doc => {
         data.monthlyMortgagePayment ??
         (
           Number(
+            data.annualDebtService ??
             data.mortgageYearly ??
             0
           ) / 12
@@ -968,6 +970,7 @@ const analyses = querySnapshot.docs.map(doc => {
         data.monthlyMortgage ??
         (
           Number(
+            data.annualDebtService ??
             data.mortgageYearly ??
             0
           ) / 12
@@ -976,18 +979,22 @@ const analyses = querySnapshot.docs.map(doc => {
 
     interestRate:
       Number(
+        assumptions?.interestRate ??
         data.interestRate ??
         3.5
       ),
 
     loanYears:
       Number(
+        assumptions?.loanYears ??
         data.loanYears ??
         20
       ),
 
     gross:
       data.gross || 0,
+
+    assumptions,
 
     expenses:
       data.expenses || 0,
@@ -996,10 +1003,10 @@ const analyses = querySnapshot.docs.map(doc => {
       data.occupancy || 0,
 
     net:
-      data.net || 0,
+      financialNumber(data.netAfterMortgage ?? data.net ?? data.cashflow),
 
     risk:
-  data.risk ?? 0,
+  financialNumber(data.risk),
 
     riskBreakdown:
       data.riskBreakdown ?? null,
@@ -1041,7 +1048,7 @@ const analyses = querySnapshot.docs.map(doc => {
       Number(data.annualDebtService ?? data.mortgageYearly ?? 0),
 
     investmentScore:
-  data.investmentScore ?? 0,
+  financialNumber(data.investmentScore),
 
     isPortfolio:
       data.isPortfolio === true,
@@ -1075,6 +1082,15 @@ window.isDemoData =
 
 window.isDemoDashboard =
   useDemoDashboard();
+
+document.body.classList.toggle("rb-demo-dashboard", window.isDemoDashboard);
+const sourceLabel = document.getElementById("dashboard-data-source");
+if(sourceLabel){
+  sourceLabel.dataset.it = window.isDemoDashboard ? "Dati dimostrativi" : "Dati del tuo account";
+  sourceLabel.dataset.en = window.isDemoDashboard ? "Illustrative data" : "Your account data";
+  sourceLabel.textContent = t(sourceLabel.dataset.it, sourceLabel.dataset.en);
+}
+
 
 if(useDemoDashboard()){
 
@@ -1378,6 +1394,8 @@ labels = [];
 
 const count = analyses.length;
 
+const highestSavedROI = highestScenarioROI(analyses);
+
 const portfolioAnalyses = analyses.filter(
   data => data.isPortfolio === true
 );
@@ -1399,21 +1417,7 @@ const totalCashflow = analyses.reduce(
 
 // ================= SORT =================
 
-analyses.sort((a,b)=>{
-
-const dateA =
-a.createdAt?.seconds
-? a.createdAt.seconds
-: 0;
-
-const dateB =
-b.createdAt?.seconds
-? b.createdAt.seconds
-: 0;
-
-return dateB - dateA;
-
-});
+analyses.sort((a,b)=> scenarioCreatedTime(b.createdAt) - scenarioCreatedTime(a.createdAt));
 
 // ================= PAGINATION DATA =================
 
@@ -1449,8 +1453,7 @@ const visibleAnalyses =
       adr * occupancy * 365 / 100
     );  
 
-    const yearlyProfit =
-  Number(data.net || 0);
+    const yearlyProfit = financialNumber(data.net);
 
     const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
 
@@ -1465,7 +1468,7 @@ const isNew =
 
 let badge = "";
 
-if(index === 0){
+if(highestSavedROI !== null && financialNumber(data.roi) === highestSavedROI){
   badge += `
   <div style="
     font-size:12px;
@@ -1473,7 +1476,7 @@ if(index === 0){
     margin-bottom:6px;
     font-weight:600;
   ">
-    🏆 Best ROI
+    🏆 ${t("ROI più alto tra gli scenari", "Highest ROI across scenarios")}
   </div>
   `;
 }
@@ -1502,7 +1505,7 @@ if(isNew){
 
       <div class="metric">
         <span>${t("Città","City")}</span>
-        <strong>${data.city.charAt(0).toUpperCase() + data.city.slice(1)}</strong>
+        <strong>${escapeDashboardHTML(String(data.city ?? "").charAt(0).toUpperCase() + String(data.city ?? "").slice(1))}</strong>
       </div>
 
       <div class="metric">
@@ -1518,13 +1521,13 @@ if(isNew){
       <div class="metric">
         <span>${t("ROI annuale","Annual ROI")}</span>
         <strong class="${roiClass}">
-          ${roi.toFixed(1)}%
+          ${formatPercent(roi)}
         </strong>
       </div>
 
       <div class="metric">
         <span>${t("Indice rischio","Risk score")}</span>
-        <strong>${data.risk}/100</strong>
+        <strong>${financialNumber(data.risk) === null ? "--" : `${data.risk}/100`}</strong>
       </div>
 
       <div class="metric">
@@ -1549,11 +1552,13 @@ if(isNew){
   </strong>
 
   <div style="font-size:12px;color:#64748b;margin-top:4px;">
-    🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
+    🔒 ${t("Sblocca per vedere il cashflow stimato","Unlock to see estimated cash flow")}
   </div>
   `
   }
 </div>
+
+${window.isDemoData ? "" : investmentAssumptionsHTML(data.assumptions, window.currentLang)}
 
 ${
 !canViewProfit()
@@ -1569,7 +1574,7 @@ ${
           cursor:pointer;
           width:100%;
         ">
-          🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
+          🚀 ${t("Confronta Investor e Pro","Compare Investor and Pro")}
         </button>
       </div>
       `
@@ -1583,7 +1588,8 @@ window.isDemoData
 <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
   <button
     class="portfolio-analysis"
-    data-id="${data.id}"
+    data-action="create-property"
+    data-id="${escapeDashboardHTML(data.id)}"
     data-active="${data.isPortfolio ? "true" : "false"}"
     data-linked="${data.propertyId ? "true" : "false"}"
     ${data.propertyId ? "disabled" : ""}
@@ -1600,14 +1606,12 @@ window.isDemoData
     ">
     ${data.propertyId
       ? t("✓ Collegato al PMS", "✓ Linked to PMS")
-      : data.isPortfolio
-      ? t("✓ Nel portafoglio", "✓ In portfolio")
-      : t("+ Aggiungi al portafoglio", "+ Add to portfolio")}
+      : t("+ Aggiungi immobile", "+ Add property")}
   </button>
   ${canDelete() && !data.propertyId ? `
   <button
     class="delete-analysis"
-    data-id="${data.id}"
+    data-id="${escapeDashboardHTML(data.id)}"
     style="
       background:#ef4444;
       color:white;
@@ -1644,10 +1648,11 @@ renderPortfolioManager(portfolioAnalyses);
 
 // ================= CONTINUA RENDER =================
 
-renderInsight(count,totalROI,totalCapital);
+renderInsight(portfolioAnalyses);
+renderInvestmentIntelligence(portfolioAnalyses);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
-renderROIMarketComparison(count,totalROI);
+renderROIMarketComparison(portfolioAnalyses);
 renderRevenueSimulator(); 
 renderBestInvestment(analyses);
 
@@ -1748,33 +1753,6 @@ renderCashflowChart();
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
-  // ================= DEMO DATA BADGE =================
-if(window.isDemoData){
-
-  const badge = document.createElement("div");
-
-  badge.innerHTML = `
-  <div style="
-    position:fixed;
-    top:100px;
-    right:30px;
-    opacity:0.85;
-    background:rgba(15,23,42,0.9);
-    color:white;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:12px;
-    z-index:999999;
-    backdrop-filter:blur(6px);
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  ">
-    🧪 ${t("Dati demo","Demo data")}
-  </div>
-  `;
-
-  document.body.appendChild(badge);
-}
-
 } // ✅ CHIUSURA loadDashboard  
 
 // ================= BEST INVESTMENT =================
@@ -1815,55 +1793,6 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-if(
-  window.RB_USER?.isInvestor &&
-  !isPro()
-){
-
-  container.innerHTML = `
-
-  <div class="analysis-card">
-
-    <h3>
-    🏆 Best Investment
-    </h3>
-
-    <div style="
-    margin-top:20px;
-    text-align:center;
-    ">
-
-      <div style="
-      font-size:42px;
-      margin-bottom:10px;
-      ">
-      🔒
-      </div>
-
-      <div style="
-      color:#64748b;
-      margin-bottom:15px;
-      ">
-      Upgrade a PRO per vedere
-      il miglior investimento
-      del portafoglio.
-      </div>
-
-      <button
-      class="btn-primary"
-      onclick="goToUpgrade()">
-      🚀 Passa a PRO
-      </button>
-
-    </div>
-
-  </div>
-
-  `;
-
-  return;
-}  
-
 const pro = isPro();
 
 const investor =
@@ -1887,12 +1816,13 @@ font-size:11px;
 font-weight:600;
 box-shadow:0 4px 12px rgba(16,185,129,0.4);
 ">
-TOP ROI
+SCENARIO
 </div>
 
 <h3 style="margin-bottom:16px">
-🏆 ${t("Miglior investimento","Best investment")}
+🕒 ${t("Analisi più recente","Latest analysis")}
 </h3>
+<p style="font-size:13px;color:#64748b">${scenarioContext(best)}</p>
 
 <!-- ROI -->
 <div style="
@@ -1901,7 +1831,7 @@ font-weight:800;
 color:${roiColor};
 margin-bottom:12px;
 ">
-${best.roi.toFixed(1)}%
+${formatPercent(best.roi)}
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-bottom:18px">
@@ -1923,16 +1853,16 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- 🔒 BLOCCO PRO -->
 ${
-isPro()
+(isPro() || isInvestor())
 ? `
-<!-- CONTENUTO PRO -->
+<!-- CONTENUTO PAID -->
 <div class="metric">
 <span>${t("Indice rischio","Risk score")}</span>
-<strong>${best.risk}/100</strong>
+<strong>${financialNumber(best.risk) === null ? "--" : `${best.risk}/100`}</strong>
 </div>
 
 <div class="metric">
-<span>${t("Break-even investimento","Investment break-even")}</span>
+<span>${t("Recupero equity stimato","Estimated equity payback")}</span>
 <strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
@@ -1946,8 +1876,8 @@ color:#065f46;
 ">
 <strong>💡 Insight:</strong><br>
 ${t(
-"Questo investimento supera la media di mercato.",
-"This investment outperforms the market average."
+"Rendimento stimato dalle ipotesi salvate, da verificare prima di investire.",
+"Return estimated from saved assumptions; verify before investing."
 )}
 </div>
 `
@@ -2000,7 +1930,7 @@ return;
 
 /* top 3 ROI */
 
-const top = [...analyses]
+const top = analyses.filter(data => financialNumber(data.roi) !== null)
 .sort((a,b)=> b.roi - a.roi)
 .slice(0,3);
 
@@ -2021,7 +1951,7 @@ html += `
 <div class="metric">
 <span>${medal} ${t("Investimento","Investment")} ${index+1}</span>
 <strong style="color:${roiColor}">
-${inv.roi.toFixed(1)}%
+${formatPercent(inv.roi)}
 </strong>
 </div>
 
@@ -2050,8 +1980,8 @@ header.innerHTML=`
 
 <h2>
 ${t("Benvenuto","Welcome")}
-<strong class="account-email" title="${window.currentUser.email}">
-${window.currentUser.email}
+<strong class="account-email" title="${escapeDashboardHTML(window.currentUser.email)}">
+${escapeDashboardHTML(window.currentUser.email)}
 </strong>
 </h2>
 
@@ -2102,6 +2032,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
   const linkedCount = portfolioAnalyses.filter(data => Boolean(data.propertyId)).length;
   const manualCount = portfolioAnalyses.length - linkedCount;
 
+  const dataCoverage = summarizeInvestments(portfolioAnalyses).coverage;
   const summary = portfolioAnalyses.length
     ? t(
         `${portfolioAnalyses.length} ${portfolioAnalyses.length === 1 ? "immobile confermato" : "immobili confermati"} · ${linkedCount} PMS · ${manualCount} ${manualCount === 1 ? "manuale" : "manuali"}`,
@@ -2113,11 +2044,11 @@ function renderPortfolioManager(portfolioAnalyses = []){
     const linked = Boolean(data.propertyId);
     const rawCity = String(data.city || t("Città non indicata", "City not specified"));
     const city = escapeDashboardHTML(rawCity.charAt(0).toUpperCase() + rawCity.slice(1));
-    const price = Number(data.price || 0);
-    const equity = Number(data.equity || 0);
-    const roi = Number(data.roi || 0);
-    const yearlyCashflow = Number(data.net || 0);
-    const risk = Number(data.risk || 0);
+    const price = financialNumber(data.price);
+    const equity = financialNumber(data.equity);
+    const roi = financialNumber(data.roi);
+    const yearlyCashflow = financialNumber(data.net);
+    const risk = financialNumber(data.risk);
     const complete = price > 0 && equity > 0 && Number.isFinite(roi) && Number.isFinite(yearlyCashflow);
 
     return `
@@ -2138,7 +2069,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
           <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
           <div><span>ROI</span><strong>${formatPercent(roi)}</strong></div>
-          <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow / 12)}</strong></div>
+          <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
           <div><span>${t("Rischio", "Risk")}</span><strong>${Number.isFinite(risk) ? `${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", { maximumFractionDigits: 0 }).format(risk)}/100` : "--"}</strong></div>
         </div>
 
@@ -2148,7 +2079,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
             : t("Questa simulazione contribuisce ai totali del portafoglio.", "This simulation contributes to portfolio totals.")}
           </span>
           ${linked
-            ? `<span class="portfolio-manager__locked">🔒 ${t("Gestisci dal PMS", "Manage in PMS")}</span>`
+            ? `<button type="button" class="btn-dashboard" data-property-id="${escapeDashboardHTML(data.propertyId)}" onclick="openPropertyEditor(this.dataset.propertyId)">✏️ ${t("Modifica immobile", "Edit property")}</button>`
             : `<button class="portfolio-analysis portfolio-manager__remove" data-id="${escapeDashboardHTML(data.id)}" data-active="true" data-linked="false">${t("Rimuovi dal portafoglio", "Remove from portfolio")}</button>`}
         </div>
       </article>
@@ -2158,14 +2089,14 @@ function renderPortfolioManager(portfolioAnalyses = []){
   container.innerHTML = `
     <div class="portfolio-manager__header">
       <div>
-        <span class="portfolio-manager__eyebrow">LIVE PORTFOLIO</span>
+        <span class="portfolio-manager__eyebrow">PATRIMONIO CONFERMATO</span>
         <h2>📂 ${t("Portafoglio investimenti", "Investment portfolio")}</h2>
         <p>${t(
           "Solo gli immobili confermati alimentano ROI, cashflow, equity e break-even.",
           "Only confirmed properties feed ROI, cash flow, equity and break-even."
         )}</p>
       </div>
-      <strong class="portfolio-manager__summary">${summary}</strong>
+      <strong class="portfolio-manager__summary">${summary}${portfolioAnalyses.length ? t(` · ROI ${dataCoverage.roi}/${portfolioAnalyses.length} · cashflow ${dataCoverage.cashflow}/${portfolioAnalyses.length} · equity ${dataCoverage.equity}/${portfolioAnalyses.length}`, ` · ROI ${dataCoverage.roi}/${portfolioAnalyses.length} · cash flow ${dataCoverage.cashflow}/${portfolioAnalyses.length} · equity ${dataCoverage.equity}/${portfolioAnalyses.length}`) : ""}</strong>
     </div>
     ${cards || `
       <div class="portfolio-manager__empty">
@@ -2184,36 +2115,19 @@ function renderPortfolioManager(portfolioAnalyses = []){
 function renderStats(count,totalROI,totalCapital,totalCashflow,portfolioAnalyses = []){
 
 // ================= SAFE CALC =================
-const avgROI = count ? (totalROI / count) : 0;
-const avgROIRounded = avgROI.toFixed(1);
-const avgCashflow = count ? (totalCashflow / count) : 0;
-
-const confirmedCount = portfolioAnalyses.length;
-const confirmedEquity = portfolioAnalyses.reduce(
-  (sum, data) => sum + Number(data.equity || 0),
-  0
-);
-const confirmedYearlyCashflow = portfolioAnalyses.reduce(
-  (sum, data) => sum + Number(data.net || 0),
-  0
-);
-const confirmedROI = confirmedCount
-  ? (
-      confirmedEquity > 0
-        ? portfolioAnalyses.reduce(
-            (sum, data) => sum + (Number(data.roi || 0) * Number(data.equity || 0)),
-            0
-          ) / confirmedEquity
-        : portfolioAnalyses.reduce(
-            (sum, data) => sum + Number(data.roi || 0),
-            0
-          ) / confirmedCount
-    )
-  : 0;
-const confirmedMonthlyCashflow = confirmedYearlyCashflow / 12;
-const confirmedBreakEven = confirmedYearlyCashflow > 0
+const scenarioMetrics = summarizeInvestments(window.dashboardSimulations || []);
+const portfolioMetrics = summarizeInvestments(portfolioAnalyses);
+const avgROI = scenarioMetrics.averageROI;
+const avgROIRounded = avgROI === null ? null : avgROI.toFixed(1);
+const avgCashflow = scenarioMetrics.averageCashflow;
+const confirmedCount = portfolioMetrics.count;
+const confirmedEquity = portfolioMetrics.equity;
+const confirmedYearlyCashflow = portfolioMetrics.cashflow;
+const confirmedROI = portfolioMetrics.weightedROI;
+const confirmedMonthlyCashflow = confirmedYearlyCashflow === null ? null : confirmedYearlyCashflow / 12;
+const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity !== null
   ? confirmedEquity / confirmedYearlyCashflow
-  : 0;
+  : null;
 
   window.__lastAvgROI = avgROI;
 
@@ -2230,14 +2144,14 @@ const marketROI = cityMarket.roi;
 const trend = avgROI >= marketROI ? "↑" : "↓";
 
 // ================= CALCOLI =================
-const monthlyProfit = avgCashflow / 12;
-const yearlyProfit = totalCashflow;
+const monthlyProfit = avgCashflow === null ? null : avgCashflow / 12;
+const yearlyProfit = avgCashflow;
 
 let breakEvenYears = "-";
 
-if(totalCashflow > 0){
+if(avgCashflow > 0 && avgROI > 0){
   breakEvenYears =
-    (totalCapital / totalCashflow)
+    (avgROI > 0 ? 100 / avgROI : 0)
     .toFixed(1);
 }
 
@@ -2255,9 +2169,7 @@ document.getElementById(
 );  
 
 if(dbRoi){
-  dbRoi.innerText = avgROI > 0
-    ? formatPercent(avgROIRounded)
-    : "--";
+  dbRoi.innerText = formatPercent(avgROIRounded);
 }
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
@@ -2275,15 +2187,15 @@ if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
 if(dbStatus){
 
-  let status = t("Rischio","Risk");
+  let status = avgROI === null ? t("Dati non disponibili", "Data unavailable") : t("Basso","Low");
 let color = "#ef4444";
 
 if(avgROI >= 10){
-  status = t("Forte","Strong");
+  status = t("Elevato","High");
   color = "#10b981";
 }
 else if(avgROI >= 5){
-  status = t("Moderato","Moderate");
+  status = t("Positivo","Positive");
   color = "#f59e0b";
 }
 
@@ -2307,7 +2219,7 @@ const canViewDashboardData =
 
 if(kpiRoi){
   kpiRoi.innerText = confirmedCount
-    ? formatPercent(confirmedROI.toFixed(1))
+    ? formatPercent(confirmedROI === null ? null : confirmedROI.toFixed(1))
     : "--";
 }
 
@@ -2328,14 +2240,14 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? (confirmedCount ? formatYears(confirmedBreakEven.toFixed(1)) : "--")
+      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
 if(roiEl){
   roiEl.textContent = confirmedCount
-    ? formatPercent(confirmedROI.toFixed(1))
+    ? formatPercent(confirmedROI === null ? null : confirmedROI.toFixed(1))
     : "--";
 }
 
@@ -2384,11 +2296,15 @@ let insight = "";
 let color = "#10b981";
 let icon = "🟢";
 
-if(avgROI >= marketROI + 5){
+if(avgROI === null){
+insight = t("Dati ROI non disponibili: completa le simulazioni salvate.", "ROI data unavailable: complete your saved simulations.");
+color = "#64748b"; icon = "⚪";
+}
+else if(avgROI >= marketROI + 5){
 
 insight = t(
-"Il tuo portafoglio sta performando significativamente sopra la media del mercato. Le attuali condizioni suggeriscono una buona opportunità di espansione.",
-"Your portfolio is performing significantly above the market average. Current conditions suggest a strong opportunity for expansion."
+"Gli scenari salvati mostrano un rendimento stimato elevato. Verifica costi, finanziamento e ipotesi prudenti prima di decidere.",
+"Saved scenarios show a high estimated return. Check costs, financing and conservative assumptions before deciding."
 );
 
 }
@@ -2399,7 +2315,7 @@ icon = "🔵";
 
 insight = t(
 "Le performance sono superiori alla media del mercato. Mantieni la strategia attuale monitorando nuove opportunità.",
-"Performance is above market average. Maintain the current strategy while monitoring new investment opportunities."
+"Performance is above the illustrative reference. Maintain the current strategy while monitoring new investment opportunities."
 );
 
 }
@@ -2436,7 +2352,7 @@ text-transform:uppercase;
 letter-spacing:.8px;
 ">
 
-Analisi strategica
+${t("Sintesi delle simulazioni salvate", "Saved simulations summary")}
 
 </div>
 
@@ -2447,7 +2363,7 @@ font-weight:800;
 color:${color};
 ">
 
-${icon} ${investmentScore}/100
+${icon} ${investmentScore === null ? "--" : `${investmentScore}/100`}
 
 </h3>
 
@@ -2459,7 +2375,7 @@ font-weight:700;
 color:${color};
 ">
 
-${avgROIRounded}% ROI
+${formatPercent(avgROIRounded)} ROI
 
 </div>
 
@@ -2507,7 +2423,7 @@ font-size:34px;
 font-weight:900;
 letter-spacing:-0.5px;
 ">
-${formatCurrency(totalCapital)}
+${formatCurrency(scenarioMetrics.price)}
 </div>
 </div>
 
@@ -2521,7 +2437,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenarioMetrics.coverage.roi}/${scenarioMetrics.count}
 </h3>
 
 <div style="
@@ -2530,7 +2446,7 @@ font-weight:900;
 letter-spacing:-0.5px;
 color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
-${avgROIRounded}% ${trend}
+${formatPercent(avgROIRounded)} ${avgROI === null ? "" : trend}
 </div>
 </div>
 
@@ -2566,7 +2482,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("Investment Score","Investment Score")}
+${t("Investment Score","Investment Score")} · ${scenarioMetrics.coverage.score}/${scenarioMetrics.count}
 </h3>
 
 <div style="
@@ -2576,8 +2492,8 @@ letter-spacing:-0.5px;
 color:#2563eb;
 ">
 ${
-isPro()
-? `${investmentScore}/100`
+(isPro() || isInvestor())
+? (investmentScore === null ? "--" : `${investmentScore}/100`)
 : "🔒"
 }
 </div>
@@ -2596,9 +2512,9 @@ if(userRoiEl){
 }
 
 if(performanceEl){
-  performanceEl.textContent = avgROI >= marketROI
-    ? t("Sopra la media di mercato","Above market average")
-    : t("Sotto la media di mercato","Below market average");
+  performanceEl.textContent = avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
+    ? t("Sopra il riferimento dimostrativo","Above the illustrative reference")
+    : t("Sotto il riferimento dimostrativo","Below the illustrative reference");
 
   performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
@@ -2614,13 +2530,13 @@ statsContainer.innerHTML = `
 
 <div class="metric">
 <span>${t("Utente","User")}</span>
-<strong>${window.currentUser.email}</strong>
+<strong>${escapeDashboardHTML(window.currentUser.email)}</strong>
 </div>
 
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
 <strong style="color:${isPro() ? "#10b981" : "#64748b"};">
-${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
+${window.currentPlan === "pro_yearly" ? t("PRO ANNUALE", "PRO ANNUAL") : isPro() ? "PRO" : escapeDashboardHTML(window.currentPlan.toUpperCase())}
 </strong>
 </div>
 </div>
@@ -2628,14 +2544,14 @@ ${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
 <div class="analysis-card">
 
 <h3>
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenarioMetrics.coverage.roi}/${scenarioMetrics.count}
 </h3>
 
 <strong style="
 font-size:22px;
 color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
-${avgROIRounded}%
+${formatPercent(avgROIRounded)}
 </strong>
 
 <div style="
@@ -2646,14 +2562,14 @@ color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
 
 🔥 ${
-avgROI >= marketROI
+avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
 ? `+${(avgROI - marketROI).toFixed(1)}% ${t(
-"rispetto alla media mercato",
-"above market average"
+"rispetto al riferimento dimostrativo",
+"above the illustrative reference"
 )}`
 : `-${(marketROI - avgROI).toFixed(1)}% ${t(
-"sotto la media mercato",
-"below market average"
+"sotto il riferimento dimostrativo",
+"below the illustrative reference"
 )}`
 }
 
@@ -2664,7 +2580,7 @@ avgROI >= marketROI
 <div class="analysis-card">
 
 <h3>
-${t("Profitto annuo","Yearly profit")}
+${t("Profitto annuo medio per scenario","Average annual profit per scenario")}
 </h3>
 
 <strong>
@@ -2679,8 +2595,8 @@ color:#10b981;
 ">
 
 💰 ${t(
-"profitto stimato nei prossimi 12 mesi",
-"estimated profit over the next 12 months"
+"stima per singola analisi, non reddito del patrimonio",
+"estimate per analysis, not portfolio income"
 )}
 
 </div>
@@ -2688,7 +2604,7 @@ color:#10b981;
 </div>
 
 <div class="analysis-card">
-<h3>${t("Break-even","Break-even")}</h3>
+<h3>${t("Recupero equity indicativo","Illustrative equity payback")}</h3>
 <strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
@@ -2715,23 +2631,25 @@ setTimeout(()=>{
 
 function updateDynamicTexts(){
 
-  const avgROI = window.__lastAvgROI || 0;
+  const avgROI = financialNumber(window.__lastAvgROI);
   const roiMsg = document.getElementById("roi-message");
 
   if(!roiMsg) return;
 
-  if(avgROI >= 10){
+  if(avgROI === null){
+    roiMsg.innerText = t("Dati ROI non disponibili", "ROI data unavailable");
+  }else if(avgROI >= 10){
 
     roiMsg.innerText = t(
-      "🔥 ROI sopra mercato (ottimo investimento)",
-      "🔥 Above market ROI (strong investment)"
+      "Rendimento dello scenario elevato",
+      "High estimated scenario return"
     );
 
   }else if(avgROI >= 5){
 
     roiMsg.innerText = t(
-      "📊 ROI nella media",
-      "📊 Average ROI"
+      "Rendimento dello scenario positivo",
+      "Positive estimated scenario return"
     );
 
   }else{
@@ -2794,10 +2712,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // ================= GET PLAN =================
       const userDoc = await getDoc(doc(db, "users", user.uid));
+      if(auth.currentUser?.uid !== user.uid) return;
 
       if(userDoc.exists()){
         const data = userDoc.data();
-        window.currentPlan = data.plan || "free";
+        window.currentPlan = resolveAccountPlan(data, window.location.hostname);
         window.rbNotificationPreferences = data.notificationPreferences || {};
       }else{
         window.currentPlan = "free";
@@ -2946,263 +2865,85 @@ function renderCityDistribution(analyses){
 // CASHFLOW PROJECTION CHART
 // ===============================
 
+let cashflowChartInstance = null;
 function renderCashflowChart(){
-
-const container = document.getElementById("cashflow-chart-container");
-if(!container) return;
-
-/* ricrea canvas */
-
-container.innerHTML = '<canvas id="cashflowChart"></canvas>';
-
-const canvas = document.getElementById("cashflowChart");
-canvas.height = 300;  
-const ctx = canvas.getContext("2d");
-
-/* dati demo */
-
-const avgROI = roiValues.length
-  ? roiValues.reduce((a,b)=>a+b,0) / roiValues.length
-  : 0;
-
-const avgInvestment = 120000;
-
-// profitto medio realistico
-const yearlyProfit = (avgInvestment * avgROI) / 100;
-
-// simulazione realistica 5 anni
-const yearlyCashflow = [
-  -avgInvestment * 0.1,
-  yearlyProfit * 0.3,
-  yearlyProfit * 0.6,
-  yearlyProfit,
-  yearlyProfit * 1.2
-];
-
-/* colori positivo/negativo */
-
-const colors = yearlyCashflow.map(v =>
-v >= 0 ? "#10b981" : "#ef4444"
-);
-
-/* linea break even */
-
-const breakEven = new Array(yearlyCashflow.length).fill(0);
-
-new Chart(ctx,{
-
-type:"bar",
-
-data:{
-labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
-
-datasets:[
-
-{
-label:t("Cashflow","Cashflow"),
-data:yearlyCashflow,
-
-backgroundColor:
-yearlyCashflow.map(v =>
-v >= 0
-? "#10b981"
-: "#ef4444"
-),
-
-borderRadius:14,
-borderSkipped:false
-},
-
-{
-label: t("Break-even","Break-even"),
-data:breakEven,
-borderColor:"#94a3b8",
-borderDash:[6,6],
-pointRadius:0
-},
-
-{
-label: t("Benchmark mercato","Market benchmark"),
-data:new Array(roiValues.length).fill(8.4),
-borderColor:"#f59e0b",
-borderDash:[4,4],
-pointRadius:0
-}  
-
-]
-
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false,
-
-plugins:{
-legend:{display:true},
-
-tooltip:{
-callbacks:{
-label:(ctx)=> ctx.raw + " €"
+  const container = document.getElementById("cashflow-chart-container");
+  if(!container) return;
+  if(cashflowChartInstance){ cashflowChartInstance.destroy(); cashflowChartInstance = null; }
+  const scenarios = (window.dashboardSimulations || []).slice(0, 10);
+  if(!scenarios.length){
+    container.textContent = t("Nessuno scenario salvato.", "No saved scenarios.");
+    return;
+  }
+  container.innerHTML = '<canvas id="cashflowChart"></canvas>';
+  const canvas = document.getElementById("cashflowChart");
+  canvas.height = 300;
+  const amounts = scenarios.map(item => Number(item.net ?? item.cashflow ?? item.annualProfit ?? 0));
+  cashflowChartInstance = new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: scenarios.map((item, index) => `${index + 1} · ${item.city || t("Scenario", "Scenario")}`),
+      datasets: [{
+        label: t("Profitto annuo stimato per scenario (€)", "Estimated annual profit per scenario (€)"),
+        data: amounts.map(value => Number.isFinite(value) ? value : 0),
+        backgroundColor: amounts.map(value => value >= 0 ? "#087f5b" : "#b4533c"),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false}, tooltip: {callbacks: {label: context => formatCurrency(context.parsed.y)}}},
+      scales: {y: {beginAtZero: true, title: {display: true, text: "€ / anno"}}}
+    }
+  });
 }
-}
-
-},
-
-scales:{
-y:{
-ticks:{
-callback:(v)=> v + " €"
-}
-},
-
-x:{
-grid:{
-display:false
-}
-}
-
-}
-
-}
-
-});
-
-}
-
-
 
 // ===============================
 // INVESTMENT INSIGHT ENGINE
 // ===============================
 
-function renderInsight(count,totalROI,totalCapital){
-
-const investor =
-String(window.currentPlan || "")
-.toLowerCase() === "investor";
-
-const container = document.getElementById("investment-insight");
-
-if(!container) return;
-  
-
-if(investor && !isPro()){
-
-  container.innerHTML = `
-  <div class="analysis-card">
-
-    <h3>Analisi strategica</h3>
-
-    <div style="
-    text-align:center;
-    padding:20px;
-    ">
-
-      <div style="
-      font-size:40px;
-      ">
-      🔒
-      </div>
-
-      <p>
-      Disponibile nel piano PRO
-      </p>
-
-      <button
-      class="btn-primary"
-      onclick="goToUpgrade()">
-      🚀 Upgrade PRO
-      </button>
-
-    </div>
-
-  </div>
-  `;
-
-  return;
-}  
-
-const avgROI = count ? (totalROI/count) : 0;
-
-const marketROI = 8.4;
-
-let title = "";
-let text = "";
-
-// ROI insight
-
-if(avgROI >= marketROI){
-
-title = t(
-"📊 Ottima performance",
-"📊 Strong performance"
-);
-
-text = t(
-"Le simulazioni salvate hanno un ROI medio superiore alla media nazionale. Le opportunità analizzate mostrano un buon potenziale.",
-"Your saved simulations have an average ROI above the national benchmark. The analyzed opportunities show strong potential."
-);
-
-}else if(avgROI > 0){
-
-title = t(
-"📊 Performance moderata",
-"📊 Moderate performance"
-);
-
-text = t(
-"Il ROI medio simulato è positivo ma sotto la media nazionale. Valuta scenari con maggiore occupazione o un prezzo medio notte più efficace.",
-"The average simulated ROI is positive but below the national benchmark. Consider scenarios with higher occupancy or a more effective nightly rate."
-);
-
-}else{
-
-title = t(
-"Analisi degli investimenti",
-"Investment analysis"
-);
-
-text = t(
-"Il ROI medio delle simulazioni è negativo. Valuta immobili con maggiore domanda turistica o costi più bassi.",
-"The average ROI of your simulations is negative. Consider properties with higher tourism demand or lower costs."
-);
-
+function portfolioNarrative(rows){
+  const facts = interpretPortfolio(rows);
+  const content = {
+    empty: [t("Portafoglio da costruire", "Build your portfolio"), t("Conferma una simulazione nel portafoglio o collegala a una proprietà PMS per attivare la sintesi.", "Confirm a simulation in your portfolio or link it to a PMS property to activate the summary."), "#64748b"],
+    incomplete: [t("Dati del patrimonio incompleti", "Incomplete portfolio data"), t("Completa ROI equity, capitale proprio e cashflow degli immobili confermati. Non è possibile interpretare il rendimento complessivo con i dati attuali.", "Complete equity ROI, invested equity and cash flow for confirmed properties. The current data does not support an overall return interpretation."), "#64748b"],
+    loss: [t("Patrimonio con rendimento negativo", "Portfolio with negative return"), t("ROI o cashflow complessivo sono negativi nelle ipotesi salvate. Verifica gli immobili in perdita, i costi e il finanziamento prima di considerare nuovi investimenti.", "Overall ROI or cash flow is negative under the saved assumptions. Review loss-making properties, costs and financing before considering new investments."), "#ef4444"],
+    balanced: [t("Patrimonio in equilibrio", "Portfolio at break-even"), t("Almeno uno tra ROI e cashflow complessivo è pari a zero. Non emerge un margine positivo su entrambi gli indicatori: verifica la tenuta in uno scenario prudente.", "At least one of overall ROI and cash flow is zero. Both indicators do not show a positive margin: check resilience under conservative assumptions."), "#f59e0b"],
+    attention: [t("Patrimonio positivo, criticità da verificare", "Positive portfolio, issues to review"), t("Il totale è positivo, ma almeno un immobile ha cashflow negativo o rischio elevato. L'aggregato può nascondere una criticità: verifica ogni immobile.", "The total is positive, but at least one property has negative cash flow or high risk. The aggregate can hide an issue: review each property."), "#f59e0b"],
+    positive: [t("Patrimonio con margine positivo stimato", "Portfolio with an estimated positive margin"), t("ROI e cashflow complessivo sono positivi nelle ipotesi salvate. Verifica costi, occupazione e finanziamento in scenari prudenti; il risultato non dimostra incassi reali.", "Overall ROI and cash flow are positive under the saved assumptions. Check costs, occupancy and financing under conservative scenarios; this does not establish actual receipts."), "#10b981"]
+  };
+  const [title,text,color] = content[facts.status];
+  return {...facts,title,text,color};
 }
 
-// capitale insight
-
-let capitalText = "";
-
-if(totalCapital > 500000){
-
-capitalText = t(
-"Hai analizzato un capitale significativo. Diversificare tra più proprietà può ridurre il rischio.",
-"You analyzed significant capital. Diversifying across properties may reduce risk."
-);
-
-}else{
-
-capitalText = t(
-"Analizzare più investimenti può aiutarti a identificare opportunità migliori.",
-"Analyzing more investments can help identify stronger opportunities."
-);
-
+function renderInsight(rows = []){
+  const container = document.getElementById("investment-insight");
+  if(!container) return;
+  const facts = portfolioNarrative(rows);
+  container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3>
+    <p style="margin-top:10px;color:#475569;font-size:14px">${facts.text}</p>
+    <p style="margin-top:8px;color:#64748b;font-size:13px">${t("Ambito: patrimonio confermato · ipotesi finanziarie salvate, non risultati operativi PMS.", "Scope: confirmed portfolio · saved financial assumptions, not PMS operating results.")}</p>`;
 }
 
-container.innerHTML = `
-
-<h3>${title}</h3>
-
-<p style="margin-top:10px;color:#475569;font-size:14px">
-${text}
-</p>
-
-<p style="margin-top:8px;color:#64748b;font-size:13px">
-${capitalText}
-</p>
-
-`;
-
+function renderInvestmentIntelligence(rows = []){
+  const container = document.getElementById("investment-intelligence-content");
+  const status = document.getElementById("investment-intelligence-status");
+  if(!container) return;
+  const facts = portfolioNarrative(rows);
+  if(status) status.textContent = facts.metrics.count ? t("● PATRIMONIO CONFERMATO", "● CONFIRMED PORTFOLIO") : t("● IN ATTESA DI DATI", "● AWAITING DATA");
+  if(!isPro() && !isInvestor()){
+    if(status) status.textContent = t("● ANTEPRIMA DEMO", "● DEMO PREVIEW");
+    container.innerHTML = `<p>${t("La demo mostra dati di esempio. Con Investor puoi interpretare il tuo patrimonio confermato e individuare immobili da verificare. Pro aggiunge PDF e dashboard-report.", "The demo shows sample data. With Investor you can interpret your confirmed portfolio and identify properties to review. Pro adds PDFs and dashboard reports.")}</p><button type="button" onclick="goToUpgrade()" style="background:#10b981;border:none;padding:10px 14px;border-radius:8px;color:white;font-weight:600;cursor:pointer;">${t("Confronta Investor e Pro", "Compare Investor and Pro")}</button>`;
+    return;
+  }
+  const {metrics} = facts;
+  container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
+    <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
+    <div class="metric"><span>${t("ROI equity ponderato", "Equity-weighted ROI")}</span><strong>${formatPercent(metrics.weightedROI)}</strong></div>
+    <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
+    <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
+    <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
+    <p style="font-size:13px;color:#64748b">${t("Fonte: simulazioni salvate collegate al patrimonio confermato. Rischio medio: media semplice degli indici disponibili, non probabilità di perdita o misura della diversificazione. I dati mancanti non sono stimati.", "Source: saved simulations linked to the confirmed portfolio. Average risk: simple mean of available indices, not a loss probability or a diversification measure. Missing data is not estimated.")}</p>`;
 }
 
 // ===============================
@@ -3242,35 +2983,35 @@ adrNeeded * occupancyNeeded * 365 / 100
 
 container.innerHTML = `
 
-<h3>💡 ${t("Ottimizzazione investimento","Investment optimization")}</h3>
+<h3>💡 ${t("Ipotesi illustrative sui ricavi","Illustrative revenue assumptions")}</h3>
 
 <p style="margin-top:10px;color:#475569;font-size:14px">
 ${t(
-"Per raggiungere la redditività media del mercato B&B:",
-"To reach average B&B market profitability:"
+"Esempio aritmetico sui ricavi: non risolve il ROI o la rata del tuo scenario.",
+"Arithmetic revenue example: it does not solve your scenario ROI or mortgage payment."
 )}
 </p>
 
 <div class="metric">
-<span>${t("Occupazione minima richiesta","Minimum occupancy")}</span>
+<span>${t("Occupazione di esempio","Example occupancy")}</span>
 <strong>${occupancyNeeded}%</strong>
 </div>
 
 <div class="metric">
-<span>${t("Prezzo medio notte necessario","Required nightly rate")}</span>
+<span>${t("Prezzo notte di esempio","Example nightly rate")}</span>
 <strong>€${adrNeeded}</strong>
 </div>
 
 <div class="metric">
-<span>${t("Ricavo annuo target","Target yearly revenue")}</span>
+<span>${t("Ricavo annuo dello scenario","Scenario annual revenue")}</span>
 <strong>${formatCurrency(revenueNeeded)}</strong>
 </div>
 
 <div style="margin-top:12px;color:#64748b;font-size:13px">
 
 ${t(
-"Oppure ridurre il prezzo dell'immobile di circa",
-"Or reduce property price by about"
+"Variazione illustrativa del prezzo (non una proposta di acquisto)",
+"Illustrative price variation (not a purchase offer)"
 )}
 
 <strong>${priceReduction}%</strong>
@@ -3285,49 +3026,30 @@ ${t(
 // ROI TARGET CALCULATOR
 // ===============================
 
+function scenarioContext(result){
+  if(!result) return t("Nessuna simulazione disponibile", "No simulation available");
+  const city = escapeDashboardHTML(String(result.city || t("Città non indicata", "City unspecified")));
+  const date = escapeDashboardHTML(formatDate(result.createdAt));
+  return `${t("Simulazione più recente", "Latest simulation")} · ${city} · ${date} · ROI equity ${formatPercent(result.roi)}`;
+}
+
 function renderROITargetCalculator(analyses){
-
-const container = document.getElementById("roi-target-calculator");
-if(!container) return;
-
-if(!analyses || analyses.length === 0){
-container.innerHTML="";
-return;
-}
-
-const best = analyses[0];
-
-/* ROI target */
-
-const targetROI = 10;
-
-/* calcolo prezzo massimo */
-
-let maxPrice = best.price;
-
-if(best.roi !== 0){
-
-maxPrice = (best.price * best.roi) / targetROI;
-
-}
-
-container.innerHTML = `
-
-<h3>🎯 ${t("Prezzo massimo immobile","Maximum property price")}</h3>
-
-<div style="font-size:26px;font-weight:700;color:#2563eb">
-${formatCurrency(maxPrice)}
-</div>
-
-<div style="font-size:13px;color:#64748b;margin-top:6px">
-${t(
-"per raggiungere ROI target",
-"to reach target ROI"
-)} ${targetROI}%
-</div>
-
-`;
-
+  const container = document.getElementById("roi-target-calculator");
+  if(!container) return;
+  const selected = analyses?.[0];
+  if(!selected){ container.innerHTML = ""; return; }
+  const targetROI = 10;
+  const result = targetEquity(selected,targetROI);
+  const value = result.status === "ready" ? formatCurrency(result.equity) : "--";
+  const explanation = result.status === "nonpositive"
+    ? t("Con cashflow nullo o negativo, un ROI positivo non è ottenibile riducendo soltanto l'equity a cashflow invariato. Rivedi ricavi, costi e finanziamento nel simulatore.", "With zero or negative cash flow, a positive ROI cannot be achieved solely by reducing equity at unchanged cash flow. Review revenue, costs and financing in the simulator.")
+    : result.status === "missing"
+    ? t("Servono equity positiva e cashflow annuo riconosciuto per calcolare il target. I dati mancanti non vengono stimati.", "Positive equity and a recognized annual cash flow are required to calculate the target. Missing data is not estimated.")
+    : t("Equity teorica = cashflow annuo salvato ÷ 10%. È un rapporto aritmetico, non una proposta di prezzo o mutuo: cambiare equity e finanziamento può cambiare il cashflow e richiede una nuova simulazione.", "Theoretical equity = saved annual cash flow ÷ 10%. This is an arithmetic ratio, not a price or mortgage offer: changing equity and financing can change cash flow and requires a new simulation.");
+  container.innerHTML = `<h3>🎯 ${t("Equity teorica al ROI target", "Theoretical equity at target ROI")}</h3>
+    <p style="font-size:13px;color:#64748b">${scenarioContext(selected)}</p>
+    <div style="font-size:26px;font-weight:700;color:#2563eb">${value}</div>
+    <p style="font-size:13px;color:#64748b;margin-top:6px">${explanation}</p>`;
 }
 
 // ===============================
@@ -3470,6 +3192,13 @@ const isActive = btn.dataset.active === "true";
 
 if(btn.dataset.linked === "true") return;
 
+// Strategic analyses create an actual property through the existing saved batch.
+// The portfolio manager keeps its separate remove-scenario action.
+if(btn.dataset.action === "create-property"){
+  await window.openPropertyFromAnalysis(id);
+  return;
+}
+
 try{
   btn.disabled = true;
 
@@ -3495,33 +3224,7 @@ try{
 
 // ================= DOWNLOAD REPORT DASHBOARD =================
 
-function downloadReport(){
-
-  if(!window.bestInvestmentData){
-    alert(window.currentLang === "en"
-      ? "No analysis available"
-      : "Nessuna analisi disponibile");
-    return;
-  }
-
-  const data = window.bestInvestmentData;
-
-  const params = new URLSearchParams({
-    price: data.price || 0,
-    roi: data.roi || 0,
-    equity: data.equity || 0,
-    risk: data.risk || 0,
-    city:
-        data.realCity ||
-        data.city ||
-        "roma",
-    source: "dashboard" // 🔥 fondamentale
-  });
-
-  // 🚀 NUOVO FLOW → PDF DASHBOARD
-  window.location.href =
-    "/dashboard-report/?" + params.toString();
-}
+function downloadReport(){ handleReportClick(); }
 
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
 function handleReportClick(){
@@ -3551,12 +3254,17 @@ function handleReportClick(){
   }
 
   // ✅ PRO → DASHBOARD REPORT
-  const data = window.bestInvestmentData || {};
-  // 🔥 FIX CRITICO → salva simulazioni per report
-localStorage.setItem(
-  "rb_simulations",
-  JSON.stringify(window.dashboardSimulations || [])
-);
+  const data = window.bestInvestmentData;
+  const price = Number(data?.propertyPrice ?? data?.price);
+  if(!data || !Number.isFinite(price) || price <= 0){
+    alert(t(
+      "Salva una simulazione valida prima di aprire il report professionale.",
+      "Save a valid simulation before opening the professional report."
+    ));
+    return;
+  }
+  const reportOwner = auth.currentUser?.uid;
+  if(!reportOwner) return;
 
   // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
   try{
@@ -3584,29 +3292,19 @@ localStorage.setItem(
           }))
         : []
     };
-    localStorage.setItem(
-      "rb_dashboard_report_context",
-      JSON.stringify({
-        generatedAt: new Date().toISOString(),
-        pms: reportPMS
-      })
+    window.RBReportCache.write(
+      reportOwner,
+      [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
+      {generatedAt: new Date().toISOString(), pms: reportPMS},
+      sessionStorage, localStorage
     );
   }catch(error){
     dashboardDebug("Dashboard report PMS snapshot unavailable", error);
+    alert(t("Impossibile preparare il report. Riprova dalla dashboard.", "Unable to prepare the report. Please retry from the dashboard."));
+    return;
   }
 
-  const params = new URLSearchParams({
-    price: data.price || 0,
-    roi: data.roi || 0,
-    equity: data.equity || 0,
-    risk: data.risk || 0,
-    city:
-         data.realCity ||
-         data.city ||
-         "roma",
-    source: "dashboard",
-    ts: Date.now() // evita cache
-  });
+  const params = new URLSearchParams({source: "dashboard"});
 
   window.location.href =
     "/dashboard-report/?" + params.toString();
@@ -3732,7 +3430,7 @@ if(stats && market){
 stats.innerHTML = `
 <div>
 <div style="font-size:13px;color:#64748b">
-${t("ROI medio","Average ROI")}
+${t("ROI equity medio degli scenari","Average scenario equity ROI")}
 </div>
 <div style="font-size:22px;font-weight:600;color:#10b981">
 ${market.roi}%
@@ -3802,82 +3500,21 @@ subtitle.innerText = randomText;
 // ================= VERDICT ENGINE =================
 
 function generateInvestmentVerdict(result){
-
-if(!result) return null;
-
-const roi = result.roi || 0;
-const cashflow =
-  result.net ||
-  result.cashflow ||
-  0;
-const risk = result.risk || 50;
-
-// ================= EXCELLENT =================
-if(roi >= 10 && cashflow > 0 && risk < 70){
-return {
-type:"excellent",
-color:"#10b981",
-
-title: t("🔥 Ottimo investimento","🔥 Excellent investment"),
-
-subtitle: t(
-"ROI sopra la media e cashflow positivo",
-"Above-average ROI and positive cashflow"
-),
-
-action: t("Procedere","Proceed"),
-
-message: t(
-"Investimento solido con ottimo equilibrio tra rendimento e rischio.",
-"Solid investment with strong balance between return and risk."
-)
-};
+  if(!result) return null;
+  const roi = financialNumber(result.roi);
+  const cashflow = financialNumber(result.net ?? result.cashflow);
+  const risk = financialNumber(result.risk);
+  if(roi === null || cashflow === null || risk === null || risk < 0 || risk > 100){
+    return {type:"incomplete",color:"#64748b",title:t("Dati dello scenario incompleti", "Incomplete scenario data"),subtitle:t("COMPLETA I DATI", "COMPLETE THE DATA"),action:t("Completa ROI, cashflow e rischio", "Complete ROI, cash flow and risk"),message:t("Non è possibile formulare una sintesi coerente con i dati riconosciuti. I valori mancanti non sono considerati zero.", "The recognized data does not support a coherent summary. Missing values are not treated as zero.")};
+  }
+  if(roi < 0 || cashflow < 0 || risk >= 70){
+    return {type:"risk",color:"#ef4444",title:t("Scenario con criticità", "Scenario with issues"),subtitle:t("VERIFICA PERDITE E RISCHIO", "REVIEW LOSSES AND RISK"),action:t("Rivedi le ipotesi prima di decidere", "Review assumptions before deciding"),message:t("Lo scenario ha ROI negativo, cashflow negativo o un indice di rischio elevato. Il solo ROI positivo non compensa queste criticità.", "The scenario has negative ROI, negative cash flow or a high risk index. Positive ROI alone does not offset these issues.")};
+  }
+  if(roi >= 10 && cashflow > 0){
+    return {type:"excellent",color:"#10b981",title:t("Scenario con indicatori positivi", "Scenario with positive indicators"),subtitle:t("SCENARIO FAVOREVOLE NEL MODELLO", "FAVORABLE SCENARIO UNDER THE MODEL"),action:t("Verifica le ipotesi prudenti", "Check conservative assumptions"),message:t("ROI equity almeno 10%, cashflow positivo e rischio inferiore a 70/100 nelle ipotesi salvate. Non è un confronto con dati di mercato verificati né una garanzia di rendimento.", "Equity ROI of at least 10%, positive cash flow and risk below 70/100 under saved assumptions. This is not a comparison with verified market data or a return guarantee.")};
+  }
+  return {type:"good",color:"#f59e0b",title:t("Scenario da approfondire", "Scenario to review"),subtitle:t("VERIFICA MARGINE E SOSTENIBILITÀ", "CHECK MARGIN AND SUSTAINABILITY"),action:t("Confronta uno scenario prudente", "Compare a conservative scenario"),message:t("ROI e cashflow non sono negativi, ma il margine richiede un approfondimento. Verifica costi, occupazione e finanziamento prima di decidere.", "ROI and cash flow are not negative, but the margin requires further review. Check costs, occupancy and financing before deciding.")};
 }
-
-// ================= GOOD =================
-if(roi >= 7){
-return {
-type:"good",
-color:"#f59e0b",
-
-title: t("📊 Buon investimento","📊 Good investment"),
-
-subtitle: t(
-"Margine interessante ma migliorabile",
-"Interesting margin but improvable"
-),
-
-action: t("Ottimizzare","Optimize"),
-
-message: t(
-"Buona opportunità ma migliorabile ottimizzando prezzo medio o occupazione.",
-"Good opportunity but can be improved by optimizing pricing or occupancy."
-)
-};
-}
-
-// ================= RISK =================
-return {
-type:"risk",
-color:"#ef4444",
-
-title: t("⚠️ Investimento rischioso","⚠️ Risky investment"),
-
-subtitle: t(
-"ROI basso o cashflow negativo",
-"Low ROI or negative cashflow"
-),
-
-action: t("Evitare","Avoid"),
-
-message: t(
-"Rendimento insufficiente o rischio elevato rispetto al mercato.",
-"Insufficient return or high risk compared to the market."
-)
-};
-
-}
-
 
 // ================= VERDICT RENDER =================
 
@@ -3887,11 +3524,12 @@ const container = document.getElementById("investment-verdict");
 if(!container) return;
 
 const verdict = generateInvestmentVerdict(result);
-if(!verdict) return;
+if(!verdict){ container.innerHTML = ""; return; }
 
 container.innerHTML = `
 
 <div style="display:flex;flex-direction:column;gap:10px;">
+<p style="font-size:13px;color:#64748b">${scenarioContext(result)} · ${t("Verdetto della singola simulazione, non del patrimonio", "Single-simulation assessment, not a portfolio assessment")}</p>
 
 <h2 style="
 font-size:30px;
@@ -3908,17 +3546,12 @@ font-weight:800;
 color:${verdict.color};
 margin-top:6px;
 ">
-${
-verdict.type === "excellent"
-  ? `✅ ${t("COMPRA","BUY")}`
-  : verdict.type === "good"
-  ? `⚙️ ${t("OTTIMIZZA","OPTIMIZE")}`
-  : `❌ ${t("EVITA","AVOID")}`
-}
+${verdict.subtitle}
+
 </div>
 
 ${
-!isPro()
+!(isPro() || isInvestor())
 ? `
 <div style="
 margin-top:16px;
@@ -3930,15 +3563,15 @@ text-align:center;
 
 <div style="font-size:14px;font-weight:600;margin-bottom:8px">
 💡 ${t(
-  "Hai già il dato chiave",
-  "You already have the key data"
+  "Esplora lo scenario dimostrativo",
+  "Explore the illustrative scenario"
 )}
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-bottom:12px">
 ${t(
-  "Ti manca la strategia per trasformarlo in profitto reale",
-  "You are missing the strategy to turn it into real profit"
+  "Con Investor confronti le tue ipotesi e gestisci gli immobili nel PMS.",
+  "With Investor you compare your assumptions and manage properties in the PMS."
 )}
 </div>
 
@@ -3952,8 +3585,8 @@ font-weight:700;
 cursor:pointer;
 ">
 🚀 ${t(
-"Sblocca strategia e ROI reale",
-"Unlock strategy & real ROI"
+"Confronta Investor e Pro",
+"Compare Investor and Pro"
 )}
 </button>
 
@@ -3969,27 +3602,7 @@ line-height:1.6;
 font-weight:500;
 ">
 
-${
-verdict.type === "excellent"
-
-? t(
-"Questo investimento supera gli standard di redditività utilizzati nelle valutazioni istituzionali.",
-"This investment exceeds the profitability standards commonly used in institutional evaluations."
-)
-
-: verdict.type === "good"
-
-? t(
-"Il potenziale è elevato, ma alcuni parametri possono essere ottimizzati per incrementare rendimento e sostenibilità.",
-"The investment shows strong potential, but several parameters can be optimized to improve returns and sustainability."
-)
-
-: t(
-"L'investimento non raggiunge attualmente i requisiti minimi consigliati per un'operazione sostenibile.",
-"The investment currently does not meet the minimum requirements recommended for a sustainable operation."
-)
-
-}
+${t("Sintesi delle ipotesi salvate: non certifica incassi reali né costituisce una valutazione bancaria.", "Summary of saved assumptions: it does not certify actual receipts or constitute a bank assessment.")}
 
 </div>
 
@@ -4002,7 +3615,7 @@ ${verdict.message}
 </div>
 
 ${
-!isPro()
+!(isPro() || isInvestor())
 ? `
 <div style="
 margin-top:16px;
@@ -4029,7 +3642,7 @@ color:white;
 font-weight:600;
 cursor:pointer;
 ">
-${t("Sblocca strategia PRO","Unlock PRO strategy")}
+${t("Confronta Investor e Pro","Compare Investor and Pro")}
 </button>
 
 </div>
@@ -4311,8 +3924,8 @@ function showInvestorOverlay(){
         font-weight:600;
       ">
         ${t(
-          "profitto reale che stai ignorando",
-          "real profit you are ignoring"
+          "profitto annuo dello scenario demo",
+          "annual profit of the demo scenario"
         )}
       </div>
 
@@ -4476,176 +4089,31 @@ function unlockProContent(){
 }
 
 function renderUpgradeTrigger(best){
-
-  if(isPro()) return;
-
   const container = document.getElementById("upgrade-trigger");
   if(!container) return;
-
-  if(!best) return;
-  if(best.roi < 6) return;
-  if(isPro()) return;
-
-  const potentialProfit =
-  Number(best.net || 0);
-
+  container.style.display = "none";
+  container.innerHTML = "";
+  if(isPro() || isInvestor()) return;
   container.style.display = "block";
-
-  container.innerHTML = `
-  <div style="
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:white;
-  padding:22px;
-  border-radius:18px;
-  text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,0.25);
-  ">
-
-    <div style="font-size:20px;font-weight:700;margin-bottom:10px">
-⚠️ ${t(
-"Stai rischiando di perdere questo profitto",
-"You are risking losing this profit"
-)}
-</div>
-
-    <div style="
-    font-size:44px;
-    font-weight:900;
-    background:linear-gradient(135deg,#10b981,#34d399);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:10px;
-    ">
-      ${formatCurrency(potentialProfit)}
-    </div>
-
-    <div style="font-size:14px;opacity:0.85;margin-bottom:16px">
-      ${t("profitto annuo stimato","estimated yearly profit")}
-    </div>
-
-    <div style="
-    font-size:13px;
-    color:#94a3b8;
-    margin-bottom:18px;
-    ">
-      ⚠️ ${t(
-        "Stai perdendo i dati più importanti per guadagnare davvero",
-        "You are missing the most important data to actually profit"
-      )}
-    </div>
-
-    <button onclick="goToUpgrade()" style="
-    background:#10b981;
-    border:none;
-    padding:14px 20px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:15px;
-    ">
-      🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
-    </button>
-
-  </div>
-  `;
+  container.innerHTML = `<div style="background:linear-gradient(135deg,#0f172a,#1e293b);color:white;padding:22px;border-radius:18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.25);">
+    <div style="font-size:20px;font-weight:700;margin-bottom:10px">${t("Dalla demo al tuo patrimonio", "From the demo to your portfolio")}</div>
+    <div style="font-size:14px;opacity:0.85;margin-bottom:16px">${t("Qui esplori dati dimostrativi. Con Investor salvi le tue simulazioni, colleghi gli immobili e gestisci il PMS.", "Here you explore illustrative data. With Investor you save your simulations, link properties and manage the PMS.")}</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:18px">${t("Pro aggiunge PDF e dashboard-report. Le simulazioni sono stime, non promesse di guadagno.", "Pro adds PDFs and dashboard reports. Simulations are estimates, not earnings promises.")}</div>
+    <button type="button" onclick="goToUpgrade()" style="background:#10b981;border:none;padding:14px 20px;border-radius:12px;font-weight:700;cursor:pointer;font-size:15px;">${t("Confronta Investor e Pro", "Compare Investor and Pro")}</button>
+  </div>`;
 }
 
 // ================= ROI MARKET COMPARISON =================
 
-function renderROIMarketComparison(count,totalROI){
-
+function renderROIMarketComparison(rows = []){
   const container = document.getElementById("roi-market-comparison");
   if(!container) return;
-
-  if(count === 0){
-    container.innerHTML = "";
-    return;
-  }
-
-  const avgROI = totalROI / count;
-  const marketROI = 8.4;
-
-  const diff = avgROI - marketROI;
-  const isBetter = diff >= 0;
-
-  const color = isBetter ? "#10b981" : "#ef4444";
-
-  const message = isBetter
-    ? t("Stai battendo il mercato","You are beating the market")
-    : t("Sei sotto la media di mercato","You are below market average");
-
-  const percentage = Math.abs(diff).toFixed(1);
-
-  container.innerHTML = `
-<h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
-
-<div style="
-margin-top:14px;
-font-size:28px;
-font-weight:700;
-color:${color};
-">
-${isBetter ? "+" : "-"}${percentage}%
-</div>
-
-<div style="margin-top:6px;color:#64748b;font-size:14px">
-${message}
-</div>
-
-<div style="margin-top:16px">
-
-${
-canViewDashboard()
-? `
-<div style="
-padding:12px;
-border-radius:10px;
-background:rgba(16,185,129,0.08);
-font-size:13px;
-color:#065f46;
-">
-💡 ${t(
-"Il tuo investimento è sopra il benchmark nazionale.",
-"Your investment outperforms the national benchmark."
-)}
-</div>
-`
-: `
-<div style="
-margin-top:16px;
-padding:16px;
-border-radius:12px;
-background:linear-gradient(135deg,#f8fafc,#eef2f7);
-text-align:center;
-">
-
-<div style="font-size:20px;margin-bottom:6px">🔒</div>
-
-<div style="font-size:13px;color:#64748b;margin-bottom:10px">
-${t(
-"Sblocca confronto avanzato e analisi strategica",
-"Unlock advanced comparison and strategy"
-)}
-</div>
-
-<button onclick="goToUpgrade()" style="
-background:#10b981;
-border:none;
-padding:10px 14px;
-border-radius:8px;
-color:white;
-font-weight:600;
-cursor:pointer;
-">
-🚀 ${t("Sblocca PRO","Unlock PRO")}
-</button>
-
-</div>
-`
-}
-
-</div>
-`;
+  const metrics = summarizeInvestments(rows);
+  const reference = 8.4; // Existing illustrative value, not a verified market feed.
+  const diff = metrics.weightedROI === null ? null : metrics.weightedROI - reference;
+  container.innerHTML = `<h3>📊 ${t("Patrimonio e riferimento dimostrativo", "Portfolio and illustrative reference")}</h3>
+    <div style="margin-top:14px;font-size:28px;font-weight:700;color:${diff === null ? "#64748b" : diff >= 0 ? "#10b981" : "#ef4444"};">${diff === null ? "--" : `${diff >= 0 ? "+" : ""}${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", {maximumFractionDigits:1}).format(diff)} ${t("punti percentuali", "percentage points")}`}</div>
+    <p style="margin-top:6px;color:#64748b;font-size:14px">${diff === null ? t("Conferma gli immobili e completa ROI ed equity per rendere disponibile il confronto.", "Confirm properties and complete ROI and equity to enable the comparison.") : t("Scarto aritmetico tra ROI equity ponderato del patrimonio e riferimento di esempio 8,4%. Non è un benchmark nazionale verificato: prima di usarlo per decidere, verifica che la base di calcolo sia confrontabile.", "Arithmetic difference between portfolio equity-weighted ROI and the 8.4% sample reference. This is not a verified national benchmark: check that the calculation bases are comparable before using it for a decision.")}</p>`;
 }
 function lockInvestorPreview(){
 
@@ -4722,8 +4190,27 @@ function updatePropertyTouristTaxVisibility(){
   if(fields) fields.style.display = enabled ? "block" : "none";
 }
 
+window.openPropertyFromAnalysis = async function(analysisId){
+  if(!window.currentUser || !canUseFirestorePMS()) return;
+  const analysis = (window.dashboardSimulations || []).find(item => item.id === analysisId);
+  if(!analysis) return;
+  if(analysis.propertyId){
+    await window.openPropertyEditor(analysis.propertyId);
+    return;
+  }
+  window.openPropertyModal();
+  window.pendingPropertyAnalysisId = analysis.id;
+  const select = document.getElementById("property-analysis");
+  if(select) select.value = analysis.id;
+  const city = document.getElementById("property-city");
+  if(city) city.value = analysis.city || "";
+  const name = document.getElementById("property-name");
+  if(name) name.focus();
+};
+
 window.openPropertyModal = function(){
 
+window.pendingPropertyAnalysisId = null;
 window.editingPropertyId = null;
 
 const title = document.getElementById("property-modal-title");
@@ -4753,6 +4240,8 @@ document.getElementById(
 
 if(modal){
 
+const analysisSelect = document.getElementById("property-analysis");
+if(analysisSelect) analysisSelect.value = "";
 populatePropertyAnalysisSelect();
 
 modal.style.display = "flex";
@@ -4763,7 +4252,7 @@ modal.style.display = "flex";
 
 window.openPropertyEditor = async function(id){
 
-  if(!window.currentUser) return;
+  if(!window.currentUser || !id || !canUseFirestorePMS()) return;
 
   const propertySnap = await getDoc(doc(db, "properties", id));
   if(!propertySnap.exists()) return;
@@ -4839,6 +4328,7 @@ function populatePropertyAnalysisSelect(){
 
 window.closePropertyModal = function(){
 
+window.pendingPropertyAnalysisId = null;
 const modal =
 document.getElementById(
 "property-modal"
@@ -5275,6 +4765,9 @@ document.addEventListener(
 // =====================================
 
 window.loadCurrentPropertyTouristTax = async function(propertyId = window.currentPropertyId){
+  const viewVersion = window.rbBookingViewVersion || 0;
+  const propertyRequest = (window.rbPropertyLoadVersion || 0) + 1;
+  window.rbPropertyLoadVersion = propertyRequest;
   if(!propertyId){
     window.currentPropertyTouristTaxConfig = null;
     window.currentPropertyData = null;
@@ -5293,6 +4786,7 @@ window.loadCurrentPropertyTouristTax = async function(propertyId = window.curren
   const propertySnap = await getDoc(
     doc(db, "properties", propertyId)
   );
+  if(viewVersion !== (window.rbBookingViewVersion || 0) || propertyRequest !== window.rbPropertyLoadVersion) return null;
   const propertyData = propertySnap.exists() ? propertySnap.data() : null;
   window.currentPropertyId = propertyId;
   window.currentPropertyData = propertyData;
@@ -5329,13 +4823,9 @@ window.getBookingStayMetrics = () => {
     return null;
   }
 
-  const nights = Math.ceil((end - start) / 86400000);
-  let weekendNights = 0;
-  const cursor = new Date(start);
-  while(cursor < end){
-    if(cursor.getDay() === 5 || cursor.getDay() === 6) weekendNights += 1;
-    cursor.setDate(cursor.getDate() + 1);
-  }
+  const nights = stayNights(checkin, checkout);
+  if(!nights) return null;
+  const weekendNights = weekendStayNights(checkin, checkout);
 
   return { checkin, checkout, start, end, nights, weekendNights };
 };
@@ -5378,7 +4868,7 @@ window.updateBookingPricingSuggestion = function(){
   const lengthFactor = metrics.nights >= 14 ? 0.92 : metrics.nights >= 7 ? 0.95 : metrics.nights === 1 ? 1.10 : 1;
   const today = new Date();
   today.setHours(12, 0, 0, 0);
-  const leadDays = Math.ceil((metrics.start - today) / 86400000);
+  const leadDays = calendarDayDifference(getLocalISODate(today), metrics.checkin);
   const leadFactor = leadDays >= 0 && leadDays <= 3 ? 0.92 : leadDays >= 60 ? 1.03 : 1;
 
   const rawSuggestedADR = referenceADR * seasonFactor * weekendFactor * lengthFactor * leadFactor;
@@ -5536,10 +5026,7 @@ window.updateBookingTouristTax = function(){
 
   let stayNights = 0;
   if(checkin && checkout){
-    stayNights = Math.max(0, Math.ceil(
-      (new Date(`${checkout}T00:00:00`) - new Date(`${checkin}T00:00:00`)) /
-      (1000 * 60 * 60 * 24)
-    ));
+    stayNights = calendarBookingNights({checkin, checkout});
   }
 
   const maxNights = Math.max(0, Number(config.maxTaxableNights || 0));
@@ -5974,8 +5461,14 @@ window.revokeGuestIssuePortalLink = async function(){
 };
 
 window.openBookingModal = async function(){
+    if(window.closeBookingForm?.() === false) return false;
+    const viewVersion = (window.rbBookingViewVersion || 0) + 1;
+    window.rbBookingViewVersion = viewVersion;
+    const previousForm = document.getElementById('booking-form-container');
+    if(previousForm) previousForm.style.display = 'none';
 
     await window.loadCurrentPropertyTouristTax();
+    if(viewVersion !== window.rbBookingViewVersion) return;
 
     const form =
         document.getElementById(
@@ -6016,6 +5509,7 @@ window.openBookingModal = async function(){
       window.currentPropertyId,
       window.bookingsAllPropertiesView === true
     );
+    if(viewVersion !== window.rbBookingViewVersion) return;
     const pricingSeason = document.getElementById("booking-pricing-season");
     if(pricingSeason) pricingSeason.value = "auto";
 
@@ -6080,21 +5574,21 @@ window.openBookingModal = async function(){
     setBookingToggleState(true);
 
 
+    updateBookingTotal();
+    window.captureBookingFormBaseline?.();
     form.style.display =
         "flex";
+    revealBookingForm(form);
 
 
     window.pmsEditingBooking =
         false;
 
     window.currentSelectedBooking = null;
+renderBookingTaskTracking(null);
 
 
-    setTimeout(()=>{
 
-        updateBookingTotal();
-
-    },100);
 
 };
 
@@ -6102,7 +5596,26 @@ window.openBookingModal = async function(){
 // ❌ CLOSE BOOKING FORM ONLY
 // =====================================
 
-window.closeBookingForm = function(){
+function bookingFormSnapshot(){
+  const form = document.getElementById('booking-form-container');
+  return JSON.stringify(Array.from(form?.querySelectorAll('input,select,textarea') || []).map(field => [field.id,field.type === 'checkbox' || field.type === 'radio' ? field.checked : field.value]));
+}
+window.captureBookingFormBaseline = function(){ window.rbBookingFormBaseline = bookingFormSnapshot(); };
+window.hasUnsavedBookingChanges = function(){
+  const form = document.getElementById('booking-form-container');
+  return !!form && form.style.display !== 'none' && typeof window.rbBookingFormBaseline === 'string' && window.rbBookingFormBaseline !== bookingFormSnapshot();
+};
+window.canLeaveBookingForm = function(){
+  return !window.hasUnsavedBookingChanges() || confirm(window.t('Ci sono modifiche non salvate. Vuoi uscire e scartarle? Premi Annulla per tornare alla scheda e salvarle.','There are unsaved changes. Leave and discard them? Press Cancel to return to the booking and save them.'));
+};
+window.addEventListener?.('beforeunload', event => {
+  if(!window.hasUnsavedBookingChanges()) return;
+  event.preventDefault(); event.returnValue = '';
+});
+
+window.closeBookingForm = function(discardConfirmed = false){
+    if(!discardConfirmed && !window.canLeaveBookingForm()) return false;
+    window.rbBookingViewVersion = (window.rbBookingViewVersion || 0) + 1;
 
     const form =
         document.getElementById(
@@ -6117,8 +5630,11 @@ window.closeBookingForm = function(){
 
     window.pmsEditingBooking = false;
     window.currentSelectedBooking = null;
+renderBookingTaskTracking(null);
 
+    window.rbBookingFormBaseline = null;
     setBookingToggleState(false);
+    return true;
 
 };
       
@@ -6126,23 +5642,8 @@ window.closeBookingForm = function(){
       // ❌ BOOKING FORM CLOSE
       // =====================================
 
-      window.closeBookingModal = function(){
-
-        const form =
-        document.getElementById(
-          "booking-form-container"
-        );
-
-        if(!form) return;
-
-        form.style.display =
-        "none";
-
-        window.pmsEditingBooking = false;
-        window.currentSelectedBooking = null;
-
-        setBookingToggleState(false);
-
+      window.closeBookingModal = function(discardConfirmed = false){
+        return window.closeBookingForm(discardConfirmed);
       };
 
     },1500);
@@ -6199,7 +5700,7 @@ document.addEventListener("rb_plan_ready", ()=>{
     .toLowerCase();
 
   if(
-    plan === "demo"
+    plan === "demo" || plan === "free"
   ){
 
     window.isDemoData = true;
@@ -6357,6 +5858,7 @@ window.saveProperty = async function(){
       : null;
 
     const editingPropertyId = window.editingPropertyId || null;
+    const showCreatedProperty = window.pendingPropertyAnalysisId === analysisId && !!analysisId;
 
     if(!name){
       alert(
@@ -6510,6 +6012,7 @@ window.saveProperty = async function(){
     window.__dashboardLoaded = false;
     window.__forceReload = true;
     await loadDashboard();
+    if(showCreatedProperty) window.showPMSTab("properties");
 
   }catch(err){
 
@@ -6704,21 +6207,7 @@ Number(
   booking.guests || 0
 );
 
-  const nights =
-    Math.max(
-      1,
-      Math.ceil(
-        (
-          new Date(
-            booking.checkout
-          ) -
-          new Date(
-            booking.checkin
-          )
-        ) /
-        (1000*60*60*24)
-      )
-    );
+  const nights = calendarBookingNights(booking);
 
   totalNights += nights;
   occupiedNightsThisMonth += getBookingNightsInMonth(
@@ -6821,7 +6310,7 @@ color:#0f172a;
 line-height:1.2;
 ">
 
-${data.name || "-"}
+${escapeDashboardHTML(data.name || "-")}
 
 </h3>
 
@@ -6834,7 +6323,7 @@ align-items:center;
 gap:6px;
 ">
 
-📍 ${data.city || "-"}
+📍 ${escapeDashboardHTML(data.city || "-")}
 
 </div>
 
@@ -6967,7 +6456,7 @@ margin-bottom:18px;
 
 <span>
 
-${data.address || "-"}
+${escapeDashboardHTML(data.address || "-")}
 
 </span>
 
@@ -6978,11 +6467,11 @@ ${data.address || "-"}
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-ADR
+${t("Tariffa base", "Base nightly rate")}
 </div>
 
 <div class="property-kpi-value">
-€${data.priceNight || 0}
+€${escapeDashboardHTML(data.priceNight || 0)}
 </div>
 
 </div>
@@ -7156,7 +6645,7 @@ opacity:.92;
 
 <div>
 <strong>ADR</strong>
-<span>€${data.priceNight || 0}</span>
+<span>€${escapeDashboardHTML(data.priceNight || 0)}</span>
 </div>
 
 </div>
@@ -7181,7 +6670,8 @@ height:48px;
 font-weight:700;
 border-radius:12px;
 "
-onclick="openBookings('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openBookings(this.dataset.propertyId)">
 
 📅 ${t(
 "Prenotazioni",
@@ -7193,7 +6683,8 @@ onclick="openBookings('${docItem.id}')">
 <button
 class="btn-dashboard"
 style="flex:1;min-width:150px;height:48px;font-weight:700;border-radius:12px;border:1px solid #8b5cf6;background:#faf5ff;color:#6d28d9;"
-onclick="openRenovationPlanner('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openRenovationPlanner(this.dataset.propertyId)">
 
 🛠️ ${renovation
   ? t("Ristrutturazione", "Renovation")
@@ -7209,11 +6700,10 @@ height:48px;
 font-weight:700;
 border-radius:12px;
 "
-onclick="openPropertyEditor('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="openPropertyEditor(this.dataset.propertyId)">
 
-${investment
-  ? t("Modifica dati", "Edit details")
-  : t("Collega analisi", "Link analysis")}
+✏️ ${t("Modifica immobile", "Edit property")}
 
 </button>
 
@@ -7228,7 +6718,8 @@ background:#fee2e2;
 color:#dc2626;
 "
 
-onclick="deleteProperty('${docItem.id}')">
+data-property-id="${escapeDashboardHTML(docItem.id)}"
+onclick="deleteProperty(this.dataset.propertyId)">
 
 🗑️
 
@@ -7250,49 +6741,22 @@ onclick="deleteProperty('${docItem.id}')">
 // 🏠 DELETE PROPERTY
 // =====================================
 
-window.deleteProperty =
-async function(id){
-
-  const ok =
-  confirm(
-    t(
-      "Eliminare proprietà?",
-      "Delete property?"
-    )
-  );
-
-if(!ok) return;
-
-  const propertyRef = doc(db, "properties", id);
-  const propertySnap = await getDoc(propertyRef);
-  const analysisId = propertySnap.exists()
-    ? propertySnap.data().analysisId
-    : null;
-
-  const linkedAnalysisSnap = analysisId
-    ? await getDoc(doc(db, "analyses", analysisId))
-    : null;
-
-  if(linkedAnalysisSnap?.exists()){
-    const batch = writeBatch(db);
-    batch.delete(propertyRef);
-    batch.update(
-      doc(db, "analyses", analysisId),
-      { isPortfolio: false, propertyId: null }
-    );
-    await batch.commit();
-  }else{
-    await deleteDoc(propertyRef);
-  }
-
-  await loadProperties();
-
-  await loadPMSStats();
-
-  window.__dashboardLoaded = false;
-  window.__forceReload = true;
-  await loadDashboard();
-
+window.deleteProperty = async function(id){
+  if(!id || !window.currentUser || !confirm(t("Eliminare proprietà?", "Delete property?"))) return;
+  return runBookingOperation(`property:${id}`,async()=>{
+    try{await mutatePMS("delete_property",{propertyId:id});}
+    catch(error){dashboardError("Property deletion failed",error);bookingOperationError(error);return;}
+    try{
+      await loadProperties();
+      await loadPMSStats();
+      window.__dashboardLoaded=false;
+      window.__forceReload=true;
+      await loadDashboard();
+    }catch(error){
+      dashboardError("Property deleted; refresh failed",error);
+      alert(t("Proprietà eliminata. Aggiorna la pagina per ricaricare i dati.", "Property deleted. Refresh the page to reload data."));
+    }
+  });
 };
 
 // =====================================
@@ -7300,6 +6764,7 @@ if(!ok) return;
 // =====================================
 
 window.closeBookingsModal = function(){
+  if(window.closeBookingForm?.() === false) return;
 
   const modal =
     document.getElementById(
@@ -7310,7 +6775,7 @@ window.closeBookingsModal = function(){
     modal.style.display = "none";
   }
 
-  window.closeBookingForm?.();
+
 
 };
 
@@ -7318,25 +6783,63 @@ window.closeBookingsModal = function(){
 // ✏️ OPEN BOOKING FROM SAVED LIST
 // =====================================
 
-window.openBookingForEdit = function(id){
+window.goToBookingSection = function(section){
+  const form=document.getElementById('booking-form-container');
+  if(!form || form.style.display==='none') return false;
+  const ids={stay:'booking-stay-heading',documents:'booking-guest-registration-box',tax:'booking-tourist-tax-box',cleaning:'booking-cleaning-box',issue:'booking-guest-issue-box'};
+  const target=document.getElementById(ids[section]);
+  const message=document.getElementById('booking-section-message');
+  if(!target || target.style.display==='none'){
+    if(message) message.textContent=window.t('Questa sezione non si applica alla prenotazione con i dati attuali.','This section does not apply to the booking with its current details.');
+    return false;
+  }
+  if(message) message.textContent='';
+  target.scrollIntoView({behavior:'instant',block:'start',inline:'nearest'});
+  target.setAttribute('tabindex','-1');target.focus({preventScroll:true});
+  return true;
+};
 
-  const booking =
-    (window.currentBookingsData || [])
-      .find(item => item.id === id);
-
-  if(!booking) return;
-
-  window.showBookingDetails(booking);
-
+window.openBookingForEdit = async function(id, section){
+  const booking = (window.currentBookingsData || []).find(item => item.id === id);
+  if(!booking) return false;
+  if(await window.showBookingDetails(booking) === false) return false;
+  const sections = {
+    documents: 'booking-guest-registration-box', authority: 'booking-guest-registration-box',
+    tax: 'booking-tourist-tax-box', cleaning: 'booking-cleaning-box', issue: 'booking-guest-issue-box',
+    stay:'booking-stay-heading'
+  };
+  const targetId = sections[section];
+  if(!targetId) return true;
+  window.requestAnimationFrame(() => {
+    const form = document.getElementById('booking-form-container');
+    const target = document.getElementById(targetId);
+    if(!form || form.style.display === 'none' || window.currentSelectedBooking?.id !== id || !target || target.style.display === 'none') return;
+    target.scrollIntoView({behavior:'instant', block:'start', inline:'nearest'});
+    target.setAttribute('tabindex','-1');
+    target.focus({preventScroll:true});
+  });
+  return true;
 };
 
 window.loadBookingPropertyOptions = async function(selectedPropertyId, editable = false){
+  const viewVersion = window.rbBookingViewVersion || 0;
   const field = document.getElementById("booking-property-field");
   const select = document.getElementById("booking-property");
   if(!field || !select || !window.currentUser) return;
 
   field.style.display = "block";
   select.disabled = true;
+
+  // Existing booking details use a locked property selector. The property
+  // was just loaded for its tax rule: avoid fetching the entire directory.
+  if(!editable && window.currentPropertyId === selectedPropertyId && window.currentPropertyData){
+    const property = window.currentPropertyData;
+    const label = [property.name, property.city].filter(Boolean).join(' · ') || window.t('Struttura attuale','Current property');
+    select.innerHTML = `<option value="${escapeDashboardHTML(selectedPropertyId)}">${escapeDashboardHTML(label)}</option>`;
+    select.value = selectedPropertyId;
+    select.style.background = '#f8fafc';
+    return;
+  }
 
   try{
     const propertiesSnap = await getDocs(
@@ -7346,6 +6849,7 @@ window.loadBookingPropertyOptions = async function(selectedPropertyId, editable 
       )
     );
 
+    if(viewVersion !== (window.rbBookingViewVersion || 0)) return;
     select.innerHTML = propertiesSnap.docs.map(propertyDoc => {
       const property = propertyDoc.data() || {};
       const label = [property.name, property.city].filter(Boolean).join(" · ") ||
@@ -7357,6 +6861,7 @@ window.loadBookingPropertyOptions = async function(selectedPropertyId, editable 
     select.disabled = !editable || propertiesSnap.empty;
     select.style.background = select.disabled ? "#f8fafc" : "#ffffff";
   }catch(error){
+    if(viewVersion !== (window.rbBookingViewVersion || 0)) return;
     dashboardError("Booking property options load failed", error);
     select.innerHTML = `<option value="${escapeDashboardHTML(selectedPropertyId || "")}">${window.t("Struttura attuale", "Current property")}</option>`;
     select.value = selectedPropertyId || "";
@@ -7376,10 +6881,16 @@ window.changeBookingProperty = async function(){
 // =====================================
 
 window.showBookingDetails = async function(booking){
+    if(window.closeBookingForm?.() === false) return false;
+    const viewVersion = (window.rbBookingViewVersion || 0) + 1;
+    window.rbBookingViewVersion = viewVersion;
+    const previousForm = document.getElementById('booking-form-container');
+    if(previousForm) previousForm.style.display = 'none';
 
     await window.loadCurrentPropertyTouristTax(
       booking.propertyId || window.currentPropertyId
     );
+    if(viewVersion !== window.rbBookingViewVersion) return;
 
 
     const modal =
@@ -7420,15 +6931,16 @@ window.showBookingDetails = async function(booking){
     }
 
 
-    modal.style.display = "flex";
-    setBookingToggleState(true);
+
 
 
     window.pmsEditingBooking = true;
 
 window.currentSelectedBooking = booking;
+renderBookingTaskTracking(booking);
     window.bookingOriginPropertyId = booking.propertyId || window.currentPropertyId;
     await window.loadBookingPropertyOptions?.(window.bookingOriginPropertyId, false);
+    if(viewVersion !== window.rbBookingViewVersion) return;
     const bookingProperty = document.getElementById("booking-property");
     if(bookingProperty) bookingProperty.onchange = window.changeBookingProperty;
 
@@ -7634,22 +7146,7 @@ window.currentSelectedBooking = booking;
         );
 
 
-    const bookingNights =
-        Number(booking.nights) ||
-        (
-            booking.checkin && booking.checkout
-            ? Math.max(
-                0,
-                Math.ceil(
-                    (
-                        new Date(`${booking.checkout}T00:00:00`) -
-                        new Date(`${booking.checkin}T00:00:00`)
-                    ) /
-                    (1000 * 60 * 60 * 24)
-                )
-            )
-            : 0
-        );
+    const bookingNights = calendarBookingNights(booking);
 
 
 
@@ -8136,8 +7633,8 @@ if(!actions){
 actions.innerHTML = `
 
 <button
-data-it="✏️ Modifica"
-data-en="✏️ Edit"
+data-it="✏️ Abilita modifica"
+data-en="✏️ Enable editing"
 style="
 flex:1;
 padding:12px;
@@ -8150,7 +7647,7 @@ cursor:pointer;
 "
 onclick="editBooking('${booking.id || ""}')">
 
-${window.t("✏️ Modifica", "✏️ Edit")}
+${window.t("✏️ Abilita modifica", "✏️ Enable editing")}
 
 </button>
 
@@ -8187,12 +7684,16 @@ cursor:pointer;
 "
 onclick="deleteBooking('${booking.id || ""}')">
 
-🗑️
+${window.t('Elimina prenotazione', 'Delete booking')}
 
 </button>
 
 `;
   
+    window.captureBookingFormBaseline?.();
+    modal.style.display = 'flex';
+    setBookingToggleState(true);
+    revealBookingForm(modal);
 };
 
 // =====================================
@@ -8236,22 +7737,7 @@ window.getBookingExecutiveAnalysis = function(booking){
         ? "en"
         : "it";
 
-    const nights =
-        Number(booking.nights) ||
-        (
-            booking.checkin && booking.checkout
-            ? Math.max(
-                0,
-                Math.ceil(
-                    (
-                        new Date(`${booking.checkout}T00:00:00`) -
-                        new Date(`${booking.checkin}T00:00:00`)
-                    ) /
-                    (1000 * 60 * 60 * 24)
-                )
-            )
-            : 0
-        );
+    const nights = calendarBookingNights(booking);
 
     const revenue =
         Number(booking.totalAmount || 0);
@@ -8802,24 +8288,7 @@ window.analyzeBookingAI = function(id){
     // ===============================
 
 
-    const nights =
-    booking.nights ||
-    (
-        booking.checkin &&
-        booking.checkout
-        ?
-        Math.ceil(
-            (
-                new Date(booking.checkout)
-                -
-                new Date(booking.checkin)
-            )
-            /
-            (1000 * 60 * 60 * 24)
-        )
-        :
-        0
-    );
+    const nights = calendarBookingNights(booking);
 
 
 
@@ -9747,6 +9216,7 @@ color:#166534;
 // =====================================
 
 window.openBookings = async function(propertyId, bookingId = null, viewAllProperties = false){
+  if(window.closeBookingForm?.() === false) return false;
 
   window.bookingsAllPropertiesView = viewAllProperties === true;
   window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
@@ -9822,6 +9292,9 @@ window.openBookings = async function(propertyId, bookingId = null, viewAllProper
 
   // Ricollega gli eventi del form
   setTimeout(()=>{
+    const form = document.getElementById('booking-form-container');
+    if(!form || form.dataset.pmsEventsReady === 'true') return;
+    form.dataset.pmsEventsReady = 'true';
 
     document
       .getElementById("booking-checkin")
@@ -10023,7 +9496,8 @@ window.openBookingFromCopilot = async function(
 // 📅 OPEN CURRENT BOOKINGS
 // =====================================
 
-window.openCurrentBookings = async function(){
+window.openCurrentBookings = async function({fresh=false}={}){
+  if(window.closeBookingForm?.() === false) return false;
 
   if(isDemo() || !canUseFirestorePMS()){
 
@@ -10037,14 +9511,15 @@ window.openCurrentBookings = async function(){
     return;
   }
 
+  const readBookings=fresh?getDocsFromServer:getDocs;
   const [propertiesSnap, bookingsSnap] = await Promise.all([
-    getDocs(
+    readBookings(
       query(
         collection(db,"properties"),
         where("uid","==",window.currentUser.uid)
       )
     ),
-    getDocs(
+    readBookings(
       query(
         collection(db,"bookings"),
         where("uid","==",window.currentUser.uid)
@@ -10135,20 +9610,7 @@ function updateBookingTotal(){
     return;
   }
 
-  const start =
-    new Date(checkin);
-
-  const end =
-    new Date(checkout);
-
-  const nights =
-    Math.max(
-      1,
-      Math.ceil(
-        (end - start) /
-        (1000 * 60 * 60 * 24)
-      )
-    );
+  const nights = stayNights(checkin, checkout);
 
   const propertyCard =
     document.querySelector(
@@ -10241,7 +9703,7 @@ function updateBookingTotal(){
 // 📅 SAVE BOOKING
 // =====================================
 
-window.saveBooking = async function(){
+async function performSaveBooking(){
 
   if(!window.currentUser){
 
@@ -10312,9 +9774,6 @@ if(!selectedPropertyId){
       "booking-status"
     )?.value || "arrival";
 
-  const arrival = new Date(`${checkin}T00:00:00`);
-  const departure = new Date(`${checkout}T00:00:00`);
-
   if(!guest){
     alert(t("Inserisci il nome dell’ospite.", "Enter the guest name."));
     return;
@@ -10331,11 +9790,7 @@ if(!selectedPropertyId){
   };
 
   if(
-    !checkin ||
-    !checkout ||
-    Number.isNaN(arrival.getTime()) ||
-    Number.isNaN(departure.getTime()) ||
-    departure <= arrival
+    stayNights(checkin, checkout) === 0
   ){
     alert(t(
       "Il check-out deve essere successivo al check-in.",
@@ -10360,38 +9815,8 @@ if(!selectedPropertyId){
   const editingBookingId = window.pmsEditingBooking
     ? window.currentSelectedBooking?.id
     : null;
-  let conflictBookings = window.currentBookingsData || [];
-  if(selectedPropertyId !== window.bookingOriginPropertyId){
-    const conflictSnap = await getDocs(
-      query(
-        collection(db, "bookings"),
-        where("uid", "==", window.currentUser.uid),
-        where("propertyId", "==", selectedPropertyId)
-      )
-    );
-    conflictBookings = conflictSnap.docs.map(item => ({ id:item.id, ...item.data() }));
-  }
-  const hasConflict = !["cancelled", "pending"].includes(status) &&
-    conflictBookings.some(existingBooking => {
-      if(existingBooking.id === editingBookingId) return false;
-      if(!isConfirmedBooking(existingBooking)) return false;
-
-      const existingArrival = new Date(`${existingBooking.checkin}T00:00:00`);
-      const existingDeparture = new Date(`${existingBooking.checkout}T00:00:00`);
-
-      if(
-        Number.isNaN(existingArrival.getTime()) ||
-        Number.isNaN(existingDeparture.getTime())
-      ) return false;
-
-      return arrival < existingDeparture && departure > existingArrival;
-    });
-
-  if(hasConflict){
-    alert(t(
-      "Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.",
-      "Dates unavailable: an overlapping booking already exists for this property."
-    ));
+  if(!isKnownBookingStatus(status)){
+    bookingOperationError({code:"booking/invalid_status"});
     return;
   }
 
@@ -10500,16 +9925,6 @@ if(!selectedPropertyId){
     return;
   }
 
-  const previousIssue = window.pmsEditingBooking
-    ? window.currentSelectedBooking?.guestIssue || {}
-    : {};
-  const urgentIssueChanged = !window.pmsEditingBooking ||
-    previousIssue.active !== true ||
-    (previousIssue.priority || "medium") !== guestIssue.priority ||
-    (previousIssue.status || "open") !== guestIssue.status ||
-    (previousIssue.category || "other") !== guestIssue.category ||
-    (previousIssue.note || "") !== guestIssue.note;
-
   const saveButton = document.getElementById("booking-save-button");
   if(saveButton){
     saveButton.disabled = true;
@@ -10521,116 +9936,23 @@ if(!selectedPropertyId){
     : "";
 
   try{
-  if(
-    window.pmsEditingBooking &&
-    window.currentSelectedBooking?.id
-){
-
-    await updateDoc(
-
-        doc(
-            db,
-            "bookings",
-            window.currentSelectedBooking.id
-        ),
-
-        {
-
-            propertyId: selectedPropertyId,
-
-            guestName: guest,
-            guestContact,
-            checkin,
-            checkout,
-            guests,
-            totalAmount: total,
-
-            touristTax,
-            guestRegistration,
-            cleaning,
-            guestIssue,
-            pricingAssistant,
-
-            status,
-
-            source:
-                document.getElementById(
-                    "booking-source"
-                )?.value || "direct",
-
-            updatedAt:
-                serverTimestamp()
-
-        }
-
-    );
-
-   
-}else{
-
-  const createdBooking = await addDoc(
-
-    collection(
-      db,
-      "bookings"
-    ),
-
-    {
-
-      uid:
-        window.currentUser.uid,
-
-      propertyId:
-        selectedPropertyId,
-
-      guestName:
-        guest,
-
-      guestContact,
-
-      checkin,
-
-      checkout,
-
-      guests,
-
-      totalAmount:
-        total,
-
-      touristTax,
-      guestRegistration,
-      cleaning,
-      guestIssue,
-      pricingAssistant,
-
-      status,
-      
-source:
-  document.getElementById(
-    "booking-source"
-  )?.value || "direct",
-
-      createdAt:
-        serverTimestamp(),
-
-      updatedAt:
-        serverTimestamp()
-
-    }
-
-  );
-  savedBookingId = createdBooking.id;
-}
+  // The atomic API is authoritative; a separate availability preflight would
+  // reject a retry when the first request committed but its response was lost.
+  const result = await mutatePMS("save", {
+    bookingId: editingBookingId || null,
+    expectedVersion: editingBookingId ? Number(window.currentSelectedBooking?._pmsVersion || 0) : 0,
+    data:{propertyId:selectedPropertyId,guestName:guest,guestContact,checkin,checkout,guests,totalAmount:total,
+      touristTax,guestRegistration,cleaning,guestIssue,pricingAssistant,status,
+      source:document.getElementById("booking-source")?.value || "direct"}
+  });
+  savedBookingId = result.bookingId;
   }catch(error){
     dashboardError("Booking save failed", error);
     if(saveButton){
       saveButton.disabled = false;
       saveButton.textContent = t("💾 Salva Prenotazione", "💾 Save Booking");
     }
-    alert(t(
-      "Impossibile salvare la prenotazione. Riprova.",
-      "Unable to save the booking. Please try again."
-    ));
+    bookingOperationError(error);
     return;
   }
 
@@ -10666,7 +9988,6 @@ window.dispatchEvent(
 
   if(
     savedBookingId &&
-    urgentIssueChanged &&
     guestIssue.active === true &&
     guestIssue.priority === "urgent" &&
     guestIssue.status !== "resolved"
@@ -10696,7 +10017,11 @@ window.dispatchEvent(
           ? "sent"
           : notificationResult.duplicate
             ? "duplicate"
-            : "";
+            : notificationResult.queued
+              ? "queued"
+              : notificationResult.success === false
+                ? "failed"
+                : "";
       }
     }catch(error){
       urgentEmailStatus = "failed";
@@ -10713,14 +10038,14 @@ window.dispatchEvent(
   t(
     status === "pending"
       ? "Richiesta salvata"
-      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "disabled" ? " · Email urgenti disattivate" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
+      : `Prenotazione salvata${urgentEmailStatus === "sent" ? " · Email urgente inviata all’host" : urgentEmailStatus === "duplicate" ? " · Avviso urgente già notificato" : urgentEmailStatus === "disabled" ? " · Email urgenti disattivate" : urgentEmailStatus === "queued" ? " · Email urgente in coda per il recupero" : urgentEmailStatus === "failed" ? " · Email urgente non inviata" : ""}`,
     status === "pending"
       ? "Request saved"
-      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "disabled" ? " · Urgent emails disabled" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
+      : `Booking saved${urgentEmailStatus === "sent" ? " · Urgent email sent to the host" : urgentEmailStatus === "duplicate" ? " · Urgent alert already notified" : urgentEmailStatus === "disabled" ? " · Urgent emails disabled" : urgentEmailStatus === "queued" ? " · Urgent email queued for recovery" : urgentEmailStatus === "failed" ? " · Urgent email not sent" : ""}`
   )
 );
 
-  closeBookingModal();
+  closeBookingModal(true);
 
   try{
     window.currentPropertyId = selectedPropertyId;
@@ -10740,64 +10065,118 @@ window.dispatchEvent(
 
 };
 
+window.saveBooking = function(){
+  const key = window.pmsEditingBooking && window.currentSelectedBooking?.id
+    ? `booking:${window.currentSelectedBooking.id}` : "new-booking";
+  return runBookingOperation(key, async () => {
+    try{ return await performSaveBooking(); }
+    catch(error){ dashboardError("Booking save failed", error); bookingOperationError(error); }
+    finally{
+      const button = document.getElementById("booking-save-button");
+      if(button){ button.disabled = false; button.textContent = t("💾 Salva Prenotazione", "💾 Save Booking"); }
+    }
+  });
+};
+
 // =====================================
 // 📅 LOAD BOOKINGS
 // =====================================
 
+
+const pmsEmailVerification=createEmailVerification({getUser:()=>auth.currentUser,send:sendEmailVerification,reload});
+let pmsVerificationFeedback='';
+function renderPMSEmailVerification(){
+  const panel=document.getElementById("pms-email-verification");
+  if(!panel)return;
+  const user=auth.currentUser;
+  panel.style.display=user && !isDemo()?"block":"none";
+  if(!user || isDemo()){panel.replaceChildren();return;}
+  const verified=user.emailVerified===true;
+  const buttonStyle="border:1px solid #a7f3d0;border-radius:12px;background:#fff;color:#047857;padding:10px 12px;font-weight:800;cursor:pointer;white-space:normal;";
+  panel.innerHTML=`<div style="padding:14px 16px;border:1px solid #cddcd2;border-radius:15px;background:#f0fdf4;margin-bottom:12px;overflow-wrap:anywhere;">
+    <strong>${verified?t("Indirizzo email verificato", "Email address verified"):t("Verifica email per le notifiche attività", "Verify email for task notifications")}</strong>
+    <div style="font-size:12px;margin:6px 0;">${escapeDashboardHTML(user.email || '')}</div>
+    ${verified?'':`<p style="font-size:13px;margin:8px 0;">${t("Per ricevere le email di presa in carico e risoluzione, conferma il tuo indirizzo. Le attività restano salvate anche senza verifica.", "To receive task claim and resolution emails, confirm your address. Tasks remain saved without verification.")}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" onclick="sendPMSEmailVerification()" style="${buttonStyle}">${t("Invia email di verifica", "Send verification email")}</button>
+      <button type="button" onclick="checkPMSEmailVerification()" style="${buttonStyle}">${t("Ho verificato: aggiorna", "I have verified: refresh")}</button>
+    </div>`}
+    <p role="status" aria-live="polite" style="font-size:13px;margin:8px 0 0;">${escapeDashboardHTML(pmsVerificationFeedback)}</p>
+  </div>`;
+}
+async function runPMSEmailVerification(action){
+  const panel=document.getElementById("pms-email-verification");
+  panel?.querySelectorAll('button').forEach(button=>button.disabled=true);
+  try{
+    const result=await pmsEmailVerification[action]();
+    pmsVerificationFeedback=result==='verified'?t("Verifica confermata. Le nuove notifiche attività possono essere inviate se la preferenza è attiva.", "Verification confirmed. New task notifications can be sent when the preference is enabled."):
+      result==='sent'?t("Email di verifica inviata. Controlla anche lo spam, apri il link e premi Ho verificato: aggiorna. Le notifiche precedentemente bloccate non vengono reinviate automaticamente.", "Verification email sent. Check spam too, open the link and select I have verified: refresh. Previously blocked notifications are not resent automatically."):
+      t("Indirizzo ancora non verificato: apri il link ricevuto e riprova.", "Address not yet verified: open the received link and try again.");
+  }catch(error){
+    pmsVerificationFeedback=['verification_cooldown','verification_busy','auth/too-many-requests'].includes(error.code || error.message)?t("Attendi almeno un minuto prima di richiedere un nuovo invio.", "Wait at least one minute before requesting another email."):t("Operazione non riuscita. Riprova; se persiste, esci e accedi nuovamente.", "Operation failed. Try again; if it persists, sign out and sign in again.");
+    dashboardError("Email verification failed",error);
+  }
+  renderPMSEmailVerification();
+}
+window.sendPMSEmailVerification=()=>runPMSEmailVerification('send');
+window.checkPMSEmailVerification=()=>runPMSEmailVerification('check');
+document.addEventListener('rb_language_changed',()=>{pmsVerificationFeedback='';renderPMSEmailVerification();});
+
+window.rbRefreshPMSForAutopilot=async function(){
+  const owner=window.currentUser?.uid;
+  await loadPMSStats({fresh:true});
+  const data=window.rbPMSData;
+  const demo=isDemo() || !canUseFirestorePMS();
+  if(!data || window.currentUser?.uid!==owner || (demo?data.isDemo!==true:
+    (!canUseFirestorePMS() || !data.portalSnapshotReady || data.ownerUid!==owner)))return null;
+  const bookings=data.portalBookingList || data.bookingList;
+  if(!Array.isArray(bookings))return null;
+  return {plan:buildPMSDailyPlan(bookings,checklistDay()),isDemo:demo,
+    syncedAt:data.lastBookingsSync?new Date(data.lastBookingsSync).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT',{timeZone:'Europe/Rome'}):null};
+};
+
 function renderPMSPortalAlerts(pmsData = {}){
+  renderPMSEmailVerification();
   const container = document.getElementById("pms-portal-alerts");
   if(!container) return;
 
-  const bookingList = Array.isArray(pmsData.bookingList)
-    ? pmsData.bookingList
+  const bookingList = Array.isArray(pmsData.portalBookingList || pmsData.bookingList)
+    ? (pmsData.portalBookingList || pmsData.bookingList)
     : [];
   const arrivalsToday = Math.max(0, Number(pmsData.arrivalsToday || 0));
   const departuresToday = Math.max(0, Number(pmsData.departuresToday || 0));
-  const alerts = bookingList.flatMap(booking => {
-    if(["completed", "cancelled"].includes(String(booking.status || "").toLowerCase())) return [];
-    const tasks = [];
-    const guestName = booking.guestName || window.t("Ospite", "Guest");
-    const addTask = (code, label) => tasks.push({ code, bookingId:booking.id, guestName, label });
-    const issue = booking.guestIssue || {};
-    if(issue.active === true && String(issue.status || "open") !== "resolved"){
-      addTask(
-        String(issue.priority || "medium") === "urgent" ? "guest_issue_urgent" : "guest_issue_open",
-        String(issue.priority || "medium") === "urgent"
-          ? window.t("Segnalazione ospite urgente", "Urgent guest issue")
-          : window.t("Segnalazione ospite aperta", "Open guest issue")
-      );
-    }
-    const registration = booking.guestRegistration || {};
-    const missingDocuments = Math.max(0, Number(booking.guests || 0) - Number(registration.documentsReceived || 0));
-    if(missingDocuments > 0){
-      addTask("guest_documents_missing", window.t(`${missingDocuments} documenti ospiti mancanti`, `${missingDocuments} guest documents missing`));
-    }
-    if(!["submitted", "not_required"].includes(String(registration.authorityStatus || "pending"))){
-      addTask(
-        "authority_report_pending",
-        registration.authorityStatus === "ready"
-          ? window.t("Invia comunicazione autorità", "Submit authority report")
-          : window.t("Prepara comunicazione autorità", "Prepare authority report")
-      );
-    }
-    if(booking.touristTax?.enabled === true && String(booking.touristTax.status || "pending") === "pending"){
-      addTask("tourist_tax_pending", window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect"));
-    }
-    const cleaning = booking.cleaning || { required:true, status:"pending" };
-    if(cleaning.required !== false && String(cleaning.status || "pending") !== "completed"){
-      addTask(
-        cleaning.status === "scheduled" ? "cleaning_scheduled" : "cleaning_to_schedule",
-        cleaning.status === "scheduled"
-          ? window.t("Pulizia programmata", "Cleaning scheduled")
-          : window.t("Pulizia da pianificare", "Cleaning to schedule")
-      );
-    }
-    return tasks;
+  const today=checklistDay();
+  const plan=buildPMSDailyPlan(bookingList,today);
+  const alerts=plan.tasks.map(task=>{
+    const booking=bookingList.find(row=>row.id===task.bookingId);
+    const labels={documents:window.t(`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} documenti ospiti mancanti`,`${Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0))} guest documents missing`),authority:window.t('Comunicazione autorità da gestire','Authority report to manage'),tax:window.t('Tassa di soggiorno da riscuotere','Tourist tax to collect'),cleaning:window.t('Pulizia da completare','Cleaning to complete'),issue:task.priority===0?window.t('Segnalazione ospite urgente','Urgent guest issue'):window.t('Segnalazione ospite aperta','Open guest issue')};
+    const timing=task.group==='overdue'?window.t('Scaduta · verifica','Overdue · review'):task.group==='today'?window.t('Oggi','Today'):task.group==='undated'?window.t('Senza data · verifica','No date · review'):window.t('Problema aperto','Open issue');
+    const reasons={documents:window.t('Documenti ancora incompleti: verifica quelli ricevuti.','Documents are incomplete: review those received.'),authority:window.t('La comunicazione risulta ancora da gestire nella checklist.','The checklist still shows the authority report as pending.'),tax:window.t('La tassa risulta ancora da riscuotere.','The tourist tax is still marked as uncollected.'),cleaning:window.t('La pulizia non risulta completata: verifica data e incaricato.','Cleaning is not marked complete: review the date and assignee.'),issue:window.t('La segnalazione è ancora aperta: verifica la nota e aggiorna lo stato.','The guest issue is still open: review the note and update its status.')};
+    const actions={documents:window.t('Verifica documenti →','Review documents →'),authority:window.t('Verifica comunicazione →','Review report →'),tax:window.t('Gestisci tassa →','Manage tax →'),cleaning:window.t('Apri pulizia →','Open cleaning →'),issue:window.t('Gestisci problema →','Manage issue →')};
+    return {...task,label:labels[task.code],timing,reason:reasons[task.code],action:actions[task.code],propertyName:booking.propertyName || ''};
   });
-  const urgentCount = alerts.filter(alert => alert.code === "guest_issue_urgent").length;
-  const operationalCount = alerts.length + arrivalsToday + departuresToday;
+  const dueOperations=plan.operations;
+  alerts.push(...dueOperations.map(row=>({...row,label:row.code==='arrival'?window.t('Arrivo da registrare','Arrival to register'):window.t('Check-out da registrare','Check-out to register'),timing:row.overdue?window.t('Arretrato · verifica','Overdue · review'):window.t('Oggi','Today'),reason:row.code==='arrival'?window.t('La data di arrivo è raggiunta; lo stato è ancora In arrivo.','The arrival date is reached; the status is still Arriving.'):window.t('La data di partenza è raggiunta; lo stato è ancora Check-in.','The departure date is reached; the status is still Check-in.'),action:window.t('Verifica soggiorno →','Review stay →'),propertyName:bookingList.find(b=>b.id===row.bookingId)?.propertyName || ''})));
+  const priorityOrder=new Map(plan.items.map((item,index)=>[`${item.bookingId}:${item.code}`,index]));
+  alerts.sort((a,b)=>priorityOrder.get(`${a.bookingId}:${a.code}`)-priorityOrder.get(`${b.bookingId}:${b.code}`));
+  const urgentCount=alerts.filter(task=>task.code==='issue' && task.priority===0).length;
+  const upcomingCount=plan.counts.upcoming;
+  const operationalCount = alerts.length;
+  const overdueCount=alerts.filter(item=>item.dueDate && item.dueDate<today).length;
+  const inProgressCount=alerts.filter(item=>item.status==='in_progress').length;
+  const autopilotButton=`<button type="button" class="pms-day-autopilot" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot()}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('✦ Autopilot · Cosa gestire prima?','✦ Autopilot · What should I manage first?')}</button>`;
+  const preparationLabels={documents:window.t('Documenti mancanti','Missing documents'),authority:window.t('Comunicazione da verificare','Report to review'),tax:window.t('Tassa da riscuotere','Tax to collect'),cleaning:window.t('Pulizia prima dell’arrivo da completare','Pre-arrival cleaning incomplete'),issue:window.t('Segnalazione aperta','Open issue')};
+  const weekHTML=`<details class="pms-week"><summary><span>${window.t('Prossimi 7 giorni · Preparazione arrivi','Next 7 days · Arrival preparation')}</span><small>${window.t(`${plan.week.arrivals.length} arrivi · ${plan.week.toPrepare} da verificare`,`${plan.week.arrivals.length} arrivals · ${plan.week.toPrepare} to review`)}</small></summary>
+    <div class="pms-week-content"><p class="pms-day-caption">${plan.week.start} → ${plan.week.end} · ${window.t(`${plan.week.tasks.length} attività future in scadenza. Conteggi separati dalle attività di oggi.`,`${plan.week.tasks.length} future tasks due. Counts are separate from today's tasks.`)}</p>
+    <div class="pms-week-arrivals">${plan.week.arrivals.slice(0,3).map(row=>`<article class="pms-week-arrival" data-pending="${!!(row.pending.length || row.guestDataIncomplete)}"><strong>${escapeDashboardHTML(row.guestName || window.t('Nome ospite mancante','Guest name missing'))}</strong><span>${escapeDashboardHTML(row.propertyName)} · ${window.t('Arrivo','Arrival')}: ${row.checkin}</span><p>${row.pending.length?row.pending.map(item=>escapeDashboardHTML(preparationLabels[item.code])+(item.code==='documents'?` (${item.missingDocuments})`:'')).join(' · '):window.t('Nessuna pendenza pre-arrivo rilevata nei dati salvati.','No pre-arrival tasks found in saved data.')}${row.guestDataIncomplete?` · ${window.t('Dati ospiti da verificare','Guest data to review')}`:''}</p><button type="button" data-booking-id="${escapeDashboardHTML(row.bookingId)}" onclick="openPMSUpcomingArrival(this.dataset.bookingId,this)">${window.t('Verifica arrivo →','Review arrival →')}</button></article>`).join('') || `<p class="pms-day-caption">${window.t('Nessun arrivo futuro rilevato in questo intervallo. Le attività di oggi restano nel riepilogo sopra.','No future arrivals found in this period. Today’s tasks remain in the summary above.')}</p>`}</div>
+    ${plan.week.arrivals.length>3?`<p class="pms-day-caption">${window.t(`Altri ${plan.week.arrivals.length-3} arrivi nell’elenco prenotazioni.`,`${plan.week.arrivals.length-3} more arrivals in the booking list.`)}</p>`:''}
+    <button type="button" class="pms-day-autopilot" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot('week')}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('✦ Autopilot · Prepara i prossimi 7 giorni','✦ Autopilot · Prepare the next 7 days')}</button></div></details>`;
+  const overviewMetrics=[[window.t('Da gestire','To manage'),operationalCount],[window.t('Urgenti','Urgent'),urgentCount],[window.t('Con data superata','Past due date'),overdueCount],[window.t('In carico','In progress'),inProgressCount]];
+  const overviewHtml=`<div class="pms-day-metrics">${overviewMetrics.map(([label,count],index)=>`<div${index===1 && count>0?' data-urgent="true"':''}><span>${label}</span><strong>${count}</strong></div>`).join('')}</div>`;
   const urgentEmailEnabled = window.rbNotificationPreferences?.pmsUrgentEmail !== false;
   const emailToggle = `
+    <button type="button" onclick="togglePMSReminderEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsReminderEmail===true?window.t("Promemoria giornalieri attivi", "Daily reminders on"):window.t("Attiva promemoria giornalieri", "Enable daily reminders")}</button>
+    <button type="button" onclick="togglePMSTaskEmail()" style="border:1px solid #cddcd2;border-radius:999px;background:#fff;color:#047857;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:normal;">${window.rbNotificationPreferences?.pmsTaskEmail===true?window.t("Email attività attive", "Task emails on"):window.t("Attiva email attività", "Enable task emails")}</button>
     <button type="button" onclick="togglePMSUrgentEmail()" style="border:1px solid ${urgentEmailEnabled ? "#a7f3d0" : "#cbd5e1"};border-radius:999px;background:${urgentEmailEnabled ? "#ecfdf5" : "#f8fafc"};color:${urgentEmailEnabled ? "#047857" : "#64748b"};padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;">
       ${urgentEmailEnabled ? "✉️ " + window.t("Email urgenti attive", "Urgent emails on") : "🔕 " + window.t("Email urgenti disattivate", "Urgent emails off")}
     </button>`;
@@ -10807,9 +10186,14 @@ function renderPMSPortalAlerts(pmsData = {}){
       <div style="padding:15px 16px;border:1px solid #a7f3d0;border-radius:15px;background:#ecfdf5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div>
           <div style="font-size:14px;font-weight:900;color:#065f46;">✅ ${window.t("Centro avvisi host", "Host alert centre")}</div>
-          <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessuna attività urgente: operatività sotto controllo.", "No urgent tasks: operations are under control.")}</div>
+          <div style="font-size:12px;color:#047857;margin-top:4px;">${window.t("Nessun problema o attività in scadenza oggi.", "No open issues or tasks due today.")}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${window.t("Tutto aggiornato", "All up to date")}</span></div>
+        <span style="padding:7px 11px;border-radius:999px;background:#d1fae5;color:#065f46;font-size:11px;font-weight:900;">${upcomingCount ? window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`) : window.t("Tutto aggiornato", "All up to date")}</span>
+        ${overviewHtml}
+        ${autopilotButton}
+        ${weekHTML}
+        <button type="button" class="pms-day-all" onclick="openPMSAllTasks()">${window.t('Vedi tutte le attività →','View all tasks →')}</button>
+        <details class="pms-email-settings"><summary>${window.t('Preferenze email e promemoria','Email and reminder preferences')}</summary><div>${emailToggle}</div></details>
       </div>`;
     return;
   }
@@ -10820,16 +10204,20 @@ function renderPMSPortalAlerts(pmsData = {}){
   const summaryParts = [];
   if(arrivalsToday) summaryParts.push(window.t(`${arrivalsToday} arrivi oggi`, `${arrivalsToday} arrivals today`));
   if(departuresToday) summaryParts.push(window.t(`${departuresToday} partenze oggi`, `${departuresToday} departures today`));
-  if(alerts.length) summaryParts.push(window.t(`${alerts.length} attività PMS`, `${alerts.length} PMS tasks`));
+  if(alerts.length) summaryParts.push(window.t(`${alerts.length} operazioni e attività da gestire`, `${alerts.length} operations and tasks to manage`));
+  const overdueOperations=dueOperations.filter(row=>row.overdue).length;
+  if(overdueOperations)summaryParts.push(window.t(`${overdueOperations} arrivi/check-out arretrati`,`${overdueOperations} overdue arrivals/check-outs`));
+
+  if(upcomingCount)summaryParts.push(window.t(`${upcomingCount} attività future`,`${upcomingCount} upcoming tasks`));
 
   container.innerHTML = `
-    <div style="padding:15px 16px;border:1px solid ${palette.border};border-radius:15px;background:${palette.background};">
+    <div class="pms-day-overview" style="padding:15px 16px;border:1px solid ${palette.border};border-radius:15px;background:#fff;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div>
-          <div style="font-size:14px;font-weight:900;color:${palette.color};">${palette.icon} ${window.t("Centro avvisi host", "Host alert centre")}</div>
+          <div style="font-size:16px;font-weight:900;color:#142b25;">${palette.icon} ${window.t("Centro avvisi host · La tua giornata", "Host alert centre · Your day")}</div>
           <div style="font-size:12px;color:#475569;margin-top:4px;">${escapeDashboardHTML(summaryParts.join(" · "))}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">${emailToggle}<span style="padding:7px 11px;border-radius:999px;background:${palette.badge};color:${palette.color};font-size:11px;font-weight:900;">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;"><span style="padding:7px 11px;border-radius:999px;background:${palette.badge};color:${palette.color};font-size:11px;font-weight:900;">
           ${urgentCount
             ? window.t(`${urgentCount} urgenti`, `${urgentCount} urgent`)
             : operationalCount === 1
@@ -10837,18 +10225,99 @@ function renderPMSPortalAlerts(pmsData = {}){
               : window.t(`${operationalCount} avvisi`, `${operationalCount} alerts`)}
         </span></div>
       </div>
+      ${overviewHtml}
+      ${autopilotButton}
+      ${weekHTML}
+      <p class="pms-day-caption">${window.t('Il totale conta attività e operazioni, non prenotazioni. Urgenze, attività con data superata e attività in carico sono comprese nel totale. Le segnalazioni aperte compaiono anche per soggiorni futuri.','The total counts tasks and operations, not bookings. Urgent, past-due and in-progress tasks are included in the total. Open guest issues are included even for future stays.')}</p>
       ${alerts.length ? `
         <div style="display:grid;gap:7px;margin-top:11px;">
           ${alerts.slice(0,3).map(alert => `
-            <div style="padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.72);border:1px solid ${palette.border};font-size:12px;color:#0f172a;">
-              <strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}
-            </div>`).join("")}
+            <button type="button" class="pms-alert-open" data-urgent="${alert.code==='issue' && alert.priority===0}" data-booking-id="${escapeDashboardHTML(alert.bookingId)}" data-task-code="${escapeDashboardHTML(alert.code)}" onclick="openPMSAlertBooking(this.dataset.bookingId,this,this.dataset.taskCode)" style="padding:12px;border-radius:10px;background:#f8fafc;border:1px solid #dce6df;font-size:13px;color:#0f172a;text-align:left;">
+              <span><strong>${escapeDashboardHTML(alert.guestName)}</strong> · ${escapeDashboardHTML(alert.label)}</span>
+              ${alert.propertyName?`<span class="pms-day-property">${escapeDashboardHTML(alert.propertyName)}</span>`:''}
+              <span class="pms-day-reason">${escapeDashboardHTML(alert.reason)}</span>
+              <span class="pms-day-timing">${escapeDashboardHTML(alert.timing)} · ${alert.status==='in_progress'?window.t('In carico','In progress'):window.t('Da gestire','To manage')}</span>
+              <span class="pms-day-action">${alert.action}</span>
+            </button>`).join("")}
         </div>` : ""}
-      <button type="button" onclick="openCurrentBookings()" style="margin-top:12px;border:0;border-radius:10px;background:#0f172a;color:white;padding:10px 14px;font-size:12px;font-weight:900;cursor:pointer;">
-        ${window.t("Apri attività PMS →", "Open PMS tasks →")}
+      ${alerts.length>3?`<p class="pms-day-caption">${window.t(`Altre ${alerts.length-3} attività da gestire nella checklist.`,`${alerts.length-3} more tasks to manage in the checklist.`)}</p>`:''}
+      <button type="button" class="pms-day-all" onclick="openPMSDailyChecklist()">
+        ${window.t("Apri checklist di oggi →", "Open today's checklist →")}
       </button>
+      <details class="pms-email-settings"><summary>${window.t('Preferenze email e promemoria','Email and reminder preferences')}</summary><div>${emailToggle}</div></details>
     </div>`;
 }
+
+window.openPMSUpcomingArrival=async function(id,button){
+  if(button?.disabled)return false;
+  if(button)button.disabled=true;
+  try{
+    if(await window.openPMSAllTasks({fresh:true})===false)return false;
+    const plan=buildPMSDailyPlan(window.currentBookingsData || [],checklistDay());
+    if(!plan.week.arrivals.some(row=>row.bookingId===id)){
+      alert(window.t('Questo arrivo non è più tra quelli previsti nei prossimi 7 giorni. L’elenco è stato aggiornato.','This arrival is no longer expected in the next 7 days. The list has been refreshed.'));return false;
+    }
+    return await window.openBookingForEdit(id,'stay')!==false;
+  }catch(error){
+    dashboardError('PMS arrival preparation failed',error);
+    if(button){alert(window.t('Impossibile aggiornare gli arrivi. Verifica la connessione e riprova.','Unable to refresh arrivals. Check your connection and retry.'));return false;}
+    throw error;
+  }
+  finally{if(button)button.disabled=false;}
+};
+
+window.openPMSAutopilotTask=async function(id,section){
+  if(!['documents','authority','tax','cleaning','issue','arrival','departure'].includes(section))return false;
+  if(await window.openPMSDailyChecklist({fresh:true})===false)return false;
+  const freshPlan=buildPMSDailyPlan(window.currentBookingsData || [],checklistDay());
+  if(![...freshPlan.items,...freshPlan.week.tasks].some(item=>item.bookingId===id && item.code===section)){
+    alert(window.t('Questa attività non è più presente nelle priorità. La checklist è stata aggiornata: chiedi un nuovo riepilogo all’Autopilot.','This task is no longer in the priorities. The checklist was refreshed: ask Autopilot for a new summary.'));
+    return false;
+  }
+  return await window.openBookingForEdit(id,section)!==false;
+};
+
+window.openPMSAllTasks=async function({fresh=false}={}){
+  window.rbChecklistFilter='all';window.rbChecklistSearch='';window.rbOperationFilter=null;
+  return await window.openCurrentBookings({fresh});
+};
+window.openPMSDailyChecklist=async function({fresh=false}={}){
+  window.rbChecklistFilter='daily';window.rbChecklistSearch='';window.rbOperationFilter='due';
+  return await window.openCurrentBookings({fresh});
+};
+window.openPMSAlertBooking=async function(id,button,section){
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
+  try{
+    if(await window.openPMSDailyChecklist() === false) return;
+    if(!(window.currentBookingsData || []).some(booking=>booking.id===id)){
+      alert(window.t('La prenotazione non è più disponibile. La checklist è stata aggiornata.','This booking is no longer available. The checklist has been refreshed.'));return;
+    }
+    await window.openBookingForEdit(id,section);
+  }catch(error){dashboardError('PMS alert booking failed',error);alert(window.t('Impossibile aprire la prenotazione. Riprova.','Unable to open the booking. Please retry.'));}
+  finally{if(button)button.disabled=false;}
+};
+
+window.togglePMSReminderEmail = async function(){
+  if(!window.currentUser || isDemo())return;
+  const next=window.rbNotificationPreferences?.pmsReminderEmail!==true;
+  try{
+    await updateDoc(doc(db,"users",window.currentUser.uid),{"notificationPreferences.pmsReminderEmail":next});
+    window.rbNotificationPreferences={...(window.rbNotificationPreferences || {}),pmsReminderEmail:next};
+    renderPMSPortalAlerts(window.rbPMSData || {});
+    if(next)alert(t("Promemoria attivati: il controllo giornaliero riepiloga fino a 20 attività e operazioni aperte con data superata, di oggi e di domani. Le segnalazioni ospiti hanno avvisi separati. Massimo un riepilogo al giorno, all’esecuzione del controllo programmato.","Reminders enabled: the daily check summarizes up to 20 open tasks and operations that are overdue, due today or tomorrow. Guest issues use separate alerts. At most one summary per day, when the scheduled check runs."));
+  }catch(error){dashboardError("Reminder preference failed",error);alert(t("Impossibile aggiornare la preferenza email.","Unable to update email preference."));}
+};
+
+window.togglePMSTaskEmail = async function(){
+  if(!window.currentUser || isDemo())return;
+  const next=window.rbNotificationPreferences?.pmsTaskEmail!==true;
+  try{
+    await updateDoc(doc(db,"users",window.currentUser.uid),{"notificationPreferences.pmsTaskEmail":next});
+    window.rbNotificationPreferences={...(window.rbNotificationPreferences || {}),pmsTaskEmail:next};
+    renderPMSPortalAlerts(window.rbPMSData || {});
+  }catch(error){dashboardError("Task email preference failed",error);alert(t("Impossibile aggiornare la preferenza email.","Unable to update email preference."));}
+};
 
 window.togglePMSUrgentEmail = async function(){
   if(!window.currentUser || window.currentUser.uid === "demo-user") return;
@@ -10878,30 +10347,24 @@ function renderTodayBookingOperations(bookings = []){
   const container = document.getElementById("booking-today-operations");
   if(!container) return;
 
-  const now = new Date();
-  const today = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0")
-  ].join("-");
+  window.rbChecklistBookings=bookings;
+  const today=checklistDay();
+  const filter=window.rbChecklistFilter || 'daily';
+  const search=window.rbChecklistSearch || '';
+
 
   const activeBookings = bookings.filter(
     booking => isConfirmedBooking(booking)
   );
-  const arrivalsToday = activeBookings.filter(
-    booking => booking.checkin === today &&
-      String(booking.status || "").toLowerCase() === "arrival"
-  );
-  const guestsInHouse = activeBookings.filter(
-    booking => String(booking.status || "").toLowerCase() === "checkin"
-  );
-  const departuresToday = activeBookings.filter(
-    booking => booking.checkout === today &&
-      String(booking.status || "").toLowerCase() === "checkin"
-  );
+  const dueOperations=bookingOperations(activeBookings,today);
+  const arrivalsToday=dueOperations.filter(row=>row.code==='arrival');
+  const departuresToday=dueOperations.filter(row=>row.code==='departure');
+  const guestsInHouse=activeBookings.filter(booking=>String(booking.status || '').toLowerCase()==='checkin');
+  const selectedOperations=operationSelection(activeBookings,today,window.rbOperationFilter || 'due');
 
   const operationCards = [
     {
+      filter:"arrival",
       icon: "🛬",
       label: window.t("Arrivi da gestire", "Arrivals to manage"),
       count: arrivalsToday.length,
@@ -10910,8 +10373,9 @@ function renderTodayBookingOperations(bookings = []){
       background: "#eff6ff"
     },
     {
+      filter:"in_house",
       icon: "🏠",
-      label: window.t("Ospiti in struttura", "Guests in house"),
+      label: window.t("Ospiti con check-in registrato", "Guests with recorded check-in"),
       count: guestsInHouse.reduce(
         (total, booking) => total + Number(booking.guests || 0), 0
       ),
@@ -10920,6 +10384,7 @@ function renderTodayBookingOperations(bookings = []){
       background: "#ecfdf5"
     },
     {
+      filter:"departure",
       icon: "🛫",
       label: window.t("Partenze da registrare", "Departures to register"),
       count: departuresToday.length,
@@ -10930,113 +10395,26 @@ function renderTodayBookingOperations(bookings = []){
   ];
   const pendingOperations = arrivalsToday.length + departuresToday.length;
 
-  const operationalBookings = activeBookings.filter(
-    booking => !["completed", "cancelled"].includes(
-      String(booking.status || "").toLowerCase()
-    )
-  );
-  const priorityTasks = operationalBookings.flatMap(booking => {
-    const tasks = [];
-    const guestName = booking.guestName || window.t("Ospite", "Guest");
-    const totalGuests = Math.max(0, Number(booking.guests || 0));
-    const registration = booking.guestRegistration || {};
-    const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
-    const missingDocuments = Math.max(0, totalGuests - documentsReceived);
-
-    const guestIssue = booking.guestIssue || {};
-    if(
-      guestIssue.active === true &&
-      String(guestIssue.status || "open") !== "resolved"
-    ){
-      const issuePriorityLabels = {
-        low: window.t("priorità bassa", "low priority"),
-        medium: window.t("priorità media", "medium priority"),
-        high: window.t("priorità alta", "high priority"),
-        urgent: window.t("urgente", "urgent")
-      };
-      tasks.push({
-        priority: guestIssue.priority === "urgent" ? 0 : 1,
-        icon: guestIssue.priority === "urgent" ? "🚨" : "🛎️",
-        date: today,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `Segnalazione ospite · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`,
-          `Guest issue · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`
-        )
-      });
+  const labels = {
+    documents: ["🪪",window.t("Documenti ospiti mancanti", "Missing guest documents")],
+    authority: ["📤",window.t("Comunicazione autorità da gestire", "Authority report to manage")],
+    tax: ["🏛️",window.t("Tassa di soggiorno da riscuotere", "Tourist tax to collect")],
+    cleaning: ["🧹",window.t("Pulizia e turnover da gestire", "Cleaning and turnover to manage")],
+    issue: ["🛎️",window.t("Segnalazione ospite aperta", "Open guest issue")]
+  };
+  const byId=new Map(bookings.map(booking=>[booking.id,booking]));
+  const allTasks=dailyChecklist(bookings,today,'all');
+  const priorityTasks = dailyChecklist(bookings,today,filter,search).map(task=>{
+    const booking=byId.get(task.bookingId);
+    let label=labels[task.code][1];
+    if(task.code==="documents"){
+      const count=Math.max(0,Number(booking.guests || 0)-Number(booking.guestRegistration?.documentsReceived || 0));
+      label=window.t(`${count} documenti ospiti mancanti`, `${count} guest documents missing`);
     }
-
-    if(missingDocuments > 0){
-      tasks.push({
-        priority: 1,
-        icon: "🪪",
-        date: booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `${missingDocuments} documenti ospiti mancanti`,
-          `${missingDocuments} guest documents missing`
-        )
-      });
-    }
-
-    if(!["submitted", "not_required"].includes(registration.authorityStatus)){
-      tasks.push({
-        priority: 2,
-        icon: "📤",
-        date: booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: registration.authorityStatus === "ready"
-          ? window.t("Invia comunicazione autorità", "Submit authority report")
-          : window.t("Prepara comunicazione autorità", "Prepare authority report")
-      });
-    }
-
-    if(booking.touristTax?.enabled && booking.touristTax.status === "pending"){
-      const symbol = window.getTouristTaxCurrencySymbol(booking.touristTax.currency);
-      tasks.push({
-        priority: 3,
-        icon: "🏛️",
-        date: booking.touristTax.collectionTime === "checkout"
-          ? booking.checkout
-          : booking.checkin,
-        bookingId: booking.id,
-        guestName,
-        label: window.t(
-          `Riscuoti tassa di soggiorno ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`,
-          `Collect tourist tax ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`
-        )
-      });
-    }
-
-    const cleaning = booking.cleaning || {
-      required: true,
-      status: "pending",
-      scheduledDate: booking.checkout
-    };
-    if(cleaning.required !== false && cleaning.status !== "completed"){
-      tasks.push({
-        priority: 4,
-        icon: "🧹",
-        date: cleaning.scheduledDate || booking.checkout,
-        bookingId: booking.id,
-        guestName,
-        label: cleaning.status === "scheduled"
-          ? window.t(
-              `Pulizia programmata${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`,
-              `Cleaning scheduled${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`
-            )
-          : window.t("Pianifica pulizia e turnover", "Schedule cleaning and turnover")
-      });
-    }
-
-    return tasks;
-  }).sort((first, second) =>
-    String(first.date || "9999-12-31").localeCompare(String(second.date || "9999-12-31")) ||
-    first.priority - second.priority
-  );
+    if(task.code==="tax") label+=` · ${window.getTouristTaxCurrencySymbol(booking.touristTax.currency)}${Number(booking.touristTax.amount).toFixed(2)}`;
+    if(task.code==="cleaning" && booking.cleaning?.assignee) label+=` · ${booking.cleaning.assignee}`;
+    return {...task,date:task.dueDate,icon:task.priority===0?"🚨":labels[task.code][0],label};
+  });
 
   const formatTaskTiming = date => {
     if(!date) return window.t("Senza scadenza", "No due date");
@@ -11054,28 +10432,27 @@ function renderTodayBookingOperations(bookings = []){
   const priorityTasksHtml = priorityTasks.length ? `
     <div style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#fff;border:1px solid #fde68a;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px;">
-        <strong style="font-size:12px;color:#92400e;">⚠️ ${window.t("Attività prioritarie", "Priority tasks")}</strong>
+        <strong style="font-size:14px;color:#92400e;">${window.t("Da gestire", "To manage")}</strong>
         <span style="font-size:11px;font-weight:800;color:#92400e;">${priorityTasks.length}</span>
       </div>
-      <div style="display:grid;gap:7px;">
-        ${priorityTasks.slice(0, 5).map(task => `
-          <button
-            type="button"
-            onclick="openBookingForEdit('${task.bookingId}')"
-            style="width:100%;padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;color:#0f172a;"
-          >
-            <span style="text-align:left;font-size:12px;line-height:1.35;">
-              ${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}
-            </span>
-            <span style="flex:0 0 auto;font-size:10px;font-weight:800;color:${task.date <= today ? "#dc2626" : "#0369a1"};">
-              ${formatTaskTiming(task.date)} →
-            </span>
-          </button>
+      <div style="display:grid;gap:7px;max-height:360px;overflow-y:auto;">
+        ${priorityTasks.map((task,index) => `
+          ${index===0 || priorityTasks[index-1].group!==task.group ? `<div style="font-size:12px;font-weight:800;color:#475569;margin-top:8px;">${({issues:window.t("Problemi aperti","Open issues"),overdue:window.t("Scadute da verificare","Overdue · review"),today:window.t("Da gestire oggi","Due today"),undated:window.t("Senza data · verifica prenotazione","No date · review booking"),upcoming:window.t("Prossime attività","Upcoming tasks")})[task.group]}</div>` : ""}
+          <div class="pms-task-row" data-urgent="${task.priority === 0}" style="padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+            <button class="pms-task-open" type="button" data-booking-id="${escapeDashboardHTML(task.bookingId)}" data-task-code="${escapeDashboardHTML(task.code)}" onclick="openBookingForEdit(this.dataset.bookingId,this.dataset.taskCode)" style="flex:1 1 180px;min-width:0;border:0;background:transparent;cursor:pointer;color:#0f172a;text-align:left;font-size:12px;line-height:1.5;">
+              <span class="pms-task-label">${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}</span>
+              <span class="pms-task-timing" style="font-size:11px;color:${task.date && task.date <= today ? "#dc2626" : "#0369a1"};">${formatTaskTiming(task.date)} →</span>
+              <span class="pms-task-action">${({documents:window.t('Verifica documenti','Review documents'),authority:window.t('Verifica comunicazione','Review report'),tax:window.t('Gestisci tassa','Manage tax'),cleaning:window.t('Apri pulizia','Open cleaning'),issue:window.t('Gestisci problema','Manage issue')})[task.code]} →</span>
+            </button>
+            <button class="pms-task-state" type="button" onclick="setPMSTaskStatus('${escapeDashboardHTML(task.bookingId)}','${task.code}','${task.status==='in_progress'?'open':'in_progress'}')" style="border:1px solid #a7f3d0;border-radius:9px;padding:8px 10px;background:${task.status==='in_progress'?'#ecfdf5':'#fff'};color:#047857;font-size:11px;font-weight:800;cursor:pointer;">
+              ${task.status==='in_progress'?window.t("In carico · Riapri", "In progress · Reopen"):window.t("Prendi in carico", "Take charge")}
+            </button>
+          </div>
         `).join("")}
       </div>
     </div>
-  ` : "";
-  const totalOpenOperations = pendingOperations + priorityTasks.length;
+  ` : `<p role="status" style="font-size:13px;color:#475569;">${window.t("Nessuna attività per questa selezione.","No tasks match this selection.")}</p>`;
+  const totalOpenOperations = pendingOperations + allTasks.filter(task=>task.group!=="upcoming").length;
 
   const upcomingOperations = activeBookings.flatMap(booking => {
     const status = String(booking.status || "").toLowerCase();
@@ -11126,6 +10503,8 @@ function renderTodayBookingOperations(bookings = []){
 
     reminderHtml = `
       <div
+        class="pms-next-reminder"
+        data-upcoming="${daysUntil > 1}"
         role="button"
         tabindex="0"
         title="${window.t("Apri la prenotazione", "Open booking")}: ${escapeDashboardHTML(nextOperation.guestName)}"
@@ -11154,20 +10533,23 @@ function renderTodayBookingOperations(bookings = []){
     <div style="padding:16px;border:1px solid ${totalOpenOperations ? "#fde68a" : "#e2e8f0"};border-radius:16px;background:${totalOpenOperations ? "#fffbeb" : "#f8fafc"};">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
         <div>
-          <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("Operatività di oggi", "Today's operations")}</div>
-          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Scadenze e attività ordinate per urgenza", "Deadlines and tasks sorted by urgency")}</div>
+          <div style="font-size:16px;font-weight:800;color:#0f172a;">${window.t("Tutto sotto controllo", "All under control")}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Prendi in carico le attività. Per risolverle, aggiorna i dati della prenotazione.", "Take charge of tasks. To resolve them, update the booking details.")}</div>
         </div>
         <span style="padding:7px 11px;border-radius:999px;background:${totalOpenOperations ? "#fef3c7" : "#e2e8f0"};color:${totalOpenOperations ? "#92400e" : "#475569"};font-size:11px;font-weight:800;">
-          ${totalOpenOperations
-            ? totalOpenOperations === 1
-              ? window.t("1 attività aperta", "1 open task")
-              : window.t(`${totalOpenOperations} attività aperte`, `${totalOpenOperations} open tasks`)
-            : window.t("Tutto sotto controllo", "All under control")}
+          ${window.t(`Oggi e arretrati: ${totalOpenOperations}`, `Today and overdue: ${totalOpenOperations}`)}
         </span>
+        <span class="pms-future-count">${window.t(`Attività future: ${allTasks.filter(task=>task.group==='upcoming').length}`, `Future tasks: ${allTasks.filter(task=>task.group==='upcoming').length}`)}</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;">
+      <section class="pms-autopilot-access" aria-label="${window.t('PMS Autopilot','PMS Autopilot')}">
+        <div><strong>✦ PMS Autopilot</strong><p>${window.t('Considera tutte le strutture caricate, anche quando la lista è filtrata per un immobile. Le scorciatoie aprono la prenotazione indicata.','Includes all loaded properties, even when the list is filtered to one property. Shortcuts open the named booking.')}</p></div>
+        <div class="pms-autopilot-periods">
+          ${[['daily',window.t('Oggi · Priorità','Today · Priorities')],['tomorrow',window.t('Domani · Arrivi','Tomorrow · Arrivals')],['week',window.t('Prossimi 7 giorni','Next 7 days')]].map(([mode,label])=>`<button type="button" data-autopilot-period="${mode}" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot(this.dataset.autopilotPeriod)}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${label}</button>`).join('')}
+        </div>
+      </section>
+      <div class="pms-shortcuts">
         ${operationCards.map(card => `
-          <div style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
+          <button type="button" class="pms-operation-card" onclick="setPMSOperationFilter('${card.filter}')" aria-pressed="${window.rbOperationFilter===card.filter}" style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
             <div style="font-size:12px;font-weight:700;color:${card.color};">${card.icon} ${card.label}</div>
             <div style="font-size:24px;line-height:1;font-weight:900;color:#0f172a;margin-top:9px;">${card.count}</div>
             <div style="font-size:11px;color:#64748b;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -11175,14 +10557,50 @@ function renderTodayBookingOperations(bookings = []){
                 ? escapeDashboardHTML(card.names.join(", "))
                 : window.t("Nessuna attività", "No activity")}
             </div>
-          </div>
+            <div style="font-size:11px;margin-top:6px;">${window.t('Mostra prenotazioni →','Show bookings →')}</div>
+          </button>
         `).join("")}
+        ${[['urgent',window.t('Urgenti','Urgent')],['documents',window.t('Documenti','Documents')],['cleaning',window.t('Pulizie','Cleaning')]].map(([value,label])=>{
+          const count=dailyChecklist(bookings,today,value).length;
+          return `<button type="button" class="pms-operation-card pms-task-shortcut" data-urgent="${value==='urgent' && count>0}" aria-pressed="${filter===value}" onclick="setPMSChecklistFilter('${value}')"><span>${label}</span><strong>${count}</strong><small>${window.t('Mostra attività →','Show tasks →')}</small></button>`;
+        }).join('')}
       </div>
+      <p class="pms-shortcuts-note">${window.t('Arrivi e partenze includono gli arretrati. Documenti e pulizie includono anche le attività future. I conteggi indicano attività, salvo gli ospiti con check-in registrato.','Arrivals and departures include overdue bookings. Documents and cleaning include future tasks. Counts refer to tasks, except guests with recorded check-in.')}</p>
+      <details class="pms-arrival-details" ${window.rbOperationFilter?'open':''}><summary>${window.t('Arrivi e partenze · oggi e arretrati','Arrivals and departures · today and overdue')} <strong>${pendingOperations}</strong></summary>
+      <section style="margin-top:12px;padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><strong>${window.t('Arrivi e partenze da verificare','Arrivals and departures to review')}</strong><button type="button" onclick="setPMSOperationFilter('due')">${window.t('Oggi e arretrati','Today and overdue')}</button></div>
+        <p style="font-size:12px;color:#64748b;">${window.t('Conteggi dai dati registrati: controlla gli arretrati prima di aggiornare lo stato.','Counts reflect saved records: review overdue bookings before changing status.')}</p>
+        <div style="display:grid;gap:7px;max-height:230px;overflow:auto;">${selectedOperations.length?selectedOperations.map(row=>`<button type="button" class="pms-operation-open" data-booking-id="${escapeDashboardHTML(row.bookingId)}" onclick="openBookingForEdit(this.dataset.bookingId)"><strong>${escapeDashboardHTML(row.guestName)}</strong> · ${row.code==='arrival'?window.t('Arrivo da registrare','Arrival to register'):row.code==='departure'?window.t('Check-out da registrare','Check-out to register'):window.t('Check-in registrato','Recorded check-in')}<span style="display:block;font-size:12px;color:${row.overdue?'#b91c1c':'#475569'};">${escapeDashboardHTML(row.dueDate || '—')} · ${row.overdue?window.t('Arretrato · verifica prenotazione','Overdue · review booking'):row.code==='in_house'?window.t('Partenza prevista','Expected departure'):window.t('Oggi','Today')} →</span></button>`).join(''):window.t('Nessuna prenotazione per questa selezione.','No bookings match this selection.')}</div>
+      </section>
+      </details>
+      <div class="pms-checklist-controls">
+        <label>${window.t("Mostra","Show")}<select aria-label="${window.t('Filtro checklist','Checklist filter')}" onchange="setPMSChecklistFilter(this.value)">${[['daily',window.t('Oggi e avvisi','Today and alerts')],['urgent',window.t('Problemi urgenti','Urgent issues')],['all',window.t('Tutte le attività','All tasks')],['issue',window.t('Problemi ospiti','Guest issues')],['documents',window.t('Documenti mancanti','Missing documents')],['authority',window.t('Comunicazioni autorità','Authority reports')],['tax',window.t('Tassa di soggiorno','Tourist tax')],['cleaning',window.t('Pulizie','Cleaning')],['in_progress',window.t('In carico','In progress')]].map(([value,label])=>`<option value="${value}" ${filter===value?'selected':''}>${label}</option>`).join('')}</select></label>
+        <label>${window.t('Cerca ospite','Find guest')}<input type="search" value="${escapeDashboardHTML(search)}" placeholder="${window.t('Nome ospite','Guest name')}" onchange="setPMSChecklistSearch(this.value)" /></label>
+      </div>
+      <p style="font-size:12px;color:#64748b;">${window.t('Le attività scompaiono quando aggiorni i dati che le risolvono. La presa in carico indica chi sta intervenendo, non il completamento.','Tasks disappear when you update the underlying booking details. Taking charge does not complete a task.')}</p>
       ${priorityTasksHtml}
       ${reminderHtml}
     </div>
   `;
 }
+
+window.setPMSOperationFilter=function(value){window.rbOperationFilter=value;window.rbChecklistFilter='daily';renderTodayBookingOperations(window.rbChecklistBookings || []);};
+
+window.setPMSChecklistFilter=function(value){window.rbChecklistFilter=value;window.rbOperationFilter=null;renderTodayBookingOperations(window.rbChecklistBookings || []);};
+window.setPMSChecklistSearch=function(value){window.rbChecklistSearch=value;renderTodayBookingOperations(window.rbChecklistBookings || []);};
+
+window.setPMSTaskStatus = async function(bookingId,taskCode,taskStatus){
+  if(!window.currentUser || isDemo()) return;
+  return runBookingOperation(`booking:${bookingId}`,async()=>{
+    try{
+      const current=await readFreshBooking(bookingId);
+      const task=visiblePMSTasks({...current,id:bookingId}).find(item=>item.code===taskCode);
+      if(!task) failBookingOperation("task_resolved");
+      await mutatePMS("task",{bookingId,expectedVersion:Number(current._pmsVersion || 0),taskCode,taskStatus,taskFingerprint:task.fingerprint});
+      await refreshAfterBookingMutation(current.propertyId);
+    }catch(error){dashboardError("PMS task update failed",error);bookingOperationError(error);}
+  });
+};
 
 async function loadBookings(propertyId){
 
@@ -11194,57 +10612,17 @@ async function loadBookings(propertyId){
   if(!list) return;
 
   if(isDemo()){
+    const bookings = window.rbBuildDemoPMS().currentBookings;
+    renderTodayBookingOperations([]);
+    list.innerHTML = `<p class="rb-source-note">${t("Prenotazioni dimostrative del mese corrente · sola lettura", "Illustrative bookings for the current month · read only")}</p>` + bookings.map((item,index) => `
+      <div class="analysis-card"><strong>${t("Ospite demo", "Demo guest")} ${index+1}</strong>
+      <p>${item.checkin} → ${item.checkout}</p><span>${formatCurrency(item.totalAmount)} · ${item.nights} ${t("notti", "nights")}</span></div>
+    `).join("");
+    return;
+  }
 
-  renderTodayBookingOperations([]);
-
-  list.innerHTML = `
-
-  <div class="analysis-card">
-
-    <strong>
-      Marco Rossi
-    </strong>
-
-    <br>
-
-    12/06 → 15/06
-
-    <br>
-
-    🏠 Airbnb
-
-    <br>
-
-    €336
-
-  </div>
-
-  <div class="analysis-card">
-
-    <strong>
-      John Smith
-    </strong>
-
-    <br>
-
-    18/06 → 22/06
-
-    <br>
-
-    🟦 Booking.com
-
-    <br>
-
-    €448
-
-  </div>
-
-  `;
-
-  return;
-
-}
-
+  if(!window.currentUser || !canUseFirestorePMS()) return;
+  const bookingsOwnerUid = window.currentUser.uid;
   const showAllProperties = propertyId === "all";
   const q = showAllProperties
     ? query(
@@ -11259,6 +10637,7 @@ async function loadBookings(propertyId){
 
   const snap =
     await getDocs(q);
+  if(window.currentUser?.uid !== bookingsOwnerUid || !canUseFirestorePMS()) return;
 
   const bookingsData = [];
   window.currentBookingsData = bookingsData;
@@ -11316,16 +10695,7 @@ let sourceStats = {};
     const source =
   b.source || "Unknown";
 
-    const nights = Math.max(
-      1,
-      Math.ceil(
-        (
-          new Date(b.checkout) -
-          new Date(b.checkin)
-        ) /
-        (1000 * 60 * 60 * 24)
-      )
-    );
+    const nights = calendarBookingNights(b);
 
 if(isConfirmed && !sourceStats[source]){
 
@@ -11360,12 +10730,13 @@ sourceStats[source].revenue +=
 html += `
 
 <div
+class="pms-booking-card"
 data-status="${escapeDashboardHTML(b.status)}"
 ${!isCancelled ? `
 role="button"
 tabindex="0"
 title="${window.t("Apri dettaglio prenotazione", "Open booking details")}"
-onclick="if(!event.target.closest('button')) openBookingForEdit('${docItem.id}')"
+onclick="if(!event.target.closest('button,details')) openBookingForEdit('${docItem.id}')"
 onkeydown="if((event.key === 'Enter' || event.key === ' ') && event.target === this){ event.preventDefault(); openBookingForEdit('${docItem.id}'); }"
 ` : ""}
 style="
@@ -11421,7 +10792,7 @@ font-weight:800;
 color:#0f172a;
 line-height:1.2;
 ">
-${escapeDashboardHTML(b.guestName)}
+<span class="pms-card-guest">${escapeDashboardHTML(b.guestName)}</span>
 </div>
 
 ${bookingProperty?.name ? `
@@ -11562,7 +10933,7 @@ Check-In
 font-weight:700;
 color:#0f172a;
 ">
-${escapeDashboardHTML(b.checkin)}
+<span class="pms-card-date">${escapeDashboardHTML(b.checkin)}</span>
 </div>
 </div>
 
@@ -11585,7 +10956,7 @@ Check-Out
 font-weight:700;
 color:#0f172a;
 ">
-${escapeDashboardHTML(b.checkout)}
+<span class="pms-card-date">${escapeDashboardHTML(b.checkout)}</span>
 </div>
 </div>
 
@@ -11666,6 +11037,10 @@ b.totalAmount || 0
 
 </div>
 
+<div class="pms-booking-flags">
+${visiblePMSTasks({...b,id:docItem.id}).map(task=>`<button type="button" class="pms-booking-flag" data-urgent="${task.priority===0}" data-booking-id="${escapeDashboardHTML(docItem.id)}" data-task-code="${task.code}" onclick="openBookingForEdit(this.dataset.bookingId,this.dataset.taskCode)">${({documents:window.t('Documenti mancanti','Missing documents'),authority:window.t('Comunicazione da gestire','Report pending'),tax:window.t('Tassa da riscuotere','Tax pending'),cleaning:window.t('Pulizia da gestire','Cleaning pending'),issue:task.priority===0?window.t('Problema urgente','Urgent issue'):window.t('Problema aperto','Open issue')})[task.code]} →</button>`).join('')}
+</div>
+<details class="pms-booking-extra"><summary>${window.t('Stati e dettagli operativi','Operational status and details')}</summary>
 ${(() => {
   const savedSeason = b.pricingAssistant?.seasonLevel;
   const checkinMonth = new Date(`${b.checkin || ""}T12:00:00`).getMonth() + 1;
@@ -11764,6 +11139,7 @@ ${b.status !== "pending" && b.cleaning ? (() => {
   `;
 })() : ""}
 
+${taskProgressBadge({...b,id:docItem.id},t)}
 ${b.status !== "pending" && b.guestIssue?.active === true ? (() => {
   const issueStatus = b.guestIssue.status || "open";
   const issuePriority = b.guestIssue.priority || "medium";
@@ -11790,6 +11166,7 @@ ${b.status !== "pending" && b.guestIssue?.active === true ? (() => {
   `;
 })() : ""}
 
+</details>
 ${!isCancelled ? (() => {
   const nextStatusByCurrent = {
     pending: {
@@ -11815,6 +11192,7 @@ ${!isCancelled ? (() => {
 
   return `
   <button
+  class="pms-card-next-action"
   onclick="advanceBookingStatus('${docItem.id}', '${nextStep.status}')"
   style="
   width:100%;
@@ -11877,7 +11255,7 @@ color:#047857;
 font-weight:700;
 cursor:pointer;
 ">
-${window.t("Modifica", "Edit")}
+${window.t("Apri scheda", "Open details")}
 </button>
 
 <button
@@ -11964,33 +11342,9 @@ const normalizedBookings =
     const checkoutDate =
       new Date(checkout);
 
-    const hasValidDates =
-      checkin &&
-      checkout &&
-      !Number.isNaN(
-        checkinDate.getTime()
-      ) &&
-      !Number.isNaN(
-        checkoutDate.getTime()
-      ) &&
-      checkoutDate >
-      checkinDate;
+    const hasValidDates = stayNights(checkin, checkout) > 0;
 
-    const calculatedNights =
-      hasValidDates
-        ? Math.ceil(
-            (
-              checkoutDate -
-              checkinDate
-            ) /
-            (
-              1000 *
-              60 *
-              60 *
-              24
-            )
-          )
-        : 0;
+    const calculatedNights = stayNights(checkin, checkout);
 
     const totalAmount =
       Number(
@@ -12181,7 +11535,9 @@ const normalizedBookings =
           booking.guests || 0
         ),
 
+      _pmsVersion: Number(booking._pmsVersion || 0),
       totalAmount,
+      amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 
       nightlyRate:
         calculatedNights > 0
@@ -12213,7 +11569,12 @@ const normalizedBookings =
             }
           : null,
 
+      touristTax: booking.touristTax || null,
+      guestRegistration: booking.guestRegistration || null,
+      cleaning: booking.cleaning || null,
       guestIssue: booking.guestIssue || null,
+      autopilotTasks: booking.autopilotTasks || {},
+      autopilotEvents: booking.autopilotEvents || [],
 
       validDateRange:
         Boolean(
@@ -12246,6 +11607,10 @@ window.rbPMSData = {
 
   bookingList:
     normalizedBookings,
+  portalBookingList: showAllProperties ? normalizedBookings : [
+    ...(window.rbPMSData?.portalBookingList || []).filter(item => item.propertyId !== propertyId),
+    ...normalizedBookings
+  ],
 
   attentionBookings,
 
@@ -12389,23 +11754,9 @@ font-size:12px;
 color:#64748b;
 ">
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:12px;
-color:#64748b;
-">
-
 <span>
-${data.bookings} pren.
+${data.bookings} ${t("pren.","bookings")}
 </span>
-
-<span>
-€${data.revenue.toFixed(0)}
-</span>
-
-</div>
 
 <span>
 €${data.revenue.toFixed(0)}
@@ -12470,230 +11821,115 @@ btn.dataset.filter
 // 🚫 CANCEL BOOKING (KEEP HISTORY)
 // =====================================
 
-window.cancelBooking =
-async function(id){
-
-  if(
-    !confirm(
-      window.t(
-        "Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.",
-        "Cancel this booking? It will remain in history but will not count toward performance."
-      )
-    )
-  ){
-    return;
-  }
-
-  await updateDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    ),
-    {
-      status: "cancelled",
-      cancelledAt: serverTimestamp()
-    }
-  );
-
-  await loadPMSStats();
-  await loadProperties();
-  await loadBookings(
-    window.currentPropertyId
-  );
-
+window.cancelBooking = async function(id){
+  if(!id || !window.currentUser) return;
+  return runBookingOperation(`booking:${id}`, async () => {
+    if(!confirm(t("Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.", "Cancel this booking? It will remain in history but will not count toward performance."))) return;
+    try{
+      const current = await readFreshBooking(id);
+      await mutatePMS("cancel",{bookingId:id,expectedVersion:Number(current._pmsVersion || 0)});
+    }catch(error){ dashboardError("Booking cancellation failed", error); bookingOperationError(error); return; }
+    await refreshAfterBookingMutation();
+  });
 };
 
 // =====================================
 // ➡️ ADVANCE BOOKING STATUS
 // =====================================
-
-window.advanceBookingStatus =
-async function(id, nextStatus){
-
-  const statusLabels = {
-    arrival: window.t("In Arrivo", "Arriving"),
-    checkin: window.t("Check-In", "Check-In"),
-    checkout: window.t("Check-Out", "Check-Out"),
-    completed: window.t("Completato", "Completed")
+window.advanceBookingStatus = async function(id, nextStatus){
+  const labels = {
+    arrival:t("In Arrivo", "Arriving"), checkin:"Check-In", checkout:"Check-Out", completed:t("Completato", "Completed")
   };
-
-  if(!id || !statusLabels[nextStatus]) return;
-
-  const currentBooking =
-    (window.currentBookingsData || [])
-      .find(booking => booking.id === id);
-  const isRequestConfirmation =
-    String(currentBooking?.status || "").toLowerCase() === "pending" &&
-    nextStatus === "arrival";
-
-  if(isRequestConfirmation){
-    const requestedArrival = new Date(`${currentBooking.checkin}T00:00:00`);
-    const requestedDeparture = new Date(`${currentBooking.checkout}T00:00:00`);
-    const hasConflict = (window.currentBookingsData || []).some(booking => {
-      if(booking.id === id || !isConfirmedBooking(booking)) return false;
-      const existingArrival = new Date(`${booking.checkin}T00:00:00`);
-      const existingDeparture = new Date(`${booking.checkout}T00:00:00`);
-      if(
-        Number.isNaN(existingArrival.getTime()) ||
-        Number.isNaN(existingDeparture.getTime())
-      ) return false;
-      return requestedArrival < existingDeparture && requestedDeparture > existingArrival;
-    });
-
-    if(hasConflict){
-      alert(window.t(
-        "Impossibile confermare: nel frattempo le date richieste risultano occupate. Modifica le date o annulla la richiesta.",
-        "Cannot confirm: the requested dates are now occupied. Change the dates or cancel the request."
-      ));
-      return;
-    }
+  if(!id || !window.currentUser || !labels[nextStatus]) return;
+  if(window.currentSelectedBooking?.id === id && window.hasUnsavedBookingChanges?.()){
+    alert(t("Salva o scarta le modifiche prima di cambiare lo stato della prenotazione.","Save or discard your edits before changing booking status.")); return;
   }
-
-  const bookingDetailsWasOpen =
-    window.currentSelectedBooking?.id === id &&
-    document.getElementById("booking-form-container")?.style.display !== "none";
-
-  if(
-    !confirm(
-      window.t(
-        isRequestConfirmation
-          ? "Confermare la richiesta e trasformarla in prenotazione?"
-          : `Aggiornare la prenotazione allo stato ${statusLabels[nextStatus]}?`,
-        isRequestConfirmation
-          ? "Confirm this request and convert it into a booking?"
-          : `Update this booking to ${statusLabels[nextStatus]}?`
-      )
-    )
-  ){
-    return;
-  }
-
-  await updateDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    ),
-    {
-      status: nextStatus,
-      statusUpdatedAt: serverTimestamp()
+  return runBookingOperation(`booking:${id}`, async () => {
+    const bookingDetailsVersion = window.rbBookingViewVersion || 0;
+    const bookingDetailsWasOpen = window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none";
+    const confirmation = nextStatus === "arrival"
+      ? t("Confermare la richiesta e trasformarla in prenotazione?", "Confirm this request and convert it into a booking?")
+      : t(`Aggiornare la prenotazione allo stato ${labels[nextStatus]}?`, `Update this booking to ${labels[nextStatus]}?`);
+    if(!confirm(confirmation)) return;
+    try{
+      // Read after confirmation: the user may leave the dialog open for minutes.
+      const current = await readFreshBooking(id);
+      if(!canAdvanceBooking(current.status, nextStatus)) failBookingOperation("stale_status");
+      await verifyBookingAvailability({...current, status:nextStatus}, id);
+      await mutatePMS("advance",{bookingId:id,nextStatus,expectedVersion:Number(current._pmsVersion || 0)});
+    }catch(error){ dashboardError("Booking status update failed", error); bookingOperationError(error); return; }
+    await refreshAfterBookingMutation();
+    if(bookingDetailsWasOpen && bookingDetailsVersion === (window.rbBookingViewVersion || 0) && window.currentSelectedBooking?.id === id && document.getElementById("booking-form-container")?.style.display !== "none"){
+      const refreshed = (window.currentBookingsData || []).find(booking => booking.id === id);
+      if(refreshed) await window.showBookingDetails(refreshed);
     }
-  );
-
-  await loadPMSStats();
-  await loadProperties();
-  await loadBookings(
-    window.currentPropertyId
-  );
-
-  // The Copilot must read the freshly rebuilt rbPMSData after a status change.
-  window.rbPMSMemory = null;
-
-  if(bookingDetailsWasOpen){
-    const refreshedBooking =
-      (window.currentBookingsData || [])
-        .find(booking => booking.id === id);
-
-    if(refreshedBooking){
-      await window.showBookingDetails(refreshedBooking);
-    }
-  }
-
+  });
 };
 
 // =====================================
 // 🗑 DELETE BOOKING
 // =====================================
 
-window.deleteBooking =
-async function(id){
-
-  if(
-    !confirm(
-      window.t(
-        "Eliminare definitivamente questa prenotazione? L’operazione non può essere annullata.",
-        "Permanently delete this booking? This action cannot be undone."
-      )
-    )
-  ){
-    return;
-  }
-
-  await deleteDoc(
-    doc(
-      db,
-      "bookings",
-      id
-    )
-  );
-
-  await loadPMSStats();
-
-await loadProperties();
-
-await loadBookings(
-  window.currentPropertyId
-);
-
+window.deleteBooking = async function(id){
+  if(!id || !window.currentUser) return;
+  return runBookingOperation(`booking:${id}`,async()=>{
+    if(!confirm(t("Eliminare definitivamente questa prenotazione? L’operazione non può essere annullata.", "Permanently delete this booking? This action cannot be undone."))) return;
+    try{
+      const current=await readFreshBooking(id);
+      await mutatePMS("delete",{bookingId:id,expectedVersion:Number(current._pmsVersion || 0)});
+    }catch(error){dashboardError("Booking deletion failed",error);bookingOperationError(error);return;}
+    await refreshAfterBookingMutation();
+  });
 };
 
 // =====================================
 // 📊 PMS DASHBOARD KPI
 // =====================================
 
-async function loadPMSStats(){
+async function loadPMSStats({fresh=false}={}){
 
   if(window.isDemoDashboard){
-
-  
-  const setText = (id,value)=>{
-
-    const el =
-      document.getElementById(id);
-
-    if(el){
-      el.innerText = value;
-    }
-
-  };
-
-  setText("pms-total-properties","1");
-  setText("pms-total-bookings","11");
-  setText("pms-total-revenue","€2.980");
-  setText("pms-occupancy","78%");
-  setText("pms-adr","€112");
-  setText("pms-revpar","€87");
-  setText("pms-avgstay","3.2");
-  setText("pms-guests","27");
-  setText("pms-arrivals-today","2");
-  setText("pms-departures-today","1");
-  setText("pms-guests-in-house","5");
-  setText("pms-checkin-today","2");
-  setText("pms-checkout-today","1");
-  setText("pms-pending-bookings","2");
-
-  renderPMSPerformanceChart([
-    { checkin:"2026-01-12", totalAmount:180 },
-    { checkin:"2026-02-09", totalAmount:220 },
-    { checkin:"2026-03-15", totalAmount:260 },
-    { checkin:"2026-04-18", totalAmount:310 },
-    { checkin:"2026-05-06", totalAmount:240 },
-    { checkin:"2026-06-21", totalAmount:330 },
-    { checkin:"2026-07-11", totalAmount:420 },
-    { checkin:"2026-08-17", totalAmount:380 },
-    { checkin:"2026-09-02", totalAmount:310 },
-    { checkin:"2026-10-14", totalAmount:330 }
-  ]);
-
-  return;
-
-}
+    const referenceDate = new Date();
+    const fixture = window.rbBuildDemoPMS(referenceDate);
+    const monthBookings = fixture.currentBookings;
+    const nights = monthBookings.reduce((sum, item) => sum + getBookingNightsInMonth(item.checkin, item.checkout, referenceDate), 0);
+    const revenue = monthBookings.reduce((sum, item) => sum + getBookingRevenueInMonth(item, referenceDate), 0);
+    const days = new Date(referenceDate.getFullYear(), referenceDate.getMonth()+1, 0).getDate();
+    const occupancy = Math.round(nights / days * 100);
+    const adr = nights ? revenue / nights : 0;
+    const today = `${referenceDate.getFullYear()}-${String(referenceDate.getMonth()+1).padStart(2,"0")}-${String(referenceDate.getDate()).padStart(2,"0")}`;
+    const arrivals = monthBookings.filter(item => item.checkin === today).length;
+    const departures = monthBookings.filter(item => item.checkout === today).length;
+    const inHouse = monthBookings.filter(item => item.checkin <= today && item.checkout > today).reduce((sum,item) => sum+item.guests,0);
+    const setText = (id,value) => { const element = document.getElementById(id); if(element) element.innerText=value; };
+    const values = {
+      "pms-total-properties":1, "pms-total-bookings":monthBookings.length,
+      "pms-total-revenue":formatCurrency(revenue), "pms-occupancy":formatPercent(occupancy),
+      "pms-adr":formatCurrency(adr), "pms-revpar":formatCurrency(revenue/days),
+      "pms-avgstay":(nights/monthBookings.length).toFixed(1),
+      "pms-guests":monthBookings.reduce((sum,item)=>sum+item.guests,0),
+      "pms-arrivals-today":arrivals, "pms-departures-today":departures,
+      "pms-guests-in-house":inHouse, "pms-checkin-today":arrivals,
+      "pms-checkout-today":departures, "pms-pending-bookings":0
+    };
+    Object.entries(values).forEach(([id,value]) => setText(id,value));
+    window.rbPMSData = {isDemo:true, propertyList:[{id:"demo-property", name:"Immobile demo",city:"Roma",acquisitionPrice:null}], properties:1, bookings:monthBookings.length,
+      revenue, occupancy, adr, revpar:revenue/days, guests:inHouse,
+      bookingList:monthBookings, attentionBookings:[], attentionCount:0,
+      arrivalsToday:arrivals, departuresToday:departures, guestsInHouse:inHouse,
+      arrivals, checkins:arrivals, checkouts:departures, pendingBookings:0};
+    renderPMSPerformanceChart(fixture.bookings);
+    window.dispatchEvent(new CustomEvent("rb_pms_data_updated", {detail:window.rbPMSData}));
+    return;
+  }
 
   if(!window.currentUser) return;
+  if(!canUseFirestorePMS()) return;
+  const pmsOwnerUid = window.currentUser.uid;
+  const readStats=fresh?getDocsFromServer:getDocs;
 
   const propertiesSnap =
-    await getDocs(
+    await readStats(
       query(
         collection(db,"properties"),
         where(
@@ -12705,7 +11941,7 @@ async function loadPMSStats(){
     );
 
   const bookingsSnap =
-    await getDocs(
+    await readStats(
       query(
         collection(db,"bookings"),
         where(
@@ -12715,6 +11951,8 @@ async function loadPMSStats(){
         )
       )
     );
+
+  if(window.currentUser?.uid !== pmsOwnerUid || !canUseFirestorePMS()) return;
 
   const properties =
     propertiesSnap.size;
@@ -12825,17 +12063,7 @@ async function loadPMSStats(){
         b.totalAmount || 0
       );
 
-    const nights =
-      Math.max(
-        1,
-        Math.ceil(
-          (
-            new Date(b.checkout) -
-            new Date(b.checkin)
-          ) /
-          (1000 * 60 * 60 * 24)
-        )
-      );
+    const nights = calendarBookingNights(b);
 
     totalNights += nights;
     const nightsThisMonth = getBookingNightsInMonth(
@@ -13070,33 +12298,9 @@ const normalizedPMSBookings =
       const checkoutDate =
         new Date(checkout);
 
-      const hasValidDates =
-        checkin &&
-        checkout &&
-        !Number.isNaN(
-          checkinDate.getTime()
-        ) &&
-        !Number.isNaN(
-          checkoutDate.getTime()
-        ) &&
-        checkoutDate >
-          checkinDate;
+      const hasValidDates = stayNights(checkin, checkout) > 0;
 
-      const calculatedNights =
-        hasValidDates
-          ? Math.ceil(
-              (
-                checkoutDate -
-                checkinDate
-              ) /
-              (
-                1000 *
-                60 *
-                60 *
-                24
-              )
-            )
-          : 0;
+      const calculatedNights = stayNights(checkin, checkout);
 
       const totalAmount =
         Number(
@@ -13282,7 +12486,9 @@ const normalizedPMSBookings =
             booking.guests || 0
           ),
 
+        _pmsVersion: Number(booking._pmsVersion || 0),
         totalAmount,
+        amountRecognized: booking.totalAmount != null && booking.totalAmount !== "" && Number.isFinite(Number(booking.totalAmount)),
 
         nightlyRate:
           calculatedNights > 0
@@ -13321,6 +12527,8 @@ const normalizedPMSBookings =
         cleaning: booking.cleaning || null,
 
         guestIssue: booking.guestIssue || null,
+        autopilotTasks: booking.autopilotTasks || {},
+      autopilotEvents: booking.autopilotEvents || [],
 
         validDateRange:
           Boolean(
@@ -13349,6 +12557,15 @@ window.rbPMSData = {
     window.rbPMSData || {}
   ),
 
+  ownerUid: pmsOwnerUid,
+  isDemo:false,
+  portalSnapshotReady: true,
+  propertyList: propertiesSnap.docs.map(item => {
+    const property = item.data() || {};
+    const rawPrice = property.investmentSnapshot?.propertyPrice;
+    return {id:item.id, name:String(property.name || ""), city:String(property.city || ""),
+      acquisitionPrice:rawPrice != null && rawPrice !== "" && Number.isFinite(Number(rawPrice)) ? Number(rawPrice) : null};
+  }),
   properties,
 
   renovationList,
@@ -13382,6 +12599,7 @@ window.rbPMSData = {
   // Complete booking memory for Copilot
   bookingList:
     normalizedPMSBookings,
+  portalBookingList: normalizedPMSBookings,
 
   attentionBookings:
     pmsAttentionBookings,
@@ -14009,6 +13227,8 @@ const isStay = dayState.isStay;
 class="pms-calendar-day"
 data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
+data-calendar-state="${isCheckout ? "departure" : isCheckin ? "arrival" : isStay ? "stay" : "available"}"
+data-today="${isToday}"
 data-booking='${
   bookingInfo
     ? escapeDashboardHTML(
@@ -15541,8 +14761,8 @@ margin-bottom:14px;
 ">
 
 ${t(
-"Azioni consigliate",
-"Recommended Actions"
+"Strumenti per gli scenari di investimento",
+"Investment scenario tools"
 )}
 
 </div>
@@ -15556,7 +14776,7 @@ gap:14px;
 
 
 <button
-onclick="window.openWhatIf && window.openWhatIf('adr')"
+onclick="window.openPMSInvestmentTool('revenue-simulator')"
 style="
 padding:20px;
 min-height:150px;
@@ -15591,8 +14811,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Aumenta ADR",
-"Increase ADR"
+"Simula ricavi",
+"Simulate revenue"
 )}
 
 </div>
@@ -15606,7 +14826,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-+5% pricing simulation
+${t("Apri gli scenari: occupazione e prezzo notte", "Open scenarios: occupancy and nightly rate")}
 
 </div>
 
@@ -15615,7 +14835,7 @@ word-break:break-word;
 
 
 <button
-onclick="window.openWhatIf && window.openWhatIf('mortgage')"
+onclick="window.location.assign('/mutui/')"
 style="
 padding:20px;
 min-height:150px;
@@ -15650,8 +14870,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Ottimizza mutuo",
-"Optimize mortgage"
+"Apri strumenti mutuo",
+"Open mortgage tools"
 )}
 
 </div>
@@ -15665,7 +14885,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("Analisi LTV / capitale proprio","LTV / equity analysis")}
+${t("Vai alla pagina Mutui", "Go to the Mortgage page")}
 
 </div>
 
@@ -15674,7 +14894,7 @@ ${t("Analisi LTV / capitale proprio","LTV / equity analysis")}
 
 
 <button
-onclick="window.openMarketComparison && window.openMarketComparison()"
+onclick="window.openPMSInvestmentTool('roi-market-comparison')"
 style="
 padding:20px;
 min-height:150px;
@@ -15709,8 +14929,8 @@ word-break:break-word;
 ">
 
 ${t(
-"Confronta mercato",
-"Compare market"
+"Confronta ROI",
+"Compare ROI"
 )}
 
 </div>
@@ -15724,7 +14944,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("Roma vs Milano vs Napoli","Rome vs Milan vs Naples")}
+${t("ROI del patrimonio e riferimento illustrativo", "Portfolio ROI and illustrative reference")}
 
 </div>
 
@@ -15784,7 +15004,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-${t("PDF Executive","Executive PDF")}
+${t("PDF della dashboard e degli scenari", "Dashboard and scenario PDF")}
 
 </div>
 
@@ -15982,6 +15202,19 @@ document.addEventListener("rb_language_changed", () => {
 // 🏨 PMS TABS
 // =====================================
 
+window.openPMSInvestmentTool = function(sectionId){
+  if(!["revenue-simulator", "roi-market-comparison"].includes(sectionId)) return false;
+  const section = document.getElementById(sectionId);
+  if(!section) return false;
+  window.showPMSTab("roi");
+  requestAnimationFrame(()=>{
+    section.scrollIntoView({behavior:"smooth",block:"start"});
+    section.setAttribute("tabindex","-1");
+    section.focus({preventScroll:true});
+  });
+  return true;
+};
+
 window.showPMSTab = function(tab){
 
   const validTabs = [
@@ -16112,3 +15345,5 @@ document.addEventListener("DOMContentLoaded",()=>{
     showPMSTab("dashboard");
 
 });
+
+document.addEventListener("rb_language_changed",()=>renderBookingTaskTracking());

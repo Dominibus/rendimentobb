@@ -59,7 +59,7 @@ window.PLAN = {
     if(cleanPlan === "investor"){
 
       this.limits.simulations =
-        50;
+        Infinity;
 
     }
 

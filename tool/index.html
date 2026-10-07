@@ -769,6 +769,9 @@ SAFE
 
 <!-- Stile dedicato al Simulatore 2026. Caricato dopo gli override legacy. -->
 <link rel="stylesheet" href="/css/tool-2026.css">
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
+<link rel="stylesheet" href="/css/investment-workspace.css?v=20261006-rc41">
 </head>
 
 <body class="tool-page">
@@ -799,14 +802,14 @@ style="margin-bottom:10px;">
 </h3>
 
 <p 
-data-it="ROI reale, rischio, mutuo e sostenibilità dell’investimento."
-data-en="Real ROI, risk, mortgage and investment sustainability."
+data-it="Investor: analisi, scenari e portfolio/PMS. Pro aggiunge PDF e dashboard-report."
+data-en="Investor: analyses, scenarios and portfolio/PMS. Pro adds PDFs and dashboard reports."
 style="font-size:14px;color:#64748b;">
 </p>
 
-<button onclick="buyPlan('pro')" class="btn btn-primary" style="margin-top:15px;width:100%;"
-data-it="🔥 Sblocca ora – 29€"
-data-en="🔥 Unlock now – €29">
+<button onclick="window.location.assign('/#pricing')" class="btn btn-primary" style="margin-top:15px;width:100%;"
+data-it="Confronta Investor e Pro"
+data-en="Compare Investor and Pro">
 </button>
 
 <button onclick="closeUpgradeModal()" style="
@@ -826,9 +829,10 @@ data-en="Not now">
 <div id="global-header"></div>  
 <!-- 🔥 MOBILE MENU ROOT (CRITICO) -->
 
-<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>  
+  
 
 <main>
+
 
 <!-- 🔥 SOURCE + TRUST -->
 <div id="property-source"
@@ -858,10 +862,10 @@ data-en="✔️ Analysis with indicative market benchmarks">
 
 <div
 style="font-size:14px;color:#334155;line-height:1.7;"
-data-it="I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcolato nella versione completa."
-data-en="Results are based on average market data. Real risk is calculated in the full version.">
+data-it="I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto."
+data-en="Results depend on your inputs. Market references are indicative; verify assumptions for your specific case.">
 
-I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcolato nella versione completa.
+I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto.
 
 </div>
 
@@ -886,19 +890,20 @@ I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcola
     </h1>
 
     <p
-      data-it="ROI reale, cashflow, rischio e confronto con il mercato in un’unica analisi."
-      data-en="Real ROI, cash flow, risk and market comparison in one analysis.">
-      ROI reale, cashflow, rischio e confronto con il mercato in un’unica analisi.
+      data-it="ROI e cashflow stimati, rischio e benchmark indicativi in un’unica analisi."
+      data-en="Estimated ROI and cash flow, risk and indicative benchmarks in one analysis.">
+      ROI e cashflow stimati, rischio e benchmark indicativi in un’unica analisi.
     </p>
   </div>
 
   <div class="tool-2026-market-status"
-    data-it="Dati di mercato aggiornati"
-    data-en="Updated market data">
-    Dati di mercato aggiornati
+    data-it="Benchmark indicativi di mercato"
+    data-en="Indicative market benchmarks">
+    Benchmark indicativi di mercato
   </div>
 </div>
 
+<section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Il tuo investimento, passo dopo passo" data-en="Your investment, step by step">Il tuo investimento, passo dopo passo</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="#price"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="#rb-simulation-summary"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="inputs" data-it="Controlla i dati" data-en="Check inputs">Controlla i dati</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="results" data-it="Leggi la mia analisi" data-en="Read my analysis">Leggi la mia analisi</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section>
 <div class="container simulator-container">
 
   <div class="simulator-grid">
@@ -914,8 +919,8 @@ I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcola
         </h3>
 
         <div style="font-size:13px;color:#64748b;margin-bottom:15px;"
-         data-it="Scopri profitto reale, ROI e rischio prima di acquistare un immobile."
-         data-en="Discover real profit, ROI and investment risk before buying a property.">
+         data-it="Stima ROI, cashflow e indice rischio nelle ipotesi inserite."
+         data-en="Estimate ROI, cashflow and the risk index under your assumptions.">
         </div>
 
         <!-- CITY -->
@@ -1004,7 +1009,7 @@ value="70">
 <!-- ================= RIGHT ================= -->
 <div class="simulator-right">
 
-  <div class="roi-dashboard" aria-live="polite">
+  <div id="rb-simulation-summary" class="roi-dashboard" aria-live="polite">
 
     <div class="tool-2026-result-heading">
       <div>
@@ -1013,12 +1018,12 @@ value="70">
           data-en="EXECUTIVE RESULT">
           RISULTATO EXECUTIVE
         </span>
-        <strong id="tool-result-city">Scenario investimento</strong>
+        <strong id="tool-result-city" data-it="Scenario investimento" data-en="Investment scenario">Scenario investimento</strong>
       </div>
-      <div class="tool-2026-result-state"
-        data-it="Analisi aggiornata"
-        data-en="Analysis updated">
-        Analisi aggiornata
+      <div id="tool-result-state" class="tool-2026-result-state"
+        data-it="In attesa di analisi"
+        data-en="Awaiting analysis">
+        In attesa di analisi
       </div>
     </div>
 
@@ -1026,14 +1031,14 @@ value="70">
 
       <!-- LABEL -->
       <div class="roi-label"
-        data-it="Valutazione AI dell'investimento"
-        data-en="AI Investment Evaluation">
+        data-it="Risultato della simulazione"
+        data-en="Simulation result">
       </div>
 
       <!-- ROI -->
       <div class="roi-value" style="position:relative;">
 
-        <div
+        <div id="roi-main-basis"
           data-it="ROI immobile"
           data-en="Property ROI"
           style="font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#64748b;">
@@ -1052,7 +1057,7 @@ color:#0f172a;
 margin-top:8px;
 ">
 
-0%
+—
 
 </span>
 
@@ -1095,8 +1100,8 @@ margin-top:12px;
           text-align:center;
         "
         class="free-only tool-2026-free-notice"
-        data-it="Versione gratuita: il ROI non include ancora mutuo, rischio e sostenibilità."
-        data-en="Free version: ROI does not yet include mortgage, risk and sustainability.">
+        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo d’acquisto; è diverso dal ROI sul capitale proprio. Non è un incasso garantito."
+        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / purchase price; it differs from equity ROI. This is not guaranteed income.">
         </div>
 
       </div>
@@ -1105,13 +1110,18 @@ margin-top:12px;
       <div class="roi-metrics">
 
         <div class="metric">
-          <span data-it="Profitto annuo stimato" data-en="Estimated annual profit"></span>
+          <span data-it="Cashflow annuo stimato" data-en="Estimated annual cashflow"></span>
           <strong id="profit-live">—</strong>
         </div>
 
         <div class="metric">
-          <span data-it="ROI preliminare" data-en="Preliminary ROI"></span>
+          <span data-it="ROI immobile stimato" data-en="Estimated property ROI"></span>
           <strong id="roi-preview-live">—</strong>
+        </div>
+
+        <div class="metric free-only">
+          <span data-it="Cashflow mensile medio" data-en="Average monthly cashflow"></span>
+          <strong id="cashflow-month-preview">—</strong>
         </div>
 
         <div class="metric pro-only">
@@ -1331,11 +1341,11 @@ EXECUTIVE KPI CARDS
       </p>
 
       <button class="btn btn-primary"
-        onclick="buyPlan('pro')"
+        onclick="window.location.assign('/#pricing')"
         style="padding:12px 20px;">
 
-        <span data-it="🔥 Sblocca ora – 29€"
-              data-en="🔥 Unlock now – €29">
+        <span data-it="Confronta Investor e Pro"
+              data-en="Compare Investor and Pro">
         </span>
 
       </button>
@@ -1353,7 +1363,7 @@ EXECUTIVE KPI CARDS
 
 
 <!-- 🔥 CTA FUORI -->
-<div style="text-align:center;margin-top:30px;position:relative;z-index:20;">
+<div class="rb-tool-extra-upgrade" style="text-align:center;margin-top:30px;position:relative;z-index:20;">
 
   <button 
     class="cta-primary upgrade-box" 
@@ -1369,15 +1379,15 @@ EXECUTIVE KPI CARDS
 
   <div id="cta-urgency"
   style="margin-top:8px;font-size:12px;color:#ef4444;font-weight:600;opacity:0.9;"
-  data-it="Molti investimenti con ROI elevato nascondono perdite che emergono solo nell'analisi completa."
-  data-en="Many high-ROI investments hide losses that only appear in the complete analysis.">
-  Molti investimenti con ROI elevato nascondono perdite che emergono solo nell'analisi completa.
+  data-it="Approfondisci le ipotesi e confronta gli scenari prima di decidere."
+  data-en="Review assumptions and compare scenarios before deciding.">
+  Approfondisci le ipotesi e confronta gli scenari prima di decidere.
   </div>
 
   <div style="margin-top:10px;font-size:13px;color:#64748b;"
-data-it="Scopri se il tuo investimento genererà profitto reale o perdite nascoste"
-data-en="Discover whether your investment will generate real profit or hidden losses">
-Scopri se il tuo investimento genererà profitto reale o perdite nascoste
+data-it="Confronta gli scenari e organizza i tuoi immobili nello stesso portale."
+data-en="Compare scenarios and organize your properties in the same portal.">
+Confronta gli scenari e organizza i tuoi immobili nello stesso portale.
 </div>
 
 </div>
@@ -1388,7 +1398,7 @@ Scopri se il tuo investimento genererà profitto reale o perdite nascoste
 <div id="investment-metrics" class="investment-metrics">
 
  <div class="metric-card">
-  <span data-it="ROI stimato" data-en="Estimated ROI">ROI</span>
+  <span data-it="ROI immobile stimato" data-en="Estimated property ROI">ROI</span>
 
   <strong id="roi-card-live">—</strong>
 </div>
@@ -1398,9 +1408,9 @@ Scopri se il tuo investimento genererà profitto reale o perdite nascoste
     <strong id="risk-preview">—</strong>
 
     <div style="font-size:11px;color:#ef4444;margin-top:4px;"
-    data-it="⚠️ Versione completa include rischio reale"
-    data-en="⚠️ Full version includes real risk">
-    ⚠️ Versione completa include rischio reale
+    data-it="Indicatore di rischio basato sulle ipotesi"
+    data-en="Risk indicator based on assumptions">
+    Indicatore di rischio basato sulle ipotesi
     </div>
   </div>
 
@@ -1414,13 +1424,13 @@ Scopri se il tuo investimento genererà profitto reale o perdite nascoste
 <div class="locked-overlay upgrade-box" data-paywall="true">
 
 <div class="overlay-title"
-data-it="🔒 Stai prendendo decisioni al buio"
-data-en="🔒 You are making decisions blindly">
+data-it="Approfondisci il tuo scenario"
+data-en="Explore your scenario in detail">
 </div>
 
 <div class="overlay-text"
-data-it="Senza analisi rischio e mutuo potresti investire in perdita."
-data-en="Without risk and mortgage analysis you could invest at a loss.">
+data-it="Investor: analisi complete, scenari, salvataggio e portfolio/PMS. Pro aggiunge PDF e dashboard-report. Confronta i piani per approfondire questa simulazione."
+data-en="Investor: full analyses, scenarios, saved simulations and portfolio/PMS. Pro adds PDFs and dashboard reports. Compare plans to explore this simulation further.">
 </div>
 
 <!-- 🔥 BULLET VALUE -->
@@ -1444,12 +1454,12 @@ data-en="Without risk and mortgage analysis you could invest at a loss.">
 
 </div>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
+<a href="/#pricing" class="btn btn-primary rb-tool-plan-link"
 style="margin-top:10px;font-size:16px;"
-data-it="🔥 Sblocca analisi completa – 29€"
-data-en="🔥 Unlock full analysis – €29">
-🔥 Sblocca analisi completa – 29€
-</button>
+data-it="Confronta i piani"
+data-en="Compare plans">
+Confronta i piani
+</a>
 
 </div>
 
@@ -1562,11 +1572,15 @@ style="margin-top:22px;"></div>
 <!-- FORECAST -->
 <div class="results-card investor-teaser">
   <h3
-    data-it="Previsione ricavi mercato"
-    data-en="Market revenue forecast">
+    data-it="Scenari ricavi annui"
+    data-en="Annual revenue scenarios">
   </h3>
 
   <div id="revenue-forecast" class="kpi-grid"></div>
+  <p data-it="Ricavi illustrativi: −20% / base / +20% rispetto all’analisi. Non sono previsioni di mercato e non ricalcolano il cashflow. Per confrontare ROI e cashflow, modifica le ipotesi e avvia una nuova analisi."
+     data-en="Illustrative revenue: −20% / base / +20% of the analysis. These are not market forecasts and do not recalculate cashflow. To compare ROI and cashflow, change the assumptions and run a new analysis.">
+    Ricavi illustrativi: −20% / base / +20% rispetto all’analisi. Non sono previsioni di mercato e non ricalcolano il cashflow. Per confrontare ROI e cashflow, modifica le ipotesi e avvia una nuova analisi.
+  </p>
 </div>
 
 <!-- BENCHMARK -->
@@ -1637,7 +1651,7 @@ style="margin-top:22px;"></div>
 </section>
 
 <!-- PDF EXPORT -->
-<div class="results-card pro-only" style="text-align:center;">
+<div class="results-card pro-only" data-pdf-only style="text-align:center;">
 
 <h3
 data-it="Report strategico investimento"
@@ -1675,7 +1689,7 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js" defer></script>
+<script src="/js/chatbot-loader.js?v=20261006-rc44" defer></script>
   
 <script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script>  
@@ -1826,7 +1840,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/app.js?v=20261007-rc54"></script>
 
 <script>
 
@@ -1978,16 +1992,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const messages = {
       dashboard: {
-        it: "🔒 La Dashboard è disponibile solo per utenti PRO.",
-        en: "🔒 Dashboard available only for PRO users."
+        it: "🔒 La Dashboard è disponibile con Investor o Pro.",
+        en: "🔒 Dashboard available with Investor or Pro."
       },
       academy: {
-        it: "🎓 La Academy è disponibile solo per utenti PRO.",
-        en: "🎓 Academy available only for PRO users."
+        it: "🎓 Consulta i piani per verificare le funzioni disponibili.",
+        en: "🎓 Compare plans to check available features."
       },
       default: {
-        it: "🔒 Funzione disponibile solo nella versione PRO.",
-        en: "🔒 This feature is available only in the PRO version."
+        it: "🔒 Consulta i piani Investor e Pro per questa funzione.",
+        en: "🔒 Compare Investor and Pro plans for this feature."
       }
     };
 
@@ -2004,10 +2018,10 @@ window.handleUpgradeClick = function(){
 
   toolDebug("🔥 CTA CLICK");
 
-  const isPro = window.getUserAccess().isPro;
+  const hasFullAnalysis = !!window.getUserAccess()?.canSeeFullAnalysis;
 
   // ================= 🟢 UTENTE PRO =================
-  if(isPro){
+  if(hasFullAnalysis){
 
     toolDebug("✅ PRO USER → scroll advanced");
 
@@ -2110,6 +2124,6 @@ setTimeout(()=>{
 }, 500);
 
 </script>
-
+<script src="/js/investment-workspace.js?v=20261006-rc43"></script>
 </body>
 </html>

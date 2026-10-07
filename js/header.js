@@ -245,6 +245,18 @@ else if(path.includes("roma")) city = "rome";
 🚀 INIT HEADER
 ===================== */
 
+// Shared header fallback: pages without an explicit loader load it on demand.
+function ensureSharedChatbot(){
+  if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
+  const script = document.createElement("script");
+  script.src = "/js/chatbot-loader.js?v=20261004-rc04";
+  script.async = true;
+  // A failed download must not prevent a later retry.
+  script.onerror = ()=>script.remove();
+  document.body.appendChild(script);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const container = document.getElementById("global-header");
@@ -258,11 +270,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="rb-left">
         <a href="/">
-          <img src="/img/logo-main.png" class="rb-logo">
+          <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
         </a>
       </div>
 
-      <nav class="rb-center">
+      <nav class="rb-center" aria-label="Navigazione principale">
   <a href="/tool/"
 data-it="Analizza"
 data-en="Analyze">
@@ -326,7 +338,7 @@ Guide
 
         <div id="user-area"></div>
 
-        <button id="rb-burger">☰</button>
+        <button id="rb-burger" aria-label="Menu" aria-controls="rb-mobile" aria-expanded="false">☰</button>
 
       </div>
 
@@ -336,7 +348,9 @@ Guide
 
 <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
-<div id="rb-mobile" class="rb-mobile-menu">
+<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" inert>
+  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu">×</button></div>
+  <div id="rb-mobile-account" class="rb-mobile-account"></div>
   <nav id="rb-mobile-nav">
 
     <a href="/tool/" 
@@ -580,7 +594,11 @@ function initHeaderInteractions(){
   }
 
   function openMenu(){
+    mobile.inert = false;
     mobile.classList.add("open");
+    burger.setAttribute("aria-expanded", "true");
+    mobile.scrollTop = 0;
+    document.getElementById("rb-mobile-close")?.focus();
 
     overlay.classList.add("open");
     overlay.style.opacity = "1";
@@ -591,6 +609,9 @@ function initHeaderInteractions(){
 
   function closeMenu(){
     mobile.classList.remove("open");
+    mobile.inert = true;
+    burger.setAttribute("aria-expanded", "false");
+    burger.focus();
 
     overlay.classList.remove("open");
     overlay.style.opacity = "0";
@@ -605,6 +626,27 @@ function initHeaderInteractions(){
   };
 
   overlay.onclick = closeMenu;
+  document.getElementById("rb-mobile-close").onclick = closeMenu;
+  // Delegate because renderUser rebuilds the mobile navigation after auth/language changes.
+  mobile.addEventListener("click", (event) => {
+    if(event.target.closest("#mobile-ai-btn")) {
+      event.preventDefault();
+      closeMenu();
+      document.getElementById("rb-header-ai-btn")?.click();
+      return;
+    }
+    if(event.target.closest("a")) closeMenu();
+  }, true);
+  document.addEventListener("keydown", (event) => {
+    if(!mobile.classList.contains("open")) return;
+    if(event.key === "Escape") { event.preventDefault(); closeMenu(); }
+    if(event.key === "Tab") {
+      const items = Array.from(mobile.querySelectorAll('a[href], button')).filter(el => el.getClientRects().length && !el.disabled);
+      const first = items[0], last = items[items.length - 1];
+      if(event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if(!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+  });
 
   document.querySelectorAll(
   ".rb-lang button, .rb-mobile-lang button"
@@ -659,35 +701,30 @@ const aiBtn =
   );
 
 if(aiBtn){
-
+  let pendingOpen = false;
   aiBtn.onclick = ()=>{
-
-
-    // aspetta chatbot render
-    setTimeout(()=>{
-
-      const chatbot =
-        document.getElementById(
-          "rb-chatbot-window"
-        );
-
-      if(!chatbot){
-
-        console.warn(
-          "❌ chatbot window missing"
-        );
-
-        return;
-
-      }
-
+    const chatbot = document.getElementById("rb-chatbot-window");
+    if(chatbot){
       chatbot.classList.toggle("open");
-
-
-    }, 50);
-
+      return;
+    }
+    // Keep one open request while the shared loader is still initializing.
+    if(pendingOpen) return;
+    pendingOpen = true;
+    let timer;
+    const onReady = ()=>{
+      clearTimeout(timer);
+      document.removeEventListener("rb_chatbot_ready", onReady);
+      pendingOpen = false;
+      document.getElementById("rb-chatbot-window")?.classList.add("open");
+    };
+    document.addEventListener("rb_chatbot_ready", onReady, {once:true});
+    timer = setTimeout(()=>{
+      document.removeEventListener("rb_chatbot_ready", onReady);
+      pendingOpen = false;
+    }, 15000);
+    ensureSharedChatbot();
   };
-
 }
 
 }  
@@ -743,6 +780,11 @@ if(
   const isPaid = isAdmin || access?.isInvestor || access?.isPro;
 
   const isProOnly = isPro && !isInvestor;
+  const accountSummary = document.getElementById("rb-mobile-account");
+  if(accountSummary) {
+    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? "PRO ANNUALE" : "PRO") : isInvestor ? "INVESTOR" : "FREE";
+    accountSummary.textContent = user ? `${window.currentLang === "en" ? "Your plan" : "Il tuo piano"} · ${label}` : (window.currentLang === "en" ? "Explore RendimentoBB" : "Esplora RendimentoBB");
+  }
 
   if(user){
 
@@ -757,7 +799,7 @@ if(isAdmin){
   badge = `<span class="badge-pro">ADMIN</span>`;
 }
 else if(access.isPro){
-  badge = `<span class="badge-pro">PRO</span>`;
+  badge = `<span class="badge-pro">${window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
 }
 else if(access.isInvestor){
   badge = `<span class="badge-pro">INVESTOR</span>`;
@@ -878,6 +920,7 @@ Assistente RendimentoBB
 }
 
       mobileNav.innerHTML = mobileHTML;
+      mobileNav.querySelectorAll('a.mobile-cta[href="/tool/"]').forEach(link => { link.previousElementSibling?.matches("hr") && link.previousElementSibling.remove(); link.remove(); });
 
       if(typeof applyStaticTranslations === "function"){
   applyStaticTranslations();
@@ -888,6 +931,7 @@ Assistente RendimentoBB
       if(mobileLogout){
         mobileLogout.onclick = async (e)=>{
           e.preventDefault();
+          window.RBReportCache?.clear(sessionStorage, localStorage);
           await signOut(auth);
           location.reload();
         };
@@ -935,7 +979,8 @@ Assistente RendimentoBB
 
    // LOGOUT
 document.getElementById("logout").onclick = async ()=>{
-  await signOut(auth);
+  window.RBReportCache?.clear(sessionStorage, localStorage);
+          await signOut(auth);
   location.reload();
 };
 
@@ -1049,6 +1094,7 @@ document.getElementById("logout").onclick = async ()=>{
 
 `;
 
+mobileNav.querySelectorAll('a.mobile-cta[href="/tool/"]').forEach(link => { link.previousElementSibling?.matches("hr") && link.previousElementSibling.remove(); link.remove(); });
 if(typeof applyStaticTranslations === "function"){
   applyStaticTranslations();
 }

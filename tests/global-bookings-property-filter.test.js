@@ -15,7 +15,8 @@ test("global bookings exposes a separate bilingual property filter", () => {
 
 test("dashboard bookings opens the aggregate view without changing property-card scope", () => {
   assert.match(dashboardSource, /await openBookings\(propertyId, null, true\)/);
-  assert.match(dashboardSource, /onclick="openBookings\('\$\{docItem\.id\}'\)"/);
+  assert.match(dashboardSource, /data-property-id="\$\{escapeDashboardHTML\(docItem\.id\)\}"/);
+  assert.match(dashboardSource, /onclick="openBookings\(this\.dataset\.propertyId\)"/);
 });
 
 test("aggregate bookings query uses only the user while property view remains scoped", () => {

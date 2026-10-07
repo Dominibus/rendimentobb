@@ -1,0 +1,160 @@
+/* PMS control centre: task-first layout, secondary details on demand. */
+body.dashboard-page #bookings-modal > div > [style*="grid-template-columns:260px"] {
+  display:flex !important; flex-direction:column; gap:18px !important;
+}
+body.dashboard-page #bookings-modal > div > [style*="grid-template-columns:260px"] > div {width:100%;min-width:0;}
+.pms-performance {order:2;width:100%;border:1px solid #dce6df;border-radius:14px;background:#fff;}
+.pms-performance summary,.pms-arrival-details summary,.pms-booking-extra summary {
+  cursor:pointer;padding:14px;font-weight:700;color:#284a3e;line-height:1.45;
+}
+.pms-performance-content {padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pms-shortcuts {display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;}
+.pms-shortcuts button {text-align:left;cursor:pointer;min-width:0;}
+.pms-shortcuts button[aria-pressed="true"] {outline:2px solid #087f5b;outline-offset:2px;}
+.pms-task-shortcut {padding:13px;border:1px solid #dce6df;border-radius:13px;background:#fff;color:#284a3e;}
+.pms-task-shortcut span,.pms-task-shortcut strong,.pms-task-shortcut small {display:block;}
+.pms-task-shortcut span {font-size:12px;font-weight:700;}
+.pms-task-shortcut strong {margin-top:9px;font-size:24px;line-height:1;color:#142b25;}
+.pms-task-shortcut small {margin-top:10px;font-size:11px;}
+.pms-task-shortcut[data-urgent="true"] {background:#fff1f2;border-color:#fda4af;color:#9f1239;}
+.pms-arrival-details {margin-top:14px;border:1px solid #dce6df;border-radius:12px;background:#fff;}
+.pms-arrival-details summary strong {float:right;}
+.pms-task-action {display:block;color:#047857;font-weight:800;margin-top:5px;}
+.pms-future-count {font-size:12px;color:#64748b;}
+.pms-day-metrics {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px;width:100%;}
+.pms-day-metrics > div {padding:12px;border:1px solid #dce6df;border-radius:12px;background:#f5f8f5;}
+.pms-day-metrics span {display:block;font-size:12px;font-weight:700;color:#475569;}
+.pms-day-metrics strong {display:block;font-size:24px;color:#142b25;margin-top:6px;}
+.pms-day-metrics [data-urgent="true"],#pms-portal-alerts .pms-alert-open[data-urgent="true"] {background:#fff1f2 !important;border-color:#fda4af !important;}
+.pms-day-caption {font-size:12px;line-height:1.5;color:#64748b;margin:10px 0;}
+.pms-day-property,.pms-day-reason,.pms-day-timing,.pms-day-action {display:block;margin-top:5px;line-height:1.5;}
+.pms-day-property {font-size:12px;color:#475569;font-weight:700;}
+.pms-day-reason {font-size:13px;color:#475569;}
+.pms-day-timing {font-size:12px;color:#64748b;}
+.pms-day-action {font-size:13px;color:#047857;font-weight:800;}
+.pms-day-all {margin-top:12px;border:0;border-radius:10px;background:#087f5b;color:#fff;padding:12px 16px;font-size:14px;font-weight:800;cursor:pointer;min-height:44px;}
+.pms-email-settings {margin-top:14px;border-top:1px solid #dce6df;padding-top:12px;width:100%;}
+.pms-email-settings summary {font-size:13px;color:#475569;cursor:pointer;font-weight:700;padding:5px 0;}
+.pms-email-settings > div {display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+#pms-portal-alerts button:focus-visible,.pms-email-settings summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
+body.dashboard-page #executive-summary {background:#fff !important;border:1px solid #dce6df !important;box-shadow:0 4px 18px #142b2508 !important;padding:16px !important;}
+body.dashboard-page #executive-summary::before,body.dashboard-page #executive-summary::after {display:none !important;content:none !important;}
+body.dashboard-page #executive-summary > div {box-shadow:none !important;}
+.pms-card-guest {display:block;font-size:20px;line-height:1.35;color:#142b25;}
+.pms-card-date {font-size:15px;font-weight:800;color:#142b25;white-space:nowrap;}
+body.dashboard-page #bookings-list .pms-card-next-action {min-height:48px;background:#087f5b !important;color:#fff !important;border-color:#087f5b !important;font-size:14px;line-height:1.4;}
+body.dashboard-page #bookings-list .pms-booking-card > div:last-child button {min-height:44px;line-height:1.35;}
+body.dashboard-page :is(#revenue-simulator,#roi-market-comparison) {scroll-margin-top:100px;}
+/* Keep the full report in the page flow, below the chart on desktop. */
+body.dashboard-page #executive-summary {height:auto !important;max-height:none !important;overflow:visible !important;grid-column:1 / -1 !important;grid-row:3;}
+body.dashboard-page #pms-dashboard-section > .analysis-card:last-child {grid-column:1 / -1;grid-row:2;}
+#booking-today-operations .pms-task-row[data-urgent="true"] {border-color:#fda4af !important;background:#fff1f2 !important;border-left:4px solid #e11d48 !important;}
+#booking-today-operations .pms-next-reminder[data-upcoming="true"] {background:#f8fafc !important;color:#334155 !important;border:1px solid #dce6df;box-shadow:none !important;}
+#booking-today-operations .pms-next-reminder[data-upcoming="true"] div {color:#475569 !important;}
+@media(max-width:900px) {
+  body.dashboard-page .rb-hero::before,body.dashboard-page .rb-hero::after {display:none !important;content:none !important;}
+  body.dashboard-page #executive-summary,body.dashboard-page #pms-dashboard-section > .analysis-card:last-child {grid-row:auto;}
+}
+#booking-today-operations .pms-task-open {font-size:14px !important;}
+#booking-today-operations .pms-task-timing {font-size:12px !important;}
+.pms-window-header {position:sticky;top:-28px;z-index:4;background:#f5f8f5;padding:14px 0;border-bottom:1px solid #dce6df;}
+.pms-window-header h2 {margin:0 60px 12px 0;}
+.pms-window-header .rb-bookings-close {position:absolute;right:0;top:12px;}
+.pms-window-header #bookings-property-context {margin:0 0 12px !important;}
+body.dashboard-page #booking-form-container {
+  position:fixed !important;inset:20px 20px 20px auto !important;transform:none !important;
+  width:min(760px,calc(100vw - 40px)) !important;max-width:none !important;
+  max-height:calc(100dvh - 40px) !important;height:auto !important;
+  margin:0 !important;padding:20px !important;overflow-y:auto !important;overflow-x:hidden !important;
+  z-index:1000001 !important;box-sizing:border-box;overscroll-behavior:contain;
+}
+.pms-detail-actions {order:-2;position:sticky;top:-20px;z-index:6;background:#fff;padding:10px 0;margin:0 !important;border-bottom:1px solid #dce6df;flex-shrink:0;min-height:72px;box-sizing:border-box;}
+.pms-detail-nav {order:-1;position:sticky;top:52px;z-index:5;background:#fff;display:flex;gap:6px;padding:8px 0;border-bottom:1px solid #dce6df;flex-wrap:nowrap;flex-shrink:0;overflow-x:auto;max-width:100%;box-sizing:border-box;}
+body.dashboard-page #booking-form-container .pms-detail-nav button {padding:9px 10px;border:1px solid #dce6df;background:#f3f7f4;color:#285044;border-radius:9px;cursor:pointer;font-size:13px !important;min-height:40px;}
+.pms-section-heading {font-size:17px;color:#142b25;margin:6px 0 0;}
+.pms-section-message {font-size:13px;color:#92400e;margin:0;}
+.pms-section-message:empty {display:none;}
+body.dashboard-page #booking-form-container :is(#booking-stay-heading,#booking-guest-registration-box,#booking-tourist-tax-box,#booking-cleaning-box,#booking-guest-issue-box) {scroll-margin-top:155px;}
+.pms-pricing-details {border:1px solid #dce6df;border-radius:12px;background:#f8fafc;}
+.pms-pricing-details summary {padding:12px;cursor:pointer;color:#284a3e;font-weight:700;font-size:13px;}
+.pms-pricing-details #booking-pricing-box {margin:0;border:0;}
+#booking-form-container > div:first-of-type {gap:12px;}
+/* Fixed flex panels must scroll, not shrink their fields to fit the viewport. */
+body.dashboard-page #booking-form-container > * {flex-shrink:0;}
+body.dashboard-page #booking-form-container button {white-space:normal !important;overflow:visible !important;text-overflow:clip !important;height:auto !important;min-height:44px;max-width:100%;box-sizing:border-box;line-height:1.4;font-size:14px;overflow-wrap:break-word;}
+body.dashboard-page #booking-smart-actions {display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px !important;padding-bottom:12px;}
+body.dashboard-page #booking-smart-actions > button {display:block !important;width:100% !important;min-width:0 !important;padding:13px !important;min-height:48px;}
+body.dashboard-page #booking-smart-actions > button:last-child {grid-column:1 / -1;background:#fff1f2 !important;color:#9f1239 !important;border:1px solid #fecdd3 !important;}
+body.dashboard-page #booking-form-container .pms-detail-nav button {flex:0 0 auto;white-space:nowrap !important;}
+body.dashboard-page #booking-form-container .pms-detail-actions button {min-height:50px;white-space:normal !important;line-height:1.3;}
+body.dashboard-page #booking-form-container :is(input,select) {min-height:48px !important;line-height:1.4;color:#142b25 !important;}
+body.dashboard-page #booking-form-container input[type="date"] {display:block;min-height:52px !important;padding:12px !important;font-size:16px !important;text-align:left;line-height:1.4;}
+body.dashboard-page #booking-form-container input[type="date"]::-webkit-date-and-time-value {text-align:left;min-width:0;min-height:22px;line-height:22px;}
+body.dashboard-page #booking-form-container input[type="date"]::-webkit-datetime-edit {padding:0;}
+.pms-field-label {font-size:13px;font-weight:700;color:#475569;margin-bottom:-10px;}
+body.dashboard-page #booking-form-container :is(input,textarea)::placeholder {color:#64748b;opacity:1;}
+.pms-shortcuts-note {font-size:12px;line-height:1.5;color:#64748b;margin:12px 0 0;}
+body.dashboard-page #bookings-list {grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr)) !important;}
+body.dashboard-page #bookings-list .pms-booking-card {padding:16px !important;margin-bottom:0 !important;border-radius:16px !important;box-shadow:0 3px 12px #142b2508 !important;}
+.pms-booking-card > div:nth-child(2) > div > div:first-child {font-size:18px !important;overflow-wrap:anywhere;}
+.pms-booking-flags {display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.pms-booking-flag {font:inherit;font-size:11px;font-weight:700;padding:7px 9px;border:1px solid #fde68a;background:#fffbeb;color:#92400e;border-radius:8px;cursor:pointer;text-align:left;}
+.pms-booking-flag[data-urgent="true"] {background:#fff1f2;border-color:#fda4af;color:#9f1239;}
+.pms-booking-extra {margin-top:10px;border-top:1px solid #e2e8f0;}
+.pms-booking-extra summary {padding:10px 0;font-size:12px;}
+body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:white !important;padding:12px 16px !important;border-radius:12px;font-size:14px;}
+.pms-performance summary:focus-visible,.pms-arrival-details summary:focus-visible,.pms-booking-extra summary:focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
+.pms-day-autopilot {display:block;width:100%;margin:12px 0;padding:13px 16px;min-height:48px;border:1px solid #b7d5c9;border-radius:12px;background:#edf7f2;color:#14523b;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;text-align:left;white-space:normal;cursor:pointer;}
+.pms-day-autopilot:hover {background:#dcefe5;}
+.pms-week {width:100%;margin:12px 0;border:1px solid #dce6df;border-radius:12px;background:#f8fbf9;}
+.pms-week > summary {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:14px;min-height:48px;cursor:pointer;color:#14523b;font-size:14px;font-weight:700;list-style:revert;}
+.pms-week > summary small {font-size:12px;color:#475569;font-weight:600;}
+.pms-week-content {padding:0 14px 14px;}
+.pms-week-arrivals {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;}
+.pms-week-arrival {padding:12px;border:1px solid #dce6df;background:#fff;border-radius:10px;min-width:0;overflow-wrap:anywhere;}
+.pms-week-arrival[data-pending="true"] {border-color:#e8d5a0;}
+.pms-week-arrival strong,.pms-week-arrival span {display:block;line-height:1.5;}
+.pms-week-arrival span,.pms-week-arrival p {font-size:13px;color:#475569;line-height:1.6;}
+.pms-week-arrival button {min-height:44px;padding:10px 12px;border:1px solid #b7d5c9;border-radius:8px;background:#edf7f2;color:#14523b;font-weight:700;white-space:normal;cursor:pointer;}
+.pms-week-arrival button:disabled {opacity:.6;cursor:wait;}
+.pms-week :is(summary,button):focus-visible {outline:3px solid #059669;outline-offset:3px;}
+.pms-day-autopilot:focus-visible {outline:3px solid #059669;outline-offset:3px;}
+#rb-chatbot-window .rb-context-actions .rb-quick-btn {min-height:48px;overflow-wrap:anywhere;}
+@media(max-width:1100px) {.pms-shortcuts {grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:600px) {
+  .pms-day-metrics {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .pms-day-all {width:100%;}
+  body.dashboard-page #executive-summary {padding:10px !important;}
+  body.dashboard-page #executive-summary > div {padding:18px !important;border-radius:14px !important;}
+  .pms-card-guest {font-size:20px;}
+  .pms-booking-card .pms-booking-extra summary {font-size:13px;color:#64748b;}
+  .pms-window-header {top:-18px;}
+  body.dashboard-page #booking-form-container {inset:0 !important;width:100vw !important;max-height:100dvh !important;height:100dvh !important;border-radius:0 !important;padding:16px !important;padding-bottom:max(20px,env(safe-area-inset-bottom)) !important;}
+  .pms-detail-actions {top:-16px;}
+  .pms-detail-nav {top:56px;}
+  body.dashboard-page #booking-form-container .pms-stay-dates {grid-template-columns:minmax(0,1fr) !important;gap:14px;}
+  body.dashboard-page #booking-smart-actions {grid-template-columns:minmax(0,1fr);}
+  body.dashboard-page #booking-form-container :is(input,select,textarea) {font-size:16px !important;}
+  body.dashboard-page #booking-form-container .pms-stay-dates label {font-size:14px !important;line-height:1.5;}
+  .pms-shortcuts {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .pms-performance-content {grid-template-columns:1fr;}
+  .pms-shortcuts button {min-height:106px;}
+  .pms-booking-card > div:nth-child(2) {flex-wrap:wrap;}
+  .pms-booking-card > div:last-child {flex-wrap:wrap;}
+  .pms-booking-card > div:last-child > div:last-child {flex-wrap:wrap;}
+  .pms-task-row {gap:10px;}
+  .pms-booking-flag {min-height:36px;}
+}
+
+/* RC37: Autopilot accessible from the booking checklist. */
+.pms-autopilot-access {margin:0 0 16px;padding:16px;border:1px solid #b7d5c9;border-radius:14px;background:#edf7f2;color:#14523b;min-width:0;}
+.pms-autopilot-access strong {font-size:16px;line-height:1.5;}
+.pms-autopilot-access p {margin:5px 0 12px;font-size:13px;line-height:1.6;color:#36594b;overflow-wrap:anywhere;}
+.pms-autopilot-periods {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.pms-autopilot-periods button {min-width:0;min-height:48px;padding:12px;border:1px solid #a5c6b8;border-radius:10px;background:white;color:#14523b;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;white-space:normal;cursor:pointer;}
+.pms-autopilot-periods button:hover {background:#dcefe5;}
+.pms-autopilot-periods button:focus-visible {outline:3px solid #059669;outline-offset:3px;}
+@media(max-width:600px) {.pms-autopilot-periods {grid-template-columns:minmax(0,1fr);} .pms-autopilot-access {padding:14px;}}
+
+/* Keep the assistant visible above the bookings dialog without closing its filters. */
+body.dashboard-page #rb-chatbot-window.open {z-index:1000001 !important;}

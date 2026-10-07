@@ -13,8 +13,9 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 export default async function handler(req, res) {
-  if (req.method !== "DELETE") {
-    res.setHeader("Allow", "DELETE");
+  res.setHeader("Cache-Control", "no-store");
+  if (!["DELETE", "PATCH"].includes(req.method)) {
+    res.setHeader("Allow", "DELETE, PATCH");
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
 
     const decoded = await admin.auth().verifyIdToken(token);
     const email = String(decoded.email || "").toLowerCase();
-    const isAdmin = decoded.admin === true || email === "rendimentobb@gmail.com";
+    const isAdmin = decoded.admin === true || (decoded.email_verified === true && email === "rendimentobb@gmail.com");
 
     if (!isAdmin) {
       return res.status(403).json({ error: "Admin access required" });
@@ -49,7 +50,16 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Lead not found" });
     }
 
-    await leadRef.delete();
+    if(req.method === "PATCH"){
+      const status=String(req.body?.status || "");
+      const adminNotes=req.body?.adminNotes;
+      if(!["new","contacted","qualified","won","lost","archived"].includes(status) || typeof adminNotes !== "string" || adminNotes.length>2000){
+        return res.status(400).json({error:"Invalid lead status or notes"});
+      }
+      await leadRef.update({status,adminNotes,adminUpdatedAt:admin.firestore.FieldValue.serverTimestamp(),adminUpdatedBy:decoded.uid});
+    }else{
+      await leadRef.delete();
+    }
 
     return res.status(200).json({ success: true });
   } catch (error) {

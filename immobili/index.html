@@ -438,6 +438,7 @@ color:#065f46;
 
 <link rel="stylesheet" href="/css/immobili-2026.css">
 
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 </head>
 
 <body class="immobili-page">
@@ -539,7 +540,7 @@ Chiudi
 <div id="rb-chatbot-root"></div>
   
 <!-- 🔥 MOBILE MENU ROOT -->
-<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>  
+  
 
 <main>
 
@@ -556,10 +557,10 @@ Immobili investimento B&B Italia ROI Napoli Roma Milano Firenze
 <div class="page-title">
 
 <h1
-data-it="Ricerca e analisi immobili per B&B e Short Rent"
+data-it="Analisi di scenari immobiliari per B&B e Short Rent"
 data-en="Property analysis for B&B and Short Rent">
 
-Ricerca e analisi immobili per B&B e Short Rent
+Analisi di scenari immobiliari per B&B e Short Rent
 
 </h1>
 
@@ -1441,10 +1442,10 @@ Analizza un immobile reale
 </h3>
 
 <p
-data-it="Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B."
-data-en="Paste a property link from Idealista, Immobiliare.it or other portals to estimate the B&B investment return.">
+data-it="Aggiungi il link come riferimento e inserisci i dati per simulare il rendimento B&B."
+data-en="Add a listing link as a reference and enter its details to simulate B&B returns.">
 
-Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B.
+Aggiungi il link come riferimento e inserisci i dati per simulare il rendimento B&B.
 
 </p>
 
@@ -1634,193 +1635,45 @@ document.addEventListener("DOMContentLoaded", () => {
 // ================= ANALYZE PROPERTY =================
 
 window.analyzeProperty = function(){
-
-const link = document.getElementById("property-link").value;
-
-if(!link){
-alert(
-window.currentLang==="en"
-? "Please paste a property link"
-: "Inserisci un link immobile"
-);
-return;
-}
-
-let portal = "Portale immobiliare";
-let id = "";
-let estimatedPrice = "";
-
-// ===== DETECTION =====
-if(link.includes("idealista")){
-portal = "Idealista";
-id = link.split("/").filter(Boolean).pop();
-}
-
-if(link.includes("immobiliare.it")){
-portal = "Immobiliare.it";
-id = link.split("/").filter(Boolean).pop();
-}
-
-// ===== PREVIEW =====
-
-const isEn =
-window.currentLang === "en";
-
-document.getElementById("property-preview").innerHTML = `
-
-<div style="
-background:#ecfdf5;
-padding:20px;
-border-radius:16px;
-margin-top:14px;
-border:1px solid #bbf7d0;
-text-align:left;
-">
-
-<div style="
-font-size:15px;
-font-weight:700;
-margin-bottom:12px;
-color:#065f46;
-">
-
-🏠 ${
-isEn
-? "Property detected"
-: "Immobile rilevato"
-}
-
-</div>
-
-<div style="
-height:180px;
-border-radius:12px;
-margin-bottom:15px;
-background-image:url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200');
-background-size:cover;
-background-position:center;
-">
-</div>
-
-<div style="margin-bottom:10px">
-
-<strong>
-${
-isEn
-? "Portal"
-: "Portale"
-}:
-</strong>
-
-${portal}
-
-</div>
-
-<div style="margin-bottom:20px">
-
-<strong>ID:</strong> ${id}
-
-</div>
-
-<div style="margin-bottom:20px">
-<strong>${
-window.currentLang==="en"
-? "Area"
-: "Zona"
-}:</strong>
-${city || "-"}
-</div>
-
-<div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:12px;
-">
-
-<input
-id="detected-price"
-type="number"
-placeholder="${
-isEn
-? "Property price €"
-: "Prezzo immobile €"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-<input
-id="detected-sqm"
-type="number"
-placeholder="${
-isEn
-? "Square meters"
-: "Metri quadri"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-<input
-id="detected-city"
-type="text"
-placeholder="${
-isEn
-? "City"
-: "Città"
-}"
-style="
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-">
-
-</div>
-
-<button
-onclick="analyzeDetectedProperty()"
-class="btn btn-primary"
-style="
-margin-top:15px;
-width:100%;
-">
-
-📊 ${
-isEn
-? "Analyze Investment"
-: "Analizza investimento"
-}
-
-</button>
-
-<div style="
-margin-top:15px;
-font-size:13px;
-color:#64748b;
-">
-
-${
-isEn
-? "Enter listing data and click Analyze Investment."
-: "Inserisci i dati dell'annuncio e premi Analizza investimento."
-}
-
-</div>
-
-</div>
-
-`;
-
-localStorage.setItem(
-  "property_link",
-  link
-);
-
+  const isEn = window.currentLang === "en";
+  const input = document.getElementById("property-link");
+  const preview = document.getElementById("property-preview");
+  let url;
+  try {
+    url = new URL(input.value.trim());
+    if(url.protocol !== "https:" || !url.hostname.includes(".")) throw new Error("Invalid URL");
+  } catch {
+    preview.textContent = isEn ? "Enter a complete HTTPS listing URL." : "Inserisci un link HTTPS completo dell’annuncio.";
+    input.setAttribute("aria-invalid", "true");
+    return;
+  }
+  input.removeAttribute("aria-invalid");
+  const host = url.hostname.toLowerCase();
+  const portal = host === "idealista.it" || host.endsWith(".idealista.it") ? "Idealista"
+    : host === "immobiliare.it" || host.endsWith(".immobiliare.it") ? "Immobiliare.it" : isEn ? "Property portal" : "Portale immobiliare";
+  preview.innerHTML = `
+    <div class="rb-listing-worksheet">
+      <span class="rb-eyebrow">${isEn ? "YOUR PROPERTY SCENARIO" : "IL TUO SCENARIO IMMOBILIARE"}</span>
+      <h4>${isEn ? "Add the listing details" : "Completa i dati dell’annuncio"}</h4>
+      <p>${isEn ? "The link is a reference. Prices, location, photos and availability are not imported or verified automatically." : "Il link è un riferimento. Prezzi, posizione, foto e disponibilità non vengono importati o verificati automaticamente."}</p>
+      <p><strong>${portal}</strong> · <a id="rb-listing-reference" target="_blank" rel="noopener noreferrer">${isEn ? "Open listing" : "Apri annuncio"} ↗</a></p>
+      <div class="rb-form-grid">
+        <label>${isEn ? "Purchase price (€)" : "Prezzo di acquisto (€)"}<input id="detected-price" type="number" min="1" inputmode="decimal" placeholder="150000"></label>
+        <label>${isEn ? "Area (m²)" : "Superficie (m²)"}<input id="detected-sqm" type="number" min="1" inputmode="decimal" placeholder="70"></label>
+        <label>${isEn ? "City" : "Città"}<input id="detected-city" type="text" maxlength="80" autocomplete="address-level2" placeholder="Roma"></label>
+      </div>
+      <button onclick="analyzeDetectedProperty()" class="btn btn-primary">${isEn ? "Build investment scenario" : "Costruisci lo scenario"} →</button>
+    </div>`;
+  document.getElementById("rb-listing-reference").href = url.href;
+  localStorage.setItem("property_link", url.href);
 };
+
+const incomingListing = new URLSearchParams(location.search).get("listing");
+if(incomingListing){
+  document.getElementById("property-link").value = incomingListing;
+  window.analyzeProperty();
+  document.getElementById("property-preview").scrollIntoView({block:"center"});
+}
 
 // =====================================
 // 📊 ANALYZE DETECTED PROPERTY
@@ -1847,12 +1700,12 @@ document.getElementById(
 "detected-city"
 )?.value || "";
 
-if(!price || !sqm){
+if(!Number.isFinite(price) || price <= 0 || !Number.isFinite(sqm) || sqm <= 0 || !city.trim()){
 
 alert(
 window.currentLang === "en"
-? "Please enter price and square meters"
-: "Inserisci prezzo e metri quadri"
+? "Enter a positive price, area and city"
+: "Inserisci prezzo e superficie positivi e la città"
 );
 
 return;
@@ -1920,8 +1773,8 @@ if(goal === "roi"){
 
 recommendation =
 window.currentLang==="en"
-? "🎯 Recommended strategy: focus on Naples and secondary tourist cities. Highest ROI potential."
-: "🎯 Strategia consigliata: concentrati su Napoli e città turistiche secondarie. Massimo potenziale ROI.";
+? "Compare the example ROI with costs, local demand and the property's actual details."
+: "Confronta il ROI di esempio con costi, domanda locale e dati effettivi dell'immobile.";
 
 }
 
@@ -1929,8 +1782,8 @@ else if(goal === "cashflow"){
 
 recommendation =
 window.currentLang==="en"
-? "💰 Recommended strategy: look for larger properties with multiple rooms to maximize monthly cashflow."
-: "💰 Strategia consigliata: cerca immobili più grandi con più camere per massimizzare il cashflow mensile.";
+? "A larger property may bring higher revenue and higher operating costs. Test both assumptions."
+: "Più spazio può aumentare i ricavi ma anche i costi. Verifica entrambe le ipotesi.";
 
 }
 
@@ -1938,8 +1791,8 @@ else if(goal === "safe"){
 
 recommendation =
 window.currentLang==="en"
-? "🛡️ Recommended strategy: Rome and Florence offer more stable demand and lower volatility."
-: "🛡️ Strategia consigliata: Roma e Firenze offrono una domanda più stabile e minore volatilità.";
+? "Risk needs local demand, operating costs and property information that these examples do not include."
+: "Per stimare il rischio servono domanda locale, costi e dati dell'immobile assenti in questi esempi.";
 
 }
 
@@ -1947,8 +1800,8 @@ else{
 
 recommendation =
 window.currentLang==="en"
-? "📈 Recommended strategy: focus on areas with strong long-term appreciation potential."
-: "📈 Strategia consigliata: punta su zone con forte rivalutazione immobiliare nel lungo periodo.";
+? "Long-term value changes cannot be predicted from these illustrative scenarios."
+: "Questi scenari illustrativi non prevedono la rivalutazione futura degli immobili.";
 
 }
 
@@ -2106,16 +1959,6 @@ url: ""
 
 };  
 
-  const propertyImages = [
-
-"https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200",
-"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200",
-"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200",
-"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200",
-"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200"
-
-];
-  
 function createCard(
 title,
 price,
@@ -2124,7 +1967,6 @@ roi,
 badge,
 portal,
 url,
-image,
 highlight=false
 ){
 
@@ -2138,14 +1980,8 @@ background:white;
 border-radius:18px;
 ">
 
-<div style="
-height:180px;
-
-background-image:url('${image}');
-
-background-size:cover;
-background-position:center;
-">
+<div style="padding:17px 20px;background:#ecfdf5;color:#065f46;font-size:13px;font-weight:700">
+${window.currentLang==="en" ? "ILLUSTRATIVE SCENARIO · NOT A LISTING" : "SCENARIO ILLUSTRATIVO · NON È UN ANNUNCIO"}
 </div>
 
 <div style="padding:20px">
@@ -2164,8 +2000,8 @@ font-weight:700;
 ">
 ${
 window.currentLang==="en"
-? "🏆 BEST ROI"
-: "🏆 MIGLIOR ROI"
+? "HIGHEST EXAMPLE ROI"
+: "ROI DI ESEMPIO PIÙ ALTO"
 }
 </div>
 ` : ""}
@@ -2245,8 +2081,8 @@ line-height:1.6;
 
 💰 ${
 window.currentLang==="en"
-? "Estimated monthly cashflow"
-: "Cashflow mensile stimato"
+? "Illustrative monthly return, before costs"
+: "Rendimento mensile illustrativo, prima dei costi"
 }
 
 <br>
@@ -2261,55 +2097,9 @@ window.currentLang==="en"
 
 <br>
 
-🛡 ${
-window.currentLang==="en"
-? "Indicative risk"
-: "Rischio indicativo"
-}
-
-<br>
-
-<strong>
-
-${roi >= 16 ? "2/10" : roi >= 12 ? "4/10" : "6/10"}
-
-</strong>
-
-${roi >=16
-? (window.currentLang==="en"?"Low":"Basso")
-: roi>=12
-? (window.currentLang==="en"?"Medium":"Medio")
-: (window.currentLang==="en"?"High":"Alto")}
-
-</div>
-
-<div style="
-margin-top:10px;
-font-size:26px;
-font-weight:800;
-color:#0f172a;
-">
-
-${Math.min(
-100,
-Math.round(
-(roi * 5) +
-(100 - price / 5000)
-)
-)}/100
-
-</div>
-
-<div style="
-margin-top:4px;
-font-size:13px;
-font-weight:600;
-color:#10b981;
-">
-
 ${window.currentLang==="en"
-? "Indicative scenario score"
-: "Punteggio indicativo dello scenario"}
+? "Costs, risk and local demand still need verification."
+: "Costi, rischio e domanda locale sono ancora da verificare."}
 
 </div>
 
@@ -2429,8 +2219,8 @@ color:#0f172a;
 
 📊 ${
 window.currentLang==="en"
-? "Recommended Investment Strategy"
-: "Strategia investimento consigliata"
+? "Illustrative scenario overview"
+: "Riepilogo dello scenario illustrativo"
 }
 
 </h3>
@@ -2482,21 +2272,8 @@ window.currentLang==="en"
 
 </div>
 
-<div style="margin-bottom:20px">
-
-🛡️ ${
-window.currentLang==="en"
-? "Risk"
-: "Rischio"
-}:
-
-<strong>${
-first.risk ??
-Math.max(
-1,
-10 - Math.round(first.roi / 2)
-)
-}/10</strong>
+<div style="margin-bottom:20px;color:#64748b">
+${window.currentLang==="en" ? "Risk cannot be estimated from these example values." : "Il rischio non è stimabile dai soli valori di esempio."}
 </div>
 
 <hr style="margin:20px 0">
@@ -2562,7 +2339,6 @@ first.roi,
 "",
 first.portal,
 first.url,
-propertyImages[0],
 true
 )}
 
@@ -2576,7 +2352,6 @@ second.roi,
 "",
 second.portal,
 second.url,
-propertyImages[1],
 false
 )}
 
@@ -2864,7 +2639,7 @@ document.addEventListener(
 <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js" defer></script>
+<script src="/js/chatbot-loader.js?v=20261001-28" defer></script>
 
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -2881,3 +2656,6 @@ document.addEventListener(
 
 <!-- 🔥 FIREBASE -->
 <script type="module" src="/js/firebase-init.js"></script>
+
+</body>
+</html>

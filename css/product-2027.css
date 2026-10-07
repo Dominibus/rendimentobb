@@ -1,0 +1,616 @@
+/* RendimentoBB • product surfaces, September 2026.
+   Preserve existing application IDs, tab state and financial behavior. */
+:root {
+  --rb-ink: #142b25;
+  --rb-muted: #536960;
+  --rb-green: #087f5b;
+  --rb-green-hover: #066447;
+  --rb-line: #dce6df;
+  --rb-canvas: #f5f7f3;
+  --rb-surface: #fff;
+  --rb-radius: 20px;
+  --rb-shadow: 0 12px 36px rgb(20 43 37 / 5%);
+}
+html { scroll-padding-top: 100px; }
+body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, input, select, textarea { font: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid #087f5b;
+  outline-offset: 4px;
+}
+.rb-header .rb-inner {
+  width: min(1440px, calc(100% - 48px));
+  gap: 20px;
+  min-height: 76px;
+}
+.rb-header { background: rgb(255 255 255 / 96%); border-bottom: 1px solid var(--rb-line); box-shadow: none; }
+.rb-header .rb-logo { width: 140px; max-height: 48px; object-fit: contain; }
+.rb-header .rb-center { gap: 17px; flex-wrap: nowrap; }
+.rb-header .rb-center a { white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--rb-muted); }
+.rb-header .rb-center a:hover { color: var(--rb-green); }
+.rb-header .rb-right { gap: 10px; flex-shrink: 0; }
+.rb-header #user-area { gap: 8px; }
+.rb-header .rb-lang button { min-height: 34px; }
+body.home-page .rb-home-hero {
+  padding: 54px 0 32px;
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3;
+}
+body.home-page .rb-home-hero::before { opacity: .3; }
+body.home-page .rb-home-hero-grid { gap: 60px; min-height: 440px; }
+body.home-page .rb-home-hero h1 { font-size: clamp(38px, 4.8vw, 62px); color: var(--rb-ink); line-height: 1.06; font-weight: 650; }
+body.home-page .rb-home-lead { font-size: 18px; max-width: 530px; color: var(--rb-muted); }
+body.home-page .rb-home-eyebrow { background: transparent; border: 0; padding-left: 0; letter-spacing: .09em; color: var(--rb-green); }
+body.home-page .rb-home-benefits li { background: #fff; border: 1px solid var(--rb-line); font-weight: 600; box-shadow: none; }
+body.home-page .rb-home-primary { background: var(--rb-green); box-shadow: none; border-radius: 12px; min-height: 50px; }
+body.home-page .rb-home-primary:hover { background: var(--rb-green-hover); transform: translateY(-1px); }
+body.home-page .rb-home-secondary { border-radius: 12px; }
+body.home-page .rb-home-visual::before { content: none; }
+.rb-scenario-canvas {
+  width: 100%; max-width: 455px; padding: 25px;
+  background: var(--rb-surface); border: 1px solid var(--rb-line); border-radius: 24px;
+  box-shadow: 0 28px 70px rgb(20 43 37 / 9%); color: var(--rb-ink); text-align: left;
+}
+.rb-canvas-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.rb-eyebrow { font-size: 10px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; color: var(--rb-muted); }
+.rb-status-pill { padding: 5px 9px; border-radius: 6px; background: #edf5ee; color: #326344; font-size: 11px; font-weight: 600; }
+.rb-scenario-canvas h3 { margin: 18px 0 4px; font-size: 23px; letter-spacing: -.025em; color: var(--rb-ink); }
+.rb-canvas-subtitle { margin: 0; color: var(--rb-muted); font-size: 12px; }
+.rb-canvas-inputs { margin: 22px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rb-canvas-inputs div { border: 1px solid var(--rb-line); border-radius: 10px; padding: 12px; background: #fafbf8; }
+.rb-canvas-inputs dt { font-size: 11px; color: var(--rb-muted); margin-bottom: 5px; }
+.rb-canvas-inputs dd { margin: 0; font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.rb-canvas-result { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-block: 1px solid var(--rb-line); padding: 19px 0; }
+.rb-canvas-result strong { font-size: 40px; color: var(--rb-green); letter-spacing: -.055em; font-weight: 650; }
+.rb-canvas-result span { max-width: 130px; color: var(--rb-muted); font-size: 12px; line-height: 1.5; }
+.rb-canvas-flow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; color: var(--rb-muted); font-size: 11px; }
+.rb-canvas-note { font-size: 11px; line-height: 1.6; margin: 17px 0 0; color: var(--rb-muted); }
+body.home-page .rb-home-path-card,
+body.home-page .plan-card { border: 1px solid var(--rb-line); border-radius: var(--rb-radius); box-shadow: none; }
+body.home-page .plan-card.featured { border: 2px solid var(--rb-green); box-shadow: var(--rb-shadow); }
+body.home-page .plan-card .price { letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+body.home-page .plan-card li { line-height: 1.65; }
+body.dashboard-bg { background: var(--rb-canvas); color: var(--rb-ink); }
+body.dashboard-bg .dashboard-container { max-width: 1280px; }
+body.dashboard-bg .analysis-card,
+body.dashboard-bg .stats-card,
+body.dashboard-bg .db-card { border: 1px solid var(--rb-line); box-shadow: none; border-radius: 16px; }
+body.dashboard-bg .analysis-card h3 { color: var(--rb-ink); font-weight: 650; letter-spacing: -.015em; }
+body.dashboard-bg .metric strong,
+body.dashboard-bg .stats-card { font-variant-numeric: tabular-nums; }
+body.dashboard-bg .metric { gap: 16px; }
+body.dashboard-bg #dashboard-workspace-nav { border: 1px solid var(--rb-line); border-radius: 14px; background: #fff; box-shadow: none; padding: 6px; }
+body.dashboard-bg #dashboard-workspace-nav button { min-height: 44px; border-radius: 9px; font-size: 13px; }
+.rb-source-note {
+  width: min(1180px, calc(100% - 40px)); margin: 24px auto;
+  padding: 16px 20px; border: 1px solid var(--rb-line); border-left: 3px solid var(--rb-green);
+  border-radius: 12px; background: #f6faf5; color: var(--rb-ink); font-size: 13px;
+}
+.rb-source-note p { margin: 6px 0 0; font-size: 12px; line-height: 1.65; color: var(--rb-muted); }
+.rb-listing-worksheet { max-width: 760px; margin: 24px auto 0; padding: 28px; border: 1px solid var(--rb-line); border-radius: 20px; background: #fff; box-shadow: var(--rb-shadow); text-align: left; }
+.rb-listing-worksheet h4 { margin: 12px 0; font-size: 23px; letter-spacing: -.025em; color: var(--rb-ink); }
+.rb-listing-worksheet p { font-size: 13px; line-height: 1.65; color: var(--rb-muted); }
+.rb-listing-worksheet a { color: var(--rb-green); text-decoration: underline; text-underline-offset: 3px; }
+.rb-form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+.rb-form-grid label { font-size: 12px; font-weight: 600; color: var(--rb-ink); }
+.rb-form-grid input { display: block; box-sizing: border-box; width: 100%; min-height: 48px; margin-top: 8px; padding: 12px; border: 1px solid #cbd8ce; border-radius: 9px; background: #fafbf8; }
+body.immobili-page .btn-primary,
+body.mortgage-page .btn-primary { background: var(--rb-green); box-shadow: none; }
+body.report-page .report { border: 1px solid var(--rb-line); border-radius: 20px; box-shadow: var(--rb-shadow); }
+body.report-page .hero-metric strong { font-variant-numeric: tabular-nums; }
+@media (min-width: 769px) and (max-width: 1250px) {
+  .rb-header .rb-inner { width: calc(100% - 32px); gap: 14px; }
+  .rb-header .rb-logo { width: 115px; }
+  .rb-header .rb-center { gap: 12px; }
+  .rb-header .rb-center a[href="/aprire-bnb-conviene/"],
+  .rb-header .rb-center a[href="/about/"] { display: none; }
+}
+@media (max-width: 768px) {
+  .rb-header .rb-inner { width: calc(100% - 28px); min-height: 64px; gap: 8px; }
+  .rb-header .rb-logo { width: 105px; }
+  .rb-header .rb-center { display: none; }
+  .rb-header .rb-right { gap: 6px; }
+  body.home-page .rb-home-hero { padding-top: 34px; }
+  body.home-page .rb-home-hero-grid { grid-template-columns: 1fr; gap: 30px; min-height: auto; }
+  body.home-page .rb-home-hero h1 { font-size: clamp(34px, 8.8vw, 47px); }
+  body.home-page .rb-home-lead { font-size: 16px; }
+  body.home-page .rb-home-visual { min-height: auto; }
+  .rb-scenario-canvas { max-width: none; padding: 21px; }
+  .rb-form-grid { grid-template-columns: 1fr; }
+  .rb-listing-worksheet { padding: 20px; }
+  .rb-source-note { width: calc(100% - 32px); }
+  body.dashboard-bg .dashboard-container { width: calc(100% - 28px); }
+  body.dashboard-bg #dashboard-workspace-nav { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Home contrast: override the legacy photographic hero's white text rules. */
+body.home-page section.hero.rb-home-hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: var(--rb-ink) !important;
+}
+body.home-page section.hero.rb-home-hero::before,
+body.home-page section.hero.rb-home-hero::after {
+  content: none !important;
+  background: none !important;
+}
+body.home-page section.hero.rb-home-hero h1,
+body.home-page section.hero.rb-home-hero h1 span,
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas h3,
+body.home-page section.hero.rb-home-hero .rb-canvas-inputs dd {
+  color: var(--rb-ink) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero h1 .rb-home-accent,
+body.home-page section.hero.rb-home-hero .rb-home-eyebrow,
+body.home-page section.hero.rb-home-hero .rb-canvas-result strong {
+  color: var(--rb-green) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-lead,
+body.home-page section.hero.rb-home-hero .rb-home-proof,
+body.home-page section.hero.rb-home-hero .rb-home-paths-title,
+body.home-page section.hero.rb-home-hero .rb-canvas-subtitle,
+body.home-page section.hero.rb-home-hero .rb-canvas-note,
+body.home-page section.hero.rb-home-hero .rb-canvas-inputs dt,
+body.home-page section.hero.rb-home-hero .rb-canvas-result span,
+body.home-page section.hero.rb-home-hero .rb-canvas-flow span,
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas .rb-eyebrow {
+  color: var(--rb-muted) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-scenario-canvas .rb-status-pill {
+  color: #326344 !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-benefits li,
+body.home-page section.hero.rb-home-hero .rb-home-benefits li span,
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-secondary {
+  color: var(--rb-ink) !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary {
+  background: var(--rb-green) !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover {
+  background: var(--rb-green-hover) !important;
+}
+
+/* Compact vector brand and balanced navigation across shared headers. */
+.rb-header { background: #fff !important; backdrop-filter: none !important; box-shadow: 0 1px 0 #dce6df !important; }
+.rb-header .rb-inner { box-sizing: border-box; max-width: 1440px; width: calc(100% - 40px); min-height: 76px; padding: 12px 0; gap: 20px; }
+.rb-header .rb-left { flex: 0 0 auto; }
+.rb-header .rb-left > a { display: flex; align-items: center; }
+.rb-header .rb-logo { display: block; width: 180px !important; height: auto !important; max-height: none; object-fit: contain; }
+.rb-header .rb-center { gap: 18px; }
+.rb-header .rb-center a { color: #344c43 !important; opacity: 1; font-size: 13px; font-weight: 600; padding-block: 10px; }
+.rb-header .rb-center a:hover { color: #087f5b !important; }
+.rb-header .rb-center a::after { bottom: 4px; background: #087f5b; }
+.rb-header .rb-right, .rb-header .rb-user { gap: 8px !important; }
+.rb-header .rb-btn, .rb-header .rb-login, .rb-header #rb-header-ai-btn { box-sizing: border-box; border-radius: 10px !important; min-height: 40px; padding: 10px 14px; font-size: 13px; white-space: nowrap; box-shadow: none !important; transition: background-color .15s ease; }
+.rb-header .rb-btn.primary, .rb-header .rb-login { background: #087f5b !important; color: #fff !important; }
+.rb-header #rb-header-ai-btn { background: #eef5ef !important; color: #24533e !important; border: 1px solid #dce6df; }
+.rb-header .rb-btn.red { background: #fff1f0 !important; color: #a12c27 !important; border: 1px solid #f2d8d5; }
+.rb-header .rb-lang { border-radius: 10px; background: #f3f6f3; padding: 3px; }
+.rb-header .rb-lang button { color: #536960; min-height: 32px; border-radius: 7px; }
+.rb-header .rb-lang button.active { background: #087f5b; color: #fff; }
+@media (max-width: 1250px) and (min-width: 1051px) {
+  .rb-header .rb-logo { width: 160px !important; }
+  .rb-header .rb-center { gap: 12px; }
+}
+@media (max-width: 1050px) {
+  .rb-header .rb-center { display: none !important; }
+  .rb-header #rb-burger { display: block !important; flex: 0 0 40px; width: 40px !important; height: 40px !important; border: 1px solid #dce6df; border-radius: 10px; color: #142b25; font-size: 22px !important; cursor: pointer; }
+}
+@media (max-width: 768px) {
+  .rb-header .rb-inner { width: calc(100% - 24px); min-height: 64px; padding: 10px 0; gap: 8px !important; }
+  .rb-header .rb-logo { width: 138px !important; }
+  .rb-header .rb-lang { display: none; }
+  .rb-header .rb-right { gap: 6px !important; }
+  .rb-header .rb-btn, .rb-header .rb-login, .rb-header #rb-header-ai-btn { min-height: 38px; font-size: 12px !important; padding: 8px 10px !important; }
+}
+@media (max-width: 420px) {
+  .rb-header .rb-logo { width: 122px !important; }
+  .rb-header #rb-header-ai-btn { display: none !important; }
+}
+
+/* Shared account controls and mobile navigation, without legacy glow effects. */
+.rb-header #user-area { display: flex; align-items: center; gap: 8px; }
+.rb-header .rb-user .rb-btn, .rb-header .rb-user #dashboard-link { width: auto !important; min-width: 0 !important; min-height: 40px !important; height: auto !important; padding: 10px 14px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600; transform: none !important; box-shadow: none !important; }
+.rb-header .rb-user #dashboard-link { background: #087f5b !important; color: #fff !important; }
+.rb-header .rb-user .dashboard-label { font-size: 13px !important; }
+.rb-header .rb-user .badge-pro { display: inline-flex; align-items: center; margin: 0; min-height: 28px; padding: 0 9px; background: #edf5ee !important; color: #24533e !important; border: 1px solid #dce6df; border-radius: 7px; box-shadow: none !important; font-size: 10px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+#rb-mobile.rb-mobile-menu { box-sizing: border-box; width: min(380px, 92vw) !important; max-width: 380px !important; height: 100vh; height: 100dvh; padding: 0 20px max(24px, env(safe-area-inset-bottom)) !important; background: #fff !important; box-shadow: -12px 0 40px rgb(20 43 37 / 12%); overscroll-behavior: contain; visibility: hidden; transition: right .2s ease, visibility .2s ease; }
+#rb-mobile.rb-mobile-menu.open { visibility: visible; }
+.rb-mobile-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; position: sticky; top: 0; z-index: 1; background: #fff; padding: max(16px, env(safe-area-inset-top)) 0 16px; border-bottom: 1px solid #dce6df; }
+.rb-mobile-top img { width: 160px; height: auto; }
+#rb-mobile-close { width: 44px; height: 44px; border: 1px solid #dce6df; border-radius: 10px; background: #f5f7f3; color: #142b25; font-size: 28px; cursor: pointer; }
+.rb-mobile-account { padding: 18px 0 12px; color: #536960; font-size: 12px; font-weight: 600; }
+#rb-mobile #rb-mobile-nav { gap: 5px; }
+#rb-mobile #rb-mobile-nav a { display: flex; align-items: center; min-height: 46px; box-sizing: border-box; padding: 11px 14px !important; border: 1px solid transparent !important; border-radius: 10px !important; background: #fff !important; color: #142b25 !important; font-size: 14px !important; font-weight: 600; box-shadow: none !important; text-shadow: none !important; }
+#rb-mobile #rb-mobile-nav a:hover, #rb-mobile #rb-mobile-nav a:focus-visible { background: #eef5ef !important; color: #066447 !important; }
+#rb-mobile #rb-mobile-nav a.mobile-cta[href="/tool/"] { display: none; }
+#rb-mobile #rb-mobile-nav #mobile-ai-btn { background: #eef5ef !important; color: #24533e !important; }
+#rb-mobile #rb-mobile-nav #mobile-dashboard, #rb-mobile #rb-mobile-nav a[href="/login/"] { background: #087f5b !important; color: #fff !important; }
+#rb-mobile #rb-mobile-nav #mobile-logout { background: #fff1f0 !important; color: #a12c27 !important; }
+#rb-mobile #rb-mobile-nav hr { margin: 10px 0 !important; border-color: #dce6df; }
+#rb-mobile .rb-mobile-lang { display: block; margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid #dce6df; color: #536960 !important; font-size: 12px; }
+#rb-mobile .rb-mobile-lang > span { color: #536960 !important; }
+#rb-mobile .rb-mobile-lang-buttons { display: flex; gap: 8px; margin-top: 10px; }
+#rb-mobile .rb-mobile-lang-buttons button { min-width: 80px; min-height: 44px; padding: 10px 16px; border: 1px solid #dce6df; border-radius: 10px; background: #f5f7f3; color: #142b25; font: inherit; cursor: pointer; box-shadow: none; }
+#rb-mobile .rb-mobile-lang-buttons button.active { background: #087f5b; color: #fff; border-color: #087f5b; }
+.rb-menu-overlay { backdrop-filter: none !important; background: rgb(20 43 37 / 45%) !important; }
+@media (max-width: 768px) {
+  .rb-header #user-area { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #rb-mobile.rb-mobile-menu { transition: none; }
+}
+
+/* Home simulator: intrinsic height, explicit initial state, unobstructed results. */
+body.home-page .quick-roi-box { border: 1px solid #dce6df; border-radius: 20px; box-shadow: none !important; }
+body.home-page .quick-roi-box > .investment-panel { display: flex !important; flex-direction: column; align-items: stretch; align-self: start !important; min-height: 0 !important; height: auto !important; gap: 0 !important; border: 1px solid #dce6df; background: #fafbf8; box-shadow: none !important; backdrop-filter: none; }
+body.home-page .quick-roi-box .investment-metrics { min-height: 0 !important; height: auto !important; max-width: none !important; padding-bottom: 0 !important; overflow: visible !important; }
+body.home-page .quick-roi-box .metric-card { box-shadow: none !important; border: 1px solid #dce6df; border-radius: 12px; }
+body.home-page .quick-roi-box .rb-quick-status { margin: 0 0 16px; color: #536960; font-size: 12px; line-height: 1.5; }
+body.home-page .rb-quick-empty { padding: 18px; border: 1px dashed #cbd8ce; border-radius: 12px; background: #fff; }
+body.home-page .rb-quick-empty h3 { margin: 0 0 8px; font-size: 21px; color: #142b25; }
+body.home-page .rb-quick-empty p { margin: 0; font-size: 14px; line-height: 1.6; color: #536960; }
+body.home-page .quick-roi-box:not(.rb-has-result) .investment-metrics,
+body.home-page .quick-roi-box:not(.rb-has-result) .investment-panel > h3,
+body.home-page .quick-roi-box .investment-score { display: none !important; }
+body.home-page .quick-roi-box.rb-has-result .rb-quick-empty { display: none; }
+body.home-page .quick-roi-box .property-analyzer { order: 2; margin: 20px 0 0 !important; padding-top: 18px; border-top: 1px solid #dce6df; }
+body.home-page .quick-roi-box .quick-roi-cta { order: 3; margin-top: 20px !important; }
+body.home-page .quick-roi-box .quick-roi-cta p:last-child { display: none; }
+body.home-page .quick-roi-box .home-blur-overlay { display: none !important; position: static !important; inset: auto !important; grid-column: 1 / -1; padding: 0 !important; margin-top: 6px; background: none !important; backdrop-filter: none !important; pointer-events: auto !important; }
+body.home-page .quick-roi-box.rb-has-result .home-blur-overlay.active { display: block !important; }
+body.home-page .quick-roi-box .home-overlay-content { width: auto !important; max-width: none !important; padding: 16px !important; color: #142b25 !important; background: #eef5ef !important; border: 1px solid #dce6df !important; border-radius: 12px; box-shadow: none !important; text-align: left; }
+body.home-page .quick-roi-box .home-overlay-content p { margin: 8px 0 12px; color: #536960 !important; font-size: 13px; line-height: 1.6; }
+body.home-page .quick-roi-box .home-overlay-content strong { color: #142b25 !important; }
+.rb-header .rb-user #dashboard-link .dashboard-label { color: #fff !important; text-shadow: none !important; }
+@media (max-width: 900px) {
+  body.home-page .quick-roi-box { grid-template-columns: 1fr !important; padding: 20px !important; gap: 24px !important; }
+  body.home-page .quick-roi-box > .investment-panel { grid-column: 1 !important; grid-row: auto !important; }
+}
+
+/* Product-wide surfaces: brand palette, readable forms and consistent cards. */
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .report-page) {
+  background: #f5f7f3 !important; color: #142b25;
+  --tool26-bg: #f5f7f3; --tool26-text: #142b25; --tool26-muted: #536960;
+  --tool26-green: #087f5b; --tool26-green-dark: #066447; --tool26-border: #dce6df;
+  --mt-bg: #f5f7f3; --mt-text: #142b25; --mt-muted: #536960;
+  --mt-green: #087f5b; --mt-green-dark: #066447; --mt-border: #dce6df;
+}
+body.tool-page section.tool-hero,
+body.mortgage-page section.hero-mutui,
+body.immobili-page section.hero,
+body.academy-page section.hero,
+body.about-page section.about-hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: #142b25 !important; isolation: isolate;
+}
+body.tool-page section.tool-hero > .hero-bg,
+body.mortgage-page section.hero-mutui::before,
+body.mortgage-page section.hero-mutui::after,
+body.immobili-page section.hero::before,
+body.immobili-page section.hero::after,
+body.academy-page section.hero::before,
+body.academy-page section.hero::after { display: none !important; }
+body.tool-page .tool-2026-hero-copy h1,
+body.mortgage-page section.hero-mutui h1,
+body.immobili-page section.hero h1,
+body.academy-page section.hero h1,
+body.about-page section.about-hero h1 { color: #142b25 !important; text-shadow: none !important; letter-spacing: -.04em; }
+body.tool-page .tool-2026-hero-copy p,
+body.mortgage-page section.hero-mutui p,
+body.immobili-page section.hero p,
+body.academy-page section.hero p,
+body.about-page section.about-hero p { color: #536960 !important; text-shadow: none !important; }
+body.tool-page .tool-2026-eyebrow,
+body.tool-page .tool-2026-market-status,
+body.mortgage-page section.hero-mutui > .container > div:first-child,
+body.mortgage-page section.hero-mutui .kpi-list,
+body.mortgage-page section.hero-mutui .kpi-list span,
+body.immobili-page section.hero .page-title > span,
+body.immobili-page section.hero .page-title > div,
+body.academy-page section.hero .hero-badge { color: #24533e !important; background: #edf5ee !important; border-color: #dce6df !important; text-shadow: none !important; }
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page) :is(.tool-card, .results-card, .executive-stat-card, .tool-box, .lead-box, .bank-card, .property-card, .about-card, .about-box, .legal-card) {
+  border: 1px solid #dce6df !important; border-radius: 18px !important;
+  box-shadow: 0 8px 26px rgb(20 43 37 / 4%) !important;
+}
+body.academy-page .cards > .card { border: 1px solid #dce6df !important; border-radius: 18px !important; box-shadow: none !important; }
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page) main :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+  box-sizing: border-box; max-width: 100%; min-height: 46px; border: 1px solid #cbd8ce !important; border-radius: 10px !important; background: #fff; color: #142b25;
+}
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .home-page) main :is(.btn-primary, .btn.btn-primary) {
+  background: #087f5b !important; color: #fff !important; border-radius: 11px !important; box-shadow: none !important; text-shadow: none !important;
+}
+body:is(.tool-page, .mortgage-page, .immobili-page, .market-page, .academy-page, .about-page, .legal-page, .home-page) main .btn-primary :is(span,strong) { color: #fff !important; }
+body.home-page .quick-roi-box #hidden-roi-msg,
+body.home-page .quick-roi-box #roi-shock-block,
+body.home-page .quick-roi-box #money-loss { display: none !important; }
+body.home-page .quick-roi-box .roi-highlight > .free-only { display: none !important; }
+body.home-page .quick-roi-box .metric-card strong { color: #142b25 !important; font-variant-numeric: tabular-nums; }
+body.home-page .quick-roi-box #qr_roi { font-size: 34px !important; line-height: 1.2; }
+body.home-page .quick-roi-box #qr_roi > span { color: #142b25 !important; }
+body.home-page .quick-roi-box .metric-hint,
+body.home-page .quick-roi-box .metric-critical { color: #536960 !important; font-size: 12px; line-height: 1.5; }
+@media (max-width: 768px) {
+  body.mortgage-page section.hero-mutui { min-height: 0 !important; padding: 50px 20px 100px !important; }
+  body.immobili-page section.hero { min-height: 0 !important; }
+}
+
+/* Contrast corrections verified against the deployed mortgage/property pages. */
+body.mortgage-page section.hero-mutui > .container { color: #142b25 !important; }
+body.mortgage-page section.hero-mutui > .container > div:last-child,
+body.mortgage-page section.hero-mutui > .container > div:last-child span { color: #536960 !important; text-shadow: none !important; }
+body.mortgage-page .ai-rate-box { background: #fff !important; border: 1px solid #dce6df !important; color: #142b25 !important; }
+body.mortgage-page .ai-rate-box > div { color: #536960 !important; text-shadow: none !important; }
+body.mortgage-page .ai-rate-box > div:first-child { color: #142b25 !important; }
+body.immobili-page section.hero.hero-bg.rome { background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important; background-image: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%) !important; min-height: 0 !important; padding: 48px 20px !important; }
+body.immobili-page section.hero.hero-bg.rome::before,
+body.immobili-page section.hero.hero-bg.rome::after { content: none !important; display: none !important; }
+body.immobili-page section.hero.hero-bg.rome .container { padding: 0 !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title h1 { color: #142b25 !important; text-shadow: none !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title :is(p,span,div) { color: #536960 !important; text-shadow: none !important; background: transparent !important; }
+body.immobili-page section.hero.hero-bg.rome .page-title h1 span { color: #142b25 !important; }
+.global-footer p, .global-footer .footer-bottom { color: #b9c9c3 !important; }
+.global-footer a:not(.btn-primary):not(.btn-secondary) { color: #c9d8d2; }
+body.academy-page .cta-box { background: #edf5ee !important; border: 1px solid #dce6df; box-shadow: none !important; }
+body.academy-page .cta-box :is(h2,p) { color: #142b25 !important; text-shadow: none !important; }
+
+/* FIX09 — secondary pages share the product palette. All rules are scoped. */
+body.rb-secondary-page { background: #f5f7f3 !important; color: #142b25; }
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  color: #142b25 !important; min-height: 0 !important; padding: 64px 24px !important;
+  isolation: isolate;
+}
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero)::before,
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero)::after,
+body.rb-business-page .hero > .hero-bg { display: none !important; }
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) h1 {
+  color: #142b25 !important; -webkit-text-fill-color: #142b25 !important;
+  text-shadow: none !important; font-size: clamp(32px, 4.2vw, 54px) !important;
+  letter-spacing: -.045em; line-height: 1.08 !important;
+}
+body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) p {
+  color: #536960 !important; -webkit-text-fill-color: #536960 !important;
+  text-shadow: none !important; line-height: 1.65 !important;
+}
+body.rb-secondary-page :is(.hero-badge, .strategy-badge, .kpi-label, .hero-trust, .hero-highlight, .hero-highlights, .hero-stats > div, .opening-hero__proof span) {
+  color: #24533e !important; background: #edf5ee !important; border-color: #dce6df !important;
+  box-shadow: none !important; text-shadow: none !important; backdrop-filter: none !important;
+}
+body.rb-secondary-page .hero :is(.kpi-list, .kpi-list span, .hero-trust span) { color: #536960 !important; text-shadow: none !important; }
+body.rb-secondary-page :is(.hero-stats, .hero-highlights, .hero-trust) { flex-wrap: wrap; }
+body.rb-secondary-page :is(.hero-highlight p, .hero-stats span, .hero-stats strong) { color: #24533e !important; }
+body.rb-secondary-page .hero .container { padding-block: 0 !important; }
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card, .roi-kpi > div, .opening-step, .opening-signal, .opening-cost-grid > div) {
+  background: #fff !important; border: 1px solid #dce6df !important; border-radius: 16px !important;
+  box-shadow: 0 6px 22px rgb(20 43 37 / 4%) !important; backdrop-filter: none !important;
+}
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card) :is(h2,h3) { color: #142b25 !important; text-shadow: none !important; }
+body.rb-secondary-page :is(.card, .benefit, .feature-card, .market-card, .roi-card) p { color: #536960 !important; -webkit-text-fill-color: #536960 !important; }
+body.rb-secondary-page :is(.benefit, .market-card) span { color: #536960 !important; }
+body.rb-secondary-page :is(.cta-box, .premium-box, .highlight-box, .cta-section) {
+  background: #edf5ee !important; border: 1px solid #dce6df !important; border-radius: 18px !important;
+  box-shadow: none !important; color: #142b25 !important;
+}
+body.rb-secondary-page :is(.cta-box, .premium-box, .highlight-box, .cta-section) :is(h2,h3,p,strong,span) {
+  color: #142b25 !important; -webkit-text-fill-color: #142b25 !important; text-shadow: none !important;
+}
+body.rb-secondary-page :is(.premium-features span, .highlight-box, .hero-highlight) { border-color: #dce6df !important; }
+body.rb-secondary-page :is(.btn-primary, .btn-main, .opening-button--primary),
+body.rb-secondary-page :is(.cta-box, .premium-box) > a:not(.dashboard-btn),
+body.rb-business-page .card > button {
+  background: #087f5b !important; color: #fff !important; -webkit-text-fill-color: #fff !important;
+  border: 1px solid #087f5b !important; border-radius: 10px !important; box-shadow: none !important;
+  text-shadow: none !important; min-height: 46px;
+}
+body.rb-secondary-page :is(.btn-outline, .opening-button--ghost) {
+  background: #fff !important; color: #24533e !important; -webkit-text-fill-color: #24533e !important;
+  border: 1px solid #cbd8ce !important; box-shadow: none !important; border-radius: 10px !important;
+}
+body.rb-secondary-page :is(.btn-primary, .btn-main, .opening-button--primary) span { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+body.rb-secondary-page :is(.section, .academy-content) { background: transparent !important; }
+body.rb-secondary-page :is(.section > .container, .academy-content) { max-width: 1120px; }
+body.rb-business-page > .container { max-width: 1040px; padding: 32px 24px 64px; }
+body.rb-business-page .card { padding: 32px; }
+body.rb-business-page .benefit { padding: 20px; background: #fafbf8 !important; }
+body.rb-business-page .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+body.rb-business-page .benefit strong { color: #142b25 !important; }
+body.rb-business-page .rb-form-label { display: block; margin-top: 20px; font-size: 13px; font-weight: 650; color: #142b25; }
+body.rb-business-page :is(input,textarea) { box-sizing: border-box; margin-top: 6px; min-height: 46px; border: 1px solid #cbd8ce; background: #fff; color: #142b25; font: inherit; font-size: 16px; }
+body.rb-business-page textarea { min-height: 110px; resize: vertical; }
+body.rb-business-page .card > button { width: auto; padding: 12px 24px; }
+body.rb-business-page .success { color: #066447; }
+body.rb-business-page .trust { color: #536960; margin-top: 28px; }
+body.rb-secondary-page .opening-eyebrow--light { color: #066447; }
+body.opening-bnb-page {
+  --opening-bg: #f5f7f3; --opening-text: #142b25; --opening-muted: #536960;
+  --opening-border: #dce6df; --opening-green: #087f5b; --opening-green-dark: #066447;
+  --opening-navy: #142b25; --opening-navy-soft: #24533e;
+}
+body.rb-secondary-page .opening-hero__inner { gap: 36px; }
+body.rb-secondary-page .opening-hero__proof span { border: 1px solid #dce6df; }
+body.rb-success-page main > .section > .container { background: #fff; border: 1px solid #dce6df; border-radius: 20px; padding: 32px 24px; }
+body.rb-success-page main :is(h1,p) { color: #142b25 !important; }
+/* Login keeps its dedicated authentication flow and adopts the brand surfaces. */
+body.rb-login-page { background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important; color: #142b25; }
+body.rb-login-page .login-wrapper { box-sizing: border-box; }
+body.rb-login-page .login-card { box-sizing: border-box; background: #fff; color: #142b25; border: 1px solid #dce6df; border-radius: 20px; box-shadow: 0 12px 40px rgb(20 43 37 / 8%); padding: 32px 24px; }
+body.rb-login-page input { box-sizing: border-box; background: #fff; color: #142b25; font-size: 16px; border-color: #cbd8ce; }
+body.rb-login-page :is(.btn, .auth-tab.active, .lang-btn.active) { background: #087f5b; color: #fff; }
+body.rb-login-page .lang-switch { background: #edf5ee; }
+body.rb-login-page .lang-btn:not(.active) { color: #536960; }
+body.rb-login-page .back-home { color: #066447; }
+@media(max-width:768px) {
+  body.rb-secondary-page :is(.hero, .hero-roi, .opening-hero) { padding: 40px 20px !important; }
+  body.rb-secondary-page .hero-grid { grid-template-columns: 1fr !important; }
+  body.rb-business-page > .container { padding: 20px 16px 40px; }
+  body.rb-business-page .card { padding: 22px 18px; }
+  body.rb-business-page .grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 26px; }
+  body.rb-business-page .card > button { width: 100%; }
+  body.rb-secondary-page :is(.cta-box, .premium-box) { padding: 28px 20px !important; }
+  body.rb-secondary-page .roi-kpi { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 12px !important; }
+  body.rb-secondary-page .roi-kpi > div { min-width: 0; padding: 20px 12px; }
+  body.rb-secondary-page .hero-market-snapshot { margin-top: 0 !important; }
+  body.rb-secondary-page .opening-hero__inner { grid-template-columns: 1fr !important; }
+}
+
+body.rb-secondary-page .internal-links a { background: #fff !important; color: #066447 !important; -webkit-text-fill-color: #066447 !important; border: 1px solid #dce6df; border-radius: 8px; padding: 10px 14px; }
+body.rb-secondary-page :is(.hero, .hero-roi) .btn-primary { animation: none !important; }
+body.rb-academy-guide .highlight-box { color: #142b25 !important; }
+body.rb-academy-guide .highlight-box :is(li,div) { color: #142b25 !important; }
+
+/* FIX10 — finish inherited styles and clarify the free/demo experience. */
+body.market-page.rb-secondary-page main > section.hero {
+  background: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%), #f5f7f3 !important;
+  background-image: radial-gradient(ellipse at 90% 5%, #dcefe1, transparent 50%) !important;
+  min-height: 0 !important; padding: 56px 20px !important;
+}
+body.market-page.rb-secondary-page { padding-top: 0 !important; }
+body.market-page.rb-secondary-page .hero-market-snapshot { margin-top: 0 !important; padding: 0 20px 24px !important; }
+body.market-page.rb-secondary-page .rb-market-overview .feature-grid,
+body.market-page.rb-secondary-page .rb-market-method .feature-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+body.market-page.rb-secondary-page .rb-market-final .feature-grid,
+body.market-page.rb-secondary-page .rb-market-cities .feature-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; }
+body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-cities) .container > div:first-child { display: block !important; text-align: center; }
+body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-cities) .container > div:first-child > * { margin-inline: auto; }
+body.market-page.rb-secondary-page .rb-market-overview .container > div:first-child p { max-width: 680px; margin-top: 12px; }
+body.immobili-page main > section:not(.hero),
+body.immobili-page main > .property-grid { box-sizing: border-box; width: min(1120px,calc(100% - 40px)) !important; max-width: 1120px !important; margin: 44px auto !important; }
+body.immobili-page main > .section-info { padding: 24px; border: 1px solid #dce6df; border-radius: 18px; background: #fff; }
+body.immobili-page main > .property-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 16px !important; }
+body.immobili-page .property-card { min-width: 0; padding: 24px 18px !important; }
+body.immobili-page main > section:not(.hero) h2 { color: #142b25; }
+body.academy-page .cta-final { background: #edf5ee !important; color: #142b25 !important; border: 1px solid #dce6df; box-shadow: none !important; margin: 44px auto !important; }
+body.academy-page .cta-final h3 { color: #142b25 !important; }
+body.academy-page .cta-final a { background: #087f5b !important; color: #fff !important; border-radius: 10px; box-shadow: none; }
+body.dashboard-page .rb-hero { background: #edf5ee !important; color: #142b25 !important; border: 1px solid #dce6df; box-shadow: none !important; }
+body.dashboard-page .rb-hero :is(h1,p,.rb-hero-card:not(.status) h2,.rb-hero-card > span) { color: #142b25 !important; }
+body.dashboard-page .rb-hero .rb-hero-card.status { background: #fff !important; border: 1px solid #dce6df; box-shadow: none !important; color: #142b25 !important; }
+body.dashboard-page .rb-hero .rb-hero-card.status h2 { color: #142b25 !important; }
+body.dashboard-page .rb-hero-live { background: #fff !important; border: 1px solid #dce6df; color: #24533e !important; }
+body.dashboard-page #demo-banner { background: #fff !important; color: #142b25 !important; border: 1px solid #dce6df; padding: 22px !important; box-shadow: none !important; }
+body.dashboard-page #demo-banner :is(h2,p,span,div) { color: #142b25 !important; text-shadow: none !important; }
+body.dashboard-page .rb-dashboard-scope-note { color: #536960; font-size: 13px; line-height: 1.6; margin: 18px 0; }
+/* Locked data stays hidden. One compact plan comparison replaces repeated overlays. */
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #results,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis > .blur-content,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) .rb-tool-extra-upgrade,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #investment-metrics,
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #smart-investment-alert { display: none !important; }
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis {
+  height: auto !important; min-height: 0 !important; padding: 24px !important; margin-top: 24px !important;
+  background: #edf5ee !important; border: 1px solid #dce6df; border-radius: 18px;
+}
+body.tool-page:not(.is-paid):not(.pro-user):not(.is-pro):not(.is-investor) #advanced-analysis > .locked-overlay {
+  position: static !important; inset: auto !important; width: auto !important; height: auto !important;
+  transform: none !important; padding: 0 !important; background: transparent !important; backdrop-filter: none !important; box-shadow: none !important;
+}
+body.tool-page #advanced-analysis .overlay-title { font-size: 22px; color: #142b25; }
+body.tool-page #advanced-analysis .overlay-text { color: #536960; line-height: 1.6; }
+body.tool-page .rb-tool-plan-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 12px 20px; background: #087f5b !important; color: #fff !important; border-radius: 10px; }
+.global-footer .footer-container { padding: 36px 24px 22px !important; max-width: 1200px; }
+.global-footer .footer-cta { margin: 0 !important; padding: 0 !important; }
+.global-footer .footer-cta h3 { margin: 0 0 8px; font-size: 22px; }
+.global-footer .footer-cta p:not(.footer-value) { display: none; }
+.global-footer .footer-cta .footer-value { margin: 0 0 14px; }
+.global-footer .footer-grid { margin-top: 30px !important; gap: 24px !important; }
+.global-footer .footer-col strong { margin-bottom: 10px; }
+.global-footer .footer-col a { margin-bottom: 8px; min-height: 22px; }
+.global-footer .footer-trust { margin-top: 24px !important; padding-top: 16px !important; }
+.global-footer .footer-extra-cta { display: none; }
+.global-footer .footer-socials { margin: 18px 0 !important; }
+.global-footer .footer-bottom { margin-top: 18px !important; padding-top: 16px !important; }
+/* Settings remain accessible after closing chat; the consent dialog itself is retained. */
+@media(max-width:768px) {
+  body:has(#rb-chatbot-window.open) .rb-consent-settings { visibility: hidden !important; pointer-events: none !important; }
+  body.market-page.rb-secondary-page :is(.rb-market-overview,.rb-market-method,.rb-market-final,.rb-market-cities) .feature-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  body.immobili-page main > .property-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  body.immobili-page main > section:not(.hero), body.immobili-page main > .property-grid { width: calc(100% - 32px) !important; margin-block: 28px !important; }
+  .global-footer .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .global-footer .footer-col:first-child { grid-column: 1 / -1; }
+}
+@media(max-width:420px) {
+  body.immobili-page main > .property-grid { grid-template-columns: 1fr !important; }
+}
+
+@media(max-width:900px) { body.market-page.rb-secondary-page { padding-top: 64px !important; } }
+@media(min-width:901px) { body.market-page.rb-secondary-page #global-header { min-height: 76px !important; } }
+
+body.mortgage-page .rb-mortgage-empty { margin: 24px auto 0; max-width: 720px; padding: 18px 22px; border: 1px dashed #cbd8ce; border-radius: 12px; background: #fff; color: #536960; text-align: center; }
+body.mortgage-page:has(#banks .bank-card) .rb-mortgage-empty { display: none; }
+
+/* FIX11: dashboard contrast and coherent booking workspace. */
+body.dashboard-page :is(#db-roi,#db-profit,#db-investments,#db-status h2) {
+ color:#142b25 !important; text-shadow:none !important; opacity:1 !important;
+ font-variant-numeric:tabular-nums;
+}
+body.dashboard-page #roi-message {color:#17664e !important;text-shadow:none !important;}
+body.dashboard-page .rb-hero-card {background:#ffffffb8 !important;border:1px solid #dce6df !important;box-shadow:none !important;}
+body.dashboard-page .rb-hero-card:hover {transform:none;box-shadow:none !important;}
+body.dashboard-page .rb-hero-card > span {color:#40594e !important;}
+body.dashboard-page .rb-pms-chart-card {min-width:0;}
+body.dashboard-page #pms-performance-chart {display:block;width:100% !important;height:260px !important;}
+body.dashboard-page #bookings-modal {background:rgba(20,43,37,.55) !important;padding:20px;box-sizing:border-box;}
+body.dashboard-page #bookings-modal > div {width:min(1360px,100%) !important;max-height:calc(100dvh - 40px) !important;background:#f5f8f5 !important;border:1px solid #dce6df;border-radius:24px !important;padding:28px !important;box-sizing:border-box;color:#142b25;}
+body.dashboard-page #bookings-modal :is(h2,h3) {color:#142b25;letter-spacing:-.025em;}
+body.dashboard-page #bookings-modal #bookings-list {grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr)) !important;gap:16px !important;}
+body.dashboard-page #bookings-list > div {border:1px solid #dce6df !important;box-shadow:0 3px 12px rgba(20,43,37,.035) !important;border-radius:18px !important;margin-bottom:0 !important;}
+body.dashboard-page #bookings-list > div > div[style*="position:absolute"] {width:3px !important;}
+body.dashboard-page .booking-filters {display:flex;gap:8px;flex-wrap:wrap;padding:8px;background:white;border:1px solid #dce6df;border-radius:16px;}
+body.dashboard-page .booking-filter {min-height:44px;border:1px solid transparent !important;border-radius:11px !important;background:#f0f5f1 !important;color:#28493c !important;padding:10px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:650;}
+body.dashboard-page .booking-filter.active {background:#087f5b !important;color:white !important;}
+body.dashboard-page #bookings-modal :is(input,select,textarea) {background:white;color:#142b25;border-color:#cddcd2;border-radius:12px;box-sizing:border-box;}
+body.dashboard-page #bookings-modal :is(button,a,input,select,textarea):focus-visible {outline:3px solid #087f5b;outline-offset:3px;}
+body.dashboard-page #booking-form-container {border:1px solid #dce6df;box-shadow:0 24px 70px rgba(20,43,37,.2);}
+body.dashboard-page #booking-calendar {min-height:0 !important;height:auto !important;overflow:visible !important;padding:18px !important;background:white !important;border:1px solid #dce6df !important;box-shadow:none !important;}
+body.dashboard-page #booking-calendar > div {border-left:0 !important;box-shadow:none !important;background:transparent !important;padding:0 !important;}
+body.dashboard-page #booking-calendar > div:last-child {gap:8px !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day {min-width:0;height:76px !important;border-radius:12px !important;color:#28493c !important;background:#f5f8f5 !important;border:1px solid #dce6df !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="stay"] {background:#e4f3eb !important;color:#17664e !important;border-color:#b9dfca !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="arrival"] {background:#eaf1fb !important;color:#214c87 !important;border-color:#bfcee6 !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-calendar-state="departure"] {background:#fff1e3 !important;color:#86400d !important;border-color:#edcba8 !important;}
+body.dashboard-page #booking-calendar .pms-calendar-day[data-today="true"] {outline:2px solid #087f5b;outline-offset:1px;box-shadow:none !important;}
+body.dashboard-page .calendar-legend {display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 18px;color:#40594e;font-size:12px;}
+@media(max-width:1000px) {
+ body.dashboard-page #bookings-modal [style*="grid-template-columns:260px"] {grid-template-columns:1fr !important;}
+}
+@media(max-width:768px) {
+ body.dashboard-page #bookings-modal {padding:8px !important;align-items:flex-start !important;}
+ body.dashboard-page #bookings-modal > div {width:100% !important;height:auto !important;max-height:calc(100dvh - 16px) !important;padding:18px !important;border-radius:18px !important;}
+ body.dashboard-page #booking-calendar {padding:12px !important;}
+ body.dashboard-page #booking-calendar > div:last-child {gap:4px !important;}
+ body.dashboard-page #booking-calendar .pms-calendar-day {height:58px !important;border-radius:8px !important;font-size:12px !important;}
+ body.dashboard-page #booking-calendar .pms-calendar-day > div > div:last-child:not(:first-child) {font-size:9px;}
+ body.dashboard-page .booking-filter {padding:9px 12px;}
+}
+
+body.dashboard-page .rb-bookings-close {width:44px;height:44px;border:1px solid #cddcd2;border-radius:12px;background:white;color:#142b25;font-size:20px;cursor:pointer;flex-shrink:0;}
+
+/* FIX22: shared form sizing, including renovation dates on narrow screens. */
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) :is(input,select,textarea) {
+  box-sizing:border-box; min-width:0; max-width:100%; color:var(--rb-ink);
+  border-radius:12px; font:inherit;
+}
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) input[type="date"] {
+  width:100%; min-width:0; max-width:100%; -webkit-appearance:none; appearance:none; overflow:hidden;
+}
+body.dashboard-page :is(.property-modal-panel, #booking-form-container) input[type="date"]::-webkit-date-and-time-value {text-align:left; min-width:0;}
+body.dashboard-page .property-modal-panel :is(button,input,select,textarea):focus-visible {outline:3px solid var(--rb-green);outline-offset:3px;}
+@media(max-width:640px) {
+  body.dashboard-page #renovation-modal [style*="grid-template-columns:repeat(auto-fit"] {grid-template-columns:minmax(0,1fr) !important;}
+  body.dashboard-page .property-modal-panel {box-sizing:border-box;max-width:100%;}
+  body.dashboard-page .property-modal-panel :is(input,select,button) {min-height:44px;}
+}
+
+body.tool-page [data-pdf-only]:not([data-pdf-allowed="true"]) {display:none !important;}

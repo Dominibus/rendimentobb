@@ -239,9 +239,12 @@ box-shadow:0 12px 30px rgba(15,23,42,.22);
 
 </style>
 
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
+<link rel="stylesheet" href="/css/admin-leads.css?v=20261001-24">
 </head>
 
-<body>
+<body class="admin-leads-page">
 
 <div id="global-header"></div>  
 
@@ -264,7 +267,7 @@ Priorità, valore potenziale e provenienza dei lead
 <div class="kpi-grid">
 
   <div class="kpi">
-    <div class="kpi-title" data-it="Lead totali" data-en="Total leads">Lead totali</div>
+    <div class="kpi-title" data-it="Lead caricati" data-en="Loaded leads">Lead caricati</div>
     <div id="totalLeads" class="kpi-value">0</div>
   </div>
 
@@ -307,388 +310,24 @@ Priorità, valore potenziale e provenienza dei lead
     <button data-filter="mutui" data-it="Richieste mutuo" data-en="Mortgage requests">Richieste mutuo</button>
   </div>
 
-  <div id="leadList" class="loader">Caricamento...</div>
+  <p class="lead-source-note" data-it="Indicatori sugli ultimi 150 record caricati. Il valore lead è una classificazione interna, non fatturato o ricavo previsto." data-en="Metrics cover the latest 150 loaded records. Lead value is an internal classification, not turnover or forecast revenue.">Indicatori sugli ultimi 150 record caricati. Il valore lead è una classificazione interna, non fatturato o ricavo previsto.</p>
+  <div class="lead-toolbar">
+    <label for="lead-search"><span data-it="Cerca lead" data-en="Search leads">Cerca lead</span><input id="lead-search" type="search" placeholder="Email, nome, città, fonte…" data-it-placeholder="Email, nome, città, fonte…" data-en-placeholder="Email, name, city, source…"></label>
+    <label for="lead-status-filter"><span data-it="Stato" data-en="Status">Stato</span><select id="lead-status-filter"><option value="all" data-it="Tutti gli stati" data-en="All statuses">Tutti gli stati</option><option value="new" data-it="Nuovo" data-en="New">Nuovo</option><option value="contacted" data-it="Contattato" data-en="Contacted">Contattato</option><option value="qualified" data-it="Qualificato" data-en="Qualified">Qualificato</option><option value="won" data-it="Convertito" data-en="Converted">Convertito</option><option value="lost" data-it="Non interessato" data-en="Not interested">Non interessato</option><option value="archived" data-it="Archiviato" data-en="Archived">Archiviato</option></select></label>
+    <label for="lead-sort"><span data-it="Ordina" data-en="Sort">Ordina</span><select id="lead-sort"><option value="recent" data-it="Attività più recente" data-en="Latest activity">Attività più recente</option><option value="oldest" data-it="Attività meno recente" data-en="Oldest activity">Attività meno recente</option><option value="value" data-it="Valore convenzionale" data-en="Internal value">Valore convenzionale</option></select></label>
+    <button id="lead-refresh" type="button" data-it="Aggiorna" data-en="Refresh">Aggiorna</button><button id="lead-export" type="button" data-it="Esporta CSV" data-en="Export CSV">Esporta CSV</button>
+  </div>
+  <p id="lead-feedback" class="lead-feedback" role="status" aria-live="polite">Caricamento…</p>
+  <div id="leadList"></div>
+  <nav class="lead-pagination" aria-label="Paginazione lead"><button id="lead-prev" type="button" data-it="Precedente" data-en="Previous">Precedente</button><span id="lead-page-label"></span><button id="lead-next" type="button" data-it="Successiva" data-en="Next">Successiva</button></nav>
 
 </div>
 
 </div>
 
+<dialog id="lead-details" aria-labelledby="lead-detail-title"><div class="lead-dialog-header"><h2 id="lead-detail-title"></h2><button id="lead-close" type="button" aria-label="Chiudi" data-it-aria="Chiudi" data-en-aria="Close">×</button></div><div id="lead-detail-content"></div><label for="lead-edit-status" data-it="Stato di lavorazione" data-en="Processing status">Stato di lavorazione</label><select id="lead-edit-status"><option value="new" data-it="Nuovo" data-en="New">Nuovo</option><option value="contacted" data-it="Contattato" data-en="Contacted">Contattato</option><option value="qualified" data-it="Qualificato" data-en="Qualified">Qualificato</option><option value="won" data-it="Convertito" data-en="Converted">Convertito</option><option value="lost" data-it="Non interessato" data-en="Not interested">Non interessato</option><option value="archived" data-it="Archiviato" data-en="Archived">Archiviato</option></select><label for="lead-edit-notes" data-it="Note interne" data-en="Internal notes">Note interne</label><textarea id="lead-edit-notes" maxlength="2000" rows="4"></textarea><p id="lead-detail-feedback" class="lead-feedback" role="status"></p><div class="lead-dialog-actions"><button id="lead-delete" type="button" data-it="Elimina definitivamente" data-en="Permanently delete">Elimina definitivamente</button><button id="lead-save" type="button" data-it="Salva stato e note" data-en="Save status and notes">Salva stato e note</button></div></dialog>
 <div id="global-footer"></div>
 
-<script type="module">
-
-import { auth, db } from "/js/firebase-init.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import {
-collection,
-getDocs,
-query,
-orderBy,
-limit
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-// ================= ADMIN =================
-function isAdmin(user){
-  const email = (user?.email || "").toLowerCase();
-  const role = (window.userRole || "").toLowerCase();
-  return email === "rendimentobb@gmail.com" || role === "admin";
-}
-
-// ================= FORMAT € =================
-function formatCurrency(v){
-  return new Intl.NumberFormat("it-IT", {
-    style:"currency",
-    currency:"EUR"
-  }).format(v || 0);
-}
-
-// ================= DATE =================
-function formatDate(ts){
-  if(!ts) return "-";
-
-  const d = ts.seconds
-    ? new Date(ts.seconds * 1000)
-    : new Date(ts);
-
-  return d.toLocaleString("it-IT");
-}
-
-function formatCity(value){
-  const city = String(value || "").trim();
-  if(!city) return "-";
-  return city
-    .toLocaleLowerCase("it-IT")
-    .replace(/(^|[\s'-])\p{L}/gu, letter => letter.toLocaleUpperCase("it-IT"));
-}
-
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>'"]/g, character => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    "'":"&#39;",
-    '"':"&quot;"
-  })[character]);
-}
-
-function translate(it, en){
-  return window.currentLang === "en" ? en : it;
-}
-
-function getLeadType(lead){
-  const type = String(
-    lead.lastType ||
-    lead.type ||
-    (Array.isArray(lead.typesVisited) ? lead.typesVisited.at(-1) : "") ||
-    "analysis"
-  ).toLowerCase();
-  return type === "career" ? "work" : type;
-}
-
-function isOperationalLead(lead){
-  return ["immobili", "mutui", "partner", "work", "auth"].includes(getLeadType(lead));
-}
-
-let currentFilter = "all";
-let leadsData = [];
-let loading = false;
-
-// ================= AUTH =================
-onAuthStateChanged(auth, async (user)=>{
-
-  if(!user || !isAdmin(user)){
-    document.body.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:white;">
-      🔒 Admin only
-    </div>`;
-    return;
-  }
-
-  await loadLeads();
-
-  setInterval(()=>{
-    if(!loading) loadLeads();
-  }, 10000);
-
-});
-
-// ================= LOAD =================
-async function loadLeads(){
-
-  loading = true;
-
-  try{
-
-    const q = query(
-      collection(db,"leads"),
-      orderBy("createdAt","desc"),
-      limit(150)
-    );
-
-    const snap = await getDocs(q);
-
-    leadsData = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-
-    render();
-
-  }catch(e){
-    console.error("🔥 Load leads error:", e);
-  }
-
-  loading = false;
-}
-
-// ================= RENDER =================
-function render(){
-
-  const listEl = document.getElementById("leadList");
-
-  const filtered = leadsData
-    .filter(l=>{
-      const score = (l.score || "cold").toLowerCase();
-      const type = getLeadType(l);
-      const operational = isOperationalLead(l);
-      return currentFilter === "all" ||
-        (currentFilter === "priority" && !operational && ["extreme", "hot"].includes(score)) ||
-        (["immobili", "mutui", "partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
-        (!operational && score === currentFilter);
-    })
-    .slice(0,50);
-
-  listEl.innerHTML = `
-    <div style="font-size:12px;color:#64748b;margin-bottom:10px">
-      ${translate(
-        `${filtered.length} lead recenti mostrati su ${leadsData.length}`,
-        `${filtered.length} recent leads shown out of ${leadsData.length}`
-      )}
-    </div>
-  `;
-
-  if(filtered.length === 0){
-    listEl.innerHTML += `<div class="loader">${translate("Nessun lead", "No leads")}</div>`;
-    return;
-  }
-
-  filtered.forEach(d=>{
-
-    const score = (d.score || "cold").toLowerCase();
-    const type = getLeadType(d);
-    const operational = isOperationalLead(d);
-
-    const roi = Number(d.roi || 0).toLocaleString(
-      window.currentLang === "en" ? "en-US" : "it-IT",
-      { minimumFractionDigits:1, maximumFractionDigits:1 }
-    );
-
-    const email = String(d.email || "").trim();
-
-    const badgeColor =
-      type === "partner" ? "#0f766e" :
-      type === "work" ? "#2563eb" :
-      type === "auth" ? "#7c3aed" :
-      type === "immobili" ? "#059669" :
-      type === "mutui" ? "#0369a1" :
-      score === "extreme" ? "#f97316" :
-      score === "hot" ? "#10b981" :
-      score === "warm" ? "#f59e0b" :
-      "#64748b";
-
-    const badgeText = type === "partner"
-      ? translate("PARTNER", "PARTNER")
-      : type === "work"
-        ? translate("CANDIDATO", "APPLICANT")
-        : type === "auth"
-          ? translate("REGISTRATO", "REGISTERED")
-        : type === "immobili"
-          ? translate("AGGIORNAMENTI", "UPDATES")
-        : type === "mutui"
-          ? translate("RICHIESTA MUTUO", "MORTGAGE REQUEST")
-        : score.toUpperCase();
-
-    const metaText = type === "partner"
-      ? `${translate("Partnership", "Partnership")} • ${d.name || translate("Azienda non indicata", "Company not provided")}`
-      : type === "work"
-        ? `${translate("Candidatura", "Application")} • ${d.role || translate("Ruolo non indicato", "Role not provided")}`
-        : type === "auth"
-          ? `${translate("Registrazione", "Registration")} • ${d.role || translate("Profilo non indicato", "Profile not provided")}`
-        : type === "immobili"
-          ? `${translate("Aggiornamenti immobiliari", "Property updates")} • ${formatCity(d.city)}`
-        : type === "mutui"
-          ? `${translate("Richiesta mutuo", "Mortgage request")} • ${formatCurrency(d.price)}${Number(d.years || 0) > 0 ? ` • ${Number(d.years)} ${translate("anni", "years")}` : ""}${d.rate ? ` • ${d.rate}%` : ""}`
-        : `${type} • ${formatCity(d.city)} • ROI ${roi}%`;
-
-    listEl.innerHTML += `
-    <div class="lead ${operational ? type : score}">
-
-      <div>
-        <b>${escapeHTML(email || translate("Email assente", "Missing email"))}</b>
-
-        <div class="lead-meta">
-          ${escapeHTML(metaText)}
-        </div>
-
-        <div class="lead-meta">
-          ${formatDate(d.createdAt)}
-        </div>
-      </div>
-
-      <div style="text-align:right">
-
-        <div class="badge" style="background:${badgeColor}">
-          ${badgeText}
-        </div>
-
-        ${!operational ? `<div style="font-size:18px;font-weight:900;margin-top:6px">
-          ${formatCurrency(d.value)}
-        </div>` : ""}
-
-        <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">
-
-          <button class="copy-email" data-email="${escapeHTML(email)}"
-            type="button"
-            title="${translate("Copia email", "Copy email")}"
-            aria-label="${translate("Copia email", "Copy email")}"
-            style="padding:6px 10px;border-radius:8px;border:none;background:#e2e8f0;cursor:pointer;">
-            📋
-          </button>
-
-          <a href="mailto:${encodeURIComponent(email)}"
-            title="${translate("Contatta lead", "Contact lead")}"
-            aria-label="${translate("Contatta lead", "Contact lead")}"
-            style="padding:6px 10px;border-radius:8px;background:#10b981;color:white;text-decoration:none;">
-            ✉️
-          </a>
-
-          <button class="delete-lead" data-lead-id="${escapeHTML(d.id)}"
-            data-lead-email="${escapeHTML(email)}"
-            type="button"
-            title="${translate("Elimina lead", "Delete lead")}"
-            aria-label="${translate("Elimina lead", "Delete lead")}"
-            style="padding:6px 10px;border-radius:8px;border:none;background:#fee2e2;color:#b91c1c;cursor:pointer;">
-            🗑️
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-    `;
-  });
-
-  updateKPI();
-}
-
-// ================= KPI =================
-function updateKPI(){
-
-  const total = leadsData.length;
-
-  const financialLeads = leadsData.filter(l => !isOperationalLead(l));
-
-  const totalValue = financialLeads.reduce((a,l)=>a+Number(l.value||0),0);
-
-  const avg = financialLeads.length
-    ? Math.round(totalValue / financialLeads.length)
-    : 0;
-
-  const priority = financialLeads.filter(l=>
-    ["extreme", "hot"].includes((l.score || "").toLowerCase())
-  ).length;
-
-  const cityMap = {};
-
-  financialLeads.forEach(l=>{
-    const c = formatCity(l.city || translate("Non indicata", "Unknown"));
-    cityMap[c] = (cityMap[c]||0)+1;
-  });
-
-  const topCity = Object.keys(cityMap)
-    .sort((a,b)=>cityMap[b]-cityMap[a])[0] || "-";
-
-  document.getElementById("totalLeads").innerText = total;
-  document.getElementById("totalValue").innerText = formatCurrency(totalValue);
-  document.getElementById("avgValue").innerText = formatCurrency(avg);
-  document.getElementById("hotLeads").innerText = priority;
-  document.getElementById("topCity").innerText = topCity;
-}
-
-// ================= COPY =================
-window.copyEmail = function(email){
-  if(!email) return;
-  navigator.clipboard.writeText(email)
-    .then(() => showToast(translate("Email copiata", "Email copied")))
-    .catch(() => showToast(translate("Copia non riuscita", "Copy failed")));
-};
-
-function showToast(message){
-  document.querySelector(".lead-toast")?.remove();
-  const toast = document.createElement("div");
-  toast.className = "lead-toast";
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2200);
-}
-
-async function deleteLead(leadId, email){
-  const confirmed = window.confirm(translate(
-    `Eliminare definitivamente il lead ${email || "selezionato"}?`,
-    `Permanently delete the lead ${email || "selected"}?`
-  ));
-
-  if(!confirmed) return;
-
-  try{
-    const user = auth.currentUser;
-    if(!user) throw new Error("Authentication required");
-
-    const token = await user.getIdToken();
-    const response = await fetch("/api/delete-lead", {
-      method:"DELETE",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization":`Bearer ${token}`
-      },
-      body:JSON.stringify({ leadId })
-    });
-
-    if(!response.ok) throw new Error("Delete failed");
-
-    leadsData = leadsData.filter(lead => lead.id !== leadId);
-    render();
-    showToast(translate("Lead eliminato", "Lead deleted"));
-  }catch(error){
-    showToast(translate(
-      "Eliminazione non riuscita",
-      "Unable to delete lead"
-    ));
-  }
-}
-
-document.getElementById("leadList").addEventListener("click", event => {
-  const button = event.target.closest(".copy-email");
-  if(button) window.copyEmail(button.dataset.email);
-
-  const deleteButton = event.target.closest(".delete-lead");
-  if(deleteButton){
-    deleteLead(deleteButton.dataset.leadId, deleteButton.dataset.leadEmail);
-  }
-});
-
-// ================= FILTER =================
-document.querySelectorAll(".filter button").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentFilter = btn.dataset.filter;
-    render();
-  });
-});
-
-document.addEventListener("rb_language_changed", render);
-
-</script>
-
+<script type="module" src="/js/admin-leads.js?v=20261001-27"></script>
 </body>
 </html>

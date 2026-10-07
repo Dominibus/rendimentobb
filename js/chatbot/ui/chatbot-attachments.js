@@ -16,18 +16,7 @@ window.rbChatAttachments = (function(){
 
         fileInput.type = "file";
 
-        fileInput.accept = `
-            .pdf,
-            .doc,
-            .docx,
-            .xls,
-            .xlsx,
-            .csv,
-            .png,
-            .jpg,
-            .jpeg,
-            .webp
-        `;
+        fileInput.accept = ".pdf";
 
         fileInput.style.display = "none";
 
@@ -71,37 +60,12 @@ window.rbChatAttachments = (function(){
             console.debug("📎 FILE SELECTED", file);
         }
 
-        window.rbFileDispatcher.dispatch(
-         file
-       );
-
-// ===========================================
-// 🧠 CHAT PREVIEW
-// ===========================================
-
-window.dispatchEvent(
-
-    new CustomEvent(
-
-        "rb-document-uploaded",
-
-        {
-
-            detail:{
-
-                fileName:file.name,
-
-                fileType:file.type,
-
-                size:file.size
-
-            }
-
-        }
-
-    )
-
-);
+        // Dispatcher owns progress and completion messages.
+        Promise.resolve(window.rbFileDispatcher.dispatch(file)).catch(() => {
+            window.addMessage?.("assistant", window.currentLang === "en"
+                ? "The file could not be processed. Please try again."
+                : "Non riesco a elaborare il file. Riprova.");
+        });
 
         event.target.value = "";
 

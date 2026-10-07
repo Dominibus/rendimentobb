@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const source=fs.readFileSync(new URL('../js/dashboard.js',import.meta.url),'utf8');
+const start=source.indexOf('function bookingFormSnapshot()');
+const code=source.slice(start,source.indexOf('// ❌ BOOKING FORM CLOSE',start));
+function harness(){const fields=[{id:'guest',value:'Giuseppe',type:'text'},{id:'cleaning',value:'pending',type:'select'},{id:'assignee',value:'',type:'text'}];const form={style:{display:'flex'},querySelectorAll:()=>fields};const prompts=[],events={};const w={currentSelectedBooking:{id:'one'},pmsEditingBooking:true,t:x=>x,addEventListener:(name,fn)=>events[name]=fn};const ctx={window:w,document:{getElementById:()=>form},confirm:message=>{prompts.push(message);return ctx.answer;},answer:false,renderBookingTaskTracking:()=>{},setBookingToggleState:()=>{}};vm.createContext(ctx);vm.runInContext(code,ctx);w.captureBookingFormBaseline();return {w,fields,form,prompts,events,ctx};}
+test('unchanged or reverted form closes without discard prompt',()=>{const h=harness();h.fields[2].value='Test';assert.equal(h.w.hasUnsavedBookingChanges(),true);h.fields[2].value='';assert.equal(h.w.closeBookingForm(),true);assert.equal(h.prompts.length,0);});
+test('cancel discard retains modified values, selected booking and pending view generation',()=>{const h=harness();h.fields[2].value='Puliti perfetti';assert.equal(h.w.closeBookingForm(),false);assert.equal(h.form.style.display,'flex');assert.equal(h.w.currentSelectedBooking.id,'one');assert.equal(h.fields[2].value,'Puliti perfetti');assert.equal(h.w.rbBookingViewVersion,undefined);});
+test('confirmed discard closes and invalidates pending view without saving',()=>{const h=harness();h.fields[1].value='completed';h.ctx.answer=true;assert.equal(h.w.closeBookingForm(),true);assert.equal(h.form.style.display,'none');assert.equal(h.w.currentSelectedBooking,null);assert.equal(h.w.rbBookingViewVersion,1);assert.equal(h.w.rbBookingFormBaseline,null);assert.equal(h.prompts.length,1);});
+test('successful save can close without a discard warning',()=>{const h=harness();h.fields[1].value='completed';assert.equal(h.w.closeBookingForm(true),true);assert.equal(h.prompts.length,0);});
+test('page exit warning applies only to visible edited form',()=>{const h=harness();let prevented=0;const event={preventDefault:()=>prevented++};h.events.beforeunload(event);assert.equal(prevented,0);h.fields[2].value='Test';h.events.beforeunload(event);assert.equal(prevented,1);assert.equal(event.returnValue,'');h.form.style.display='none';h.events.beforeunload(event);assert.equal(prevented,1);});

@@ -117,7 +117,7 @@ window.rbParseExecutivePDF = async function(documentObject){
             }
 
             else if(
-                /^\d{1,3}(\.\d{3})+$/.test(
+                /^-?\d{1,3}(\.\d{3})+$/.test(
                     normalized
                 )
             ){
@@ -128,7 +128,7 @@ window.rbParseExecutivePDF = async function(documentObject){
             }
 
             else if(
-                /^\d{1,3}(,\d{3})+$/.test(
+                /^-?\d{1,3}(,\d{3})+$/.test(
                     normalized
                 )
             ){
@@ -399,7 +399,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
 }
 
+        // In exported four-column KPI tables, labels precede all four values.
+        // Match the entire schema instead of taking the first amount after each label.
+        const feasibilityKPI = text.match(/PREZZO IMMOBILE\s+RICAVI ANNUI\s+CASHFLOW NETTO\s+ROI EQUITY\s+([\d.,]+)\s*€\s+([\d.,]+)\s*€\s+(-?[\d.,]+)\s*€\s+([\d.,]+)\s*%/i);
+
         const gross =
+
+    parseAmount(feasibilityKPI?.[2]) ??
 
     parseAmount(loanRevenuePair?.[2]) ??
 
@@ -419,6 +425,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const cashflow =
 
+            extractAmount(/(?:CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE))[^0-9\-]{0,30}(-?[\d.,]+)/i) ??
+            parseAmount(feasibilityKPI?.[3]) ??
             annualProfit ??
 
             extractAmount(
@@ -427,13 +435,30 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const adr =
+        // ADR must be an adjacent, explicitly labelled amount. Do not scan
+        // narrative text for the next number: it can be a footer date.
+        function extractADR(){
+            const label = "\\b(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)\\b";
+            const amount = "([0-9]+(?:[.,][0-9]+)*)(?![0-9.,])";
+            const patterns = [
+                // Exported PMS table: ADR RevPAR 155 € 28 €.
+                new RegExp(label + "\\s+RevPAR\\s+" + amount + "\\s*€", "ig"),
+                new RegExp(label + "\\s*(?:[:=]\\s*)?€\\s*" + amount + "(?!\\s*[/:%–—-])", "ig"),
+                new RegExp(label + "\\s*(?:[:=]\\s*)?" + amount + "\\s*€", "ig"),
+                new RegExp(label + "\\s*\\(€\\)\\s*[:=]?\\s*" + amount + "(?!\\s*[/:%–—-])", "ig"),
+                // A colon/equal sign also makes a unitless value explicit.
+                new RegExp(label + "\\s*[:=]\\s*" + amount + "(?=\\s|$)(?!\\s*[/:%–—-])", "ig")
+            ];
+            for(const pattern of patterns){
+                for(const match of text.matchAll(pattern)){
+                    const value = parseAmount(match[1]);
+                    if(value !== null && value >= 0){ return value; }
+                }
+            }
+            return null;
+        }
 
-            extractAmount(
-
-                /(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)[^0-9\-]*(-?[\d.,]+)/i
-
-            );
+        const adr = extractADR();
 
         const extractedVerdict =
 
@@ -559,6 +584,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         };
 
+        // Keep the unit in the evidence; convert square feet to square metres.
+        const surfaceEvidence = text.match(/(?:SUPERFICIE|SURFACE|AREA)[^0-9]{0,80}([\d.,]+)\s*(M[²2]|MQ|SQ\.?\s*FT|SQM)/i);
+        if(surfaceEvidence && /sq\.?\s*ft/i.test(surfaceEvidence[2])){
+            const sqft = parseAmount(surfaceEvidence[1]);
+            propertyFacts.surfaceSqm = sqft === null ? null : Math.round(sqft * 0.09290304 * 100) / 100;
+        }
+
         const financialEvidence = [
             roi,
             realROI,
@@ -610,6 +642,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             investmentScore:
                 investmentScore,
+            dscr: extractPercentage(/DSCR\s*[:]?\s*(\d+(?:[.,]\d+)?)/i) ?? parsePercentage(text.match(/MUTUO\s+LTV\s+DSCR\s+[\d.,]+\s*€\s+[\d.,]+\s*%\s*(\d+(?:[.,]\d+)?)/i)?.[1]),
+            benchmarkROI: extractPercentage(/(?:ROI EQUITY DI MERCATO|MARKET EQUITY ROI|BENCHMARK LOCALE|LOCAL BENCHMARK)\s*[:]?\s*([\d.,]+)\s*%/i),
 
             propertyPrice:
                 propertyPrice,
@@ -635,6 +669,10 @@ window.rbParseExecutivePDF = async function(documentObject){
             verdict:
                 verdict,
 
+            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
+            cashflowBasis: /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(text) ? "after_mortgage" : "unknown",
+            financingRate: extractPercentage(/(?:TASSO IPOTIZZATO|ASSUMED INTEREST RATE)[^0-9]{0,30}([\d.,]+)\s*%/i),
+            debtService: extractAmount(/(?:RATA MUTUO ANNUA STIMATA|ESTIMATED ANNUAL LOAN PAYMENTS)[^0-9]{0,30}([\d.,]+)/i),
             propertyFacts
 
         };
@@ -660,6 +698,8 @@ window.rbParseExecutivePDF = async function(documentObject){
 
                         key !== "reportType" &&
                         key !== "propertyFacts" &&
+                        key !== "roiBasis" &&
+                        key !== "cashflowBasis" &&
                         value !== null
 
                 ),

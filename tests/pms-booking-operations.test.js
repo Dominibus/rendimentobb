@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {bookingOperations,operationSelection} from '../js/pms-booking-operations.js';
+const today='2026-10-05';
+const rows=[{id:'dario',guestName:'Dario',status:'checkin',checkin:'2026-09-07',checkout:'2026-09-14'},{id:'carlo',guestName:'Carlo',status:'arrival',checkin:today,checkout:'2026-10-11'},{id:'old-arrival',status:'arrival',checkin:'2026-10-04',checkout:'2026-10-08'},{id:'future',status:'arrival',checkin:'2026-11-08',checkout:'2026-11-10'}];
+test('overdue recorded check-in produces departure operation before current arrivals',()=>{const ops=bookingOperations(rows,today);assert.deepEqual(ops.map(row=>row.bookingId),['dario','old-arrival','carlo']);assert.equal(ops[0].code,'departure');assert.equal(ops[0].overdue,true);assert.equal(ops.at(-1).overdue,false);});
+test('operation cards filter due arrivals, departures and all recorded check-ins',()=>{assert.equal(operationSelection(rows,today,'arrival').length,2);assert.deepEqual(operationSelection(rows,today,'departure').map(row=>row.bookingId),['dario']);assert.deepEqual(operationSelection(rows,today,'in_house').map(row=>row.bookingId),['dario']);});
+test('completed, cancelled, pending, invalid dates and future events generate no due operation',()=>{const variants=['completed','cancelled','pending'].map(status=>({...rows[0],status}));assert.equal(bookingOperations([...variants,{...rows[0],checkout:'2026-02-30'},{...rows[0],checkout:'bad'},{...rows[0],checkout:'2026-10-06'},rows[3]],today).length,0);});
+test('reviewing due operations never mutates booking status',()=>{const original=structuredClone(rows);bookingOperations(rows,today);operationSelection(rows,today,'in_house');assert.deepEqual(rows,original);});
+test('recording checkout clears departure while changing arrival to check-in removes arrival',()=>{assert.equal(bookingOperations([{...rows[0],status:'completed'}],today).length,0);assert.equal(bookingOperations([{...rows[1],status:'checkin'}],today).length,0);});

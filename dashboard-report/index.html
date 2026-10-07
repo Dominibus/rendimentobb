@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="/js/lang.js"></script>
+<script src="/js/market-data.js?v=20261001-22"></script>
+<script src="/js/account-report-cache.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
   <link rel="stylesheet" href="/css/style.css">
@@ -636,6 +638,8 @@ body.report-page #global-footer .footer-bottom{
 
 </style>
 
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 </head>
 
 <body class="report-page theme-light">
@@ -675,7 +679,7 @@ style="justify-content:space-between;align-items:center;">
   <div style="font-size:12px;color:#64748b;"
        data-it="Report professionale"
        data-en="Professional report">
-    Report professionale
+    Report di simulazione
   </div>
 
 </div>
@@ -736,7 +740,7 @@ border-bottom:1px solid #eef2f7;
   box-shadow:
   0 10px 30px rgba(16,185,129,0.12);
   ">
-    AI VERIFIED • INSTITUTIONAL REPORT
+    REPORT DI SIMULAZIONE • IPOTESI ESPLICITE
   </div>
 
 </div>
@@ -827,9 +831,9 @@ EXECUTIVE ROI
     opacity:.8;
     ">
       <span
-data-it="Valutazione AI investimento istituzionale"
-data-en="AI Institutional Investment Rating">
-Valutazione AI investimento istituzionale
+data-it="Indicatori dello scenario di investimento"
+data-en="Investment scenario indicators">
+Indicatori dello scenario di investimento
 </span>
     </div>
 
@@ -842,7 +846,7 @@ Valutazione AI investimento istituzionale
     flex-wrap:wrap;
     ">
 
-      <!-- BANK SCORE -->
+      <!-- SCENARIO SCORE -->
       <div>
         <div style="
         font-size:11px;
@@ -850,9 +854,9 @@ Valutazione AI investimento istituzionale
         letter-spacing:1px;
         ">
           <span
-data-it="BANK SCORE"
-data-en="BANK SCORE">
-BANK SCORE
+data-it="SCENARIO SCORE"
+data-en="SCENARIO SCORE">
+SCENARIO SCORE
 </span>
         </div>
 
@@ -896,9 +900,9 @@ LIVELLO RISCHIO
         letter-spacing:1px;
         ">
           <span
-data-it="CLASSE MERCATO"
-data-en="MARKET CLASS">
-CLASSE MERCATO
+data-it="CLASSE SCENARIO"
+data-en="SCENARIO CLASS">
+CLASSE SCENARIO
 </span>
         </div>
 
@@ -1043,9 +1047,9 @@ Analisi performance
     border:1px solid rgba(16,185,129,0.15);
     ">
       <span
-data-it="DATI LIVE"
+data-it="IPOTESI SALVATE"
 data-en="LIVE DATA">
-DATI LIVE
+IPOTESI SALVATE
 </span>
     </div>
 
@@ -1119,9 +1123,9 @@ data-en="🔒 Secure Analysis">
 </div>
 
 <div
-data-it="📊 Livello istituzionale"
-data-en="📊 Institutional Grade">
-📊 Livello istituzionale
+data-it="📊 Modello RendimentoBB"
+data-en="📊 RendimentoBB model">
+📊 Modello RendimentoBB
 </div>
 
 <div
@@ -1140,13 +1144,13 @@ data-en="🤖 AI Powered">
       <!-- CTA -->
       <button class="btn"
       onclick="generatePDF()"
-      data-it="📥 Scarica report PDF istituzionale"
-      data-en="📥 Export Institutional PDF Report"
+      data-it="📥 Scarica report PDF"
+      data-en="📥 Export PDF report"
       style="
       margin-top:0;
       min-width:280px;
       ">
-        📥 Scarica report PDF istituzionale
+        📥 Scarica report PDF
       </button>
 
     </div>
@@ -1189,8 +1193,28 @@ data-en="🤖 AI Powered">
 </div>
 
 <script>
-
-let isPro = false;  
+window.goToPricing = () => { window.location.href = "/#pricing"; };
+let reportOwnerUid = null;
+function startOwnedReport(user){
+  const access = window.getUserAccess?.() || {};
+  const report = document.querySelector(".report");
+  if(!user || !(access.isPro || access.isAdmin)){
+    window.RBReportCache.clear(sessionStorage, localStorage);
+    window.dashboardSimulations = [];
+    window.generatePDF = window.goToPricing;
+    if(report){
+      report.classList.add("ready");
+      report.textContent = window.currentLang === "en"
+        ? "Professional reports are included in Pro. Open your dashboard to continue."
+        : "I report professionali sono inclusi in Pro. Apri la tua dashboard per continuare.";
+    }
+    return;
+  }
+  if(reportOwnerUid && reportOwnerUid !== user.uid){ location.reload(); return; }
+  if(reportOwnerUid) return;
+  reportOwnerUid = user.uid;
+  const ownedSnapshot = window.RBReportCache.read(user.uid, sessionStorage, localStorage);
+  let isPro = true;  
 
 // ================= CANONICAL REPORT DATA =================
 const params =
@@ -1198,35 +1222,8 @@ const params =
     window.location.search
   );
 
-let storedSimulations = [];
-let dashboardReportContext = {};
-
-try{
-
-  storedSimulations =
-    JSON.parse(
-      localStorage.getItem(
-        "rb_simulations"
-      ) || "[]"
-    );
-
-}catch(error){
-
-  console.warn(
-    "Dashboard Report simulations parse error",
-    error
-  );
-
-}
-
-try{
-  dashboardReportContext = JSON.parse(
-    localStorage.getItem("rb_dashboard_report_context") || "{}"
-  );
-}catch(error){
-  console.warn("Dashboard report PMS context parse error", error);
-  dashboardReportContext = {};
-}
+const storedSimulations = ownedSnapshot?.simulations || [];
+const dashboardReportContext = ownedSnapshot?.context || {};
 
 const canonicalSimulation =
   storedSimulations[0] ||
@@ -1236,14 +1233,12 @@ const price =
   Number(
     canonicalSimulation.propertyPrice ??
     canonicalSimulation.price ??
-    params.get("price") ??
     0
   );
 
 const equity =
   Number(
     canonicalSimulation.equity ??
-    params.get("equity") ??
     0
   );
 
@@ -1251,7 +1246,6 @@ const roi =
   Number(
     canonicalSimulation.visualROI ??
     canonicalSimulation.roi ??
-    params.get("roi") ??
     0
   );
 
@@ -1276,7 +1270,6 @@ const realROI =
 const risk =
   Number(
     canonicalSimulation.risk ??
-    params.get("risk") ??
     0
   );
 
@@ -1573,6 +1566,7 @@ function renderOperationalReport(){
   if(!section || !grid || !pms || typeof pms !== "object") return;
 
   const n = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+  const escaped = value => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
   const percent = value => `${n(value).toFixed(0)}%`;
   const cards = [
     [t("Proprietà","Properties"), n(pms.properties)],
@@ -1594,8 +1588,8 @@ function renderOperationalReport(){
   renovationsBox.innerHTML = renovations.length
     ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
         <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
-          <strong>${item.propertyName || item.name || t("Immobile","Property")}</strong><br>
-          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${item.status || "—"} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
+          <strong>${escaped(item.propertyName || item.name || t("Immobile","Property"))}</strong><br>
+          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
         </div>`).join("")
     : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
 
@@ -1652,10 +1646,10 @@ function renderVerdict(){
 
   }
 
-  document.getElementById(
-    "verdict"
-  ).innerText =
-    verdict;
+  document.getElementById("verdict").innerText = verdict === "BUY"
+    ? (lang === "en" ? "FAVORABLE SCENARIO" : "SCENARIO FAVOREVOLE")
+    : verdict === "AVOID" ? (lang === "en" ? "CRITICAL SCENARIO" : "SCENARIO CRITICO")
+    : (lang === "en" ? "ASSUMPTIONS TO REVIEW" : "IPOTESI DA RIVEDERE");
 
   document.getElementById(
     "verdict-text"
@@ -1682,10 +1676,10 @@ function renderChart(){
       type:"bar",
       data:{
         labels: lang==="en"
-          ? ["ROI","Risk","Benchmark"]
-          : ["ROI","Rischio","Benchmark"],
+          ? ["Equity ROI (%)","Scenario risk (0–100)"]
+          : ["ROI equity (%)","Rischio scenario (0–100)"],
         datasets:[{
-          data:[roi, risk, 8],
+          data:[roi, risk],
           backgroundColor:["#10b981","#ef4444","#3b82f6"],
           borderRadius:10
         }]
@@ -1772,8 +1766,8 @@ color:#64748b;
 font-weight:700;
 ">
 ${lang==="en"
-? "INSTITUTIONAL SCORE"
-: "PUNTEGGIO ISTITUZIONALE"}
+? "SCENARIO SCORE"
+: "INDICE DELLO SCENARIO"}
 </div>
 
 <div style="
@@ -1838,7 +1832,7 @@ ${euro(annualProfit)}
 <div class="kpi">
 <span>${lang==="en"?"Break-even":"Pareggio"}</span>
 <strong style="font-size:22px">
-${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
+${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
 </div>
 
@@ -2058,7 +2052,7 @@ doc.text(
   27
 );
 
-// VERIFIED LABEL
+// ESTIMATED LABEL
 doc.setFillColor(6,78,59);
 doc.roundedRect(132,10,58,10,3,3,"F");
 
@@ -2431,7 +2425,7 @@ drawPerformanceKPI(
 drawPerformanceKPI(
   20 + performanceKpiW + performanceKpiGap,
   t("BREAK-EVEN","BREAK-EVEN"),
-  `${breakEven.toFixed(1)} ${t("anni","years")}`
+  annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
 );
 
 drawPerformanceKPI(
@@ -2760,10 +2754,10 @@ if(riskBreakdown){
     doc.setTextColor(...dark);
     doc.text(t("Confronto mercato","Market comparison"),20,20);
 
-    const localBenchmarks = { roma:8.4, milano:7.2, napoli:11.5, firenze:7.9 };
     const marketKey = String(city || "").toLowerCase().trim();
-    const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(localBenchmarks, marketKey);
-    const marketROI = hasLocalBenchmark ? localBenchmarks[marketKey] : 8.4;
+    const localROI = window.RB_MARKET_DATA?.[marketKey]?.roi;
+    const hasLocalBenchmark = Number.isFinite(Number(localROI)) && localROI != null;
+    const marketROI = hasLocalBenchmark ? Number(localROI) : 8.4;
 const diff = roi - marketROI;
 
 const comparisonColor =
@@ -2946,7 +2940,7 @@ doc.text(
   27
 );
 
-// VERIFIED BADGE
+// ESTIMATED BADGE
 doc.setFillColor(6,78,59);
 
 doc.roundedRect(
@@ -3352,20 +3346,7 @@ function goToPricing(){
 
 // ================= STORAGE =================
 function loadSimulations(){
-
-  const raw = localStorage.getItem("rb_simulations");
-
-  if(raw){
-    try{
-      window.dashboardSimulations = JSON.parse(raw);
-    }catch(e){
-      console.warn("Sim parse error");
-      window.dashboardSimulations = [];
-    }
-  } else {
-    window.dashboardSimulations = [];
-  }
-
+  window.dashboardSimulations = storedSimulations;
 }
 
 // ================= SELECT =================
@@ -3413,8 +3394,29 @@ function init(){
 
   loadSimulations();
 
+  if(!Number.isFinite(price) || price <= 0){
+    const report = document.querySelector(".report");
+    if(report){
+      report.textContent = lang === "en"
+        ? "Save a valid simulation in Analyze before opening the professional report."
+        : "Salva una simulazione valida in Analizza prima di aprire il report professionale.";
+      report.classList.add("ready");
+      report.style.cssText = "display:block;max-width:760px;margin:48px auto;padding:32px;background:#fff;border-radius:16px;text-align:center;color:#0f172a;font-weight:600";
+    }
+    return;
+  }
+
   checkUserPlan();
   populateSimulations();
+  document.getElementById("simulationSelector")?.addEventListener("change", event => {
+    const index = Number(event.target.value);
+    if(event.target.value === "" || !Number.isInteger(index) || !storedSimulations[index]) return;
+    const selected = storedSimulations[index];
+    window.RBReportCache.write(reportOwnerUid,
+      [selected, ...storedSimulations.filter((_, position) => position !== index)],
+      dashboardReportContext, sessionStorage, localStorage);
+    location.reload();
+  });
   renderData();
   renderVerdict();
   renderOperationalReport();
@@ -3432,15 +3434,21 @@ function init(){
 }
 
 // ================= START =================
-document.addEventListener("rb_auth_ready", ()=>{
-  setTimeout(init, 50);
+window.generatePDF = generatePDF;
+init();
+}
+document.addEventListener("rb_auth_ready", event => {
+  startOwnedReport(event.detail?.user || window.currentUser || null);
+});
+window.addEventListener("pageshow", event => {
+  if(event.persisted) location.reload();
 });
 
 
 </script>
 
 <!-- 🔥 MOBILE MENU ROOT -->
-<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>
+
   
 <!-- 🔥 UPGRADE MODAL (SAAS PREMIUM) -->
 <div id="upgradeModal" style="
@@ -3485,9 +3493,9 @@ document.addEventListener("rb_auth_ready", ()=>{
       color:#0f172a;
       line-height:1.6;
     ">
-      <div data-it="✔ ROI reale (non stimato)"
-data-en="✔ Real ROI (not estimated)">
-✔ ROI reale (non stimato)
+      <div data-it="✔ ROI e cashflow stimati"
+data-en="✔ Estimated ROI and cash flow">
+✔ ROI e cashflow stimati
 </div>
 
 <div data-it="✔ Analisi rischio completa"
@@ -3530,7 +3538,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js" defer></script>
+<script src="/js/chatbot-loader.js?v=20261001-28" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3543,6 +3551,6 @@ data-en="✔ Professional PDF report">
 <!-- 🔥 UI -->
 <script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script>
-<script type="module" src="/js/footer.js"></script> 
+<script type="module" src="/js/footer.js"></script>
 </body>
 </html>

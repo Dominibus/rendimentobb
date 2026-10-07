@@ -731,6 +731,14 @@ box-shadow:
 
 }
 
+/* These narrative cards grow with their content; KPI tiles keep equal heights. */
+#dashboard-ai-insight,
+#dashboard-ai-insight > .analysis-card,
+#investment-intelligence-card{
+  height:auto;
+  min-height:0;
+}
+
   /* =====================================
 🔥 VERTICAL RHYTHM FIX
 ===================================== */
@@ -1889,10 +1897,14 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-portal-v20-1">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20261001-21">
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
+<link rel="stylesheet" href="/css/pms-tasks.css?v=20261005-rc28">
+<link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc38">
 </head>
 
-<body class="dashboard-bg">
+<body class="dashboard-bg dashboard-page">
 
 <div id="pro-overlay" style="
 position:fixed;
@@ -1954,7 +1966,7 @@ z-index:9999;
     align-items:flex-start;
   ">
 
-    <div data-it="💰 ROI reale" data-en="💰 Real ROI">✔ ROI reale</div>
+    <div data-it="💰 ROI stimato" data-en="💰 Estimated ROI">✔ ROI stimato</div>
     <div data-it="📉 Analisi rischio" data-en="📉 Risk analysis">✔ Analisi rischio</div>
     <div data-it="🏦 Simulazione mutuo" data-en="🏦 Mortgage simulation">✔ Simulazione mutuo</div>
     <div data-it="📄 Report banca PDF" data-en="📄 Professional bank report">✔ Report banca PDF</div>
@@ -2026,7 +2038,7 @@ z-index:9999;
 <div id="global-header"></div>
 
 <!-- 🔥 MOBILE MENU ROOT -->
-<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>
+
 
 <main>
 
@@ -2051,10 +2063,10 @@ z-index:9999;
     Analizza performance, rischio e crescita del tuo portfolio
     </p>
 
-    <div class="rb-hero-live"
-    data-it="Dati aggiornati"
-    data-en="Data updated">
-    Dati aggiornati
+    <div id="dashboard-data-source" class="rb-hero-live"
+    data-it="Dati del tuo account"
+    data-en="Your account data">
+    Dati del tuo account
     </div>
 
     <div class="rb-hero-badges">
@@ -2090,7 +2102,7 @@ z-index:9999;
     </div>
 
     <div class="rb-hero-card status good" id="db-status">
-      <span data-it="Stato" data-en="Status">Stato</span>
+      <span data-it="Livello ROI simulato" data-en="Simulated ROI level">Livello ROI simulato</span>
       <h2>—</h2>
     </div>
 
@@ -2112,6 +2124,7 @@ z-index:9999;
 🧪 DEMO DASHBOARD BANNER
 ===================================== -->
 
+<p class="rb-dashboard-scope-note" data-it="Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi." data-en="Analyses: saved scenarios. Portfolio: combined assumptions linked to confirmed investments. PMS: booking revenue before costs. These measures describe different scopes.">Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi.</p>
 <div
 id="demo-banner"
 style="
@@ -2470,10 +2483,10 @@ onclick="openCurrentBookings()">
       onclick="showPMSTab('roi')">
 
       <span
-      data-it="📈 ROI Reale"
-      data-en="📈 Real ROI">
+      data-it="📈 Scenari e patrimonio"
+      data-en="📈 Scenarios & portfolio">
 
-      📈 ROI Reale
+      📈 Scenari e patrimonio
 
       </span>
 
@@ -2493,6 +2506,7 @@ class="pms-section">
 
 <div class="analysis-card pro-pms-only">
 
+  <div id="pms-email-verification" style="display:none;"></div>
   <div id="pms-portal-alerts" role="status" aria-live="polite" style="margin-bottom:18px;"></div>
   
   <div class="rb-kpi-grid">
@@ -2665,18 +2679,18 @@ style="display:none;">
 📈 PMS PERFORMANCE
 ===================================== -->
 
-<div class="analysis-card pro-pms-only">
+<div class="analysis-card pro-pms-only rb-pms-chart-card">
 
   <h3
-  data-it="📈 Performance PMS"
-  data-en="📈 PMS Performance">
+  data-it="Ricavi PMS per mese"
+  data-en="PMS revenue by month">
 
-    📈 Performance PMS
+    Ricavi PMS per mese
 
   </h3>
 
   <canvas
-  id="pms-performance-chart"
+  id="pms-performance-chart" role="img" aria-label="Ricavi PMS mensili"
   height="120">
   </canvas>
 
@@ -2686,7 +2700,7 @@ style="display:none;">
 <div
 id="pms-roi-section"
 class="pms-section"
-style="display:none;">  
+style="display:none;"><aside class="rb-source-note" role="note"><strong data-it="Scenari, patrimonio e risultati operativi" data-en="Scenarios, portfolio and operating results">Scenari, patrimonio e risultati operativi</strong><p data-it="Le simulazioni sono alternative, non redditi da sommare. Il patrimonio mostra ipotesi collegate agli immobili confermati. I risultati PMS derivano dalle prenotazioni registrate. I riferimenti città sono dimostrativi." data-en="Simulations are alternatives, not income to add together. Portfolio figures use assumptions linked to confirmed properties. PMS results come from recorded bookings. City references are illustrative.">Le simulazioni sono alternative, non redditi da sommare. Il patrimonio mostra ipotesi collegate agli immobili confermati. I risultati PMS derivano dalle prenotazioni registrate. I riferimenti città sono dimostrativi.</p></aside>  
 
 <!-- ================= MAIN GRID ================= -->
 
@@ -2704,7 +2718,7 @@ class="analysis-card"
 style="margin-top:24px;margin-bottom:28px;">
 </div>
 
-<div class="analysis-card" style="margin:28px 0;">
+<div id="investment-intelligence-card" class="analysis-card" style="margin:28px 0;">
 
 <div style="
 display:flex;
@@ -2769,11 +2783,13 @@ font-weight:700;
 color:#059669;
 ">
 
-● ANALISI ATTIVA
+<span id="investment-intelligence-status">● IN ATTESA DI DATI</span>
 
 </div>
 
 </div>
+
+<div id="investment-intelligence-content" style="margin-top:18px;"></div>
 
 </div>
 
@@ -2793,8 +2809,8 @@ data-en="📈 ROI Trend">
     <!-- CASHFLOW -->
     <div class="card">
       <h3
-data-it="💰 Cashflow"
-data-en="💰 Cashflow">
+data-it="💰 Profitto stimato per scenario"
+data-en="💰 Estimated profit per scenario">
 💰 Cashflow
 </h3>
       <div id="cashflow-chart-container" class="chart-big"></div>
@@ -2932,9 +2948,9 @@ font-size:14px;
 color:#ffffff;
 font-weight:600;
 "
-data-it="ROI reale, rischio e simulazioni complete sono bloccate"
-data-en="Real ROI, risk and full simulations are locked">
-ROI reale, rischio e simulazioni complete sono bloccate
+data-it="ROI stimato, rischio e simulazioni complete sono bloccate"
+data-en="Estimated ROI, risk and full simulations are locked">
+ROI stimato, rischio e simulazioni complete sono bloccate
 </p>
 
 <p
@@ -3130,10 +3146,10 @@ line-height:1.7;
 color:#64748b;
 max-width:720px;
 "
-data-it="Andamento reale e aggiornato dei tuoi investimenti."
+data-it="Scenari salvati e ipotesi collegate al patrimonio confermato."
 data-en="Real-time performance of your investment portfolio.">
 
-Andamento reale e aggiornato dei tuoi investimenti.
+Scenari salvati e ipotesi collegate al patrimonio confermato.
 
 </p>
 
@@ -3143,10 +3159,10 @@ margin-top:6px;
 font-size:14px;
 color:#64748b;
 "
-data-it="Panoramica in tempo reale del tuo patrimonio immobiliare"
-data-en="Real-time overview of your real estate portfolio">
+data-it="Rendimento stimato del patrimonio confermato"
+data-en="Estimated returns for confirmed properties">
 
-Panoramica in tempo reale del tuo patrimonio immobiliare
+Rendimento stimato del patrimonio confermato
 
 </div>
 
@@ -3179,7 +3195,7 @@ box-shadow:
 0 10px 25px rgba(16,185,129,.12);
 ">
 
-📊 LIVE PORTFOLIO
+📊 PATRIMONIO CONFERMATO
 
 </div>
 
@@ -3217,7 +3233,7 @@ letter-spacing:.4px;
 text-transform:uppercase;
 ">
 
-VERIFICATO
+STIMATO
 
 </div>  
 
@@ -3240,10 +3256,10 @@ font-size:12px;
 color:#10b981;
 font-weight:600;
 "
-data-it="Sopra la media italiana"
-data-en="Above Italian average">
+data-it="Ipotesi finanziarie salvate"
+data-en="Saved financial assumptions">
 
-Sopra la media italiana
+Ipotesi finanziarie salvate
 
 </div>
 
@@ -3278,7 +3294,7 @@ font-size:11px;
 font-weight:800;
 ">
 
-LIVE CASHFLOW
+CASHFLOW STIMATO
 
 </div>  
 
@@ -3339,7 +3355,7 @@ font-size:11px;
 font-weight:800;
 ">
 
-ASSET VALUE
+EQUITY
 
 </div>  
 
@@ -3503,10 +3519,10 @@ text-align:center;
 <div class="analysis-card" style="margin-bottom:20px">
 
   <h3
-data-it="🌍 Benchmark di Mercato"
-data-en="🌍 Market Benchmark">
+data-it="🌍 Riferimenti di esempio"
+data-en="🌍 Example references">
 
-🌍 Benchmark di Mercato
+🌍 Riferimenti di esempio
 
 </h3>
 
@@ -3516,10 +3532,10 @@ margin-top:6px;
 font-size:13px;
 color:#64748b;
 "
-data-it="Confronta il tuo portafoglio con le principali città italiane."
-data-en="Compare your portfolio with the top Italian investment markets.">
+data-it="Esplora valori illustrativi; non usarli come quotazioni aggiornate."
+data-en="Explore illustrative values, not current market quotations.">
 
-Confronta il tuo portafoglio con le principali città italiane.
+Esplora valori illustrativi; non usarli come quotazioni aggiornate.
 
 </p>
 
@@ -3564,27 +3580,27 @@ data-en="🌍 Market Intelligence">
 </h3>
 
 <p
-data-it="Confronto tra il tuo portafoglio e il mercato italiano in tempo reale"
-data-en="Real-time comparison between your portfolio and the Italian market">
-Confronto tra il tuo portafoglio e il mercato italiano in tempo reale
+data-it="Riferimenti dimostrativi: non sono statistiche di mercato aggiornate"
+data-en="Illustrative references, not updated market statistics">
+Riferimenti dimostrativi: non sono statistiche di mercato aggiornate
 </p>
 
 <div class="metric">
-<span data-it="ROI medio Italia" data-en="Average ROI Italy">
-ROI medio Italia
+<span data-it="ROI di riferimento (esempio)" data-en="Reference ROI (example)">
+ROI di riferimento (esempio)
 </span>
 <strong>8.4%</strong>
 </div>
 
 <div class="metric">
-<span data-it="Occupazione media" data-en="Average occupancy">
-Occupazione media
+<span data-it="Occupazione (esempio)" data-en="Occupancy (example)">
+Occupazione (esempio)
 </span>
 <strong>62%</strong>
 </div>
 
 <div class="metric">
-<span data-it="ADR medio (prezzo notte)" data-en="Average nightly rate">
+<span data-it="ADR (esempio)" data-en="ADR (example)">
 ADR medio
 </span>
 <strong>€118</strong>
@@ -3698,9 +3714,9 @@ Insight predittivi basati su performance e rischio
   </h3>
 
   <p
-  data-it="Aggiornamenti in tempo reale sui tuoi investimenti"
-  data-en="Real-time updates on your investments">
-  Aggiornamenti in tempo reale sui tuoi investimenti
+  data-it="Archivio delle simulazioni salvate"
+  data-en="Saved simulation archive">
+  Archivio delle simulazioni salvate
   </p>
 
 </div>  
@@ -3728,7 +3744,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20260909-renovation-control-v21-4" defer></script>
+<script src="/js/chatbot-loader.js?v=20261006-rc38" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3750,11 +3766,11 @@ Insight predittivi basati su performance e rischio
 <script type="module" src="/js/firebase-init.js"></script>
 
 <!-- 🧪 DEMO INVESTMENTS -->
-<script src="/js/demo/demo-investments.js"></script>  
+<script src="/js/demo/demo-investments.js?v=20260930-10"></script>  
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20260910-pms-email-preferences-v21-8-1"></script>
+<script type="module" src="/js/dashboard.js?v=20261007-rc54"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4088,7 +4104,7 @@ Salva
 <!-- ===================================== -->
 
 <div
-id="bookings-modal"
+id="bookings-modal" role="dialog" aria-modal="true" aria-label="Prenotazioni"
 style="
 display:none;
 position:fixed;
@@ -4114,11 +4130,13 @@ flex-direction:column;
 gap:16px;
 ">
 
+<header class="pms-window-header">
+<button type="button" class="rb-bookings-close" onclick="closeBookingsModal()" aria-label="Chiudi prenotazioni" data-it-aria-label="Chiudi prenotazioni" data-en-aria-label="Close bookings">✕</button>
 <h2
-data-it="📅 Prenotazione"
-data-en="📅 Booking">
+data-it="Prenotazioni"
+data-en="Bookings">
 
-📅 Prenotazione
+Prenotazioni
 
 </h2>
 
@@ -4136,6 +4154,7 @@ aria-live="polite">
     <option value="all" data-it="Tutte le strutture" data-en="All properties">Tutte le strutture</option>
   </select>
 </div>
+</header>
 
 <!-- ===================================== -->
 <!-- PMS GRID -->
@@ -4144,13 +4163,15 @@ aria-live="polite">
 <div
 style="
 display:grid;
-grid-template-columns:380px 1fr;
+grid-template-columns:260px minmax(0,1fr);
 gap:20px;
 align-items:start;
 ">
 
-<!-- LEFT COLUMN -->
-<div>
+<!-- Secondary performance figures stay available without preceding daily tasks. -->
+<details class="pms-performance">
+<summary data-it="Risultati e canali" data-en="Results and channels">Risultati e canali</summary>
+<div class="pms-performance-content">
 
 <div
 id="booking-summary"
@@ -4180,6 +4201,7 @@ margin-bottom:15px;
 </div>
 
 </div>
+</details>
 
 <!-- RIGHT COLUMN -->
 <div>
@@ -4216,16 +4238,6 @@ cursor:pointer;
 ➕ Nuova Prenotazione
 </h3>
 
-<div
-onclick="closeBookingsModal()"
-style="
-font-size:22px;
-font-weight:700;
-cursor:pointer;
-padding:4px 10px;
-">
-✕
-</div>
 
 </div>
 
@@ -4246,6 +4258,15 @@ max-width:700px;
 margin:0 auto 24px auto;
 
 ">
+
+<nav class="pms-detail-nav" aria-label="Sezioni prenotazione">
+  <button type="button" onclick="goToBookingSection('stay')" data-it="Soggiorno" data-en="Stay">Soggiorno</button>
+  <button type="button" onclick="goToBookingSection('documents')" data-it="Documenti" data-en="Documents">Documenti</button>
+  <button type="button" onclick="goToBookingSection('tax')" data-it="Tassa" data-en="Tax">Tassa</button>
+  <button type="button" onclick="goToBookingSection('cleaning')" data-it="Pulizie" data-en="Cleaning">Pulizie</button>
+  <button type="button" onclick="goToBookingSection('issue')" data-it="Assistenza" data-en="Assistance">Assistenza</button>
+</nav>
+<p id="booking-section-message" role="status" class="pms-section-message"></p>
 
 <div
 style="
@@ -4387,6 +4408,7 @@ font-size:20px;
 
 </div>
 
+<h4 id="booking-stay-heading" class="pms-section-heading" tabindex="-1" data-it="Soggiorno e contatti" data-en="Stay and contacts">Soggiorno e contatti</h4>
 <div id="booking-property-field" style="display:none;">
   <label for="booking-property" style="display:block;font-size:12px;font-weight:800;color:#475569;margin-bottom:6px;" data-it="Struttura" data-en="Property">Struttura</label>
   <select id="booking-property" disabled style="width:100%;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 14px;font-size:15px;background:#f8fafc;color:#0f172a;">
@@ -4395,6 +4417,7 @@ font-size:20px;
   <div style="font-size:11px;color:#64748b;margin-top:6px;" data-it="In modifica puoi trasferire la prenotazione a un'altra struttura." data-en="While editing, you can move the booking to another property.">In modifica puoi trasferire la prenotazione a un'altra struttura.</div>
 </div>
 
+<label class="pms-field-label" for="booking-guest" data-it="Nome ospite" data-en="Guest name">Nome ospite</label>
 <input
 id="booking-guest"
 type="text"
@@ -4423,35 +4446,20 @@ data-en-placeholder="Guest email (optional)"
 style="height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 16px;font-size:15px;background:#fff;">
 </div>
 
-<div
-style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-">
-
-<input
-id="booking-checkin"
-type="date"
-style="
-height:52px;
-border:1px solid #dbe3ee;
-border-radius:14px;
-padding:0 16px;
-font-size:15px;
-">
-
-<input
-id="booking-checkout"
-type="date"
-style="
-height:52px;
-border:1px solid #dbe3ee;
-border-radius:14px;
-padding:0 16px;
-font-size:15px;
-">
-
+<div class="pms-stay-dates" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;">
+  <div style="min-width:0;">
+    <label for="booking-checkin" style="display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;" data-it="Arrivo · Check-in" data-en="Arrival · Check-in">Arrivo · Check-in</label>
+    <input id="booking-checkin" type="date" aria-describedby="booking-dates-help"
+      style="width:100%;min-width:0;box-sizing:border-box;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 10px;font-size:15px;background:#fff;">
+  </div>
+  <div style="min-width:0;">
+    <label for="booking-checkout" style="display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;" data-it="Partenza · Check-out" data-en="Departure · Check-out">Partenza · Check-out</label>
+    <input id="booking-checkout" type="date" aria-describedby="booking-dates-help"
+      style="width:100%;min-width:0;box-sizing:border-box;height:52px;border:1px solid #dbe3ee;border-radius:14px;padding:0 10px;font-size:15px;background:#fff;">
+  </div>
+  <p id="booking-dates-help" style="grid-column:1 / -1;margin:0;font-size:12px;line-height:1.5;color:#64748b;"
+    data-it="Tocca ciascun campo per scegliere la data dal calendario. La partenza deve essere successiva all’arrivo."
+    data-en="Tap each field to choose a date from the calendar. Departure must be after arrival.">Tocca ciascun campo per scegliere la data dal calendario. La partenza deve essere successiva all’arrivo.</p>
 </div>
 
 <div
@@ -4491,6 +4499,7 @@ font-size:15px;
 
 </div>
 
+<details class="pms-pricing-details"><summary data-it="Analisi e suggerimento tariffa" data-en="Rate analysis and suggestion">Analisi e suggerimento tariffa</summary>
 <section id="booking-pricing-box" class="booking-pricing-box" style="display:none;" aria-labelledby="booking-pricing-title">
   <div class="booking-pricing-head">
     <div>
@@ -4538,6 +4547,7 @@ font-size:15px;
     ✓ Conferma e applica tariffa
   </button>
 </section>
+</details>
 
 <select
 id="booking-status"
@@ -4676,6 +4686,7 @@ background:#fff;
   <div id="booking-cleaning-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
 </div>
 
+<div id="booking-task-tracking" style="display:none;"></div>
 <div id="booking-guest-issue-box" style="padding:14px;border:1px solid #fecaca;border-radius:14px;background:#fff7f7;">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
     <div>
@@ -4748,12 +4759,8 @@ background:#fff;
 </div>
 
 <div
-style="
-display:flex;
-justify-content:flex-end;
-gap:12px;
-margin-top:10px;
-">
+class="pms-detail-actions"
+style="display:flex;justify-content:flex-end;gap:12px;margin-top:10px;">
 
 <button
 class="btn-dashboard"
@@ -4945,6 +4952,5 @@ border-radius:18px;
 </div>
 
 </div>
-
 </body>
 </html>

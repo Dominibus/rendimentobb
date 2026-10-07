@@ -1,0 +1,925 @@
+{
+  "date": "2026-10-01",
+  "release": "FIX22",
+  "coverage": "Structural inspection and syntax checks only; no rendered browser certification.",
+  "summary": {
+    "pages": 38,
+    "sharedTheme": 37,
+    "sharedHeader": 36,
+    "apiEndpoints": 12,
+    "javascriptFiles": 126,
+    "inlineScripts": 28,
+    "issues": 0
+  },
+  "issues": [],
+  "surfaces": [
+    {
+      "path": "about/index.html",
+      "title": "Chi siamo – RendimentoBB",
+      "bodyClass": "about-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/about-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "academy/errori/index.html",
+      "title": "Errori B&B – gli errori che compromettono un investimento",
+      "bodyClass": "academy-page rb-secondary-page rb-academy-guide",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "academy/index.html",
+      "title": "Academy B&B – ROI e strategie investimento",
+      "bodyClass": "academy-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/academy-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "academy/mutuo/index.html",
+      "title": "Mutuo B&B – sostenibilità reale",
+      "bodyClass": "academy-page rb-secondary-page rb-academy-guide",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "academy/roi/index.html",
+      "title": "ROI B&B – rendimento reale",
+      "bodyClass": "academy-page rb-secondary-page rb-academy-guide",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/academy-roi-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "academy/strategia/index.html",
+      "title": "Strategia B&B – ROI e profitto",
+      "bodyClass": "academy-page rb-secondary-page rb-academy-guide",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "aprire-bnb-conviene/index.html",
+      "title": "Aprire un B&B conviene? Valuta costi, ROI e rischi | RendimentoBB",
+      "bodyClass": "opening-bnb-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/aprire-bnb-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "contact.html",
+      "title": "Contatti – RendimentoBB",
+      "bodyClass": "legal-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/legal-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "costi-aprire-bnb/index.html",
+      "title": "Costi per aprire un B&B nel 2026",
+      "bodyClass": "rb-secondary-page rb-guide-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "dashboard/index.html",
+      "title": "Dashboard Analisi – RendimentoBB",
+      "bodyClass": "dashboard-bg dashboard-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [
+        "property-modal-title",
+        "renovation-modal-title",
+        "bookings-modal"
+      ],
+      "styles": [
+        "/css/style.css",
+        "/css/dashboard-2026.css?v=20261001-21",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/market-data.js",
+        "/js/firebase-init.js",
+        "/js/demo/demo-investments.js?v=20260930-10",
+        "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js",
+        "/js/dashboard.js?v=20261001-22",
+        "https://cdn.jsdelivr.net/npm/chart.js"
+      ]
+    },
+    {
+      "path": "dashboard-leads/index.html",
+      "title": "Centro gestione lead – RendimentoBB",
+      "bodyClass": "admin-leads-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [
+        "lead-details"
+      ],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/admin-leads.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/admin-leads.js?v=20261001-22"
+      ]
+    },
+    {
+      "path": "dashboard-report/index.html",
+      "title": "Report investimento B&B",
+      "bodyClass": "report-page theme-light",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+        "https://cdn.jsdelivr.net/npm/chart.js",
+        "/js/lang.js",
+        "/js/market-data.js?v=20261001-22",
+        "/js/account-report-cache.js",
+        "/js/firebase-init.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "guest-report/index.html",
+      "title": "Segnala un problema · RendimentoBB",
+      "bodyClass": "",
+      "viewport": true,
+      "sharedTheme": false,
+      "sharedHeader": false,
+      "sharedFooter": false,
+      "forms": 1,
+      "dialogs": [],
+      "styles": [],
+      "scripts": [
+        "/js/guest-report.js?v=20260908-guest-portal-v20-1"
+      ]
+    },
+    {
+      "path": "immobili/firenze/index.html",
+      "title": "Immobili investimento B&B Firenze – ROI 2026",
+      "bodyClass": "immobili-page rb-secondary-page rb-property-city",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/immobili-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/property-city-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/firebase-init.js",
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "immobili/index.html",
+      "title": "Immobili per B&B – Scenari di investimento 2026",
+      "bodyClass": "immobili-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/immobili-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/property-database.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/firebase-init.js"
+      ]
+    },
+    {
+      "path": "immobili/milano/index.html",
+      "title": "Immobili investimento B&B Milano – ROI 2026",
+      "bodyClass": "immobili-page rb-secondary-page rb-property-city",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/immobili-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/property-city-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/firebase-init.js",
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "immobili/napoli/index.html",
+      "title": "Immobili investimento B&B Napoli – ROI 2026",
+      "bodyClass": "immobili-page rb-secondary-page rb-property-city",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/immobili-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/property-city-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/firebase-init.js",
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "immobili/roma/index.html",
+      "title": "Investire in B&B a Roma – ROI e immobili",
+      "bodyClass": "immobili-page rb-secondary-page rb-property-city",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/immobili-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/property-city-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/firebase-init.js",
+        "/js/header.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "index.html",
+      "title": "RendimentoBB – Find profitable properties and calculate B&B ROI",
+      "bodyClass": "home-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/home-2026.css?v=20260930-12",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/home-2026.js?v=20260930-10",
+        "/js/footer.js",
+        "/js/firebase-init.js",
+        "/js/plan-system.js?v=20260826-2",
+        "/js/market-data.js",
+        "/js/roi-engine.js",
+        "/js/app.js?v=20261001-22"
+      ]
+    },
+    {
+      "path": "lavora-con-noi/index.html",
+      "title": "Lavora con noi – RendimentoBB",
+      "bodyClass": "rb-secondary-page rb-business-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "login/index.html",
+      "title": "Login – RendimentoBB",
+      "bodyClass": "rb-login-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": false,
+      "sharedFooter": false,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "market/firenze/index.html",
+      "title": "ROI B&B Firenze 2026 – investimento premium",
+      "bodyClass": "market-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/market-city-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "market/index.html",
+      "title": "Dove investire in un B&B nel 2026? ROI città Italia",
+      "bodyClass": "market-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/market-main-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "market/milano/index.html",
+      "title": "ROI B&B Milano 2026 – investimento stabile",
+      "bodyClass": "market-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/market-city-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "market/napoli/index.html",
+      "title": "ROI B&B Napoli 2026 – Fino al 18%",
+      "bodyClass": "market-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/market-city-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "market/roma/index.html",
+      "title": "ROI B&B Roma 2026 – Quanto rende davvero?",
+      "bodyClass": "market-page rb-secondary-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/market-city-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "mutui/index.html",
+      "title": "Mutuo B&B",
+      "bodyClass": "mortgage-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/mutui-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/chatbot/knowledge-base.js",
+        "/js/chatbot/market-data.js",
+        "/js/chatbot/support-data.js",
+        "/js/ai-engine.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "partner/index.html",
+      "title": "Partnership – RendimentoBB",
+      "bodyClass": "rb-secondary-page rb-business-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "privacy.html",
+      "title": "Privacy Policy – RendimentoBB",
+      "bodyClass": "legal-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/legal-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "pro-success/index.html",
+      "title": "Pagamento completato – RendimentoBB",
+      "bodyClass": "rb-secondary-page rb-success-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "quanto-guadagna-bnb/index.html",
+      "title": "Quanto guadagna un B&B nel 2026",
+      "bodyClass": "rb-secondary-page rb-guide-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "roi-bnb/firenze/index.html",
+      "title": "ROI B&B Firenze – Scenari e analisi investimento",
+      "bodyClass": "rb-secondary-page rb-roi-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/roi-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "roi-bnb/index.html",
+      "title": "ROI B&B – Quanto rende davvero un Bed & Breakfast?",
+      "bodyClass": "rb-secondary-page rb-roi-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/roi-main-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/app.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "roi-bnb/milano/index.html",
+      "title": "ROI B&B Milano – Scenari, occupazione e analisi investimento",
+      "bodyClass": "rb-secondary-page rb-roi-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/roi-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "roi-bnb/napoli/index.html",
+      "title": "ROI B&B Napoli – Scenari e analisi investimento",
+      "bodyClass": "rb-secondary-page rb-roi-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/roi-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "roi-bnb/roma/index.html",
+      "title": "ROI B&B Roma – Scenari, occupazione e analisi investimento",
+      "bodyClass": "rb-secondary-page rb-roi-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/roi-city-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/visual-refinements-2027.css?v=20260930-16"
+      ],
+      "scripts": [
+        "/js/lang.js",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js"
+      ]
+    },
+    {
+      "path": "terms.html",
+      "title": "Termini di servizio – RendimentoBB",
+      "bodyClass": "legal-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/legal-2026.css",
+        "/css/product-2027.css?v=20261001-22"
+      ],
+      "scripts": [
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/lang.js"
+      ]
+    },
+    {
+      "path": "tool/index.html",
+      "title": "Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)",
+      "bodyClass": "tool-page",
+      "viewport": true,
+      "sharedTheme": true,
+      "sharedHeader": true,
+      "sharedFooter": true,
+      "forms": 0,
+      "dialogs": [],
+      "styles": [
+        "/css/style.css",
+        "/css/tool-2026.css",
+        "/css/product-2027.css?v=20261001-22",
+        "/css/chatbot.css"
+      ],
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/chart.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+        "/js/firebase-init.js",
+        "/js/mortgage-rates.js",
+        "/js/lang.js",
+        "/js/chatbot-loader.js?v=20261001-22",
+        "/js/header.js",
+        "/js/ui-system.js",
+        "/js/footer.js",
+        "/js/market-data.js",
+        "/js/app.js?v=20261001-22"
+      ]
+    }
+  ]
+}

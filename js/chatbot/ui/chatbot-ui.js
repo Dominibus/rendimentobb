@@ -43,9 +43,8 @@ window.initRBChatbotUI = function(){
   // ===========================================
 
   const t = (it,en)=>
-
-    window.t
-      ? window.t(it,en)
+    (window.currentLang || window.RB_LANG?.current || "it") === "en"
+      ? (en || it)
       : it;
 
 // ===========================================
@@ -105,7 +104,7 @@ const canSeeFullSnapshot = ()=>{
 
         <div class="rb-ai-status">
             <span class="rb-status-dot"></span>
-            Online
+            ${t("Pronto", "Ready")}
         </div>
 
         <div class="rb-chat-title">
@@ -116,8 +115,7 @@ const canSeeFullSnapshot = ()=>{
 
         <div class="rb-chat-subtitle">
 
-            Executive Investment Advisor
-
+            ${t("Assistente per analisi e gestione", "Analysis and management assistant")}
         </div>
 
     </div>
@@ -181,8 +179,7 @@ HOME
 
                 <span class="rb-status-dot"></span>
 
-                Online
-
+                ${t("Pronto", "Ready")}
             </div>
 
             <div class="rb-ai-home-title">
@@ -193,8 +190,7 @@ HOME
 
             <div class="rb-ai-home-subtitle">
 
-                Executive Investment Advisor
-
+                ${t("Assistente per analisi e gestione", "Analysis and management assistant")}
             </div>
 
             ${
@@ -216,7 +212,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📍 Mercato
+                                📍 ${t("Mercato","Market")}
                             </span>
 
                             <strong>
@@ -273,7 +269,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                ⚠️ Rischio
+                                ⚠️ ${t("Rischio","Risk")}
                             </span>
 
                             <strong>
@@ -311,13 +307,13 @@ HOME
 
                     <div class="rb-empty-title">
 
-                        Nessuna simulazione disponibile
+                        ${t("Partiamo dai tuoi dati", "Start with your data")}
 
                     </div>
 
                     <div class="rb-empty-text">
 
-                        Avvia una simulazione oppure carica un PDF per ottenere un'analisi AI completa.
+                        ${t("Apri una simulazione o allega un PDF con testo. Ti aiuto a leggere i dati disponibili.", "Open a simulation or attach a text PDF. I can help interpret the available data.")}
 
                     </div>
 
@@ -524,7 +520,7 @@ MESSAGES
     <button
         id="rb-chat-attach"
         class="rb-chat-action-btn"
-        title="Allega file">
+        title="${t("Allega file", "Attach file")}" aria-label="${t("Allega file", "Attach file")}">
 
         ＋
 
@@ -533,7 +529,7 @@ MESSAGES
     <button
         id="rb-chat-voice"
         class="rb-chat-action-btn"
-        title="Parla">
+        title="${t("Parla", "Speak")}" aria-label="${t("Parla", "Speak")}">
 
         🎤
 
@@ -543,7 +539,7 @@ MESSAGES
 
         id="rb-chat-input"
 
-        type="text"
+        type="text" aria-label="${t("Messaggio", "Message")}"
 
         placeholder="${t(
             "Scrivi oppure parla...",
@@ -553,7 +549,7 @@ MESSAGES
     >
 
     <button
-        id="rb-chat-send">
+        id="rb-chat-send" aria-label="${t("Invia messaggio", "Send message")}">
 
         ➜
 
@@ -833,7 +829,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📍 Mercato
+                                📍 ${t("Mercato","Market")}
                             </span>
 
                             <strong>--</strong>
@@ -863,7 +859,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                ⚠️ Rischio
+                                ⚠️ ${t("Rischio","Risk")}
                             </span>
 
                             <strong>--</strong>
@@ -911,7 +907,7 @@ metrics[2].textContent =
         ? "€" +
           Math.round(Number(cashflow))
             .toLocaleString(
-                window.currentLanguage === "en"
+                window.currentLang === "en"
                     ? "en-US"
                     : "it-IT"
             )
@@ -977,7 +973,7 @@ if(SpeechRecognition){
     recognition = new SpeechRecognition();
 
     recognition.lang =
-        window.currentLanguage === "en"
+        window.currentLang === "en"
             ? "en-US"
             : "it-IT";
 
@@ -1045,18 +1041,7 @@ newChatBtn.onclick = ()=>{
     // 🧹 CLEAR SAVED CONVERSATION
     // =======================================
 
-    if(window.rbChatMemory){
-
-        window.rbChatMemory.messages = [];
-
-        localStorage.setItem(
-  "rbChatMemory",
-  JSON.stringify(
-    window.rbChatMemory
-  )
-);
-
-    }
+    window.rbClearMemory?.();
 
     refreshHomeSnapshot();
 
@@ -1092,59 +1077,39 @@ newChatBtn.onclick = ()=>{
 
 };
 
+  function escapeMessageText(value){
+    return String(value || "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[char]));
+  }
+
   function renderExecutiveMessage(text){
+    if(!text) return "";
+    // Shared safe formatting for document, live, support and PMS responses.
+    const inline = line => escapeMessageText(line).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+    const paragraphs = String(text).replace(/\r\n/g,"\n").split(/\n\s*\n+/);
+    return paragraphs.map(paragraph => {
+      const lines=paragraph.split("\n").map(line=>line.trim()).filter(Boolean);
+      return lines.map(line=>{
+        if(/^(Fonte|Source):/.test(line)) return `<div class="rb-message-source">${inline(line)}</div>`;
+        const plain=line.replace(/^#{1,3}\s*/,"").replace(/^\*\*|\*\*$/g,"");
+        const heading=/^(?:[📊🧠🎯✅]\s*)?(?:Investment Score|Executive Summary|Strategic Priorities|AI Decision|Interpretazione del report|Interpretation of the report|Dati riconosciuti nel PDF|Recognized PDF data):?$/i.test(plain);
+        if(heading || /^#{1,3}\s/.test(line)) return `<div class="rb-section-title">${inline(plain.replace(/^[📊🧠🎯✅]\s*/,""))}</div>`;
+        return `<div class="rb-message-line">${inline(line)}</div>`;
+      }).join("");
+    }).map(html=>`<div class="rb-message-paragraph">${html}</div>`).join("");
+  }
 
-    if(!text){
-
-        return "";
-
-    }
-
-    let html = String(text);
-
-    html = html.replace(
-
-        /^[ \t]*(?:📊[ \t]*)?Investment Score:?[ \t]*$/gim,
-
-        `<div class="rb-section-title">
-            📊 Investment Score
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /Executive Summary:?/gi,
-
-        `<div class="rb-section-title">
-            🧠 Executive Summary
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /Strategic Priorities:?/gi,
-
-        `<div class="rb-section-title">
-            🎯 Strategic Priorities
-        </div>`
-
-    );
-
-    html = html.replace(
-
-        /AI Decision:?/gi,
-
-        `<div class="rb-section-title">
-            ✅ AI Decision
-        </div>`
-
-    );
-
-    return html.replace(/\n/g,"<br>");
-
-}
+  function refreshQuickActions(){
+    const active = window.rbDocumentManager?.getLast?.();
+    const pdfFocus = active && window.rbPDFConversationDocumentId === active.id;
+    const labels = pdfFocus
+      ? [t("ROI del PDF","PDF ROI"),t("Cashflow del PDF","PDF cash flow"),t("Rischio del PDF","PDF risk"),t("Interpreta PDF","Interpret PDF")]
+      : ["ROI","Cashflow",t("Rischio","Risk"),t("Conviene?","Worth it?")];
+    document.querySelectorAll("#rb-quick-actions .rb-quick-btn").forEach((button,index)=>{
+      button.textContent=labels[index] || "";
+    });
+  }
 
   // ===========================================
   // 💬 ADD MESSAGE
@@ -1167,56 +1132,17 @@ newChatBtn.onclick = ()=>{
 
     : "rb-bot-message";
 
-if(role === "bot"){
-
-    div.innerHTML = `
-
-        <div class="rb-ai-card-header">
-
-            <div class="rb-ai-card-avatar">
-
-                🧠
-
-            </div>
-
-            <div class="rb-ai-card-info">
-
-                <div class="rb-ai-card-title">
-
-                    RendimentoBB AI Executive
-
-                </div>
-
-                <div class="rb-ai-card-status">
-
-                    <span class="rb-status-dot"></span>
-
-                    Online
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="rb-ai-card-content">
-
-            ${
-                renderExecutiveMessage(text)
-            }
-
-        </div>
-
-    `;
-
-}else{
-
-    div.innerHTML =
-
-        String(text || "")
-            .replace(/\n/g,"<br>");
-
-}
+// One renderer for every assistant response: no legacy executive card.
+    if(role === "user"){
+        div.innerHTML = escapeMessageText(text).replace(/\n/g,"<br>");
+    }else{
+        div.innerHTML = renderExecutiveMessage(text);
+    }
+    const home = document.getElementById("rb-chat-home");
+    if(home) home.style.display = "none";
+    messages.style.display = "block";
+    const quick = document.getElementById("rb-quick-actions");
+    if(quick) quick.style.display = "flex";
 
     messages.appendChild(div);
 
@@ -1261,7 +1187,7 @@ function showThinking(){
     div.id =
         "rb-thinking";
 
-    div.innerHTML = "🧠 Analizzo la richiesta...";
+    div.textContent = t("Leggo la richiesta e i dati disponibili…", "Reading your request and available data…");
 
     messages.appendChild(div);
 
@@ -1269,15 +1195,8 @@ function showThinking(){
         messages.scrollHeight;
 
     const steps = [
-
-        "🧠 Analizzo la richiesta...",
-
-        "📊 Elaboro i dati...",
-
-        "⚖️ Valuto l'investimento...",
-
-        "🎯 Genero la risposta..."
-
+        t("Leggo la richiesta e i dati disponibili…", "Reading your request and available data…"),
+        t("Preparo la risposta…", "Preparing the response…")
     ];
 
     let i = 0;
@@ -1390,122 +1309,18 @@ function showThinking(){
   // 🔄 SYNC CONVERSATION BETWEEN TABS
   // ===========================================
 
-  window.addEventListener(
-    "storage",
-    event => {
-
-      if(
-        event.key !== "rbChatMemory" ||
-        !event.newValue
-      ){
-
-        return;
-
-      }
-
-      try{
-
-        const updatedMemory =
-          JSON.parse(event.newValue);
-
-        const updatedMessages =
-          Array.isArray(updatedMemory?.messages)
-            ? updatedMemory.messages
-            : [];
-
-        window.rbChatMemory =
-          updatedMemory;
-
-        const home =
-          document.getElementById(
-            "rb-chat-home"
-          );
-
-        const quick =
-          document.getElementById(
-            "rb-quick-actions"
-          );
-
-        messages.innerHTML = "";
-
-        updatedMessages.forEach(item => {
-
-          const role =
-            item?.role === "bot"
-              ? "bot"
-              : item?.role === "user"
-                ? "user"
-                : null;
-
-          const text =
-            item?.message ??
-            item?.text ??
-            "";
-
-          if(
-            role &&
-            String(text).trim()
-          ){
-
-            addMessage(
-              role,
-              text,
-              false
-            );
-
-          }
-
-        });
-
-        if(updatedMessages.length){
-
-          if(home){
-
-            home.style.display = "none";
-
-          }
-
-          messages.style.display = "block";
-
-          if(quick){
-
-            quick.style.display = "flex";
-
-          }
-
-          messages.scrollTop =
-            messages.scrollHeight;
-
-        }else{
-
-          messages.style.display = "none";
-
-          if(home){
-
-            home.style.display = "block";
-
-          }
-
-          if(quick){
-
-            quick.style.display = "none";
-
-          }
-
-        }
-
-      }catch(error){
-
-        reportRuntimeError(
-  "Chat synchronization unavailable",
-  error
-);
-
-      }
-
-    }
-  );
-  
+  window.addEventListener("rb_chat_context_changed", () => {
+    messages.innerHTML = "";
+    const history = window.rbChatMemory?.messages || [];
+    history.forEach(item => { if(["user","bot","assistant"].includes(item.role)) addMessage(item.role, item.message, false); });
+    const home = document.getElementById("rb-chat-home");
+    if(home) home.style.display = history.length ? "none" : "block";
+    messages.style.display = history.length ? "block" : "none";
+    const quick = document.getElementById("rb-quick-actions");
+    if(quick) quick.style.display = history.length ? "flex" : "none";
+    refreshHomeSnapshot();
+    refreshQuickActions();
+  });
 
   // ===========================================
   // 💡 CONTEXTUAL SUGGESTIONS
@@ -1590,11 +1405,16 @@ function showThinking(){
 
         if(
           ![
+            "open_investment_section",
             "open_booking",
+            "open_pms_task",
+            "open_pms_checklist",
+            "open_pms_arrival",
+            "open_pms_all_tasks",
             "manage_arrival",
             "manage_departure"
           ].includes(action?.type) ||
-          !action.bookingId
+          (!action.bookingId && !["open_pms_checklist","open_pms_all_tasks","open_investment_section"].includes(action.type))
         ){
           return;
         }
@@ -1610,10 +1430,30 @@ function showThinking(){
             : action.labelIT;
 
         actionButton.onclick = async ()=>{
-
-          if(
-            typeof window.openBookingFromCopilot !== "function"
-          ){
+          if(action.type==='open_investment_section'){
+            actionButton.disabled=true;
+            try{
+              if(await window.rbOpenInvestmentAction?.(action))windowEl.classList.remove('open');
+              else {
+                const state=action.target==='results' ? window.rbGetInvestmentAnalysisState?.().status : null;
+                const message=state==='stale'
+                  ? t('Hai modificato i dati dopo l’analisi. Premi “Avvia / aggiorna analisi”, poi “Analizza investimento”. Dopo il calcolo, chiedimi di leggere nuovamente l’analisi.','You changed the inputs after the analysis. Press “Run / update analysis”, then “Analyze investment”. After the calculation, ask me to read the analysis again.')
+                  : state==='pending'
+                    ? t('L’analisi o l’account si sta ancora caricando. Attendi il completamento e riprova.','The analysis or account is still loading. Wait until it completes and try again.')
+                    : state==='missing'
+                      ? t('Avvia prima l’analisi con i dati attuali: premi “Avvia / aggiorna analisi”, poi “Analizza investimento”.','Run an analysis with the current inputs first: press “Run / update analysis”, then “Analyze investment”.')
+                      : t('Questa sezione non è disponibile qui. Apri il simulatore e riprova.','This section is not available here. Open the simulator and try again.');
+                addMessage('bot',message,false);
+              }
+            }catch(error){
+              reportRuntimeError('Investment shortcut unavailable',error);
+              addMessage('bot',t('Non riesco ad aprire la sezione. Riprova.','I cannot open this section. Please try again.'),false);
+            }finally{actionButton.disabled=false;}
+            return;
+          }
+          const pmsHandler={open_pms_task:'openPMSAutopilotTask',open_pms_checklist:'openPMSDailyChecklist',
+            open_pms_arrival:'openPMSUpcomingArrival',open_pms_all_tasks:'openPMSAllTasks'}[action.type];
+          if(typeof window[pmsHandler || 'openBookingFromCopilot']!=='function'){
             return;
           }
 
@@ -1622,6 +1462,7 @@ function showThinking(){
           try{
 
             const opened =
+              pmsHandler?(await window[pmsHandler](action.bookingId,action.section)!==false):
               await window.openBookingFromCopilot(
                 action.bookingId,
                 action.attentionCodes,
@@ -1676,6 +1517,8 @@ function showThinking(){
 
     const text =
       input.value.trim();
+    if(!text) return;
+    const requestEpoch = window.rbDocumentEpoch || 0;
 
     // ========================================
     // 🔒 FREE MESSAGE LIMIT
@@ -1904,12 +1747,14 @@ debugLog(
     );
 
     thinking.element.remove();
+    if(requestEpoch !== (window.rbDocumentEpoch || 0)) return;
 
     addMessage(
         "bot",
         finalText
     );
 
+    refreshQuickActions();
     addSuggestions(
         finalSuggestions
     );
@@ -1981,6 +1826,36 @@ debugLog(
   // 🚀 EVENTS
   // ===========================================
 
+  let autopilotRequestPending=false;
+  window.rbAskPMSAutopilot=async function(mode='daily'){
+    windowEl.classList.add('open');
+    if(autopilotRequestPending)return;
+    if(input.value.trim()){
+      input.focus();
+      addMessage('bot',t('Hai una domanda in bozza: inviala o svuota il campo, poi premi di nuovo Autopilot.','You have a draft question: send it or clear the field, then press Autopilot again.'),false);
+      return;
+    }
+    autopilotRequestPending=true;
+    input.value=mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):mode==='tomorrow'?t('Prepara gli arrivi di domani','Prepare tomorrow’s arrivals'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
+    try{await sendMessage();}finally{autopilotRequestPending=false;}
+  };
+
+  window.rbAskInvestmentAutopilot=async function(mode='guide'){
+    windowEl.classList.add('open');
+    if(autopilotRequestPending)return;
+    if(input.value.trim()){
+      input.focus();
+      addMessage('bot',t('Hai una domanda in bozza: inviala o svuota il campo, poi premi di nuovo Autopilot.','You have a draft question: send it or clear the field, then press Autopilot again.'),false);
+      return;
+    }
+    const questions=window.rbInvestmentAutopilotQuestions;
+    if(!questions)return;
+    autopilotRequestPending=true;
+    const pair=questions[mode] || questions.guide;
+    input.value=t(pair[0],pair[1]);
+    try{await sendMessage();}finally{autopilotRequestPending=false;}
+  };
+
   sendBtn.onclick =
     sendMessage;
 
@@ -1997,7 +1872,7 @@ voiceBtn.onclick = ()=>{
     if(!recognition){
 
         alert(
-            "Speech Recognition non supportato da questo browser."
+            t("Il riconoscimento vocale non è supportato da questo browser.", "Speech recognition is not supported by this browser.")
         );
 
         return;
@@ -2016,6 +1891,7 @@ voiceBtn.onclick = ()=>{
 
 };
 
+if(recognition){
 recognition.onstart = ()=>{
 
     isListening = true;
@@ -2059,6 +1935,8 @@ recognition.onerror = ()=>{
     voiceBtn.textContent = "🎤";
 
 };  
+
+}
 
   debugLog("Chatbot send action initialized");
 
@@ -2104,7 +1982,7 @@ recognition.onerror = ()=>{
 
 const homeCards = document.querySelectorAll(".rb-home-card");
 
-const homePrompts = [
+const getHomePrompts = ()=> [
 
     t(
         "Analizza questo investimento",
@@ -2142,7 +2020,7 @@ homeCards.forEach((card,index)=>{
 
     card.onclick = ()=>{
 
-        input.value = homePrompts[index];
+        input.value = getHomePrompts()[index];
 
         sendMessage();
 
@@ -2192,7 +2070,7 @@ window.addEventListener(
 
 `📄 Documento ricevuto
 
-<b>${file.fileName}</b>
+${file.fileName}
 
 🧠 Sto analizzando il contenuto...`
 
@@ -2207,88 +2085,65 @@ window.addEventListener(
 // 🧠 DOCUMENT READY
 // ===========================================
 
-document.addEventListener(
+document.addEventListener("rb:document_ready", event => {
+    if(event.detail?.status !== "ready") return;
+    refreshQuickActions();
+    addSuggestions(window.currentLang === "en"
+      ? ["Interpret this PDF", "What about ROI?", "Which data are missing in the PDF?"]
+      : ["Interpretami il PDF", "E il ROI?", "Quali dati mancano nel PDF?"]);
+});
 
-    "rb:document_ready",
-
-    async(event)=>{
-
-        const doc = event.detail;
-
-        if(!doc){
-
-            return;
-
-        }
-
-        debugLog("Document ready for analysis");
-
-        addMessage(
-
-            "bot",
-
-`🧠 Documento classificato
-
-📄 ${doc.subtype}
-
-🎯 Confidence: ${doc.confidence}%`
-
-        );
-
-        if(
-
-            typeof window.rbProcessAIMessage ===
-            "function"
-
-        ){
-
-            const prompt =
-
-`Analizza automaticamente il documento appena caricato.
-
-Tipo documento:
-${doc.subtype}
-
-Nome file:
-${doc.fileName}
-
-Fornisci un Executive Summary.`;
-
-            const result =
-                await window.rbProcessAIMessage(
-                    prompt
-                );
-
-            const response =
-
-                Array.isArray(result?.response)
-
-                    ? result.response[0]
-
-                    : result?.response;
-
-            addMessage(
-
-                "bot",
-
-                response?.textIT ||
-
-                response?.text ||
-
-                "Analisi completata."
-
-            );
-
-        }
-
-    }
-
-);
-  
-  
   // ===========================================
   // 🚀 READY
   // ===========================================
+
+  function refreshChatbotLanguage(){
+    // Reformat the existing UI; never recreate messages, files or event handlers.
+    refreshHomeSnapshot();
+    refreshQuickActions();
+    const texts = [
+      [".rb-chat-subtitle", "Assistente per analisi e gestione", "Analysis and management assistant"],
+      [".rb-ai-home-subtitle", "Assistente per analisi e gestione", "Analysis and management assistant"],
+      [".rb-empty-title", "Partiamo dai tuoi dati", "Start with your data"],
+      [".rb-empty-text", "Apri una simulazione o allega un PDF con testo. Ti aiuto a leggere i dati disponibili.", "Open a simulation or attach a text PDF. I can help interpret the available data."]
+    ];
+    texts.forEach(([selector,it,en])=>{
+      wrapper.querySelectorAll(selector).forEach(el=>{el.textContent=t(it,en);});
+    });
+    wrapper.querySelectorAll(".rb-ai-status").forEach(el=>{
+      el.childNodes.forEach(node=>{if(node.nodeType===3) node.textContent=" " + t("Pronto","Ready");});
+    });
+    const titles = [
+      ["Analizza investimento","Analyze investment"], ["Analizza PDF","Analyze PDF"],
+      ["Analizza ROI","Analyze ROI"], ["Mutuo","Mortgage"],
+      ["Mercato","Market"], ["Dashboard","Dashboard"]
+    ];
+    const descriptions = [
+      ["ROI • Cashflow • Rischio","ROI • Cash flow • Risk"], ["Executive Report","Executive Report"],
+      ["Performance investimento","Investment performance"], ["Leva • DSCR • LTV","Leverage • DSCR • LTV"],
+      ["Benchmark città","City benchmarks"], ["KPI e Report","KPIs and reports"]
+    ];
+    wrapper.querySelectorAll(".rb-home-title").forEach((el,i)=>{if(titles[i]) el.textContent=t(...titles[i]);});
+    wrapper.querySelectorAll(".rb-home-desc").forEach((el,i)=>{if(descriptions[i]) el.textContent=t(...descriptions[i]);});
+    const metricLabels = [["📍 Mercato","📍 Market"],["📈 ROI immobile","📈 Property ROI"],["💰 Cashflow","💰 Cash flow"],["⚠️ Rischio","⚠️ Risk"]];
+    wrapper.querySelectorAll(".rb-ai-metric-label").forEach((el,i)=>{if(metricLabels[i]) el.textContent=t(...metricLabels[i]);});
+    const city = window.lastAnalysisData?.realCity || window.lastAnalysisData?.marketCity || window.rbChatMemory?.lastCity;
+    const actionTitle=wrapper.querySelector(".rb-home-actions-title");
+    if(actionTitle) actionTitle.textContent=city?t("Continua l’analisi","Continue the analysis"):t("Come posso aiutarti?","How can I help?");
+    const actionContext=wrapper.querySelector(".rb-home-actions-context");
+    if(actionContext) actionContext.textContent=city?t("Contesto attivo: ","Active context: ")+String(city).toUpperCase():t("Scegli da dove iniziare","Choose where to start");
+    for(const [id,it,en] of [["rb-chat-attach","Allega file","Attach file"],["rb-chat-voice","Parla","Speak"],["rb-chat-new","Nuova chat","New chat"],["rb-chat-close","Minimizza","Minimize"]]){
+      const el=wrapper.querySelector("#"+id);
+      if(el){el.setAttribute("title",t(it,en));el.setAttribute("aria-label",t(it,en));}
+    }
+    input.setAttribute("placeholder",t("Scrivi oppure parla...","Write or speak..."));
+    input.setAttribute("aria-label",t("Messaggio","Message"));
+    wrapper.querySelector("#rb-chat-send")?.setAttribute("aria-label",t("Invia messaggio","Send message"));
+    if(recognition) recognition.lang=t("it-IT","en-US");
+  }
+
+  document.addEventListener("rb_language_changed", refreshChatbotLanguage);
+  refreshChatbotLanguage();
 
   debugLog("Chatbot UI ready");
 

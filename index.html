@@ -17,7 +17,7 @@ RendimentoBB – Find profitable properties and calculate B&B ROI
 </title>
  
 <meta name="description"
-content="Calcola ROI, rischio e profitto di un B&B in pochi secondi. Evita errori e investi con dati reali.">
+content="Calcola ROI, rischio e profitto di un B&B in pochi secondi. Evita errori e investi con ipotesi esplicite.">
 
 <meta name="keywords" content="ROI B&B, rendimento bed and breakfast, investimento B&B Italia, calcolo ROI affitti brevi, aprire B&B investimento">
 <meta name="robots" content="index, follow">
@@ -48,9 +48,9 @@ data-en="RendimentoBB – Find out if a B&B generates profit before investing"
 content="RendimentoBB – Find out if a B&B generates profit before investing">
 
 <meta property="og:description"
-data-it="Simula ROI, rischio e sostenibilità in pochi secondi. Evita errori e investi con dati reali."
-data-en="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and invest with real data."
-content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and invest with real data.">
+data-it="Simula ROI, rischio e sostenibilità in pochi secondi. Evita errori e investi con ipotesi esplicite."
+data-en="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and invest with explicit assumptions."
+content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and invest with explicit assumptions.">
 
 <meta property="og:image" content="https://rendimentobb.it/og-dashboard.jpg">
 <meta property="og:image:width" content="1200">
@@ -115,8 +115,12 @@ content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and in
 <!-- ================= CSS ================= -->
 <link rel="preload" href="/css/style.css" as="style">
 <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/home-2026.css?v=20260826-5">
+<link rel="stylesheet" href="/css/home-2026.css?v=20260930-12">
 
+
+<link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
+<link rel="stylesheet" href="/css/visual-refinements-2027.css?v=20260930-16">
+<link rel="stylesheet" href="/css/investment-workspace.css?v=20261006-rc41">
 </head>
 
 <body class="home-page">
@@ -130,6 +134,7 @@ window.updateOverlayVisibility =
 <div id="global-header"></div>
 
 <main>
+
 
 <section class="hero hero-bg rb-home-hero">
   <div class="rb-home-shell">
@@ -158,9 +163,9 @@ window.updateOverlayVisibility =
 
         <p
           class="rb-home-lead"
-          data-it="Analizza ROI, cashflow, rischio e sostenibilità finanziaria in meno di 30 secondi."
-          data-en="Analyze ROI, cashflow, risk and financial sustainability in under 30 seconds.">
-          Analizza ROI, cashflow, rischio e sostenibilità finanziaria in meno di 30 secondi.
+          data-it="Valuta le stime di ROI, cashflow e rischio. Poi gestisci strutture e prenotazioni da un unico pannello."
+          data-en="Review ROI, cash flow and risk estimates. Then manage properties and bookings from one dashboard.">
+          Valuta le stime di ROI, cashflow e rischio. Poi gestisci strutture e prenotazioni da un unico pannello.
         </p>
 
         <ul class="rb-home-benefits" aria-label="Funzioni principali">
@@ -214,23 +219,21 @@ window.updateOverlayVisibility =
         </p>
       </div>
 
-      <div class="rb-home-visual" aria-hidden="true">
-        <img
-          class="rb-home-dashboard"
-          src="/img/dashboard-preview.png"
-          alt=""
-          width="560"
-          height="440"
-          fetchpriority="high">
-
-        <div class="rb-home-insight">
-          <span data-it="Decisione basata sui dati" data-en="Data-driven decision">
-            Decisione basata sui dati
-          </span>
-          <strong data-it="Analizza prima di investire" data-en="Analyze before investing">
-            Analizza prima di investire
-          </strong>
-        </div>
+      <div class="rb-home-visual">
+        <article class="rb-scenario-canvas" aria-label="Esempio di simulazione">
+          <div class="rb-canvas-heading"><span class="rb-eyebrow">RENDIMENTOBB / SCENARIO</span><span class="rb-status-pill" data-it="Esempio illustrativo" data-en="Illustrative example">Esempio illustrativo</span></div>
+          <h3 data-it="Dall’ipotesi al risultato." data-en="From assumptions to results.">Dall’ipotesi al risultato.</h3>
+          <p class="rb-canvas-subtitle" data-it="Ogni numero parte dai dati che scegli." data-en="Every number starts with your assumptions.">Ogni numero parte dai dati che scegli.</p>
+          <dl class="rb-canvas-inputs">
+            <div><dt data-it="Immobile + lavori" data-en="Property + works">Immobile + lavori</dt><dd>170.000 €</dd></div>
+            <div><dt data-it="Prezzo notte" data-en="Nightly rate">Prezzo notte</dt><dd>100 €</dd></div>
+            <div><dt data-it="Occupazione" data-en="Occupancy">Occupazione</dt><dd>65%</dd></div>
+            <div><dt data-it="Costi sui ricavi" data-en="Costs on revenue">Costi sui ricavi</dt><dd>30%</dd></div>
+          </dl>
+          <div class="rb-canvas-result"><strong>9,8%</strong><span data-it="ROI annuo indicativo sul capitale complessivo" data-en="Illustrative annual ROI on total capital">ROI annuo indicativo sul capitale complessivo</span></div>
+          <div class="rb-canvas-flow"><span data-it="01 · Simula" data-en="01 · Simulate">01 · Simula</span><span class="rb-flow-arrow" aria-hidden="true">→</span><span data-it="02 · Confronta" data-en="02 · Compare">02 · Confronta</span><span class="rb-flow-arrow" aria-hidden="true">→</span><span data-it="03 · Gestisci" data-en="03 · Manage">03 · Gestisci</span></div>
+          <p class="rb-canvas-note" data-it="Esempio senza finanziamento e imposte. Le ipotesi non sono statistiche di mercato né risultati garantiti." data-en="Example excluding financing and taxes. Assumptions are not market statistics or guaranteed returns.">Esempio senza finanziamento e imposte. Le ipotesi non sono statistiche di mercato né risultati garantiti.</p>
+        </article>
       </div>
     </div>
 
@@ -286,6 +289,7 @@ window.updateOverlayVisibility =
     </div>
   </div>
 </section>
+<section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Dall’idea alla gestione quotidiana" data-en="From your idea to daily management">Dall’idea alla gestione quotidiana</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="/tool/"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="/tool/"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="guide" data-it="Da dove inizio?" data-en="Where do I start?">Da dove inizio?</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="next" data-it="Qual è il prossimo passo?" data-en="What is the next step?">Qual è il prossimo passo?</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section>
 
 <section id="rb-home-experience" class="rb-home-experience" aria-labelledby="rb-home-experience-title">
   <div class="rb-home-shell">
@@ -381,7 +385,7 @@ window.updateOverlayVisibility =
         aria-label="Presentazione della piattaforma RendimentoBB">
 
         <source
-          src="/video/RendimentoBB-Presentation-Web.mp4"
+          src="/video/RendimentoBB-Demo-20261002.mp4"
           type="video/mp4">
 
         Il tuo browser non supporta la riproduzione video.
@@ -416,111 +420,7 @@ window.updateOverlayVisibility =
 🚀 RENDIMENTOBB ECOSYSTEM
 ===================================== -->
 
-<section class="rb-ecosystem">
-
-<div class="container">
-
-<div
-class="home-section-badge"
-data-it="Piattaforma operativa"
-data-en="Operating platform">
-Piattaforma operativa
-
-</div> 
-
-<h2
-data-it="Dall’analisi alla gestione, in un unico spazio"
-data-en="From analysis to management, in one place">
-Dall’analisi alla gestione, in un unico spazio
-</h2>
-
-<p class="rb-ecosystem-intro"
-data-it="Quattro strumenti collegati per valutare, monitorare e gestire un investimento B&B."
-data-en="Four connected tools to assess, track and manage a B&B investment.">
-Quattro strumenti collegati per valutare, monitorare e gestire un investimento B&B.
-</p>
  
-<div class="rb-ecosystem-grid">
-
-<a class="eco-card" href="/tool/">
-
-    <div class="eco-icon">01</div>
-
-    <h3
-        data-it="Analizza"
-        data-en="Analyze">
-        Analizza
-    </h3>
-
-    <p
-        data-it="Calcola ROI, cashflow, rischio e sostenibilità prima di acquistare."
-        data-en="Calculate ROI, cashflow, risk and sustainability before buying.">
-        Calcola ROI, cashflow, rischio e sostenibilità prima di acquistare.
-    </p>
-
-</a>
-
-<a class="eco-card" href="/dashboard/">
-
-    <div class="eco-icon">02</div>
-
-    <h3
-        data-it="Dashboard"
-        data-en="Dashboard">
-        Dashboard
-    </h3>
-
-    <p
-        data-it="Controlla analisi salvate, KPI, scenari e performance del portafoglio."
-        data-en="Review saved analyses, KPIs, scenarios and portfolio performance.">
-        Controlla analisi salvate, KPI, scenari e performance del portafoglio.
-    </p>
-
-</a>
-
-<a class="eco-card" href="/dashboard/">
-
-    <div class="eco-icon">03</div>
-
-    <h3
-        data-it="PMS"
-        data-en="PMS">
-        PMS
-    </h3>
-
-    <p
-        data-it="Gestisci prenotazioni, ospiti, calendario, ADR, RevPAR e occupazione."
-        data-en="Manage bookings, guests, calendar, ADR, RevPAR and occupancy.">
-        Gestisci prenotazioni, ospiti, calendario, ADR, RevPAR e occupazione.
-    </p>
-
-</a>
-
-<a class="eco-card" href="#rb-chatbot-root" onclick="event.preventDefault(); document.getElementById('rb-header-ai-btn')?.click();">
-
-    <div class="eco-icon">04</div>
-
-    <h3
-        data-it="Assistente"
-        data-en="Assistant">
-        Assistente
-    </h3>
-
-    <p
-        data-it="Interroga analisi, mercato e gestione con risposte contestuali sui tuoi dati."
-        data-en="Ask about analysis, markets and management with contextual answers based on your data.">
-        Interroga analisi, mercato e gestione con risposte contestuali sui tuoi dati.
-    </p>
-
-</a>
-
-</div>
-
-</div>
-
- 
-
-</section> 
  
 <section class="quick-roi-section" data-rb-home-panel="simulator">
 
@@ -623,25 +523,27 @@ Calcola rendimento
 
 <!-- SOCIAL PROOF -->
 <p 
-data-it="Stima immediata basata sui dati inseriti • Nessuna registrazione"
-data-en="Instant estimate based on your inputs • No registration required"
+data-it="Stima indicativa senza mutuo e imposte • Nessuna registrazione"
+data-en="Indicative estimate without financing and taxes • No registration required"
 style="margin-top:20px;font-size:14px;color:#64748b;text-align:center">
-Stima immediata basata sui dati inseriti • Nessuna registrazione
+Stima indicativa senza mutuo e imposte • Nessuna registrazione
 </p>
 
 </div>
 
 <!-- SCORE -->
 <div class="investment-panel">
+<p id="rb-quick-status" class="rb-quick-status" role="status" aria-live="polite" data-it="Pronto per la tua prima stima" data-en="Ready for your first estimate">Pronto per la tua prima stima</p>
+<div class="rb-quick-empty"><h3 data-it="Dai numeri al tuo investimento." data-en="Put numbers behind your investment.">Dai numeri al tuo investimento.</h3><p data-it="Inserisci i dati a sinistra e premi Calcola rendimento. I campi vuoti utilizzano i valori di esempio indicati." data-en="Enter your assumptions and select Calculate ROI. Empty fields use the example values shown.">Inserisci i dati a sinistra e premi Calcola rendimento. I campi vuoti utilizzano i valori di esempio indicati.</p></div>
 
 <div class="investment-score">
 
-<div class="score-circle" id="investment_score">B</div>
+<div class="score-circle" id="investment_score">↗</div>
 
 <div class="score-label"
-data-it="Valutazione investimento"
-data-en="Investment rating">
-Valutazione investimento
+data-it="Anteprima investimento"
+data-en="Investment preview">
+Anteprima investimento
 </div>
 
 </div>
@@ -657,9 +559,9 @@ Analizza un immobile reale
 
 <p
 style="margin-top:6px;font-size:14px;color:#64748b"
-data-it="Incolla un annuncio e scopri se è davvero profittevole."
-data-en="Paste a listing and find out if it’s truly profitable.">
-Incolla un annuncio e scopri se è davvero profittevole.
+data-it="Parti da un annuncio, inserisci i dati e confronta il tuo scenario."
+data-en="Start from a listing, enter its details and compare your scenario.">
+Parti da un annuncio, inserisci i dati e confronta il tuo scenario.
 </p>
 
 <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
@@ -749,10 +651,10 @@ data-en="/year without full analysis">
 
 </div>
 
-<span 
-data-it="⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale"
-data-en="⚠️ Without full analysis you could lose up to 30% of your real profit">
-⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale
+<span
+data-it="⚠️ La stima rapida non include imposte, mutuo e altri costi"
+data-en="⚠️ The quick estimate excludes taxes, financing and other costs">
+⚠️ La stima rapida non include imposte, mutuo e altri costi
 </span>
 
 </div>
@@ -765,9 +667,9 @@ text-align:center;
 color:#f59e0b;
 font-weight:600;
 "
-data-it="⚠️ Questo numero può farti perdere soldi"
-data-en="⚠️ This number can lead to real losses">
-⚠️ Questo numero può farti perdere soldi
+data-it="Stima preliminare da approfondire"
+data-en="Preliminary estimate to explore further">
+Stima preliminare da approfondire
 </div>
 
 <!-- ℹ️ INFO -->
@@ -777,9 +679,9 @@ font-size:12px;
 text-align:center;
 color:#64748b;
 "
-data-it="Dati incompleti: rischio, mutuo e costi reali esclusi"
-data-en="Incomplete data: risk, mortgage and real costs excluded">
-Dati incompleti: rischio, mutuo e costi reali esclusi
+data-it="Mutuo e imposte esclusi da questa stima"
+data-en="This estimate excludes financing and taxes">
+Mutuo e imposte esclusi da questa stima
 </div>
 
 </div>
@@ -797,8 +699,8 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
   <strong id="qr_profit">🔒</strong>
 
   <div class="metric-hint"
-    data-it="Stima basata su dati parziali"
-    data-en="Estimate based on partial data">
+    data-it="Stima prima di mutuo e imposte"
+    data-en="Estimate before financing and taxes">
   </div>
 </div>
 
@@ -828,8 +730,8 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
   <!-- 🔥 CORE CONVERSION -->
   <div class="metric-critical"
-    data-it="🔒 Dato critico per capire se perdi soldi"
-    data-en="🔒 Critical data to understand if you lose money">
+    data-it="Tempo stimato di recupero del capitale"
+    data-en="Estimated time to recover invested capital">
   </div>
 </div>
 
@@ -851,87 +753,7 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
 <!-- ================= OVERLAY ================= -->
 
-<div class="home-blur-overlay dynamic-overlay free-only">
-
-  <div class="home-overlay-content">
-
-    <!-- HEADLINE -->
-    <div class="overlay-title"
-      data-it="🔓 Stai prendendo una decisione senza dati completi"
-      data-en="🔓 You are making a decision without full data">
-      🔓 Stai prendendo una decisione senza dati completi
-    </div>
-
-    <!-- SUBTEXT -->
-    <div class="overlay-text"
-      data-it="Può sembrare profittevole… ma potresti perdere soldi reali"
-      data-en="It may look profitable… but you could lose real money">
-      Può sembrare profittevole… ma potresti perdere soldi reali
-    </div>
-
-    <!-- STAT -->
-    <div style="
-      margin-top:10px;
-      font-size:13px;
-      opacity:0.85;
-    "
-    data-it="Molti errori di valutazione nascono proprio in questa fase"
-    data-en="Many investment mistakes begin at this stage">
-      Molti errori di valutazione nascono proprio in questa fase
-    </div>
-
-    <!-- 🔥 MISSING HOOK -->
-    <div style="
-      margin-top:10px;
-      font-size:13px;
-      color:#f59e0b;
-      font-weight:600;
-    "
-    data-it="La versione gratuita mostra una stima. La versione Pro mostra se questo investimento vale davvero il tuo capitale."
-    data-en="The free version shows an estimate. The Pro version tells you whether this investment is actually worth your capital.">
-      La versione gratuita mostra una stima. La versione Pro mostra se questo investimento vale davvero il tuo capitale.
-    </div>
-
-    <!-- CTA -->
-    <button
-onclick="
-if(!window.currentUser){
-
-  window.location.href='/login/';
-
-}else{
-
-  document.getElementById('pricing')?.scrollIntoView({
-    behavior:'smooth'
-  });
-
-}
-"
-class="btn btn-primary"
-style="margin-top:16px">
-
-      <span
-        data-it="🔓 Sblocca analisi completa"
-        data-en="🔓 Unlock full analysis">
-        🔓 Sblocca analisi completa
-      </span>
-
-    </button>
-
-    <!-- TRUST -->
-    <div style="
-      margin-top:10px;
-      font-size:12px;
-      opacity:0.7;
-    "
-    data-it="ROI reale • Break-even • Analisi rischio completa"
-    data-en="Real ROI • Break-even • Full risk analysis">
-      ROI reale • Break-even • Analisi rischio completa
-    </div>
-
-  </div>
-
-</div>
+<div class="home-blur-overlay dynamic-overlay free-only"><div class="home-overlay-content"><strong data-it="Approfondisci lo scenario" data-en="Explore your scenario">Approfondisci lo scenario</strong><p data-it="Questa è una stima preliminare. Nel simulatore completo puoi includere mutuo, imposte e ipotesi di rischio." data-en="This is a preliminary estimate. The full simulator lets you include financing, taxes and risk assumptions.">Questa è una stima preliminare. Nel simulatore completo puoi includere mutuo, imposte e ipotesi di rischio.</p><a href="/tool/" class="btn btn-primary" data-it="Apri il simulatore completo →" data-en="Open the full simulator →">Apri il simulatore completo →</a></div></div>
 
 </div>
 
@@ -995,9 +817,9 @@ data-en="📄 Executive Report Preview">
 </div> 
 
 <h3
-data-it="Analisi completa di un investimento reale"
-data-en="Complete analysis of a real investment">
-Analisi completa di un investimento reale
+data-it="Esempio di report di investimento"
+data-en="Example investment report">
+Esempio di report di investimento
 </h3>
 
 <p style="margin-top:6px;font-size:13px;color:#64748b"
@@ -1050,9 +872,9 @@ Classe
 
 <!-- 🔥 MICRO PSICOLOGIA -->
 <p class="free-only" style="margin-top:15px;font-size:14px;color:#64748b;text-align:center"
-data-it="Questo è un esempio reale. Ma non stai vedendo il rischio completo."
-data-en="This is a real example. But you're not seeing the full risk.">
-Questo è un esempio reale. Ma non stai vedendo il rischio completo.
+data-it="Esempio illustrativo: i valori non rappresentano una previsione o un investimento verificato."
+data-en="Illustrative example: these figures are not a forecast or a verified investment.">
+Esempio illustrativo: i valori non rappresentano una previsione o un investimento verificato.
 </p>
 
 <!-- CTA SNAPSHOT -->
@@ -1089,19 +911,19 @@ Scegli il piano per sbloccare analisi complete e gestione professionale
 
 <p
 style="max-width:700px;margin:10px auto;color:#64748b"
-data-it="Ottieni ROI reale, analisi del rischio, Assistente e PMS professionale per gestire investimenti e prenotazioni da un'unica piattaforma."
-data-en="Get real ROI, risk analytics, the Assistant and a professional PMS to manage investments and bookings from a single platform.">
+data-it="Ottieni ROI stimato, analisi del rischio, Assistente e PMS professionale per gestire investimenti e prenotazioni da un'unica piattaforma."
+data-en="Get estimated ROI, risk analytics, the Assistant and a professional PMS to manage investments and bookings from a single platform.">
 
-Ottieni ROI reale, analisi del rischio, Assistente e PMS professionale per gestire investimenti e prenotazioni da un'unica piattaforma.
+Ottieni ROI stimato, analisi del rischio, Assistente e PMS professionale per gestire investimenti e prenotazioni da un'unica piattaforma.
 
 </p>
 
 <div class="pricing-value-strip">
 
 <span
-data-it="✔ ROI reale"
-data-en="✔ Real ROI">
-✔ ROI reale
+data-it="✔ ROI stimato"
+data-en="✔ Estimated ROI">
+✔ ROI stimato
 </span>
 
 <span
@@ -1163,9 +985,9 @@ Evita investimenti sbagliati
 </div>
 
 <span
-data-it="Analizza ROI reale, cashflow e rischio"
-data-en="Analyze real ROI, cashflow and risk">
-Analizza ROI reale, cashflow e rischio
+data-it="Analizza ROI stimato, cashflow e rischio"
+data-en="Analyze estimated ROI, cashflow and risk">
+Analizza ROI stimato, cashflow e rischio
 </span>
 
 </div>
@@ -1274,9 +1096,9 @@ Per chi vuole trovare investimenti profittevoli
 
 <ul>
 
-<li data-it="✔ Fino a 50 simulazioni mensili"
+<li data-it="✔ Simulazioni e scenari salvati"
 data-en="✔ Up to 50 simulations per month">
-✔ Fino a 50 simulazioni mensili
+✔ Simulazioni e scenari salvati
 </li>
 
 <li data-it="✔ Analisi ROI e cashflow"
@@ -1300,9 +1122,9 @@ data-en="✔ RendimentoBB Assistant">
 </li>
 
 <li class="disabled"
-data-it="✖ PMS prenotazioni"
-data-en="✖ Booking PMS">
-✖ PMS prenotazioni
+data-it="✔ PMS prenotazioni"
+data-en="✔ Booking PMS">
+✔ PMS prenotazioni
 </li>
 
 <li class="disabled"
@@ -1320,9 +1142,9 @@ data-en="✖ Operational B&B dashboard">
 </ul>
 
   <p class="note"
-     data-it="Analisi finanziaria completa • Dashboard inclusa • PDF e PMS esclusi"
-     data-en="Complete financial analysis • Dashboard included • PDF and PMS excluded">
-     Analisi finanziaria completa • Dashboard inclusa • PDF e PMS esclusi
+     data-it="Analisi, dashboard e PMS inclusi • Report PDF esclusi"
+     data-en="Analysis, dashboard and PMS included • PDF reports excluded">
+     Analisi, dashboard e PMS inclusi • Report PDF esclusi
   </p>
 
   <button
@@ -1365,7 +1187,7 @@ Per chi investe e gestisce un B&B
 <ul>
 
 <li data-it="✔ ROI professionale reale"
-data-en="✔ Professional real ROI">
+data-en="✔ Professional estimated ROI">
 ✔ ROI professionale reale
 </li>
 
@@ -1685,9 +1507,9 @@ data-en="🔍 Analyze investment in this city">
 <div class="trust-item">
 <div class="trust-icon">📊</div>
 <p
-data-it="Modelli finanziari basati su dati reali di mercato"
-data-en="Financial models based on real market data">
-Modelli finanziari basati su dati reali di mercato
+data-it="Modelli finanziari con costi e ipotesi espliciti"
+data-en="Financial models with explicit costs and assumptions">
+Modelli finanziari con costi e ipotesi espliciti
 </p>
 </div>
 
@@ -1743,9 +1565,9 @@ Quanto può rendere un investimento B&B?
 </h3>
 
 <p
-data-it="Un investimento ben analizzato può generare ROI tra l'8% e il 18%, ma dipende da immobile, posizione, rischio e costi reali."
-data-en="A well-analyzed investment can generate ROI between 8% and 18%, but it depends on the property, location, risk and real operating costs.">
-Un investimento ben analizzato può generare ROI tra l'8% e il 18%, ma dipende da immobile, posizione, rischio e costi reali.
+data-it="Il rendimento dipende da capitale investito, ricavi, costi, imposte e finanziamento. Confronta uno scenario prudente e uno favorevole; non esiste un rendimento garantito."
+data-en="Returns depend on invested capital, revenue, costs, taxes and financing. Compare conservative and favorable scenarios; returns are not guaranteed.">
+Il rendimento dipende da capitale investito, ricavi, costi, imposte e finanziamento. Confronta uno scenario prudente e uno favorevole; non esiste un rendimento garantito.
 </p>
 
 </div>
@@ -1856,7 +1678,7 @@ ROI B&B
 
 <p
 data-it="Calcolo reale e break-even"
-data-en="Real ROI and break-even">
+data-en="Estimated ROI and break-even">
 Calcolo reale e break-even
 </p>
 
@@ -1912,12 +1734,12 @@ Scopri di più →
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js" defer></script>
+<script src="/js/chatbot-loader.js?v=20261006-rc44" defer></script>
 
 <!-- 🔥 UI -->
 <script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script> 
-<script src="/js/home-2026.js?v=20260826-2" defer></script> 
+<script src="/js/home-2026.js?v=20260930-10" defer></script> 
 <script src="/js/footer.js" defer></script>
 
 <!-- 🔥 FIREBASE INIT -->
@@ -1929,7 +1751,7 @@ Scopri di più →
 <!-- 🔥 DATA + ENGINE -->
 <script src="/js/market-data.js"></script> 
 <script type="module" src="/js/roi-engine.js"></script>
-<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/app.js?v=20261007-rc54"></script>
  
 <script>
 
@@ -2145,6 +1967,12 @@ window.startAnalysis = function(){
 
 window.triggerROI = function(){
   window.userTriggeredSimulation = true;
+  document.querySelector(".quick-roi-box")?.classList.add("rb-has-result");
+  const status = document.getElementById("rb-quick-status");
+  if(status) {
+    status.removeAttribute("data-it"); status.removeAttribute("data-en");
+    status.textContent = window.currentLang === "en" ? "Estimate calculated · financing and taxes excluded" : "Stima calcolata · mutuo e imposte esclusi";
+  }
   quickROI();
 };
 
@@ -2210,11 +2038,12 @@ rbLog("🔥 QUICK ROI ACCESS:", {
 
   if(typeof calculateROI === "function"){
     result = calculateROI({
-      price,
-      equity: price * 0.3,
+      price: investment,
+      equity: investment,
       priceNight: night,
       occupancy: occ,
       expenses: cost,
+      expensesUnit: "percentage",
       commission: 0,
       tax: 0,
       loanAmount: 0,
@@ -2499,8 +2328,8 @@ function renderUpgradeCTA(roi){
     );
 
     subtitle = t(
-      "Ottieni ROI reale, rischio completo e simulazioni professionali.",
-      "Unlock real ROI, full risk analysis and professional simulations."
+      "Ottieni ROI stimato, rischio completo e simulazioni professionali.",
+      "Unlock estimated ROI, full risk analysis and professional simulations."
     );
 
     ctaText = t(
@@ -2648,8 +2477,8 @@ function renderUpgradeCTA(roi){
           font-weight:600;
         ">
           ✅ ${t(
-            "ROI reale avanzato",
-            "Advanced real ROI"
+            "ROI stimato avanzato",
+            "Advanced estimated ROI"
           )}
         </div>
 
@@ -2676,7 +2505,7 @@ function renderUpgradeCTA(roi){
           font-weight:600;
         ">
           ✅ ${t(
-            "Forecast e cashflow reali",
+            "Forecast e cashflow stimati",
             "Real forecast & cashflow"
           )}
         </div>
@@ -2756,7 +2585,7 @@ window.analyzeProperty = function(){
   rbLog("PROPERTY URL:", url);
 
   // 🔥 redirect al simulatore (CORE UX)
-  window.location.href = `/tool/?listing=${encodeURIComponent(url)}`;
+  window.location.href = `/immobili/?listing=${encodeURIComponent(url)}`;
 
 };
 
@@ -2889,8 +2718,8 @@ else if(mode === "pro"){
           margin-bottom:24px;
         ">
           ${t(
-            "Stai vedendo solo una parte del potenziale reale.<br><strong>ROI reale, rischio avanzato, cashflow e PDF professionali</strong> sono bloccati.",
-            "You are only seeing part of the real potential.<br><strong>Real ROI, advanced risk, cashflow and professional PDFs</strong> are locked."
+            "Stai vedendo solo una parte del potenziale reale.<br><strong>ROI stimato, rischio avanzato, cashflow e PDF professionali</strong> sono bloccati.",
+            "You are only seeing part of the real potential.<br><strong>Estimated ROI, advanced risk, cashflow and professional PDFs</strong> are locked."
           )}
         </p>
 
@@ -2914,8 +2743,8 @@ else if(mode === "pro"){
             color:#0f172a;
           ">
             ✅ ${t(
-              "ROI reale avanzato",
-              "Advanced real ROI"
+              "ROI stimato avanzato",
+              "Advanced estimated ROI"
             )}
           </div>
 
@@ -2944,7 +2773,7 @@ else if(mode === "pro"){
             color:#0f172a;
           ">
             ✅ ${t(
-              "Forecast e cashflow reali",
+              "Forecast e cashflow stimati",
               "Real forecast & cashflow"
             )}
           </div>
@@ -3543,6 +3372,6 @@ if(investorPlanButton){
   </div>
 
 </div>
-
+<script src="/js/investment-workspace.js?v=20261006-rc43"></script>
 </body>
 </html>

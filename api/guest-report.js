@@ -1,4 +1,8 @@
+import {Resend} from "resend";
+import {sendUrgentHostNotification} from "../lib/pms-urgent-email.js";
+import {createHostBookingHandler} from "../lib/pms-booking-service.js";
 import crypto from "node:crypto";
+import {reconcilePMSTasks} from "../js/pms-tasks.js";
 import admin from "firebase-admin";
 
 const ALLOWED_CATEGORIES = new Set(["maintenance", "cleaning", "access", "noise", "comfort", "other"]);
@@ -43,6 +47,12 @@ function validateAccess(booking, token){
     !["cancelled", "completed", "pending"].includes(status);
 }
 
+const hostBookingHandler = createHostBookingHandler({
+  getFirestore,
+  verifyToken: token => admin.auth().verifyIdToken(token, true),
+  timestamp: () => admin.firestore.FieldValue.serverTimestamp()
+});
+
 export default async function handler(req, res){
   res.setHeader("Cache-Control", "no-store, max-age=0");
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -52,6 +62,7 @@ export default async function handler(req, res){
   }
 
   const body = req.body || {};
+  if(body.action === "host_booking") return hostBookingHandler(req, res);
   const bookingId = cleanText(body.bookingId, 128);
   const token = cleanText(body.token, 256);
   const action = cleanText(body.action, 24);
@@ -118,7 +129,10 @@ export default async function handler(req, res){
         reportedAt: now,
         resolved: false
       };
-      transaction.update(bookingRef, { guestIssue, lastGuestReportAt: now });
+      transaction.update(bookingRef, { guestIssue, lastGuestReportAt: now,
+        autopilotTasks: reconcilePMSTasks({...freshBooking,guestIssue},freshBooking.autopilotTasks || {},now),
+        _pmsVersion: (Number.isSafeInteger(freshBooking._pmsVersion) ? freshBooking._pmsVersion : 0) + 1
+      });
       transaction.set(reportRef, {
         bookingId,
         propertyId: freshBooking.propertyId || "",
@@ -131,6 +145,23 @@ export default async function handler(req, res){
       });
     });
 
+    // The report has committed. Notification failure must not encourage the guest
+    // to submit the same report again or undo the saved operational task.
+    if(priority === "urgent"){
+      try{
+        const owner = await admin.auth().getUser(booking.uid);
+        if(owner.emailVerified && !owner.disabled){
+          await sendUrgentHostNotification({
+            db, resend:new Resend(process.env.RESEND_API_KEY),getAuthUser:uid=>admin.auth().getUser(uid),
+            decoded:{uid:owner.uid,email:owner.email},
+            body:{bookingId,lang:body.lang === "en" ? "en" : "it"},
+            timestamp:()=>admin.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      }catch(error){
+        console.error("Guest report urgent email failed", error?.message || error);
+      }
+    }
     return res.status(201).json({ success: true });
   }catch(error){
     if(error?.message === "LINK_INVALID"){

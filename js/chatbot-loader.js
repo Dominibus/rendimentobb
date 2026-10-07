@@ -78,6 +78,18 @@
   // =============================================
 
   function loadScript(src) {
+    // PDF.js is an ES module. Await its export before loading document tools.
+    if(src === "/js/vendor/pdfjs/pdf.min.mjs"){
+      return import(src)
+        .then(pdfjs => {
+          window.pdfjsLib = pdfjs;
+        })
+        .catch(() => {
+          window.pdfjsLib = null;
+          reportLoadError("PDF reader");
+        });
+    }
+
     return new Promise((resolve) => {
       const existing = document.querySelector(
         `script[src="${src}"]`
@@ -114,7 +126,7 @@
   // =============================================
 
   const cssFiles = [
-    "/css/chatbot.css"
+    "/css/chatbot.css?v=20261001-22"
   ];
 
   const scripts = [
@@ -143,16 +155,16 @@
     "/js/chatbot/core/semantic-router.js",
     "/js/chatbot/core/entity-engine.js",
     "/js/chatbot/core/intent-engine.js?v=20260909-renovation-control-v21-4",
-    "/js/chatbot/core/memory-engine.js",
-    "/js/chatbot/core/conversation-engine.js",
+    "/js/chatbot/core/memory-engine.js?v=20261001-22",
+    "/js/chatbot/core/conversation-engine.js?v=20261001-22",
     "/js/chatbot/core/investor-profile-engine.js",
     "/js/chatbot/core/score-engine.js",
 
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+    "/js/vendor/pdfjs/pdf.min.mjs",
 
-    "/js/chatbot/document-engine.js",
-    "/js/chatbot/pdf-extraction-engine.js",
-    "/js/chatbot/pdf-parser-engine.js",
+    "/js/chatbot/document-engine.js?v=20261004-rc02",
+    "/js/chatbot/pdf-extraction-engine.js?v=20261004-rc02",
+    "/js/chatbot/pdf-parser-engine.js?v=20261004-rc07",
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/executive-narrative-engine.js",
@@ -160,15 +172,18 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260909-renovation-control-v21-4",
-    "/js/chatbot/core/chatbot-file-dispatcher.js",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260909-renovation-copilot-v21-1",
+    "/js/chatbot/core/response-engine.js?v=20261001-22",
+    "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
+    "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",
+    "/js/chatbot/core/pms-autopilot-engine.js?v=20261006-rc41",
+    "/js/chatbot/core/investment-autopilot-engine.js?v=20261006-rc43",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261006-rc41",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
-    "/js/chatbot/ui/chatbot-attachments.js",
-    "/js/chatbot/ui/chatbot-ui.js?v=20260908-guest-portal-v20-1",
+    "/js/chatbot/ui/chatbot-attachments.js?v=20261001-22",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261006-rc44",
 
     "/js/ai-engine.js"
   ];
