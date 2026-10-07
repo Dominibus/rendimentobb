@@ -9,5 +9,5 @@ test("upgrade popup uses authenticated purchase flow for both paid plans", () =>
   assert.doesNotMatch(homepage, /buy\.stripe\.com\//);
   assert.match(homepage, /triggerUpgradeFlow\(\{plan:'investor',source:'upgrade-modal'\}\)/);
   assert.match(homepage, /triggerUpgradeFlow\(\{plan:'pro',source:'upgrade-modal'\}\)/);
-  assert.match(checkout, /client_reference_id:\s*uid/);
+  assert.match(checkout, /guardedCheckout\(/);
 });

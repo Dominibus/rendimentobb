@@ -7711,6 +7711,16 @@ window.buyPlan = async function(plan){
       return;
     }
 
+    if(response.status === 409 && ["CHECKOUT_IN_PROGRESS", "PAYMENT_PROCESSING", "PROFILE_REQUIRED"].includes(data?.code)){
+      const message = data.code === "PAYMENT_PROCESSING"
+        ? t("Pagamento già completato: attendi l’attivazione del piano e aggiorna la pagina.", "Payment already completed: wait for plan activation and refresh the page.")
+        : data.code === "PROFILE_REQUIRED"
+          ? t("Esci e accedi nuovamente prima di acquistare.", "Sign out and sign in again before purchasing.")
+          : t("Un checkout è già in preparazione. Attendi qualche secondo e riprova.", "A checkout is already being prepared. Wait a few seconds and try again.");
+      showToast?.(message, "info");
+      return;
+    }
+
     if(!response.ok){
 
       throw new Error(

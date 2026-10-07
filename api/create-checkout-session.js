@@ -1,4 +1,4 @@
-import { getPlanForScope } from "../js/account-plan.js";
+import { guardedCheckout, CheckoutConflict } from "../lib/stripe-checkout-guard.js";
 import Stripe from "stripe";
 import admin from "firebase-admin";
 import { getStripePrices } from "../lib/stripe-plan-config.js";
@@ -87,90 +87,27 @@ export default async function handler(req, res) {
       .auth()
       .verifyIdToken(idToken);
 
-        const uid = decodedToken.uid;
+    const uid = decodedToken.uid;
 
     const email =
       typeof decodedToken.email === "string"
         ? decodedToken.email
         : undefined;
 
-    // ==========================================
-    // PROTEZIONE ABBONAMENTI DUPLICATI
-    // ==========================================
-
-    const userSnapshot =
-      await firebaseAdmin
-        .firestore()
-        .collection("users")
-        .doc(uid)
-        .get();
-
-    const currentPlan =
-      String(
-        getPlanForScope(userSnapshot.data() || {}, process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_"))
-      )
-        .toLowerCase()
-        .trim();
-
-    const paidPlans = [
-      "investor",
-      "pro",
-      "pro_yearly"
-    ];
-
-    if(paidPlans.includes(currentPlan)){
-
-      return res.status(409).json({
-        error: "Subscription already active",
-        code: "ACTIVE_SUBSCRIPTION",
-        currentPlan
-      });
-
-    }
-
-    const baseUrl = (
-      process.env.BASE_URL || "https://rendimentobb.it"
-    ).replace(/\/+$/, "");
-
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-
-      payment_method_types: ["card"],
-
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1
-        }
-      ],
-
-      success_url:
-        `${baseUrl}/?session_id={CHECKOUT_SESSION_ID}`,
-
-      cancel_url:
-        `${baseUrl}/`,
-
-      client_reference_id: uid,
-
-      customer_email: email,
-
-      metadata: {
-        uid,
-        plan
-      },
-
-      subscription_data: {
-        metadata: {
-          uid,
-          plan
-        }
-      }
+    const baseUrl = (process.env.BASE_URL || "https://rendimentobb.it").replace(/\/+$/, "");
+    const session = await guardedCheckout({
+      db: firebaseAdmin.firestore(), stripe, uid, plan, priceId, email, baseUrl,
+      liveMode: !process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")
     });
 
     return res.status(200).json({
       url: session.url
     });
   } catch (error) {
+    if (error instanceof CheckoutConflict) {
+      return res.status(409).json({ error: "Checkout unavailable", code: error.code });
+    }
+
     if (
       error?.code === "auth/id-token-expired" ||
       error?.code === "auth/argument-error" ||
