@@ -487,24 +487,14 @@ return;
 async function saveAnalysis(data){
 
   // The Free simulator stays local; Firestore also enforces the entitlement.
-  if(!window.getUserAccess?.().isPaid) return;
+  if(!window.getUserAccess?.().isPaid) return false;
 
-  if(window.__savingAnalysis){
-  
-  return;
-}
-
-window.__savingAnalysis = true;
-
-  if(!window.firebaseReady){
-    
-    return;
+  // Readiness checks precede the lock: an early attempt must remain retryable.
+  if(window.__savingAnalysis || !window.firebaseReady || !window.currentUser?.uid){
+    return false;
   }
 
-  if(!window.currentUser || !window.currentUser.uid){
-    
-    return;
-  }
+  window.__savingAnalysis = true;
 
   try{
 
@@ -605,14 +595,13 @@ window.dispatchEvent(
 
 
 
-    window.__savingAnalysis = false;
+    return true;
 
   }catch(e){
-
-    window.__savingAnalysis = false;
-    
     console.error("Errore salvataggio:", e);
-  
+    return false;
+  }finally{
+    window.__savingAnalysis = false;
   }
 
 }
@@ -2689,6 +2678,7 @@ if(window.RB_DEBUG === true){
 
     const monthlyCosts =
       Number(
+        result?.expensesMonthly ??
         expenses ??
         result?.monthlyCosts ??
         0
@@ -2781,35 +2771,19 @@ if(window.RB_DEBUG === true){
 
     // ================= SAVE DEDUP =================
 
+    // Include the calculated scenario and account, not just rounded ROI.
     const analysisHash = JSON.stringify({
-      roi: finalROI.toFixed(2),
-      city: market,
-      price: propertyPrice,
-      ts: Math.floor(Date.now() / 15000)
+      uid: window.currentUser?.uid ?? null,
+      result,
+      context,
+      market,
+      realCity: realCityInput
     });
 
     const now = Date.now();
-
-const shouldSave =
-
-!window.__LAST_SAVED_ANALYSIS__ ||
-
-window.__LAST_SAVED_ANALYSIS__ !== analysisHash ||
-
-(
-  now -
-  (window.__LAST_SAVE_TIME__ || 0)
-) > 15000;
-
-// salva hash + timestamp
-if(shouldSave){
-
-  window.__LAST_SAVED_ANALYSIS__ =
-    analysisHash;
-
-  window.__LAST_SAVE_TIME__ =
-    now;
-}
+    const shouldSave =
+      window.__LAST_SAVED_ANALYSIS__ !== analysisHash ||
+      now - (window.__LAST_SAVE_TIME__ || 0) > 15000;
 
     // ================= CANONICAL SCORE FOR SAVE =================
 
@@ -2912,6 +2886,7 @@ window.__MANUAL_ANALYSIS__ === true;
     annualDebtService:
       Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
     gross,
+    expenses: monthlyCosts, // Canonical EUR/month from the completed engine result.
     net,
     occupancy: occupancyRate,
 
@@ -2926,6 +2901,12 @@ marketCity: market,
       realCityInput ||
       market ||
       "roma"
+  }).then(saved => {
+    // A failed/blocked write must not suppress an immediate manual retry.
+    if(saved){
+      window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+      window.__LAST_SAVE_TIME__ = now;
+    }
   });
 
   
