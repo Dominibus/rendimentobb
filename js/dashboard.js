@@ -1575,6 +1575,7 @@ window.isDemoData
 <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
   <button
     class="portfolio-analysis"
+    data-action="create-property"
     data-id="${escapeDashboardHTML(data.id)}"
     data-active="${data.isPortfolio ? "true" : "false"}"
     data-linked="${data.propertyId ? "true" : "false"}"
@@ -1592,9 +1593,7 @@ window.isDemoData
     ">
     ${data.propertyId
       ? t("✓ Collegato al PMS", "✓ Linked to PMS")
-      : data.isPortfolio
-      ? t("✓ Nel portafoglio", "✓ In portfolio")
-      : t("+ Aggiungi al portafoglio", "+ Add to portfolio")}
+      : t("+ Aggiungi immobile", "+ Add property")}
   </button>
   ${canDelete() && !data.propertyId ? `
   <button
@@ -3180,6 +3179,13 @@ const isActive = btn.dataset.active === "true";
 
 if(btn.dataset.linked === "true") return;
 
+// Strategic analyses create an actual property through the existing saved batch.
+// The portfolio manager keeps its separate remove-scenario action.
+if(btn.dataset.action === "create-property"){
+  await window.openPropertyFromAnalysis(id);
+  return;
+}
+
 try{
   btn.disabled = true;
 
@@ -4171,8 +4177,27 @@ function updatePropertyTouristTaxVisibility(){
   if(fields) fields.style.display = enabled ? "block" : "none";
 }
 
+window.openPropertyFromAnalysis = async function(analysisId){
+  if(!window.currentUser || !canUseFirestorePMS()) return;
+  const analysis = (window.dashboardSimulations || []).find(item => item.id === analysisId);
+  if(!analysis) return;
+  if(analysis.propertyId){
+    await window.openPropertyEditor(analysis.propertyId);
+    return;
+  }
+  window.openPropertyModal();
+  window.pendingPropertyAnalysisId = analysis.id;
+  const select = document.getElementById("property-analysis");
+  if(select) select.value = analysis.id;
+  const city = document.getElementById("property-city");
+  if(city) city.value = analysis.city || "";
+  const name = document.getElementById("property-name");
+  if(name) name.focus();
+};
+
 window.openPropertyModal = function(){
 
+window.pendingPropertyAnalysisId = null;
 window.editingPropertyId = null;
 
 const title = document.getElementById("property-modal-title");
@@ -4202,6 +4227,8 @@ document.getElementById(
 
 if(modal){
 
+const analysisSelect = document.getElementById("property-analysis");
+if(analysisSelect) analysisSelect.value = "";
 populatePropertyAnalysisSelect();
 
 modal.style.display = "flex";
@@ -4288,6 +4315,7 @@ function populatePropertyAnalysisSelect(){
 
 window.closePropertyModal = function(){
 
+window.pendingPropertyAnalysisId = null;
 const modal =
 document.getElementById(
 "property-modal"
@@ -5817,6 +5845,7 @@ window.saveProperty = async function(){
       : null;
 
     const editingPropertyId = window.editingPropertyId || null;
+    const showCreatedProperty = window.pendingPropertyAnalysisId === analysisId && !!analysisId;
 
     if(!name){
       alert(
@@ -5970,6 +5999,7 @@ window.saveProperty = async function(){
     window.__dashboardLoaded = false;
     window.__forceReload = true;
     await loadDashboard();
+    if(showCreatedProperty) window.showPMSTab("properties");
 
   }catch(err){
 
