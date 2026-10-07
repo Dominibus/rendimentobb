@@ -1,4 +1,5 @@
 import { stripeFieldName, buildStripeEntitlementUpdate } from "../lib/stripe-entitlements.js";
+import { canApplyStripeBinding, checkoutIdentityMatches } from "../lib/stripe-subscription-binding.js";
 import Stripe from "stripe"; 
 import admin from "firebase-admin";
 import { getStripePrices, assertStripeEventMode } from "../lib/stripe-plan-config.js";
@@ -212,7 +213,8 @@ async function updateUserPlan(
   db,
   uid,
   data,
-  event
+  event,
+  binding
 ){
 
   const userRef =
@@ -224,10 +226,16 @@ async function updateUserPlan(
       const userSnapshot =
         await transaction.get(userRef);
 
-      const currentData =
-        userSnapshot.exists
-          ? userSnapshot.data()
-          : {};
+      // Billing never creates profiles or trusts metadata without checking the binding.
+      if(!userSnapshot.exists){
+        console.warn("Stripe entitlement update skipped", {eventId: event.id, eventType: event.type, reason: "profile_missing"});
+        return false;
+      }
+      const currentData = userSnapshot.data();
+      if(!canApplyStripeBinding(currentData, event, binding)){
+        console.warn("Stripe entitlement update skipped", {eventId: event.id, eventType: event.type, reason: "subscription_binding_mismatch_or_terminal"});
+        return false;
+      }
 
       const incomingEventCreated =
         Number(event?.created || 0);
@@ -419,7 +427,8 @@ export default async function handler(
       if (
         session.mode !== "subscription" ||
         !subscription ||
-        subscriptionPriceId !== priceId
+        subscriptionPriceId !== priceId ||
+        !checkoutIdentityMatches(session, subscription)
       ) {
         return res.status(400).json({ error: "Subscription does not match checkout" });
       }
@@ -447,9 +456,10 @@ export default async function handler(
           subscriptionStatus: status,
 
           cancelAtPeriodEnd:
-            false
+            subscription.cancel_at_period_end === true
         },
-        event
+        event,
+        { source: "checkout", customerId: getStripeId(session.customer), subscriptionId }
       );
 
     }
@@ -463,8 +473,8 @@ export default async function handler(
       "customer.subscription.updated"
     ){
 
-      const subscription =
-        event.data.object;
+      // Read the current resource: a delayed snapshot must not restore obsolete status.
+      const subscription = await stripe.subscriptions.retrieve(event.data.object.id);
 
       const customerId =
         getStripeId(
@@ -544,7 +554,8 @@ export default async function handler(
                 0
               )
           },
-          event
+          event,
+          { source: "subscription", customerId, subscriptionId }
         );
 
       }
@@ -603,10 +614,11 @@ export default async function handler(
             cancelAtPeriodEnd:
               false,
 
-            subscriptionId:
-              null
+            // Retain the canceled ID as a tombstone against delayed updates.
+            subscriptionId
           },
-          event
+          event,
+          { source: "subscription", customerId, subscriptionId }
         );
 
       }
@@ -655,7 +667,8 @@ export default async function handler(
             subscriptionStatus:
               "past_due"
           },
-          event
+          event,
+          { source: "invoice", customerId, subscriptionId }
         );
 
       }
