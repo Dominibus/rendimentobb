@@ -30,6 +30,18 @@
     if(values.years === null || !Number.isInteger(values.years) || values.years < 1 || values.years > 100) errors.years = 'whole_years';
     if(values.rate === null || values.rate < 0 || values.rate > 100) errors.rate = 'valid_rate';
     if(values.income === null || values.income < 0 || values.income > 100000000) errors.income = 'nonnegative_income';
+    for(const [field,low,high] of [['propertyPrice',0.01,100000000],['occupancy',0.01,100],['expenses',0,100000000],['commission',0,100],['tax',0,100]]){
+      if(raw[field] === undefined || String(raw[field]).trim() === '') continue;
+      const value = parseNumber(raw[field], ['occupancy','commission','tax'].includes(field) ? 'rate' : 'amount');
+      if(value === null || value < low || value > high) errors[field] = 'valid_optional_input';
+      else values[field] = value;
+    }
+    if(values.propertyPrice !== undefined && values.amount >= values.propertyPrice) errors.propertyPrice = 'positive_equity';
+    if(raw.location !== undefined && String(raw.location).trim()){
+      const location = String(raw.location).trim();
+      if(location.length > 80 || /[<>\x00-\x1f]/.test(location)) errors.location = 'valid_location';
+      else values.location = location;
+    }
     return {valid:Object.keys(errors).length === 0, values, errors};
   }
   function clear(storage){ try { storage.removeItem(key); } catch {} }

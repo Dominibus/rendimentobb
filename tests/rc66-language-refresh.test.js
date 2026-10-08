@@ -26,5 +26,5 @@ test('PMS language refresh preserves monthly chart amounts and owner isolation',
 test('report describes saved assumptions in both languages and pages fetch the updated header',()=>{
  assert.match(read('dashboard-report/index.html'),/data-en="SAVED ASSUMPTIONS"/);
  assert.doesNotMatch(read('dashboard-report/index.html'),/data-en="LIVE DATA"/);
- for(const path of ['dashboard/index.html','dashboard-report/index.html','tool/index.html'])assert.match(read(path),/header\.js\?v=20261008-rc66/);
+ for(const path of ['dashboard/index.html','dashboard-report/index.html','tool/index.html'])assert.match(read(path),/header\.js\?v=20261008-rc67/);
 });

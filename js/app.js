@@ -7787,8 +7787,15 @@ function applySelectedMortgage(){
   document.getElementById("interestRate").value = String(scenario.rate);
   document.getElementById("loanYears").value = String(scenario.years);
   // Do not invent the purchase price or equity: imported principal is reconciled once price is entered.
-  document.getElementById("price").value = "";
-  document.getElementById("equity").value = "";
+  document.getElementById("price").value = scenario.propertyPrice === undefined ? "" : String(scenario.propertyPrice);
+  document.getElementById("equity").value = scenario.propertyPrice === undefined ? "" : String(scenario.propertyPrice - scenario.amount);
+  for(const field of ["occupancy", "expenses", "commission", "tax"]){
+    if(scenario[field] !== undefined) document.getElementById(field).value = String(scenario[field]);
+  }
+  if(scenario.location && locationInput){
+    locationInput.value = scenario.location;
+    locationInput.dispatchEvent(new Event("input", {bubbles:true}));
+  }
   const occupancy = Number(document.getElementById("occupancy").value);
   const equivalent = RBInvestmentJourney.equivalentNight(scenario.income, occupancy);
   if(equivalent !== null) document.getElementById("priceNight").value = String(equivalent);
@@ -7806,7 +7813,9 @@ function updateMortgageTransferSummary(){
   const price = Number(document.getElementById("price").value);
   const equity = Number(document.getElementById("equity").value);
   document.getElementById("mortgage-transfer-values").textContent = t("Mutuo originale", "Original loan") + ": " + money(data.amount) + " · " + data.years + t(" anni", " years") + " · " + data.rate + "% · " + t("Ricavi annui originali", "Original annual revenue") + ": " + money(data.income);
-  let note = t("Inserisci il prezzo dell’immobile: il capitale proprio sarà prezzo meno mutuo. La tariffa equivalente riproduce i ricavi originali con l’occupazione mostrata; verifica entrambe le ipotesi e completa i costi.", "Enter the purchase price: equity will equal price minus loan. The equivalent nightly rate reproduces original revenue with the displayed occupancy; verify both assumptions and complete costs.");
+  let note = data.propertyPrice !== undefined
+    ? t("Prezzo e capitale proprio trasferiti. La tariffa equivalente conserva i ricavi annui con l’occupazione mostrata. Verifica le ipotesi e completa gli eventuali costi mancanti.", "Purchase price and equity transferred. The equivalent nightly rate preserves annual revenue at the displayed occupancy. Verify assumptions and complete any missing costs.")
+    : t("Inserisci il prezzo dell’immobile: il capitale proprio sarà prezzo meno mutuo. La tariffa equivalente riproduce i ricavi originali con l’occupazione mostrata; verifica entrambe le ipotesi e completa i costi.", "Enter the purchase price: equity will equal price minus loan. The equivalent nightly rate reproduces original revenue with the displayed occupancy; verify both assumptions and complete costs.");
   if(price > 0){
     note += " " + t("Mutuo nel modello", "Loan in the model") + ": " + money(Math.max(0, price - equity)) + ".";
     if(data.amount >= price && imported.linkedPrincipal) note += " " + t("Il prezzo deve superare l’importo del mutuo per avere capitale proprio positivo.", "Purchase price must exceed the loan to have positive equity.");
@@ -7848,6 +7857,8 @@ document.addEventListener("rb_language_changed", updateMortgageTransferSummary);
 // ================= AUTO LOAD PROPERTY =================
 
 document.addEventListener("DOMContentLoaded", () => {
+  // A mortgage import has priority over a previous property selection.
+  if(window.rbImportedMortgage || sessionStorage.getItem(RBInvestmentJourney.key)) return;
 
   const savedPrice =
 Number(

@@ -935,6 +935,17 @@ data-it-placeholder="Ricavi annui B&B" data-en-placeholder="Annual B&B revenue">
 
 </div>
 
+<details style="margin:20px 0;padding:18px;border:1px solid #e2e8f0;border-radius:14px;">
+<summary data-it="Completa i dati da trasferire in Analizza" data-en="Complete the inputs to transfer to Analyze">Completa i dati da trasferire in Analizza</summary>
+<p data-it="Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte." data-en="Optional fields: enter verified values. Equity equals price minus loan; annual revenue and occupancy determine the equivalent nightly rate. Costs must not duplicate commissions and taxes.">Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte.</p>
+<div class="mortgage-form-grid">
+<label class="mortgage-field"><span data-it="Città o comune" data-en="City or municipality">Città o comune</span><input id="transfer-location" maxlength="80"></label>
+<label class="mortgage-field"><span data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</span><input id="transfer-propertyPrice" inputmode="decimal"></label>
+<label class="mortgage-field"><span data-it="Occupazione (%)" data-en="Occupancy (%)">Occupazione (%)</span><input id="transfer-occupancy" inputmode="decimal"></label>
+<label class="mortgage-field"><span data-it="Costi mensili (€)" data-en="Monthly costs (€)">Costi mensili (€)</span><input id="transfer-expenses" inputmode="decimal"></label>
+<label class="mortgage-field"><span data-it="Commissioni (%)" data-en="Commissions (%)">Commissioni (%)</span><input id="transfer-commission" inputmode="decimal"></label>
+<label class="mortgage-field"><span data-it="Aliquota del modello (%)" data-en="Model tax rate (%)">Aliquota del modello (%)</span><input id="transfer-tax" inputmode="decimal"></label>
+</div></details>
 <button class="btn-main"
 id="calc-btn"
 
@@ -1449,11 +1460,11 @@ margin-top:25px;
 <script src="/js/ai-engine.js" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261008-rc60"></script>
+<script type="module" src="/js/header.js?v=20261008-rc67"></script>
 <script src="/js/ui-system.js" defer></script>
 <script type="module" src="/js/footer.js"></script>
 
-<script src="/js/investment-journey.js?v=20261008-rc60"></script>
+<script src="/js/investment-journey.js?v=20261008-rc67"></script>
 <script>
 
 function getAccess(){
@@ -2122,7 +2133,17 @@ function readMortgageInputs(rateOverride){
 function continueMortgage(rateOverride){
   const scenario = readMortgageInputs(rateOverride);
   if(!scenario) return false;
-  if(!RBInvestmentJourney.write(sessionStorage, scenario, window.currentUser?.uid || null)){
+  const fields = ['location','propertyPrice','occupancy','expenses','commission','tax'];
+  const raw = {...scenario};
+  fields.forEach(field => { raw[field] = document.getElementById('transfer-' + field)?.value || ''; });
+  const checked = RBInvestmentJourney.validate(raw);
+  fields.forEach(field => document.getElementById('transfer-' + field)?.setCustomValidity(checked.errors[field] ? t('Verifica il valore. Il prezzo deve superare il mutuo; le percentuali devono essere tra 0 e 100 e l’occupazione maggiore di zero.', 'Check this value. Price must exceed the loan; percentages must be between 0 and 100 and occupancy above zero.') : ''));
+  if(!checked.valid){
+    const input = document.getElementById('transfer-' + Object.keys(checked.errors)[0]);
+    input?.closest('details')?.setAttribute('open','');
+    input?.reportValidity(); input?.focus(); return false;
+  }
+  if(!RBInvestmentJourney.write(sessionStorage, checked.values, window.currentUser?.uid || null)){
     document.getElementById("mortgage-input-status").textContent = t("Non è possibile trasferire i dati in questa sessione.", "Scenario transfer is unavailable in this session.");
     return false;
   }
