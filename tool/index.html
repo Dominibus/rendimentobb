@@ -44,7 +44,7 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 
 <!-- 🔥 FIREBASE -->
 <script type="module" src="/js/firebase-init.js"></script>
-<script type="module" src="/js/mortgage-rates.js"></script>
+<script type="module" src="/js/mortgage-rates.js?v=20261008-rc58"></script>
 
 <!-- 🔥 TRUST SIGNAL (Schema JSON-LD) -->
 <script type="application/ld+json">
@@ -772,6 +772,7 @@ SAFE
 
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 <link rel="stylesheet" href="/css/investment-workspace.css?v=20261006-rc41">
+<link rel="stylesheet" href="/css/assumptions-2027.css?v=20261008-rc58">
 </head>
 
 <body class="tool-page">
@@ -950,8 +951,8 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
 
           <div
           style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="Prezzo medio, occupazione e benchmark vengono caricati automaticamente."
-          data-en="Average price, occupancy and benchmark are loaded automatically.">
+          data-it="I riferimenti di esempio della città vengono caricati automaticamente. Verifica tariffa e occupazione del tuo immobile."
+          data-en="Illustrative city references are loaded automatically. Verify your property’s nightly rate and occupancy.">
          </div>
 
         </div>
@@ -959,17 +960,17 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
         <!-- INPUTS -->
         <div class="input-group">
           <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-          <input type="number" id="price" placeholder="150000">
+          <input type="number" id="price" min="0.01" step="any" required placeholder="150000">
         </div>
 
         <div class="input-group">
           <label data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
-          <input type="number" id="equity" placeholder="30000">
+          <input type="number" id="equity" min="0.01" step="any" required placeholder="30000">
         </div>
 
         <div class="input-group">
           <label data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
-          <input type="number" id="priceNight" placeholder="120">
+          <input type="number" id="priceNight" min="0" step="any" required placeholder="120">
         </div>
 
         <div class="input-group">
@@ -978,8 +979,8 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <input
 type="range"
 id="occupancy"
-min="30"
-max="90"
+min="0"
+max="100"
 value="70">
 
           <div class="range-value">
@@ -997,6 +998,19 @@ value="70">
             Importo totale stimato al mese. Il valore è sempre espresso in euro, mai in percentuale.
           </small>
         </div>
+
+<details class="rb-assumptions-panel">
+<summary data-it="Finanziamento, commissioni e imposte del modello" data-en="Financing, commissions and model tax assumptions">Finanziamento, commissioni e imposte del modello</summary>
+<p data-it="Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale." data-en="These values enter the calculation. Defaults are editable assumptions, not lender offers or tax advice.">Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale.</p>
+<div class="rb-assumptions-grid">
+<div class="input-group"><label for="interestRate" data-it="Tasso annuo mutuo (%)" data-en="Annual loan interest (%)">Tasso annuo mutuo (%)</label><input id="interestRate" type="number" value="3.5" min="0" max="100" step="0.01" inputmode="decimal"></div>
+<div class="input-group"><label for="loanYears" data-it="Durata mutuo (anni)" data-en="Loan term (years)">Durata mutuo (anni)</label><input id="loanYears" type="number" value="20" min="1" max="100" step="1"></div>
+<div class="input-group"><label for="commission" data-it="Commissioni sui ricavi (%)" data-en="Revenue commissions (%)">Commissioni sui ricavi (%)</label><input id="commission" type="number" value="15" min="0" max="100" step="0.5" inputmode="decimal"></div>
+<div class="input-group"><label for="tax" data-it="Aliquota applicata dal modello (%)" data-en="Model tax rate (%)">Aliquota applicata dal modello (%)</label><input id="tax" type="number" value="21" min="0" max="100" step="0.5" inputmode="decimal"></div>
+</div>
+<p data-it="Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente." data-en="The loan is derived from price minus equity. Monthly costs should not duplicate commissions and taxes already counted separately.">Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente.</p>
+</details>
+<p class="rb-save-disclosure" role="note" data-it="Investor e Pro: un’analisi completata viene salvata automaticamente nel tuo archivio personale. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione." data-en="Investor and Pro: a completed analysis is automatically saved to your personal archive. Results remain simulations, not confirmed properties. Free: results are available in the session.">Investor e Pro: un’analisi completata viene salvata automaticamente nel tuo archivio personale. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione.</p>
 
         <button id="analyze-btn" class="btn btn-primary" style="margin-top:10px;"
           data-it="🚀 Analizza investimento"
@@ -1228,10 +1242,10 @@ class="investment-panel">
   "></div>
 
 <div class="score-label"
-data-it="Punteggio AI investimento"
-data-en="AI Investment Score">
+data-it="Punteggio del modello investimento"
+data-en="Investment model score">
 
-Punteggio AI investimento
+Punteggio del modello investimento
 
 </div>
 </div>
@@ -1436,8 +1450,8 @@ data-en="Investor: full analyses, scenarios, saved simulations and portfolio/PMS
 <!-- 🔥 BULLET VALUE -->
 <div style="font-size:13px;color:#334155;margin-top:10px;text-align:center;display:flex;flex-direction:column;gap:8px;font-weight:500;">
 
-  <div data-it="✔️ ROI reale" data-en="✔️ Real ROI">
-    ✔️ ROI reale
+  <div data-it="✔️ ROI stimato" data-en="✔️ Estimated ROI">
+    ✔️ ROI stimato
   </div>
 
   <div data-it="✔️ Analisi mutuo" data-en="✔️ Mortgage analysis">
@@ -1691,7 +1705,7 @@ data-en="📄 Download Executive Report PDF">
 <!-- 🤖 GLOBAL AI CHATBOT -->
 <script src="/js/chatbot-loader.js?v=20261008-rc57" defer></script>
   
-<script type="module" src="/js/header.js"></script>
+<script type="module" src="/js/header.js?v=20261008-rc58"></script>
 <script src="/js/ui-system.js" defer></script>  
 <script type="module" src="/js/footer.js"></script>  
 
@@ -1840,7 +1854,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261008-rc57"></script>
+<script type="module" src="/js/app.js?v=20261008-rc58"></script>
 
 <script>
 

@@ -714,11 +714,11 @@ cutout:"65%"
 }
 // ================= LOAD DASHBOARD =================
 
-async function loadDashboard(){
+async function loadDashboard({languageOnly = false} = {}){
 
   if(
     window.__dashboardLoaded &&
-    !window.__forceReload
+    !window.__forceReload && !languageOnly
   ){
     dashboardDebug(
       "Dashboard già inizializzata → skip"
@@ -729,7 +729,7 @@ async function loadDashboard(){
   window.__dashboardLoaded = true;
   window.__forceReload = false;
 
-  closeAllOverlays();
+  if(!languageOnly) closeAllOverlays();
 
   roiValues = [];
   labels = [];
@@ -830,8 +830,13 @@ if(
 
     );
 
-    querySnapshot =
-      await getDocs(q);
+    const ownerKey = `${window.currentUser.uid}:${window.currentPlan}`;
+    if(languageOnly && window.__rbDashboardSnapshot?.ownerKey === ownerKey){
+      querySnapshot = window.__rbDashboardSnapshot.snapshot;
+    }else{
+      querySnapshot = await getDocs(q);
+      window.__rbDashboardSnapshot = {ownerKey, snapshot:querySnapshot};
+    }
 
 }else{
 
@@ -2314,8 +2319,8 @@ color = "#3b82f6";
 icon = "🔵";
 
 insight = t(
-"Le performance sono superiori alla media del mercato. Mantieni la strategia attuale monitorando nuove opportunità.",
-"Performance is above the illustrative reference. Maintain the current strategy while monitoring new investment opportunities."
+"Il ROI medio degli scenari supera il riferimento illustrativo. Non dimostra un rendimento superiore al mercato: verifica base di calcolo e ipotesi di ogni immobile.",
+"Average scenario ROI exceeds the illustrative reference. This does not demonstrate market outperformance: verify the calculation basis and each property’s assumptions."
 );
 
 }
@@ -2325,8 +2330,8 @@ color = "#f59e0b";
 icon = "🟠";
 
 insight = t(
-"Il rendimento è inferiore al benchmark di mercato. Valuta immobili con ROI più elevato o riduci i costi operativi.",
-"Performance is below the market benchmark. Consider higher ROI properties or optimize operating costs."
+"Il ROI medio degli scenari è sotto il riferimento illustrativo. Verifica ricavi, costi e finanziamento senza trattarlo come una quotazione di mercato.",
+"Average scenario ROI is below the illustrative reference. Review revenue, costs and financing without treating the reference as a market valuation."
 );
 
 }
@@ -2679,8 +2684,7 @@ function reloadDashboardLanguage(){
 document.addEventListener("rb_language_changed", () => {
 
   
-  window.__forceReload = true;
-  loadDashboard();
+  loadDashboard({languageOnly:true});
 
 });
 
@@ -3397,26 +3401,10 @@ firenze:"Firenze"
 /* ================= HERO CONTENT ================= */
 
 const HERO_CONTENT = {
-roma:[
-"Domanda turistica costante e ROI stabile",
-"Capitale del turismo internazionale",
-"Mercato premium ad alta occupazione"
-],
-napoli:[
-"ROI sopra la media nazionale",
-"Forte crescita turistica",
-"Ottimo rapporto prezzo / rendimento"
-],
-milano:[
-"Business travel e alta occupazione",
-"Mercato stabile e liquido",
-"Alta domanda tutto l’anno"
-],
-firenze:[
-"Turismo internazionale premium",
-"Alta redditività stagionale",
-"Domanda costante tutto l’anno"
-]
+roma:["Scenario illustrativo su Roma", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+napoli:["Scenario illustrativo su Napoli", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+milano:["Scenario illustrativo su Milano", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+firenze:["Scenario illustrativo su Firenze", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"]
 };
 
 /* ================= MARKET STATS ================= */
@@ -6405,7 +6393,7 @@ flex-wrap:wrap;
       ${t("Analisi finanziaria collegata", "Financial analysis linked")}
     </strong>
     <span style="color:#64748b;font-size:12px;">
-      ${t("Dati verificati per Dashboard e Autopilot", "Verified data for Dashboard and Autopilot")}
+      ${t("Ipotesi salvate per Dashboard e Autopilot", "Saved assumptions for Dashboard and Autopilot")}
     </span>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -8041,12 +8029,12 @@ ${totalRevenue >= 1000 ? "High" : totalRevenue >= 500 ? "Medium" : "Limited"} va
         ? `L'ADR è di €${adr.toFixed(0)}. ${
             adr < 130
                 ? "Aumentare la tariffa media potrebbe migliorare la redditività."
-                : "La tariffa è in linea con il mercato."
+                : "La tariffa supera la soglia interna di esempio; confrontala con dati verificati della zona."
           }`
         : `Current ADR is €${adr.toFixed(0)}. ${
             adr < 130
                 ? "Increasing the average daily rate could improve profitability."
-                : "ADR is aligned with the market."
+                : "ADR exceeds the internal example threshold; compare it with verified local data."
           }`;
 
 }
@@ -8058,14 +8046,14 @@ if (adr < 130) {
 
     analysis.why.push(
         lang === "it"
-            ? "ADR sotto il target di mercato"
-            : "ADR below market target"
+            ? "ADR sotto la soglia interna di esempio (€130)"
+            : "ADR below the internal example threshold (€130)"
     );
 
     analysis.actions.push(
         lang === "it"
-            ? "Aumenta l’ADR di 10 €"
-            : "Increase ADR by €10"
+            ? "Simula una variazione di ADR di €10 e verifica domanda e disponibilità"
+            : "Simulate a €10 ADR change and verify demand and availability"
     );
 
 }
@@ -13759,7 +13747,7 @@ const bookings =
 Number(data.bookings || 0);
 
 const hasPMSPerformanceData =
-bookings > 0 || revenue > 0;
+revenue > 0 || occupancy > 0 || revpar > 0;
 
 if(!hasPMSPerformanceData){
 
@@ -13788,8 +13776,8 @@ box-shadow:0 12px 40px rgba(15,23,42,.08);
 
   <p style="margin:0;color:#64748b;line-height:1.7;">
     ${t(
-      "Dati PMS non disponibili. Registra almeno una prenotazione o un ricavo per generare score, valutazione e raccomandazioni operative.",
-      "PMS data is not available. Record at least one booking or revenue entry to generate a score, assessment and operating recommendations."
+      "Nessuna attività economica registrata nel periodo corrente. Le prenotazioni storiche o future non dimostrano performance insufficiente: verifica completezza e periodo dei dati prima di trarre conclusioni.",
+      "No economic activity recorded in the current period. Past or future bookings do not demonstrate poor performance: verify data completeness and the reporting period before drawing conclusions."
     )}
   </p>
 </div>

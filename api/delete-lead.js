@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const decoded = await admin.auth().verifyIdToken(token);
+    const decoded = await admin.auth().verifyIdToken(token, true);
     const email = String(decoded.email || "").toLowerCase();
     const isAdmin = decoded.admin === true || (decoded.email_verified === true && email === "rendimentobb@gmail.com");
 
@@ -63,6 +63,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true });
   } catch (error) {
+    if(String(error?.code || "").startsWith("auth/")) return res.status(401).json({error:"Invalid authentication"});
     return res.status(500).json({ error: "Unable to delete lead" });
   }
 }

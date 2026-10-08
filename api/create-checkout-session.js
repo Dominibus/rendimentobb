@@ -85,7 +85,7 @@ export default async function handler(req, res) {
 
     const decodedToken = await firebaseAdmin
       .auth()
-      .verifyIdToken(idToken);
+      .verifyIdToken(idToken, true);
 
     const uid = decodedToken.uid;
 
@@ -111,7 +111,8 @@ export default async function handler(req, res) {
     if (
       error?.code === "auth/id-token-expired" ||
       error?.code === "auth/argument-error" ||
-      error?.code === "auth/id-token-revoked"
+      error?.code === "auth/id-token-revoked" ||
+      error?.code === "auth/user-disabled" || error?.code === "auth/invalid-id-token"
     ) {
       return res.status(401).json({
         error: "Invalid authentication"

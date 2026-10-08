@@ -156,13 +156,13 @@ if(window.hasPlan && window.hasPlan(required)){
     setTimeout(()=>{
       alert(
         getCurrentLang()==="it"
-        ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
-        : "⚠️ You are making decisions without real data"
+        ? "Consulta gli indicatori aggiuntivi e le ipotesi del piano richiesto"
+        : "Review the additional indicators and assumptions included in the required plan"
       );
     },300);
 
   }else{
-    window.location.href = "/pricing/";
+    window.location.href = "/#pricing";
   }
 
   return false;

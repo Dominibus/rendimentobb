@@ -437,7 +437,7 @@ Guide
     </p>
 
     <ul>
-      <li data-it="✔ ROI reale avanzato" data-en="✔ Advanced real ROI"></li>
+      <li data-it="✔ ROI stimato avanzato" data-en="✔ Advanced estimated ROI"></li>
       <li data-it="✔ Analisi mutuo completa" data-en="✔ Full mortgage analysis"></li>
       <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
       <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>

@@ -5,18 +5,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
 
-  const city =
-    (req.query.city || "napoli")
-    .toLowerCase();
-
-  const budget =
-    Number(req.query.budget || 200000);
-
-  const sqm =
-    Number(req.query.sqm || 60);
-
-  const goal =
-    req.query.goal || "roi";
+  const validScalar = value => value === undefined || typeof value === "string";
+  if(![req.query.city,req.query.budget,req.query.sqm,req.query.goal].every(validScalar)){
+    return res.status(400).json({success:false,error:"Invalid search parameters"});
+  }
+  const city = (req.query.city || "napoli").trim().toLowerCase();
+  const budget = Number(req.query.budget || 200000);
+  const sqm = Number(req.query.sqm || 60);
+  const goal = req.query.goal || "roi";
+  if(!["napoli","roma","milano","firenze"].includes(city) || !Number.isFinite(budget) || budget <= 0 || budget > 100000000 ||
+    !Number.isFinite(sqm) || sqm <= 0 || sqm > 10000 || !["roi","cashflow","safe"].includes(goal)){
+    return res.status(400).json({success:false,error:"Invalid search parameters"});
+  }
+  res.setHeader("Cache-Control","no-store");
 
   // =====================================
   // 🏠 IMMOBILIARE.IT
