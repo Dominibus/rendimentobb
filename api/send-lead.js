@@ -242,6 +242,7 @@ export default async function handler(req, res){
       bank,
       rate,
       years,
+      income,
       name,
       role,
       message,
@@ -269,7 +270,22 @@ export default async function handler(req, res){
     phone = clean(phone, 40);
     bank = clean(bank, 100);
     rate = clean(rate, 20);
-    years = clamp(years, 0, 50);
+    years = clamp(years, 0, 100);
+    if(type === "mutui"){
+      const raw = req.body || {};
+      const amountNumber = Number(raw.price);
+      const rateNumber = raw.rate === null || raw.rate === undefined || String(raw.rate).trim() === "" ? NaN : Number(String(raw.rate).replace(/%$/, "").replace(",", "."));
+      const yearsNumber = Number(raw.years);
+      const hasIncome = raw.income !== undefined && raw.income !== null && raw.income !== "";
+      const incomeNumber = hasIncome ? Number(raw.income) : null;
+      if(!Number.isFinite(amountNumber) || amountNumber <= 0 || amountNumber > 100000000 ||
+         !Number.isFinite(rateNumber) || rateNumber < 0 || rateNumber > 100 ||
+         !Number.isInteger(yearsNumber) || yearsNumber < 1 || yearsNumber > 100 ||
+         (hasIncome && (!Number.isFinite(incomeNumber) || incomeNumber < 0 || incomeNumber > 100000000))){
+        return res.status(400).json({error:"Invalid mortgage parameters"});
+      }
+      price = amountNumber; rate = String(rateNumber); years = yearsNumber; income = incomeNumber;
+    }else{ income = null; }
     name = clean(name, 100);
     role = clean(role, 100);
     message = clean(message, 2000);
@@ -379,6 +395,7 @@ const leadPayload = {
 bank: clean(bank || ""),
 rate: clean(rate || ""),
 years,
+income,
 name: clean(name || ""),
 role: clean(role || ""),
 message: clean(message || ""),
@@ -584,9 +601,10 @@ if(role) userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]
 if(message) userRows.push([t(detectedLang,"Messaggio inviato","Submitted message"),message]);
 if(type === "mutui"){
   if(provided("price")) userRows.push([t(detectedLang,"Importo simulato","Modeled amount"),formatMoney(price,detectedLang)]);
+  if(provided("income") && income !== null) userRows.push([t(detectedLang,"Ricavi annui ipotizzati","Assumed annual revenue"),formatMoney(income,detectedLang)]);
   if(years) userRows.push([t(detectedLang,"Durata","Term"),`${years} ${t(detectedLang,"anni","years")}`]);
   if(rate) userRows.push([t(detectedLang,"Tasso ipotizzato","Assumed rate"),`${rate}%`]);
-  if(bank) userRows.push([t(detectedLang,"Banca indicata","Selected bank"),bank]);
+  if(bank) userRows.push([t(detectedLang,"Scenario selezionato","Selected scenario"),bank]);
 }
 if(showInvestmentResults){
   for(const [key,label,enLabel,val] of [

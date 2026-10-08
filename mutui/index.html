@@ -943,6 +943,9 @@ data-en="Calculate impact">
 Calcola impatto
 </button>
 
+<p id="mortgage-input-status" role="alert"></p>
+<button type="button" class="btn-main" onclick="continueMortgage()" data-it="Continua in Analizza →" data-en="Continue in Analyze →">Continua in Analizza →</button>
+<p data-it="Importo, durata, tasso e ricavi vengono trasferiti. In Analizza completa prezzo, capitale proprio e costi." data-en="Amount, duration, rate and revenue are transferred. In Analyze complete the purchase price, equity and costs.">Importo, durata, tasso e ricavi vengono trasferiti. In Analizza completa prezzo, capitale proprio e costi.</p>
 <div id="roi-alert" class="roi-alert"></div>
 
 <div class="kpi-grid">
@@ -1446,10 +1449,11 @@ margin-top:25px;
 <script src="/js/ai-engine.js" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261008-rc58"></script>
+<script type="module" src="/js/header.js?v=20261008-rc60"></script>
 <script src="/js/ui-system.js" defer></script>
 <script type="module" src="/js/footer.js"></script>
 
+<script src="/js/investment-journey.js?v=20261008-rc60"></script>
 <script>
 
 function getAccess(){
@@ -1474,35 +1478,18 @@ function calculate(options = {}){
 
 // Production: nessun log
   
-const amount = parseFloat(document.getElementById("amount").value || 200000);
-const rateInput = String(
-  document.getElementById("rate").value ?? ""
-).trim();
-
-const parsedRate = parseFloat(
-  rateInput
-    .replace("%","")
-    .replace(",",".")
-);
-
-// Lo 0% è un valore valido; il fallback si applica solo a input vuoti o errati.
-const rate = Number.isFinite(parsedRate) && parsedRate >= 0
-  ? parsedRate
-  : 3.5;
-const years  = parseFloat(document.getElementById("years").value || 20);
-const income = parseFloat(document.getElementById("income").value || 30000);
-
-const monthlyRate = rate/100/12;
-const n = years*12;
-
-const monthly = monthlyRate === 0
-  ? amount / n
-  : amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
-const yearly = monthly*12;
+const scenario = readMortgageInputs();
+if(!scenario) return false;
+const {amount, rate, years, income} = scenario;
+for(const id of ["banks", "decision-box", "advisor-box"]){ const node = document.getElementById(id); if(node) node.style.display = "block"; }
+const monthly = RBInvestmentJourney.payment(amount, rate, years);
+const yearly = monthly * 12;
+if(!Number.isFinite(yearly)) return false;
+RBInvestmentJourney.write(sessionStorage, scenario, window.currentUser?.uid || null);
 
 const roi = income > 0
   ? ((income - yearly) / income * 100)
-  : 0;
+  : -100;
 
 /* ===== ALERT ===== */
 const alertBox = document.getElementById("roi-alert");
@@ -1534,7 +1521,7 @@ document.getElementById("yearly").innerText =
   lockValue(safeYearly.toFixed(0), "€");
 
 document.getElementById("impact").innerText =
-  lockValue(safeROI.toFixed(1), "%");
+  income > 0 ? lockValue(safeROI.toFixed(1), "%") : "—";
 
 document.getElementById("score").innerText = "—";
   
@@ -1555,12 +1542,12 @@ if(extraBox){
 }
 
 /* ===== BANK ===== */
-renderBanks(amount);
+renderBanks(amount, years);
 
 renderDecision(roi);
 
-renderAdvisor(roi);  
-  
+renderAdvisor(roi);
+return true;
 }
 
 function lockValue(value, suffix=""){
@@ -1810,7 +1797,7 @@ ${t(
 }
 
 /* ================= BANCHE ================= */
-function renderBanks(amount){
+function renderBanks(amount, years){
 
 const banks = [
 {name:t("Scenario fisso A","Fixed-rate scenario A"), rate:3.1},
@@ -1827,6 +1814,7 @@ let html = "<h3 style='margin-top:40px'>🏦 " +
 t("Scenari di finanziamento","Financing scenarios") +
 "</h3>";
 
+html += `<p>${t("Durata applicata a tutti gli scenari", "Duration applied to all scenarios")}: ${years} ${t("anni", "years")}</p>`;
 html += `
 
 <div class="ai-rate-box">
@@ -1912,8 +1900,7 @@ if(!access.isInvestor && !access.isPro){
 banks.forEach((b,i)=>{
 
 const monthlyRate = b.rate/100/12;
-const n = 20*12;
-const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
+const monthly = RBInvestmentJourney.payment(amount, b.rate, years);
 const yearly = monthly * 12;
 
 const access = getAccess();
@@ -2102,46 +2089,50 @@ function closeUpgradeModal(){
 }
   
 function selectMortgage(rate, bank){
-
   const access = getAccess();
-
-  // 🔥 PRO → simulatore
-  if(access.isPro){
-    localStorage.setItem("mortgage_rate",rate);
-    window.location.href="/tool/";
-    return;
-  }
-
-  // 🔥 INVESTOR → contatto diretto
-  if(access.isInvestor){
-
-    const email = document.getElementById("email").value;
-
-    // 👉 se NON ha inserito email → scroll + stop
-    if(!email){
-
-      document.querySelector(".lead-box").scrollIntoView({
-        behavior:"smooth"
-      });
-
-      alert(t(
-        "Inserisci email prima",
-        "Enter email first"
-      ));
-
-      return;
-    }
-
-    saveLeadFromBank(bank, rate);
-
-    return; // 🔴 IMPORTANTISSIMO
-  }
-
-  // 🔥 FREE → upgrade
+  if(access.isPro || access.isInvestor) return continueMortgage(rate);
   handleUpgradeClick();
 }
-  
+
+function readMortgageInputs(rateOverride){
+  const raw = Object.fromEntries(["amount", "years", "rate", "income"].map(id => [id, document.getElementById(id).value]));
+  if(rateOverride !== undefined) raw.rate = rateOverride;
+  const checked = RBInvestmentJourney.validate(raw);
+  const messages = {
+    amount:t("Inserisci un importo maggiore di zero, fino a 100 milioni di euro.", "Enter a positive amount up to 100 million euros."),
+    years:t("Inserisci una durata intera da 1 a 100 anni.", "Enter a whole duration from 1 to 100 years."),
+    rate:t("Inserisci un tasso da 0 a 100%. Lo 0% è valido.", "Enter a rate from 0 to 100%. Zero is valid."),
+    income:t("Inserisci ricavi annui da 0 a 100 milioni di euro.", "Enter annual revenue from 0 to 100 million euros.")
+  };
+  for(const id of Object.keys(raw)){
+    const input = document.getElementById(id);
+    input.setCustomValidity(checked.errors[id] ? messages[id] : "");
+    input.setAttribute("aria-invalid", checked.errors[id] ? "true" : "false");
+  }
+  if(!checked.valid){
+    RBInvestmentJourney.clear(sessionStorage);
+    const first = document.getElementById(Object.keys(checked.errors)[0]);
+    document.getElementById("mortgage-input-status").textContent = messages[first.id];
+    first.reportValidity(); first.focus(); return null;
+  }
+  document.getElementById("mortgage-input-status").textContent = "";
+  return checked.values;
+}
+
+function continueMortgage(rateOverride){
+  const scenario = readMortgageInputs(rateOverride);
+  if(!scenario) return false;
+  if(!RBInvestmentJourney.write(sessionStorage, scenario, window.currentUser?.uid || null)){
+    document.getElementById("mortgage-input-status").textContent = t("Non è possibile trasferire i dati in questa sessione.", "Scenario transfer is unavailable in this session.");
+    return false;
+  }
+  window.location.href = "/tool/";
+  return true;
+}
+
 async function saveLeadFromBank(bank, rate){
+  const scenario = readMortgageInputs(rate);
+  if(!scenario) return;
 
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
@@ -2162,8 +2153,8 @@ async function saveLeadFromBank(bank, rate){
   type: "mutui",
   email,
   phone,
-  price: parseFloat(document.getElementById("amount").value || 0),
-  years: parseFloat(document.getElementById("years").value || 0),
+  price: scenario.amount,
+  years: scenario.years,
   rate,
   bank,
   lang: window.currentLang || "it",
@@ -2207,11 +2198,13 @@ function handleUpgradeClick(){
 
 /* ================= LEAD ================= */
 async function saveLead(){
+  const scenario = readMortgageInputs();
+  if(!scenario) return;
 
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
 
-  if(!email){
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     document.querySelector(".lead-box").scrollIntoView({behavior:"smooth"});
     alert(t("Inserisci email","Enter email"));
     return;
@@ -2234,11 +2227,12 @@ async function saveLead(){
     phone,
     type:"mutui",
     roi: roiValue,
-    price: parseFloat(document.getElementById("amount").value || 0),
+    price: scenario.amount,
     equity: 0,
     profit: 0,
-    years: parseFloat(document.getElementById("years").value || 0),
-    rate: parseFloat(String(document.getElementById("rate").value || 0).replace("%", "").replace(",", ".")),
+    years: scenario.years,
+    rate: scenario.rate,
+    income: scenario.income,
     lang: window.currentLang || "it",
     source: "mutui_page",
     funnel: window.currentPlan || "free"
@@ -2307,6 +2301,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Production: nessun log
 
+  for(const id of ["amount", "years", "rate", "income"]){
+    const input = document.getElementById(id);
+    input.required = true;
+    input.addEventListener("input", () => {
+      input.setCustomValidity(""); input.removeAttribute("aria-invalid");
+      RBInvestmentJourney.clear(sessionStorage);
+      document.getElementById("mortgage-input-status").textContent = t("Dati modificati: ricalcola prima di confrontare gli scenari.", "Inputs changed: recalculate before comparing scenarios.");
+      for(const kpi of ["monthly", "yearly", "impact", "score"]) document.getElementById(kpi).textContent = "—";
+      for(const area of ["roi-alert", "extra", "banks", "decision-box", "advisor-box"]){
+        const node = document.getElementById(area); if(node) node.style.display = "none";
+      }
+    });
+  }
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if(!link || new URL(link.href, location.href).pathname !== "/tool/" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if(["amount", "years", "rate", "income"].some(id => document.getElementById(id).value.trim())){
+      event.preventDefault(); continueMortgage();
+    }
+  });
   const btn = document.getElementById("calc-btn");
 
   if(btn){

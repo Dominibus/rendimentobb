@@ -1,3 +1,4 @@
+import "./investment-journey.js?v=20261008-rc60";
 // ===============================================
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
@@ -13,7 +14,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261006-rc46";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js";
+} from "./market-engine.js?v=20261008-rc60";
 
 import {
 renderExecutiveKPI
@@ -32,7 +33,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js";
+import { app } from "./firebase-init.js?v=20261008-rc60";
 const db = getFirestore(app);
 
 let roiChartInstance = null;
@@ -3408,230 +3409,32 @@ if(mortgageBox && mortgageBtn){
 // ================= LOCATION → CITY MAPPING PRO =================
 
 function mapLocationToCity(input){
-
-  if(!input || input.trim() === "") return null;
-
-  const val = input.toLowerCase().trim();
-
-  // ================= DATABASE MIRATO =================
-  const cityMap = {
-
-    // NAPOLI
-    "portici": "napoli",
-    "ercolano": "napoli",
-    "pompei": "napoli",
-
-    // MILANO
-    "sesto san giovanni": "milano",
-    "lambrate": "milano",
-    "monza": "milano",
-
-    // ROMA
-    "fiumicino": "roma",
-    "ostia": "roma",
-
-    // FIRENZE
-    "prato": "firenze",
-    "pistoia": "firenze"
-  };
-
-  for(const city in cityMap){
-    if(val.includes(city)){
-      return cityMap[city];
-    }
-  }
-
-  // ================= PROVINCE =================
-  const provinceMap = {
-    na: "napoli",
-    sa: "napoli",
-
-    mi: "milano",
-    mb: "milano",
-
-    rm: "roma",
-    lt: "roma",
-
-    fi: "firenze",
-    po: "firenze"
-  };
-
-  const match = val.match(/\((.*?)\)/);
-
-  if(match){
-    const prov = match[1].toLowerCase();
-    if(provinceMap[prov]){
-      return provinceMap[prov];
-    }
-  }
-
-  if(
-  val.includes("parma") ||
-  val.includes("reggio emilia") ||
-  val.includes("piacenza")
-){
-  
-  return "bologna";
+  const value = String(input || "").trim().toLowerCase().replace(/\s*\([a-z]{2}\)$/, "").trim();
+  return ["napoli", "roma", "milano", "firenze"].includes(value) ? value : null;
 }
-
-  // ================= REGION LOGIC (🔥 QUI È IL FIX) =================
-
-  if(val.includes("pisa") || val.includes("livorno") || val.includes("lucca")){
-    return "firenze";
-  }
-
-  if(val.includes("torino") || val.includes("novara")){
-    return "milano";
-  }
-
-  if(val.includes("bologna") || val.includes("modena")){
-    return "firenze";
-  }
-
-  if(val.includes("napoli") || val.includes("salerno")){
-    return "napoli";
-  }
-
-  if(val.includes("milano")){
-    return "milano";
-  }
-
-  if(val.includes("roma")){
-    return "roma";
-  }
-
-  if(val.includes("firenze")){
-    return "firenze";
-  }
-
-  // ================= FALLBACK INTELLIGENTE =================
-
- 
-
-  return "roma";
-}
-
-// ================= LOCATION HELPER UX (FINAL PREMIUM) =================
 
 const locationInput = document.getElementById("custom-location");
 const helper = document.getElementById("location-helper");
-
-if(locationInput && helper){
-
+if(locationInput){
   locationInput.addEventListener("input", () => {
-
-    const val = locationInput.value?.trim();
-
-// =====================================
-// 🔥 RESET SELECT DEFAULT (CRITICO)
-// =====================================
-
-const citySelector =
-  document.getElementById("market-city");
-
-if(citySelector){
-
-  if(val !== ""){
-
-    // 🔥 svuota select
-    citySelector.value = "";
-
-    // 🔥 disabilita select
-    citySelector.disabled = true;
-    citySelector.style.opacity = "0.5";
-
-    // 🔥 input manuale prioritario
-    window.__CITY_MANUAL__ = true;
-
-    // 🔥 mapping reale città
-    const mapped = mapLocationToCity(val);
-
-    if(mapped){
-
-      // 🔥 aggiorna città globale
-      window.currentCity = mapped;
-
-      // 🔥 salva sync
-      sessionStorage.setItem("tool_city", mapped);
-
-     
-
-    }
-
-  }else{
-
-    // 🔓 riattiva select
-    citySelector.disabled = false;
-    citySelector.style.opacity = "1";
-
-    window.__CITY_MANUAL__ = false;
-
-  }
-
-}
-
-    // ================= EMPTY STATE =================
-    if(!val){
-
-      helper.innerText = t(
-        "💡 I dati di mercato verranno applicati automaticamente",
-        "💡 Market data will be applied automatically"
-      );
-
-      return;
-    }
-
-    // ================= MAPPING =================
-    const mapped = mapLocationToCity(val);
-
-    // ================= LABEL =================
-    const cityLabel = {
-      napoli: "Napoli",
-      milano: "Milano",
-      roma: "Roma",
-      firenze: "Firenze"
-    };
-
-    const label = cityLabel[mapped] || "Roma";
-
-    // ================= UX MESSAGE =================
-    helper.innerText = t(
-  `📍 Mercato automatico rilevato: ${label}`,
-  `📍 Automatic market detected: ${label}`
-);
-
-    // ================= SYNC REALE (CRITICO) =================
-    if(!window.__CITY_LOCKED__){
-
-      if(window.__CITY_LOCKED__ && window.location.pathname.includes("/tool")){
-  window.__CITY_LOCKED__ = false;
-}
-
-      // 🔥 aggiorna città globale
-      window.currentCity = mapped;
-
-      // 🔥 salva (coerenza UX)
-      sessionStorage.setItem("tool_city", mapped);
-
-      // 🔥 aggiorna background live (effetto premium)
-      if(typeof applyCityBackground === "function"){
-
-  const hero =
-    document.querySelector(".tool-hero") ||
-    document.querySelector(".hero-bg") ||
-    document.querySelector(".hero-roi");
-
-  window.__BG_LOCK__ = false;
-  window.__CITY_MANUAL__ = true;
-  applyCityBackground(mapped);
-}
-
-    }
-
-
+    if(window.__CITY_LOCKED__) return;
+    const value = locationInput.value.trim();
+    const mapped = mapLocationToCity(value);
+    const selector = document.getElementById("market-city");
+    if(selector){ selector.disabled = !!value; selector.style.opacity = value ? "0.5" : "1"; if(value) selector.value = mapped || ""; }
+    window.__CITY_MANUAL__ = !!value;
+    window.__CITY_FROM_INPUT__ = !!value;
+    window.currentCity = value ? mapped || value.toLowerCase() : selector?.value || "";
+    selectedCity = window.currentCity;
+    sessionStorage.setItem("tool_city", window.currentCity);
+    if(helper) helper.textContent = !value ? t("Scegli una città o inserisci la tua località.", "Choose a city or enter your location.")
+      : mapped ? t("Riferimenti illustrativi per la città selezionata: verifica le ipotesi.", "Illustrative references for the selected city: verify assumptions.")
+      : t("Nessun benchmark locale disponibile. La simulazione usa soltanto i dati che inserisci.", "No local benchmark is available. The simulation uses only your own inputs.");
+    renderMarketBenchmark(window.currentCity);
+    if(mapped) { window.__BG_LOCK__ = false; applyCityBackground(mapped); }
   });
-
 }
+
 // ================= SAFE INPUT =================
 
 function getValue(id){
@@ -3828,6 +3631,7 @@ if(access.isPro || access.isAdmin){
 
     monthlyCostsInput?.setCustomValidity("");
     if(isTool && window.__MANUAL_ANALYSIS__){
+      document.getElementById("equity")?.setCustomValidity?.("");
       for(const id of ["price", "equity", "priceNight", "expenses"]){
         const field = document.getElementById(id);
         if(field?.reportValidity && !field.reportValidity()){
@@ -8003,64 +7807,73 @@ document.addEventListener("rb_auth_ready", () => {
 // ===============================================
 
 function applySelectedMortgage(){
-
-  const savedRate =
-    localStorage.getItem("selected_mortgage_rate") ||
-    localStorage.getItem("mortgage_rate");
-
-  if(!savedRate) return;
-
-  
-
-  const rateInput = document.getElementById("interestRate");
-
-  if(rateInput){
-    rateInput.value = savedRate;
-  }
-
-  // ===============================
-  // UX BANNER PREMIUM
-  // ===============================
-
-  const banner = document.getElementById("mortgage-banner");
-
-  if(banner){
-
-    banner.innerHTML = `
-    <div style="
-      margin-bottom:20px;
-      padding:14px;
-      border-radius:12px;
-      background:linear-gradient(135deg,#ecfdf5,#d1fae5);
-      border:1px solid #10b981;
-      font-weight:600;
-      text-align:center;
-      box-shadow:0 8px 20px rgba(16,185,129,0.15);
-    ">
-      🏦 ${
-        typeof t === "function"
-        ? t(
-          "Mutuo selezionato automaticamente dal comparatore",
-          "Mortgage auto-selected from comparator"
-        )
-        : "Mutuo selezionato"
-      }
-      <br>
-      <span style="font-size:18px;color:#059669">
-        ${savedRate}%
-      </span>
-    </div>
-    `;
-  }
-
-  // ===============================
-  // CLEAN STORAGE
-  // ===============================
-
-  localStorage.removeItem("selected_mortgage_rate");
-  localStorage.removeItem("mortgage_rate");
-
+  if(!window.location.pathname.startsWith("/tool") || !window.firebaseReady) return;
+  localStorage.removeItem("mortgage_rate"); localStorage.removeItem("selected_mortgage_rate");
+  const scenario = RBInvestmentJourney.read(sessionStorage, window.currentUser?.uid || null);
+  if(!scenario) return;
+  RBInvestmentJourney.clear(sessionStorage);
+  localStorage.removeItem("mortgage_rate"); localStorage.removeItem("selected_mortgage_rate");
+  window.rbImportedMortgage = {data:scenario, linkedPrincipal:true};
+  document.getElementById("interestRate").value = String(scenario.rate);
+  document.getElementById("loanYears").value = String(scenario.years);
+  // Do not invent the purchase price or equity: imported principal is reconciled once price is entered.
+  document.getElementById("price").value = "";
+  document.getElementById("equity").value = "";
+  const occupancy = Number(document.getElementById("occupancy").value);
+  const equivalent = RBInvestmentJourney.equivalentNight(scenario.income, occupancy);
+  if(equivalent !== null) document.getElementById("priceNight").value = String(equivalent);
+  document.getElementById("interestRate").closest("details")?.setAttribute("open", "");
+  updateMortgageTransferSummary();
 }
+
+function updateMortgageTransferSummary(){
+  const imported = window.rbImportedMortgage;
+  const summary = document.getElementById("mortgage-transfer-summary");
+  if(!summary || !imported) return;
+  summary.hidden = false;
+  const data = imported.data;
+  const money = value => new Intl.NumberFormat(window.currentLang === "en" ? "en-US" : "it-IT", {style:"currency", currency:"EUR"}).format(value);
+  const price = Number(document.getElementById("price").value);
+  const equity = Number(document.getElementById("equity").value);
+  document.getElementById("mortgage-transfer-values").textContent = t("Mutuo originale", "Original loan") + ": " + money(data.amount) + " · " + data.years + t(" anni", " years") + " · " + data.rate + "% · " + t("Ricavi annui originali", "Original annual revenue") + ": " + money(data.income);
+  let note = t("Inserisci il prezzo dell’immobile: il capitale proprio sarà prezzo meno mutuo. La tariffa equivalente riproduce i ricavi originali con l’occupazione mostrata; verifica entrambe le ipotesi e completa i costi.", "Enter the purchase price: equity will equal price minus loan. The equivalent nightly rate reproduces original revenue with the displayed occupancy; verify both assumptions and complete costs.");
+  if(price > 0){
+    note += " " + t("Mutuo nel modello", "Loan in the model") + ": " + money(Math.max(0, price - equity)) + ".";
+    if(data.amount >= price && imported.linkedPrincipal) note += " " + t("Il prezzo deve superare l’importo del mutuo per avere capitale proprio positivo.", "Purchase price must exceed the loan to have positive equity.");
+  }
+  const revenue = Number(document.getElementById("priceNight").value) * 365 * Number(document.getElementById("occupancy").value) / 100;
+  if(Math.abs(revenue - data.income) > 0.01) note += " " + t("I ricavi del modello sono stati modificati", "Model revenue has changed") + ": " + money(revenue) + ".";
+  document.getElementById("mortgage-transfer-note").textContent = note;
+}
+
+document.addEventListener("rb_auth_ready", () => queueMicrotask(applySelectedMortgage));
+document.addEventListener("DOMContentLoaded", () => {
+  queueMicrotask(() => {
+    const incoming = new URLSearchParams(window.location.search).get("location");
+    if(incoming && locationInput){ locationInput.value = incoming.slice(0, 80); locationInput.dispatchEvent(new Event("input", {bubbles:true})); }
+    applySelectedMortgage();
+  });
+  document.getElementById("price")?.addEventListener("input", () => {
+    const imported = window.rbImportedMortgage;
+    if(imported?.linkedPrincipal){
+      const value = Number(document.getElementById("price").value);
+      document.getElementById("equity").value = value > imported.data.amount ? String(value - imported.data.amount) : "";
+      document.getElementById("equity").setCustomValidity("");
+    }
+    updateMortgageTransferSummary();
+  });
+  document.getElementById("equity")?.addEventListener("input", () => {
+    document.getElementById("equity").setCustomValidity("");
+    if(window.rbImportedMortgage) window.rbImportedMortgage.linkedPrincipal = false;
+    updateMortgageTransferSummary();
+  });
+  for(const id of ["priceNight", "occupancy", "interestRate", "loanYears"]) document.getElementById(id)?.addEventListener("input", updateMortgageTransferSummary);
+  document.getElementById("mortgage-transfer-clear")?.addEventListener("click", () => {
+    window.rbImportedMortgage = null; RBInvestmentJourney.clear(sessionStorage);
+    document.getElementById("mortgage-transfer-summary").hidden = true;
+  });
+});
+document.addEventListener("rb_language_changed", updateMortgageTransferSummary);
 
 // ================= AUTO LOAD PROPERTY =================
 
@@ -8117,7 +7930,7 @@ margin-bottom:8px;
 </div>
 
 <div>
-📍 ${savedCity || "-"}
+📍 ${String(savedCity || "-").replace(/[&<>"']/g, character => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"})[character])}
 </div>
 
 <div>
@@ -8158,12 +7971,12 @@ if(savedPrice > 0){
 
     if(citySelect){
 
-  citySelect.value =
-  savedCity.toLowerCase();
-
-  citySelect.dispatchEvent(
-    new Event("change")
-  );
+  const exactMarket = mapLocationToCity(savedCity);
+  citySelect.value = exactMarket || "";
+  if(locationInput){
+    locationInput.value = savedCity;
+    locationInput.dispatchEvent(new Event("input", {bubbles:true}));
+  }else if(exactMarket){ citySelect.dispatchEvent(new Event("change")); }
 
 }
 
@@ -8212,7 +8025,7 @@ if(propertyBanner){
 
     <div>📐 Size: ${savedSqm} m²</div>
 
-    <div>📍 City: ${savedCity}</div>
+    <div>📍 City: ${String(savedCity || "").replace(/[&<>"']/g, character => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"})[character])}</div>
 
   </div>
 

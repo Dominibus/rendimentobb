@@ -1,3 +1,4 @@
+import "./investment-journey.js?v=20261008-rc60";
 import { resolveAccountPlan } from "./account-plan.js";
 import "./account-report-cache.js";
 // =============================== 
@@ -479,6 +480,8 @@ function updateUserUI(user) {
 onAuthStateChanged(auth, async (user) => {
 
   window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
+  // Discard a scenario from a different account or an expired session.
+  window.RBInvestmentJourney.read(sessionStorage, user?.uid || null);
 
   if (rbAuthSnapshotOwner !== (user?.uid || null)) {
     window.rbPMSData = null;

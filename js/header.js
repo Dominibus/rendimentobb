@@ -932,6 +932,7 @@ Assistente RendimentoBB
         mobileLogout.onclick = async (e)=>{
           e.preventDefault();
           window.RBReportCache?.clear(sessionStorage, localStorage);
+          window.RBInvestmentJourney?.clear(sessionStorage);
           await signOut(auth);
           location.reload();
         };
@@ -980,6 +981,7 @@ Assistente RendimentoBB
    // LOGOUT
 document.getElementById("logout").onclick = async ()=>{
   window.RBReportCache?.clear(sessionStorage, localStorage);
+          window.RBInvestmentJourney?.clear(sessionStorage);
           await signOut(auth);
   location.reload();
 };

@@ -1483,6 +1483,7 @@ Simula investimento
 </main>
 
 <script src="/js/lang.js" defer></script>
+<script src="/js/investment-journey.js?v=20261008-rc60"></script>
 
 <!-- ===================== -->
 <!-- 🔥 CITY BACKGROUND LOGIC -->
@@ -1514,63 +1515,20 @@ window.applyCityBackground = function(city){
 // 🔥 AUTO CHANGE DA INPUT
 // =====================
 
+let propertySearchRequest = 0;
+let propertySearchCompleted = false;
 document.addEventListener("DOMContentLoaded", () => {
-
-  const cityInput = document.getElementById("searchCity");
-  const priceInput = document.getElementById("searchPrice");
-  const sqmInput = document.getElementById("searchSqm");
-
-  if(!cityInput) return;
-
-  const cityData = {
-    napoli: { price:180000, sqm:60, bg:"naples" },
-    roma: { price:300000, sqm:70, bg:"rome" },
-    milano: { price:350000, sqm:65, bg:"milan" },
-    firenze: { price:280000, sqm:60, bg:"florence" }
-  };
-
-  let autoSearchTimeout;
-
-  cityInput.addEventListener("input", () => {
-
-    const val = cityInput.value.toLowerCase();
-
-    // 🔥 match intelligente
-    const match = Object.keys(cityData).find(c => val.includes(c));
-
-    if(match){
-
-      const data = cityData[match];
-
-      // 🎯 background sync
-      applyCityBackground(data.bg);
-
-      // 🎯 auto-fill intelligente
-      if(!priceInput.value){
-        priceInput.value = data.price;
-      }
-
-      if(!sqmInput.value){
-        sqmInput.value = data.sqm;
-      }
-
-      // 🔥 AUTO SEARCH (wow effect)
-      clearTimeout(autoSearchTimeout);
-
-      autoSearchTimeout = setTimeout(()=>{
-
-  if(typeof window.searchProperties === "function"){
-
-    window.searchProperties();
-
+  for(const id of ["searchCity", "searchPrice", "searchSqm", "investmentGoal"]){
+    const input = document.getElementById(id);
+    input.addEventListener(id === "investmentGoal" ? "change" : "input", () => {
+      propertySearchRequest++;
+      if(!propertySearchCompleted) return;
+      document.getElementById("property-search-results").textContent = window.currentLang === "en"
+        ? "Filters changed. Select Compare scenarios to update results."
+        : "Filtri modificati. Premi Confronta scenari per aggiornare i risultati.";
+      document.getElementById("ai-property-result").style.display = "none";
+    });
   }
-
-}, 800);
-
-    }
-
-  });
-
 });
 
 </script>  
@@ -1687,599 +1645,79 @@ window.location.href =
 // ================= SEARCH =================
 
 window.searchProperties = async function(){
-
-const cityInput = document.getElementById("searchCity").value.trim();
-
-const city =
-cityInput ||
-(window.currentLang==="en" ? "Italy" : "Italia");
-
-const container = document.getElementById("property-search-results");
-
-
-const goal =
-document.getElementById(
-"investmentGoal"
-)?.value || "roi";
-
-const propertyType =
-document.getElementById(
-"propertyType"
-)?.value || "all";  
-
-const aiBox =
-document.getElementById(
-"ai-property-result"
-);
-
-if(aiBox){
-
-let recommendation = "";
-
-if(goal === "roi"){
-
-recommendation =
-window.currentLang==="en"
-? "Compare the example ROI with costs, local demand and the property's actual details."
-: "Confronta il ROI di esempio con costi, domanda locale e dati effettivi dell'immobile.";
-
-}
-
-else if(goal === "cashflow"){
-
-recommendation =
-window.currentLang==="en"
-? "A larger property may bring higher revenue and higher operating costs. Test both assumptions."
-: "Più spazio può aumentare i ricavi ma anche i costi. Verifica entrambe le ipotesi.";
-
-}
-
-else if(goal === "safe"){
-
-recommendation =
-window.currentLang==="en"
-? "Risk needs local demand, operating costs and property information that these examples do not include."
-: "Per stimare il rischio servono domanda locale, costi e dati dell'immobile assenti in questi esempi.";
-
-}
-
-else{
-
-recommendation =
-window.currentLang==="en"
-? "Long-term value changes cannot be predicted from these illustrative scenarios."
-: "Questi scenari illustrativi non prevedono la rivalutazione futura degli immobili.";
-
-}
-
-aiBox.style.display = "block";
-
-aiBox.innerHTML = `
-
-<div style="
-font-size:15px;
-font-weight:700;
-color:#0f172a;
-margin-bottom:8px;
-">
-
-${
-window.currentLang==="en"
-? "Indicative Strategy"
-: "Indicazione strategica"
-}
-
-</div>
-
-<div style="
-font-size:14px;
-color:#475569;
-line-height:1.6;
-">
-
-${recommendation}
-
-</div>
-
-`;
-
-}  
-
-// ===== BACKGROUND SYNC =====
-const val = city.toLowerCase();
-
-if(val.includes("milano")) applyCityBackground("milan");
-else if(val.includes("napoli")) applyCityBackground("naples");
-else if(val.includes("firenze")) applyCityBackground("florence");
-else if(val.includes("roma")) applyCityBackground("rome");
-
-// ===== LOADING =====
-container.innerHTML = `
-<div style="padding:20px;text-align:center;color:#64748b">
-⏳ ${window.currentLang==="en"?"Analyzing market...":"Analisi mercato in corso..."}
-</div>
-`;
-
-const maxPrice =
-Number(
-document.getElementById("searchPrice")
-?.value || 999999999
-);
-
-const minSqm =
-Number(
-document.getElementById("searchSqm")
-?.value || 0
-);
-
-const response =
-await fetch(
-
-`/api/property-search?city=${city.toLowerCase()}&budget=${maxPrice}&sqm=${minSqm}&goal=${goal}`
-
-);
-
-const data =
-await response.json();
-
-
-
-const results =
-data.results || [];
-
-if(!results.length){
-
-container.innerHTML = `
-
-<div style="
-padding:30px;
-text-align:center;
-color:#64748b;
-">
-
-${
-window.currentLang==="en"
-? "No illustrative scenarios match these filters."
-: "Nessuno scenario illustrativo corrisponde ai filtri."
-}
-
-</div>
-
-`;
-
-return;
-
-}
-
-const first = results[0];
-
-  if(!first){
-
-container.innerHTML = `
-
-<div style="
-padding:30px;
-text-align:center;
-color:#64748b;
-">
-
-${
-window.currentLang==="en"
-? "No properties found."
-: "Nessun immobile trovato."
-}
-
-</div>
-
-`;
-
-return;
-
-}
-
-const second = results[1] || null;
-
-function createCard(
-title,
-price,
-sqm,
-roi,
-badge,
-portal,
-url,
-highlight=false
-){
-
-return `
-
-<div class="property-card" style="
-position:relative;
-overflow:hidden;
-padding:0;
-background:white;
-border-radius:18px;
-">
-
-<div style="padding:17px 20px;background:#ecfdf5;color:#065f46;font-size:13px;font-weight:700">
-${window.currentLang==="en" ? "ILLUSTRATIVE SCENARIO · NOT A LISTING" : "SCENARIO ILLUSTRATIVO · NON È UN ANNUNCIO"}
-</div>
-
-<div style="padding:20px">
-
-${highlight ? `
-<div style="
-position:absolute;
-top:12px;
-right:12px;
-background:#10b981;
-color:white;
-padding:6px 12px;
-border-radius:999px;
-font-size:11px;
-font-weight:700;
-">
-${
-window.currentLang==="en"
-? "HIGHEST EXAMPLE ROI"
-: "ROI DI ESEMPIO PIÙ ALTO"
-}
-</div>
-` : ""}
-
-<h3 style="
-font-size:18px;
-margin-bottom:8px;
-font-weight:700;
-color:#0f172a;
-">
-${title || ""}
-</h3>
-
-<div style="
-margin-top:-2px;
-margin-bottom:14px;
-font-size:13px;
-color:#64748b;
-">
-
-📍 ${city}
-
-</div>  
-
-<div style="
-font-size:28px;
-font-weight:800;
-color:#0f172a;
-">
-
-€${price.toLocaleString()}
-
-</div>
-
-<div style="
-margin-top:12px;
-font-size:30px;
-font-weight:800;
-color:#10b981;
-">
-
-ROI ${roi}%
-
-</div>
-
-<div style="
-margin-top:8px;
-font-size:14px;
-color:#64748b;
-">
-
-📐 ${sqm} m²
-
-</div>
-
-<div style="
-margin-top:8px;
-font-size:13px;
-font-weight:700;
-color:#10b981;
-">
-
-${
-window.currentLang==="en"
-? "Indicative assessment"
-: "Valutazione indicativa"
-}
-
-<div style="
-margin-top:10px;
-padding:10px;
-background:#f8fafc;
-border-radius:10px;
-font-size:13px;
-line-height:1.6;
-">
-
-💰 ${
-window.currentLang==="en"
-? "Illustrative monthly return, before costs"
-: "Rendimento mensile illustrativo, prima dei costi"
-}
-
-<br>
-
-<strong>
-
-€${Math.round(price * roi / 100 / 12)}
-
-</strong>
-
-/mese
-
-<br>
-
-${window.currentLang==="en"
-? "Costs, risk and local demand still need verification."
-: "Costi, rischio e domanda locale sono ancora da verificare."}
-
-</div>
-
-</div>
-
-<div style="
-margin-top:8px;
-font-size:13px;
-color:#64748b;
-line-height:1.5;
-">
-
-${
-window.currentLang==="en"
-? (
-roi >= 16
-? "Scenario with a comparatively high estimated return."
-: roi >= 12
-? "Scenario with a balanced estimated return."
-: "Scenario focused on potential long-term growth."
-)
-: (
-roi >= 16
-? "Scenario con rendimento stimato comparativamente elevato."
-: roi >= 12
-? "Scenario con rendimento stimato equilibrato."
-: "Scenario orientato alla possibile crescita nel lungo periodo."
-)
-}
-
-</div>
-
-<div style="
-margin-top:8px;
-font-size:13px;
-color:#64748b;
-">
-
-${
-roi >= 16
-? (window.currentLang==="en" ? "High estimated return" : "Rendimento stimato elevato")
-: roi >= 12
-? (window.currentLang==="en" ? "Balanced estimated return" : "Rendimento stimato equilibrato")
-: (window.currentLang==="en" ? "Long-term scenario" : "Scenario di lungo periodo")
-}
-
-</div>
-
-<div style="
-display:inline-block;
-padding:4px 10px;
-background:#eff6ff;
-border-radius:999px;
-font-size:12px;
-font-weight:600;
-color:#2563eb;
-margin-top:10px;
-">
-
-${portal}
-
-</div>
-
-<div style="
-display:flex;
-gap:10px;
-margin-top:16px;
-">
-
-${url ? `<a
-href="${url}"
-target="_blank"
-rel="noopener noreferrer"
-class="btn btn-primary"
-style="flex:1;text-align:center"
->${window.currentLang==="en" ? "Open source" : "Apri fonte"}</a>` : ""}
-
-<button
-onclick="openInvestment(
-${price},
-'${city}',
-${roi}
-)"
-class="btn btn-primary"
-style="flex:1"
->
-
-${window.currentLang==="en"
-? "Analyze Investment"
-: "Analizza investimento"}
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-}
-
-  container.innerHTML = `
-
-<div style="
-background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 40px rgba(0,0,0,.08);
-border:1px solid #e2e8f0;
-">
-
-<h3 style="
-margin-bottom:20px;
-color:#0f172a;
-">
-
-📊 ${
-window.currentLang==="en"
-? "Illustrative scenario overview"
-: "Riepilogo dello scenario illustrativo"
-}
-
-</h3>
-
-<div style="
-font-size:18px;
-font-weight:700;
-color:#10b981;
-margin-bottom:15px;
-">
-
-📍 ${city}
-
-</div>
-
-<div style="margin-bottom:10px">
-
-${
-window.currentLang==="en"
-? "Example ROI"
-: "ROI di esempio"
-}:
-
-<strong>${first.roi}%</strong>
-
-</div>
-
-<div style="margin-bottom:10px">
-
-💰 ${
-window.currentLang==="en"
-? "Budget"
-: "Budget"
-}:
-
-<strong>€${first.price.toLocaleString()}</strong>
-
-</div>
-
-<div style="margin-bottom:10px">
-
-📐 ${
-window.currentLang==="en"
-? "Scenario floor area"
-: "Metratura dello scenario"
-}:
-
-<strong>${first.sqm} m²</strong>
-
-</div>
-
-<div style="margin-bottom:20px;color:#64748b">
-${window.currentLang==="en" ? "Risk cannot be estimated from these example values." : "Il rischio non è stimabile dai soli valori di esempio."}
-</div>
-
-<hr style="margin:20px 0">
-
-<div style="
-font-weight:600;
-margin-bottom:10px;
-">
-
-🎯 ${
-window.currentLang==="en"
-? "Areas to assess"
-: "Zone da valutare"
-}
-
-</div>
-
-<ul style="
-line-height:2;
-padding-left:20px;
-">
-
-<li>${
-window.currentLang==="en"
-? "Historic Center"
-: "Centro Storico"
-}</li>
-
-<li>${
-window.currentLang==="en"
-? "University Area"
-: "Zona Universitaria"
-}</li>
-
-<li>${
-window.currentLang==="en"
-? "High Tourist Demand Areas"
-: "Aree ad alta domanda turistica"
-}</li>
-
-</ul>
-
-</div>
-
-`;
-
-  container.innerHTML += `
-
-<div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-margin-top:30px;
-">
-
-${createCard(
-window.currentLang==="en"
-? (first.titleEN || first.titleIT || first.title)
-: (first.titleIT || first.titleEN || first.title),
-first.price,
-first.sqm,
-first.roi,
-"",
-first.portal,
-first.url,
-true
-)}
-
-${second ? createCard(
-window.currentLang==="en"
-? (second.titleEN || second.titleIT || second.title)
-: (second.titleIT || second.titleEN || second.title),
-second.price,
-second.sqm,
-second.roi,
-"",
-second.portal,
-second.url,
-false
-) : ""}
-
-</div>
-
-`;
-
+  const container = document.getElementById("property-search-results");
+  const en = window.currentLang === "en";
+  const city = document.getElementById("searchCity").value.trim();
+  const goal = document.getElementById("investmentGoal").value;
+  const requestId = ++propertySearchRequest;
+  propertySearchCompleted = true;
+  document.getElementById("ai-property-result").style.display = "none";
+  const showMessage = (message, withManual = false) => {
+    container.replaceChildren();
+    const note = document.createElement("p"); note.setAttribute("role", "status"); note.textContent = message; container.append(note);
+    if(withManual){
+      const link = document.createElement("a");
+      const params = new URLSearchParams({location:city});
+      link.href = "/tool/?" + params; link.className = "btn btn-primary";
+      link.textContent = en ? "Simulate with your own data →" : "Simula con i tuoi dati →";
+      container.append(link);
+    }
   };
+  const params = new URLSearchParams({city, goal});
+  for(const [id, name, max, allowZero] of [["searchPrice", "budget", 100000000, false], ["searchSqm", "sqm", 10000, true]]){
+    const input = document.getElementById(id); input.setCustomValidity("");
+    const raw = input.value.trim();
+    if(!raw) continue;
+    const value = RBInvestmentJourney.parseNumber(raw);
+    if(value === null || value < 0 || (!allowZero && value === 0) || value > max){
+      const message = en ? "Enter valid positive filters; leave a field empty to omit it." : "Inserisci filtri numerici validi; lascia vuoto un campo per non applicarlo.";
+      input.setCustomValidity(message); input.reportValidity(); showMessage(message); return;
+    }
+    params.set(name, String(value));
+  }
+  showMessage(en ? "Loading illustrative scenarios…" : "Caricamento scenari illustrativi…");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch("/api/property-search?" + params, {signal:controller.signal});
+    const data = await response.json();
+    if(requestId !== propertySearchRequest) return;
+    if(!response.ok || data.success !== true){
+      showMessage(en ? "The search could not run. Check the filters and retry." : "La ricerca non è stata eseguita. Controlla i filtri e riprova."); return;
+    }
+    if(data.code === "unsupported_location" || data.code === "location_required"){
+      const coverage = (data.supportedCities || []).map(name => name[0].toUpperCase() + name.slice(1)).join(", ");
+      showMessage(data.code === "location_required"
+        ? (en ? "Choose an illustrative city: " : "Scegli una città con scenari illustrativi: ") + coverage
+        : (en ? "No local benchmark or illustrative scenarios are available for this city. Covered cities: " : "Per questa città non sono disponibili benchmark locali o scenari illustrativi. Città coperte: ") + coverage, !!city);
+      return;
+    }
+    const results = Array.isArray(data.results) ? data.results : [];
+    if(!results.length){
+      showMessage(en ? "No illustrative scenario matches these filters. Adjust them or simulate your property." : "Nessuno scenario illustrativo corrisponde ai filtri. Modificali o simula il tuo immobile.", true); return;
+    }
+    container.replaceChildren();
+    const note = document.createElement("p");
+    note.textContent = (en ? "Illustrative scenarios: " : "Scenari illustrativi: ") + results.length + (en ? ". They are examples, not listings or local market forecasts." : ". Sono esempi, non annunci o previsioni del mercato locale.");
+    container.append(note);
+    const grid = document.createElement("div"); grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px";
+    for(const scenario of results){
+      const card = document.createElement("article"); card.className = "property-card";
+      const badge = document.createElement("p"); badge.textContent = en ? "ILLUSTRATIVE SCENARIO · NOT A LISTING" : "SCENARIO ILLUSTRATIVO · NON È UN ANNUNCIO";
+      const title = document.createElement("h3"); title.textContent = en ? scenario.titleEN || scenario.titleIT || scenario.title : scenario.titleIT || scenario.titleEN || scenario.title;
+      const cityLine = document.createElement("p"); cityLine.textContent = scenario.city;
+      const values = document.createElement("p");
+      values.textContent = new Intl.NumberFormat(en ? "en-US" : "it-IT", {style:"currency", currency:"EUR"}).format(scenario.price) + " · " + scenario.sqm + " m² · " + (en ? "Example ROI " : "ROI di esempio ") + scenario.roi + "%";
+      const caveat = document.createElement("p"); caveat.textContent = en ? "Verify revenue, costs and local demand. Risk cannot be calculated from these examples." : "Verifica ricavi, costi e domanda locale. Il rischio non è calcolabile da questi esempi.";
+      const button = document.createElement("button"); button.type = "button"; button.className = "btn btn-primary"; button.textContent = en ? "Analyze scenario" : "Analizza scenario";
+      button.addEventListener("click", () => openInvestment(scenario.price, scenario.city, scenario.roi));
+      card.append(badge, title, cityLine, values, caveat, button); grid.append(card);
+    }
+    container.append(grid);
+  }catch(error){
+    if(requestId === propertySearchRequest) showMessage(en ? "Search temporarily unavailable. Retry or simulate manually." : "Ricerca temporaneamente non disponibile. Riprova o simula manualmente.", true);
+  }finally { clearTimeout(timeout); }
+};
 
 // ================= OPEN INVESTMENT =================
 
@@ -2360,7 +1798,7 @@ window.sendLeadImmobili = async function(){
   const email = document.getElementById("lead-email").value.trim();
   const city  = document.getElementById("lead-city").value.trim() || "unknown";
 
-  if(!email || !email.includes("@")){
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     alert(
       window.currentLang==="en"
       ? "Enter a valid email"
@@ -2570,12 +2008,12 @@ document.addEventListener(
 <script src="/js/ai-engine.js" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261008-rc58"></script>
+<script type="module" src="/js/header.js?v=20261008-rc60"></script>
 <script src="/js/ui-system.js" defer></script>
 <script type="module" src="/js/footer.js"></script>
 
 <!-- 🔥 FIREBASE -->
-<script type="module" src="/js/firebase-init.js"></script>
+<script type="module" src="/js/firebase-init.js?v=20261008-rc60"></script>
 
 </body>
 </html>

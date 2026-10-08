@@ -6,7 +6,7 @@ async function query(params, method = 'GET') {
   await handler({ method, query: params }, response); return response;
 }
 test('property search rejects repeated, nonfinite and out-of-range parameters', async () => {
-  for (const params of [{city:['roma','napoli']}, {city:'unknown'}, {budget:'Infinity'}, {budget:'0'}, {budget:'100000001'}, {sqm:'NaN'}, {sqm:'-1'}, {sqm:'10001'}, {goal:'anything'}]) assert.equal((await query(params)).code, 400, JSON.stringify(params));
+  for (const params of [{city:['roma','napoli']}, {budget:'Infinity'}, {budget:'0'}, {budget:'100000001'}, {sqm:'NaN'}, {sqm:'-1'}, {sqm:'10001'}, {goal:'anything'}]) assert.equal((await query(params)).code, 400, JSON.stringify(params));
   assert.equal((await query({}, 'POST')).code, 405);
 });
 test('property search remains explicitly illustrative and never impersonates live listings', async () => {

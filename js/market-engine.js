@@ -37,6 +37,8 @@ function getText(){
 
 function getSafeCity(inputCity){
 
+  const custom = document.getElementById("custom-location")?.value?.trim();
+  if(custom) return custom.toLowerCase().replace(/\s*\([a-z]{2}\)$/, "").trim();
   // 🔒 PRIORITÀ 1 → app.js (LA TUA VERA SOURCE)
   if(window.currentCity){
     return window.currentCity;
@@ -68,14 +70,6 @@ export function renderMarketBenchmark(inputCity){
     return;
   }
 
-  // 🔒 anti loop
-  if(window.__marketRendering) return;
-  window.__marketRendering = true;
-
-  setTimeout(()=>{
-    window.__marketRendering = false;
-  },200);
-
   const city = getSafeCity(inputCity);
 
   
@@ -87,19 +81,17 @@ export function renderMarketBenchmark(inputCity){
     return;
   }
 
-  const data =
-  window.RB_MARKET_DATA[city] ||
-  window.RB_MARKET_DATA.napoli;
-
-if(!window.RB_MARKET_DATA[city]){
-
-  console.warn(
-    "⚠️ Benchmark fallback:",
-    city,
-    "→ napoli"
-  );
-
-}
+  const data = Object.hasOwn(window.RB_MARKET_DATA, city) ? window.RB_MARKET_DATA[city] : null;
+  if(!data){
+    for(const id of ["benchmark-price", "benchmark-occupancy", "benchmark-revenue"]){
+      const node = document.getElementById(id); if(node) node.textContent = "—";
+    }
+    const comparison = document.getElementById("market-comparison");
+    if(comparison) comparison.textContent = window.currentLang === "en"
+      ? "No local benchmark is available for this location. Use your own data for the simulation."
+      : "Nessun benchmark locale disponibile per questa località. Simula con i tuoi dati.";
+    return;
+  }
 
   const text = getText();
 
@@ -117,8 +109,10 @@ if(!window.RB_MARKET_DATA[city]){
 
   let userRevenue = Number(window.currentRevenue);
 
-  if(!userRevenue || userRevenue <= 0){
-    userRevenue = data.annualRevenue;
+  if(window.currentRevenue === undefined || window.currentRevenue === null || !Number.isFinite(userRevenue) || userRevenue < 0){
+    const node = document.getElementById("market-comparison");
+    if(node) node.textContent = window.currentLang === "en" ? "Run a simulation to compare your revenue." : "Completa una simulazione per confrontare i ricavi.";
+    return;
   }
 
   /* ================= CALCOLO ================= */
