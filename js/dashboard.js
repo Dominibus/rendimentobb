@@ -14298,8 +14298,8 @@ margin-bottom:8px;
 ">
 
 💰 ${t(
-"Ricavi registrati · tutti i periodi",
-"Recorded revenue · all periods"
+"Ricavi attribuiti al mese corrente",
+"Revenue allocated to the current month"
 )}
 
 </div>
