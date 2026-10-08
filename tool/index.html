@@ -827,7 +827,203 @@ data-en="Not now">
 </div>
 </div>  
 
-<div id="global-header"></div>  
+<!-- Navigation is available before authentication modules finish loading. -->
+<div id="global-header">
+
+  <header class="rb-header">
+
+    <div class="rb-inner">
+
+      <div class="rb-left">
+        <a href="/">
+          <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
+        </a>
+      </div>
+
+      <nav class="rb-center" aria-label="Navigazione principale">
+  <a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+
+Analizza
+
+</a>
+
+  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
+    Aprire un B&B
+  </a>
+
+  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">
+    Mutui
+  </a>
+
+  <a href="/market/" data-it="Mercato" data-en="Market">
+    Mercato
+  </a>
+
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
+
+Trova immobili
+
+</a>
+
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+
+Guide
+
+</a>
+
+  <a href="/about/" data-it="Chi siamo" data-en="About">
+    Chi siamo
+  </a>
+</nav>
+
+      <div class="rb-right">
+
+        <div class="rb-lang">
+          <button data-lang="it">IT</button>
+          <button data-lang="en">EN</button>
+        </div>
+
+        <button
+        id="rb-header-ai-btn"
+        class="rb-header-ai-btn">
+          <span
+          class="rb-assistant-label-desktop"
+          data-it="Assistente"
+          data-en="Assistant">Assistente</span>
+          <span
+          class="rb-assistant-label-mobile"
+          data-it="Aiuto"
+          data-en="Help">Aiuto</span>
+        </button>
+
+        <div id="user-area"></div>
+
+        <button id="rb-burger" aria-label="Menu" aria-controls="rb-mobile" aria-expanded="false">☰</button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+<div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
+
+<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" inert>
+  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu">×</button></div>
+  <div id="rb-mobile-account" class="rb-mobile-account"></div>
+  <nav id="rb-mobile-nav">
+
+    <a href="/tool/" 
+    data-it="Analizza" 
+    data-en="Analyze">
+    Analizza
+    </a>
+
+    <a href="/aprire-bnb-conviene/" 
+    data-it="Aprire un B&B" 
+    data-en="Start a B&B">
+    Aprire un B&B
+    </a>
+
+    <a href="/mutui/" 
+    data-it="Mutui" 
+    data-en="Mortgages">
+    Mutui
+    </a>
+
+    <a href="/market/" 
+    data-it="Mercato" 
+    data-en="Market">
+    Mercato
+    </a>
+
+    <a href="/immobili/" 
+    data-it="Trova immobili" 
+    data-en="Find Properties">
+    Trova immobili
+    </a>
+
+    <a href="/academy/" 
+    data-it="Guide" 
+    data-en="Guides">
+    Guide
+    </a>
+
+    <a href="/about/" 
+    data-it="Chi siamo" 
+    data-en="About">
+    Chi siamo
+    </a>
+
+  </nav>
+
+    <div class="rb-mobile-lang">
+
+  <span
+    data-it="Lingua"
+    data-en="Language">
+    Lingua
+  </span>
+
+  <div class="rb-mobile-lang-buttons">
+
+    <button type="button" data-lang="it">
+      🇮🇹 IT
+    </button>
+
+    <button type="button" data-lang="en">
+      🇬🇧 EN
+    </button>
+
+  </div>
+
+</div>
+  
+</div>
+
+  <!-- 🔥 MODAL PRO -->
+  <div id="rb-pro-modal" class="rb-modal">
+  <div class="rb-modal-box">
+
+    <h3
+      data-it="🚀 Sblocca analisi completa"
+      data-en="🚀 Unlock full analysis">
+      🚀 Sblocca analisi completa
+    </h3>
+
+    <p
+      data-it="Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro."
+      data-en="You are analyzing a real investment. Without full data you risk losing thousands.">
+    </p>
+
+    <ul>
+      <li data-it="✔ ROI stimato avanzato" data-en="✔ Advanced estimated ROI"></li>
+      <li data-it="✔ Analisi mutuo completa" data-en="✔ Full mortgage analysis"></li>
+      <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
+      <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>
+    </ul>
+
+    <button id="rb-upgrade-btn" class="rb-btn primary"
+      data-it="🔥 Sblocca ora – €29"
+      data-en="🔥 Unlock now – €29">
+    </button>
+
+    <span class="continue-free"
+      id="rb-close-modal"
+      data-it="Continua senza"
+      data-en="Continue free">
+    </span>
+
+  </div>
+</div>
+
+</div>  
 <!-- 🔥 MOBILE MENU ROOT (CRITICO) -->
 
   
@@ -1713,7 +1909,7 @@ data-en="📄 Download Executive Report PDF">
 <!-- 🤖 GLOBAL AI CHATBOT -->
 <script src="/js/chatbot-loader.js?v=20261008-rc63" defer></script>
   
-<script type="module" src="/js/header.js?v=20261008-rc63"></script>
+<script type="module" src="/js/header.js?v=20261008-rc64"></script>
 <script src="/js/ui-system.js" defer></script>  
 <script type="module" src="/js/footer.js"></script>  
 

@@ -2,8 +2,9 @@
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
 
-import { auth } from "/js/firebase-init.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+// Render navigation independently of remote authentication imports.
+let auth;
+let signOut;
 
 const GA_MEASUREMENT_ID = "G-749B8PW4ST";
 const RB_CONSENT_KEY = "rb_analytics_consent_v1";
@@ -475,7 +476,15 @@ document.addEventListener("rb_language_changed", () => {
   }
 });
 
-onAuthStateChanged(auth, (user) => {
+async function bindHeaderAccount(){
+  try{
+    const [app, firebaseAuth] = await Promise.all([
+      import("/js/firebase-init.js"),
+      import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
+    ]);
+    auth = app.auth;
+    signOut = firebaseAuth.signOut;
+    firebaseAuth.onAuthStateChanged(auth, (user) => {
 
   window.currentUser = user;
 
@@ -573,7 +582,15 @@ if(hasRealAccess){
 
   }, 120);
 
-});
+    });
+  }catch(error){
+    console.warn("Header account controls unavailable", error);
+    // Keep navigation visible; do not infer a plan or authenticated state.
+    const accountArea = document.getElementById("user-area");
+    if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">Accedi</a>`;
+  }
+}
+void bindHeaderAccount();
 
   }
 
