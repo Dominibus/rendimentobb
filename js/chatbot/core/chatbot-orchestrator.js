@@ -21,6 +21,13 @@ async function(message){
       String(message || "")
         .trim();
 
+    const portfolioResponse=window.rbBuildConfirmedPortfolioResponse?.(text);
+    if(portfolioResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'confirmed_portfolio'}});
+      return {success:true,response:portfolioResponse,intent:{intent:'confirmed_portfolio'}};
+    }
+
     const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
     if(investmentResponse){
       window.rbPDFConversationDocumentId=null;

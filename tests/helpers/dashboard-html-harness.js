@@ -1,3 +1,4 @@
+import {bookingNights as calendarBookingNights,nightsInMonth} from '../../js/pms-calendar.js';
 import {investmentAssumptionsHTML} from '../../js/investment-assumptions.js';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
@@ -41,15 +42,18 @@ export function renderAnalysis(data) {
   }));
 }
 
-export async function renderProperties(data, id = 'property-1') {
+export async function renderProperties(data, id = 'property-1', bookings = []) {
   const container = { innerHTML: '' };
   let reads = 0;
   const context = base({
     document: { getElementById: () => container },
     getDocs: async () => ++reads === 1
       ? { empty: false, docs: [{ id, data: () => data }] }
-      : { empty: true, docs: [] },
-    isConfirmedBooking: () => true
+      : { empty: !bookings.length, docs: bookings.map(b=>({data:()=>b})) },
+    calendarBookingNights,
+    getBookingNightsInMonth:(checkin,checkout)=>nightsInMonth(checkin,checkout,new Date()),
+    getBookingRevenueInMonth:booking=>{const n=calendarBookingNights(booking);return n?Number(booking.totalAmount||0)*nightsInMonth(booking.checkin,booking.checkout,new Date())/n:0;},
+    isConfirmedBooking: booking => !['pending','cancelled'].includes(booking.status)
   });
   await vm.runInNewContext(`${escapeSource}\n${propertiesSource}\nloadProperties()`, context);
   return container.innerHTML;

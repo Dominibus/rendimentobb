@@ -1,3 +1,4 @@
+import { calculateMortgage } from "./mortgage-engine.js";
 // Saved assumptions are a versioned snapshot, never a reconstruction from defaults.
 const fields = ['propertyPrice','equity','loanAmount','priceNight','occupancy','expenses','commission','tax','interestRate','loanYears'];
 const keys = ['schemaVersion','calculationVersion','source','expensesUnit',...fields];
@@ -39,4 +40,19 @@ export function investmentAssumptionsHTML(value, lang='it'){
     [en?'Loan term':'Durata mutuo',n(a.loanYears)+(en?' years':' anni')]
   ];
   return `<details style="font-size:13px;margin:12px 0"><summary style="cursor:pointer;padding:10px 0;font-weight:600">${en?'Saved analysis assumptions':'Ipotesi dell’analisi salvata'}</summary><p style="font-size:12px;color:#64748b">${en?'Simulated inputs · ':'Dati simulati · '}${a.source==='home_preview'?(en?'Home preview':'Anteprima home'):(en?'Simulator':'Simulatore')}</p><dl style="margin:0">${rows.map(([label,value])=>`<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;padding:6px 0;border-bottom:1px solid #e2e8f0"><dt>${label}</dt><dd style="margin:0;font-weight:600">${value}</dd></div>`).join('')}</dl></details>`;
+}
+
+// Minimum annual gross revenue for non-negative cash flow under the saved model.
+// Null means missing inputs or a model with no finite positive-revenue solution.
+export function requiredAnnualRevenue(value){
+  const a=readInvestmentAssumptions(value);
+  if(!a) return null;
+  const debt=calculateMortgage(a.loanAmount,a.interestRate,a.loanYears);
+  const margin=1-a.commission/100-(a.expensesUnit==='percentage'?a.expenses/100:0);
+  const fixed=a.expensesUnit==='monthly_eur'?a.expenses*12:0;
+  if(a.tax===100 && debt>0) return null;
+  const neededNOI=debt>0?debt/(1-a.tax/100):0;
+  if(margin<=0) return fixed===0 && debt===0?0:null;
+  const result=(fixed+neededNOI)/margin;
+  return Number.isFinite(result)?result:null;
 }

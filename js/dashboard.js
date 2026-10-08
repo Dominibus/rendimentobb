@@ -1,4 +1,4 @@
-import { readInvestmentAssumptions, investmentAssumptionsHTML } from "./investment-assumptions.js?v=20261007-rc54";
+import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261008-rc59";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
 import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
@@ -728,6 +728,8 @@ async function loadDashboard({languageOnly = false} = {}){
 
   window.__dashboardLoaded = true;
   window.__forceReload = false;
+  window.rbConfirmedPortfolio = null;
+  const portfolioOwnerUid = window.currentUser?.uid;
 
   if(!languageOnly) closeAllOverlays();
 
@@ -1404,6 +1406,13 @@ const highestSavedROI = highestScenarioROI(analyses);
 const portfolioAnalyses = analyses.filter(
   data => data.isPortfolio === true
 );
+// Publish only the explicitly confirmed, loaded account snapshot. Never the last simulation.
+if(!window.isDemoDashboard && !window.isDemoData && portfolioOwnerUid && window.currentUser?.uid === portfolioOwnerUid){
+  window.rbConfirmedPortfolio = {
+    ownerUid:window.currentUser.uid, loadedAt:new Date().toISOString(),
+    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
+  };
+}
 
 const totalROI = analyses.reduce(
   (sum, data) => sum + Number(data.roi || 0),
@@ -1451,12 +1460,7 @@ const visibleAnalyses =
     const price = data.price;
     const equity = data.equity;
 
-    const occupancy = 65;
-    const adr = 120;
-
-    const revenueNeeded = Math.round(
-      adr * occupancy * 365 / 100
-    );  
+    const revenueNeeded = requiredAnnualRevenue(data.assumptions);  
 
     const yearlyProfit = financialNumber(data.net);
 
@@ -1541,7 +1545,7 @@ if(isNew){
       </div>
 
       <div class="metric">
-        <span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
+        <span>${t("Ricavi lordi annui per cashflow ≥ 0 (modello)","Annual gross revenue for cash flow ≥ 0 (model)")}</span>
         <strong>${formatCurrency(revenueNeeded)}</strong>
       </div>
 
@@ -2698,6 +2702,7 @@ if(window.__dashboardAuthInit){
 window.addEventListener("DOMContentLoaded", () => {
 
   onAuthStateChanged(auth, async (user) => {
+    window.rbConfirmedPortfolio = null;
 
     // ================= USER NON LOGGATO =================
     if(!user){
@@ -6178,6 +6183,7 @@ const bookingsSnap =
 let totalNights = 0;
 let occupiedNightsThisMonth = 0;
 let realRevenue = 0;
+let revenueThisMonth = 0;
 let totalGuests = 0;  
 
 activeBookingDocs.forEach(b=>{
@@ -6198,6 +6204,7 @@ Number(
   const nights = calendarBookingNights(booking);
 
   totalNights += nights;
+  revenueThisMonth += getBookingRevenueInMonth(booking);
   occupiedNightsThisMonth += getBookingNightsInMonth(
     booking.checkin,
     booking.checkout
@@ -6241,14 +6248,8 @@ else if(
 
 }   
 
-  const revpar =
-(
-  data.priceNight || 0
-)
-*
-(
-  occupancy / 100
-);  
+  const adrThisMonth = occupiedNightsThisMonth > 0 ? revenueThisMonth / occupiedNightsThisMonth : null;
+  const revpar = revenueThisMonth / daysInMonth;  
 
 html += `
 
@@ -6467,7 +6468,7 @@ ${t("Tariffa base", "Base nightly rate")}
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-${t("Occupazione","Occupancy")}
+${t("Occupazione · mese corrente","Occupancy · current month")}
 </div>
 
 <div class="property-kpi-value">
@@ -6479,7 +6480,7 @@ ${occupancy}%
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-RevPAR
+${t("RevPAR · mese corrente", "RevPAR · current month")}
 </div>
 
 <div class="property-kpi-value">
@@ -6594,8 +6595,8 @@ letter-spacing:.8px;
 ">
 
 ${t(
-"Ricavi Totali",
-"Total Revenue"
+"Ricavi registrati · tutti i periodi",
+"Recorded revenue · all periods"
 )}
 
 </div>
@@ -6612,6 +6613,7 @@ ${formatCurrency(realRevenue)}
 
 </div>
 
+<p style="font-size:12px;opacity:.9;margin-top:12px">${t("KPI mensili: importi prenotazioni ripartiti per notte; una unità disponibile per immobile. Non certificano incassi.", "Monthly KPIs: booking amounts allocated per night; one available unit per property. They do not certify receipts.")}</p>
 <div class="property-revenue-meta" style="
 margin-top:18px;
 display:flex;
@@ -6628,12 +6630,12 @@ opacity:.92;
 
 <div>
 <strong>${occupancy}%</strong>
-<span>${t("Occupazione","Occupancy")}</span>
+<span>${t("Occupazione · mese corrente","Occupancy · current month")}</span>
 </div>
 
 <div>
-<strong>ADR</strong>
-<span>€${escapeDashboardHTML(data.priceNight || 0)}</span>
+<strong>${t("ADR · mese corrente","ADR · current month")}</strong>
+<span>${formatCurrency(adrThisMonth)}</span>
 </div>
 
 </div>
@@ -7962,8 +7964,8 @@ else if (bookingScore >= 70) {
 
     analysis.verdict =
         lang === "it"
-            ? "🟢 Ottima Prenotazione"
-            : "🟢 Great Booking";
+            ? "🟢 Profilo economico positivo"
+            : "🟢 Positive economic profile";
 
     analysis.executiveSummary =
         lang === "it"
@@ -8135,7 +8137,7 @@ if (!analysis.why.length) {
 if (!analysis.actions.length) {
 
     analysis.actions.push(
-        "No action required"
+        lang === "it" ? "Nessuna variazione economica suggerita. Verifica le attività operative PMS." : "No economic change suggested. Review the PMS operational tasks."
     );
 
 }
@@ -9067,8 +9069,8 @@ ${action}
 `).join("")
 : `<div style="color:#64748b;font-size:14px;">
 ${window.t(
-"Nessuna azione richiesta.",
-"No action required."
+"Nessuna variazione economica suggerita. Verifica le attività operative PMS.",
+"No economic change suggested. Review the PMS operational tasks."
 )}
 </div>`
 }
@@ -9153,6 +9155,7 @@ color:#166534;
 ${window.t("Dati registrati", "Recorded data")}
 
 </div>
+<p style="font-size:12px;line-height:1.6;color:#475569;margin-top:12px">${window.t("Punteggio descrittivo basato su tariffa e durata. Non misura l’utile netto o il completamento degli adempimenti: verifica le attività operative PMS.", "Descriptive score based on rate and duration. It does not measure net profit or completed requirements: review the PMS operational tasks.")}</p>
 
 </div>
 
@@ -12141,9 +12144,7 @@ async function loadPMSStats({fresh=false}={}){
       )
     : 0;
 
-  const revpar =
-    adr *
-    (occupancy / 100);
+  const revpar = properties > 0 ? revenueThisMonth / (properties * daysInMonth) : 0;
 
   // ======================
   // KPI UPDATE
@@ -14297,8 +14298,8 @@ margin-bottom:8px;
 ">
 
 💰 ${t(
-"Ricavi Totali",
-"Total Revenue"
+"Ricavi registrati · tutti i periodi",
+"Recorded revenue · all periods"
 )}
 
 </div>

@@ -2604,7 +2604,7 @@ else if(
   // 🚨 NEGATIVE CASHFLOW
   // =====================================
 
-  else if(net <= 0){
+  else if(net < 0){
 
     response.signals.push(
       "negative_cashflow"
@@ -2612,10 +2612,10 @@ else if(
 
     response.textIT =
 
-`🚨 Cashflow operativo negativo.
+`🚨 Cashflow annuo stimato dopo mutuo negativo.
 
-💸 Profitto netto stimato:
-€${net.toLocaleString("it-IT")}
+💸 Cashflow stimato (€/anno):
+€${net.toLocaleString("it-IT", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
 ⚠️ L'investimento potrebbe generare perdite operative.
 
@@ -2623,10 +2623,10 @@ else if(
 
     response.textEN =
 
-`🚨 Negative operational cashflow detected.
+`🚨 Negative estimated annual cash flow after debt service.
 
-💸 Estimated net profit:
-€${net.toLocaleString("en-US")}
+💸 Estimated cash flow (€/year):
+€${net.toLocaleString("en-US", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
 ⚠️ The investment may generate operational losses.
 
@@ -2642,21 +2642,21 @@ else if(
 
     response.textIT =
 
-`✅ Cashflow operativo positivo.
+`✅ Cashflow annuo stimato dopo mutuo non negativo.
 
-💰 Profitto netto stimato:
-€${net.toLocaleString("it-IT")}
+💰 Cashflow stimato (€/anno):
+€${net.toLocaleString("it-IT", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
-📈 La simulazione mostra una sostenibilità finanziaria potenzialmente stabile.`;
+📈 Verifica costi, rata e occupazione con uno scenario prudente. Questo risultato non certifica incassi.`;
 
     response.textEN =
 
-`✅ Positive operational cashflow detected.
+`✅ Non-negative estimated annual cash flow after debt service.
 
-💰 Estimated net profit:
-€${net.toLocaleString("en-US")}
+💰 Estimated cash flow (€/year):
+€${net.toLocaleString("en-US", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
-📈 The simulation shows potentially stable financial sustainability.`;
+📈 Check costs, debt service and occupancy with a conservative scenario. This result does not certify receipts.`;
 
   }
 

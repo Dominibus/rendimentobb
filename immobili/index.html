@@ -1038,8 +1038,8 @@ color:#065f46;
 ">
 
 <div>✔ <span
-data-it="ROI stimato"
-data-en="Estimated ROI">
+data-it="ROI di esempio"
+data-en="Example ROI">
 ROI stimato
 </span></div>
 
@@ -1256,28 +1256,24 @@ Obiettivo
 <select id="investmentGoal">
 
 <option value="roi"
-data-it="ROI massimo"
-data-en="Maximum ROI">
-ROI massimo
+data-it="ROI di esempio decrescente"
+data-en="Example ROI, descending">
+ROI di esempio decrescente
 </option>
 
 <option value="cashflow"
-data-it="Cashflow"
-data-en="Cash Flow">
-Cashflow
+data-it="Superficie maggiore"
+data-en="Largest floor area">
+Superficie maggiore
 </option>
 
 <option value="safe"
-data-it="Basso rischio"
-data-en="Low Risk">
-Basso rischio
+data-it="Prezzo minore"
+data-en="Lowest price">
+Prezzo minore
 </option>
 
-<option value="growth"
-data-it="Crescita valore immobile"
-data-en="Property Value Growth">
-Crescita valore immobile
-</option>
+
 
 </select>
 
@@ -1299,56 +1295,7 @@ Il simulatore ordinerà gli scenari in base al ROI stimato
 
 </div>
 
-<div class="input-group">
-
-<label
-data-it="Tipologia"
-data-en="Property Type">
-
-Tipologia
-
-</label>
-
-<select id="propertyType">
-
-<option
-value="all"
-data-it="Tutti"
-data-en="All">
-Tutti
-</option>
-
-<option
-value="apartment"
-data-it="Appartamento"
-data-en="Apartment">
-Appartamento
-</option>
-
-<option
-value="house"
-data-it="Casa indipendente"
-data-en="Detached House">
-Casa indipendente
-</option>
-
-<option
-value="villa"
-data-it="Villa"
-data-en="Villa">
-Villa
-</option>
-
-<option
-value="commercial"
-data-it="Locale commerciale"
-data-en="Commercial Property">
-Locale commerciale
-</option>
-
-</select>
-
-</div>  
+  
 
 </div>
 
@@ -1892,8 +1839,8 @@ color:#64748b;
 
 ${
 window.currentLang==="en"
-? "No properties found. Try increasing budget."
-: "Nessun immobile trovato. Prova ad aumentare il budget."
+? "No illustrative scenarios match these filters."
+: "Nessuno scenario illustrativo corrisponde ai filtri."
 }
 
 </div>
@@ -1930,34 +1877,7 @@ return;
 
 }
 
-const second =
-results[1]
-? results[1]
-: {
-
-titleIT:
-`Bilocale Premium ${city}`,
-
-titleEN:
-`Premium Apartment ${city}`,
-
-price:
-Math.round(first.price * 1.15),
-
-sqm:
-first.sqm + 10,
-
-roi:
-Math.max(
-8,
-Number(first.roi) - 2
-),
-
-portal: window.currentLang === "en" ? "Scenario 2" : "Scenario 2",
-
-url: ""
-
-};  
+const second = results[1] || null;
 
 function createCard(
 title,
@@ -2240,8 +2160,8 @@ margin-bottom:15px;
 
 ${
 window.currentLang==="en"
-? "Estimated ROI"
-: "ROI stimato"
+? "Example ROI"
+: "ROI di esempio"
 }:
 
 <strong>${first.roi}%</strong>
@@ -2264,8 +2184,8 @@ window.currentLang==="en"
 
 📐 ${
 window.currentLang==="en"
-? "Ideal Size"
-: "Metratura ideale"
+? "Scenario floor area"
+: "Metratura dello scenario"
 }:
 
 <strong>${first.sqm} m²</strong>
@@ -2285,8 +2205,8 @@ margin-bottom:10px;
 
 🎯 ${
 window.currentLang==="en"
-? "Recommended Areas"
-: "Zone consigliate"
+? "Areas to assess"
+: "Zone da valutare"
 }
 
 </div>
@@ -2342,7 +2262,7 @@ first.url,
 true
 )}
 
-${createCard(
+${second ? createCard(
 window.currentLang==="en"
 ? (second.titleEN || second.titleIT || second.title)
 : (second.titleIT || second.titleEN || second.title),
@@ -2353,7 +2273,7 @@ second.roi,
 second.portal,
 second.url,
 false
-)}
+) : ""}
 
 </div>
 
@@ -2639,7 +2559,7 @@ document.addEventListener(
 <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261008-rc57" defer></script>
+<script src="/js/chatbot-loader.js?v=20261008-rc59" defer></script>
 
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>

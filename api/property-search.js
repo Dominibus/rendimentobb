@@ -1538,56 +1538,6 @@ export default async function handler(req, res) {
 
   );
 
-// =====================================
-// 🤖 SMART FALLBACK ENGINE
-// =====================================
-
-if(results.length === 0){
-
-  const cityProperties =
-    properties.filter(
-      p => p.city === city
-    );
-
-  if(cityProperties.length){
-
-    results =
-      cityProperties
-      .sort((a,b)=>
-        a.price - b.price
-      )
-      .slice(0,5);
-
-  }
-
-}
-
-// =====================================
-// 🇮🇹 NATIONAL FALLBACK
-// =====================================
-
-if(results.length === 0){
-
-  results =
-    [...properties]
-
-    .sort((a,b)=>
-      b.roi - a.roi
-    )
-
-    .slice(0,5)
-
-    .map(p=>({
-
-      ...p,
-
-      aiReason:
-      "Market Similarity"
-
-    }));
-
-}
-
   // =====================================
   // 🤖 AI ENRICHMENT
   // =====================================
@@ -1622,7 +1572,7 @@ if(results.length === 0){
 
     results.sort(
       (a,b)=>
-        b.score - a.score
+        b.roi - a.roi
     );
 
   }

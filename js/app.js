@@ -3,7 +3,7 @@
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
-import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261007-rc54";
+import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261008-rc59";
 import { calculateROI } from "./roi-engine.js";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
@@ -255,10 +255,7 @@ function renderUniversalKPI(data = {}){
   ? (investment / net)
   : 0;
 
-// 🔥 SAFE BANKING
-if(payback > 0 && payback < 1){
-  payback = 1;
-}
+// A sub-year capital recovery remains a sub-year estimate; do not round it up.
 
 const paybackText =
   payback > 0
@@ -4878,7 +4875,7 @@ if(riskPreview){
     renderUniversalKPI({
       net,
       revenue: gross,
-      investment: price
+      investment: equity
     });
 
     renderCashflowProjection(net);
@@ -9171,7 +9168,7 @@ if(!window.__rbToolLanguageRefreshBound){
     const cashflow = Number(data.net ?? data.cashflow ?? 0);
     const occupancy = Number(data.occupancy ?? 0);
     const gross = Number(data.gross ?? data.revenueAnnual ?? 0);
-    const investment = Number(data.propertyPrice ?? data.price ?? 0);
+    const investment = Number(data.equity ?? 0);
     const city = String(
       data.marketCity ??
       data.city ??
