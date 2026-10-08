@@ -42,6 +42,11 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+// URL query versions can evaluate this module more than once in a page.
+// Keep shared account state and observers owned by the first bootstrap.
+if(!window.__rbFirebaseBootstrapInitialized){
+window.__rbFirebaseBootstrapInitialized = true;
+
 // rende Firebase Auth globale per tutto il sito
 window.firebaseAuth = auth;
 
@@ -417,6 +422,12 @@ window.hasPlan = function(required){
 
 function updateUserUI(user) {
 
+  // Shared header owns its markup; keep Dashboard, plan badge and language coherent.
+  if(typeof window.rbRenderHeaderUser === "function"){
+    window.rbRenderHeaderUser(user);
+    return;
+  }
+
   const userArea = document.getElementById("user-area");
   if (!userArea) return;
 
@@ -774,3 +785,5 @@ if (stripeSession) {
   }
 
 });
+
+} // Single Firebase bootstrap per page.

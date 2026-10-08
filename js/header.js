@@ -485,103 +485,10 @@ async function bindHeaderAccount(){
     auth = app.auth;
     signOut = firebaseAuth.signOut;
     firebaseAuth.onAuthStateChanged(auth, (user) => {
-
-  window.currentUser = user;
-
-  // 👻 GUEST → render immediato
-  if(!user){
-  // 🔥 aspetta comunque RB_USER fallback
-  setTimeout(()=>{
-    renderUser(null);
-  }, 100);
-  return;
-}
-
-  // 🔥 utente loggato → aspetta RB_USER
-  let attempts = 0;
-
-  const interval = setInterval(()=>{
-
-    attempts++;
-
-    const RB = window.RB_USER;
-
-    if(!window.getUserAccess){
-  return;
-}
-
-    // 🔥 WAIT REAL ACCESS CLASS
-const hasRealAccess =
-  RB &&
-  typeof RB.isFree === "boolean" &&
-  typeof RB.isInvestor === "boolean" &&
-  typeof RB.isPro === "boolean" &&
-  typeof RB.isAdmin === "boolean";
-
-if(hasRealAccess){
-
-  
-  clearInterval(interval);
-
-  renderUser(user);
-
-      // ===============================
-      // 🔥 INVESTOR CLEAN (TEASER MODE)
-      // ===============================
-     if(RB.isInvestor && !RB.isPro){
-
-
-  // rimuove SOLO hard lock
-  document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
-    el.remove();
-  });
-
-  // ❌ NON applicare blur qui (lo gestisce app.js)
-}
-
-      // ===============================
-      // 🔥 ACCESS CONTROL UI
-      // ===============================
-
-      // 🟢 PRO / ADMIN → FULL
-      if(RB.isPro || RB.isAdmin){
-        
-        unlockUI();
-      }
-
-     else if(RB.isInvestor){
-
-
-  // 💣 NON toccare UI → gestita da app.js (PRO-LIKE)
-
-  // pulizia SOLO sicurezza (no override logica)
-  document.querySelectorAll(`
-    .locked-overlay,
-    .hard-lock
-  `).forEach(el=>{
-    el.remove();
-  });
-
-}
-
-      // 🔴 FREE → BLOCCATO
-      else{
-        
-      }
-
-      return;
-    }
-
-    if(attempts > 40){
-      console.warn("⚠️ HEADER fallback");
-
-      clearInterval(interval);
-
-      renderUser(user);
-    }
-
-  }, 120);
-
+      // The Firebase bootstrap publishes the loaded plan through its ready events.
+      // Do not race that bootstrap with a second navbar renderer or polling timer.
+      if(!user){ renderUser(null); return; }
+      if(window.firebaseReady && window.currentUser?.uid === user.uid){ renderUser(user); }
     });
   }catch(error){
     console.warn("Header account controls unavailable", error);
@@ -590,6 +497,13 @@ if(hasRealAccess){
     if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">Accedi</a>`;
   }
 }
+window.rbRenderHeaderUser = renderUser;
+const refreshHeaderAccount = () => renderUser(window.currentUser || null);
+document.addEventListener("rb_auth_ready", refreshHeaderAccount);
+document.addEventListener("rb_plan_loaded", refreshHeaderAccount);
+document.addEventListener("rb_language_changed", refreshHeaderAccount);
+window.addEventListener("rb_plan_ready", refreshHeaderAccount);
+if(window.firebaseReady) refreshHeaderAccount();
 void bindHeaderAccount();
 
   }
