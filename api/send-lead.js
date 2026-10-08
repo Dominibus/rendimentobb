@@ -1,3 +1,4 @@
+import {hasFunnelConsent,funnelConfirmationURL} from "../lib/funnel-consent.js";
 // ===============================
 // 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (SILICON FINAL)
 // ===============================
@@ -210,6 +211,8 @@ function getScore({roi, type}){
 
 // ================= HANDLER =================
 export default async function handler(req, res){
+  res.setHeader("Cache-Control","no-store");
+  res.setHeader("X-Content-Type-Options","nosniff");
 
   if(req.method !== "POST"){
     return res.status(405).json({ error:"Method not allowed" });
@@ -246,7 +249,8 @@ export default async function handler(req, res){
       name,
       role,
       message,
-      requestId
+      requestId,
+      marketingConsent
     } = req.body || {};
 
     // ================= CLEAN =================
@@ -303,6 +307,7 @@ export default async function handler(req, res){
         .limit(1)
         .get();
       if(!repeatedRequest.empty){
+        if(repeatedRequest.docs[0].data().email !== email)return res.status(409).json({success:false,error:"request_id_conflict"});
         return res.status(200).json({ success:true, duplicate:true, leadSaved:true, emailDelivery:repeatedRequest.docs[0].data().emailDelivery || {} });
       }
     }
@@ -470,9 +475,10 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
+let reminderConfirmationURL = "";
 // Property-update requests have their own confirmation email and must not enter
 // the generic investment-analysis reminder sequence.
-if(!["immobili", "mutui", "partner", "work", "auth"].includes(type)){
+if(type === "analysis" && marketingConsent === true && process.env.CRON_SECRET && (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production")){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -481,7 +487,7 @@ const funnelQuery = await db
 
 if(funnelQuery.empty){
 
-  await db.collection("email_funnel").add({
+  const createdFunnel = await db.collection("email_funnel").add({
 
     email,
 
@@ -494,6 +500,12 @@ if(funnelQuery.empty){
     createdAt:
     admin.firestore.FieldValue.serverTimestamp(),
 
+    consentConfirmed: false,
+    marketingConsent: true,
+    consentVersion: "analysis-reminders-v1",
+    consentSource: "roi_simulator",
+    consentAt: admin.firestore.FieldValue.serverTimestamp(),
+    unsubscribed: false,
     sentSteps: [],
 
     steps:[
@@ -517,6 +529,11 @@ if(funnelQuery.empty){
 
   });
 
+  reminderConfirmationURL=funnelConfirmationURL(createdFunnel.id,process.env.CRON_SECRET);
+}else{
+  const existing=funnelQuery.docs[0];
+  await db.collection("email_funnel").doc(existing.id).update({city,roi:roiRounded,lang:detectedLang,...(!hasFunnelConsent(existing.data())?{consentConfirmed:false,marketingConsent:true,consentVersion:"analysis-reminders-v1",consentSource:"roi_simulator",consentAt:admin.firestore.FieldValue.serverTimestamp(),unsubscribed:false}:{})});
+  if(!hasFunnelConsent(existing.data()))reminderConfirmationURL=funnelConfirmationURL(existing.id,process.env.CRON_SECRET);
 }
 }
 
@@ -619,6 +636,7 @@ if(showInvestmentResults){
 }
 const userMail = buildBrandedEmail({lang:detectedLang,title:userHeading,intro:userDescription.replaceAll(htmlCity,displayCity),rows:userRows,
   note:showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
+  secondaryLabel:reminderConfirmationURL?t(detectedLang,"Conferma i promemoria facoltativi","Confirm optional reminders"):undefined,secondaryURL:reminderConfirmationURL || undefined,
   ctaLabel,ctaURL:cta,eyebrow:t(detectedLang,"Conferma richiesta","Request confirmation")});
 
 // ================= SUBJECT =================

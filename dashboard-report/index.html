@@ -1573,9 +1573,9 @@ function renderOperationalReport(){
     [t("Proprietà","Properties"), n(pms.properties)],
     [t("Prenotazioni","Bookings"), n(pms.bookings)],
     [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), euro(n(pms.totalRevenue))],
-    [t("Occupazione · mese corrente","Occupancy · current month"), percent(pms.occupancy)],
-    [t("ADR · mese corrente","ADR · current month"), euro(n(pms.adr))],
-    [t("RevPAR · mese corrente","RevPAR · current month"), euro(n(pms.revpar))],
+    [t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), percent(pms.occupancy)],
+    [t("ADR · mese dello snapshot","ADR · snapshot month"), euro(n(pms.adr))],
+    [t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), euro(n(pms.revpar))],
     [t("Ospiti","Guests"), n(pms.guests)],
     [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
   ];
@@ -1877,6 +1877,8 @@ async function generatePDF(){
       return isFinite(n) ? n : 0;
     };
 
+    const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261008-rc62");
+    if(window.currentUser?.uid !== reportOwnerUid || !(window.getUserAccess?.()?.isPro || window.getUserAccess?.()?.isAdmin)) return;
     // ================= DATA =================
     const dashboardList = window.dashboardSimulations || [];
     const selectedValue = document.getElementById("simulationSelector")?.value;
@@ -1971,12 +1973,7 @@ const monthlyProfit = safe(
         : 0;
 
     // ================= FORMAT =================
-    const eur = v => {
-      const rounded = Math.round(safe(v));
-      const sign = rounded < 0 ? "-" : "";
-      const grouped = String(Math.abs(rounded)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : ".");
-      return lang === "en" ? `${sign}€${grouped}` : `${sign}${grouped} €`;
-    };
+    const eur = v => new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT", {style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(safe(v));
 
     const dark = [15,23,42];
     const green = [16,185,129];
@@ -2758,8 +2755,8 @@ if(riskBreakdown){
     const marketKey = String(city || "").toLowerCase().trim();
     const localROI = window.RB_MARKET_DATA?.[marketKey]?.roi;
     const hasLocalBenchmark = Number.isFinite(Number(localROI)) && localROI != null;
-    const marketROI = hasLocalBenchmark ? Number(localROI) : 8.4;
-const diff = roi - marketROI;
+    const marketROI = hasLocalBenchmark ? Number(localROI) : null;
+const diff = hasLocalBenchmark ? roi - marketROI : 0;
 
 const comparisonColor =
   diff > 0
@@ -2837,7 +2834,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  hasLocalBenchmark ? t("BENCHMARK LOCALE","LOCAL BENCHMARK") : t("RIFERIMENTO GENERALE","GENERAL REFERENCE"),
+  hasLocalBenchmark ? t("RIFERIMENTO ILLUSTRATIVO","ILLUSTRATIVE REFERENCE") : t("RIFERIMENTO NON DISPONIBILE","REFERENCE UNAVAILABLE"),
   115,
   44
 );
@@ -2848,7 +2845,7 @@ doc.setFontSize(24);
 doc.setTextColor(...dark);
 
 doc.text(
-  `${marketROI.toFixed(1)}%`,
+  hasLocalBenchmark ? `${marketROI.toFixed(1)}%` : "—",
   115,
   63
 );
@@ -2872,7 +2869,7 @@ doc.setFontSize(16);
 doc.setTextColor(255,255,255);
 
 doc.text(
-  `${diff > 0 ? "+" : ""}${diff.toFixed(1)}%`,
+  hasLocalBenchmark ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} ${t("p.p.","pp")}` : "—",
   28,
   107
 );
@@ -2880,7 +2877,7 @@ doc.text(
 doc.setFontSize(8);
 
 doc.text(
-  comparisonLabel,
+  hasLocalBenchmark ? comparisonLabel : t("NESSUN CONFRONTO","NO COMPARISON"),
   182,
   106,
   { align:"right" }
@@ -2895,23 +2892,29 @@ doc.setTextColor(100,116,139);
 doc.text(
   diff > 0
     ? t(
-        hasLocalBenchmark ? "Il rendimento del progetto supera il benchmark locale disponibile." : "Il rendimento supera il riferimento generale; il confronto non è specifico per la città.",
+        hasLocalBenchmark ? "Il rendimento del progetto supera il benchmark locale disponibile." : "Nessun riferimento disponibile per questa città.",
         hasLocalBenchmark ? "The project return exceeds the available local benchmark." : "The project return exceeds the general reference; the comparison is not city-specific."
       )
     : diff < 0
       ? t(
-          hasLocalBenchmark ? "Il rendimento del progetto è inferiore al benchmark locale disponibile." : "Il rendimento è inferiore al riferimento generale; il confronto non è specifico per la città.",
+          hasLocalBenchmark ? "Il rendimento del progetto è inferiore al benchmark locale disponibile." : "Nessun riferimento disponibile per questa città.",
           hasLocalBenchmark ? "The project return is below the available local benchmark." : "The project return is below the general reference; the comparison is not city-specific."
         )
       : t(
-          hasLocalBenchmark ? "Il rendimento è allineato al benchmark locale disponibile." : "Il rendimento è allineato al riferimento generale, non specifico per la città.",
-          hasLocalBenchmark ? "The return is aligned with the available local benchmark." : "The return is aligned with the general reference, which is not city-specific."
+          hasLocalBenchmark ? "Il rendimento è allineato al benchmark locale disponibile." : "Nessun riferimento disponibile per questa città.",
+          hasLocalBenchmark ? "The return is aligned with the available local benchmark." : "No reference is available for this city."
         ),
   20,
   130,
   { maxWidth:170 }
 );
 
+    doc.setFontSize(8);
+    doc.setTextColor(100,116,139);
+    doc.text(doc.splitTextToSize(t(
+      "Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.",
+      "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."
+    ),170),20,153);
     addFooter();
 
     // ================= PAGE 6 =================
@@ -3209,6 +3212,11 @@ doc.text(
       doc.setFontSize(8);
       doc.setTextColor(100,116,139);
       doc.text(t("Fotografia operativa dei dati disponibili in dashboard.","Operational snapshot of the data available in the dashboard."),20,28);
+      const snapshotTime = new Date(dashboardReportContext.generatedAt || "");
+      if(Number.isFinite(snapshotTime.getTime())){
+        doc.setFontSize(7);
+        doc.text(t("Snapshot PMS: ","PMS snapshot: ")+snapshotTime.toLocaleString(lang === "en"?"en-GB":"it-IT"),20,35);
+      }
       doc.setFillColor(236,253,245);
       doc.setTextColor(4,120,87);
       doc.roundedRect(145,17,45,10,3,3,"F");
@@ -3218,8 +3226,8 @@ doc.text(
 
       const rows = [
         [t("Proprietà","Properties"), String(safe(pms.properties)), t("Prenotazioni","Bookings"), String(safe(pms.bookings))],
-        [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), eur(safe(pms.totalRevenue)), t("Occupazione · mese corrente","Occupancy · current month"), `${safe(pms.occupancy).toFixed(0)}%`],
-        [t("ADR · mese corrente","ADR · current month"), eur(safe(pms.adr)), t("RevPAR · mese corrente","RevPAR · current month"), eur(safe(pms.revpar))],
+        [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), eur(safe(pms.totalRevenue)), t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), `${safe(pms.occupancy).toFixed(0)}%`],
+        [t("ADR · mese dello snapshot","ADR · snapshot month"), eur(safe(pms.adr)), t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), eur(safe(pms.revpar))],
         [t("Ospiti","Guests"), String(safe(pms.guests)), t("Da attenzionare","Requiring attention"), String(safe(pms.attentionCount))],
         [t("Arrivi oggi","Arrivals today"), String(safe(pms.arrivalsToday)), t("Partenze oggi","Departures today"), String(safe(pms.departuresToday))]
       ];
@@ -3269,6 +3277,44 @@ doc.text(
       }
       addFooter();
     }
+
+    // Saved inputs are never rebuilt from defaults for a legacy report.
+    doc.addPage();
+    doc.setFont("helvetica","bold");doc.setFontSize(15);doc.setTextColor(...dark);
+    doc.text(t("Ipotesi salvate della simulazione","Saved simulation assumptions"),20,20);
+    const assumptions = readInvestmentAssumptions(fallback.assumptions);
+    const number = v => new Intl.NumberFormat(lang === "en"?"en-GB":"it-IT",{maximumFractionDigits:6}).format(v);
+    doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);
+    doc.text(doc.splitTextToSize(t("Input simulati, non dati operativi verificati. Le aliquote appartengono al modello semplificato.","Simulated inputs, not verified operating data. Tax rates belong to the simplified model."),170),20,30);
+    let assumptionsY=46;
+    if(!assumptions){
+      doc.text(doc.splitTextToSize(t("Ipotesi complete non disponibili per questa analisi salvata. Non sono ricostruite da valori predefiniti: riapri Analizza per creare uno scenario con input espliciti.","Complete assumptions are unavailable for this saved analysis. No defaults are used to reconstruct them: open Analyze to create a scenario with explicit inputs."),170),20,assumptionsY);
+    }else{
+      const rows=[
+        [t("ID analisi","Analysis ID"),String(fallback.id || "—").slice(0,80)],
+        [t("Versione calcolo","Calculation version"),assumptions.calculationVersion],
+        [t("Origine input","Input source"),assumptions.source === "simulator"?t("Simulatore","Simulator"):t("Anteprima home","Home preview")],
+        [t("Prezzo immobile","Property price"),eur(assumptions.propertyPrice)],
+        [t("Capitale proprio","Equity"),eur(assumptions.equity)],
+        [t("Tariffa notte","Nightly rate"),number(assumptions.priceNight)+" EUR"],
+        [t("Occupazione","Occupancy"),number(assumptions.occupancy)+"%"],
+        [assumptions.expensesUnit === "monthly_eur"?t("Costi mensili","Monthly costs"):t("Costi (% ricavi)","Costs (% revenue)"),assumptions.expensesUnit === "monthly_eur"?eur(assumptions.expenses):number(assumptions.expenses)+"%"],
+        [t("Commissioni","Commissions"),number(assumptions.commission)+"%"],
+        [t("Aliquota del modello","Model tax rate"),number(assumptions.tax)+"%"],
+        [t("Importo mutuo","Loan amount"),eur(assumptions.loanAmount)],
+        [t("Tasso annuo","Annual interest rate"),number(assumptions.interestRate)+"%"],
+        [t("Durata mutuo","Loan term"),number(assumptions.loanYears)+t(" anni"," years")]
+      ];
+      rows.forEach(([label,value])=>{
+        doc.setFillColor(248,250,252);doc.roundedRect(20,assumptionsY-5,170,10,2,2,"F");
+        doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);doc.text(label,24,assumptionsY+1);
+        doc.setFont("helvetica","bold");doc.setTextColor(...dark);doc.text(value,186,assumptionsY+1,{align:"right"});
+        assumptionsY+=12;
+      });
+      doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);
+      doc.text(doc.splitTextToSize(t("Ricavi annui = tariffa x 365 x occupazione / 100. Costi mensili x 12. ROI equity = cashflow netto annuo / capitale proprio x 100. Il risultato dipende anche da commissioni, imposte e servizio del debito del modello; l'occupazione è costante nell'anno.","Annual revenue = nightly rate x 365 x occupancy / 100. Monthly costs x 12. Equity ROI = annual net cash flow / equity x 100. Results also depend on modeled commissions, tax and debt service; occupancy is constant throughout the year."),170),20,assumptionsY+8);
+    }
+    addFooter();
 
     // ================= REGISTER DASHBOARD REPORT =================
     if(
@@ -3326,10 +3372,12 @@ doc.text(
     }
 
     // ================= SAVE =================
+    if(window.currentUser?.uid !== reportOwnerUid || !(window.getUserAccess?.()?.isPro || window.getUserAccess?.()?.isAdmin)) return;
     doc.save(`RendimentoBB-Investimento-Gestione-${city}.pdf`);
 
   }catch(err){
     console.error("PDF ERROR:", err);
+    alert(window.currentLang === "en" ? "Unable to generate the PDF. Please retry from the dashboard." : "Impossibile generare il PDF. Riprova dalla dashboard.");
   }
 
 }

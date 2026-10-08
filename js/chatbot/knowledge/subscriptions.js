@@ -1,198 +1,83 @@
-// ===============================================
-// 💳 SUBSCRIPTIONS KNOWLEDGE
-// ===============================================
-
+// Plan information matches current product capabilities.
 Object.assign(window.rbKnowledgeBase, {
-
-  freePlan:{
-
-    type:"subscriptions",
-
-    priority:6,
-
-    keywords:[
+  "freePlan": {
+    "type": "subscriptions",
+    "priority": 6,
+    "keywords": [
       "free",
       "free plan",
       "piano gratuito",
       "gratis",
       "basic plan"
     ],
-
-    aiTitleIT:"🆓 PIANO FREE",
-    aiTitleEN:"🆓 FREE PLAN",
-
-    aiSummaryIT:`
-Il piano Free consente di iniziare ad analizzare investimenti B&B.
-`,
-
-    aiSummaryEN:`
-The Free plan allows users to start analyzing B&B investments.
-`,
-
-    aiInsightIT:`
-📊 Include:
-
-• simulazioni base
-• accesso AI limitato
-• benchmark essenziali
-• analisi introduttive
-
-💡 Ideale per testare il mercato prima di investire capitale reale.
-`,
-
-    aiInsightEN:`
-📊 Includes:
-
-• basic simulations
-• limited AI access
-• essential benchmarks
-• introductory analysis
-
-💡 Ideal for testing the market before investing real capital.
-`,
-
-    recommendationsIT:[
-      "Usa il piano Free per comprendere il mercato",
-      "Valuta upgrade per analisi più avanzate"
+    "aiTitleIT": "🆓 PIANO FREE",
+    "aiTitleEN": "🆓 FREE PLAN",
+    "aiSummaryIT": "Free permette di provare il simulatore.",
+    "aiSummaryEN": "Free lets you try the simulator.",
+    "aiInsightIT": "Risultati nella sessione e riferimenti illustrativi. Archivio personale e PMS operativo sono nei piani a pagamento. Le simulazioni non attestano ricavi reali.",
+    "aiInsightEN": "Session results and illustrative references. Personal saved analyses and operational PMS are paid features. Simulations do not verify actual revenue.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Use the Free plan to understand the market",
-      "Consider upgrading for advanced analysis"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
   },
-
-  investorPlan:{
-
-    type:"subscriptions",
-
-    priority:8,
-
-    keywords:[
+  "investorPlan": {
+    "type": "subscriptions",
+    "priority": 8,
+    "keywords": [
       "investor",
       "investor plan",
       "piano investor",
       "investor subscription"
     ],
-
-    aiTitleIT:"📊 PIANO INVESTOR",
-    aiTitleEN:"📊 INVESTOR PLAN",
-
-    aiSummaryIT:`
-Il piano Investor sblocca strumenti avanzati per investitori short-rent.
-`,
-
-    aiSummaryEN:`
-The Investor plan unlocks advanced tools for short-rent investors.
-`,
-
-    aiInsightIT:`
-📈 Include:
-
-• analisi ROI avanzate
-• benchmark mercato
-• insight AI
-• analisi rischio
-• simulazioni dettagliate
-
-💡 Pensato per investitori attivi nel settore B&B e Airbnb.
-`,
-
-    aiInsightEN:`
-📈 Includes:
-
-• advanced ROI analysis
-• market benchmarks
-• AI insights
-• risk analysis
-• detailed simulations
-
-💡 Designed for active B&B and Airbnb investors.
-`,
-
-    recommendationsIT:[
-      "Ideale per investitori in crescita",
-      "Perfetto per confrontare opportunità short-rent"
+    "aiTitleIT": "📊 PIANO INVESTOR",
+    "aiTitleEN": "📊 INVESTOR PLAN",
+    "aiSummaryIT": "Investor: €19 al mese, per analisi salvate e gestione PMS.",
+    "aiSummaryEN": "Investor: €19 per month, for saved analyses and PMS.",
+    "aiInsightIT": "ROI, cashflow, scenari salvati, dashboard, confronto immobili e PMS prenotazioni. Include assistente per analisi e attività. I report PDF Executive e i report dashboard sono riservati a Pro.",
+    "aiInsightEN": "ROI, cashflow, saved scenarios, dashboard, property comparison and booking PMS. Includes the analysis and task assistant. Executive PDFs and dashboard reports require Pro.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Ideal for growing investors",
-      "Perfect for comparing short-rent opportunities"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
   },
-
-  proPlan:{
-
-    type:"subscriptions",
-
-    priority:10,
-
-    keywords:[
+  "proPlan": {
+    "type": "subscriptions",
+    "priority": 10,
+    "keywords": [
       "pro",
       "pro plan",
       "piano pro",
       "professional plan",
       "premium"
     ],
-
-    aiTitleIT:"🚀 PIANO PRO",
-    aiTitleEN:"🚀 PRO PLAN",
-
-    aiSummaryIT:`
-Il piano PRO offre accesso completo all'ecosistema professionale RendimentoBB.
-`,
-
-    aiSummaryEN:`
-The PRO plan provides full access to the professional RendimentoBB ecosystem.
-`,
-
-    aiInsightIT:`
-📊 Include:
-
-• PDF executive professionale
-• cashflow avanzato
-• comparazione mutui
-• simulazioni complete
-• analisi sostenibilità
-• AI investment assistant avanzato
-
-💡 Ideale per investitori professionali e operazioni ad alto capitale.
-`,
-
-    aiInsightEN:`
-📊 Includes:
-
-• professional executive PDF
-• advanced cashflow
-• mortgage comparison
-• complete simulations
-• sustainability analysis
-• advanced AI investment assistant
-
-💡 Ideal for professional investors and high-capital operations.
-`,
-
-    recommendationsIT:[
-      "Consigliato per analisi professionali",
-      "Perfetto per investimenti multi-property"
+    "aiTitleIT": "🚀 PIANO PRO",
+    "aiTitleEN": "🚀 PRO PLAN",
+    "aiSummaryIT": "Pro: €29 al mese. Aggiunge PDF professionali e report dashboard alle funzioni Investor.",
+    "aiSummaryEN": "Pro: €29 per month. Adds professional PDFs and dashboard reports to Investor features.",
+    "aiInsightIT": "Analisi, archivio e gestione PMS con report esportabili. Autopilot propone priorità e azioni assistite: non certifica documenti e non sincronizza automaticamente i portali OTA.",
+    "aiInsightEN": "Analysis, saved scenarios and PMS with exportable reports. Autopilot suggests priorities and guided actions: it does not certify documents or automatically synchronize OTA channels.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Recommended for professional analysis",
-      "Perfect for multi-property investments"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
   },
-
-  upgradePlan:{
-
-    type:"subscriptions",
-
-    priority:9,
-
-    keywords:[
+  "upgradePlan": {
+    "type": "subscriptions",
+    "priority": 9,
+    "keywords": [
       "upgrade",
       "upgrade plan",
       "upgrade subscription",
@@ -200,120 +85,50 @@ The PRO plan provides full access to the professional RendimentoBB ecosystem.
       "become pro",
       "become investor"
     ],
-
-    aiTitleIT:"⬆️ UPGRADE PIANO",
-    aiTitleEN:"⬆️ PLAN UPGRADE",
-
-    aiSummaryIT:`
-Puoi effettuare upgrade del piano in qualsiasi momento.
-`,
-
-    aiSummaryEN:`
-You can upgrade your subscription plan at any time.
-`,
-
-    aiInsightIT:`
-🔓 L'upgrade sblocca:
-
-• dati avanzati
-• benchmark premium
-• insight AI
-• analisi professionali
-• report executive
-
-💡 Gli strumenti premium aiutano a ridurre errori di investimento.
-`,
-
-    aiInsightEN:`
-🔓 Upgrading unlocks:
-
-• advanced data
-• premium benchmarks
-• AI insights
-• professional analysis
-• executive reports
-
-💡 Premium tools help reduce investment mistakes.
-`,
-
-    recommendationsIT:[
-      "Valuta upgrade prima di investire capitale importante",
-      "Usa benchmark premium per confronti realistici"
+    "aiTitleIT": "⬆️ UPGRADE PIANO",
+    "aiTitleEN": "⬆️ PLAN UPGRADE",
+    "aiSummaryIT": "Confronta i piani dalla sezione Prezzi della home.",
+    "aiSummaryEN": "Compare plans in the home page Pricing section.",
+    "aiInsightIT": "Se hai già un abbonamento attivo, contatta l’assistenza per il cambio piano prima di avviare un nuovo pagamento. I dati di mercato restano riferimenti illustrativi anche nei piani premium.",
+    "aiInsightEN": "If you already have an active subscription, contact support about a plan change before starting another payment. Market data remains illustrative in paid plans too.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Consider upgrading before major investments",
-      "Use premium benchmarks for realistic comparisons"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
   },
-
-  cancelSubscription:{
-
-    type:"subscriptions",
-
-    priority:7,
-
-    keywords:[
+  "cancelSubscription": {
+    "type": "subscriptions",
+    "priority": 7,
+    "keywords": [
       "cancel",
       "cancel subscription",
       "unsubscribe",
       "annulla abbonamento",
       "disdire piano"
     ],
-
-    aiTitleIT:"❌ GESTIONE ABBONAMENTO",
-    aiTitleEN:"❌ SUBSCRIPTION MANAGEMENT",
-
-    aiSummaryIT:`
-Gli abbonamenti possono essere gestiti direttamente dall'account utente.
-`,
-
-    aiSummaryEN:`
-Subscriptions can be managed directly from the user account.
-`,
-
-    aiInsightIT:`
-⚙️ Puoi:
-
-• verificare il piano attivo
-• aggiornare metodo pagamento
-• annullare rinnovo
-• gestire upgrade
-
-💡 Le funzioni premium restano attive fino alla fine del periodo corrente.
-`,
-
-    aiInsightEN:`
-⚙️ You can:
-
-• check active plan
-• update payment method
-• cancel renewal
-• manage upgrades
-
-💡 Premium features remain active until the current billing cycle ends.
-`,
-
-    recommendationsIT:[
-      "Controlla sempre il periodo attivo residuo",
-      "Gestisci il piano direttamente dalla dashboard"
+    "aiTitleIT": "❌ GESTIONE ABBONAMENTO",
+    "aiTitleEN": "❌ SUBSCRIPTION MANAGEMENT",
+    "aiSummaryIT": "Per richiedere la disattivazione del rinnovo, contatta l’assistenza dalla pagina Contatti.",
+    "aiSummaryEN": "Contact support through the Contact page to request renewal cancellation.",
+    "aiInsightIT": "Controlla il piano attivo e la sua scadenza. La dashboard attuale non offre un pannello per modificare autonomamente la carta o annullare il rinnovo.",
+    "aiInsightEN": "Check your active plan and its expiry date. The current dashboard does not provide a self-service panel for changing payment cards or cancelling renewal.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Always check remaining active period",
-      "Manage your plan directly from dashboard"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
   },
-
-  pricing:{
-
-    type:"subscriptions",
-
-    priority:8,
-
-    keywords:[
+  "pricing": {
+    "type": "subscriptions",
+    "priority": 8,
+    "keywords": [
       "pricing",
       "price",
       "prices",
@@ -321,52 +136,46 @@ Subscriptions can be managed directly from the user account.
       "prezzi",
       "quanto costa"
     ],
-
-    aiTitleIT:"💰 PREZZI RENDIMENTOBB",
-    aiTitleEN:"💰 RENDIMENTOBB PRICING",
-
-    aiSummaryIT:`
-RendimentoBB offre diversi livelli di accesso in base alle esigenze dell'investitore.
-`,
-
-    aiSummaryEN:`
-RendimentoBB offers multiple access levels based on investor needs.
-`,
-
-    aiInsightIT:`
-📊 I piani premium includono strumenti avanzati per:
-
-• ROI
-• cashflow
-• benchmark
-• rischio
-• sostenibilità finanziaria
-
-💡 Investire con dati migliori può ridurre errori molto costosi.
-`,
-
-    aiInsightEN:`
-📊 Premium plans include advanced tools for:
-
-• ROI
-• cashflow
-• benchmarks
-• risk
-• financial sustainability
-
-💡 Better investment data can reduce expensive mistakes.
-`,
-
-    recommendationsIT:[
-      "Scegli il piano in base al livello di investimento",
-      "Valuta ROI e rischio con strumenti avanzati"
+    "aiTitleIT": "💰 PREZZI RENDIMENTOBB",
+    "aiTitleEN": "💰 RENDIMENTOBB PRICING",
+    "aiSummaryIT": "Investor €19/mese; Pro €29/mese; Pro annuale €199/anno.",
+    "aiSummaryEN": "Investor €19/month; Pro €29/month; Yearly Pro €199/year.",
+    "aiInsightIT": "Investor include analisi salvate e PMS. Pro aggiunge report PDF e report dashboard. L’annuale include le stesse funzioni Pro con un risparmio di €149 rispetto a dodici mensilità Pro. Prezzi e fatturazione sono riportati anche nella home.",
+    "aiInsightEN": "Investor includes saved analyses and PMS. Pro adds PDF and dashboard reports. Yearly Pro includes the same Pro features, saving €149 compared with twelve monthly Pro payments. Prices and billing terms are also shown on the home page.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
     ],
-
-    recommendationsEN:[
-      "Choose a plan based on investment level",
-      "Evaluate ROI and risk with advanced tools"
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
     ]
-
+  },
+  "proYearlyPlan": {
+    "type": "subscriptions",
+    "priority": 11,
+    "keywords": [
+      "pro annuale",
+      "piano annuale",
+      "pro yearly",
+      "yearly plan",
+      "annual plan",
+      "annual subscription",
+      "abbonamento annuale"
+    ],
+    "aiTitleIT": "PRO ANNUALE",
+    "aiTitleEN": "YEARLY PRO",
+    "aiSummaryIT": "Pro annuale: tutte le funzioni Pro a €199 all’anno, pagati in un’unica soluzione.",
+    "aiSummaryEN": "Yearly Pro: all Pro features for €199 per year, paid upfront.",
+    "aiInsightIT": "Risparmi €149 rispetto a 12 mesi di Pro mensile (€348), circa il 42,8%. Il costo medio è €16,58 al mese; il pagamento resta annuale. Include PDF, dashboard, prenotazioni, calendario e attività PMS. Le funzioni sono le stesse del Pro mensile; non sono promessi servizi esterni aggiuntivi.",
+    "aiInsightEN": "Save €149 versus 12 months of monthly Pro (€348), about 42.8%. The average cost is €16.58 per month; billing remains annual. Includes PDFs, dashboard, bookings, calendar and PMS tasks. Features match monthly Pro; no additional external services are promised.",
+    "recommendationsIT": [
+      "Confronta i piani nella home",
+      "Verifica il piano attivo nella dashboard"
+    ],
+    "recommendationsEN": [
+      "Compare plans on the home page",
+      "Check your active plan on the dashboard"
+    ]
   }
-
 });

@@ -3304,6 +3304,7 @@ if(finalROI <= 0){
         dscr: Number(result?.dscr ?? 0),
         annualDebtService: Number(result?.annualDebtService ?? result?.mortgageYearly ?? 0),
         type: "analysis",
+        marketingConsent: document.getElementById("analysis-reminder-consent")?.checked === true,
         source: "roi_simulator",
         funnel: "analysis_completed",
         leadScore,
@@ -3359,45 +3360,8 @@ if(mortgageBox && mortgageBtn){
     mortgageBox.style.display = "block";
 
     mortgageBtn.onclick = () => {
-
-      if(!window.firebaseReady) return;
-      if(!window.isUserReady()) return;
-
-      if(!window.currentUser){
-
-        localStorage.setItem("lead_type", "mutuo");
-
-        showToast(
-          t(
-            "Inserisci email per ricevere le migliori offerte mutuo",
-            "Enter your email to receive the best mortgage offers"
-          ),
-          "info"
-        );
-
-        window.location.href = "/login/";
-        return;
-      }
-
-      fetch("/api/send-lead",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          email: window.currentUser.email,
-          type:"mutuo",
-          roi: window.lastAnalysisData?.roi || 0,
-          city: window.currentCity
-        })
-      });
-
-      showToast(
-        t(
-          "🏦 Richiesta inviata. Le banche ti contatteranno",
-          "🏦 Request sent. Banks will contact you"
-        ),
-        "success"
-      );
-
+      // An indicative simulation is not an offer or a promise of bank contact.
+      window.location.href = "/mutui/";
     };
 
   }else{

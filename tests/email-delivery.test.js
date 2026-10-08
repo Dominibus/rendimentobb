@@ -1,3 +1,4 @@
+import {hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL} from "../lib/funnel-consent.js";
 import {dispatchTaskNotification,urgentNotificationId} from '../lib/pms-notification-queue.js';
 import {reconcilePMSTasks} from '../js/pms-tasks.js';
 import {drainTaskNotifications} from '../lib/pms-notification-queue.js';
@@ -21,7 +22,7 @@ function harness(file,failRecipient=''){
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:file==='api/work-email.js'?'user@example.test':'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
+ const ctx={hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
@@ -74,12 +75,12 @@ test('urgent host email honors ownership and notification preferences',async()=>
 
 test('funnel provider rejection never marks the reminder as sent and releases the lock',async()=>{
  const h=harness('api/cron-funnel.js','owner@example.test');h.ctx.process.env.CRON_SECRET='mock-secret';
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
- const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);const data=(await h.collection('email_funnel').doc('funnel-id').get()).data();assert.equal(data.sentSteps.length,0);assert.equal(data.sending,false);assert.equal(data.lastError,'mock provider rejected');
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.funnel.errors,1);const data=(await h.collection('email_funnel').doc('funnel-id').get()).data();assert.equal(data.sentSteps.length,0);assert.equal(data.sending,false);assert.equal(data.lastError,'mock provider rejected');
 });
 test('successful funnel reminder is branded and cannot be sent again as the same step',async()=>{
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'<b>Roma</b>',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'<b>Roma</b>',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);assert.ok(h.sent[0].payload.html.includes('&lt;b&gt;Roma'));assert.ok(h.sent[0].payload.html.includes('#087f5b'));
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
 });
@@ -105,7 +106,7 @@ test('authenticated cron drains durable PMS notifications and records safe job c
 });
 test('PMS recovery error is visible but does not prevent the existing funnel from running',async()=>{
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.drainTaskNotifications=async()=>{throw Error('database unavailable');};
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.error,'pms_recovery_failed');assert.equal(h.sent.length,1);
 });
 
@@ -152,4 +153,48 @@ test('uncertain urgent delivery beyond safe idempotency window requires review w
 });
 test('legacy failed urgent delivery is not replayed with a potentially unsafe new provider request',async()=>{
  const h=harness('api/guest-report.js'),body=await seedPublicUrgent(h),id=urgentNotificationId(body.bookingId,body);await h.collection('_pms_notifications').doc(id).set({type:'guest_issue_urgent',status:'failed',uid:'user-id'});await h.run(body);assert.equal(h.sent.length,0);assert.equal(h.stores.get('_pms_notifications').get(id).status,'manual_review');
+});
+
+test('analysis email without optional consent does not enter a reminder funnel',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'user@example.test',type:'analysis',roi:20,price:150000,equity:30000});
+ assert.equal(r.status,200);assert.equal(h.stores.get('email_funnel')?.size || 0,0);assert.ok(h.sent.length>0);
+});
+test('optional consent queues an unconfirmed record and a recipient confirmation link',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'user@example.test',type:'analysis',roi:20,marketingConsent:true});
+ assert.equal(r.status,200);const records=[...h.stores.get('email_funnel').values()];assert.equal(records.length,1);
+ assert.equal(records[0].consentConfirmed,false);assert.equal(hasFunnelConsent(records[0]),false);
+ assert.ok(h.sent.some(x=>x.payload.html.includes('action=confirm')));
+});
+test('cron suppresses legacy, unconfirmed and revoked commercial funnels',async()=>{
+ for(const consent of [{},{marketingConsent:true,consentConfirmed:false,consentVersion:'analysis-reminders-v1'},{marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',unsubscribed:true}]){
+  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+  await h.collection('email_funnel').doc('legacy').set({...consent,email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+  assert.equal((await h.run({},'GET','mock-secret')).status,200);assert.equal(h.sent.length,0);
+ }
+});
+test('confirmed reminders carry signed opt-out in HTML, text and provider header',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('confirmed').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
+ const mail=h.sent[0].payload;assert.ok(mail.headers['List-Unsubscribe'].includes('email-unsubscribe?token='));assert.ok(mail.html.includes('Interrompi i promemoria'));assert.ok(mail.text.includes('email-unsubscribe?token='));
+});
+
+test('ambiguous funnel attempts older than the safe window require review without another send',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('old-attempt').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[],deliveryAttempts:{0:{firstAt:Date.now()-86400001}}});
+ const r=await h.run({},'GET','mock-secret');assert.equal(h.sent.length,0);assert.equal(r.body.funnel.manualReview,1);
+ assert.equal((await h.collection('email_funnel').doc('old-attempt').get()).data().manualReview,true);
+});
+
+test('preview cron cannot send email or change production queue records',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.process.env.VERCEL_ENV='preview';
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);assert.equal(r.body.reason,'production_only');assert.equal(h.sent.length,0);assert.equal(h.stores.size,0);
+});
+
+test('reusing a public request ID for another email does not expose delivery metadata',async()=>{
+ const h=harness('api/send-lead.js');await h.run({email:'first@example.test',type:'analysis',requestId:'same-public-request'});
+ const count=h.sent.length;const r=await h.run({email:'second@example.test',type:'analysis',requestId:'same-public-request'});
+ assert.equal(r.status,409);assert.equal(r.body.error,'request_id_conflict');assert.equal(r.body.emailDelivery,undefined);assert.equal(h.sent.length,count);
 });
