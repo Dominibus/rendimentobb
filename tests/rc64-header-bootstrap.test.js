@@ -30,6 +30,6 @@ test('tool has the same navigation markup before any script executes',()=>{
  const html=read('tool/index.html');assert.ok(html.includes('<div id="global-header">'+template+'</div>'));
  assert.equal((html.match(/id="global-header"/g)||[]).length,1);
  assert.equal((html.match(/id="rb-mobile"/g)||[]).length,1);
- assert.match(html,/header.js\?v=20261008-rc65/);
+ assert.match(html,/header.js\?v=20261008-rc66/);
  assert.doesNotMatch(source,/^import .*firebase/m);
 });

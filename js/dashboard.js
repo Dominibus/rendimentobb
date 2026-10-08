@@ -15336,3 +15336,28 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 document.addEventListener("rb_language_changed",()=>renderBookingTaskTracking());
+
+// Language refresh uses the existing PMS snapshot and keeps chart revenue unchanged.
+function refreshPMSLanguage(){
+  const pms = window.rbPMSData;
+  if(!pms || (!pms.isDemo && pms.ownerUid !== window.currentUser?.uid)) return;
+  for(const [id,value] of Object.entries({
+    "pms-total-revenue":formatCurrency(pms.revenue),
+    "pms-adr":formatCurrency(pms.adr),
+    "pms-revpar":formatCurrency(pms.revpar),
+    "pms-occupancy":formatPercent(pms.occupancy)
+  })){
+    const element = document.getElementById(id);
+    if(element) element.innerText = value;
+  }
+  const canvas = document.getElementById("pms-performance-chart");
+  const chart = canvas && Chart.getChart(canvas);
+  if(chart){
+    chart.data.labels = window.currentLang === "en"
+      ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+      : ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"];
+    chart.data.datasets.forEach(dataset => { dataset.label = t("Ricavi","Revenue"); });
+    chart.update("none");
+  }
+}
+document.addEventListener("rb_language_changed", refreshPMSLanguage);

@@ -741,7 +741,7 @@ border-bottom:1px solid #eef2f7;
   box-shadow:
   0 10px 30px rgba(16,185,129,0.12);
   ">
-    REPORT DI SIMULAZIONE • IPOTESI ESPLICITE
+    <span data-it="REPORT DI SIMULAZIONE • IPOTESI ESPLICITE" data-en="SIMULATION REPORT • EXPLICIT ASSUMPTIONS">REPORT DI SIMULAZIONE • IPOTESI ESPLICITE</span>
   </div>
 
 </div>
@@ -1049,7 +1049,7 @@ Analisi performance
     ">
       <span
 data-it="IPOTESI SALVATE"
-data-en="LIVE DATA">
+data-en="SAVED ASSUMPTIONS">
 IPOTESI SALVATE
 </span>
     </div>
@@ -1441,7 +1441,7 @@ const canonicalVerdict =
 
 
 // ================= LANG =================
-const lang = window.currentLang || "it";
+let lang = window.currentLang || "it";
 
 // ================= USER =================
 function checkUserPlan(){
@@ -1590,7 +1590,7 @@ function renderOperationalReport(){
     ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
         <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
           <strong>${escaped(item.propertyName || item.name || t("Immobile","Property"))}</strong><br>
-          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
+          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(({planning:t("Pianificazione","Planning"),in_progress:t("In corso","In progress"),completed:t("Completata","Completed"),paused:t("In pausa","Paused")})[item.status] || item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
         </div>`).join("")
     : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
 
@@ -1731,9 +1731,8 @@ function applyLock(){
 // ================= ADVANCED =================
 function renderAdvanced(){
 
-  if(document.getElementById("advancedBox")) return;
-
-  const box = document.createElement("div");
+  const existingBox = document.getElementById("advancedBox");
+  const box = existingBox || document.createElement("div");
   box.id = "advancedBox";
   box.className = "verdict";
 
@@ -1842,7 +1841,7 @@ ${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (
 
   // 🔥 FIX sicurezza DOM
   const reportEl = document.querySelector(".report");
-  if(reportEl){
+  if(reportEl && !existingBox){
     reportEl.appendChild(box);
   }
 
@@ -3485,6 +3484,20 @@ function init(){
 // ================= START =================
 window.generatePDF = generatePDF;
 init();
+document.addEventListener("rb_language_changed", () => {
+  if(window.currentUser?.uid !== reportOwnerUid || !Number.isFinite(price) || price <= 0) return;
+  lang = window.currentLang || "it";
+  renderData();
+  renderVerdict();
+  renderOperationalReport();
+  renderChart();
+  if(isPro) renderAdvanced();
+  const selector = document.getElementById("simulationSelector");
+  const selected = selector?.value;
+  populateSimulations();
+  if(selector) selector.value = selected;
+  window.applyTranslations?.();
+});
 }
 document.addEventListener("rb_auth_ready", event => {
   startOwnedReport(event.detail?.user || window.currentUser || null);
@@ -3598,7 +3611,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261008-rc58"></script>
+<script type="module" src="/js/header.js?v=20261008-rc66"></script>
 <script src="/js/ui-system.js" defer></script>
 <script type="module" src="/js/footer.js"></script>
 </body>
