@@ -3619,7 +3619,7 @@ if(access.isPro || access.isAdmin){
     const equityInput = getValue("equity");
 
     let equity = isTool
-  ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
+  ? equityInput
   : Math.round(price * 0.3);
 
 // 🔥 EQUITY CANNOT EXCEED PRICE
@@ -5886,7 +5886,7 @@ doc.setTextColor(...(roi < 0 ? [220,38,38] : green));
 doc.setFontSize(40);
 
 doc.text(
-  pct(roi),
+  (equity > 0 ? pct(roi) : "N/A"),
   20,
   155
 );
@@ -6111,7 +6111,7 @@ doc.setTextColor(255);
 
 doc.setFontSize(26);
 doc.text(
-  pct(roi),
+  (equity > 0 ? pct(roi) : "N/A"),
   28,
   y + 22
 );
@@ -6227,7 +6227,7 @@ profit >= 0
 
 {
 title:T("ROI equity","Equity ROI"),
-value:pct(roi),
+value:equity > 0 ? pct(roi) : "N/A",
 subtitle:rating
 }
 
@@ -6722,7 +6722,7 @@ doc.setFontSize(11);
 doc.setTextColor(...dark);
 
 doc.text(
-pct(roi),
+(equity > 0 ? pct(roi) : "N/A"),
 28,
 y+19
 );
@@ -6751,7 +6751,7 @@ y += 38;
 
 row(
   T("ROI equity","Equity ROI"),
-  pct(roi)
+  (equity > 0 ? pct(roi) : "N/A")
 );
 
 row(
@@ -6820,7 +6820,7 @@ doc.setFontSize(8);
 doc.setTextColor(...dark);
 
 const compareLabel =
-  `${pct(roi)} vs ${pct(marketROI)}`;
+  `${(equity > 0 ? pct(roi) : "N/A")} vs ${pct(marketROI)}`;
 
 // 🔥 barra lunga → testo sotto
 if(compareWidth > 105){
@@ -7070,7 +7070,9 @@ y += 10;
 const insights = [];
 
 // ROI
-if (roi >= marketROI + 5) {
+if(equity <= 0){
+  insights.push(T("Finanziamento al 100%: ROI equity non applicabile. Valuta cashflow, servizio del debito e costi accessori.", "100% financing: equity ROI is not applicable. Assess cash flow, debt service and transaction costs."));
+}else if (roi >= marketROI + 5) {
 
   insights.push(
     T(
@@ -7818,8 +7820,9 @@ function updateMortgageTransferSummary(){
     : t("Inserisci il prezzo dell’immobile: il capitale proprio sarà prezzo meno mutuo. La tariffa equivalente riproduce i ricavi originali con l’occupazione mostrata; verifica entrambe le ipotesi e completa i costi.", "Enter the purchase price: equity will equal price minus loan. The equivalent nightly rate reproduces original revenue with the displayed occupancy; verify both assumptions and complete costs.");
   if(price > 0){
     note += " " + t("Mutuo nel modello", "Loan in the model") + ": " + money(Math.max(0, price - equity)) + ".";
-    if(data.amount >= price && imported.linkedPrincipal) note += " " + t("Il prezzo deve superare l’importo del mutuo per avere capitale proprio positivo.", "Purchase price must exceed the loan to have positive equity.");
+    if(data.amount > price && imported.linkedPrincipal) note += " " + t("Il mutuo supera il prezzo: verifica gli importi.", "Loan exceeds the purchase price: check the amounts.");
   }
+  if(price > 0 && equity === 0) note += " " + t("Finanziamento al 100%: ROI equity e recupero del capitale proprio non applicabili. Valuta cashflow e servizio del debito; verifica i costi accessori e le condizioni con la banca.", "100% financing: equity ROI and equity payback are not applicable. Assess cash flow and debt service; verify transaction costs and terms with the bank.");
   const revenue = Number(document.getElementById("priceNight").value) * 365 * Number(document.getElementById("occupancy").value) / 100;
   if(Math.abs(revenue - data.income) > 0.01) note += " " + t("I ricavi del modello sono stati modificati", "Model revenue has changed") + ": " + money(revenue) + ".";
   document.getElementById("mortgage-transfer-note").textContent = note;
@@ -7836,7 +7839,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const imported = window.rbImportedMortgage;
     if(imported?.linkedPrincipal){
       const value = Number(document.getElementById("price").value);
-      document.getElementById("equity").value = value > imported.data.amount ? String(value - imported.data.amount) : "";
+      document.getElementById("equity").value = value >= imported.data.amount ? String(value - imported.data.amount) : "";
       document.getElementById("equity").setCustomValidity("");
     }
     updateMortgageTransferSummary();

@@ -10,7 +10,7 @@ test('full mortgage scenario preserves every entered input including zero costs'
  assert.equal(c.RBInvestmentJourney.write(storage,{...scenario,expenses:0},'annual'),true);
  const restored=c.RBInvestmentJourney.read(storage,'annual');
  for(const [key,value] of Object.entries({...scenario,expenses:0}))assert.equal(restored[key],value,key);
- for(const bad of [{propertyPrice:120000},{occupancy:0},{commission:101},{expenses:-1},{tax:'abc'},{location:'<svg>'}])assert.equal(c.RBInvestmentJourney.validate({...scenario,...bad}).valid,false);
+ for(const bad of [{propertyPrice:119999},{occupancy:0},{commission:101},{expenses:-1},{tax:'abc'},{location:'<svg>'}])assert.equal(c.RBInvestmentJourney.validate({...scenario,...bad}).valid,false);
 });
 test('actual Analyze importer fills all entered fields and reproduces annual revenue',()=>{
  const c=setup(),values=new Map(),nodes=new Map();const node=id=>{if(!nodes.has(id))nodes.set(id,{value:'',setCustomValidity(){},closest:()=>({setAttribute(){}}),addEventListener(){}});return nodes.get(id);};

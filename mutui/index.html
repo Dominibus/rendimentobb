@@ -1460,11 +1460,11 @@ margin-top:25px;
 <script src="/js/ai-engine.js" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261008-rc67"></script>
+<script type="module" src="/js/header.js?v=20261008-rc68"></script>
 <script src="/js/ui-system.js" defer></script>
 <script type="module" src="/js/footer.js"></script>
 
-<script src="/js/investment-journey.js?v=20261008-rc67"></script>
+<script src="/js/investment-journey.js?v=20261008-rc68"></script>
 <script>
 
 function getAccess(){
@@ -2137,7 +2137,7 @@ function continueMortgage(rateOverride){
   const raw = {...scenario};
   fields.forEach(field => { raw[field] = document.getElementById('transfer-' + field)?.value || ''; });
   const checked = RBInvestmentJourney.validate(raw);
-  fields.forEach(field => document.getElementById('transfer-' + field)?.setCustomValidity(checked.errors[field] ? t('Verifica il valore. Il prezzo deve superare il mutuo; le percentuali devono essere tra 0 e 100 e l’occupazione maggiore di zero.', 'Check this value. Price must exceed the loan; percentages must be between 0 and 100 and occupancy above zero.') : ''));
+  fields.forEach(field => document.getElementById('transfer-' + field)?.setCustomValidity(checked.errors[field] ? t('Verifica il valore. Il prezzo non può essere inferiore al mutuo; le percentuali devono essere tra 0 e 100 e l’occupazione maggiore di zero.', 'Check this value. Price cannot be lower than the loan; percentages must be between 0 and 100 and occupancy above zero.') : ''));
   if(!checked.valid){
     const input = document.getElementById('transfer-' + Object.keys(checked.errors)[0]);
     input?.closest('details')?.setAttribute('open','');

@@ -1464,7 +1464,7 @@ function euro(v){
 function renderData(){
   document.getElementById("price").innerText = euro(price);
   document.getElementById("equity").innerText = euro(equity);
-  document.getElementById("roi").innerText = roi.toFixed(1)+"%";
+  document.getElementById("roi").innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
   document.getElementById("risk").innerText = risk+"/100";
   const realROIHero =
   document.getElementById(
@@ -1517,7 +1517,7 @@ if(ltvHero){
 }
 
 if(heroROI){
-  heroROI.innerText = roi.toFixed(1)+"%";
+  heroROI.innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
 
   const bankScoreHero =
   document.getElementById("bankScoreHero");
@@ -1680,7 +1680,7 @@ function renderChart(){
           ? ["Equity ROI (%)","Scenario risk (0–100)"]
           : ["ROI equity (%)","Rischio scenario (0–100)"],
         datasets:[{
-          data:[roi, risk],
+          data:[equity > 0 ? roi : null, risk],
           backgroundColor:["#10b981","#ef4444","#3b82f6"],
           borderRadius:10
         }]
@@ -1747,7 +1747,7 @@ const investmentClass =
   "E";
 
   // 🔥 FIX divisione sicura
-  const breakEven = annualProfit > 0 ? (equity / annualProfit) : 0;
+  const breakEven = annualProfit > 0 && equity > 0 ? (equity / annualProfit) : 0;
 
   box.innerHTML = `
 
@@ -1832,7 +1832,7 @@ ${euro(annualProfit)}
 <div class="kpi">
 <span>${lang==="en"?"Break-even":"Pareggio"}</span>
 <strong style="font-size:22px">
-${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
+${equity === 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
 </div>
 
@@ -2137,7 +2137,7 @@ doc.setFontSize(30);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  roi.toFixed(1) + "%",
+  (equity > 0 ? roi.toFixed(1) + "%" : "N/A"),
   28,
   y + 36
 );
@@ -2755,7 +2755,7 @@ if(riskBreakdown){
     const localROI = window.RB_MARKET_DATA?.[marketKey]?.roi;
     const hasLocalBenchmark = Number.isFinite(Number(localROI)) && localROI != null;
     const marketROI = hasLocalBenchmark ? Number(localROI) : null;
-const diff = hasLocalBenchmark ? roi - marketROI : 0;
+const diff = hasLocalBenchmark && equity > 0 ? roi - marketROI : 0;
 
 const comparisonColor =
   diff > 0
@@ -2765,7 +2765,7 @@ const comparisonColor =
       : amber;
 
 const comparisonLabel =
-  diff > 0
+  equity <= 0 ? t("ROI equity non applicabile con capitale proprio pari a zero.", "Equity ROI is not applicable with zero equity.") : diff > 0
     ? t(
         "SOPRA IL BENCHMARK",
         "ABOVE BENCHMARK"
@@ -2812,7 +2812,7 @@ doc.setFontSize(24);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  `${roi.toFixed(1)}%`,
+  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A"),
   28,
   63
 );
@@ -2868,7 +2868,7 @@ doc.setFontSize(16);
 doc.setTextColor(255,255,255);
 
 doc.text(
-  hasLocalBenchmark ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} ${t("p.p.","pp")}` : "—",
+  hasLocalBenchmark && equity > 0 ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} ${t("p.p.","pp")}` : "—",
   28,
   107
 );
@@ -2889,7 +2889,7 @@ doc.setFontSize(8);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  diff > 0
+  equity <= 0 ? t("ROI equity non applicabile con capitale proprio pari a zero.", "Equity ROI is not applicable with zero equity.") : diff > 0
     ? t(
         hasLocalBenchmark ? "Il rendimento del progetto supera il benchmark locale disponibile." : "Nessun riferimento disponibile per questa città.",
         hasLocalBenchmark ? "The project return exceeds the available local benchmark." : "The project return exceeds the general reference; the comparison is not city-specific."
@@ -3107,7 +3107,7 @@ const drawFinalKPI = (
 drawFinalKPI(
   20,
   t("ROI EQUITY","EQUITY ROI"),
-  `${roi.toFixed(1)}%`
+  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A")
 );
 
 drawFinalKPI(

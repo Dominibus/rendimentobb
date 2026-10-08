@@ -36,7 +36,7 @@
       if(value === null || value < low || value > high) errors[field] = 'valid_optional_input';
       else values[field] = value;
     }
-    if(values.propertyPrice !== undefined && values.amount >= values.propertyPrice) errors.propertyPrice = 'positive_equity';
+    if(values.propertyPrice !== undefined && values.amount > values.propertyPrice) errors.propertyPrice = 'loan_exceeds_price';
     if(raw.location !== undefined && String(raw.location).trim()){
       const location = String(raw.location).trim();
       if(location.length > 80 || /[<>\x00-\x1f]/.test(location)) errors.location = 'valid_location';

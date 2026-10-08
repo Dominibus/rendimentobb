@@ -1168,7 +1168,8 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
 
         <div class="input-group">
           <label data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
-          <input type="number" id="equity" min="0.01" step="any" required placeholder="30000">
+          <input type="number" id="equity" min="0" step="any" required placeholder="30000">
+<p data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
         </div>
 
         <div class="input-group">
@@ -2058,7 +2059,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261008-rc67"></script>
+<script type="module" src="/js/app.js?v=20261008-rc68"></script>
 
 <script>
 
