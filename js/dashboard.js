@@ -1661,8 +1661,8 @@ const helper = document.getElementById("report-helper-text");
 
 if(helper){
   helper.innerHTML = t(
-    "Perfetto per convincere banca o investitori",
-    "Perfect to convince banks or investors"
+    "Presenta le ipotesi economiche a banca o investitori",
+    "Present financial assumptions to banks or investors"
   );
 }
 
@@ -9149,8 +9149,8 @@ color:#15803d;
 ">
 
 ${window.t(
-"Affidabilità analisi",
-"Analysis confidence"
+"Base della sintesi",
+"Summary basis"
 )}
 
 </div>
@@ -9162,7 +9162,7 @@ font-weight:800;
 color:#166534;
 ">
 
-96%
+${window.t("Dati registrati", "Recorded data")}
 
 </div>
 

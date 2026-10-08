@@ -653,142 +653,19 @@ return {
 // ===============================================
 
 window.rbGenerateExecutiveConfidence = function(memory = {}){
-
-  memory =
-    window.rbNormalizeExecutiveMemory(memory);
-
-  let confidence = 50;
-
-  const reasonsIT = [];
-  const reasonsEN = [];
-
-  const fields = [
-
-    memory.lastROI,
-
-    memory.lastRisk,
-
-    memory.lastOccupancy,
-
-    memory.lastCashflow,
-
-    memory.lastRevenue ??
-    memory.revenueAnnual ??
-    memory.gross,
-
-    memory.lastExpenses ??
-    memory.monthlyCosts ??
-    memory.expenses,
-
-    memory.lastMortgagePercent ??
-    memory.mortgagePercent,
-
-    memory.lastNightPrice ??
-    memory.pricePerNight ??
-    memory.nightly
-
-  ];
-
-  const available =
-    fields.filter(v =>
-      v !== undefined &&
-      v !== null &&
-      v !== ""
-    ).length;
-
-  confidence += available * 5;
-
-  if(
-    Number(memory.lastROI || 0) > 0
-  ){
-
-    confidence += 5;
-
-    reasonsIT.push(
-      "✔ ROI disponibile"
-    );
-
-    reasonsEN.push(
-      "✔ ROI available"
-    );
-
-  }
-
-  if(
-    Number(memory.lastRisk || 0) >= 0
-  ){
-
-    confidence += 5;
-
-    reasonsIT.push(
-      "✔ Analisi del rischio disponibile"
-    );
-
-    reasonsEN.push(
-      "✔ Risk analysis available"
-    );
-
-  }
-
-  if(
-    Number(memory.lastCashflow || 0) !== 0
-  ){
-
-    confidence += 5;
-
-    reasonsIT.push(
-      "✔ Cashflow disponibile"
-    );
-
-    reasonsEN.push(
-      "✔ Cashflow available"
-    );
-
-  }
-
-  if(
-    Number(memory.lastOccupancy || 0) > 0
-  ){
-
-    confidence += 5;
-
-    reasonsIT.push(
-      "✔ Occupazione disponibile"
-    );
-
-    reasonsEN.push(
-      "✔ Occupancy available"
-    );
-
-  }
-
-  confidence =
-    Math.min(
-      confidence,
-      100
-    );
-
-const titleIT =
-  `🎯 Affidabilità AI: ${confidence}/100`;
-
-const titleEN =
-  `🎯 AI Confidence: ${confidence}/100`;
-
-return {
-
-  it:
-`${titleIT}
-
-${reasonsIT.join("\n")}`,
-
-  en:
-`${titleEN}
-
-${reasonsEN.join("\n")}`
-
+  memory = window.rbNormalizeExecutiveMemory(memory);
+  const values = [memory.lastROI, memory.lastRisk, memory.lastOccupancy,
+    memory.lastCashflow, memory.lastRevenue ?? memory.revenueAnnual ?? memory.gross,
+    memory.lastExpenses ?? memory.monthlyCosts ?? memory.expenses,
+    memory.lastMortgagePercent ?? memory.mortgagePercent,
+    memory.lastNightPrice ?? memory.pricePerNight ?? memory.nightly];
+  const available = values.filter(value => value !== undefined && value !== null &&
+    value !== "" && Number.isFinite(Number(value))).length;
+  return {
+    it: `Dati disponibili nel contesto: ${available} su ${values.length} campi. La presenza dei dati non ne verifica l'esattezza e non misura l'affidabilità della previsione.`,
+    en: `Data available in context: ${available} of ${values.length} fields. Data presence does not verify accuracy or measure forecast reliability.`
+  };
 };
-
-};  
 
 // ===============================================
 // 🧠 EXECUTIVE INVESTMENT SUMMARY

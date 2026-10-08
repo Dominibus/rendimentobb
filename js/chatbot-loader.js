@@ -168,7 +168,7 @@
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/executive-narrative-engine.js",
-    "/js/chatbot/reasoning-engine.js",
+    "/js/chatbot/reasoning-engine.js?v=20261008-rc57",
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",

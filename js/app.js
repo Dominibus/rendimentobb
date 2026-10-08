@@ -1802,8 +1802,8 @@ let icon = "🟢";
 
 let title =
 t(
-"AI Recommendation",
-"AI Recommendation"
+"Valutazione delle ipotesi",
+"Assessment of assumptions"
 );
 
 let description =
@@ -1988,8 +1988,8 @@ box.innerHTML = `
 <div class="ai-verdict-badge">
 
 🧠 ${t(
-"Executive AI Decision",
-"Executive AI Decision"
+"Esito del modello sulle ipotesi",
+"Model assessment of assumptions"
 )}
 
 </div>
@@ -2006,24 +2006,9 @@ ${icon} ${verdictLabel}
 
 </h3>
 
-<div class="ai-confidence">
-
-<span>
-
-${t(
-"AI Confidence",
-"AI Confidence"
-)}
-
-</span>
-
-<strong>
-
-${confidence}%
-
-</strong>
-
-</div>
+<p style="font-size:13px;line-height:1.6;">
+${t("Valutazione basata sulle ipotesi inserite. Il rischio è un indice del modello, non una probabilità di perdita.", "Assessment based on entered assumptions. Risk is a model index, not a probability of loss.")}
+</p>
 
 </div>
 
@@ -6123,8 +6108,8 @@ doc.setTextColor(...gray);
 
 doc.text(
   T(
-    "ROI sul capitale proprio",
-    "Equity ROI"
+    "ROI stimato sul capitale proprio",
+    "Estimated equity ROI"
   ),
   22,
   165
@@ -8628,8 +8613,8 @@ window.showRegisterPopup = function(){
 
         <p>
           ${t(
-            "Registrati gratis per ottenere ROI reale, rischio e analisi completa.",
-            "Sign up for free to unlock real ROI, risk and full analysis."
+            "Registrati gratis per salvare la simulazione e consultare i risultati disponibili nel tuo piano.",
+            "Sign up for free to save the simulation and view the results available in your plan."
           )}
         </p>
 
