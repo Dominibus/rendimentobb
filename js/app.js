@@ -2903,6 +2903,10 @@ marketCity: market,
 
     window.lastAnalysisData = {
 
+  assumptions: readInvestmentAssumptions(context?.assumptions),
+  interestRate: context?.assumptions?.interestRate,
+  loanYears: context?.assumptions?.loanYears,
+
   // =====================================
   // 🌍 MARKET
   // =====================================
@@ -6469,12 +6473,14 @@ const ltv =
 
 const financingRate =
   safe(
+    d.assumptions?.interestRate ??
     d.interestRate ??
     3.5
   );
 
 const financingYears =
   safe(
+    d.assumptions?.loanYears ??
     d.loanYears ??
     20
   );

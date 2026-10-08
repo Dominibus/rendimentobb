@@ -257,10 +257,11 @@ function ensureSharedChatbot(){
   document.body.appendChild(script);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeSharedHeader(){
 
   const container = document.getElementById("global-header");
-  if(!container) return;
+  if(!container || container.dataset.rbInitialized === "true") return;
+  container.dataset.rbInitialized = "true";
 
   container.innerHTML = `
 
@@ -574,7 +575,13 @@ if(hasRealAccess){
 
 });
 
-  });
+  }
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", initializeSharedHeader, {once:true});
+}else{
+  initializeSharedHeader();
+}
 /* =====================
 📱 MENU + LANG
 ===================== */

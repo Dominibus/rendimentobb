@@ -76,6 +76,28 @@ if(rbAsksFreeFeatures || rbAsksPlanPDF){
   intent = { ...intent, intent: "subscriptions" };
 }
 
+// Product questions must not depend on a simulation or uploaded PDF.
+const rbExplicitPlanQuestion = /(?:prezz|cost|differ|includ).*(?:pian[oi]|plans?)/i.test(rbPlanQuestion) || /\b(pro|investor|abbonament[oi]|subscription|pricing)\b/i.test(rbPlanQuestion) || /(?:pian[oi]|plans?).*(?:prezz|cost|differ|mensil|annual|month|year|includ|funzion)/i.test(rbPlanQuestion);
+if(rbExplicitPlanQuestion || rbAsksFreeFeatures || rbAsksPlanPDF || intent.intent === "subscriptions"){
+  const cancel = /disdire|disdetta|annull|cancell|cancel|renewal|rinnovo/.test(rbPlanQuestion);
+  const annual = /annuale|annuali|annual|yearly|year|mensile|monthly/.test(rbPlanQuestion);
+  const textIT = cancel
+    ? "Per gestire il rinnovo o cambiare un abbonamento attivo, contatta l’assistenza. Non è presente una gestione autonoma del rinnovo nell’area account."
+    : rbAsksPlanPDF
+    ? "Free e Investor non includono il PDF Executive. È disponibile con Pro mensile e Pro annuale."
+    : annual
+    ? "Pro mensile: 29 € al mese. Pro annuale: 199 € pagati in un’unica soluzione per l’anno, equivalenti a circa 16,58 €/mese. Le funzioni Pro sono le stesse: analisi salvate, dashboard, PMS prenotazioni, assistente e report PDF. Risparmi 149 € rispetto a 12 mesi di Pro mensile (348 €). Autopilot propone priorità e azioni assistite; la sincronizzazione automatica con i portali OTA non è inclusa."
+    : "Free permette di provare il simulatore. Investor: 19 €/mese, con analisi salvate, dashboard, assistente e PMS prenotazioni. Pro: 29 €/mese, aggiunge report PDF Executive e report dashboard. Pro annuale: 199 €/anno, con le stesse funzioni Pro e un risparmio di 149 € rispetto a 12 mesi mensili. Le analisi sono stime sulle ipotesi inserite; Autopilot guida le attività e non sincronizza automaticamente i portali OTA.";
+  const textEN = cancel
+    ? "Contact support to manage renewal or change an active subscription. Account self-service renewal management is not available."
+    : rbAsksPlanPDF
+    ? "Free and Investor do not include the Executive PDF. Monthly and annual Pro include it."
+    : annual
+    ? "Monthly Pro: €29/month. Annual Pro: €199 paid upfront for one year, about €16.58/month. Both include the same Pro features: saved analyses, dashboard, booking PMS, assistant and PDF reports. Annual billing saves €149 compared with 12 monthly payments (€348). Autopilot suggests priorities and guided actions; automatic OTA channel synchronization is not included."
+    : "Free lets you try the simulator. Investor: €19/month, with saved analyses, dashboard, assistant and booking PMS. Pro: €29/month, adding Executive PDFs and dashboard reports. Annual Pro: €199/year, with the same Pro features and €149 savings versus 12 monthly payments. Analyses are estimates based on inputs; Autopilot guides tasks and does not automatically synchronize OTA channels.";
+  return {type:"subscriptions",confidence:1,textIT,textEN,suggestionsIT:["Confronta i piani nella home"],suggestionsEN:["Compare plans on the home page"],signals:[],metadata:{source:"product_plans"}};
+}
+
 // A failed current upload must never be replaced by a previous report or live simulation.
 if(!rbAsksFreeFeatures && !rbAsksPlanPDF &&
    ["reading","unreadable","failed"].includes(documentKnowledge?.activeDocument?.status) &&
@@ -520,7 +542,7 @@ Puoi continuare a visualizzare l’anteprima disponibile nel simulatore.
 
 Con l’upgrade puoi sbloccare:
 
-• ROI reale
+• ROI stimato sulle ipotesi
 • cashflow e profitto netto
 • rischio operativo
 • Investment Score e Verdict AI
@@ -534,7 +556,7 @@ You can continue viewing the preview available in the simulator.
 
 Upgrade to unlock:
 
-• real ROI
+• estimated ROI based on inputs
 • cashflow and net profit
 • operational risk
 • Investment Score and AI Verdict
@@ -2118,7 +2140,7 @@ if(
 `📊 Sto leggendo dati parziali dalla simulazione rapida.
 
 Per ottenere:
-• ROI reale
+• ROI stimato sulle ipotesi
 • cashflow avanzato
 • rischio operativo
 • analisi AI completa
@@ -2130,7 +2152,7 @@ esegui una simulazione nel simulatore principale.`,
 `📊 I am currently reading partial quick-simulation data.
 
 To unlock:
-• real ROI
+• estimated ROI based on inputs
 • advanced cashflow
 • operational risk
 • full AI analysis

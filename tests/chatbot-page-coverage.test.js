@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import {readFile,readdir} from 'node:fs/promises';
 const read=f=>readFile(new URL('../'+f,import.meta.url),'utf8');
 const header=await read('js/header.js');
-const helper=header.slice(header.indexOf('function ensureSharedChatbot(){'),header.indexOf('document.addEventListener("DOMContentLoaded", () => {',header.indexOf('function ensureSharedChatbot(){')));
+const helper=header.slice(header.indexOf('function ensureSharedChatbot(){'),header.indexOf('function initializeSharedHeader(){',header.indexOf('function ensureSharedChatbot(){')));
 function harness({loaded=false,ready=false,existing=false}={}){
  const appended=[];let scriptExists=existing;
  const c={window:{__rbChatbotLoaded:loaded,rbChatbotReady:ready},document:{querySelector:()=>scriptExists?{}:null,createElement:()=>({remove(){scriptExists=false;}}),body:{appendChild:s=>{scriptExists=true;appended.push(s);}}}};
