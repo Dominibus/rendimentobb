@@ -20,7 +20,7 @@ test('signed preferences reject tampering, missing secrets and cross-action repl
 });
 function setup(){
  const db=new MemoryFirestore({'email_funnel/record-1':{...consent},'users/host':{notificationPreferences:{pmsReminderEmail:true}}});
- const source=readFileSync(new URL('../api/email-unsubscribe.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export function createUnsubscribeHandler','function createUnsubscribeHandler').replace('export default createUnsubscribeHandler();','');
+ const source=readFileSync(new URL('../api/send-followup.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export function createUnsubscribeHandler','function createUnsubscribeHandler').replace('export default createUnsubscribeHandler();','');
  const ctx={readUnsubscribeToken,process:{env:{}},admin:{},};vm.createContext(ctx);vm.runInContext(source,ctx);
  const handler=ctx.createUnsubscribeHandler({getDatabase:()=>db,getSecret:()=>secret,timestamp:()=> 'server-time'});
  const run=async(method,token,action)=>{const r={headers:{},setHeader(k,v){this.headers[k]=v;},status(n){this.code=n;return this;},send(x){this.body=x;return this;},json(x){this.body=x;return this;}};await handler({method,query:{token,action}},r);return r;};return {db,run};
@@ -38,4 +38,8 @@ test('confirmation requires its own token and explicit POST',async()=>{
  assert.equal((await run('POST',token,'confirm')).code,200);assert.equal(hasFunnelConsent(db.documents.get('email_funnel/record-1')),true);
  assert.equal((await run('POST',token)).code,400);
  assert.equal((await run('DELETE',token,'confirm')).code,405);
+});
+
+test('legacy follow-up endpoint stays disabled without a signed preference token',async()=>{
+ const {db,run}=setup();assert.equal((await run('POST',undefined)).code,410);assert.equal(db.documents.get('email_funnel/record-1').marketingConsent,true);
 });

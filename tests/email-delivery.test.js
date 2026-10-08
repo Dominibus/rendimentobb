@@ -178,7 +178,7 @@ test('confirmed reminders carry signed opt-out in HTML, text and provider header
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
  await h.collection('email_funnel').doc('confirmed').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
- const mail=h.sent[0].payload;assert.ok(mail.headers['List-Unsubscribe'].includes('email-unsubscribe?token='));assert.ok(mail.html.includes('Interrompi i promemoria'));assert.ok(mail.text.includes('email-unsubscribe?token='));
+ const mail=h.sent[0].payload;assert.ok(mail.headers['List-Unsubscribe'].includes('send-followup?token='));assert.ok(mail.html.includes('Interrompi i promemoria'));assert.ok(mail.text.includes('send-followup?token='));
 });
 
 test('ambiguous funnel attempts older than the safe window require review without another send',async()=>{
