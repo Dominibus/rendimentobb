@@ -3385,8 +3385,15 @@ function populateSimulations(){
     const opt = document.createElement("option");
     opt.value = index.toString();
 
+    // ROI on own capital is applicable only when a positive equity is known.
+    const simulationEquity = Number(sim.equity);
+    const rawROI = sim.visualROI ?? sim.roi;
+    const simulationROI = rawROI == null || rawROI === "" ? NaN : Number(rawROI);
+    const roiLabel = simulationEquity > 0 && Number.isFinite(simulationROI)
+      ? `${simulationROI.toFixed(1)}%`
+      : "N/A";
     opt.innerText =
-      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${(sim.roi || 0).toFixed(1)}%`;
+      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${roiLabel}`;
 
     select.appendChild(opt);
 
