@@ -481,16 +481,27 @@ return;
 // ================= SAVE ANALYSIS =================
 
 async function saveAnalysis(data){
+  const requestId = (window.__rbAnalysisSaveRequest || 0) + 1;
+  window.__rbAnalysisSaveRequest = requestId;
+  const showStatus = state => {
+    if(window.__rbAnalysisSaveRequest === requestId) renderAnalysisSaveStatus(state);
+  };
 
   // The Free simulator stays local; Firestore also enforces the entitlement.
-  if(!window.getUserAccess?.().isPaid) return false;
+  if(!window.getUserAccess?.().isPaid){showStatus("local");return false;}
 
   // Readiness checks precede the lock: an early attempt must remain retryable.
-  if(window.__savingAnalysis || !window.firebaseReady || !window.currentUser?.uid){
+  if(window.__savingAnalysis){
+    showStatus("busy");
+    return false;
+  }
+  if(!window.firebaseReady || !window.currentUser?.uid){
+    showStatus("notReady");
     return false;
   }
 
   window.__savingAnalysis = true;
+  showStatus("pending");
 
   try{
 
@@ -592,16 +603,49 @@ window.dispatchEvent(
 
 
 
+    showStatus("saved");
     return true;
 
   }catch(e){
-    console.error("Errore salvataggio:", e);
+    console.error("Analysis save failed", {code: String(e?.code || "unknown")});
+    showStatus("failed");
     return false;
   }finally{
     window.__savingAnalysis = false;
   }
 
 }
+
+function renderAnalysisSaveStatus(state = window.__rbAnalysisSaveState){
+  if(!state) return;
+  window.__rbAnalysisSaveState = state;
+  if(typeof document === "undefined") return;
+  const messages = {
+    local: {it:"Risultati disponibili in questa sessione. Il piano Free non salva le analisi nel database.",en:"Results are available in this session. The Free plan does not save analyses to the database."},
+    pending: {it:"Salvataggio in corso: attendo la conferma del database. Mantieni aperta questa pagina.",en:"Saving: waiting for database confirmation. Keep this page open."},
+    saved: {it:"Analisi salvata nel tuo archivio. Puoi ritrovarla nella dashboard.",en:"Analysis saved to your archive. You can find it in the dashboard."},
+    failed: {it:"Analisi non salvata. I risultati restano visibili qui: verifica la connessione e premi di nuovo Analizza per riprovare.",en:"Analysis was not saved. Results remain visible here: check your connection and click Analyze again to retry."},
+    busy: {it:"Il salvataggio precedente è ancora in corso. Questa nuova analisi non è stata salvata: attendi e premi di nuovo Analizza.",en:"The previous save is still in progress. This new analysis has not been saved: wait and click Analyze again."},
+    notReady: {it:"Salvataggio non avviato: la sessione non è pronta. Verifica l’accesso e premi di nuovo Analizza.",en:"Saving has not started: the session is not ready. Check your sign-in and click Analyze again."}
+  };
+  if(!messages[state]) return;
+  let el = document.getElementById("rb-analysis-save-status");
+  if(!el){
+    const results = document.getElementById("results");
+    if(!results || !document.createElement) return;
+    el = document.createElement("p");
+    el.id = "rb-analysis-save-status";
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
+    el.style.cssText = "padding:12px 16px;margin:16px 0;border:1px solid #64748b;border-radius:12px;line-height:1.5;color:inherit;background:transparent;";
+    results.before(el);
+  }
+  el.dataset.state = state;
+  const lang = window.currentLang === "en" ? "en" : "it";
+  el.textContent = messages[state][lang];
+}
+
+if(typeof document !== "undefined") document.addEventListener?.("rb_language_changed", () => renderAnalysisSaveStatus());
 
 // =====================================
 // 🔒 LOCK OVERLAY – SAAS CLEAN VERSION
@@ -2811,8 +2855,6 @@ window.__MANUAL_ANALYSIS__ === true;
     if(
   isManualAnalysis &&
   shouldSave &&
-  window.currentUser &&
-  window.firebaseReady &&
   Number.isFinite(Number(finalROI))
 ){
 
