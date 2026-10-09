@@ -22,6 +22,26 @@ async function(message){
         .trim();
 
     if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
+    // Handle explicit document requests once before the multi-intent/live pipeline.
+    const activePDF = window.rbDocumentManager?.getLast?.();
+    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
+    const explicitLiveRequest = /simulazion|simulation|simulator|simulatore|autopilot investimento|investment autopilot|mercato|market|altra citt|another city/i.test(text);
+    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
+        /(risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        !explicitLiveRequest;
+    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
+    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
+    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
+        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
+        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
+            window.rbPDFConversationDocumentId = activePDF.id;
+            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
+            return {success:true,response,intent:{intent:"pdf_analysis"}};
+        }
+    }
+
+    window.rbPDFConversationDocumentId = null;
+
     const recoveryResponse=window.rbBuildRenovationRecoveryResponse?.(text);
     if(recoveryResponse){
       window.rbPDFConversationDocumentId=null;
@@ -55,31 +75,12 @@ async function(message){
       return {success:true,response:portalResponse,intent:{intent:"portal_facts"}};
     }
 
-    // Handle explicit document requests once before the multi-intent/live pipeline.
-    const activePDF = window.rbDocumentManager?.getLast?.();
-    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
-    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
-        /(indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
-        !/(simulazion|simulation|mercato|market|altra citt|another city)/i.test(text);
-    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
-    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
-    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
-        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
-        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
-            window.rbPDFConversationDocumentId = activePDF.id;
-            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
-            return {success:true,response,intent:{intent:"pdf_analysis"}};
-        }
-    }
-
-    window.rbPDFConversationDocumentId = null;
-
     // Educational questions do not require a completed simulation. Keep
     // explicit/current PDF requests above this route so document evidence wins.
     const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const asksROIMeaning = /\b(definizione|definition|significa|meaning)\b|che cos['’]?e|che cosa e|what is|what does.*mean/.test(educationalQuery);
+    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery);
     const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
-    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b)|(?:\bzero\b|\b0\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity/.test(educationalQuery);
+    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b|\bnullo\b)|(?:\bzero\b|\b0\b|\bnullo\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity|no own capital/.test(educationalQuery);
     if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
       return {success:true,intent:{intent:'education'},response:{
         type:'education',confidence:1,
