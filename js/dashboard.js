@@ -12856,7 +12856,7 @@ function openCalendarDayBookings(bookings, isEnglish){
   const dialog = document.createElement("dialog");
   dialog.id = "pms-calendar-booking-picker";
   dialog.setAttribute("aria-labelledby", "pms-calendar-picker-title");
-  dialog.style.cssText = "width:min(560px,90vw);max-height:80vh;overflow:auto;border:1px solid #dbe7e1;border-radius:20px;padding:24px;background:#fff;color:#153b30;box-shadow:0 20px 80px #0003";
+  dialog.style.cssText = "position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(560px,90vw);height:fit-content;max-height:80vh;overflow:auto;border:1px solid #dbe7e1;border-radius:20px;padding:24px;background:#fff;color:#153b30;box-shadow:0 20px 80px #0003";
   const title = document.createElement("h2");
   title.id = "pms-calendar-picker-title";
   title.textContent = isEnglish ? "Bookings on this day" : "Prenotazioni del giorno";
@@ -12881,6 +12881,7 @@ function openCalendarDayBookings(bookings, isEnglish){
   const close = document.createElement("button");
   close.type = "button";
   close.textContent = isEnglish ? "Close" : "Chiudi";
+  close.style.cssText = "margin-top:8px;padding:10px 18px;border:1px solid #cfe4d9;border-radius:12px;background:#f3faf6;color:#153b30;font:inherit;font-weight:600;cursor:pointer";
   close.onclick = () => dialog.close();
   dialog.append(close);
   dialog.addEventListener("close", () => dialog.remove(), {once:true});
