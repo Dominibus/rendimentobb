@@ -11,6 +11,7 @@
 window.rbGenerateInvestmentScore = function({
 
   roi = 0,
+  roiAvailable = true,
 
   risk = 50,
 
@@ -57,7 +58,10 @@ window.rbGenerateInvestmentScore = function({
     // 📈 ROI WEIGHT
     // ===========================================
 
-    if(roi >= 30){
+    if(roiAvailable === false){
+      signals.push("roi_not_applicable");
+    }
+    else if(roi >= 30){
 
       score += 25;
 
@@ -397,6 +401,10 @@ window.rbGenerateInvestmentScore = function({
     const insightsIT = [];
 
     const insightsEN = [];
+    if(roiAvailable === false){
+      insightsIT.push("ROI sul capitale proprio non applicabile: questa componente è esclusa dal punteggio. Restano leva, cashflow e gli altri indicatori del modello.");
+      insightsEN.push("Equity ROI is not applicable: this component is excluded from the score. Leverage, cash flow and the other model indicators still apply.");
+    }
 
     // ===========================================
 

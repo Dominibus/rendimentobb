@@ -1,12 +1,13 @@
 (function(){
   'use strict';
-  const normalize=text=>String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const normalize=text=>(window.rbNormalizeAIQuery?.(text)?.text ?? String(text || '')).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const wantsHorizon=text=>/(prossim[ia].*(7|sette|giorni|settimana)|next.*(7|seven|days|week)|arriv.*(domani|prepar|pront)|arrivals?.*(tomorrow|prepar|ready)|prepar.*domani|prepare.*tomorrow)/.test(normalize(text));
   window.rbIsPMSAutopilotQuestion=function(text){
     const query=normalize(text);
     if(/^(autopilot investimento:|investment autopilot:)/.test(query))return false;
     if(/\b(pdf|brochure|simulatore|simulation|roi|mutuo|mortgage|password|login|registrarmi|subscription)\b/.test(query))return false;
     if(wantsHorizon(query))return true;
+    if(/(?:qualcosa|attivita|task|tasks|operazioni).*(?:fare|gestire|aperte|pending|today|oggi)|(?:rimast|resta|left).*(?:fare|gestire|do)|(?:documenti|documents).*(?:mancanti|missing)|(?:priorita|priorities).*(?:giornat|today|oggi)/.test(query))return true;
     return /checklist|riepilogo operativo|daily (plan|tasks|priorities)|what (should|do) i (do|manage)|cosa (devo |posso )?(fare|gestire)|da dove (parto|inizio)|tutto sotto controllo|what needs attention|priorita.*(oggi|prenot|pms)|autopilot.*(oggi|domani|priorita|pms)|\b(urgenti|urgenze|urgent)\b|documenti.*manc|missing.*documents|documents.*missing|pulizi.*(complet|gestire|fare)|cleaning.*(pending|complete)|cosa.*(manca|da gestire)/.test(query);
   };
 

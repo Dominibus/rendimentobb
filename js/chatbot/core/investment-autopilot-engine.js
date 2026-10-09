@@ -9,10 +9,20 @@
   };
   window.rbInvestmentAutopilotQuestions=questions;
   window.rbBuildInvestmentAutopilotResponse=function(message){
-    const normalize=s=>String(s||'').trim().toLowerCase();
-    const mode=Object.keys(questions).find(key=>questions[key].some(q=>normalize(q)===normalize(message)));
-    if(!mode)return null;
+    const normalize=s=>(window.rbNormalizeAIQuery?.(s)?.text ?? String(s||'')).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const query=normalize(message);
     const isTool=Boolean(document.getElementById('price') && document.getElementById('analyze-btn'));
+    let mode=Object.keys(questions).find(key=>questions[key].some(q=>normalize(q)===query));
+    const otherDomain=/\b(pdf|prenotazioni|bookings|ospiti|guests|pulizie|cleaning|piani|plans|subscription|password|login)\b/.test(query);
+    const investmentContext=isTool || /investiment|investment|simulator|simulatore/.test(query);
+    if(!mode && investmentContext && !otherDomain){
+      if(/(controll|verific|corrett|esamin|check|review).*(dati|parametri|input|values)|(?:dati|parametri|inputs?).*(corrett|giust|valid|correct|right)/.test(query)) mode='inputs';
+      else if(/(ipotesi|assunzioni|assumptions?).*(verific|controll|check|review)|quali.*ipotesi|which.*assumptions/.test(query)) mode='assumptions';
+      else if(/(leggi|leggimi|riassum|interpret|spiega|capire|read|summar|explain|understand).*(analisi|risultat|results|analysis)|(?:analisi|risultati).*(signific|interpret)/.test(query)) mode='results';
+      else if(/prossimo passo|next step|cosa.*(?:fare|faccio).*adesso|what.*(?:next|now)|come.*(?:proced|continu)/.test(query)) mode='next';
+      else if(/da dove.*(?:iniz|part)|come.*iniz|where.*start|how.*start/.test(query)) mode='guide';
+    }
+    if(!mode)return null;
     let analysis={status:'missing'};
     if(isTool && typeof window.rbGetInvestmentAnalysisState==='function'){
       try{analysis=window.rbGetInvestmentAnalysisState();}catch(_){analysis={status:'unavailable'};}
@@ -45,7 +55,8 @@
           const decimal=value=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(value);
           const time=new Date(analysis.calculatedAt).toLocaleString(locale);
           lines.push((en?'Current simulator analysis':'Analisi corrente del simulatore')+(analysis.city?' · '+analysis.city:'')+' · '+time);
-          lines.push((metrics.roiBasis==='equity'?(en?'Return on equity: ':'ROI sul capitale proprio: '):(en?'Property ROI: ':'ROI immobile: '))+percent(metrics.roi));
+          lines.push((metrics.roiBasis==='equity'?(en?'Return on equity: ':'ROI sul capitale proprio: '):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiBasis==='equity' && metrics.equity===0 ? 'N/A' : percent(metrics.roi)));
+          if(metrics.roiBasis==='equity' && metrics.equity===0)lines.push(en?'Invested equity is zero: equity ROI cannot be calculated. Review cash flow, leverage and debt coverage.':'Il capitale proprio è zero: il ROI equity non è calcolabile. Verifica cashflow, leva e copertura delle rate.');
           lines.push((en?'Simulated annual cashflow after debt: ':'Cashflow annuo simulato dopo mutuo: ')+currency(metrics.annualCashflow),
             (en?'Monthly average: ':'Media mensile: ')+currency(metrics.monthlyCashflow));
           if(analysis.tier==='paid'){

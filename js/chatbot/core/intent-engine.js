@@ -6,7 +6,7 @@
 
 window.rbDetectIntent = function(message = ""){
 
-const text = String(message)
+const text = (window.rbNormalizeAIQuery?.(message)?.text ?? String(message))
   .toLowerCase()
   .replace(
     /[\u2018\u2019\u02BC\u0060´]/g,

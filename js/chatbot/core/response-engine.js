@@ -1100,6 +1100,7 @@ const investmentScore =
 
           window.rbGenerateInvestmentScore?.({
 
+            roiAvailable: Number(liveData.equity ?? liveData.investment) !== 0,
             roi,
 
             risk,

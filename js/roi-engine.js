@@ -86,6 +86,8 @@ function calculateROI(input = {}){
     equity > 0
       ? (netAfterMortgage / equity) * 100
       : 0;
+  // Zero is retained for legacy numeric consumers; applicability is explicit.
+  const roiAvailable = equity > 0;
 
   const realROI =
   price > 0
@@ -121,6 +123,7 @@ function calculateROI(input = {}){
       : 0;
 
   const roiRisk =
+    !roiAvailable ? 0 :
     roi < 0 ? 25 :
     roi < 6 ? 20 :
     roi < 10 ? 15 :
@@ -204,6 +207,8 @@ function calculateROI(input = {}){
     profit: clean(netAfterMortgage),
 
     roi: clean(roi),
+    roiAvailable,
+    riskROIApplied: roiAvailable,
     realROI: clean(realROI),
 
     monthlyProfit: clean(monthlyProfit),

@@ -8,8 +8,9 @@ import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
 import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
-import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
+import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
 import { resolveAccountPlan } from "./account-plan.js";
+import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261009-rc76";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
@@ -891,7 +892,8 @@ const analyses = querySnapshot.docs.map(doc => {
     id: doc.id,
 
     roi:
-      financialNumber(data.roi),
+      financialNumber(data.equity) === 0 || data.roiAvailable === false ? null : financialNumber(data.roi),
+    roiAvailable: financialNumber(data.equity) === 0 || data.roiAvailable === false ? false : true,
 
     visualROI:
       data.visualROI || 0,
@@ -1126,7 +1128,8 @@ window.investmentHistory =
       a.marketCity,
 
     roi:
-      Number(a.roi || 0),
+      financialNumber(a.roi),
+    roiAvailable: a.roiAvailable !== false,
 
     risk:
       Number(a.risk || 0),
@@ -1464,7 +1467,7 @@ const visibleAnalyses =
 
     const yearlyProfit = financialNumber(data.net);
 
-    const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
+    const roiClass = roi === null ? "" : roi >= 0 ? "roi-positive" : "roi-negative";
 
     const analysisDate =
   data.createdAt?.seconds
@@ -1530,7 +1533,7 @@ if(isNew){
       <div class="metric">
         <span>${t("ROI annuale","Annual ROI")}</span>
         <strong class="${roiClass}">
-          ${formatPercent(roi)}
+          ${data.roiAvailable === false ? "N/A" : formatPercent(roi)}
         </strong>
       </div>
 
@@ -1686,13 +1689,14 @@ window.bestInvestmentData = best;
 window.lastAnalysisData = {
 
   roi:
-    Number(best?.roi || 0),
+    financialNumber(best?.roi),
+  roiAvailable: best?.roiAvailable !== false,
 
   realROI:
     Number(best?.realROI ?? best?.roi ?? 0),
 
   visualROI:
-    Number(best?.roi || 0),
+    financialNumber(best?.roi),
 
   risk:
     Number(best?.risk || 0),
@@ -2058,7 +2062,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
     const roi = financialNumber(data.roi);
     const yearlyCashflow = financialNumber(data.net);
     const risk = financialNumber(data.risk);
-    const complete = price > 0 && equity > 0 && Number.isFinite(roi) && Number.isFinite(yearlyCashflow);
+    const complete = price > 0 && equity !== null && equity >= 0 && (equity === 0 || Number.isFinite(roi)) && Number.isFinite(yearlyCashflow);
 
     return `
       <article class="portfolio-manager__item">
@@ -2077,7 +2081,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
         <div class="portfolio-manager__metrics">
           <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
-          <div><span>ROI</span><strong>${formatPercent(roi)}</strong></div>
+          <div><span>ROI</span><strong>${equity === 0 ? "N/A" : formatPercent(roi)}</strong></div>
           <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
           <div><span>${t("Rischio", "Risk")}</span><strong>${Number.isFinite(risk) ? `${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", { maximumFractionDigits: 0 }).format(risk)}/100` : "--"}</strong></div>
         </div>
@@ -2703,6 +2707,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   onAuthStateChanged(auth, async (user) => {
     window.rbConfirmedPortfolio = null;
+    window.rbRenovationRecoveryData = null;
+    const recoveryPanel=document.getElementById("renovation-recovery");
+    if(recoveryPanel){recoveryPanel.hidden=true;recoveryPanel.innerHTML="";}
 
     // ================= USER NON LOGGATO =================
     if(!user){
@@ -2919,6 +2926,7 @@ function portfolioNarrative(rows){
     loss: [t("Patrimonio con rendimento negativo", "Portfolio with negative return"), t("ROI o cashflow complessivo sono negativi nelle ipotesi salvate. Verifica gli immobili in perdita, i costi e il finanziamento prima di considerare nuovi investimenti.", "Overall ROI or cash flow is negative under the saved assumptions. Review loss-making properties, costs and financing before considering new investments."), "#ef4444"],
     balanced: [t("Patrimonio in equilibrio", "Portfolio at break-even"), t("Almeno uno tra ROI e cashflow complessivo è pari a zero. Non emerge un margine positivo su entrambi gli indicatori: verifica la tenuta in uno scenario prudente.", "At least one of overall ROI and cash flow is zero. Both indicators do not show a positive margin: check resilience under conservative assumptions."), "#f59e0b"],
     attention: [t("Patrimonio positivo, criticità da verificare", "Positive portfolio, issues to review"), t("Il totale è positivo, ma almeno un immobile ha cashflow negativo o rischio elevato. L'aggregato può nascondere una criticità: verifica ogni immobile.", "The total is positive, but at least one property has negative cash flow or high risk. The aggregate can hide an issue: review each property."), "#f59e0b"],
+    financed: [t("Patrimonio senza capitale proprio", "Portfolio with no invested equity"), t("ROI equity non applicabile: il capitale proprio totale è zero. Il cashflow resta disponibile; verifica il suo segno, la leva e la copertura delle rate. Questo caso non è un dato mancante.", "Equity ROI is not applicable: total invested equity is zero. Cash flow remains available; review its sign, leverage and debt coverage. This is not missing data."), "#64748b"],
     positive: [t("Patrimonio con margine positivo stimato", "Portfolio with an estimated positive margin"), t("ROI e cashflow complessivo sono positivi nelle ipotesi salvate. Verifica costi, occupazione e finanziamento in scenari prudenti; il risultato non dimostra incassi reali.", "Overall ROI and cash flow are positive under the saved assumptions. Check costs, occupancy and financing under conservative scenarios; this does not establish actual receipts."), "#10b981"]
   };
   const [title,text,color] = content[facts.status];
@@ -2948,7 +2956,8 @@ function renderInvestmentIntelligence(rows = []){
   const {metrics} = facts;
   container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
     <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
-    <div class="metric"><span>${t("ROI equity ponderato", "Equity-weighted ROI")}</span><strong>${formatPercent(metrics.weightedROI)}</strong></div>
+    <div class="metric"><span>${t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
+    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties.")}</p>
     <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
     <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
     <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
@@ -6050,6 +6059,9 @@ async function loadProperties(){
   if(!container) return;
 
   if(!canUseFirestorePMS()){
+    window.rbRenovationRecoveryData=null;
+    const recovery = document.getElementById("renovation-recovery");
+    if(recovery){recovery.hidden=true;recovery.innerHTML="";}
 
     container.innerHTML = `
 
@@ -6120,8 +6132,18 @@ return;
       )
     );
 
+  const propertyOwnerUid = window.currentUser.uid;
   const snap =
     await getDocs(q);
+
+  if(window.currentUser?.uid !== propertyOwnerUid || !canUseFirestorePMS()) return;
+  const recoveryProperties=snap.docs.map(d=>({...d.data(),id:d.id}));
+  window.rbRenovationRecoveryData={ownerUid:propertyOwnerUid,loadedAt:new Date().toISOString(),...renovationRecovery(recoveryProperties)};
+  const recovery = document.getElementById("renovation-recovery");
+  if(recovery){
+    recovery.hidden=false;
+    recovery.innerHTML=renovationRecoveryHTML(recoveryProperties,window.currentLang);
+  }
 
   if(snap.empty){
 

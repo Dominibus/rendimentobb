@@ -5,7 +5,7 @@ import "./investment-journey.js?v=20261008-rc60";
 // ===============================================
 // ================= FIRESTORE ================
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261008-rc59";
-import { calculateROI } from "./roi-engine.js";
+import { calculateROI } from "./roi-engine.js?v=20261009-rc76";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
@@ -1036,13 +1036,13 @@ if(oldModal){
       features_it: [
         "Simulazioni e scenari salvati",
         "Analisi ROI avanzata",
-        "Confronto con benchmark indicativi",
+        "Riferimenti interni illustrativi, senza dati di mercato verificati",
         "Analisi rischio, portfolio e PMS"
       ],
       features_en: [
         "Simulations and saved scenarios",
         "Advanced ROI analysis",
-        "Indicative market benchmark comparison",
+        "Illustrative internal references, without verified market data",
         "Risk analysis, portfolio and PMS"
       ],
 
@@ -1596,6 +1596,7 @@ const canonicalScoreData =
   typeof window.rbGenerateInvestmentScore === "function"
     ? window.rbGenerateInvestmentScore({
         roi: Number(roi || 0),
+        roiAvailable: Number(window.lastAnalysisData?.equity) > 0,
 
         risk: Number(riskScore || 0),
 
@@ -1691,6 +1692,7 @@ else if(score > 40){
   <div class="kpi-box">
     <span>${t("Indice rischio","Risk score")}</span>
     <strong>${riskScore} / 100</strong>
+    ${Number(window.lastAnalysisData?.equity) === 0 ? `<small>${t("ROI equity N/A: componente esclusa dall’indice. Leva, cashflow e copertura del debito restano valutati.", "Equity ROI N/A: component excluded from the index. Leverage, cash flow and debt coverage remain assessed.")}</small>` : ""}
   </div>
 
   <div class="kpi-box">
@@ -2797,6 +2799,7 @@ const canonicalSaveScoreData =
 
     ? window.rbGenerateInvestmentScore({
 
+        roiAvailable: Number(equity) > 0,
         roi: Number(
           finalROI ?? 0
         ),
@@ -3973,6 +3976,7 @@ const executiveScoreData =
   typeof window.rbGenerateInvestmentScore === "function"
     ? window.rbGenerateInvestmentScore({
         roi: Number(result?.roi ?? roi ?? 0),
+        roiAvailable: Number(equity) > 0,
         risk: Number(risk ?? 0),
         occupancy: Number(occupancy ?? 0),
         mortgagePercent: Number(price > 0 ? (calculatedLoan / price) * 100 : 0),
@@ -6677,7 +6681,7 @@ const pdfRiskBreakdown = d.riskBreakdown || null;
 const pdfRiskDetails = pdfRiskBreakdown
   ? [
       `${T("Base prudenziale","Prudential base")} +${safe(pdfRiskBreakdown.base)}`,
-      `${T("ROI equity","Equity ROI")} +${safe(pdfRiskBreakdown.roi)}`,
+      equity > 0 ? `${T("ROI equity","Equity ROI")} +${safe(pdfRiskBreakdown.roi)}` : T("ROI equity: N/A, componente esclusa", "Equity ROI: N/A, component excluded"),
       `${T("Occupazione","Occupancy")} +${safe(pdfRiskBreakdown.occupancy)}`,
       `${T("Leva LTV","LTV leverage")} +${safe(pdfRiskBreakdown.leverage)}`,
       `${T("Copertura DSCR","DSCR coverage")} +${safe(pdfRiskBreakdown.debtCoverage)}`,

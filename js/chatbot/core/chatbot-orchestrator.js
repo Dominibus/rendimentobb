@@ -18,9 +18,15 @@ async function(message){
 
     const text =
 
-      String(message || "")
+      (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
 
+    if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
+    const recoveryResponse=window.rbBuildRenovationRecoveryResponse?.(text);
+    if(recoveryResponse){
+      window.rbPDFConversationDocumentId=null;
+      return {success:true,response:recoveryResponse,intent:{intent:'renovation_recovery'}};
+    }
     const portfolioResponse=window.rbBuildConfirmedPortfolioResponse?.(text);
     if(portfolioResponse){
       window.rbPDFConversationDocumentId=null;
@@ -1464,6 +1470,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -1836,6 +1843,7 @@ if(isEquityWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -2090,6 +2098,7 @@ const calculatedMortgageBaselineScore =
     : Number(
         window.rbGenerateInvestmentScore?.({
           roi: mortgageBaselineROI,
+          roiAvailable: Number(window.lastAnalysisData?.equity ?? analysisData.equity ?? analysisData.investment) !== 0,
           risk: Number(
             window.lastAnalysisData?.risk ??
             analysisData.risk ??
@@ -2362,6 +2371,7 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
 
   const scenarioScore =
     window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
       roi:
         Number(analysisData.roi || 0),
@@ -2728,6 +2738,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -3165,6 +3176,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -3577,6 +3589,7 @@ if(isADRWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -3914,6 +3927,7 @@ if(isMonthlyCostsWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(

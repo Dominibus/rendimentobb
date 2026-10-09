@@ -10,7 +10,7 @@ window.rbExtractEntities = function(input = ""){
   // 🧹 NORMALIZATION
   // ===========================================
 
-  const text = String(input)
+  const text = (window.rbNormalizeAIQuery?.(input)?.text ?? String(input))
     .toLowerCase()
     .trim();
 

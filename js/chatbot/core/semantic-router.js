@@ -162,7 +162,7 @@
   }
 
   function normalizeText(value){
-    const normalized = stripAccents(value)
+    const normalized = stripAccents(window.rbNormalizeAIQuery?.(value)?.text ?? value)
       .toLowerCase()
       .replace(/[’'`´]/g, " ")
       .replace(/[^a-z0-9%€]+/g, " ")
