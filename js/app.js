@@ -5872,53 +5872,16 @@ doc.text(
   165
 );
 
-// ================= ROI BAR =================
-
-const coverBenchmarkByCity = {
-  roma:8.4,
-  milano:7.2,
-  napoli:11.5,
-  firenze:7.9
-};
+// The internal table is illustrative and cannot grade this scenario's return.
 const coverMarketKey = String(city).toLowerCase().trim();
-const coverHasLocalBenchmark = Object.prototype.hasOwnProperty.call(coverBenchmarkByCity, coverMarketKey);
-const coverBenchmark = Number(window.RB_MARKET_DATA?.[coverMarketKey]?.roi ?? (coverHasLocalBenchmark ? coverBenchmarkByCity[coverMarketKey] : 8.4));
-const coverScaleMax = 40;
-const coverBarWidth = 120;
-const coverFillWidth = Math.min(Math.max(roi,0),coverScaleMax) / coverScaleMax * coverBarWidth;
-const coverBenchmarkX = 20 + Math.min(coverBenchmark,coverScaleMax) / coverScaleMax * coverBarWidth;
-
-doc.setFillColor(51,65,85);
-
-doc.roundedRect(
-  20,
-  178,
-  120,
-  8,
-  4,
-  4,
-  "F"
-);
-
-doc.setFillColor(...green);
-doc.roundedRect(20,178,coverFillWidth,8,4,4,"F");
-
-doc.setDrawColor(255,255,255);
-doc.setLineWidth(0.7);
-doc.line(coverBenchmarkX,176.5,coverBenchmarkX,187.5);
-
+const coverReference = window.RB_MARKET_DATA?.[coverMarketKey]?.roi;
+const coverHasReference = coverReference !== null && coverReference !== undefined && Number.isFinite(Number(coverReference));
 doc.setFont("helvetica","normal");
-doc.setFontSize(6.5);
-doc.setTextColor(148,163,184);
-doc.text("0%",20,191);
-doc.text("40%",140,191,{align:"right"});
+doc.setFontSize(9);
 doc.setTextColor(203,213,225);
-doc.text(
-  (coverHasLocalBenchmark ? T("Benchmark locale ","Local benchmark ") : T("Riferimento generale ","General reference ")) + pct(coverBenchmark),
-  coverBenchmarkX,
-  191,
-  {align:"center"}
-);
+doc.text(T("Riferimento interno illustrativo: ","Illustrative internal reference: ") + (coverHasReference ? pct(coverReference) : T("non disponibile","unavailable")),20,180);
+doc.setFontSize(8);
+doc.text(T("Basi non comparabili - nessun giudizio di performance di mercato.","Bases not comparable - no market performance grade."),20,191,{maxWidth:170});
 
 // ================= RATING =================
 
@@ -6603,251 +6566,26 @@ footer();
 // ===================================================
 // MARKET
 // ===================================================
-
 doc.addPage();
-
 y = 30;
-
-doc.setFontSize(14);
-doc.setTextColor(...dark);
-
-doc.text(
-  T("Confronto mercato","Market comparison"),
-  20,
-  y
-);
-
-y += 12;
-
-// =====================================
-// MARKET SNAPSHOT
-// =====================================
-
-const marketROIMap = {
-  roma: 8.4,
-  milano: 7.2,
-  napoli: 11.5,
-  firenze: 7.9
-};
-
-const marketKey =
-  String(city)
-    .toLowerCase()
-    .trim();
-
-const hasLocalBenchmark = Object.prototype.hasOwnProperty.call(marketROIMap, marketKey);
-const marketROI = Number(window.RB_MARKET_DATA?.[marketKey]?.roi ?? (hasLocalBenchmark ? marketROIMap[marketKey] : 8.4));
-
-const benchmarkROI = marketROI;
-
-doc.setFillColor(248,250,252);
-
-doc.roundedRect(
-20,
-y,
-170,
-26,
-5,
-5,
-"F"
-);
-
-doc.setDrawColor(230);
-
-doc.roundedRect(
-20,
-y,
-170,
-26,
-5,
-5
-);
-
-doc.setFontSize(8);
-doc.setTextColor(...gray);
-
-doc.text(
-T("ROI equity","Equity ROI"),
-28,
-y+8
-);
-
-doc.text(
-hasLocalBenchmark ? T("Benchmark locale","Local benchmark") : T("Riferimento generale","General reference"),
-88,
-y+8
-);
-
-doc.text(
-T("Posizione","Position"),
-145,
-y+8
-);
-
-doc.setFontSize(11);
-doc.setTextColor(...dark);
-
-doc.text(
-(equity > 0 ? pct(roi) : "N/A"),
-28,
-y+19
-);
-
-doc.text(
-pct(benchmarkROI),
-88,
-y+19
-);
-
-doc.setTextColor(...green);
-
-doc.text(
-roi >= benchmarkROI
-? T("Sopra riferimento","Above reference")
-: T("Sotto riferimento","Below reference"),
-145,
-y+19
-);
-
-y += 38;  
-
-// ================= MARKET DATA =================
-
-// ================= KPI =================
-
-row(
-  T("ROI equity","Equity ROI"),
-  (equity > 0 ? pct(roi) : "N/A")
-);
-
-row(
-  T("ROI equity di mercato","Market equity ROI"),
-  pct(marketROI)
-);
-
-// ================= SPACING FIX =================
-
+doc.setFontSize(14);doc.setTextColor(...dark);
+doc.text(T("Riferimento interno illustrativo","Illustrative internal reference"),20,y);
+y += 16;
+const marketKey = String(city).toLowerCase().trim();
+const internalReference = window.RB_MARKET_DATA?.[marketKey]?.roi;
+const hasLocalBenchmark = internalReference !== null && internalReference !== undefined && Number.isFinite(Number(internalReference));
+row(T("ROI equity","Equity ROI"),equity > 0 ? pct(roi) : "N/A");
+row(T("Riferimento interno illustrativo","Illustrative internal reference"),hasLocalBenchmark ? pct(internalReference) : T("Non disponibile","Unavailable"));
 y += 14;
-
-// ================= MARKET LABEL =================
-
-doc.setFontSize(9);
-doc.setTextColor(...gray);
-
-doc.text(
-  T("Performance mercato","Market performance"),
-  20,
-  y
-);
-
-// ================= BAR START =================
-
-y += 8;
-
-// ================= MARKET BAR BG =================
-
-doc.setFillColor(230,230,230);
-
-doc.roundedRect(
-  20,
-  y,
-  150,
-  10,
-  5,
-  5,
-  "F"
-);
-
-// ================= ROI BAR =================
-
-const compareWidth = Math.max(
-  0,
-  Math.min(
-    135,
-    safe((roi / (marketROI * 2)) * 135)
-  )
-);
-
-doc.setFillColor(...green);
-
-doc.roundedRect(
-  20,
-  y,
-  compareWidth,
-  10,
-  5,
-  5,
-  "F"
-);
-
-// ================= LABEL VALUE =================
-
-doc.setFontSize(8);
-doc.setTextColor(...dark);
-
-const compareLabel =
-  `${(equity > 0 ? pct(roi) : "N/A")} vs ${pct(marketROI)}`;
-
-// 🔥 barra lunga → testo sotto
-if(compareWidth > 105){
-
-  doc.text(
-    compareLabel,
-    20,
-    y + 18
-  );
-
-  y += 12;
-
-}else{
-
-  doc.text(
-    compareLabel,
-    175,
-    y + 7,
-    { align:"right" }
-  );
-
-  y += 18;
-
-}
-
-// ================= COMMENT BOX =================
-
-doc.setFillColor(248,250,252);
-
-doc.roundedRect(
-  20,
-  y,
-  170,
-  36,
-  5,
-  5,
-  "F"
-);
-
-doc.setFontSize(10);
-doc.setTextColor(...dark);
-
-// 🔥 rinominato per evitare conflitto JS
-const marketBenchmarkComment =
-  roi > marketROI
-    ? T(
-        "Il ROI simulato supera il riferimento indicativo. Verifica la comparabilità delle ipotesi.",
-        "Simulated ROI exceeds the indicative reference. Check that the assumptions are comparable."
-      )
-    : T(
-        "Il ROI simulato è pari o inferiore al riferimento indicativo; il confronto non verifica il mercato.",
-        "The investment performs in line with or below average market benchmark."
-      );
-
-doc.text(
-  marketBenchmarkComment,
-  25,
-  y + 15,
-  { maxWidth: 155 }
-);
-
+doc.setFontSize(11);doc.setTextColor(...gray);
+doc.text(T("BASI NON COMPARABILI","BASES NOT COMPARABLE"),20,y);
+y += 10;
+doc.setFillColor(248,250,252);doc.roundedRect(20,y,170,50,5,5,"F");
+doc.setFontSize(10);doc.setTextColor(...dark);
+const referenceNote = equity <= 0
+  ? T("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow, servizio del debito e costi accessori. Il riferimento interno non misura la performance dello scenario.","Equity ROI is not applicable with zero equity. Assess cash flow, debt service and transaction costs. The internal reference does not measure this scenario's performance.")
+  : T("La tabella interna è statica e illustrativa: non documenta una fonte esterna aggiornata né gli stessi costi e la stessa leva della simulazione. Il confronto non misura una sovraperformance o sottoperformance di mercato.","The internal table is static and illustrative: it documents neither an updated external source nor the same costs and leverage as the simulation. It does not measure market outperformance or underperformance.");
+doc.text(doc.splitTextToSize(referenceNote,155),25,y+12);
 footer();
 
 // ===================================================
@@ -7036,40 +6774,9 @@ y += 10;
 const insights = [];
 
 // ROI
-if(equity <= 0){
-  insights.push(T("Finanziamento al 100%: ROI equity non applicabile. Valuta cashflow, servizio del debito e costi accessori.", "100% financing: equity ROI is not applicable. Assess cash flow, debt service and transaction costs."));
-}else if (roi >= marketROI + 5) {
-
-  insights.push(
-    T(
-      hasLocalBenchmark
-        ? "Il rendimento stimato è nettamente superiore al benchmark locale disponibile."
-        : "Il rendimento stimato è nettamente superiore al benchmark generale di riferimento; il confronto non è specifico per la città.",
-      hasLocalBenchmark
-        ? "Estimated returns are significantly above the available local benchmark."
-        : "Estimated returns are significantly above the general reference benchmark; the comparison is not city-specific."
-    )
-  );
-
-} else if (roi >= marketROI) {
-
-  insights.push(
-    T(
-      hasLocalBenchmark ? "Il ROI è superiore al benchmark locale disponibile." : "Il ROI è superiore al benchmark generale di riferimento, non specifico per la città.",
-      hasLocalBenchmark ? "ROI is above the available local benchmark." : "ROI is above the general reference benchmark, which is not city-specific."
-    )
-  );
-
-} else {
-
-  insights.push(
-    T(
-      hasLocalBenchmark ? "Il rendimento è inferiore al benchmark locale disponibile." : "Il rendimento è inferiore al benchmark generale di riferimento, non specifico per la città.",
-      hasLocalBenchmark ? "Returns are below the available local benchmark." : "Returns are below the general reference benchmark, which is not city-specific."
-    )
-  );
-
-}
+insights.push(equity <= 0
+  ? T("Finanziamento al 100%: ROI equity non applicabile. Valuta cashflow, servizio del debito e costi accessori.","100% financing: equity ROI is not applicable. Assess cash flow, debt service and transaction costs.")
+  : T("Il ROI deriva dalle ipotesi inserite; il riferimento interno non è un confronto di mercato verificato.","ROI derives from the entered assumptions; the internal reference is not a verified market comparison."));
 
 // Cashflow
 if (monthly >= 1500) {
@@ -7326,7 +7033,7 @@ reportSource:
 }
 
 // SAVE
-doc.save(`RendimentoBB-Fattibilita-${city}-${roi.toFixed(1)}ROI.pdf`);
+doc.save(`RendimentoBB-Fattibilita-${city}-${equity > 0 ? roi.toFixed(1)+"ROI" : "ROI-N-A"}.pdf`);
 
 };
   // ================= AUTO CITY DETECTION =================
