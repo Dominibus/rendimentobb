@@ -9,7 +9,7 @@ import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
-import { resolveAccountPlan } from "./account-plan.js";
+import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
 import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261009-rc76";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
@@ -2732,6 +2732,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if(userDoc.exists()){
         const data = userDoc.data();
+        window.rbAccountData=data; window.rbAccountOwner=user.uid;
         window.currentPlan = resolveAccountPlan(data, window.location.hostname);
         window.rbNotificationPreferences = data.notificationPreferences || {};
       }else{

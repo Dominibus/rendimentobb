@@ -7169,8 +7169,13 @@ window.buyPlan = async function(plan){
     return;
   }
 
+  if(typeof window.rbReviewPurchase !== "function"){
+    showToast?.(t("Ricarica la pagina per consultare le condizioni.","Reload the page to review the terms."),"error");return;
+  }
+  const purchaseOwner=user.uid;
+  if(!await window.rbReviewPurchase(requestedPlan))return;
+  if(window.currentUser?.uid !== purchaseOwner)return;
   try{
-
         const idToken =
       await user.getIdToken();
 
@@ -7186,7 +7191,7 @@ window.buyPlan = async function(plan){
           },
 
           body: JSON.stringify({
-            plan: requestedPlan
+            plan: requestedPlan, acceptedTerms:true, termsVersion:"2026-10-09-rc85"
           })
         }
       );
@@ -8248,8 +8253,8 @@ window.startPlanPurchase = function(plan){
 
   // già attivo
   if(
-    (plan === "pro" && access.isPro) ||
-    (plan === "investor" && access.isInvestor)
+    (plan === "pro" && access.isPro && !window.rbIsTrial?.()) ||
+    (plan === "investor" && access.isInvestor && !window.rbIsTrial?.())
   ){
     showToast?.(
       t("Hai già questo piano attivo","You already have this plan"),
@@ -8259,7 +8264,7 @@ window.startPlanPurchase = function(plan){
   }
 
   // downgrade blocco
-  if(plan === "investor" && access.isPro){
+  if(plan === "investor" && access.isPro && !window.rbIsTrial?.()){
     showToast?.(
       t("Hai già un piano superiore","You already have a higher plan"),
       "info"

@@ -1,5 +1,6 @@
+import './subscription-ui.js?v=20261009-rc85';
 import "./investment-journey.js?v=20261008-rc60";
-import { resolveAccountPlan } from "./account-plan.js";
+import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
 import "./account-report-cache.js";
 // =============================== 
 // FIREBASE INIT – RENDIMENTOBB
@@ -13,6 +14,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -40,6 +42,12 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+window.rbSendVerificationEmail=async()=>{
+ const user=auth.currentUser;
+ if(!user||user.uid!==window.currentUser?.uid)throw Error('LOGIN_REQUIRED');
+ if(user.emailVerified)return;
+ await sendEmailVerification(user);
+};
 export const db = getFirestore(app);
 
 // URL query versions can evaluate this module more than once in a page.
@@ -66,7 +74,8 @@ window.firebaseReady = false;
 
 window.getUserAccess = function(){
 
-  const plan = String(window.currentPlan || "free")
+  const effectivePlan = window.rbAccountData && window.rbAccountOwner === window.currentUser?.uid ? resolveAccountPlan(window.rbAccountData,window.location.hostname) : window.currentPlan;
+  const plan = String(effectivePlan || "free")
     .trim()
     .toLowerCase();
 
@@ -249,6 +258,7 @@ let role = "user";
 if (docSnap.exists()) {
   const data = docSnap.data();
 
+  window.rbAccountData=data; window.rbAccountOwner=uid;
   plan = resolveAccountPlan(data, window.location.hostname);
   role = data.role || "user";
   
@@ -511,6 +521,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
 
     
+    window.rbAccountData=null; window.rbAccountOwner=null;
     window.currentUser = null;
     window.currentPlan = "free";
     window.userRole = "user";

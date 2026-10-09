@@ -1,3 +1,4 @@
+import './subscription-ui.js?v=20261009-rc85';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
@@ -720,7 +721,7 @@ if(
   const isProOnly = isPro && !isInvestor;
   const accountSummary = document.getElementById("rb-mobile-account");
   if(accountSummary) {
-    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO") : isInvestor ? "INVESTOR" : "FREE";
+    const label = isAdmin ? "ADMIN" : window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : isPro ? (window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO") : isInvestor ? "INVESTOR" : "FREE";
     accountSummary.textContent = user ? `${window.currentLang === "en" ? "Your plan" : "Il tuo piano"} · ${label}` : (window.currentLang === "en" ? "Explore RendimentoBB" : "Esplora RendimentoBB");
   }
 
@@ -737,10 +738,10 @@ if(isAdmin){
   badge = `<span class="badge-pro">ADMIN</span>`;
 }
 else if(access.isPro){
-  badge = `<span class="badge-pro">${window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
+  badge = `<span class="badge-pro">${window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
 }
 else if(access.isInvestor){
-  badge = `<span class="badge-pro">INVESTOR</span>`;
+  badge = `<span class="badge-pro">${window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : "INVESTOR"}</span>`;
 }
 else{
   badge = `<span class="badge-pro">FREE</span>`;
@@ -781,6 +782,7 @@ class="dashboard-label">
       html += `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`;
     }
 
+    html += `<button type="button" class="rb-btn secondary" onclick="window.rbOpenSubscription?.()">${window.currentLang === "en" ? "Subscription" : "Abbonamento"}</button>`;
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
 
@@ -832,6 +834,7 @@ Assistente RendimentoBB
           mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
         }
 
+        mobileHTML += `<a href="#" onclick="event.preventDefault();window.rbOpenSubscription?.()">${window.currentLang === "en" ? "Subscription" : "Abbonamento"}</a>`;
         mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
 
       } else {

@@ -30,14 +30,22 @@ service cloud.firestore {
         );
     }
 
+    function hasActiveTrial(data) {
+      let start = data.get("trialStartedAt", null);
+      let end = data.get("trialEndsAt", null);
+      return start is timestamp && end is timestamp
+        && start <= request.time && end > request.time
+        && end > start && end <= start + duration.value(7, "d");
+    }
+
     function canWritePaidData() {
       return isSignedIn() && (
         isAdmin()
         || (
           exists(/databases/$(database)/documents/users/$(request.auth.uid))
-          && hasPaidAccountData(
+          && (hasPaidAccountData(
             get(/databases/$(database)/documents/users/$(request.auth.uid)).data
-          )
+          ) || hasActiveTrial(get(/databases/$(database)/documents/users/$(request.auth.uid)).data))
         )
       );
     }
@@ -234,7 +242,9 @@ service cloud.firestore {
           "sandboxStripeLiveMode",
           "sandboxLastStripeEventId",
           "sandboxLastStripeEventCreated",
-          "sandboxUpdatedAt"
+          "sandboxUpdatedAt",
+          "trialStartedAt", "trialEndsAt", "trialTermsVersion",
+          "sandboxTrialStartedAt", "sandboxTrialEndsAt", "sandboxTrialTermsVersion"
         ];
       }
 
@@ -263,7 +273,9 @@ service cloud.firestore {
           "sandboxStripeLiveMode",
           "sandboxLastStripeEventId",
           "sandboxLastStripeEventCreated",
-          "sandboxUpdatedAt"
+          "sandboxUpdatedAt",
+          "trialStartedAt", "trialEndsAt", "trialTermsVersion",
+          "sandboxTrialStartedAt", "sandboxTrialEndsAt", "sandboxTrialTermsVersion"
         ])
         && (!request.resource.data.keys().hasAny(["isAdmin"]) || request.resource.data.isAdmin == false)
         && request.resource.data.email is string

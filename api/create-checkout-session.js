@@ -1,3 +1,5 @@
+import {startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError} from '../lib/account-subscription-service.js';
+import {TERMS_VERSION} from '../js/subscription-offer.js';
 import { guardedCheckout, CheckoutConflict } from "../lib/stripe-checkout-guard.js";
 import Stripe from "stripe";
 import admin from "firebase-admin";
@@ -74,7 +76,9 @@ export default async function handler(req, res) {
 
   const priceId = PRICE_BY_PLAN[plan];
 
-  if (!priceId) {
+  const action = req.body?.action || "checkout";
+  if (!["checkout","trial","portal","contract"].includes(action)) return res.status(400).json({code:"INVALID_ACTION"});
+  if (action === "checkout" && !priceId) {
     return res.status(400).json({
       error: "Invalid plan"
     });
@@ -95,6 +99,24 @@ export default async function handler(req, res) {
         : undefined;
 
     const baseUrl = (process.env.BASE_URL || "https://rendimentobb.it").replace(/\/+$/, "");
+    const db=firebaseAdmin.firestore();
+    const liveMode=!process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_");
+    if(action === "contract") return res.status(200).json(await getAccountContract({db,uid,liveMode}));
+    if(action === "trial"){
+      const testEmail=String(process.env.RB_TRIAL_TEST_EMAIL || "").trim().toLowerCase();
+      const isDesignatedTest=!!testEmail && decodedToken.email_verified===true && String(email||"").trim().toLowerCase()===testEmail;
+      if(process.env.RB_INVESTOR_TRIAL_ENABLED !== "true" && !isDesignatedTest) return res.status(503).json({code:"TRIAL_NOT_ENABLED"});
+      const result=await startAccountTrial({db,uid,email,emailVerified:decodedToken.email_verified===true,liveMode,
+        termsVersion:req.body?.termsVersion,acceptedTerms:req.body?.acceptedTerms,
+        timestamp:ms=>firebaseAdmin.firestore.Timestamp.fromMillis(ms)});
+      return res.status(200).json(result);
+    }
+    if(action === "portal"){
+      return res.status(200).json(await createAccountPortal({db,stripe,uid,liveMode,baseUrl,locale:req.body?.locale}));
+    }
+    if(req.body?.acceptedTerms !== true || req.body?.termsVersion !== TERMS_VERSION){
+      return res.status(400).json({code:"TERMS_REQUIRED"});
+    }
     const session = await guardedCheckout({
       db: firebaseAdmin.firestore(), stripe, uid, plan, priceId, email, baseUrl,
       liveMode: !process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")
@@ -104,6 +126,7 @@ export default async function handler(req, res) {
       url: session.url
     });
   } catch (error) {
+    if(error instanceof SubscriptionError) return res.status(error.status).json({code:error.code});
     if (error instanceof CheckoutConflict) {
       return res.status(409).json({ error: "Checkout unavailable", code: error.code });
     }

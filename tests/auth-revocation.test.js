@@ -11,7 +11,7 @@ for (const file of ['delete-lead.js','create-checkout-session.js']) {
         assert.equal(token,'blocked-token'); assert.equal(revocationCheck,true); verified++;
         throw Object.assign(new Error('blocked'),{code});
       }}), firestore:() => ({collection() { throw new Error('Unexpected database write/read'); }}) };
-      const context = {admin, Stripe:class {}, getStripePrices:() => ({pro:'price-pro'}), process:{env:{STRIPE_SECRET_KEY:'sk_test_placeholder'}}, guardedCheckout:() => { throw new Error('Unexpected checkout'); }, CheckoutConflict:class extends Error {}};
+      const context = {admin, Stripe:class {}, getStripePrices:() => ({pro:'price-pro'}), process:{env:{STRIPE_SECRET_KEY:'sk_test_placeholder'}}, guardedCheckout:() => { throw new Error('Unexpected checkout'); }, CheckoutConflict:class extends Error {}, SubscriptionError:class extends Error {}};
       vm.createContext(context); vm.runInContext(source,context);
       const res = {setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
       await context.handler({method:file==='delete-lead.js'?'DELETE':'POST',headers:{authorization:'Bearer blocked-token'},body:{plan:'pro',leadId:'abcdefghijk'}},res);
