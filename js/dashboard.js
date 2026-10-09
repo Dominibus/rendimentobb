@@ -6231,12 +6231,12 @@ const occupancy =
   );
 
  let occupancyStatus =
-  t("🔴 Vuoto","🔴 Empty");
+  t("🔴 Occupazione mensile bassa","🔴 Low monthly occupancy");
 
 if(occupancy >= 80){
 
   occupancyStatus =
-    t("🟢 Alta","🟢 High");
+    t("🟢 Occupazione mensile alta","🟢 High monthly occupancy");
 
 }
 else if(
@@ -6244,7 +6244,7 @@ else if(
 ){
 
   occupancyStatus =
-    t("🟡 Media","🟡 Medium");
+    t("🟡 Occupazione mensile media","🟡 Medium monthly occupancy");
 
 }   
 
@@ -14530,7 +14530,7 @@ color:#0f172a;
 ">
 
 ${t(
-"Performance Positive",
+"Performance positiva",
 "Positive Performance"
 )}
 

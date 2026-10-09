@@ -25,11 +25,11 @@ function getText(){
 
   return {
     revenue: lang === "en" ? "Your revenue" : "Ricavi stimati",
-    average: lang === "en" ? "Market average" : "Media mercato",
-    comparison: lang === "en" ? "Performance" : "Performance",
-    above: lang === "en" ? "Above market" : "Sopra media",
-    below: lang === "en" ? "Below market" : "Sotto media",
-    vs: lang === "en" ? "vs market" : "vs mercato"
+    average: lang === "en" ? "Internal illustrative reference" : "Riferimento interno illustrativo",
+    comparison: lang === "en" ? "Arithmetic difference" : "Differenza aritmetica",
+    above: lang === "en" ? "Higher than illustrative input" : "Maggiore del dato illustrativo",
+    below: lang === "en" ? "Lower than illustrative input" : "Minore del dato illustrativo",
+    vs: lang === "en" ? "vs illustrative reference" : "vs riferimento illustrativo"
   };
 }
 
@@ -127,7 +127,7 @@ export function renderMarketBenchmark(inputCity){
 
   const isAbove = diff >= 0;
 
-  const color = isAbove ? "#10b981" : "#ef4444";
+  const color = "#64748b";
   const badge = isAbove ? text.above : text.below;
 
   /* ================= UI ================= */

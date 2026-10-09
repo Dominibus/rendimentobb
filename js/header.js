@@ -594,7 +594,7 @@ function initHeaderInteractions(){
       localStorage.setItem("rb_lang", lang);
       if(window.setLang) window.setLang(lang);
       updateLangButtons(lang);
-      renderUser(auth.currentUser || null);
+      renderUser(auth?.currentUser || window.currentUser || null);
     };
   });
 
@@ -602,7 +602,7 @@ function initHeaderInteractions(){
 
   // 🔥 SYNC PLAN
   window.addEventListener("rb_plan_ready", ()=>{
-    renderUser(auth.currentUser || null);
+    renderUser(auth?.currentUser || window.currentUser || null);
   });
 
   // 🔥 HEADER SCROLL UX
@@ -720,7 +720,7 @@ if(
   const isProOnly = isPro && !isInvestor;
   const accountSummary = document.getElementById("rb-mobile-account");
   if(accountSummary) {
-    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? "PRO ANNUALE" : "PRO") : isInvestor ? "INVESTOR" : "FREE";
+    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO") : isInvestor ? "INVESTOR" : "FREE";
     accountSummary.textContent = user ? `${window.currentLang === "en" ? "Your plan" : "Il tuo piano"} · ${label}` : (window.currentLang === "en" ? "Explore RendimentoBB" : "Esplora RendimentoBB");
   }
 

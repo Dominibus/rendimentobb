@@ -16,7 +16,8 @@ async function render({lang='it',city='roma',snapshot=assumptions,authorized=tru
 }
 test('PDF contains exact amounts and saved assumptions with version and ID',async()=>{
  const result=await render();assert.equal(result.saved,true);assert.equal(result.pages,8);
- for(const value of ['6144,64','3,7%','25 anni','117,41683','roi-monthly-v1','analysis-id','Costi mensili','10.7 p.p.','Dato statico illustrativo'])assert.ok(result.text.includes(value),value);
+ for(const value of ['6144,64','3,7%','25 anni','117,41683','roi-monthly-v1','analysis-id','Costi mensili','Dato statico illustrativo'])assert.ok(result.text.includes(value),value);
+ assert.ok(result.text.includes('BASI NON COMPARABILI'));assert.ok(!result.text.includes('SOPRA IL BENCHMARK'));assert.ok(!result.text.includes('10.7 p.p.'));
  assert.ok(result.calls.filter(x=>x.page===8).every(x=>x.y<=285));
 });
 test('legacy PDF states missing assumptions and does not invent saved rate or term',async()=>{
@@ -28,7 +29,7 @@ test('unknown city has no invented numerical reference or comparative gap',async
  assert.ok(page.includes('RIFERIMENTO NON DISPONIBILE'));assert.ok(page.includes('NESSUN CONFRONTO'));assert.ok(!page.includes('8.4%'));
 });
 test('English PDF shows explicit terms and authentic saved inputs',async()=>{
- const result=await render({lang:'en'});assert.ok(result.text.includes('Saved simulation assumptions'));assert.ok(result.text.includes('25 years'));assert.ok(result.text.includes('10.7 pp'));
+ const result=await render({lang:'en'});assert.ok(result.text.includes('Saved simulation assumptions'));assert.ok(result.text.includes('25 years'));assert.ok(result.text.includes('BASES NOT COMPARABLE'));assert.ok(!result.text.includes('10.7 pp'));
 });
 test('PDF export respects premium gating and refuses changed owner during generation',async()=>{
  assert.equal((await render({authorized:false})).saved,false);assert.equal((await render({changeOwnerOnPage:true})).saved,false);
