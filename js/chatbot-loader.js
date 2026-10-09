@@ -178,7 +178,7 @@
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",
     "/js/chatbot/core/pms-autopilot-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/investment-autopilot-engine.js?v=20261009-rc76",
+    "/js/chatbot/core/investment-autopilot-engine.js?v=20261009-rc91",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/chatbot-orchestrator.js?v=20261009-rc78",
 

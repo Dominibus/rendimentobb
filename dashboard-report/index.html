@@ -1231,6 +1231,7 @@ const canonicalSimulation =
   storedSimulations[0] ||
   {};
 
+const ownedProperty = canonicalSimulation.propertyMode === "owned" || canonicalSimulation.assumptions?.source === "owned_property";
 const price =
   Number(
     canonicalSimulation.propertyPrice ??
@@ -1309,6 +1310,7 @@ function getFinancingMetrics(
     Math.max(
       0,
       safeNumber(
+        source.assumptions?.loanAmount ??
         source.loan ??
         source.loanAmount ??
         source.mortgageAmount ??
@@ -1463,7 +1465,12 @@ function euro(v){
 
 // ================= RENDER =================
 function renderData(){
-  document.getElementById("price").innerText = euro(price);
+  if(ownedProperty){
+    let note=document.getElementById('owned-report-note');
+    if(!note){note=document.createElement('p');note.id='owned-report-note';note.style.cssText='padding:16px;background:#f0fdfa;border-radius:12px;color:#123b32;line-height:1.5';document.querySelector('.report')?.prepend(note);}
+    note.textContent=lang==='en'?'Already owned property. Startup capital excludes the value of the house. No purchase or new mortgage is assumed; any remaining principal comes from the saved analysis.':'Immobile già di proprietà. Il capitale di avvio esclude il valore della casa. Non è presunto un acquisto o un nuovo mutuo: l’eventuale residuo proviene dall’analisi salvata.';
+  }
+  document.getElementById("price").innerText = ownedProperty && price === 0 ? (lang === "en" ? "Not provided" : "Non indicato") : euro(price);
   document.getElementById("equity").innerText = euro(equity);
   document.getElementById("roi").innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
   document.getElementById("risk").innerText = risk+"/100";
@@ -1475,7 +1482,7 @@ function renderData(){
 if(realROIHero){
 
   realROIHero.innerText =
-    realROI.toFixed(1) + "%";
+    price > 0 ? realROI.toFixed(1) + "%" : "N/A";
 }
 
   const dscrHero =
@@ -1505,8 +1512,7 @@ if(dscrHero){
 
 if(ltvHero){
 
-  const loan =
-    Math.max(0, price - equity);
+  const loan = getFinancingMetrics(canonicalSimulation,price,equity,annualProfit).loan;
 
   const ltv =
     price > 0
@@ -1514,7 +1520,7 @@ if(ltvHero){
       : 0;
 
   ltvHero.innerText =
-    ltv.toFixed(0) + "%";
+    price > 0 ? ltv.toFixed(0) + "%" : "N/A";
 }
 
 if(heroROI){
@@ -1890,7 +1896,7 @@ async function generatePDF(){
       return isFinite(n) ? n : 0;
     };
 
-    const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261008-rc62");
+    const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261009-rc91");
     if(window.currentUser?.uid !== reportOwnerUid || !(window.getUserAccess?.()?.isPro || window.getUserAccess?.()?.isAdmin)) return;
     // ================= DATA =================
     const dashboardList = window.dashboardSimulations || [];
@@ -2536,7 +2542,7 @@ drawFinancingKPI(
   20 + financingCardW + financingGap,
   32,
   "LTV",
-  `${ltv.toFixed(1)}%`
+  price > 0 ? `${ltv.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -2553,7 +2559,7 @@ drawFinancingKPI(
   20,
   64,
   "CAP RATE",
-  `${capRate.toFixed(1)}%`
+  price > 0 ? `${capRate.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -3283,9 +3289,9 @@ doc.text(
       const rows=[
         [t("ID analisi","Analysis ID"),String(fallback.id || "—").slice(0,80)],
         [t("Versione calcolo","Calculation version"),assumptions.calculationVersion],
-        [t("Origine input","Input source"),assumptions.source === "simulator"?t("Simulatore","Simulator"):t("Anteprima home","Home preview")],
-        [t("Prezzo immobile","Property price"),eur(assumptions.propertyPrice)],
-        [t("Capitale proprio","Equity"),eur(assumptions.equity)],
+        [t("Origine input","Input source"),assumptions.source === "owned_property"?t("Immobile già di proprietà","Already owned property"):assumptions.source === "simulator"?t("Simulatore","Simulator"):t("Anteprima home","Home preview")],
+        [assumptions.source === "owned_property"?t("Valore immobile","Property value"):t("Prezzo immobile","Property price"),assumptions.source === "owned_property" && assumptions.propertyPrice === 0 ? t("Non indicato","Not provided"):eur(assumptions.propertyPrice)],
+        [assumptions.source === "owned_property"?t("Capitale di avvio","Startup capital"):t("Capitale proprio","Equity"),eur(assumptions.equity)],
         [t("Tariffa notte","Nightly rate"),number(assumptions.priceNight)+" EUR"],
         [t("Occupazione","Occupancy"),number(assumptions.occupancy)+"%"],
         [assumptions.expensesUnit === "monthly_eur"?t("Costi mensili","Monthly costs"):t("Costi (% ricavi)","Costs (% revenue)"),assumptions.expensesUnit === "monthly_eur"?eur(assumptions.expenses):number(assumptions.expenses)+"%"],
@@ -3440,7 +3446,7 @@ function init(){
 
   loadSimulations();
 
-  if(!Number.isFinite(price) || price <= 0){
+  if(!Number.isFinite(price) || price < 0 || (price === 0 && !ownedProperty)){
     const report = document.querySelector(".report");
     if(report){
       report.textContent = lang === "en"
@@ -3483,7 +3489,7 @@ function init(){
 window.generatePDF = generatePDF;
 init();
 document.addEventListener("rb_language_changed", () => {
-  if(window.currentUser?.uid !== reportOwnerUid || !Number.isFinite(price) || price <= 0) return;
+  if(window.currentUser?.uid !== reportOwnerUid || !Number.isFinite(price) || price < 0 || (price === 0 && !ownedProperty)) return;
   lang = window.currentLang || "it";
   renderData();
   renderVerdict();

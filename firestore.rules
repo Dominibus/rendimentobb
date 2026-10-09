@@ -107,7 +107,7 @@ service cloud.firestore {
         && snapshot.keys().hasOnly(["schemaVersion", "calculationVersion", "source", "expensesUnit", "propertyPrice", "equity", "loanAmount", "priceNight", "occupancy", "expenses", "commission", "tax", "interestRate", "loanYears"])
         && snapshot.schemaVersion == 1
         && snapshot.calculationVersion == "roi-monthly-v1"
-        && snapshot.source in ["simulator", "home_preview"]
+        && snapshot.source in ["simulator", "home_preview", "owned_property"]
         && snapshot.expensesUnit in ["monthly_eur", "percentage"]
         && snapshot.propertyPrice is number && snapshot.propertyPrice >= 0 && snapshot.propertyPrice <= 1000000000000
         && snapshot.equity is number && snapshot.equity >= 0 && snapshot.equity <= 1000000000000

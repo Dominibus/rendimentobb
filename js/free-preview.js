@@ -11,6 +11,8 @@ export function updateSimulationROILabel({access, document, lang='it'}={}){
 // Free gets a useful result from the current calculation, without premium panels.
 export function renderFreeSimulationPreview(data, {access, document, lang='it'}={}){
   updateSimulationROILabel({access,document,lang});
+  const owned=data?.propertyMode==='owned' || data?.assumptions?.source==='owned_property';
+  const hasPropertyValue=data?.propertyROIAvailable !== false && (!owned || Number(data?.price ?? data?.propertyPrice ?? data?.assumptions?.propertyPrice ?? 0)>0);
   if(document && (access?.isInvestor || access?.isPro || access?.isAdmin)){
     const formatROI=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value))
       ? new Intl.NumberFormat(lang==='en'?'en-GB':'it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}).format(Number(value))+'%'
@@ -22,7 +24,7 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
     const badge=document.getElementById('roi-badge');
     if(badge){
       badge.textContent=zeroEquity
-        ? (lang==='en'?'Equity ROI not applicable · zero equity':'ROI equity non applicabile · capitale proprio zero')
+        ? (owned ? (lang==='en'?'Return on startup capital not applicable · no capital entered':'ROI sul capitale di avvio non applicabile · nessun capitale indicato') : (lang==='en'?'Equity ROI not applicable · zero equity':'ROI equity non applicabile · capitale proprio zero'))
         : (lang==='en'?'Return on equity · simulated cashflow / equity':'ROI equity · cashflow simulato / capitale proprio');
       badge.className='';
     }
@@ -30,7 +32,7 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
     const rawCashflow=data?.netAfterMortgage ?? data?.net ?? data?.cashflow;
     const cashflow=rawCashflow !== null && rawCashflow !== undefined && rawCashflow !== '' && Number.isFinite(Number(rawCashflow)) ? Number(rawCashflow) : null;
     if(verdict)verdict.textContent=zeroEquity
-      ? (lang==='en'?'100% financing: assess cash flow, debt service and transaction costs.':'Finanziamento al 100%: valuta cashflow, servizio del debito e costi accessori.')
+      ? (owned ? (lang==='en'?'Already owned property: assess revenue, operating costs and cashflow. Any remaining loan is modelled separately.':'Immobile già di proprietà: valuta ricavi, costi operativi e cashflow. L’eventuale mutuo residuo è simulato separatamente.') : (lang==='en'?'100% financing: assess cash flow, debt service and transaction costs.':'Finanziamento al 100%: valuta cashflow, servizio del debito e costi accessori.'))
       : cashflow===null
         ? (lang==='en'?'Complete the inputs to assess cash flow.':'Completa i dati per valutare il cashflow.')
         : cashflow<0
@@ -40,19 +42,19 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
             : (lang==='en'?'The scenario has a positive cashflow under your assumptions. Test more cautious assumptions before deciding.':'Lo scenario ha cashflow positivo nelle ipotesi inserite. Verifica anche ipotesi più prudenti prima di decidere.');
     for(const id of ['roi-preview-live','roi-card-live']){
       const element=document.getElementById(id);
-      if(element)element.textContent=formatROI(data?.realROI);
+      if(element)element.textContent=hasPropertyValue ? formatROI(data?.realROI) : 'N/A';
     }
     return;
   }
   if(!access?.isFree || access.isInvestor || access.isPro || access.isAdmin || !document) return;
   const number=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
-  const roi=number(data?.realROI);
+  const roi=hasPropertyValue ? number(data?.realROI) : null;
   const cashflow=number(data?.netAfterMortgage ?? data?.net ?? data?.cashflow);
   const locale=lang==='en'?'en-GB':'it-IT';
   const currency=value=>value===null?'—':new Intl.NumberFormat(locale,{style:'currency',currency:'EUR',useGrouping:true,maximumFractionDigits:2}).format(value);
   for(const id of ['roi-live','roi-preview-live','roi-card-live']){
     const el=document.getElementById(id);
-    if(el) el.textContent=roi===null?'—':new Intl.NumberFormat(locale,{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)+'%';
+    if(el) el.textContent=!hasPropertyValue?'N/A':roi===null?'—':new Intl.NumberFormat(locale,{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)+'%';
   }
   const annual=document.getElementById('profit-live');
   if(annual) annual.textContent=currency(cashflow);
@@ -62,7 +64,7 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
   if(risk) risk.textContent='Investor / Pro';
   // A property ROI must not be compared visually with an equity ROI benchmark.
   const badge=document.getElementById('roi-badge');
-  if(badge){badge.textContent=lang==='en'?'Property ROI · simulated cashflow / purchase price':'ROI immobile · cashflow simulato / prezzo d’acquisto';badge.className='';}
+  if(badge){badge.textContent=!hasPropertyValue ? (lang==='en'?'Property ROI not applicable · no property value entered':'ROI immobile non applicabile · valore immobile non indicato') : owned ? (lang==='en'?'Property ROI · simulated cashflow / stated property value':'ROI immobile · cashflow simulato / valore immobile indicato') : (lang==='en'?'Property ROI · simulated cashflow / purchase price':'ROI immobile · cashflow simulato / prezzo d’acquisto');badge.className='';}
   const verdict=document.getElementById('roi-verdict');
   if(verdict) verdict.textContent=cashflow===null
     ? (lang==='en'?'Complete the inputs to calculate your scenario.':'Completa i dati per calcolare il tuo scenario.')

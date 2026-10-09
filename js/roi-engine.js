@@ -20,9 +20,10 @@ function calculateROI(input = {}){
   };
 
   // ================= INPUT =================
-  const price        = safePositive(input.price, 100000);
+  const propertyMode = input.propertyMode === "owned" || input.source === "owned_property" ? "owned" : "purchase";
+  const price        = safePositive(input.price, propertyMode === "owned" ? 0 : 100000);
   const equity       = safePositive(input.equity, 0);
-  const loanAmount   = safePositive(input.loanAmount, price - equity);
+  const loanAmount   = safePositive(input.loanAmount, propertyMode === "owned" ? 0 : Math.max(0, price - equity));
 
   const priceNight   = safePositive(input.priceNight, 100);
   const occupancy    = Math.min(100, safePositive(input.occupancy, 65));
@@ -140,6 +141,7 @@ function calculateROI(input = {}){
 
   const leverageRisk =
     loanAmount <= 0 ? 0 :
+    price <= 0 ? 10 :
     ltv >= 80 ? 10 :
     ltv >= 70 ? 8 :
     ltv >= 60 ? 5 :
@@ -180,6 +182,9 @@ function calculateROI(input = {}){
   const clean = (v) => isFinite(v) ? v : 0;
 
   const result = {
+    propertyMode,
+    propertyROIAvailable: price > 0,
+    ltvAvailable: price > 0,
     price: clean(price),
     equity: clean(equity),
     loan: clean(loanAmount),

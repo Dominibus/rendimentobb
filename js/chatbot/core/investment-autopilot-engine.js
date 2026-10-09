@@ -29,10 +29,14 @@
     }
     const number=id=>{const raw=document.getElementById(id)?.value;return raw==null || String(raw).trim()===''?null:Number(raw);};
     const values={price:number('price'),equity:number('equity'),priceNight:number('priceNight'),expenses:number('expenses'),occupancy:number('occupancy')};
+    const owned=document.getElementById('property-mode')?.value==='owned';
+    const residual=number('owned-loan-amount');
     const checks=[
-      [values.price===null || !Number.isFinite(values.price) || values.price<=0,'Inserisci un prezzo immobile maggiore di zero.','Enter a property price greater than zero.','price'],
-      [values.equity===null || !Number.isFinite(values.equity) || values.equity<0,'Controlla il capitale proprio: serve un importo non negativo.','Check equity: enter a non-negative amount.','equity'],
-      [Number.isFinite(values.price) && Number.isFinite(values.equity) && values.equity>values.price,'Il capitale supera il prezzo immobile: verifica gli importi e quali costi includono.','Equity exceeds the property price: check the amounts and included costs.','equity'],
+      [owned && values.price!==null && (!Number.isFinite(values.price) || values.price<0),'Il valore facoltativo dell’immobile deve essere non negativo.','Optional property value must be non-negative.','price'],
+      [owned && residual!==null && (!Number.isFinite(residual) || residual<0),'Il mutuo residuo deve essere non negativo.','Remaining loan principal must be non-negative.','owned-loan-amount'],
+      [!owned && (values.price===null || !Number.isFinite(values.price) || values.price<=0),'Inserisci un prezzo immobile maggiore di zero.','Enter a property price greater than zero.','price'],
+      [(values.equity===null && !owned) || (values.equity!==null && (!Number.isFinite(values.equity) || values.equity<0)),'Controlla il capitale proprio: serve un importo non negativo.','Check equity: enter a non-negative amount.','equity'],
+      [!owned && Number.isFinite(values.price) && Number.isFinite(values.equity) && values.equity>values.price,'Il capitale supera il prezzo immobile: verifica gli importi e quali costi includono.','Equity exceeds the property price: check the amounts and included costs.','equity'],
       [values.priceNight===null || !Number.isFinite(values.priceNight) || values.priceNight<=0,'Inserisci una tariffa notte maggiore di zero.','Enter a nightly rate greater than zero.','priceNight'],
       [values.expenses===null || !Number.isFinite(values.expenses) || values.expenses<0,'Inserisci i costi mensili in euro. Zero è un’ipotesi da verificare.','Enter monthly costs in euros. Zero is an assumption to verify.','expenses'],
       [values.expenses===0,'Costi mensili a zero: verifica pulizie, utenze, commissioni e manutenzione.','Monthly costs are zero: check cleaning, utilities, fees and maintenance.','expenses'],
@@ -55,7 +59,7 @@
           const decimal=value=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(value);
           const time=new Date(analysis.calculatedAt).toLocaleString(locale);
           lines.push((en?'Current simulator analysis':'Analisi corrente del simulatore')+(analysis.city?' · '+analysis.city:'')+' · '+time);
-          lines.push((metrics.roiBasis==='equity'?(en?'Return on equity: ':'ROI sul capitale proprio: '):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiBasis==='equity' && metrics.equity===0 ? 'N/A' : percent(metrics.roi)));
+          lines.push((metrics.roiBasis==='equity'?(en?'Return on equity: ':'ROI sul capitale proprio: '):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiAvailable===false || (metrics.roiBasis==='equity' && metrics.equity===0) ? 'N/A' : percent(metrics.roi)));
           if(metrics.roiBasis==='equity' && metrics.equity===0)lines.push(en?'Invested equity is zero: equity ROI cannot be calculated. Review cash flow, leverage and debt coverage.':'Il capitale proprio è zero: il ROI equity non è calcolabile. Verifica cashflow, leva e copertura delle rate.');
           lines.push((en?'Simulated annual cashflow after debt: ':'Cashflow annuo simulato dopo mutuo: ')+currency(metrics.annualCashflow),
             (en?'Monthly average: ':'Media mensile: ')+currency(metrics.monthlyCashflow));
@@ -73,7 +77,8 @@
             :metrics.annualCashflow===0
               ?(en?'The scenario breaks even; it leaves no buffer for unforeseen costs.':'Lo scenario è in pareggio: non lascia margine per imprevisti.')
               :(en?'Cashflow is positive under the entered assumptions. Run a separate analysis with lower revenue to test the buffer.':'Il cashflow è positivo nelle ipotesi inserite. Esegui un’analisi separata con ricavi inferiori per verificarne il margine.'));
-          if(metrics.roiBasis==='property')lines.push(en?'This ROI uses the purchase price as its denominator; it is not return on equity.':'Questo ROI usa il prezzo d’acquisto come denominatore; non è il ROI sul capitale proprio.');
+          if(metrics.propertyMode==='owned')lines.push(en?'Already owned property: cashflow is available without a purchase. Startup ROI excludes the value of the house.':'Immobile già di proprietà: il cashflow è disponibile senza acquisto. Il ROI di avvio esclude il valore della casa.');
+          if(metrics.roiBasis==='property' && metrics.propertyMode!=='owned')lines.push(en?'This ROI uses the purchase price as its denominator; it is not return on equity.':'Questo ROI usa il prezzo d’acquisto come denominatore; non è il ROI sul capitale proprio.');
           lines.push(en?'Source: the completed simulator calculation with unchanged inputs. These are estimates, not verified operating results.':'Fonte: calcolo completato nel simulatore con dati invariati. Sono stime, non risultati operativi verificati.');
         }else{
           lines.push(analysis.status==='stale'

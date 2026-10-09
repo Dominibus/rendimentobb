@@ -1167,15 +1167,23 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <button id="mortgage-transfer-clear" type="button" class="btn btn-secondary" data-it="Scollega lo scenario" data-en="Unlink scenario">Scollega lo scenario</button>
         </section>
         <!-- INPUTS -->
+        <div class="input-group rb-property-mode">
+          <label for="property-mode" data-it="Cosa vuoi analizzare?" data-en="What would you like to analyze?">Cosa vuoi analizzare?</label>
+          <select id="property-mode" style="width:100%;padding:12px;border:1px solid #99d6ce;border-radius:12px;background:#f0fdfa;color:#123b32;font-weight:700">
+            <option value="purchase" data-it="Voglio acquistare un immobile" data-en="I want to buy a property">Voglio acquistare un immobile</option>
+            <option value="owned" data-it="Ho già l’immobile" data-en="I already own the property">Ho già l’immobile</option>
+          </select>
+          <p id="owned-property-help" hidden role="note" data-it="Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili." data-en="Estimate revenue, costs and cashflow for a property you already own. Property value is optional and does not create a new loan. With zero startup capital, return on capital and payback are not applicable.">Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili.</p>
+        </div>
         <div class="input-group">
-          <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+          <label id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
           <input type="number" id="price" min="0.01" step="any" required placeholder="150000">
         </div>
 
         <div class="input-group">
-          <label data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
+          <label id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
           <input type="number" id="equity" min="0" step="any" required placeholder="30000">
-<p data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
+<p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
         </div>
 
         <div class="input-group">
@@ -1212,13 +1220,18 @@ value="70">
 <details class="rb-assumptions-panel">
 <summary data-it="Finanziamento, commissioni e imposte del modello" data-en="Financing, commissions and model tax assumptions">Finanziamento, commissioni e imposte del modello</summary>
 <p data-it="Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale." data-en="These values enter the calculation. Defaults are editable assumptions, not lender offers or tax advice.">Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale.</p>
+<div id="owned-loan-group" class="input-group" hidden>
+<label for="owned-loan-amount" data-it="Mutuo residuo da simulare (€)" data-en="Remaining loan principal to model (€)">Mutuo residuo da simulare (€)</label>
+<input id="owned-loan-amount" type="number" value="0" min="0" step="any" inputmode="decimal">
+<p data-it="Lascia 0 se non hai un mutuo. Se inserisci il residuo, imposta sotto tasso e anni rimanenti: la rata è una stima del modello, da confrontare con quella effettiva. Non inserire la stessa rata anche nei costi mensili." data-en="Leave 0 if there is no loan. Otherwise enter the remaining principal and set the rate and remaining years below. The model estimates payments: compare them with actual payments. Do not also include the same payment in monthly costs.">Lascia 0 se non hai un mutuo. Se inserisci il residuo, imposta sotto tasso e anni rimanenti: la rata è una stima del modello, da confrontare con quella effettiva. Non inserire la stessa rata anche nei costi mensili.</p>
+</div>
 <div class="rb-assumptions-grid">
 <div class="input-group"><label for="interestRate" data-it="Tasso annuo mutuo (%)" data-en="Annual loan interest (%)">Tasso annuo mutuo (%)</label><input id="interestRate" type="number" value="3.5" min="0" max="100" step="0.01" inputmode="decimal"></div>
 <div class="input-group"><label for="loanYears" data-it="Durata mutuo (anni)" data-en="Loan term (years)">Durata mutuo (anni)</label><input id="loanYears" type="number" value="20" min="1" max="100" step="1"></div>
 <div class="input-group"><label for="commission" data-it="Commissioni sui ricavi (%)" data-en="Revenue commissions (%)">Commissioni sui ricavi (%)</label><input id="commission" type="number" value="15" min="0" max="100" step="any" inputmode="decimal"></div>
 <div class="input-group"><label for="tax" data-it="Aliquota applicata dal modello (%)" data-en="Model tax rate (%)">Aliquota applicata dal modello (%)</label><input id="tax" type="number" value="21" min="0" max="100" step="any" inputmode="decimal"></div>
 </div>
-<p data-it="Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente." data-en="The loan is derived from price minus equity. Monthly costs should not duplicate commissions and taxes already counted separately.">Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente.</p>
+<p id="purchase-loan-help" data-it="Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente." data-en="The loan is derived from price minus equity. Monthly costs should not duplicate commissions and taxes already counted separately.">Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente.</p>
 </details>
 <p class="rb-save-disclosure" role="note" data-it="Investor e Pro: il salvataggio automatico viene confermato dal messaggio sotto i risultati. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione." data-en="Investor and Pro: automatic saving is confirmed by the message below the results. Results remain simulations, not confirmed properties. Free: results are available in the session.">Investor e Pro: il salvataggio automatico viene confermato dal messaggio sotto i risultati. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione.</p>
 
@@ -1325,8 +1338,8 @@ margin-top:12px;
           text-align:center;
         "
         class="free-only tool-2026-free-notice"
-        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo d’acquisto; è diverso dal ROI sul capitale proprio. Non è un incasso garantito."
-        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / purchase price; it differs from equity ROI. This is not guaranteed income.">
+        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo o valore indicato; senza questo importo non è applicabile. Non è un incasso garantito."
+        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / stated price or value; without that value it is not applicable. This is not guaranteed income.">
         </div>
 
       </div>
@@ -1916,7 +1929,7 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261009-rc78" defer></script>
+<script src="/js/chatbot-loader.js?v=20261009-rc91" defer></script>
   
 <script type="module" src="/js/header.js?v=20261009-rc85"></script>
 <script src="/js/ui-system.js" defer></script>  
@@ -2067,7 +2080,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261009-rc76"></script>
+<script type="module" src="/js/app.js?v=20261009-rc91"></script>
 
 <script>
 

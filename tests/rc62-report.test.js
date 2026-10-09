@@ -5,12 +5,12 @@ import {readFileSync} from 'node:fs';
 import {readInvestmentAssumptions} from '../js/investment-assumptions.js';
 const html=readFileSync(new URL('../dashboard-report/index.html',import.meta.url),'utf8');
 const financing=html.slice(html.indexOf('function getFinancingMetrics('),html.indexOf('const canonicalInvestmentScore'));
-const pdf=html.slice(html.indexOf('async function generatePDF(){'),html.indexOf('// ================= MODAL =================')).replace('const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261008-rc62");','const {readInvestmentAssumptions} = reportHelpers;');
+const pdf=html.slice(html.indexOf('async function generatePDF(){'),html.indexOf('// ================= MODAL =================')).replace('const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261009-rc91");','const {readInvestmentAssumptions} = reportHelpers;');
 const assumptions={schemaVersion:1,calculationVersion:'roi-monthly-v1',source:'simulator',expensesUnit:'monthly_eur',propertyPrice:150000,equity:30000,loanAmount:120000,priceNight:117.41682974559687,occupancy:70,expenses:1000,commission:15,tax:21,interestRate:3.7,loanYears:25};
-async function render({lang='it',city='roma',snapshot=assumptions,authorized=true,changeOwnerOnPage=false,equityAmount=30000}={}){
+async function render({lang='it',city='roma',snapshot=assumptions,authorized=true,changeOwnerOnPage=false,equityAmount=30000,propertyAmount=150000}={}){
  const calls=[],errors=[];let pages=1,saved=false;
  const doc=new Proxy({text:(text,x,y)=>{calls.push({text:Array.isArray(text)?text.join(' '):text,x,y,page:pages});},addPage:()=>{pages++;if(changeOwnerOnPage)context.window.currentUser={uid:'another-owner'};},getNumberOfPages:()=>pages,splitTextToSize:(text)=>[text],save:()=>{saved=true;}},{get:(target,key)=>key in target?target[key]:(()=>{})});
- const sim={id:'analysis-id',city,price:150000,equity:equityAmount,net:6144.64,roi:20.4821,risk:25,score:79,verdict:'BUY',annualDebtService:7364.36,netOperatingIncome:17100,assumptions:snapshot};
+ const sim={id:'analysis-id',city,price:propertyAmount,equity:equityAmount,net:6144.64,roi:20.4821,risk:25,score:79,verdict:'BUY',annualDebtService:7364.36,netOperatingIncome:17100,assumptions:snapshot};
  const context={reportHelpers:{readInvestmentAssumptions},reportOwnerUid:'owner',dashboardReportContext:{pms:{properties:4,totalRevenue:8710}},window:{currentLang:lang,currentUser:{uid:'owner'},jspdf:{jsPDF:class{constructor(){return doc;}}},getUserAccess:()=>({isPro:authorized}),dashboardSimulations:[sim],RB_MARKET_DATA:{roma:{roi:9.8}}},document:{getElementById:id=>id==='simulationSelector'?{value:'0'}:null},showUpgradeModal:()=>{},alert:x=>errors.push(x),console:{error:(...x)=>errors.push(x)},Date,Intl,Number,isFinite};
  vm.createContext(context);vm.runInContext(financing+pdf,context);await context.generatePDF();assert.deepEqual(errors,[]);return {calls,pages,saved,text:calls.map(x=>x.text).join('\n')};
 }
@@ -50,4 +50,10 @@ test('zero-equity PDF never represents ROE or equity payback as zero',async()=>{
   assert.ok(!performance.some(x=>/^0[.,]0 (anni|years)$/.test(x.text)));
   assert.ok(!financing.some(x=>x.text==='0.0%'));
  }
+});
+
+test('owned zero-value PDF keeps property yields and LTV unavailable and identifies the owned source',async()=>{
+ const result=await render({equityAmount:0,propertyAmount:0,snapshot:{...assumptions,source:'owned_property',propertyPrice:0,equity:0,loanAmount:0}});
+ assert.equal(result.saved,true);assert.match(result.text,/Immobile già di proprietà/);assert.match(result.text,/Non indicato/);
+ assert.doesNotMatch(result.text,/NaN|Infinity/);
 });

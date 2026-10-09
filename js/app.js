@@ -4,13 +4,15 @@ import "./investment-journey.js?v=20261008-rc60";
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
-import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261008-rc59";
-import { calculateROI } from "./roi-engine.js?v=20261009-rc76";
+import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
+import { calculateROI } from "./roi-engine.js?v=20261009-rc91";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
-import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
+import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
+import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261009-rc91";
+initPropertyMode(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
-import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc73";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
 
 import {
 renderMarketBenchmark
@@ -1487,22 +1489,23 @@ const higherOccupancy = Math.min(100, baseOccupancy + 10);
 const lower = calculateROI({...inputs, occupancy: lowerOccupancy});
 const higher = calculateROI({...inputs, occupancy: higherOccupancy});
 const formatROI = value => `${Number(value || 0).toFixed(1)}%`;
+const sensitivityValue = result => result.roiAvailable === false ? formatCurrency(result.netAfterMortgage) : formatROI(result.roi);
 
 container.innerHTML = `
 
 <div class="kpi-box">
   <div class="kpi-label">${lowerOccupancy}% ${t("occupazione", "occupancy")}</div>
-  <div class="kpi-value">${formatROI(lower.roi)}</div>
+  <div class="kpi-value">${sensitivityValue(lower)}</div>
 </div>
 
 <div class="kpi-box">
   <div class="kpi-label">${t("Base", "Base")} · ${baseOccupancy}%</div>
-  <div class="kpi-value">${formatROI(baseResult.roi)}</div>
+  <div class="kpi-value">${sensitivityValue(baseResult)}</div>
 </div>
 
 <div class="kpi-box">
   <div class="kpi-label">${higherOccupancy}% ${t("occupazione", "occupancy")}</div>
-  <div class="kpi-value">${formatROI(higher.roi)}</div>
+  <div class="kpi-value">${sensitivityValue(higher)}</div>
 </div>
 
 `;
@@ -3596,6 +3599,7 @@ if(access.isPro || access.isAdmin){
 
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
+    const propertyMode = isTool && document.getElementById("property-mode")?.value === "owned" ? "owned" : "purchase";
 
     const monthlyCostsInput =
       isTool
@@ -3631,7 +3635,7 @@ if(access.isPro || access.isAdmin){
         }
       }
       const equityField = document.getElementById("equity");
-      if(getValue("equity") > getValue("price")){
+      if(propertyMode !== "owned" && getValue("equity") > getValue("price")){
         equityField?.setCustomValidity?.(t("Il capitale proprio non può superare il prezzo immobile in questo modello.", "Equity cannot exceed the property price in this model."));
         equityField?.reportValidity?.(); window.isCalculating = false; window.__preventRecalculate = false; return;
       }
@@ -3639,7 +3643,7 @@ if(access.isPro || access.isAdmin){
     }
 
 
-    const price       = isTool ? getValueOrDefault("price", 100000) : getValueOrDefault("qr_price", 100000);
+    const price       = isTool ? (propertyMode === "owned" ? getValue("price") : getValueOrDefault("price", 100000)) : getValueOrDefault("qr_price", 100000);
     const equityInput = getValue("equity");
 
     let equity = isTool
@@ -3648,7 +3652,7 @@ if(access.isPro || access.isAdmin){
 
 // 🔥 EQUITY CANNOT EXCEED PRICE
 
-if(equity > price){
+if(propertyMode !== "owned" && equity > price){
 
   equity = price;
 
@@ -3667,7 +3671,7 @@ if(!isTool && equity < minEquity){
     const expensesUnit = isTool ? "monthly_eur" : "percentage";
 
     if(isTool){
-      for(const id of ["interestRate", "loanYears", "commission", "tax"]){
+      for(const id of ["interestRate", "loanYears", "commission", "tax", ...(propertyMode === "owned" ? ["owned-loan-amount"] : [])]){
         const field = document.getElementById(id);
         if(field?.reportValidity && !field.reportValidity()){
           field.closest("details")?.setAttribute("open", "");
@@ -3707,7 +3711,7 @@ if(!isTool && equity < minEquity){
 );
 
 const loanAmount =
-  getValueOrDefault("loanAmount", calculatedLoan);
+  propertyMode === "owned" ? getValue("owned-loan-amount") : getValueOrDefault("loanAmount", calculatedLoan);
     const interestRate = getValueOrDefault("interestRate", 3.5);
     const loanYearsInput = getValueOrDefault("loanYears", 20);
     const loanYears = loanYearsInput > 0 ? loanYearsInput : 20;
@@ -3718,6 +3722,7 @@ const loanAmount =
 
 const investmentInputSignature = investmentAnalysisState.capture();
 const result = calculateROI({
+  propertyMode,
   price,
   equity,
   priceNight,
@@ -4672,7 +4677,7 @@ if(riskPreview){
 
 runPostAnalysis(result,{
 
-  assumptions: buildInvestmentAssumptions(result, {commission, tax, interestRate, loanYears}, isTool ? "simulator" : "home_preview"),
+  assumptions: buildInvestmentAssumptions(result, {commission, tax, interestRate, loanYears}, isTool ? (propertyMode === "owned" ? "owned_property" : "simulator") : "home_preview"),
 
   price,
 
@@ -4702,7 +4707,9 @@ runPostAnalysis(result,{
   ) / 12
 
 });
+    Object.assign(window.lastAnalysisData || (window.lastAnalysisData = {}), {propertyMode, propertyROIAvailable:result.propertyROIAvailable, roiAvailable:result.roiAvailable});
     renderFreeSimulationPreview(result, {access, document, lang:window.currentLang});
+    renderPropertyModeResults(window.lastAnalysisData, {window, document, access});
 
     // ================= MARKET =================
     if(access.isFree){
@@ -4781,7 +4788,7 @@ runPostAnalysis(result,{
   renderRevenueForecast?.(gross);
 
   renderOccupancySensitivity?.(result, {
-    price, equity, priceNight, occupancy, expenses, expensesUnit,
+    propertyMode, price, equity, priceNight, occupancy, expenses, expensesUnit,
     commission, tax, loanAmount, interestRate, loanYears
   });
 
@@ -4791,7 +4798,7 @@ runPostAnalysis(result,{
       renderMarketComparison?.(gross, window.currentCity);
       renderRevenueForecast?.(gross);
       renderOccupancySensitivity?.(result, {
-        price, equity, priceNight, occupancy, expenses, expensesUnit,
+        propertyMode, price, equity, priceNight, occupancy, expenses, expensesUnit,
         commission, tax, loanAmount, interestRate, loanYears
       });
 
@@ -5655,6 +5662,7 @@ const riskScore = Math.max(
 );
   
 // ================= SAFE FINANCIAL DATA =================
+const isOwnedProperty = d.assumptions?.source === "owned_property";
 
 const revenue = safe(
   d.revenueAnnual ??
@@ -6180,8 +6188,8 @@ doc.text(
 const executiveKPIs = [
 
 {
-title:T("Prezzo immobile","Property Price"),
-value:eur(price),
+title:isOwnedProperty ? T("Valore immobile","Property value") : T("Prezzo immobile","Property Price"),
+value:isOwnedProperty && price === 0 ? T("Non indicato","Not provided") : eur(price),
 subtitle:T("Valore dell'asset","Asset Value")
 },
 
@@ -6437,14 +6445,9 @@ doc.text(T("Richiesta finanziamento","Loan request"),20,y);
 
 y+=12;
 
-const safePrice =
-  Math.max(
-    price,
-    1
-  );
+const safePrice = price;
 
-const ltv =
-  (loan / safePrice) * 100;
+const ltv = safePrice > 0 ? (loan / safePrice) * 100 : null;
 
 const financingRate =
   safe(
@@ -6505,7 +6508,7 @@ row(
 
 row(
   "LTV",
-  ltv.toFixed(1) + "%"
+  ltv === null ? "N/A" : ltv.toFixed(1) + "%"
 );
 
 row(
@@ -6553,7 +6556,7 @@ if(incomeTaxCost > 0){
 
 row(
   "Cap Rate",
-  capRate.toFixed(2) + "%"
+  price > 0 ? capRate.toFixed(2) + "%" : "N/A"
 );
 
 row(
@@ -6820,8 +6823,11 @@ y += 10;
 const insights = [];
 
 // ROI
+if(d.assumptions?.source === "owned_property") insights.push(T("Immobile già di proprietà: il capitale di avvio esclude il valore della casa. Il ROI di avvio non è il rendimento dell’intero patrimonio immobiliare.","Already owned property: startup capital excludes the house value. Startup ROI is not return on the entire property asset."));
 insights.push(equity <= 0
-  ? T("Finanziamento al 100%: ROI equity non applicabile. Valuta cashflow, servizio del debito e costi accessori.","100% financing: equity ROI is not applicable. Assess cash flow, debt service and transaction costs.")
+  ? (d.assumptions?.source === "owned_property"
+    ? T("Immobile già di proprietà: nessun capitale di avvio indicato. ROI sul capitale non applicabile; valuta ricavi, costi e cashflow.","Already owned property: no startup capital provided. Return on capital is not applicable; assess revenue, costs and cashflow.")
+    : T("Finanziamento al 100%: ROI equity non applicabile. Valuta cashflow, servizio del debito e costi accessori.","100% financing: equity ROI is not applicable. Assess cash flow, debt service and transaction costs."))
   : T("Il ROI deriva dalle ipotesi inserite; il riferimento interno non è un confronto di mercato verificato.","ROI derives from the entered assumptions; the internal reference is not a verified market comparison."));
 
 // Cashflow
@@ -7513,6 +7519,7 @@ function applySelectedMortgage(){
   document.getElementById("interestRate").value = String(scenario.rate);
   document.getElementById("loanYears").value = String(scenario.years);
   // Do not invent the purchase price or equity: imported principal is reconciled once price is entered.
+  window.rbSetPropertyMode?.("purchase");
   document.getElementById("price").value = scenario.propertyPrice === undefined ? "" : String(scenario.propertyPrice);
   document.getElementById("equity").value = scenario.propertyPrice === undefined ? "" : String(scenario.propertyPrice - scenario.amount);
   for(const field of ["occupancy", "expenses", "commission", "tax"]){
@@ -8743,6 +8750,7 @@ if(!window.__rbToolLanguageRefreshBound){
     }
 
     renderFreeSimulationPreview(data, {access:window.getUserAccess?.(), document, lang:window.currentLang});
+    renderPropertyModeResults(data, {window, document, access:window.getUserAccess?.()});
 
     const resultCity = document.getElementById("tool-result-city");
     if(resultCity){

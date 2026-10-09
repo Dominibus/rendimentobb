@@ -6,7 +6,7 @@ export function readInvestmentAssumptions(value){
   if(!value || typeof value !== 'object' || Array.isArray(value)) return null;
   if(Object.keys(value).length !== keys.length || keys.some(key=>!Object.hasOwn(value,key))) return null;
   if(value.schemaVersion !== 1 || value.calculationVersion !== 'roi-monthly-v1') return null;
-  if(!['simulator','home_preview'].includes(value.source) || !['monthly_eur','percentage'].includes(value.expensesUnit)) return null;
+  if(!['simulator','home_preview','owned_property'].includes(value.source) || !['monthly_eur','percentage'].includes(value.expensesUnit)) return null;
   for(const key of fields){
     const limit = ['occupancy','commission','tax'].includes(key) || (key==='expenses' && value.expensesUnit==='percentage') ? 100 : key==='loanYears' ? 100 : key==='interestRate' ? 100 : 1e12;
     if(typeof value[key] !== 'number' || !Number.isFinite(value[key]) || value[key]<0 || value[key]>limit) return null;
@@ -30,6 +30,7 @@ export function investmentAssumptionsHTML(value, lang='it'){
   const n=v=>new Intl.NumberFormat(en?'en-GB':'it-IT',{maximumFractionDigits:2}).format(v);
   const eur=v=>new Intl.NumberFormat(en?'en-GB':'it-IT',{style:'currency',currency:'EUR'}).format(v);
   const rows=[
+    ...(a.source==='owned_property' ? [[en?'Scenario':'Scenario',en?'Already owned property':'Immobile già di proprietà'],[en?'Property value (optional)':'Valore immobile (facoltativo)',a.propertyPrice>0?eur(a.propertyPrice):(en?'Not provided':'Non indicato')],[en?'Startup capital':'Capitale per avvio',eur(a.equity)]] : []),
     [en?'Nightly rate':'Tariffa notte',eur(a.priceNight)],
     [en?'Occupancy':'Occupazione',n(a.occupancy)+'%'],
     [a.expensesUnit==='percentage'?(en?'Costs (% of revenue)':'Costi (% dei ricavi)'):(en?'Monthly costs':'Costi mensili'),a.expensesUnit==='percentage'?n(a.expenses)+'%':eur(a.expenses)],

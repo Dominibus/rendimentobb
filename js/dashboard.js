@@ -1,4 +1,4 @@
-import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261008-rc59";
+import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
 import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
@@ -890,6 +890,7 @@ const analyses = querySnapshot.docs.map(doc => {
   return {
 
     id: doc.id,
+    propertyMode: assumptions?.source === "owned_property" ? "owned" : "purchase",
 
     roi:
       financialNumber(data.equity) === 0 || data.roiAvailable === false ? null : financialNumber(data.roi),
@@ -1521,12 +1522,12 @@ if(isNew){
       </div>
 
       <div class="metric">
-        <span>${t("Prezzo immobile","Property price")}</span>
-        <strong>${formatCurrency(price)}</strong>
+        <span>${data.propertyMode === "owned" ? t("Valore immobile (facoltativo)","Property value (optional)") : t("Prezzo immobile","Property price")}</span>
+        <strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong>
       </div>
 
       <div class="metric">
-        <span>${t("Equity investita","Equity invested")}</span>
+        <span>${data.propertyMode === "owned" ? t("Capitale di avvio","Startup capital") : t("Equity investita","Equity invested")}</span>
         <strong>${formatCurrency(equity)}</strong>
       </div>
 
@@ -1688,6 +1689,9 @@ window.bestInvestmentData = best;
 
 window.lastAnalysisData = {
 
+  propertyMode: best?.propertyMode || "purchase",
+  assumptions: best?.assumptions || null,
+  propertyROIAvailable: Number(best?.price) > 0,
   roi:
     financialNumber(best?.roi),
   roiAvailable: best?.roiAvailable !== false,
@@ -1853,12 +1857,12 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- DATI BASE (SEMPRE VISIBILI) -->
 <div class="metric">
-<span>${t("Prezzo immobile","Property price")}</span>
-<strong>${formatCurrency(best.price)}</strong>
+<span>${best.propertyMode === "owned" ? t("Valore immobile (facoltativo)","Property value (optional)") : t("Prezzo immobile","Property price")}</span>
+<strong>${best.propertyMode === "owned" && best.price === 0 ? t("Non indicato", "Not provided") : formatCurrency(best.price)}</strong>
 </div>
 
 <div class="metric">
-<span>${t("Equity investita","Equity invested")}</span>
+<span>${best.propertyMode === "owned" ? t("Capitale di avvio","Startup capital") : t("Equity investita","Equity invested")}</span>
 <strong>${formatCurrency(best.equity)}</strong>
 </div>
 
@@ -2062,7 +2066,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
     const roi = financialNumber(data.roi);
     const yearlyCashflow = financialNumber(data.net);
     const risk = financialNumber(data.risk);
-    const complete = price > 0 && equity !== null && equity >= 0 && (equity === 0 || Number.isFinite(roi)) && Number.isFinite(yearlyCashflow);
+    const complete = (price > 0 || (data.propertyMode === "owned" && price === 0)) && equity !== null && equity >= 0 && (equity === 0 || Number.isFinite(roi)) && Number.isFinite(yearlyCashflow);
 
     return `
       <article class="portfolio-manager__item">
@@ -2079,7 +2083,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
         </div>
 
         <div class="portfolio-manager__metrics">
-          <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
+          <div><span>${t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
           <div><span>ROI</span><strong>${equity === 0 ? "N/A" : formatPercent(roi)}</strong></div>
           <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
@@ -2958,7 +2962,7 @@ function renderInvestmentIntelligence(rows = []){
   container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
     <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
     <div class="metric"><span>${t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
-    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties.")}</p>
+    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%. Per le case già possedute, il capitale di avvio esclude il valore della casa.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties. For already owned properties, startup capital excludes the value of the house.")}</p>
     <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
     <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
     <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
@@ -3285,7 +3289,7 @@ async function handleReportClick(){
   // ✅ PRO → DASHBOARD REPORT
   const data = window.bestInvestmentData;
   const price = Number(data?.propertyPrice ?? data?.price);
-  if(!data || !Number.isFinite(price) || price <= 0){
+  if(!data || !Number.isFinite(price) || price < 0 || (price === 0 && data.propertyMode !== "owned" && data.assumptions?.source !== "owned_property")){
     alert(t(
       "Salva una simulazione valida prima di aprire il report professionale.",
       "Save a valid simulation before opening the professional report."
