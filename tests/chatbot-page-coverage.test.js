@@ -28,7 +28,7 @@ test('every page exposing the shared Assistant has a centralized loader fallback
  for(const url of await htmlFiles()){
   const html=await readFile(url,'utf8');
   if(html.includes('/js/header.js')){covered++;const tags=html.match(/<script\b[^>]*src="[^"]*chatbot-loader\.js[^\"]*"[^>]*>/g)||[];assert.ok(tags.length<=1,`${url.pathname}: duplicate explicit loader`);}
-  else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html'),`Unexpected page without shared header: ${url.pathname}`);
+  else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html')||url.pathname.endsWith('/account-action/index.html'),`Unexpected page without shared header: ${url.pathname}`);
  }
  assert.equal(covered,37);
 });

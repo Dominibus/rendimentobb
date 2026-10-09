@@ -46,6 +46,7 @@ window.rbSendVerificationEmail=async()=>{
  const user=auth.currentUser;
  if(!user||user.uid!==window.currentUser?.uid)throw Error('LOGIN_REQUIRED');
  if(user.emailVerified)return;
+ auth.languageCode=window.currentLang==='en'?'en':'it';
  await sendEmailVerification(user);
 };
 export const db = getFirestore(app);
