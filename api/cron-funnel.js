@@ -10,20 +10,23 @@ import admin from "firebase-admin";
 import crypto from "node:crypto";
 import { buildBrandedEmail, sendCheckedEmail } from "../lib/email-templates.js";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// ================= FIREBASE =================
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-    })
-  });
+// Initialize only after authorization, inside the handler's error boundary.
+function cronServices() {
+  if (!admin.apps.length) {
+    const {FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY} = process.env;
+    if (![FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY].every(value => typeof value === "string" && value.trim())) {
+      const error = new Error("cron_configuration_missing");
+      error.code = "cron_configuration_missing";
+      throw error;
+    }
+    admin.initializeApp({credential:admin.credential.cert({
+      projectId:FIREBASE_PROJECT_ID,
+      clientEmail:FIREBASE_CLIENT_EMAIL,
+      privateKey:FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+    })});
+  }
+  return {db:admin.firestore(),resend:new Resend(process.env.RESEND_API_KEY)};
 }
-
-const db = admin.firestore();
 
 function hasValidCronAuthorization(req) {
   const cronSecret = process.env.CRON_SECRET;
@@ -67,9 +70,14 @@ export default async function handler(req, res){
 
   if(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production") return res.status(200).json({success:true,skipped:true,reason:"production_only"});
 
+  const runId = crypto.randomUUID();
+  const startedAt = Date.now();
+  let phase = "initialization";
+  console.info("RB_CRON_START", {runId});
   try{
-
-    const now = Date.now();
+    const {db,resend} = cronServices();
+    const now = startedAt;
+    phase = "pms";
     let pmsNotifications,pmsReminders,pmsError=false;
     try{
       try{
@@ -84,6 +92,7 @@ export default async function handler(req, res){
     }
 
 
+    phase = "analysis_reminders";
     const funnelStats={checked:0,sent:0,suppressed:0,errors:0,manualReview:0,budgetExhausted:false};
     const snapshot = await db.collection("email_funnel").get();
 
@@ -239,17 +248,21 @@ ${lang==="en"?"Stop analysis reminders":"Interrompi i promemoria"}: ${unsubscrib
     }
 
     await db.collection("_pms_jobs").doc("analysis_reminders").set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...funnelStats,success:funnelStats.errors===0,needsAttention:funnelStats.errors>0 || funnelStats.manualReview>0 || funnelStats.budgetExhausted});
+    console.info("RB_CRON_COMPLETE", {runId,durationMs:Date.now()-startedAt,success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pms:{sent:pmsNotifications?.sent || 0,queued:pmsReminders?.queued || 0,error:pmsError}});
     return res.status(pmsError || funnelStats.errors>0?503:200).json({success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
 
   }
 
   catch(err){
-
+    // Do not log provider messages, recipients, tokens or Firebase private keys.
+    const error = err?.code === "cron_configuration_missing" ? "cron_configuration_missing" : "cron_error";
+    console.error("RB_CRON_FAILED", {runId,phase,error,durationMs:Date.now()-startedAt});
     return res.status(500).json({
 
       success:false,
 
-      error:"cron_error"
+      error,
+      runId
 
     });
 

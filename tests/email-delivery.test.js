@@ -10,7 +10,7 @@ import crypto from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {buildBrandedEmail,sendCheckedEmail} from '../lib/email-templates.js';
 function harness(file,failRecipient=''){
- const stores=new Map(),sent=[];let sequence=0;
+ const stores=new Map(),sent=[],logs=[];let sequence=0;
  const apply=(target,patch)=>{for(const [key,value] of Object.entries(patch)){const path=key.split('.');let obj=target;while(path.length>1){const k=path.shift();obj=obj[k]??=( {} );}obj[path[0]]=value;}};
  const collection=name=>{
   if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);
@@ -22,10 +22,10 @@ function harness(file,failRecipient=''){
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:file==='api/work-email.js'?'user@example.test':'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
+ const ctx={hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
- return {run,stores,sent,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
+ return {run,stores,sent,logs,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
 }
 test('shared email is fluid table-based, escapes submitted content and supplies complete plain text',()=>{
  const mail=buildBrandedEmail({title:'<script>x</script>',intro:'Test',rows:[['Note','A & B\nsecond line']],ctaLabel:'Open',ctaURL:'javascript:alert(1)'});
@@ -197,4 +197,36 @@ test('reusing a public request ID for another email does not expose delivery met
  const h=harness('api/send-lead.js');await h.run({email:'first@example.test',type:'analysis',requestId:'same-public-request'});
  const count=h.sent.length;const r=await h.run({email:'second@example.test',type:'analysis',requestId:'same-public-request'});
  assert.equal(r.status,409);assert.equal(r.body.error,'request_id_conflict');assert.equal(r.body.emailDelivery,undefined);assert.equal(h.sent.length,count);
+});
+
+
+test('cron initializes only after authorization and reports missing configuration safely',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.admin.apps=[];
+ h.ctx.process.env.CRON_SECRET='private-secret';
+ assert.equal((await h.run({},'GET','wrong')).status,401);
+ assert.equal(h.logs.length,0);assert.equal(h.stores.size,0);
+ const r=await h.run({},'GET','private-secret');
+ assert.equal(r.status,500);assert.equal(r.body.error,'cron_configuration_missing');
+ assert.equal(typeof r.body.runId,'string');assert.equal(h.sent.length,0);
+ assert.equal(h.logs[0][0],'RB_CRON_START');assert.equal(h.logs[1][0],'RB_CRON_FAILED');
+ assert.equal(h.logs[1][1].phase,'initialization');
+ assert.ok(!JSON.stringify(h.logs).includes('private-secret'));
+});
+test('successful empty cron has correlated start/completion logs with safe zero counters',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);
+ const start=h.logs.find(row=>row[0]==='RB_CRON_START')[1];
+ const complete=h.logs.find(row=>row[0]==='RB_CRON_COMPLETE')[1];
+ assert.equal(start.runId,complete.runId);assert.equal(complete.funnel.sent,0);
+ assert.equal(complete.success,true);assert.equal(complete.pms.sent,0);
+});
+test('cron failure log identifies its phase without leaking the database error message',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const original=h.ctx.admin.firestore;
+ h.ctx.admin.firestore=()=>({collection:()=>{throw Error('sensitive@example.test private-key');}});
+ h.ctx.admin.firestore.FieldValue=original.FieldValue;
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,500);
+ const failure=h.logs.find(row=>row[0]==='RB_CRON_FAILED')[1];
+ assert.equal(failure.phase,'analysis_reminders');assert.equal(failure.error,'cron_error');
+ assert.ok(!JSON.stringify(h.logs).includes('sensitive@example.test'));
 });
