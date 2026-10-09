@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const source = fs.readFileSync(new URL('../js/dashboard.js', import.meta.url), 'utf8');
+const handler = source.slice(source.indexOf('async function handleReportClick()'), source.indexOf('// ================= GLOBAL CLICK HANDLER', source.indexOf('async function handleReportClick()')));
+assert.match(handler, /price === 0 && data\.propertyMode !== "owned"/);
+assert.match(handler, /let reportPMS = null/);
+assert.match(handler, /Optional PMS snapshot unavailable for investment report/);
+assert.doesNotMatch(handler, /Impossibile preparare il report/);
+assert.match(handler, /window\.RBReportCache\.write/);
+assert.match(handler, /window\.location\.href/);
+assert.match(handler, /if\(!isPro\)/);
+console.log('RC93: owned-property report route, optional PMS and Pro gating verified');

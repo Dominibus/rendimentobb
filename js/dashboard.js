@@ -3299,10 +3299,13 @@ async function handleReportClick(){
   const reportOwner = auth.currentUser?.uid;
   if(!reportOwner) return;
 
-  // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
+  // Il report finanziario non dipende dalla disponibilità dei dati PMS.
+  // Se lo snapshot operativo non è pronto, il report si apre senza inventare
+  // metriche PMS; la pagina report gestisce i dati operativi assenti.
+  let reportPMS = null;
   try{
     const pms = await getOwnedReportPMS(reportOwner);
-    const reportPMS = {
+    reportPMS = {
       properties: Number(pms.properties || 0),
       bookings: Number(pms.bookings || 0),
       totalRevenue: Number(pms.totalRevenue || 0),
@@ -3325,17 +3328,17 @@ async function handleReportClick(){
           }))
         : []
     };
-    window.RBReportCache.write(
-      reportOwner,
-      [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
-      {generatedAt: new Date().toISOString(), pms: reportPMS},
-      sessionStorage, localStorage
-    );
   }catch(error){
-    dashboardDebug("Dashboard report PMS snapshot unavailable", error);
-    alert(t("Impossibile preparare il report. Riprova dalla dashboard.", "Unable to prepare the report. Please retry from the dashboard."));
-    return;
+    dashboardDebug("Optional PMS snapshot unavailable for investment report", error);
   }
+  // Non procedere se la sessione è cambiata durante la lettura asincrona.
+  if(auth.currentUser?.uid !== reportOwner || window.currentUser?.uid !== reportOwner) return;
+  window.RBReportCache.write(
+    reportOwner,
+    [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
+    {generatedAt: new Date().toISOString(), ...(reportPMS ? {pms: reportPMS} : {})},
+    sessionStorage, localStorage
+  );
 
   const params = new URLSearchParams({source: "dashboard"});
 
