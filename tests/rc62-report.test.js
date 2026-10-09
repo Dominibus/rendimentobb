@@ -44,6 +44,7 @@ test('zero-equity PDF never represents ROE or equity payback as zero',async()=>{
   const result=await render({lang,equityAmount:0,snapshot:{...assumptions,equity:0,loanAmount:150000}});
   const performance=result.calls.filter(x=>x.page===2),financing=result.calls.filter(x=>x.page===3);
   assert.ok(performance.some(x=>x.text==='N/A'));
+  assert.ok(performance.some(x=>x.text.includes(lang==='en'?'With zero equity':'Con capitale proprio zero')));
   assert.ok(financing.some(x=>x.text==='ROE'));
   assert.ok(financing.some(x=>x.text==='N/A'));
   assert.ok(!performance.some(x=>/^0[.,]0 (anni|years)$/.test(x.text)));

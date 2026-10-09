@@ -1063,6 +1063,7 @@ IPOTESI SALVATE
   width:100%;
   ">
     <canvas id="roiChart"></canvas>
+    <div id="roi-chart-unavailable" role="status" hidden style="padding:32px;background:#f8fafc;border-radius:16px;color:#334155;line-height:1.6"></div>
   </div>
 
   <!-- ACTION BAR -->
@@ -1671,6 +1672,16 @@ function renderChart(){
     roiChartInstance.destroy();
     roiChartInstance = null;
   }
+
+  const unavailable = document.getElementById("roi-chart-unavailable");
+  canvas.hidden = equity <= 0;
+  if(unavailable){
+    unavailable.hidden = equity > 0;
+    unavailable.textContent = lang === "en"
+      ? "Equity ROI: N/A. With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately."
+      : "ROI sul capitale proprio: N/A. Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.";
+  }
+  if(equity <= 0) return;
 
   requestAnimationFrame(()=>{
     roiChartInstance = new Chart(canvas,{
@@ -2334,7 +2345,15 @@ const verdictColor =
     doc.setTextColor(...dark);
     doc.text(t("Performance finanziaria","Financial performance"),20,20);
 
-    try{
+    if(equity <= 0){
+      doc.setFillColor(248,250,252);
+      doc.roundedRect(20,32,170,55,4,4,"F");
+      doc.setFontSize(12);
+      doc.setTextColor(...dark);
+      doc.text(t("ROI sul capitale proprio: N/A","Equity ROI: N/A"),26,45);
+      doc.setFontSize(10);
+      doc.text(doc.splitTextToSize(t("Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.","With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately."),156),26,57);
+    }else try{
       const canvas = document.getElementById("roiChart");
       if(canvas){
         const img = canvas.toDataURL("image/png");
@@ -2733,7 +2752,7 @@ if(riskBreakdown){
   doc.setTextColor(71,85,105);
   doc.text(
     [
-      `${t("Base prudenziale","Prudential base")} +${safe(riskBreakdown.base)}  ·  ${t("ROI equity","Equity ROI")} +${safe(riskBreakdown.roi)}  ·  ${t("Occupazione","Occupancy")} +${safe(riskBreakdown.occupancy)}`,
+      `${t("Base prudenziale","Prudential base")} +${safe(riskBreakdown.base)}  ·  ${equity <= 0 ? t("ROI N/A: escluso","ROI N/A: excluded") : `${t("ROI equity","Equity ROI")} +${safe(riskBreakdown.roi)}`}  ·  ${t("Occupazione","Occupancy")} +${safe(riskBreakdown.occupancy)}`,
       `${t("Leva LTV","LTV leverage")} +${safe(riskBreakdown.leverage)}  ·  ${t("Copertura DSCR","DSCR coverage")} +${safe(riskBreakdown.debtCoverage)}  ·  ${t("Cashflow","Cashflow")} +${safe(riskBreakdown.cashflow)}`
     ],
     20,
