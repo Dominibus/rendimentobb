@@ -1057,7 +1057,7 @@ IPOTESI SALVATE
   </div>
 
   <!-- CHART -->
-  <div style="
+  <div id="roi-chart-frame" style="
   height:420px;
   position:relative;
   width:100%;
@@ -1674,7 +1674,10 @@ function renderChart(){
   }
 
   const unavailable = document.getElementById("roi-chart-unavailable");
+  const frame = document.getElementById("roi-chart-frame");
+  if(frame) frame.style.height = equity <= 0 ? "auto" : "420px";
   canvas.hidden = equity <= 0;
+  canvas.style.display = equity <= 0 ? "none" : "block";
   if(unavailable){
     unavailable.hidden = equity > 0;
     unavailable.textContent = lang === "en"

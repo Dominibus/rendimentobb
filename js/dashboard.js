@@ -12826,108 +12826,66 @@ borderSkipped:false
 }
 
 function getDayBookingState(currentDate, bookingList, isEnglish){
+  const bookings = bookingList.filter(booking =>
+    isConfirmedBooking(booking) && booking.checkin && booking.checkout &&
+    currentDate >= String(booking.checkin) && currentDate <= String(booking.checkout)
+  );
+  const isCheckin = bookings.some(booking => currentDate === String(booking.checkin));
+  const isCheckout = bookings.some(booking => currentDate === String(booking.checkout));
+  const isStay = bookings.some(booking => currentDate >= String(booking.checkin) && currentDate < String(booking.checkout));
+  const color = isCheckout ? "#f97316" : isCheckin ? "#3b82f6" : isStay ? "#10b981" : "";
+  const tooltip = bookings.map(booking => {
+    const guest = booking.guestName || (isEnglish ? "Guest" : "Ospite");
+    const event = currentDate === String(booking.checkout) ? (isEnglish ? "Departure" : "Partenza")
+      : currentDate === String(booking.checkin) ? (isEnglish ? "Arrival" : "Arrivo")
+      : (isEnglish ? "Stay" : "Soggiorno");
+    return `${event}: ${guest}`;
+  }).join(" · ");
+  return {color, tooltip, bookingInfo: bookings.length === 1 ? bookings[0] : null,
+    bookings, isCheckin, isCheckout, isStay};
+}
 
-    let color = "";
-    let tooltip = "";
-    let bookingInfo = null;
-
-    let isCheckin = false;
-    let isCheckout = false;
-    let isStay = false;
-
-    bookingList.forEach(booking=>{
-
-        if(!isConfirmedBooking(booking)) return;
-
-        const checkin = String(booking.checkin || "");
-        const checkout = String(booking.checkout || "");
-
-        const guestName =
-            booking.guestName ||
-            (isEnglish ? "Guest" : "Ospite");
-
-        const status =
-            String(
-                booking.status || ""
-            ).toLowerCase();
-
-        if(
-            currentDate >= checkin &&
-            currentDate < checkout
-        ){
-
-            color = "#10b981";
-            tooltip = guestName;
-            bookingInfo = booking;
-            isStay = true;
-
-        }
-
-        if(
-            currentDate === checkin
-        ){
-
-            isCheckin = true;
-
-            color = "#3b82f6";
-
-            tooltip =
-                isEnglish
-                    ? `Arrival: ${guestName}`
-                    : `Arrivo: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-        if(
-            currentDate === checkout
-        ){
-
-            isCheckout = true;
-
-            color = "#f97316";
-
-            tooltip =
-                isEnglish
-                    ? `Departure: ${guestName}`
-                    : `Partenza: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-        if(
-            status === "cancelled" &&
-            currentDate >= checkin &&
-            currentDate <= checkout
-        ){
-
-            color = "#ef4444";
-
-            tooltip =
-                isEnglish
-                    ? `Cancelled: ${guestName}`
-                    : `Cancellata: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-    });
-
-    return {
-
-        color,
-        tooltip,
-        bookingInfo,
-
-        isCheckin,
-        isCheckout,
-        isStay
-
+function openCalendarDayBookings(bookings, isEnglish){
+  if(bookings.length === 1){
+    window.showBookingDetails?.(bookings[0]);
+    return;
+  }
+  if(!bookings.length) return;
+  const ownerUid = window.currentUser?.uid;
+  document.getElementById("pms-calendar-booking-picker")?.remove();
+  const dialog = document.createElement("dialog");
+  dialog.id = "pms-calendar-booking-picker";
+  dialog.setAttribute("aria-labelledby", "pms-calendar-picker-title");
+  dialog.style.cssText = "width:min(560px,90vw);max-height:80vh;overflow:auto;border:1px solid #dbe7e1;border-radius:20px;padding:24px;background:#fff;color:#153b30;box-shadow:0 20px 80px #0003";
+  const title = document.createElement("h2");
+  title.id = "pms-calendar-picker-title";
+  title.textContent = isEnglish ? "Bookings on this day" : "Prenotazioni del giorno";
+  dialog.append(title);
+  const hint = document.createElement("p");
+  hint.textContent = isEnglish ? "Choose the booking to view. Arrivals, stays and departures may belong to different properties."
+    : "Scegli la prenotazione da vedere. Arrivi, soggiorni e partenze possono appartenere a strutture diverse.";
+  dialog.append(hint);
+  bookings.forEach(booking => {
+    const property = window.rbPMSData?.propertyList?.find(item => item.id === booking.propertyId);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${booking.guestName || (isEnglish ? "Guest" : "Ospite")} · ${property?.name || booking.propertyName || (isEnglish ? "Property" : "Struttura")} · ${booking.checkin} → ${booking.checkout}`;
+    button.style.cssText = "display:block;width:100%;margin:10px 0;padding:14px;text-align:left;border:1px solid #cfe4d9;border-radius:12px;background:#f3faf6;color:#153b30;cursor:pointer";
+    button.onclick = () => {
+      dialog.close();
+      if(window.currentUser?.uid !== ownerUid) return;
+      window.showBookingDetails?.(booking);
     };
-
+    dialog.append(button);
+  });
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = isEnglish ? "Close" : "Chiudi";
+  close.onclick = () => dialog.close();
+  dialog.append(close);
+  dialog.addEventListener("close", () => dialog.remove(), {once:true});
+  document.body.append(dialog);
+  dialog.showModal();
 }
 
 function renderPMSCalendar(bookings){
@@ -13250,6 +13208,7 @@ data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
 data-calendar-state="${isCheckout ? "departure" : isCheckin ? "arrival" : isStay ? "stay" : "available"}"
 data-today="${isToday}"
+data-bookings='${escapeDashboardHTML(JSON.stringify(dayState.bookings))}'
 data-booking='${
   bookingInfo
     ? escapeDashboardHTML(
@@ -13321,7 +13280,7 @@ ${day}
 </div>
 
 ${
-bookingInfo
+dayState.bookings.length
 ?
 `
 <div style="
@@ -13332,7 +13291,9 @@ overflow:hidden;
 max-width:90%;
 text-overflow:ellipsis;
 ">
-${escapeDashboardHTML(bookingInfo.guestName || "")}
+${escapeDashboardHTML(dayState.bookings.length > 1
+  ? `${dayState.bookings.length} ${isEnglish ? "bookings" : "prenotazioni"}`
+  : (bookingInfo.guestName || ""))}
 </div>
 `
 :
@@ -13490,39 +13451,9 @@ container
         dayCell.onclick =
           () => {
 
-            const bookingRaw =
-              dayCell.dataset.booking;
-
-
-            if(!bookingRaw){
-
-             
-              return;
-
-            }
-
-
             try{
-
-              const bookingData =
-                JSON.parse(
-                  bookingRaw
-                );
-
-
-              
-
-              if(
-                typeof window.showBookingDetails === "function"
-              ){
-
-                window.showBookingDetails(
-                  bookingData
-                );
-
-              }
-
-
+              const bookings = JSON.parse(dayCell.dataset.bookings || "[]");
+              openCalendarDayBookings(bookings, isEnglish);
             }catch(error){
 
               dashboardError(
