@@ -71,11 +71,12 @@ test('rules protect trial profile fields and use server time with a seven-day bo
 import vm from 'node:vm';
 import {SubscriptionError} from '../lib/account-subscription-service.js';
 import {CheckoutConflict} from '../lib/stripe-checkout-guard.js';
-function apiHarness(enabled=true){
+function apiHarness(enabled=true,legacyEnabled="false"){
  const db=seed();let checkoutCalls=0;const portalCalls=[];
  const stripe={billingPortal:{sessions:{create:async p=>{portalCalls.push(p);return {url:'https://billing.stripe.com/p/owned'};}}}};
  const firestore=()=>db;firestore.Timestamp={fromMillis:timestamp};
- const context={process:{env:{STRIPE_SECRET_KEY:'sk_live_test_boundary',BASE_URL:'https://example.test',RB_INVESTOR_TRIAL_ENABLED:enabled?'true':'false'}},console:{error(){}},Stripe:function(){return stripe;},admin:{apps:[{}],firestore,auth:()=>({verifyIdToken:async()=>({uid:'u1',email:'a@example.test',email_verified:true})})},getStripePrices:()=>({pro:'price_pro'}),TERMS_VERSION,startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError,CheckoutConflict,guardedCheckout:async()=>{checkoutCalls++;return {url:'https://checkout.stripe.com/owned'};}};
+ const context={process:{env:{STRIPE_SECRET_KEY:'sk_live_test_boundary',BASE_URL:'https://example.test',RB_INVESTOR_TRIAL_ENABLED:legacyEnabled,RB_TRIAL_TEST_EMAIL:'pilot@example.test',RB_INVESTOR_TRIAL_PAUSED:enabled?'false':'true'}},console:{error(){}},Stripe:function(){return stripe;},admin:{apps:[{}],firestore,auth:()=>({verifyIdToken:async()=>({uid:'u1',email:'a@example.test',email_verified:true})})},getStripePrices:()=>({pro:'price_pro'}),TERMS_VERSION,startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError,CheckoutConflict,guardedCheckout:async()=>{checkoutCalls++;return {url:'https://checkout.stripe.com/owned'};}};
+ if(legacyEnabled===null)delete context.process.env.RB_INVESTOR_TRIAL_ENABLED;
  const source=fs.readFileSync(new URL('../api/create-checkout-session.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.createContext(context);vm.runInContext(source+'\nglobalThis.handler=handler;',context);
  return {db,portalCalls,get checkoutCalls(){return checkoutCalls;},async send(body,authorized=true){const res={setHeader(){},status(c){this.code=c;return this;},json(b){this.body=b;return this;}};await context.handler({method:'POST',headers:authorized?{authorization:'Bearer synthetic-token'}:{},body},res);return res;}};
 }
@@ -109,4 +110,14 @@ test('real access resolver grants trial Investor features and denies Pro PDF, th
  const trialNow=Date.now();const c={resolveAccountPlan:(data,host)=>getPlanForScope(data,false),window:{location:{hostname:'www.rendimentobb.it'},currentUser:{uid:'u1'},rbAccountOwner:'u1',rbAccountData:{plan:'free',trialStartedAt:timestamp(trialNow-1000),trialEndsAt:timestamp(trialNow+86400000)},currentPlan:'investor',userRole:'user'}};
  vm.createContext(c);vm.runInContext(source.slice(start,end),c);const access=c.window.getUserAccess();assert.equal(access.isInvestor,true);assert.equal(access.canSeeFullAnalysis,true);assert.equal(access.canDownloadPDF,false);assert.equal(access.isPro,false);
  c.window.rbAccountData.trialEndsAt=timestamp(trialNow-1);assert.equal(c.window.getUserAccess().isFree,true);assert.equal(c.window.getUserAccess().canDownloadPDF,false);
+});
+
+// RC86: new verified users are eligible without any pilot configuration.
+test('public trial works with absent, false and true legacy activation settings',async()=>{
+ for(const legacy of [null,'false','true']){
+  const h=apiHarness(true,legacy);
+  const result=await h.send({action:'trial',acceptedTerms:true,termsVersion:TERMS_VERSION});
+  assert.equal(result.code,200);assert.equal(h.checkoutCalls,0);
+  assert.equal((await h.send({action:'trial',acceptedTerms:true,termsVersion:TERMS_VERSION})).body.code,'TRIAL_ALREADY_USED');
+ }
 });

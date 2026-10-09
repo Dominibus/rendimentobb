@@ -103,9 +103,9 @@ export default async function handler(req, res) {
     const liveMode=!process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_");
     if(action === "contract") return res.status(200).json(await getAccountContract({db,uid,liveMode}));
     if(action === "trial"){
-      const testEmail=String(process.env.RB_TRIAL_TEST_EMAIL || "").trim().toLowerCase();
-      const isDesignatedTest=!!testEmail && decodedToken.email_verified===true && String(email||"").trim().toLowerCase()===testEmail;
-      if(process.env.RB_INVESTOR_TRIAL_ENABLED !== "true" && !isDesignatedTest) return res.status(503).json({code:"TRIAL_NOT_ENABLED"});
+      // RC86: public self-service trial. Legacy pilot settings no longer restrict eligibility.
+      // Explicit operational pause applies equally to every account, including pilot users.
+      if(process.env.RB_INVESTOR_TRIAL_PAUSED === "true") return res.status(503).json({code:"TRIAL_NOT_ENABLED"});
       const result=await startAccountTrial({db,uid,email,emailVerified:decodedToken.email_verified===true,liveMode,
         termsVersion:req.body?.termsVersion,acceptedTerms:req.body?.acceptedTerms,
         timestamp:ms=>firebaseAdmin.firestore.Timestamp.fromMillis(ms)});
