@@ -1,4 +1,4 @@
-import './subscription-ui.js?v=20261009-rc85';
+import './subscription-ui.js?v=20261009-rc88';
 import "./investment-journey.js?v=20261008-rc60";
 import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
 import "./account-report-cache.js";

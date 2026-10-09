@@ -1,4 +1,4 @@
-import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261009-rc85';
+import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261009-rc88';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261009-rc85';
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
