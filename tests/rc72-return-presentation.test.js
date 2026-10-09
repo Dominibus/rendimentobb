@@ -48,3 +48,18 @@ test('comparison handles zero equity and missing city reference without a fabric
   const html=comparison({equity:0,reference:null});assert.match(html,/N\/A/);assert.match(html,/<strong>—<\/strong>/);
   assert.match(html,/non è applicabile/);
 });
+
+test('paid messages reset across zero/positive equity, profit/loss and language changes',()=>{
+ const rows=elements(),document={getElementById:id=>rows.get(id)},access={isPro:true};
+ renderFreeSimulationPreview({equity:0,roi:0,realROI:-4.6,net:-22891},{access,document,lang:'it'});
+ assert.match(rows.get('roi-verdict').textContent,/100%/);
+ renderFreeSimulationPreview({equity:30000,roi:-69.3,realROI:-4.2,net:-20803.64},{access,document,lang:'en'});
+ assert.equal(rows.get('roi-live').textContent,'-69.3%');
+ assert.match(rows.get('roi-verdict').textContent,/negative cashflow/);
+ assert.doesNotMatch(rows.get('roi-verdict').textContent,/100%/);
+ assert.doesNotMatch(rows.get('roi-badge').textContent,/not applicable/);
+ renderFreeSimulationPreview({equity:30000,roi:10,realROI:2,net:3000},{access,document,lang:'it'});
+ assert.match(rows.get('roi-verdict').textContent,/cashflow positivo/);
+ renderFreeSimulationPreview({equity:30000,roi:0,realROI:0,net:0},{access,document,lang:'en'});
+ assert.match(rows.get('roi-verdict').textContent,/breaks even/);
+});

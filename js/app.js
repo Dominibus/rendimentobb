@@ -10,7 +10,7 @@ import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
-import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc72";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc73";
 
 import {
 renderMarketBenchmark

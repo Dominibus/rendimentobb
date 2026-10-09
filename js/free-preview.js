@@ -18,12 +18,26 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
     const zeroEquity=(typeof data?.equity === 'number' || (typeof data?.equity === 'string' && data.equity.trim() !== '')) && Number(data.equity) === 0;
     const main=document.getElementById('roi-live');
     if(main)main.textContent=zeroEquity ? 'N/A' : formatROI(data?.roi);
-    if(zeroEquity){
-      const badge=document.getElementById('roi-badge');
-      if(badge){badge.textContent=lang==='en'?'Equity ROI not applicable · zero equity':'ROI equity non applicabile · capitale proprio zero';badge.className='';}
-      const verdict=document.getElementById('roi-verdict');
-      if(verdict)verdict.textContent=lang==='en'?'100% financing: assess cash flow, debt service and transaction costs.':'Finanziamento al 100%: valuta cashflow, servizio del debito e costi accessori.';
+    // Refresh messages on every calculation and language change, not just zero equity.
+    const badge=document.getElementById('roi-badge');
+    if(badge){
+      badge.textContent=zeroEquity
+        ? (lang==='en'?'Equity ROI not applicable · zero equity':'ROI equity non applicabile · capitale proprio zero')
+        : (lang==='en'?'Return on equity · simulated cashflow / equity':'ROI equity · cashflow simulato / capitale proprio');
+      badge.className='';
     }
+    const verdict=document.getElementById('roi-verdict');
+    const rawCashflow=data?.netAfterMortgage ?? data?.net ?? data?.cashflow;
+    const cashflow=rawCashflow !== null && rawCashflow !== undefined && rawCashflow !== '' && Number.isFinite(Number(rawCashflow)) ? Number(rawCashflow) : null;
+    if(verdict)verdict.textContent=zeroEquity
+      ? (lang==='en'?'100% financing: assess cash flow, debt service and transaction costs.':'Finanziamento al 100%: valuta cashflow, servizio del debito e costi accessori.')
+      : cashflow===null
+        ? (lang==='en'?'Complete the inputs to assess cash flow.':'Completa i dati per valutare il cashflow.')
+        : cashflow<0
+          ? (lang==='en'?'The scenario has a negative cashflow. Review revenue, costs and financing assumptions.':'Lo scenario ha cashflow negativo. Rivedi le ipotesi di ricavi, costi e finanziamento.')
+          : cashflow===0
+            ? (lang==='en'?'The scenario breaks even on cashflow; it leaves no buffer for unforeseen costs.':'Lo scenario è in pareggio sul cashflow; non lascia margine per imprevisti.')
+            : (lang==='en'?'The scenario has a positive cashflow under your assumptions. Test more cautious assumptions before deciding.':'Lo scenario ha cashflow positivo nelle ipotesi inserite. Verifica anche ipotesi più prudenti prima di decidere.');
     for(const id of ['roi-preview-live','roi-card-live']){
       const element=document.getElementById(id);
       if(element)element.textContent=formatROI(data?.realROI);
