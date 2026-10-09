@@ -1662,7 +1662,10 @@ let grade = "C";
 let recommendation =
   t("Operazione non consigliata", "Investment not recommended");
 
-if(score >= 75){
+if(window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property"){
+  recommendation = t("Valutare la gestione dell’immobile", "Assess property management");
+}
+else if(score >= 75){
 
   grade = "A";
 
@@ -1995,8 +1998,10 @@ ${r}
 `)
 .join("");
 
-const verdictLabel =
-  verdict === "BUY"
+const ownedVerdictMode = window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property";
+const verdictLabel = ownedVerdictMode
+  ? t("VALUTA LA GESTIONE", "ASSESS MANAGEMENT")
+  : verdict === "BUY"
     ? t("ACQUISTA", "BUY")
     : verdict === "WAIT"
       ? t("ATTENDI", "WAIT")

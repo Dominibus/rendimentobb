@@ -1622,7 +1622,11 @@ function renderVerdict(){
   let verdict = normalizedVerdict;
   let text = "";
 
-  if(
+  if(ownedProperty){
+    text = lang === "en"
+      ? "Existing property: assess operating cashflow, costs and risks. No purchase recommendation applies."
+      : "Immobile già di proprietà: valuta cashflow operativo, costi e rischi. Non si applica alcuna raccomandazione di acquisto.";
+  }else if(
     normalizedVerdict === "BUY"
   ){
 
@@ -1654,7 +1658,9 @@ function renderVerdict(){
 
   }
 
-  document.getElementById("verdict").innerText = verdict === "BUY"
+  document.getElementById("verdict").innerText = ownedProperty
+    ? (lang === "en" ? "MANAGEMENT SCENARIO" : "SCENARIO DI GESTIONE")
+    : verdict === "BUY"
     ? (lang === "en" ? "FAVORABLE SCENARIO" : "SCENARIO FAVOREVOLE")
     : verdict === "AVOID" ? (lang === "en" ? "CRITICAL SCENARIO" : "SCENARIO CRITICO")
     : (lang === "en" ? "ASSUMPTIONS TO REVIEW" : "IPOTESI DA RIVEDERE");
@@ -1681,7 +1687,14 @@ function renderChart(){
 
   const unavailable = document.getElementById("roi-chart-unavailable");
   const frame = document.getElementById("roi-chart-frame");
-  if(frame) frame.style.height = equity <= 0 ? "auto" : "420px";
+  if(frame){ frame.hidden = equity <= 0; frame.style.display = equity <= 0 ? "none" : "block"; frame.style.height = "420px"; }
+  let roiNote = document.getElementById("roi-chart-zero-note");
+  if(!roiNote && frame?.parentElement){
+    roiNote = document.createElement("p"); roiNote.id = "roi-chart-zero-note";
+    roiNote.style.cssText = "padding:14px;border-radius:12px;background:#f8fafc;color:#334155;line-height:1.5";
+    frame.insertAdjacentElement("afterend", roiNote);
+  }
+  if(roiNote){ roiNote.hidden = equity > 0; roiNote.textContent = lang === "en" ? "ROI chart not applicable: no startup capital was invested. Assess annual cashflow, costs and risk instead." : "Grafico ROI non applicabile: nessun capitale di avvio investito. Valuta invece cashflow annuo, costi e rischio."; }
   canvas.hidden = equity <= 0;
   canvas.style.display = equity <= 0 ? "none" : "block";
   if(unavailable){

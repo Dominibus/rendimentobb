@@ -2013,8 +2013,10 @@ window.updateInvestmentScore = function(score){
         ? "B"
         : "C";
 
-  const recommendation =
-    safeScore >= 75
+  const ownedMode = document.getElementById("property-mode")?.value === "owned";
+  const recommendation = ownedMode
+    ? (lang === "en" ? "Management scenario to assess" : "Scenario di gestione da valutare")
+    : safeScore >= 75
       ? (
           lang === "en"
             ? "Buy recommended"
