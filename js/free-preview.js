@@ -15,8 +15,15 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
     const formatROI=value=>value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value))
       ? new Intl.NumberFormat(lang==='en'?'en-GB':'it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}).format(Number(value))+'%'
       : '—';
+    const zeroEquity=(typeof data?.equity === 'number' || (typeof data?.equity === 'string' && data.equity.trim() !== '')) && Number(data.equity) === 0;
     const main=document.getElementById('roi-live');
-    if(main)main.textContent=formatROI(data?.roi);
+    if(main)main.textContent=zeroEquity ? 'N/A' : formatROI(data?.roi);
+    if(zeroEquity){
+      const badge=document.getElementById('roi-badge');
+      if(badge){badge.textContent=lang==='en'?'Equity ROI not applicable · zero equity':'ROI equity non applicabile · capitale proprio zero';badge.className='';}
+      const verdict=document.getElementById('roi-verdict');
+      if(verdict)verdict.textContent=lang==='en'?'100% financing: assess cash flow, debt service and transaction costs.':'Finanziamento al 100%: valuta cashflow, servizio del debito e costi accessori.';
+    }
     for(const id of ['roi-preview-live','roi-card-live']){
       const element=document.getElementById(id);
       if(element)element.textContent=formatROI(data?.realROI);

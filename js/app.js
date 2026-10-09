@@ -10,7 +10,7 @@ import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261006-rc43";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
-import { renderFreeSimulationPreview } from "./free-preview.js?v=20261006-rc46";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc72";
 
 import {
 renderMarketBenchmark
@@ -1382,51 +1382,30 @@ const kpi3 = `
 // ================= ROI VS MARKET =================
 
 function renderROIMarketComparison(roi, cityKey){
-
-  if(!window.RB_MARKET_DATA) return;
-
   const container = document.getElementById("roi-market-comparison");
   if(!container) return;
-
-  const market = window.RB_MARKET_DATA[cityKey];
-  if(!market) return;
-
-  const marketROI = market.roi;
-
-  let message = "";
-  let color = "#ef4444";
-  let badge = "";
-
-  if(roi > marketROI){
-    message = t("ROI sopra il riferimento illustrativo","ROI above the illustrative reference");
-    color = "#10b981";
-
-    badge = `
-    <div style="margin-bottom:12px;padding:12px;border-radius:10px;background:#ecfdf5;border:1px solid #10b981;font-weight:600;">
-      ${t("ROI sopra il riferimento illustrativo","ROI above the illustrative reference")}
-    </div>`;
-  }else{
-    message = t("ROI sotto il riferimento illustrativo","ROI below the illustrative reference");
-  }
-
-  container.innerHTML = badge + `
+  const marketROI = window.RB_MARKET_DATA?.[cityKey]?.roi;
+  const hasReference = marketROI !== null && marketROI !== undefined && Number.isFinite(Number(marketROI));
+  const equity = window.lastAnalysisData?.equity;
+  const zeroEquity=(typeof equity === "number" || (typeof equity === "string" && equity.trim() !== "")) && Number(equity) === 0;
+  const hasEquity = !zeroEquity;
+  const number = value => new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {maximumFractionDigits:1}).format(Number(value));
+  container.innerHTML = `
     <div class="kpi-box">
       <span>${t("ROI sul capitale proprio","Return on equity")}</span>
-      <strong>${safeNumber(roi).toFixed(1)}%</strong>
+      <strong>${hasEquity ? number(roi)+"%" : "N/A"}</strong>
     </div>
-
     <div class="kpi-box">
-      <span>${t("ROI di riferimento illustrativo","Illustrative reference ROI")} ${cityKey}</span>
-      <strong>${marketROI}%</strong>
+      <span>${t("Riferimento interno illustrativo","Illustrative internal reference")}</span>
+      <strong>${hasReference ? number(marketROI)+"%" : "—"}</strong>
     </div>
-
     <div class="kpi-box">
-      <span>${t("Confronto mercato","Market comparison")}</span>
-      <strong style="color:${color}">
-        ${message}
-      </strong>
-    </div>
-  `;
+      <span>${t("Comparabilità","Comparability")}</span>
+      <strong>${t("Basi non comparabili","Bases not comparable")}</strong>
+      <p>${hasEquity
+        ? t("Il riferimento interno non documenta gli stessi costi e la stessa leva della simulazione. Non misura una sovraperformance di mercato.", "The internal reference does not document the same costs and leverage as this simulation. It does not measure market outperformance.")
+        : t("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow e servizio del debito.", "Equity ROI is not applicable with zero equity. Assess cash flow and debt service.")}</p>
+    </div>`;
 }
 
 // ================= REVENUE FORECAST =================
@@ -3732,20 +3711,7 @@ if(!isFinite(roi)){
   roi = 0;
 }
 
-// =====================================
-// 🔥 ROI ENGINE SPLIT (HOME vs TOOL)
-// =====================================
-
-// 🏠 HOME → teaser più aggressivo
-if(!isTool){
-
-  // boost psicologico leggero
-  roi = roi * 1.18;
-
-  // cap marketing
-  roi = Math.min(roi, 38);
-
-}
+// All entry points use the same calculated return, without promotional adjustments.
 
 // =====================================
 // 🔥 ROI ENGINE PROFESSIONAL
