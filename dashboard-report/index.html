@@ -1677,10 +1677,10 @@ function renderChart(){
       type:"bar",
       data:{
         labels: lang==="en"
-          ? ["Equity ROI (%)","Scenario risk (0–100)"]
-          : ["ROI equity (%)","Rischio scenario (0–100)"],
+          ? [equity > 0 ? "Equity ROI (%)" : "Equity ROI: N/A"]
+          : [equity > 0 ? "ROI equity (%)" : "ROI equity: N/A"],
         datasets:[{
-          data:[equity > 0 ? roi : null, risk],
+          data:[equity > 0 ? roi : null],
           backgroundColor:["#10b981","#ef4444","#3b82f6"],
           borderRadius:10
         }]
@@ -2422,7 +2422,7 @@ drawPerformanceKPI(
 drawPerformanceKPI(
   20 + performanceKpiW + performanceKpiGap,
   t("BREAK-EVEN","BREAK-EVEN"),
-  annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
+  equity <= 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
 );
 
 drawPerformanceKPI(
@@ -2538,7 +2538,7 @@ drawFinancingKPI(
   20 + financingCardW + financingGap,
   64,
   "ROE",
-  `${roe.toFixed(1)}%`
+  equity > 0 ? `${roe.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(

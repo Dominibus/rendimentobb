@@ -38,3 +38,15 @@ test('PDF export respects premium gating and refuses changed owner during genera
 test('zero-equity PDF marks equity ROI as not applicable in Italian and English',async()=>{
  for(const lang of ['it','en']){const result=await render({lang,equityAmount:0,snapshot:{...assumptions,equity:0,loanAmount:150000}});assert.equal(result.saved,true);assert.ok(result.text.includes('N/A'));}
 });
+
+test('zero-equity PDF never represents ROE or equity payback as zero',async()=>{
+ for(const lang of ['it','en']){
+  const result=await render({lang,equityAmount:0,snapshot:{...assumptions,equity:0,loanAmount:150000}});
+  const performance=result.calls.filter(x=>x.page===2),financing=result.calls.filter(x=>x.page===3);
+  assert.ok(performance.some(x=>x.text==='N/A'));
+  assert.ok(financing.some(x=>x.text==='ROE'));
+  assert.ok(financing.some(x=>x.text==='N/A'));
+  assert.ok(!performance.some(x=>/^0[.,]0 (anni|years)$/.test(x.text)));
+  assert.ok(!financing.some(x=>x.text==='0.0%'));
+ }
+});

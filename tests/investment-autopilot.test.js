@@ -41,7 +41,7 @@ test('assumption guidance distinguishes benchmark estimates and explicit reruns'
  assert.match(r.textEN,/indicative/);assert.match(r.textEN,/separate simulation/);assert.match(r.textEN,/Avoid counting costs twice/);
 });
 test('home and tool retain calculation anchors and include cache-versioned workspace resources',()=>{
- for(const file of ['index.html','tool/index.html']){const html=readFileSync(new URL('../'+file,import.meta.url),'utf8');assert.equal((html.match(/class="rb-investment-hub"/g)||[]).length,1);assert.match(html,/investment-workspace.css\?v=20261006-rc41/);assert.match(html,/investment-workspace.js\?v=20261006-rc43/);assert.match(html,/chatbot-loader\.js\?v=\d{8}-rc\d+/);assert.equal((html.match(/data-rb-investment-question=/g)||[]).length,3);}
+ for(const file of ['index.html','tool/index.html']){const html=readFileSync(new URL('../'+file,import.meta.url),'utf8');assert.equal((html.match(/class="rb-investment-hub"/g)||[]).length,1);assert.match(html,/investment-workspace.css\?v=20261009-rc80/);assert.match(html,/investment-workspace.js\?v=20261006-rc43/);assert.match(html,/chatbot-loader\.js\?v=\d{8}-rc\d+/);assert.equal((html.match(/data-rb-investment-question=/g)||[]).length,3);}
  const html=readFileSync(new URL('../tool/index.html',import.meta.url),'utf8');for(const id of ['price','equity','priceNight','occupancy','expenses','analyze-btn','results'])assert.match(html,new RegExp('id="'+id+'"'));
 });
 

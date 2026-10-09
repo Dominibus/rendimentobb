@@ -3244,8 +3244,18 @@ try{
 
 function downloadReport(){ handleReportClick(); }
 
+// Report snapshots require a completed PMS read for the same authenticated owner.
+async function getOwnedReportPMS(ownerUid){
+  const ready = pms => pms && pms.ownerUid === ownerUid && pms.portalSnapshotReady === true;
+  if(!ready(window.rbPMSData)) await loadPMSStats();
+  if(auth.currentUser?.uid !== ownerUid || window.currentUser?.uid !== ownerUid || !ready(window.rbPMSData)){
+    throw new Error("report/pms_snapshot_unavailable");
+  }
+  return window.rbPMSData;
+}
+
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
-function handleReportClick(){
+async function handleReportClick(){
 
   const user = window.RB_USER || {};
 
@@ -3286,7 +3296,7 @@ function handleReportClick(){
 
   // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
   try{
-    const pms = window.rbPMSData || {};
+    const pms = await getOwnedReportPMS(reportOwner);
     const reportPMS = {
       properties: Number(pms.properties || 0),
       bookings: Number(pms.bookings || 0),
