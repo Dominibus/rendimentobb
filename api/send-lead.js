@@ -334,6 +334,12 @@ export default async function handler(req, res){
 
     // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
+    // Only an explicitly supplied zero equity makes equity ROI inapplicable.
+    // Missing equity remains unknown; do not infer it from the cleaned default.
+    const rawEquity = req.body?.equity;
+    const roiAvailable = !((typeof rawEquity === 'number' ||
+      (typeof rawEquity === 'string' && rawEquity.trim() !== '')) && Number(rawEquity) === 0);
+    const roiDisplay = language => roiAvailable ? `${formatNumber(roiRounded,language,1)}%` : 'N/A';
     const loan = price - equity;
 
     // NOI, Cap Rate and DSCR are calculated by the canonical ROI engine.
@@ -494,6 +500,7 @@ if(funnelQuery.empty){
     city,
 
     roi: roiRounded,
+    roiAvailable,
 
     lang: detectedLang,
 
@@ -532,7 +539,7 @@ if(funnelQuery.empty){
   reminderConfirmationURL=funnelConfirmationURL(createdFunnel.id,process.env.CRON_SECRET);
 }else{
   const existing=funnelQuery.docs[0];
-  await db.collection("email_funnel").doc(existing.id).update({city,roi:roiRounded,lang:detectedLang,...(!hasFunnelConsent(existing.data())?{consentConfirmed:false,marketingConsent:true,consentVersion:"analysis-reminders-v1",consentSource:"roi_simulator",consentAt:admin.firestore.FieldValue.serverTimestamp(),unsubscribed:false}:{})});
+  await db.collection("email_funnel").doc(existing.id).update({city,roi:roiRounded,roiAvailable,lang:detectedLang,...(!hasFunnelConsent(existing.data())?{consentConfirmed:false,marketingConsent:true,consentVersion:"analysis-reminders-v1",consentSource:"roi_simulator",consentAt:admin.firestore.FieldValue.serverTimestamp(),unsubscribed:false}:{})});
   if(!hasFunnelConsent(existing.data()))reminderConfirmationURL=funnelConfirmationURL(existing.id,process.env.CRON_SECRET);
 }
 }
@@ -627,7 +634,7 @@ if(showInvestmentResults){
   for(const [key,label,enLabel,val] of [
     ["price","Prezzo immobile","Property price",formatMoney(price,detectedLang)],
     ["equity","Capitale proprio","Equity",formatMoney(equity,detectedLang)],
-    ["roi","ROI stimato","Estimated ROI",`${formatNumber(roiRounded,detectedLang,1)}%`],
+    ["roi","ROI stimato","Estimated ROI",roiDisplay(detectedLang)],
     ["profit","Cashflow / profitto annuo simulato","Modeled annual cash flow / profit",formatMoney(profit, detectedLang)],
     ["noi","Reddito operativo netto simulato","Modeled net operating income",formatMoney(noi,detectedLang)],
     ["annualDebtService","Rate annue simulate","Modeled annual debt service",formatMoney(annualDebtService,detectedLang)],
@@ -643,10 +650,10 @@ const userMail = buildBrandedEmail({lang:detectedLang,title:userHeading,intro:us
 
 let subject = t(
   detectedLang,
-  roiRounded > 0
+  roiAvailable && roiRounded > 0
     ? `📈 Analisi completata • ROI ${formatNumber(roiRounded, "it", 1)}%`
     : "📊 La tua analisi è pronta",
-  roiRounded > 0
+  roiAvailable && roiRounded > 0
     ? `📈 Analysis completed • ROI ${formatNumber(roiRounded, "en", 1)}%`
     : "📊 Your analysis is ready"
 );
@@ -787,7 +794,7 @@ const adminSubject = isPartnerLead
         ? `🏠 RICHIESTA AGGIORNAMENTI IMMOBILIARI | ${displayCity}`
       : isMortgageLead
         ? `🏦 RICHIESTA MUTUO | ${price > 0 ? formatMoney(price, "it") : "IMPORTO NON INDICATO"} | ${email}`
-    : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
+    : `${leadTitle} | ${displayCity} | ROI ${roiDisplay("it")} | €${value} | ${type.toUpperCase()}`;
 
 const adminSuggestion = isPartnerLead
   ? "Valutare la proposta commerciale e ricontattare il referente entro un giorno lavorativo."
@@ -809,7 +816,7 @@ const adminSuggestion = isPartnerLead
 
 const adminRows = [["Email",email],["Tipo richiesta",type.toUpperCase()],["Nome / azienda",name||"Non indicato"],["Telefono",phone||"Non indicato"],["Città",["partner","work","auth"].includes(type)?"Non indicata":displayCity],["Provenienza",source],["Funnel",funnel === "unknown"?"Non indicato":funnel],["Lingua utente",detectedLang.toUpperCase()],["Profilo / ruolo",role||"Non indicato"],["Messaggio",message||"Non indicato"]];
 if(!isOperationalLead){
-  adminRows.push(["ROI",`ROI ${formatNumber(roiRounded, "it", 1)}%`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
+  adminRows.push(["ROI",`ROI ${roiDisplay("it")}`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
 }
 if(isMortgageLead)adminRows.push(["Importo simulato",formatMoney(price,"it")],["Durata",`${years} anni`],["Tasso ipotizzato",rate?`${rate}%`:"Non indicato"],["Banca",bank||"Non indicato"]);
 const adminMail=buildBrandedEmail({lang:"it",title:leadTitle,intro:"Nuovo lead acquisito da RendimentoBB",rows:adminRows.filter(([,value]) => value !== "Non indicato" && value !== "Non indicata" && value !== "unknown" && value !== null && value !== undefined && value !== ""),note:`Suggerimento operativo: ${adminSuggestion}`,ctaLabel:"Apri Dashboard",ctaURL:"https://rendimentobb.it/dashboard-leads/",secondaryLabel:"Contatta Lead",secondaryURL:`mailto:${encodeURIComponent(email)}`,eyebrow:"Centro gestione lead · Admin"});

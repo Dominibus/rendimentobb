@@ -74,6 +74,21 @@ async function(message){
 
     window.rbPDFConversationDocumentId = null;
 
+    // Educational questions do not require a completed simulation. Keep
+    // explicit/current PDF requests above this route so document evidence wins.
+    const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const asksROIMeaning = /\b(definizione|definition|significa|meaning)\b|che cos['’]?e|che cosa e|what is|what does.*mean/.test(educationalQuery);
+    const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
+    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b)|(?:\bzero\b|\b0\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity/.test(educationalQuery);
+    if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
+      return {success:true,intent:{intent:'education'},response:{
+        type:'education',confidence:1,
+        textIT:'Il ROI sul capitale proprio confronta il cashflow annuo stimato, dopo i costi, le imposte e le rate previste dal modello, con il capitale proprio investito: cashflow annuo ÷ capitale proprio × 100.\n\nSe il capitale proprio è zero, il denominatore è zero: il ROI equity e il recupero dell’equity sono N/A, non 0% e non un rendimento infinito. Questa componente è esclusa da rischio e punteggio; restano cashflow, leva, copertura del debito e occupazione. Valuta anche il rendimento sull’immobile, specificando la sua base di calcolo.\n\nÈ una spiegazione del metodo, non una valutazione del tuo investimento. Un finanziamento al 100% non implica approvazione bancaria: verifica anche costi accessori, riserva di liquidità e condizioni effettive.',
+        textEN:'Return on equity compares estimated annual cash flow, after the costs, taxes and loan payments included in the model, with invested equity: annual cash flow ÷ equity × 100.\n\nWith zero equity, the denominator is zero: equity ROI and equity payback are N/A, rather than 0% or an infinite return. This component is excluded from risk and scoring; cash flow, leverage, debt coverage and occupancy still apply. Also assess the property return, stating its calculation basis.\n\nThis explains the method; it does not assess your investment. Full financing does not imply bank approval: check purchase costs, cash reserves and actual financing terms.',
+        suggestionsIT:['Controlla i dati','Leggi la mia analisi'],suggestionsEN:['Review the simulator inputs','Read my analysis'],actions:[],signals:['roi_method_explained'],metadata:{source:'calculation_method'}
+      }};
+    }
+
     // =========================================
     // 🧠 ENTITY EXTRACTION
     // =========================================

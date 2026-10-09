@@ -52,9 +52,9 @@ function t(lang, it, en){
 }
 
 // ================= TEMPLATE =================
-function buildFunnelEmail({roi,city,lang,stepType,unsubscribeURL}){
+function buildFunnelEmail({roi,roiAvailable=true,city,lang,stepType,unsubscribeURL}){
   const en=lang === "en";
-  return buildBrandedEmail({lang,title:stepType === "reminder_1" ? (en?"Review your investment assumptions":"Rivedi le ipotesi del tuo investimento") : (en?"Continue your saved analysis":"Riprendi la tua analisi"),intro:en?"Review the scenario before moving forward: rental rates, occupancy, recurring costs and loan payments can change its results.":"Rivedi lo scenario prima di proseguire: tariffe, occupazione, costi ricorrenti e rate possono modificarne i risultati.",rows:[[en?"City":"Città",city||"—"],[en?"Recorded estimated ROI":"ROI stimato registrato",`${new Intl.NumberFormat(en?"en-GB":"it-IT",{maximumFractionDigits:1}).format(roi)}%`]],note:en?"This is a reminder about a simulation, not verified income or a current market appraisal. You can compare conservative assumptions in the simulator.":"Questo promemoria riguarda una simulazione, non incassi verificati o una perizia di mercato. Puoi confrontare ipotesi prudenti nel simulatore.",ctaLabel:en?"Open the simulator":"Apri il simulatore",ctaURL:"https://rendimentobb.it/tool/",secondaryLabel:en?"Stop analysis reminders":"Interrompi i promemoria",secondaryURL:unsubscribeURL,eyebrow:en?"Investment analysis · Reminder":"Analisi investimento · Promemoria"}).html;
+  return buildBrandedEmail({lang,title:stepType === "reminder_1" ? (en?"Review your investment assumptions":"Rivedi le ipotesi del tuo investimento") : (en?"Continue your saved analysis":"Riprendi la tua analisi"),intro:en?"Review the scenario before moving forward: rental rates, occupancy, recurring costs and loan payments can change its results.":"Rivedi lo scenario prima di proseguire: tariffe, occupazione, costi ricorrenti e rate possono modificarne i risultati.",rows:[[en?"City":"Città",city||"—"],[en?"Recorded estimated ROI":"ROI stimato registrato",roiAvailable ? `${new Intl.NumberFormat(en?"en-GB":"it-IT",{maximumFractionDigits:1}).format(roi)}%` : "N/A"]],note:en?"This is a reminder about a simulation, not verified income or a current market appraisal. You can compare conservative assumptions in the simulator.":"Questo promemoria riguarda una simulazione, non incassi verificati o una perizia di mercato. Puoi confrontare ipotesi prudenti nel simulatore.",ctaLabel:en?"Open the simulator":"Apri il simulatore",ctaURL:"https://rendimentobb.it/tool/",secondaryLabel:en?"Stop analysis reminders":"Interrompi i promemoria",secondaryURL:unsubscribeURL,eyebrow:en?"Investment analysis · Reminder":"Analisi investimento · Promemoria"}).html;
 }
 
 // ================= HANDLER =================
@@ -109,6 +109,7 @@ export default async function handler(req, res){
       const unsubscribeURL=funnelUnsubscribeURL(doc.id,process.env.CRON_SECRET);
       const email = data.email;
       const roi   = safe(data.roi);
+      const roiAvailable = data.roiAvailable !== false;
       const city  = data.city || "";
       const lang  = data.lang || "it";
 
@@ -156,9 +157,9 @@ export default async function handler(req, res){
 
           subject = lang==="en"
 
-          ? `📈 Review your investment assumptions${roi>0?` • ROI ${roi}%`:""}`
+          ? `📈 Review your investment assumptions${roiAvailable && roi>0?` • ROI ${roi}%`:""}`
 
-          : `📈 Rivedi le ipotesi del tuo investimento${roi>0?` • ROI ${roi}%`:""}`;
+          : `📈 Rivedi le ipotesi del tuo investimento${roiAvailable && roi>0?` • ROI ${roi}%`:""}`;
 
         }
 
@@ -189,7 +190,7 @@ ${lang==="en"
 ? "Your investment analysis is waiting for you."
 : "La tua analisi investimento ti sta aspettando."}
 
-ROI: ${roi}%
+ROI: ${roiAvailable ? `${roi}%` : "N/A"}
 
 ${city}
 
@@ -202,6 +203,7 @@ ${lang==="en"?"Stop analysis reminders":"Interrompi i promemoria"}: ${unsubscrib
             html:buildFunnelEmail({
 
               roi,
+              roiAvailable,
 
               city,
 

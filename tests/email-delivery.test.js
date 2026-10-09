@@ -28,6 +28,19 @@ function harness(file,failRecipient=''){
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,logs,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
 }
+test('zero equity is N/A in user/admin email and persists for optional reminders',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'owner@example.test',type:'analysis',roi:0,equity:0,price:150000,profit:1200,marketingConsent:true});
+ assert.equal(r.status,200);
+ for(const mail of h.sent){assert.match(mail.payload.text,/N\/A/);assert.doesNotMatch(mail.payload.text,/ROI[^\n]*0%/);}
+ assert.equal([...h.stores.get('email_funnel').values()][0].roiAvailable,false);
+});
+test('fully financed funnel reminder keeps N/A in HTML and plain text',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('zero-equity').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:0,roiAvailable:false,city:'Roma',lang:'en',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);assert.equal(h.sent.length,1);
+ assert.match(h.sent[0].payload.text,/ROI: N\/A/);assert.match(h.sent[0].payload.html,/N\/A/);assert.doesNotMatch(h.sent[0].payload.html,/Recorded estimated ROI[^]*?0%/);
+});
 test('shared email is fluid table-based, escapes submitted content and supplies complete plain text',()=>{
  const mail=buildBrandedEmail({title:'<script>x</script>',intro:'Test',rows:[['Note','A & B\nsecond line']],ctaLabel:'Open',ctaURL:'javascript:alert(1)'});
  assert.ok(mail.html.includes('max-width:600px'));assert.ok(mail.html.includes('#087f5b'));assert.ok(mail.html.includes('&lt;script&gt;'));assert.ok(!mail.html.includes('href="javascript:'));assert.ok(mail.text.includes('A & B\nsecond line'));

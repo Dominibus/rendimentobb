@@ -19,6 +19,7 @@ test("admin lead email keeps its operational copy in Italian", () => {
 });
 
 test("admin lead email localizes ROI and DSCR as Italian numbers", () => {
-  assert.match(adminSource, /ROI \$\{formatNumber\(roiRounded, "it", 1\)\}%/);
+  assert.match(adminSource, /ROI \$\{roiDisplay\("it"\)\}/);
+  assert.match(source, /roiAvailable \? `\$\{formatNumber\(roiRounded,language,1\)\}%` : 'N\/A'/);
   assert.match(adminSource, /formatNumber\(canonicalDSCR, "it", 2\)/);
 });
