@@ -1,3 +1,4 @@
+import {scanFunnelDocuments} from "../lib/funnel-scan.js";
 import {hasFunnelConsent,funnelUnsubscribeURL} from "../lib/funnel-consent.js";
 import {queueDailyReminders} from "../lib/pms-reminders.js";
 // ===============================
@@ -94,9 +95,11 @@ export default async function handler(req, res){
 
     phase = "analysis_reminders";
     const funnelStats={checked:0,sent:0,suppressed:0,errors:0,manualReview:0,budgetExhausted:false};
-    const snapshot = await db.collection("email_funnel").get();
-
-    for(const doc of snapshot.docs){
+    const scanRef=db.collection("_pms_jobs").doc("analysis_reminders");
+    const previousScan=await scanRef.get();
+    const savedCursor=previousScan.data()?.cursor;
+    const scan={cursor:typeof savedCursor === "string" ? savedCursor : ""};
+    for await(const doc of scanFunnelDocuments({db,state:scan,deadline:now+48000})){
       if(Date.now()-now >= 48000){funnelStats.budgetExhausted=true;break;}
 
       const data = doc.data();
@@ -244,10 +247,13 @@ ${lang==="en"?"Stop analysis reminders":"Interrompi i promemoria"}: ${unsubscrib
         }
 
       }
-
+      // An unfinished record must be revisited, rather than skipped by the cursor.
+      if(funnelStats.budgetExhausted)break;
     }
-
-    await db.collection("_pms_jobs").doc("analysis_reminders").set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...funnelStats,success:funnelStats.errors===0,needsAttention:funnelStats.errors>0 || funnelStats.manualReview>0 || funnelStats.budgetExhausted});
+    funnelStats.budgetExhausted ||= scan.budgetExhausted;
+    funnelStats.hasMore=scan.hasMore;
+    funnelStats.pages=scan.pages;
+    await scanRef.set({cursor:scan.cursor,lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...funnelStats,success:funnelStats.errors===0,needsAttention:funnelStats.errors>0 || funnelStats.manualReview>0 || funnelStats.budgetExhausted || scan.hasMore});
     console.info("RB_CRON_COMPLETE", {runId,durationMs:Date.now()-startedAt,success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pms:{sent:pmsNotifications?.sent || 0,queued:pmsReminders?.queued || 0,error:pmsError}});
     return res.status(pmsError || funnelStats.errors>0?503:200).json({success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
 

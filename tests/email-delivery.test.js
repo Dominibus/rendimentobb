@@ -1,3 +1,4 @@
+import {scanFunnelDocuments} from '../lib/funnel-scan.js';
 import {hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL} from "../lib/funnel-consent.js";
 import {dispatchTaskNotification,urgentNotificationId} from '../lib/pms-notification-queue.js';
 import {reconcilePMSTasks} from '../js/pms-tasks.js';
@@ -15,14 +16,14 @@ function harness(file,failRecipient=''){
  const collection=name=>{
   if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);
   const ref=id=>({id,get:async()=>({exists:store.has(id),data:()=>store.get(id)}),set:async(value,options)=>{if(options?.merge){const current=store.get(id)||{};apply(current,value);store.set(id,current);}else store.set(id,{...value});},update:async value=>{if(!store.has(id))throw Error('missing');apply(store.get(id),value);},delete:async()=>store.delete(id)});
-  const query=(constraints=[],max=Infinity)=>({where:(key,op,value)=>query([...constraints,[key,op,value]],max),orderBy:()=>query(constraints,max),limit:n=>query(constraints,n),get:async()=>{const docs=[...store].filter(([,v])=>constraints.every(([k,op,x])=>op==='=='?v[k]===x:typeof v[k]==='number' && v[k]<=x)).slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
+  const query=(constraints=[],max=Infinity,cursor='',ordered=false)=>({where:(key,op,value)=>query([...constraints,[key,op,value]],max,cursor,ordered),orderBy:key=>query(constraints,max,cursor,key==='__name__'),startAfter:id=>query(constraints,max,id,ordered),limit:n=>query(constraints,n,cursor,ordered),get:async()=>{let rows=[...store].filter(([id,v])=>(!cursor || id>cursor) && constraints.every(([k,op,x])=>op==='=='?v[k]===x:typeof v[k]==='number' && v[k]<=x));if(ordered)rows.sort(([a],[b])=>a<b?-1:a>b?1:0);const docs=rows.slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
   return {...query(),doc:ref,add:async data=>{const id=`mock-lead-${String(++sequence).padStart(12,'0')}`;store.set(id,{...data});return ref(id);}};
  };
  const db={collection,runTransaction:async fn=>fn({getAll:async(...refs)=>Promise.all(refs.map(r=>r.get())),get:r=>r.get(),set:(r,v)=>r.set(v),update:(r,v)=>r.update(v)})};
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:file==='api/work-email.js'?'user@example.test':'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
+ const ctx={scanFunnelDocuments,hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,logs,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
@@ -229,4 +230,13 @@ test('cron failure log identifies its phase without leaking the database error m
  const failure=h.logs.find(row=>row[0]==='RB_CRON_FAILED')[1];
  assert.equal(failure.phase,'analysis_reminders');assert.equal(failure.error,'cron_error');
  assert.ok(!JSON.stringify(h.logs).includes('sensitive@example.test'));
+});
+
+test('cron reads beyond a full funnel page and resets its cursor after a complete scan',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ for(let i=0;i<105;i++)await h.collection('email_funnel').doc('record-'+String(i).padStart(3,'0')).set({});
+ const result=await h.run({},'GET','mock-secret');
+ assert.equal(result.status,200);assert.equal(result.body.funnel.checked,105);
+ assert.equal(result.body.funnel.pages,2);assert.equal(result.body.funnel.hasMore,false);
+ assert.equal(h.stores.get('_pms_jobs').get('analysis_reminders').cursor,'');
 });
