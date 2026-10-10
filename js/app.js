@@ -5938,7 +5938,7 @@ const coverHasReference = coverReference !== null && coverReference !== undefine
 doc.setFont("helvetica","normal");
 doc.setFontSize(9);
 doc.setTextColor(203,213,225);
-doc.text(T("Riferimento interno illustrativo: ","Illustrative internal reference: ") + (coverHasReference ? pct(coverReference) : T("non disponibile","unavailable")),20,180);
+doc.text(isOwnedProperty && equity <= 0 ? T("ROI non applicabile: valuta il cashflow previsto.","ROI not applicable: assess projected cashflow.") : T("Riferimento interno illustrativo: ","Illustrative internal reference: ") + (coverHasReference ? pct(coverReference) : T("non disponibile","unavailable")),20,180);
 doc.setFontSize(8);
 doc.text(T("Basi non comparabili - nessun giudizio di performance di mercato.","Bases not comparable - no market performance grade."),20,191,{maxWidth:170});
 
@@ -5989,7 +5989,9 @@ const verdict =
 // Keep the canonical machine value for saved data, but localize the text
 // printed in the user-facing PDF.
 const pdfVerdictLabel =
-  verdict === "BUY"
+  isOwnedProperty && equity <= 0
+    ? (profit > 0 ? T("Cashflow positivo", "Positive cashflow") : T("Cashflow da verificare", "Cashflow to review"))
+    : verdict === "BUY"
     ? T("Favorevole", "Favourable")
     : verdict === "WAIT" || verdict === "WATCH"
       ? T("Da verificare", "Review")
@@ -6629,7 +6631,7 @@ const marketKey = String(city).toLowerCase().trim();
 const internalReference = window.RB_MARKET_DATA?.[marketKey]?.roi;
 const hasLocalBenchmark = internalReference !== null && internalReference !== undefined && Number.isFinite(Number(internalReference));
 row(T("ROI equity","Equity ROI"),equity > 0 ? pct(roi) : "N/A");
-row(T("Riferimento interno illustrativo","Illustrative internal reference"),hasLocalBenchmark ? pct(internalReference) : T("Non disponibile","Unavailable"));
+row(isOwnedProperty && equity <= 0 ? T("Confronto ROI","ROI comparison") : T("Riferimento interno illustrativo","Illustrative internal reference"),isOwnedProperty && equity <= 0 ? T("Non applicabile","Not applicable") : hasLocalBenchmark ? pct(internalReference) : T("Non disponibile","Unavailable"));
 y += 14;
 doc.setFontSize(11);doc.setTextColor(...gray);
 doc.text(T("BASI NON COMPARABILI","BASES NOT COMPARABLE"),20,y);
@@ -6637,7 +6639,7 @@ y += 10;
 doc.setFillColor(248,250,252);doc.roundedRect(20,y,170,50,5,5,"F");
 doc.setFontSize(10);doc.setTextColor(...dark);
 const referenceNote = equity <= 0
-  ? T("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow, servizio del debito e costi accessori. Il riferimento interno non misura la performance dello scenario.","Equity ROI is not applicable with zero equity. Assess cash flow, debt service and transaction costs. The internal reference does not measure this scenario's performance.")
+  ? (isOwnedProperty ? T("Immobile già posseduto: ROI sul capitale di avvio non applicabile. Valuta ricavi, costi e cashflow; il rischio considera solo i fattori disponibili.","Already owned property: return on startup capital is not applicable. Assess revenue, costs and cashflow; risk covers only available factors.") : T("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow, servizio del debito e costi accessori. Il riferimento interno non misura la performance dello scenario.","Equity ROI is not applicable with zero equity. Assess cash flow, debt service and transaction costs. The internal reference does not measure this scenario's performance."))
   : T("La tabella interna è statica e illustrativa: non documenta una fonte esterna aggiornata né gli stessi costi e la stessa leva della simulazione. Il confronto non misura una sovraperformance o sottoperformance di mercato.","The internal table is static and illustrative: it documents neither an updated external source nor the same costs and leverage as the simulation. It does not measure market outperformance or underperformance.");
 doc.text(doc.splitTextToSize(referenceNote,155),25,y+12);
 footer();
@@ -6934,14 +6936,11 @@ y += 10;
 const nextSteps = [];
 
 // ROI
-if (roi < 20) {
+if (isOwnedProperty || roi < 20) {
 
-  nextSteps.push(
-    T(
-      "Confrontare prezzo, tariffa e occupazione con dati effettivi; non aumentare le ipotesi solo per migliorare il ROI.",
-      "Check price, rate and occupancy against actual data; do not raise assumptions just to improve ROI."
-    )
-  );
+  nextSteps.push(isOwnedProperty
+    ? T("Confrontare tariffa, occupazione e costi operativi con dati effettivi; verificare il cashflow anche in scenari prudenti.","Compare rates, occupancy and operating costs with actual data; also test cashflow under conservative scenarios.")
+    : T("Confrontare prezzo, tariffa e occupazione con dati effettivi; non aumentare le ipotesi solo per migliorare il ROI.","Check price, rate and occupancy against actual data; do not raise assumptions just to improve ROI."));
 
 }
 

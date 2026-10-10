@@ -2300,13 +2300,13 @@ const drawExecutiveKPI = (
 
 drawExecutiveKPI(
   20,
-  t("PREZZO","PURCHASE PRICE"),
-  eur(price)
+  ownedProperty ? t("VALORE IMMOBILE","PROPERTY VALUE") : t("PREZZO","PURCHASE PRICE"),
+  ownedProperty && price === 0 ? t("Non indicato","Not provided") : eur(price)
 );
 
 drawExecutiveKPI(
   20 + kpiW + kpiGap,
-  t("CAPITALE PROPRIO","EQUITY"),
+  ownedProperty ? t("CAPITALE AVVIO","STARTUP CAPITAL") : t("CAPITALE PROPRIO","EQUITY"),
   eur(equity)
 );
 
@@ -2322,7 +2322,9 @@ drawExecutiveKPI(
   ).toUpperCase();
 
 const verdict =
-  canonicalVerdict === "BUY"
+  ownedProperty && equity <= 0
+    ? (annualProfit > 0 ? t("Cashflow previsionale positivo","Positive projected cashflow") : t("Cashflow da verificare","Cashflow to review"))
+    : canonicalVerdict === "BUY"
     ? t(
         "Scenario favorevole",
         "Favourable scenario"
@@ -2636,7 +2638,9 @@ drawFinancingKPI(
   );
 
 const riskLabel =
-  riskScore < 40
+  ownedProperty && equity <= 0
+    ? t("RISCHIO MODELLO: PARZIALE","MODEL RISK: PARTIAL")
+    : riskScore < 40
     ? t("RISCHIO BASSO","LOW RISK")
     : riskScore < 65
       ? t("RISCHIO MEDIO","MEDIUM RISK")
@@ -2855,7 +2859,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  hasLocalBenchmark ? t("RIFERIMENTO ILLUSTRATIVO","ILLUSTRATIVE REFERENCE") : t("RIFERIMENTO NON DISPONIBILE","REFERENCE UNAVAILABLE"),
+  ownedProperty && equity <= 0 ? t("CONFRONTO ROI","ROI COMPARISON") : hasLocalBenchmark ? t("RIFERIMENTO ILLUSTRATIVO","ILLUSTRATIVE REFERENCE") : t("RIFERIMENTO NON DISPONIBILE","REFERENCE UNAVAILABLE"),
   115,
   44
 );
@@ -2866,7 +2870,7 @@ doc.setFontSize(24);
 doc.setTextColor(...dark);
 
 doc.text(
-  hasLocalBenchmark ? `${marketROI.toFixed(1)}%` : "—",
+  ownedProperty && equity <= 0 ? "N/A" : hasLocalBenchmark ? `${marketROI.toFixed(1)}%` : "—",
   115,
   63
 );
@@ -2911,7 +2915,7 @@ doc.setFontSize(8);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  equity <= 0 ? t("ROI equity non applicabile con capitale proprio pari a zero.", "Equity ROI is not applicable with zero equity.") : hasLocalBenchmark
+  equity <= 0 ? (ownedProperty ? t("Immobile già posseduto: ROI sul capitale di avvio non applicabile. Nessun confronto percentuale significativo.", "Already owned property: return on startup capital is not applicable. No meaningful percentage comparison.") : t("ROI equity non applicabile con capitale proprio pari a zero.", "Equity ROI is not applicable with zero equity.")) : hasLocalBenchmark
     ? t("Riferimento interno illustrativo: non misura la performance del mercato né un rendimento superiore.", "Internal illustrative reference: it does not measure market performance or outperformance.")
     : t("Nessun riferimento disponibile per questa città.", "No reference is available for this city."),
   20,
@@ -3221,7 +3225,7 @@ doc.text(
       doc.setFont("helvetica","normal");
       doc.setFontSize(8);
       doc.setTextColor(100,116,139);
-      doc.text(t("Fotografia operativa dei dati disponibili in dashboard.","Operational snapshot of the data available in the dashboard."),20,28);
+      doc.text(t("Dati PMS complessivi della dashboard, non attribuiti alla singola simulazione.","Dashboard-wide PMS data, not attributed to this simulation."),20,28);
       const snapshotTime = new Date(dashboardReportContext.generatedAt || "");
       if(Number.isFinite(snapshotTime.getTime())){
         doc.setFontSize(7);
