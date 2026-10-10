@@ -2925,10 +2925,11 @@ doc.text(
 
     doc.setFontSize(8);
     doc.setTextColor(100,116,139);
-    doc.text(doc.splitTextToSize(t(
-      "Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.",
-      "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."
-    ),170),20,153);
+    doc.text(doc.splitTextToSize(
+      ownedProperty && equity <= 0
+        ? t("Nessun benchmark percentuale viene applicato a questo scenario. Il cashflow è una stima basata sugli input, non una misura di rendimento del patrimonio immobiliare.", "No percentage benchmark applies to this scenario. Cashflow is an input-based estimate, not a return on the property's market value.")
+        : t("Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.", "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."),
+      170),20,153);
     addFooter();
 
     // ================= PAGE 6 =================

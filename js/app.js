@@ -7088,6 +7088,53 @@ reportSource:
 
 }
 
+// RC96 — Audit trail of the exact scenario used by this feasibility PDF.
+// Different reports must not be treated as the same simulation merely because
+ // they share the same city and revenue. Never silently substitute PMS values.
+doc.addPage();
+drawBrand(20,14,false);
+doc.setFont("helvetica","bold");
+doc.setFontSize(15);
+doc.setTextColor(...dark);
+doc.text(T("Ipotesi effettive del report", "Actual report assumptions"),20,32);
+doc.setFont("helvetica","normal");
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+doc.text(doc.splitTextToSize(T(
+  "Valori acquisiti dalla simulazione che ha generato questo PDF. Confrontali con la pagina 'Ipotesi salvate' del report Dashboard: se sono diversi, i documenti rappresentano scenari diversi.",
+  "Values captured from the simulation that generated this PDF. Compare them with 'Saved assumptions' in the Dashboard report: differences indicate different scenarios."
+),168),20,43);
+const rc96Numeric = value => value == null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+const rc96Assumptions = d.assumptions || {};
+const rc96Costs = rc96Numeric(d.expenses ?? d.monthlyCosts ?? d.expensesMonthly ?? rc96Assumptions.monthlyCosts);
+const rc96Nightly = rc96Numeric(d.priceNight ?? d.pricePerNight ?? rc96Assumptions.nightlyRate ?? rc96Assumptions.pricePerNight);
+const rc96Occupancy = rc96Numeric(d.occupancy ?? rc96Assumptions.occupancy);
+const rc96Rows = [
+  [T("Tipo scenario","Scenario type"), isOwnedProperty ? T("Immobile già posseduto","Already owned property") : T("Acquisto / altro","Purchase / other")],
+  [T("Valore immobile","Property value"), isOwnedProperty && price === 0 ? T("Non indicato","Not provided") : eur(price)],
+  [T("Capitale proprio / avvio","Equity / startup capital"), eur(equity)],
+  [T("Tariffa per notte","Nightly rate"), rc96Nightly === null ? T("Non disponibile","Unavailable") : eur(rc96Nightly)],
+  [T("Occupazione","Occupancy"), rc96Occupancy === null ? T("Non disponibile","Unavailable") : `${rc96Occupancy}%`],
+  [T("Costi mensili","Monthly costs"), rc96Costs === null ? T("Non disponibili","Unavailable") : eur(rc96Costs)],
+  [T("Ricavi annui","Annual revenue"), eur(revenue)],
+  [T("NOI del modello","Model NOI"), eur(netOperatingIncome)],
+  [T("Cashflow netto annuo","Annual net cashflow"), eur(profit)]
+];
+let rc96Y = 76;
+for(const [label,value] of rc96Rows){
+  doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(...gray);
+  doc.text(label,22,rc96Y);
+  doc.setFont("helvetica","bold"); doc.setTextColor(...dark);
+  doc.text(String(value),188,rc96Y,{align:"right"});
+  rc96Y += 16;
+}
+doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(...gray);
+doc.text(doc.splitTextToSize(T(
+  "I valori sono stime e non risultati PMS. Per un confronto valido tra PDF, usare la medesima simulazione e gli stessi input, quindi rigenerare entrambi i documenti.",
+  "These are estimates, not PMS actuals. To compare PDFs, use the same simulation and inputs, then regenerate both documents."
+),168),20,239);
+footer();
+
 // SAVE
 doc.save(`RendimentoBB-Fattibilita-${city}-${equity > 0 ? roi.toFixed(1)+"ROI" : "ROI-N-A"}.pdf`);
 
