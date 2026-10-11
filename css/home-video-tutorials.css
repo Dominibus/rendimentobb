@@ -1,0 +1,19 @@
+/* RC100: additional overview; existing platform demo remains unchanged. */
+body.home-page .rb-tutorial-item {
+  max-width: 980px;
+  margin: 0 auto 32px;
+}
+body.home-page .rb-tutorial-item > h3 {
+  margin: 0 0 8px;
+  color: #15362e;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  line-height: 1.3;
+}
+body.home-page .rb-tutorial-item > p {
+  margin: 0 0 16px;
+  color: #465d55;
+  line-height: 1.6;
+}
+body.home-page .rb-overview-video {
+  aspect-ratio: 910 / 512;
+}
