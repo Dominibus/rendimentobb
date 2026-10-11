@@ -2013,9 +2013,9 @@ window.updateInvestmentScore = function(score){
         ? "B"
         : "C";
 
-  const ownedMode = document.getElementById("property-mode")?.value === "owned";
+  const ownedMode = window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property";
   const recommendation = ownedMode
-    ? (lang === "en" ? "Management scenario to assess" : "Scenario di gestione da valutare")
+    ? (safeScore >= 75 ? (lang === "en" ? "Favorable management under assumptions" : "Gestione favorevole nelle ipotesi") : safeScore > 40 ? (lang === "en" ? "Management needs optimization" : "Gestione da ottimizzare") : (lang === "en" ? "Management needs review" : "Gestione da rivedere"))
     : safeScore >= 75
       ? (
           lang === "en"
@@ -2082,7 +2082,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261009-rc91"></script>
+<script type="module" src="/js/app.js?v=20261011-rc97"></script>
 
 <script>
 

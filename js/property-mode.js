@@ -57,6 +57,12 @@ export function renderPropertyModeResults(data, {window,document,access}={}){
       ? 'Already owned property · no purchase or new loan assumed. Revenue and cashflow are estimates. Return on startup capital excludes the value of the house; it is not total return on your property.'
       : 'Immobile già di proprietà · nessun acquisto o nuovo mutuo presunto. Ricavi e cashflow sono stime. Il ROI sul capitale di avvio esclude il valore della casa: non è il rendimento complessivo del patrimonio.';
   }
+  const paidAccess = access?.isInvestor || access?.isPro || access?.isAdmin;
+  const denominator = Number(paidAccess ? (data?.equity ?? data?.assumptions?.equity ?? 0) : (data?.price ?? data?.propertyPrice ?? data?.assumptions?.propertyPrice ?? 0));
+  const canvas = document.getElementById('roiChart');
+  const frame = canvas?.closest?.('.roi-chart') || canvas?.parentElement;
+  if(frame){frame.hidden = denominator <= 0;frame.style.display = denominator > 0 ? '' : 'none';}
+  if(denominator <= 0 && window.mainROIChart){window.mainROIChart.destroy();window.mainROIChart=null;}
   if(!owned)return;
   const en=window.currentLang==='en';
   const price=Number(data.price ?? data.propertyPrice ?? data.assumptions?.propertyPrice ?? 0);

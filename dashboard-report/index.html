@@ -1687,7 +1687,7 @@ function renderChart(){
 
   const unavailable = document.getElementById("roi-chart-unavailable");
   const frame = document.getElementById("roi-chart-frame");
-  if(frame){ frame.hidden = equity <= 0; frame.style.display = equity <= 0 ? "none" : "block"; frame.style.height = "420px"; }
+  if(frame){ frame.hidden = equity <= 0; frame.style.display = equity <= 0 ? "none" : "block"; frame.style.height = equity <= 0 ? "auto" : "420px"; }
   let roiNote = document.getElementById("roi-chart-zero-note");
   if(!roiNote && frame?.parentElement){
     roiNote = document.createElement("p"); roiNote.id = "roi-chart-zero-note";
@@ -1926,6 +1926,7 @@ async function generatePDF(){
       [...dashboardList].sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
       {};
 
+    const ownedProperty = fallback.propertyMode === "owned" || fallback.assumptions?.source === "owned_property";
     const roi = safe(fallback.roi);
     const price = safe(fallback.price);
     const equity = safe(fallback.equity);

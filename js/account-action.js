@@ -1,5 +1,6 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
-import {getAuth,applyActionCode} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+import {getAuth,applyActionCode,checkActionCode,ActionCodeOperation} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+import {firebaseConfig} from './firebase-config.js?v=20261011-rc97';
 const params=new URLSearchParams(location.search),en=params.get('lang')==='en';
 const t=(it,english)=>en?english:it;
 document.documentElement.lang=en?'en':'it';
@@ -8,21 +9,26 @@ title.textContent=t('Verifica della tua email','Verifying your email');
 message.textContent=t('Stiamo verificando il link. Attendi qualche istante.','We are checking your link. Please wait a moment.');
 const mode=params.get('mode'),code=params.get('oobCode');
 async function run(){
+ // Keep one-use codes out of the address bar before any action request.
+ history.replaceState(null,'',location.pathname+'?lang='+(en?'en':'it'));
  if(mode!=='verifyEmail'){
   // Firebase uses one action URL for all templates. Keep its existing password
   // reset and email recovery handlers; forward only known Firebase parameters.
   if(['resetPassword','recoverEmail','verifyAndChangeEmail','revertSecondFactorAddition'].includes(mode)&&code){
    const fallback=new URL('https://rendimento-bb.firebaseapp.com/__/auth/action');
    for(const key of ['mode','oobCode','lang'])if(params.has(key))fallback.searchParams.set(key,params.get(key));
-   fallback.searchParams.set('apiKey','AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU');
+   fallback.searchParams.set('apiKey',firebaseConfig.apiKey);
    location.replace(fallback.href);return;
   }
   fail();return;
  }
  if(!code){fail();return;}
  try{
-  const app=initializeApp({apiKey:'AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU',authDomain:'rendimento-bb.firebaseapp.com',projectId:'rendimento-bb'},'email-action');
-  await applyActionCode(getAuth(app),code);
+  const app=initializeApp(firebaseConfig,'email-action');
+  const auth=getAuth(app);
+  const action=await checkActionCode(auth,code);
+  if(action.operation!==ActionCodeOperation.VERIFY_EMAIL){fail();return;}
+  await applyActionCode(auth,code);
   // Success is shown only after Firebase accepts the code. No subscription is activated here.
   icon.textContent='✓';title.textContent=t('Email verificata. Benvenuto!','Email verified. Welcome!');
   message.textContent=t('Il tuo indirizzo email è stato confermato. Ora puoi tornare su RendimentoBB e continuare nel tuo account.','Your email address has been confirmed. You can now return to RendimentoBB and continue in your account.');

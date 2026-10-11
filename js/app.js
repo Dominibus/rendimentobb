@@ -9,7 +9,7 @@ import { calculateROI } from "./roi-engine.js?v=20261009-rc91";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
-import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261009-rc91";
+import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc97";
 initPropertyMode(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
 import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
@@ -1402,7 +1402,7 @@ const kpi3 = `
     border:1px solid ${borderCol};
   ">
     <div class="kpi-label">
-      ${t("⚡ Performance","⚡ Performance")}
+      ${t("Scostamento dal riferimento illustrativo","Difference from illustrative reference")}
     </div>
 
     <div class="kpi-value" style="color:${diffColor}">
@@ -1415,8 +1415,8 @@ const kpi3 = `
       color:#64748b;
     ">
       ${isPositive
-        ? t("Sopra la media","Above market")
-        : t("Sotto la media","Below market")}
+        ? t("Sopra il riferimento statico","Above static reference")
+        : t("Sotto il riferimento statico","Below static reference")}
     </div>
   </div>
 `;
@@ -1662,10 +1662,7 @@ let grade = "C";
 let recommendation =
   t("Operazione non consigliata", "Investment not recommended");
 
-if(window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property"){
-  recommendation = t("Valutare la gestione dell’immobile", "Assess property management");
-}
-else if(score >= 75){
+if(score >= 75){
 
   grade = "A";
 
@@ -1681,6 +1678,14 @@ else if(score > 40){
     t("Attendere e ottimizzare", "Wait and optimize");
 
 }
+
+  if(window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property"){
+    recommendation = score >= 75
+      ? t("Gestione favorevole nelle ipotesi", "Favorable management under assumptions")
+      : score > 40
+        ? t("Gestione da ottimizzare", "Management needs optimization")
+        : t("Gestione da rivedere", "Management needs review");
+  }
 
   let gradeColor = "#ef4444";
   if(grade === "A") gradeColor = "#10b981";
@@ -1791,7 +1796,9 @@ function renderRiskMeter(riskScore){
 
   <p style="margin-top:6px;font-size:13px;color:#64748b">
 
-  ${t(
+  ${Number(window.lastAnalysisData?.equity) <= 0
+    ? t("Indice del modello basato sui fattori disponibili: leva, cashflow e copertura del debito. Il ROI non applicabile è escluso.", "Model index based on available factors: leverage, cashflow and debt coverage. Unavailable ROI is excluded.")
+    : t(
   "Valutazione del rischio basata su ROI e sostenibilità finanziaria.",
   "Risk evaluation based on ROI and financial sustainability."
   )}
@@ -1837,9 +1844,15 @@ let description =
 
 const reasons = [];
 
-// ROI
-
-if(roi >= 15){
+// Do not compare startup ROI against acquisition opportunities or classify N/A as zero.
+const owned = window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property";
+const roiAvailable = window.lastAnalysisData?.roiAvailable !== false && Number(window.lastAnalysisData?.equity) > 0;
+if(owned || !roiAvailable){
+  reasons.push(owned
+    ? t("Valuta ricavi, costi e cashflow dell’immobile già posseduto; il ROI di avvio non è confrontabile con un acquisto.", "Assess revenue, costs and cashflow of the owned property; startup ROI is not comparable with an acquisition.")
+    : t("ROI non applicabile: nessun capitale proprio indicato.", "ROI not applicable: no equity provided."));
+}
+else if(roi >= 15){
 
 reasons.push(
 t(
@@ -2000,7 +2013,7 @@ ${r}
 
 const ownedVerdictMode = window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property";
 const verdictLabel = ownedVerdictMode
-  ? t("VALUTA LA GESTIONE", "ASSESS MANAGEMENT")
+  ? (verdict === "BUY" ? t("GESTIONE FAVOREVOLE NELLE IPOTESI", "FAVORABLE MANAGEMENT UNDER ASSUMPTIONS") : verdict === "WAIT" ? t("GESTIONE DA OTTIMIZZARE", "MANAGEMENT NEEDS OPTIMIZATION") : t("GESTIONE DA RIVEDERE", "MANAGEMENT NEEDS REVIEW"))
   : verdict === "BUY"
     ? t("ACQUISTA", "BUY")
     : verdict === "WAIT"
@@ -3791,7 +3804,7 @@ const visualROI =
 window.realROI = realROI;
 
 // 🔥 render chart con cap visivo
-renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI);
+renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI, access.isFree ? result.propertyROIAvailable : result.roiAvailable);
 
 // 🔥 testo reale
 const roiText = realROI.toFixed(1) + "%";
@@ -3996,6 +4009,9 @@ const executiveScoreData =
     : null;
 
 window.lastAnalysisData = {
+  propertyMode,
+  roiAvailable: result.roiAvailable,
+  propertyROIAvailable: result.propertyROIAvailable,
 
   // This snapshot precedes runPostAnalysis: score the current simulation now.
   investmentScore:
@@ -4896,7 +4912,7 @@ window.roiChartInstance = new Chart(ctx,{
 }
 
 // ================= MAIN ROI CHART (FIX DEFINITIVO) =================
-function renderROIChart(roi){
+function renderROIChart(roi, available = true){
 
   const canvas = document.getElementById("roiChart");
 
@@ -4905,6 +4921,13 @@ function renderROIChart(roi){
     return;
   }
 
+  const frame = canvas.closest?.('.roi-chart') || canvas.parentElement;
+  if(frame){frame.hidden = !available;frame.style.display = available ? '' : 'none';}
+  if(!available){
+    window.mainROIChart?.destroy();
+    window.mainROIChart = null;
+    return;
+  }
   if(typeof Chart === "undefined"){
     appDebugWarn("⛔ Chart.js non caricato");
     return;

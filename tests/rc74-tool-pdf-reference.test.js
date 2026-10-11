@@ -16,7 +16,7 @@ async function render(lang,equity,reference=true){
 }
 for(const lang of ['it','en'])for(const equity of [0,30000])test(`complete Tool PDF uses neutral internal references: ${lang}, equity ${equity}`,async()=>{
   const r=await render(lang,equity),all=r.texts.map(t=>t.text).join('\n'),market=r.texts.filter(t=>t.page===4).map(t=>t.text).join('\n');
-  assert.equal(r.page,7);
+  assert.equal(r.page,8);
   assert.match(market,lang==='en'?/BASES NOT COMPARABLE/:/BASI NON COMPARABILI/);
   assert.match(market,/10[.,]2%/);
   assert.doesNotMatch(all,/Below reference|Above reference|Sotto riferimento|Sopra riferimento|Market equity ROI|ROI equity di mercato|Local benchmark|Benchmark locale/);
