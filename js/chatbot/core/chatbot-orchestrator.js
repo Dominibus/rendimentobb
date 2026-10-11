@@ -189,10 +189,10 @@ if(mentionsGuestIssues && (hasOpenGuestIssues || /ospit|guest|soggiorn|stay/.tes
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 DETECTED INTENT",
-    detectedIntent
-  );
+  (void 0)
+
+
+;
 
 }
  // =========================================
@@ -606,10 +606,10 @@ if(!uniqueIntents.length){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🔥 FINAL INTENTS:",
-    uniqueIntents
-  );
+  (void 0)
+
+
+;
 
 }
     // =========================================
@@ -1213,16 +1213,16 @@ const isCombinedWhatIf =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF DETECTOR",
-    {
-      isCombinedWhatIf,
-      keys:
-        combinedWhatIfKeys,
-      changes:
-        combinedWhatIfChanges
-    }
-  );
+  (void 0)
+
+
+
+
+
+
+
+
+;
 
 }   
 
@@ -1468,10 +1468,10 @@ analysisData.revenueAnnual =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 COMBINED WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1528,10 +1528,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1645,10 +1645,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2371,10 +2371,10 @@ analysisData.risk =
         : 80;
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2421,10 +2421,10 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2526,10 +2526,10 @@ propertyPrice:
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏦 MORTGAGE WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2740,10 +2740,10 @@ if(isPropertyPriceWhatIf){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 PRICE WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2798,10 +2798,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 PRICE WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2905,10 +2905,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏠 PROPERTY PRICE WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3173,10 +3173,10 @@ analysisData.risk =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3234,10 +3234,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 OCCUPANCY WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3323,10 +3323,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏨 OCCUPANCY WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -4383,36 +4383,36 @@ const advisor =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 ADVISOR ENGINE RESULT",
-    {
-      enabled:
-        !!advisor,
+  (void 0)
 
-      shouldRunAdvisor,
 
-      intent:
-        intent.intent,
 
-      roi:
-        analysisData.realROI ??
-        analysisData.roi ??
-        0,
 
-      risk:
-        analysisData.risk ?? 0,
 
-      occupancy:
-        analysisData.occupancy ?? 0,
 
-      cashflow:
-        analysisData.net ??
-        analysisData.cashflow ??
-        0,
 
-      advisor
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 
@@ -4446,23 +4446,23 @@ const documentKnowledge = {
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "📄 DOCUMENT KNOWLEDGE",
-    {
-      activeDocument:
-        !!documentKnowledge.activeDocument,
+  (void 0)
 
-      activeReport:
-        !!documentKnowledge.activeReport,
 
-      uploadedReports:
-        Array.isArray(
-          documentKnowledge.uploadedReports
-        )
-        ? documentKnowledge.uploadedReports.length
-        : 0
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 
@@ -4570,10 +4570,10 @@ if(!analysisData?.whatIfScenario){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 CANONICAL INVESTMENT DECISION",
-    window.lastInvestmentScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -4583,31 +4583,31 @@ if(advisor){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧪 ADVISOR INPUTS",
-    {
-      roi:
-        analysisData.roi,
+  (void 0)
 
-      risk:
-        analysisData.risk,
 
-      occupancy:
-        analysisData.occupancy,
 
-      net:
-        analysisData.net,
 
-      annualProfit:
-        analysisData.annualProfit,
 
-      cashflow:
-        analysisData.cashflow,
 
-      lastAnalysis:
-        window.lastAnalysisData
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 }
@@ -5407,9 +5407,9 @@ if(window.rbRememberMessage){
 
   catch(error){
 
-console.error(
-  "AI Orchestrator error"
-);
+(void 0)
+
+;
 
     return {
 

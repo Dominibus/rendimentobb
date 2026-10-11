@@ -250,9 +250,9 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261011-rc99"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261004-rc04";
+  script.src = "/js/chatbot-loader.js?v=20261011-rc99";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -480,7 +480,7 @@ document.addEventListener("rb_language_changed", () => {
 async function bindHeaderAccount(){
   try{
     const [app, firebaseAuth] = await Promise.all([
-      import("/js/firebase-init.js"),
+      import("/js/firebase-init.js?v=20261011-rc99"),
       import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
     ]);
     auth = app.auth;
@@ -492,7 +492,7 @@ async function bindHeaderAccount(){
       if(window.firebaseReady && window.currentUser?.uid === user.uid){ renderUser(user); }
     });
   }catch(error){
-    console.warn("Header account controls unavailable", error);
+    (void 0);
     // Keep navigation visible; do not infer a plan or authenticated state.
     const accountArea = document.getElementById("user-area");
     if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">Accedi</a>`;

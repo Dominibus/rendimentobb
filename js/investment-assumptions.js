@@ -1,4 +1,4 @@
-import { calculateMortgage } from "./mortgage-engine.js";
+import { calculateMortgage } from "./mortgage-engine.js?v=20261011-rc99";
 // Saved assumptions are a versioned snapshot, never a reconstruction from defaults.
 const fields = ['propertyPrice','equity','loanAmount','priceNight','occupancy','expenses','commission','tax','interestRate','loanYears'];
 const keys = ['schemaVersion','calculationVersion','source','expensesUnit',...fields];

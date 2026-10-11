@@ -1,4 +1,4 @@
-import { app } from '/js/firebase-init.js';
+import { app } from '/js/firebase-init.js?v=20261011-rc99';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, setPersistence, browserSessionPersistence,
   browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
@@ -12,6 +12,7 @@ let mode = 'login';
 function message(it, en, success = false) {
   $('login-message').textContent = t(it, en);
   $('login-message').classList.toggle('success', success);
+  $('login-message').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 function ui() {
   const register = mode === 'register';

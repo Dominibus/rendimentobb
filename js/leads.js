@@ -2,7 +2,7 @@
 // 🚀 LEADS ENGINE – RENDIMENTOBB (SILICON FINAL)
 // ===============================
 
-import { db } from "/js/firebase-init.js";
+import { db } from "/js/firebase-init.js?v=20261011-rc99";
 
 import {
   collection,
@@ -129,13 +129,13 @@ async function sendLead(data){
 
     // 🔒 ANTI DUPLICATO
     if(window.__leadLock[key]){
-      console.warn("⛔ Duplicate lead blocked:", key);
+      (void 0);
       return;
     }
 
     window.__leadLock[key] = true;
 
-    console.log("📡 SEND LEAD →", data);
+    (void 0);
 
     const response = await fetch("/api/send-lead",{
       method:"POST",
@@ -148,18 +148,18 @@ async function sendLead(data){
 
     if(!response.ok){
       const txt = await response.text();
-      console.error("❌ API error:", txt);
+      (void 0);
       return false;
     }
 
     const result = await response.json();
 
-    console.log("✅ Lead sent:", result);
+    (void 0);
 
     return result;
 
   }catch(err){
-    console.error("❌ sendLead error:", err);
+    (void 0);
     return false;
   }
 }
@@ -172,7 +172,7 @@ export async function saveLeadMutui(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Invalid email");
+      (void 0);
       return;
     }
 
@@ -186,7 +186,7 @@ export async function saveLeadMutui(data){
     await sendLead(lead);
 
   }catch(err){
-    console.error("❌ mutui error:", err);
+    (void 0);
   }
 }
 
@@ -198,7 +198,7 @@ export async function saveLeadImmobili(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Invalid email");
+      (void 0);
       return;
     }
 
@@ -211,7 +211,7 @@ export async function saveLeadImmobili(data){
     await sendLead(lead);
 
   }catch(err){
-    console.error("❌ immobili error:", err);
+    (void 0);
   }
 }
 
@@ -223,7 +223,7 @@ export async function savePartnerLead(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Invalid email");
+      (void 0);
       return;
     }
 
@@ -238,7 +238,7 @@ export async function savePartnerLead(data){
     await sendLead(lead);
 
   }catch(err){
-    console.error("❌ partner error:", err);
+    (void 0);
   }
 }
 
@@ -250,7 +250,7 @@ export async function saveWorkLead(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Invalid email");
+      (void 0);
       return;
     }
 
@@ -266,6 +266,6 @@ export async function saveWorkLead(data){
     await sendLead(lead);
 
   }catch(err){
-    console.error("❌ work error:", err);
+    (void 0);
   }
 }

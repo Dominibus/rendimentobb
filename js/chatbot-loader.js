@@ -12,13 +12,13 @@
 
   const debugLog = (...args) => {
     if (IS_DEVELOPMENT) {
-      console.log(...args);
+      (void 0);
     }
   };
 
   const reportLoadError = (resourceType) => {
     if (IS_DEVELOPMENT) {
-      console.error(`Unable to load chatbot ${resourceType}`);
+      (void 0);
     }
   };
 
@@ -154,41 +154,41 @@
 
     "/js/chatbot/core/query-normalizer.js?v=20261009-rc76",
     "/js/chatbot/core/semantic-router.js?v=20261009-rc76",
-    "/js/chatbot/core/entity-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/intent-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/memory-engine.js?v=20261001-22",
+    "/js/chatbot/core/entity-engine.js?v=20261011-rc99",
+    "/js/chatbot/core/intent-engine.js?v=20261011-rc99",
+    "/js/chatbot/core/memory-engine.js?v=20261011-rc99",
     "/js/chatbot/core/conversation-engine.js?v=20261001-22",
-    "/js/chatbot/core/investor-profile-engine.js",
-    "/js/chatbot/core/score-engine.js?v=20261009-rc76",
+    "/js/chatbot/core/investor-profile-engine.js?v=20261011-rc99",
+    "/js/chatbot/core/score-engine.js?v=20261011-rc99",
 
     "/js/vendor/pdfjs/pdf.min.mjs",
 
-    "/js/chatbot/document-engine.js?v=20261004-rc02",
-    "/js/chatbot/pdf-extraction-engine.js?v=20261004-rc02",
-    "/js/chatbot/pdf-parser-engine.js?v=20261004-rc07",
+    "/js/chatbot/document-engine.js?v=20261011-rc99",
+    "/js/chatbot/pdf-extraction-engine.js?v=20261011-rc99",
+    "/js/chatbot/pdf-parser-engine.js?v=20261011-rc99",
     "/js/chatbot/core/document-classifier.js",
     "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/executive-narrative-engine.js",
-    "/js/chatbot/reasoning-engine.js?v=20261008-rc57",
-    "/js/chatbot/core/ai-brain.js",
-    "/js/chatbot/core/executive-brain-v2.js",
-    "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20261009-rc76",
+    "/js/chatbot/reasoning-engine.js?v=20261011-rc99",
+    "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
+    "/js/chatbot/core/executive-brain-v2.js?v=20261011-rc99",
+    "/js/chatbot/core/executive-response-builder.js?v=20261011-rc99",
+    "/js/chatbot/core/response-engine.js?v=20261011-rc99",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",
     "/js/chatbot/core/pms-autopilot-engine.js?v=20261009-rc76",
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261009-rc91",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261009-rc78",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261011-rc99",
 
     "/js/chatbot/support-engine.js",
-    "/js/chatbot/core/advisor-engine.js",
+    "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
-    "/js/chatbot/ui/chatbot-attachments.js?v=20261001-22",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261006-rc44",
+    "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261011-rc99",
 
-    "/js/ai-engine.js"
+    "/js/ai-engine.js?v=20261011-rc99"
   ];
 
   // =============================================

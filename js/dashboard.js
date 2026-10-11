@@ -15,7 +15,7 @@ import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js";
+import { app } from "./firebase-init.js?v=20261011-rc99";
 
 // 🔥 FIRESTORE
 import {
@@ -94,15 +94,15 @@ const IS_DEVELOPMENT =
 
 const dashboardDebug = (...args) => {
   if (IS_DEVELOPMENT) {
-    console.debug(...args);
+    (void 0);
   }
 };
 
 const dashboardError = (message, error) => {
-  console.error(message);
+  (void 0);
 
   if (IS_DEVELOPMENT && error) {
-    console.error(error);
+    (void 0);
   }
 };
 

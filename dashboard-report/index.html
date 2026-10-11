@@ -15,7 +15,7 @@
 <script src="/js/lang.js"></script>
 <script src="/js/market-data.js?v=20261001-22"></script>
 <script src="/js/account-report-cache.js"></script>
-<script type="module" src="/js/firebase-init.js?v=20261009-rc85"></script>
+<script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -3392,7 +3392,7 @@ doc.text(
     doc.save(`RendimentoBB-Investimento-Gestione-${city}.pdf`);
 
   }catch(err){
-    console.error("PDF ERROR:", err);
+    (void 0);
     alert(window.currentLang === "en" ? "Unable to generate the PDF. Please retry from the dashboard." : "Impossibile generare il PDF. Riprova dalla dashboard.");
   }
 
@@ -3460,7 +3460,7 @@ function init(){
   window.__reportStarted = true;
 
   if(!window.getUserAccess){
-    console.warn("⏳ Access non pronto → skip");
+    (void 0);
     return;
   }
 
@@ -3624,7 +3624,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261009-rc78" defer></script>
+<script src="/js/chatbot-loader.js?v=20261011-rc99" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3632,11 +3632,11 @@ data-en="✔ Professional PDF report">
 <script src="/js/chatbot/support-data.js" defer></script>
 
 <!-- 🤖 CHATBOT ENGINE -->
-<script src="/js/ai-engine.js" defer></script>
+<script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261009-rc85"></script>
-<script src="/js/ui-system.js" defer></script>
+<script type="module" src="/js/header.js?v=20261011-rc99"></script>
+<script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js"></script>
 </body>
 </html>

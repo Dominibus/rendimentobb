@@ -26,19 +26,19 @@ const t = (it, en) =>
 function applyAccessUI(){
 
   if(!window.RB_USER?.ready){
-    console.warn("⏳ RB_USER not ready → skip UI");
+    (void 0);
     return;
   }
 
   // 🔥 NON interferire durante simulazione
   if(window.simulationExecuted){
-    console.warn("⛔ UI locked → handled by simulator");
+    (void 0);
     return;
   }
 
   const { isPro, isInvestor, isLogged } = window.RB_USER;
 
-  console.log("🎯 APPLY ACCESS UI:", window.RB_USER);
+  (void 0);
 
   // reset classi
   document.body.classList.remove(
@@ -50,24 +50,24 @@ function applyAccessUI(){
 
   if(isPro){
     document.body.classList.add("is-pro");
-    console.log("🟢 PRO MODE");
+    (void 0);
     return;
   }
 
   if(isInvestor){
     document.body.classList.add("is-investor");
-    console.log("🟡 INVESTOR MODE");
+    (void 0);
     return;
   }
 
   if(isLogged){
     document.body.classList.add("is-free");
-    console.log("🔵 FREE USER");
+    (void 0);
     return;
   }
 
   document.body.classList.add("is-guest");
-  console.log("👻 GUEST MODE");
+  (void 0);
 }
 
 // ========================================
@@ -77,7 +77,7 @@ window.initAccessControl = function(){
 
   // 🔥 BLOCCO HARD anti doppio init
   if(window.RB_USER.initialized){
-    console.warn("⛔ AccessControl già inizializzato → skip");
+    (void 0);
     return;
   }
 
@@ -109,7 +109,7 @@ window.initAccessControl = function(){
       initialized: true // 🔥 segna init fatto
     };
 
-    console.log("🧠 RB_USER FINAL:", window.RB_USER);
+    (void 0);
 
     // 🔥 SOLO classi → NO overlay → NO DOM
     applyAccessUI();
@@ -122,7 +122,7 @@ window.initAccessControl = function(){
     );
 
   }catch(e){
-    console.error("❌ AccessControl error:", e);
+    (void 0);
   }
 
 };
@@ -192,7 +192,7 @@ window.getUserAccess = function(){
 // 🔥 SOLO quando Firebase è pronto
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 AccessControl → plan ready");
+  (void 0);
 
   window.initAccessControl();
 
@@ -207,15 +207,15 @@ setTimeout(() => {
 
   if(window.currentPlan){
     
-    console.warn("⚠️ AccessControl fallback after plan detected");
+    (void 0);
 
     window.initAccessControl();
 
   } else {
 
-    console.warn(
-      "⏳ AccessControl waiting Firebase plan"
-    );
+    (void 0)
+
+;
 
   }
 

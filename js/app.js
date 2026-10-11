@@ -5,7 +5,7 @@ import "./investment-journey.js?v=20261008-rc60";
 // ===============================================
 // ================= FIRESTORE ================
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
-import { calculateROI } from "./roi-engine.js?v=20261009-rc91";
+import { calculateROI } from "./roi-engine.js?v=20261011-rc99";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
@@ -16,7 +16,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261008-rc60";
+} from "./market-engine.js?v=20261011-rc99";
 
 import {
 renderExecutiveKPI
@@ -25,7 +25,7 @@ renderExecutiveKPI
 import {
 calculateMortgage,
 compareMortgages as compareMortgagesEngine
-} from "./mortgage-engine.js";
+} from "./mortgage-engine.js?v=20261011-rc99";
 
 
 import {
@@ -35,7 +35,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js?v=20261008-rc60";
+import { app } from "./firebase-init.js?v=20261011-rc99";
 const db = getFirestore(app);
 
 let roiChartInstance = null;
@@ -46,7 +46,7 @@ window.roiChartInstance = null;
 
 const appDebugWarn = (...args) => {
   if(window.RB_DEBUG === true){
-    console.warn(...args);
+    (void 0);
   }
 };
 
@@ -61,13 +61,13 @@ window.funnelState = {
 // 🔥 GLOBAL ERROR DEBUG (CRITICO)
 // =====================================
 window.onerror = function(msg, url, line, col, error){
-  console.error("💥 JS ERROR:", {
-    msg,
-    url,
-    line,
-    col,
-    error
-  });
+  (void 0)
+
+
+
+
+
+;
 };
 
 // ================= SAFE GLOBAL UTILS =================
@@ -163,7 +163,7 @@ window.rbAlert = function(msg){
 
   if(window.RB_DEBUG === true){
     appDebugWarn("🚫 ALERT BLOCCATO:", msg);
-    console.trace("📍 ALERT SOURCE");
+    (void 0);
   }
 
   if(typeof showToast === "function"){
@@ -609,7 +609,7 @@ window.dispatchEvent(
     return true;
 
   }catch(e){
-    console.error("Analysis save failed", {code: String(e?.code || "unknown")});
+    (void 0);
     showStatus("failed");
     return false;
   }finally{
@@ -3390,10 +3390,10 @@ if(finalROI <= 0){
 
   }catch(err){
 
-    console.error(
-      "❌ runPostAnalysis ERROR:",
-      err
-    );
+    (void 0)
+
+
+;
   }
 }
 
@@ -3760,10 +3760,10 @@ const result = calculateROI({
 
     if (!result || typeof result !== "object") {
 
-  console.error(
-    "💥 ROI Engine returned an invalid result",
-    result
-  );
+  (void 0)
+
+
+;
 
   window.isCalculating = false;
 
@@ -4843,7 +4843,7 @@ if(isTool && window.simulationExecuted === true){
 
 } catch(err){
 
-  console.error("💥 CALCULATE ERROR:", err);
+  (void 0);
 
 } finally {
 
@@ -5611,9 +5611,9 @@ if(analyzeBtn){
 
 } else {
 
-  console.error(
-    "❌ calculate non trovata"
-  );
+  (void 0)
+
+;
 
 }
 
@@ -7424,7 +7424,7 @@ localStorage.setItem("property_price", data.price);
 
 }catch(e){
 
-console.error("Errore analisi immobile:", e);
+(void 0);
 // nessun popup: utente inserirà i dati manualmente
 
 }
@@ -7520,7 +7520,7 @@ document.addEventListener("rb_auth_ready", () => {
       if(typeof window.buyPlan === "function"){
         window.buyPlan(pendingPlan);
       }else{
-        console.error("❌ buyPlan non trovata");
+        (void 0);
 
         showToast(
           t("Errore sistema pagamento","Payment system error"),
@@ -8325,7 +8325,7 @@ window.startPlanPurchase = function(plan){
   }
 
   if(!plan){
-    console.error("❌ Piano non valido");
+    (void 0);
     showToast?.(t("Errore piano","Invalid plan"),"error");
     return;
   }
@@ -8365,7 +8365,7 @@ window.startPlanPurchase = function(plan){
   if(typeof window.buyPlan === "function"){
     window.buyPlan(plan);
   }else{
-    console.error("❌ buyPlan non trovata");
+    (void 0);
     showToast?.(t("Errore pagamento","Payment error"),"error");
   }
 

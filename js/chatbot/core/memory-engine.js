@@ -470,10 +470,10 @@ if(
 
     if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 MEMORY UPDATED:",
-    memory
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -481,10 +481,10 @@ if(
 
   catch(error){
 
-    console.error(
-      "❌ MEMORY ERROR:",
-      error
-    );
+    (void 0)
+
+
+;
 
   }
 

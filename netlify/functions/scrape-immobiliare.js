@@ -37,7 +37,7 @@ headers:{
 const html = await response.text();
 
 // DEBUG: mostra cosa riceve davvero Netlify
-console.log(html.substring(0,2000));
+(void 0);
 
 let price = null;
 let city = null; 
@@ -61,7 +61,7 @@ price = parseInt(json.offers.price);
 }
 
 }catch(e){
-console.log("JSON parse error");
+(void 0);
 }
 
 }
@@ -152,7 +152,7 @@ city = cityFallback[1];
 
 }
 
-console.log("Extracted city:", city);  
+(void 0);  
 
 
 // ================= RETURN =================
@@ -174,7 +174,7 @@ city: city || null
 
 }catch(e){
 
-console.log("SCRAPE ERROR", e);
+(void 0);
 
 return {
 

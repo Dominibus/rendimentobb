@@ -37,13 +37,13 @@ const RB_DEBUG = window.RB_DEBUG === true;
 
 const rbDebugLog = (...args) => {
     if (RB_DEBUG) {
-        console.log(...args);
+        (void 0);
     }
 };
 
 const rbDebugWarn = (...args) => {
     if (RB_DEBUG) {
-        console.warn(...args);
+        (void 0);
     }
 };
   

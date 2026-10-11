@@ -632,9 +632,9 @@ if(typeof window.rbDetectIntent === "function"){
 
 }else{
 
-  console.error(
-    "❌ rbDetectIntent NOT LOADED"
-  );
+  (void 0)
+
+;
 
 }
 

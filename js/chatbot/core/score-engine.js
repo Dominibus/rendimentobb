@@ -493,10 +493,10 @@ window.rbGenerateInvestmentScore = function({
 
   catch(error){
 
-    console.error(
-      "❌ SCORE ENGINE ERROR:",
-      error
-    );
+    (void 0)
+
+
+;
 
     return {
 

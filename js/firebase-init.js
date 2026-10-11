@@ -232,12 +232,12 @@ async function loadUserPlan(uid) {
   
 if(window.RB_DEBUG === true){
 
-console.log("🧠 USER STATE", {
-  plan: window.currentPlan,
-  role: window.userRole,
-  isAdmin: window.isAdmin ? window.isAdmin() : false,
-  isPro: window.isPro()
-});
+(void 0)
+
+
+
+
+;
 
 }
 
@@ -258,7 +258,7 @@ if (docSnap.exists()) {
   window.userName = data.name || "";
 } else {
       if(window.RB_DEBUG === true){
-  console.warn("⚠️ Documento NON trovato");
+  (void 0);
 }
     }
 
@@ -286,7 +286,7 @@ window.isAdminUser = isAdmin;
 if(window.isAdminUser){
 
   if(window.RB_DEBUG === true){
-  console.log("👑 ADMIN OVERRIDE ATTIVO");
+  (void 0);
 }
 
   // forza piano
@@ -301,12 +301,12 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
 
 if(window.RB_DEBUG === true){
 
-console.log(
-"🔥 Piano finale CLEAN:",
-window.currentPlan,
-"| ruolo:",
-window.userRole
-);
+(void 0)
+
+
+
+
+;
 
 } 
 
@@ -409,7 +409,7 @@ window.hasPlan = function(required){
 
   }catch(err){
 
-    console.error("❌ ERRORE loadUserPlan:", err);
+    (void 0);
 
     if(!window.currentPlan){
   window.currentPlan = "free";
@@ -674,7 +674,7 @@ setTimeout(()=>{
 
   } catch (err) {
 
-    console.error("❌ Errore init utente:", err);
+    (void 0);
 
     window.currentPlan = "free";
     window.firebaseReady = true;

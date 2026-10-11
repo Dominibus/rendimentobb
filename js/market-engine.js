@@ -77,7 +77,7 @@ export function renderMarketBenchmark(inputCity){
   /* ================= DATA CHECK ================= */
 
   if(!window.RB_MARKET_DATA){
-    console.warn("⏳ MARKET DATA non pronto");
+    (void 0);
     return;
   }
 

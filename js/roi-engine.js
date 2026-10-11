@@ -3,7 +3,7 @@
 // Silicon Valley grade – Stable / Safe / Predictable
 // ===============================================
 
-import { calculateMortgage } from "./mortgage-engine.js";
+import { calculateMortgage } from "./mortgage-engine.js?v=20261011-rc99";
 
 // ================= CORE ENGINE =================
 function calculateROI(input = {}){
@@ -75,7 +75,7 @@ function calculateROI(input = {}){
     mortgageYearly =
       calculateMortgage(loanAmount, interestRate, loanYears) || 0;
   }catch(e){
-    console.warn("⚠️ Mortgage fallback", e);
+    (void 0);
     mortgageYearly = 0;
   }
 
@@ -230,7 +230,7 @@ function calculateROI(input = {}){
   };
 
   if(!result || typeof result !== "object"){
-    console.error("⛔ ROI ENGINE FAILED");
+    (void 0);
     return {};
   }
 

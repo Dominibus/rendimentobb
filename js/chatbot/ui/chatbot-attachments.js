@@ -28,7 +28,7 @@ window.rbChatAttachments = (function(){
         );
 
         if(window.RB_DEBUG === true){
-            console.debug("📎 ATTACHMENTS READY");
+            (void 0);
         }
 
     }
@@ -57,7 +57,7 @@ window.rbChatAttachments = (function(){
         }
 
         if(window.RB_DEBUG === true){
-            console.debug("📎 FILE SELECTED", file);
+            (void 0);
         }
 
         // Dispatcher owns progress and completion messages.

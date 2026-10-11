@@ -746,10 +746,10 @@ window.rbParseExecutivePDF = async function(documentObject){
         };
 
         if(window.RB_DEBUG === true){
-            console.debug(
-                "🧠 PDF PARSER RESULT",
-                documentObject.analysis
-            );
+            (void 0)
+
+
+;
         }
 
         return documentObject;
@@ -758,10 +758,10 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     catch(error){
 
-        console.error("PDF Parser Error");
+        (void 0);
 
         if(window.RB_DEBUG === true){
-            console.debug(error);
+            (void 0);
         }
 
         return documentObject;

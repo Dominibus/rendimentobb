@@ -16,9 +16,9 @@ test("Dashboard and PMS routine diagnostics stay development-only", () => {
   assert.match(source, /dashboardDebug\("Optional PMS snapshot unavailable for investment report"/);
 });
 
-test("Dashboard and PMS real failures remain observable", () => {
+test("Dashboard and PMS failures do not print account data in the browser", () => {
   assert.match(source, /const dashboardError =/);
-  assert.match(source, /console\.error\(message\)/);
+  assert.doesNotMatch(source, /console\.(?:log|debug|warn|error|trace)\s*\(/);
   assert.match(source, /dashboardError\(\s*"PROPERTY SAVE ERROR:"/);
   assert.match(source, /dashboardError\("Booking save failed", error\)/);
 });

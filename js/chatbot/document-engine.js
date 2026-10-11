@@ -96,7 +96,7 @@ window.rbDocumentEvents = {
         ){
 
             if(window.RB_DEBUG === true){
-    console.debug("DOCUMENT EVENT", event);
+    (void 0);
 }
 
         }

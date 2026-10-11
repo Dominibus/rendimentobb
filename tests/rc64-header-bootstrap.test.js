@@ -15,7 +15,7 @@ test('header renders before authentication resolves and survives an unavailable 
  assert.match(container.innerHTML,/<header class="rb-header">/);
  assert.match(container.innerHTML,/href="\/mutui\/"/);
  await new Promise(resolve=>setImmediate(resolve));
- assert.equal(warnings,1);assert.match(container.innerHTML,/Navigazione principale/);
+ assert.equal(warnings,0);assert.match(container.innerHTML,/Navigazione principale/);
  assert.match(account.innerHTML,/href="\/login\/"/);assert.doesNotMatch(account.innerHTML,/PRO|Logout/);
 });
 test('repeated initialization does not duplicate the header or account binding',()=>{
@@ -30,6 +30,6 @@ test('tool has the same navigation markup before any script executes',()=>{
  const html=read('tool/index.html');assert.ok(html.includes('<div id="global-header">'+template+'</div>'));
  assert.equal((html.match(/id="global-header"/g)||[]).length,1);
  assert.equal((html.match(/id="rb-mobile"/g)||[]).length,1);
- assert.match(html,/header.js\?v=20261009-rc85/);
+ assert.match(html,/header.js\?v=20261011-rc99/);
  assert.doesNotMatch(source,/^import .*firebase/m);
 });

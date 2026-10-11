@@ -687,10 +687,10 @@ function(memory = null){
 
 if (window.RB_DEBUG) {
 
-    console.debug(
-        "AI CONTEXT:",
-        memory
-    );
+    (void 0)
+
+
+;
 
 }
 
@@ -899,19 +899,19 @@ if(executiveConfidence){
   
 if (window.RB_DEBUG) {
 
-    console.debug(
-        "SUMMARY IT:",
-        summaryIT
-    );
+    (void 0)
+
+
+;
 
 }
 
 if (window.RB_DEBUG) {
 
-    console.debug(
-        "SUMMARY EN:",
-        summaryEN
-    );
+    (void 0)
+
+
+;
 
 }
 
@@ -926,10 +926,10 @@ const finalSummary =
 
 if (window.RB_DEBUG) {
 
-    console.debug(
-        "FINAL SUMMARY:",
-        finalSummary
-    );
+    (void 0)
+
+
+;
 
 }
 
@@ -1098,10 +1098,10 @@ compatibili con fascia alta.
 
 if (window.RB_DEBUG) {
 
-    console.debug(
-        "AI SIGNALS:",
-        signals
-    );
+    (void 0)
+
+
+;
 
 }
 
@@ -1888,13 +1888,13 @@ assessment.recommendations =
   // 🧠 DEBUG
   // ===========================================
 
-  if(window.RB_DEBUG === true) console.debug(
+  if(window.RB_DEBUG === true) (void 0)
 
-    "🧠 EXECUTIVE ASSESSMENT:",
 
-    assessment
 
-  );
+
+
+;
 
   // ===========================================
   // ✅ RETURN OBJECT
