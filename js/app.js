@@ -1660,14 +1660,14 @@ const score =
   // ================= KPI BOX =================
 let grade = "C";
 let recommendation =
-  t("Operazione non consigliata", "Investment not recommended");
+  t("Scenario critico nelle ipotesi", "Critical scenario under assumptions");
 
 if(score >= 75){
 
   grade = "A";
 
   recommendation =
-    t("Acquisto consigliato", "Buy recommended");
+    t("Scenario favorevole nelle ipotesi", "Favorable scenario under assumptions");
 
 }
 else if(score > 40){
@@ -1675,7 +1675,7 @@ else if(score > 40){
   grade = "B";
 
   recommendation =
-    t("Attendere e ottimizzare", "Wait and optimize");
+    t("Ipotesi da verificare", "Assumptions to review");
 
 }
 
@@ -1707,7 +1707,7 @@ else if(score > 40){
   </div>
 
   <div class="kpi-box">
-    <span>${t("Raccomandazione","Recommendation")}</span>
+    <span>${t("Esito del modello","Model assessment")}</span>
     <strong>${recommendation}</strong>
   </div>
 
@@ -1856,8 +1856,8 @@ else if(roi >= 15){
 
 reasons.push(
 t(
-"ROI superiore al riferimento illustrativo",
-"ROI significantly above market average"
+"ROI equity almeno 15% nelle ipotesi: soglia interna del modello, non media di mercato",
+"Equity ROI at least 15% under assumptions: an internal model threshold, not a market average"
 )
 );
 
@@ -1866,8 +1866,8 @@ else if(roi >= 8){
 
 reasons.push(
 t(
-"ROI competitivo",
-"Competitive ROI"
+"ROI equity tra 8% e 15% nelle ipotesi: fascia interna del modello",
+"Equity ROI between 8% and 15% under assumptions: an internal model band"
 )
 );
 
@@ -1884,8 +1884,8 @@ confidence-=15;
 
 reasons.push(
 t(
-"ROI inferiore alle opportunità migliori",
-"ROI below the best market opportunities"
+"ROI equity inferiore all’8% nelle ipotesi: soglia interna del modello",
+"Equity ROI below 8% under assumptions: an internal model threshold"
 )
 );
 
@@ -2015,10 +2015,10 @@ const ownedVerdictMode = window.lastAnalysisData?.propertyMode === "owned" || wi
 const verdictLabel = ownedVerdictMode
   ? (verdict === "BUY" ? t("GESTIONE FAVOREVOLE NELLE IPOTESI", "FAVORABLE MANAGEMENT UNDER ASSUMPTIONS") : verdict === "WAIT" ? t("GESTIONE DA OTTIMIZZARE", "MANAGEMENT NEEDS OPTIMIZATION") : t("GESTIONE DA RIVEDERE", "MANAGEMENT NEEDS REVIEW"))
   : verdict === "BUY"
-    ? t("ACQUISTA", "BUY")
+    ? t("SCENARIO FAVOREVOLE NELLE IPOTESI", "FAVORABLE SCENARIO UNDER ASSUMPTIONS")
     : verdict === "WAIT"
-      ? t("ATTENDI", "WAIT")
-      : t("EVITA", "AVOID");
+      ? t("IPOTESI DA VERIFICARE", "ASSUMPTIONS TO REVIEW")
+      : t("SCENARIO CRITICO NELLE IPOTESI", "CRITICAL SCENARIO UNDER ASSUMPTIONS");
 
 box.innerHTML = `
 

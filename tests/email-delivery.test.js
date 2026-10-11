@@ -50,12 +50,15 @@ test('resolved email provider error and absent accepted id both reject',async()=
 });
 for(const type of ['analysis','mutui','immobili','partner','work','auth']){
  test(`lead ${type} sends separate exhaustive user and Italian admin confirmations`,async()=>{
-  const h=harness('api/send-lead.js');const result=await h.run({type,email:'owner@example.test',name:'Domenico',city:'napoli',roi:-4.2,profit:-6678,price:530000,equity:159000,dscr:.94,years:20,rate:'3.5',role:'Gestore',message:'Note <script>',lang:'en',source:'test_form',requestId:`request-${type}`});
+  const h=harness('api/send-lead.js');
+  if(type==='auth')h.ctx.admin.auth=()=>({verifyIdToken:async(token,revocationCheck)=>{assert.equal(token,'registration');assert.equal(revocationCheck,true);return {uid:'new-account',email:'owner@example.test'};}});
+  const result=await h.run({type,email:'owner@example.test',name:'Domenico',city:'napoli',roi:-4.2,profit:-6678,price:530000,equity:159000,dscr:.94,years:20,rate:'3.5',role:'Gestore',message:'Note <script>',lang:'en',source:'test_form',requestId:`request-${type}`},'POST',type==='auth'?'registration':'');
   assert.equal(result.status,200);assert.equal(result.body.leadSaved,true);assert.equal(h.sent.length,2);
   const user=h.sent[0].payload,adminMail=h.sent[1].payload;
   assert.deepEqual(Array.from(user.to),['owner@example.test']);assert.deepEqual(Array.from(adminMail.to),['rendimentobb@gmail.com']);assert.equal(adminMail.replyTo,'owner@example.test');
   assert.ok(user.html.includes('Note &lt;script&gt;'));assert.ok(adminMail.text.includes('test_form'));assert.ok(adminMail.html.includes('/dashboard-leads/'));
   if(type==='analysis'){assert.ok(user.text.includes('-€6,678.00')||user.text.includes('-€6,678'));assert.ok(adminMail.text.includes('-6.678,00'));assert.ok(adminMail.text.includes('0,94'));}
+  if(type==='auth'){assert.match(user.text,/does not activate a subscription/);assert.doesNotMatch(user.text,/approval or acceptance|Profile \/ role/);}
   assert.ok([...h.stores.get('leads').values()][0].emailDelivery.user.providerId);
  });
 }

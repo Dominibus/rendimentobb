@@ -10762,7 +10762,7 @@ ${estimatedProperties} immobili
 
 ${growthProfileIT}
 
-L'obiettivo appare realistico se mantieni un ROI sostenibile, controlli il rischio operativo e reinvesti progressivamente i profitti generati.
+Questo è uno scenario sulle ipotesi, non una verifica della fattibilità dell’obiettivo. Occorre verificare costi accessori, liquidità, disponibilità degli immobili e finanziamento effettivamente ottenibile.
 
 📈 Strategia consigliata
 
@@ -10791,7 +10791,7 @@ Fase 3
 
 🚀 Consiglio del Consulente AI
 
-Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attuale consente realisticamente l'acquisizione iniziale di circa ${aggressiveProperties} immobili utilizzando una leva finanziaria sostenibile e una crescita progressiva del portafoglio.`;
+Con il capitale indicato di €${availableCapital.toLocaleString("it-IT")}, il modello ipotizza circa ${aggressiveProperties} immobili nello scenario dinamico. È un calcolo illustrativo: non verifica l’accesso al credito, il prezzo degli immobili o la sostenibilità della leva. Non è un invito all’acquisto.`;
 
   // =====================================
   // 🇬🇧
@@ -10853,7 +10853,7 @@ ${estimatedProperties} properties
 
 ${growthProfileEN}
 
-The objective appears realistic if sustainable ROI is maintained, operational risk is controlled and profits are continuously reinvested.
+This is a scenario based on assumptions, not a feasibility check of the target. Purchase expenses, cash reserves, property availability and actually obtainable financing must be checked.
 
 📈 Recommended Strategy
 
@@ -10882,7 +10882,7 @@ Phase 3
 
 🚀 AI Consultant Advice
 
-With €${availableCapital.toLocaleString("en-US")} available, your current capital could realistically support the initial acquisition of approximately ${aggressiveProperties} properties using sustainable leverage and progressive portfolio growth.`;
+With the stated capital of €${availableCapital.toLocaleString("en-US")}, the model assumes approximately ${aggressiveProperties} properties in the growth scenario. This is an illustration: it does not verify access to credit, property prices or sustainable leverage. It is not a recommendation to buy.`;
 
 }
 

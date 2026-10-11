@@ -42,6 +42,17 @@ function isValidEmail(value){
     && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
 }
 
+async function authenticateRegistration(req, email){
+  const bearer = String(req.headers?.authorization || '').match(/^Bearer (\S+)$/);
+  if(!bearer) return false;
+  try{
+    const identity = await admin.auth().verifyIdToken(bearer[1], true);
+    return Boolean(identity.uid) && String(identity.email || '').trim().toLowerCase() === email;
+  }catch{
+    return false;
+  }
+}
+
 function escapeHTML(value){
   return String(value ?? "").replace(/[&<>'"]/g, character => ({
     "&":"&amp;",
@@ -298,6 +309,12 @@ export default async function handler(req, res){
 
     if(!isValidEmail(email)){
       return res.status(400).json({ error:"Invalid email" });
+    }
+
+    // Public lead forms remain available; an account confirmation must be
+    // bound to the authenticated account, never a caller-supplied address.
+    if(type === 'auth' && !(await authenticateRegistration(req, email))){
+      return res.status(401).json({success:false,error:'authentication_required'});
     }
 
     if(requestId){
@@ -621,7 +638,7 @@ const userRows = [[t(detectedLang,"Email","Email"),email]];
 if(name) userRows.push([t(detectedLang,"Nome / azienda","Name / company"),name]);
 if(phone) userRows.push([t(detectedLang,"Telefono","Phone"),phone]);
 if(city !== "N/A" && !["partner","work","auth"].includes(type)) userRows.push([t(detectedLang,"Città","City"),displayCity]);
-if(role) userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]);
+if(role && type !== 'auth') userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]);
 if(message) userRows.push([t(detectedLang,"Messaggio inviato","Submitted message"),message]);
 if(type === "mutui"){
   if(provided("price")) userRows.push([t(detectedLang,"Importo simulato","Modeled amount"),formatMoney(price,detectedLang)]);
@@ -642,7 +659,7 @@ if(showInvestmentResults){
   ]) if(provided(key)) userRows.push([t(detectedLang,label,enLabel),val]);
 }
 const userMail = buildBrandedEmail({lang:detectedLang,title:userHeading,intro:userDescription.replaceAll(htmlCity,displayCity),rows:userRows,
-  note:showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
+  note:type === 'auth'?t(detectedLang,"Accedi con l’indirizzo con cui ti sei registrato. La verifica dell’email e l’eventuale attivazione della prova Investor sono passaggi separati: questa conferma non attiva un abbonamento.","Sign in with the address you registered. Email verification and any Investor trial activation are separate steps: this confirmation does not activate a subscription."):showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
   secondaryLabel:reminderConfirmationURL?t(detectedLang,"Conferma i promemoria facoltativi","Confirm optional reminders"):undefined,secondaryURL:reminderConfirmationURL || undefined,
   ctaLabel,ctaURL:cta,eyebrow:t(detectedLang,"Conferma richiesta","Request confirmation")});
 

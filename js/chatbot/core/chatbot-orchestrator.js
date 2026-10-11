@@ -7,6 +7,22 @@
 // 🚀 MAIN AI PIPELINE
 // ===============================================
 
+// Product limits take priority over document, PMS and general knowledge routes.
+// A question about an external action must never be answered as if it happened.
+window.rbBuildProductLimitsResponse = function(message){
+  const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagno|guadagni)\b/.test(q);
+  const guarantee = /garanti|guarante|assicurat|assured|certo|certain|sicuro|sure|promett|promise/.test(q);
+  const external = /alloggiati|airbnb|booking\.com|\bota\b|schedin|questura|police|istat/.test(q);
+  const action = /sincron|sync|invi|send|sent|trasmess|transmi|automat|automatic|gia fatto|already|integrat|collegat|connect/.test(q);
+  if(!(financial && guarantee) && !(external && action)) return null;
+  return {
+    type:'product_limits',confidence:1,actions:[],signals:['product_limits_explained'],metadata:{source:'product_scope'},
+    textIT:'Il ROI, il cashflow, i ricavi e i punteggi sono stime del modello basate sui dati inseriti: non sono rendimenti garantiti, risultati già conseguiti o una probabilità di successo. Verifica le ipotesi e le condizioni effettive prima di decidere.\n\nRendimentoBB non sincronizza automaticamente Airbnb o Booking.com e non invia automaticamente schedine ad Alloggiati Web, comunicazioni ISTAT o altri adempimenti. Il PMS e Autopilot organizzano dati, scadenze e attività; le istruzioni o gli eventuali file di esportazione richiedono la tua verifica e l’esecuzione sui portali competenti. Una risposta del chatbot non conferma che un invio o una sincronizzazione siano avvenuti.\n\nPer sapere se hai completato un adempimento, controlla la ricevuta del portale competente. Le valutazioni del modello non sostituiscono una verifica fiscale, legale o bancaria.',
+    textEN:'ROI, cash flow, revenue and scores are model estimates based on the inputs: they are not guaranteed returns, achieved results or a probability of success. Review the assumptions and actual conditions before deciding.\n\nRendimentoBB does not automatically sync Airbnb or Booking.com and does not automatically send guest registrations to Alloggiati Web, ISTAT reports or other statutory filings. PMS and Autopilot organize data, deadlines and tasks; instructions and any export files require your review and submission through the relevant portals. A chatbot reply does not confirm that a submission or synchronization took place.\n\nTo check whether a filing was completed, inspect the receipt from the relevant portal. Model assessments do not replace tax, legal or lender checks.'
+  };
+};
+
 window.rbProcessAIMessage =
 async function(message){
 
@@ -20,6 +36,9 @@ async function(message){
 
       (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
+
+    const limitsResponse = window.rbBuildProductLimitsResponse(text);
+    if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
     if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
     // Handle explicit document requests once before the multi-intent/live pipeline.

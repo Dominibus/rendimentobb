@@ -39,8 +39,8 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
 <!-- 🔥 LIBS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
+<script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
 
 <!-- 🔥 FIREBASE -->
 <script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
@@ -1230,6 +1230,7 @@ value="70">
 <div class="input-group"><label for="loanYears" data-it="Durata mutuo (anni)" data-en="Loan term (years)">Durata mutuo (anni)</label><input id="loanYears" type="number" value="20" min="1" max="100" step="1"></div>
 <div class="input-group"><label for="commission" data-it="Commissioni sui ricavi (%)" data-en="Revenue commissions (%)">Commissioni sui ricavi (%)</label><input id="commission" type="number" value="15" min="0" max="100" step="any" inputmode="decimal"></div>
 <div class="input-group"><label for="tax" data-it="Aliquota applicata dal modello (%)" data-en="Model tax rate (%)">Aliquota applicata dal modello (%)</label><input id="tax" type="number" value="21" min="0" max="100" step="any" inputmode="decimal"></div>
+<p data-it="Il modello applica questa aliquota al margine positivo dopo commissioni e costi operativi, prima delle rate del mutuo. È una semplificazione: non calcola la cedolare secca sui ricavi né determina il regime fiscale applicabile." data-en="The model applies this rate to the positive margin after commissions and operating costs, before loan payments. This is a simplification: it does not calculate Italian flat-rate rental tax on gross revenue or determine the applicable tax regime.">Il modello applica questa aliquota al margine positivo dopo commissioni e costi operativi, prima delle rate del mutuo. È una semplificazione: non calcola la cedolare secca sui ricavi né determina il regime fiscale applicabile.</p>
 </div>
 <p id="purchase-loan-help" data-it="Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente." data-en="The loan is derived from price minus equity. Monthly costs should not duplicate commissions and taxes already counted separately.">Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente.</p>
 </details>
@@ -1929,7 +1930,7 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261011-rc99" defer></script>
+<script src="/js/chatbot-loader.js?v=20261011-rc101" defer></script>
   
 <script type="module" src="/js/header.js?v=20261011-rc99"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
@@ -2082,7 +2083,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261011-rc99"></script>
+<script type="module" src="/js/app.js?v=20261011-rc101"></script>
 
 <script>
 

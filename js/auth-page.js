@@ -73,8 +73,11 @@ $('auth-form').addEventListener('submit', async event => {
         }
         if (role === 'investor') localStorage.setItem('show_investor_modal','1');
         // Secondary notification must not strand a successfully created account.
-        fetch('/api/send-lead', {method:'POST', headers:{'Content-Type':'application/json'},
-          signal:AbortSignal.timeout(8000), body:JSON.stringify({email,name,role,type:'auth',source:'/login/',funnel,lang:window.currentLang || 'it'})}).catch(() => {});
+        (async () => {
+          const token = await credential.user.getIdToken();
+          await fetch('/api/send-lead', {method:'POST', headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},
+            keepalive:true, signal:AbortSignal.timeout(8000), body:JSON.stringify({email,name,role,type:'auth',source:'/login/',funnel,lang:window.currentLang || 'it'})});
+        })().catch(() => {});
         localStorage.removeItem('lead_source');
       }
       localStorage.setItem('just_logged','1');
