@@ -3,7 +3,7 @@
 // Silicon Valley grade – Stable / Safe / Predictable
 // ===============================================
 
-import { calculateMortgage } from "./mortgage-engine.js";
+import { calculateMortgage } from "./mortgage-engine.js?v=20261011-rc99";
 
 // ================= CORE ENGINE =================
 function calculateROI(input = {}){
@@ -20,9 +20,10 @@ function calculateROI(input = {}){
   };
 
   // ================= INPUT =================
-  const price        = safePositive(input.price, 100000);
+  const propertyMode = input.propertyMode === "owned" || input.source === "owned_property" ? "owned" : "purchase";
+  const price        = safePositive(input.price, propertyMode === "owned" ? 0 : 100000);
   const equity       = safePositive(input.equity, 0);
-  const loanAmount   = safePositive(input.loanAmount, price - equity);
+  const loanAmount   = safePositive(input.loanAmount, propertyMode === "owned" ? 0 : Math.max(0, price - equity));
 
   const priceNight   = safePositive(input.priceNight, 100);
   const occupancy    = Math.min(100, safePositive(input.occupancy, 65));
@@ -74,7 +75,7 @@ function calculateROI(input = {}){
     mortgageYearly =
       calculateMortgage(loanAmount, interestRate, loanYears) || 0;
   }catch(e){
-    console.warn("⚠️ Mortgage fallback", e);
+    (void 0);
     mortgageYearly = 0;
   }
 
@@ -86,6 +87,8 @@ function calculateROI(input = {}){
     equity > 0
       ? (netAfterMortgage / equity) * 100
       : 0;
+  // Zero is retained for legacy numeric consumers; applicability is explicit.
+  const roiAvailable = equity > 0;
 
   const realROI =
   price > 0
@@ -121,6 +124,7 @@ function calculateROI(input = {}){
       : 0;
 
   const roiRisk =
+    !roiAvailable ? 0 :
     roi < 0 ? 25 :
     roi < 6 ? 20 :
     roi < 10 ? 15 :
@@ -137,6 +141,7 @@ function calculateROI(input = {}){
 
   const leverageRisk =
     loanAmount <= 0 ? 0 :
+    price <= 0 ? 10 :
     ltv >= 80 ? 10 :
     ltv >= 70 ? 8 :
     ltv >= 60 ? 5 :
@@ -177,6 +182,9 @@ function calculateROI(input = {}){
   const clean = (v) => isFinite(v) ? v : 0;
 
   const result = {
+    propertyMode,
+    propertyROIAvailable: price > 0,
+    ltvAvailable: price > 0,
     price: clean(price),
     equity: clean(equity),
     loan: clean(loanAmount),
@@ -204,6 +212,8 @@ function calculateROI(input = {}){
     profit: clean(netAfterMortgage),
 
     roi: clean(roi),
+    roiAvailable,
+    riskROIApplied: roiAvailable,
     realROI: clean(realROI),
 
     monthlyProfit: clean(monthlyProfit),
@@ -220,7 +230,7 @@ function calculateROI(input = {}){
   };
 
   if(!result || typeof result !== "object"){
-    console.error("⛔ ROI ENGINE FAILED");
+    (void 0);
     return {};
   }
 

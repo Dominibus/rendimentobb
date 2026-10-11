@@ -8,9 +8,9 @@
     const RB_DEBUG = false;
 
     if(RB_DEBUG){
-    console.log(
-        "🧠 AI Brain READY"
-    );
+    (void 0)
+
+;
 }
 
     window.rbProcessBrain = function(context = {}){
@@ -108,10 +108,10 @@ const cashflow =
         };
 
         if(RB_DEBUG){
-    console.log(
-        "🧠 BRAIN CONTEXT",
-        brainContext
-    );
+    (void 0)
+
+
+;
 }
 
         // =====================================
@@ -455,46 +455,46 @@ brainContext.executiveSummary = {
 
 };
         if(RB_DEBUG){
-    console.log(
-        "🧠 EXECUTIVE SUMMARY",
-        brainContext.executiveSummary
-    );
+    (void 0)
+
+
+;
 }
         
 
         if(RB_DEBUG){
-    console.log(
-        "🧠 AI DIAGNOSIS",
-        diagnosis
-    );
+    (void 0)
+
+
+;
 }
 
         if(RB_DEBUG){
-    console.log(
-        "🟢 STRENGTHS",
-        strengths
-    );
+    (void 0)
+
+
+;
 }
 
         if(RB_DEBUG){
-    console.log(
-        "🔴 WEAKNESSES",
-        weaknesses
-    );
+    (void 0)
+
+
+;
 }
 
         if(RB_DEBUG){
-    console.log(
-        "⚠️ RISKS",
-        risks
-    );
+    (void 0)
+
+
+;
 }
 
         if(RB_DEBUG){
-    console.log(
-        "🎯 ACTION PLAN",
-        actionPlan
-    );
+    (void 0)
+
+
+;
 }
 
         return brainContext;

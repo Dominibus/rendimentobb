@@ -12,15 +12,15 @@ window.initRBChatbotUI = function(){
 
   const debugLog = (...args) => {
     if (IS_DEVELOPMENT) {
-      console.debug(...args);
+      (void 0);
     }
   };
 
   const reportRuntimeError = (context, error) => {
-    console.error(context);
+    (void 0);
 
     if (IS_DEVELOPMENT && error) {
-      console.error(error);
+      (void 0);
     }
   };
 

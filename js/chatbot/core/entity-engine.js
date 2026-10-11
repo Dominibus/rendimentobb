@@ -10,7 +10,7 @@ window.rbExtractEntities = function(input = ""){
   // 🧹 NORMALIZATION
   // ===========================================
 
-  const text = String(input)
+  const text = (window.rbNormalizeAIQuery?.(input)?.text ?? String(input))
     .toLowerCase()
     .trim();
 
@@ -231,10 +231,10 @@ if(detectedCities.length >= 2){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🌍 MULTI CITY:",
-    detectedCities
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1895,10 +1895,10 @@ if(matchedKnowledge){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "📚 KNOWLEDGE MATCH:",
-    matchedKnowledge.key
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2120,10 +2120,10 @@ try{
 
 if(window.RB_DEBUG === true){
 
-  console.warn(
-    "⚠️ KPI extraction failed:",
-    err
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2265,14 +2265,14 @@ if(window.lastAnalysisData){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 ENTITY ENGINE FULL:",
-    JSON.stringify(
-      entities,
-      null,
-      2
-    )
-  );
+  (void 0)
+
+
+
+
+
+
+;
 
 }
 

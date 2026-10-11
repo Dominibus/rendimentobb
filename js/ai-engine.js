@@ -692,13 +692,13 @@ if(
   // 🧠 DEBUG
   // ===========================================
 
-  console.log(
+  (void 0)
 
-    "🧠 Investment Memory Saved",
 
-    window.rbInvestmentMemory
 
-  );
+
+
+;
 
   return window.rbInvestmentMemory;
 
@@ -728,9 +728,9 @@ function(){
   window.rbInvestmentMemory =
     null;
 
-  console.log(
-    "🧠 Investment Memory Cleared"
-  );
+  (void 0)
+
+;
 
 };
 

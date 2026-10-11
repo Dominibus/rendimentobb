@@ -25,11 +25,11 @@ function getText(){
 
   return {
     revenue: lang === "en" ? "Your revenue" : "Ricavi stimati",
-    average: lang === "en" ? "Market average" : "Media mercato",
-    comparison: lang === "en" ? "Performance" : "Performance",
-    above: lang === "en" ? "Above market" : "Sopra media",
-    below: lang === "en" ? "Below market" : "Sotto media",
-    vs: lang === "en" ? "vs market" : "vs mercato"
+    average: lang === "en" ? "Internal illustrative reference" : "Riferimento interno illustrativo",
+    comparison: lang === "en" ? "Arithmetic difference" : "Differenza aritmetica",
+    above: lang === "en" ? "Higher than illustrative input" : "Maggiore del dato illustrativo",
+    below: lang === "en" ? "Lower than illustrative input" : "Minore del dato illustrativo",
+    vs: lang === "en" ? "vs illustrative reference" : "vs riferimento illustrativo"
   };
 }
 
@@ -37,6 +37,8 @@ function getText(){
 
 function getSafeCity(inputCity){
 
+  const custom = document.getElementById("custom-location")?.value?.trim();
+  if(custom) return custom.toLowerCase().replace(/\s*\([a-z]{2}\)$/, "").trim();
   // 🔒 PRIORITÀ 1 → app.js (LA TUA VERA SOURCE)
   if(window.currentCity){
     return window.currentCity;
@@ -68,14 +70,6 @@ export function renderMarketBenchmark(inputCity){
     return;
   }
 
-  // 🔒 anti loop
-  if(window.__marketRendering) return;
-  window.__marketRendering = true;
-
-  setTimeout(()=>{
-    window.__marketRendering = false;
-  },200);
-
   const city = getSafeCity(inputCity);
 
   
@@ -83,23 +77,21 @@ export function renderMarketBenchmark(inputCity){
   /* ================= DATA CHECK ================= */
 
   if(!window.RB_MARKET_DATA){
-    console.warn("⏳ MARKET DATA non pronto");
+    (void 0);
     return;
   }
 
-  const data =
-  window.RB_MARKET_DATA[city] ||
-  window.RB_MARKET_DATA.napoli;
-
-if(!window.RB_MARKET_DATA[city]){
-
-  console.warn(
-    "⚠️ Benchmark fallback:",
-    city,
-    "→ napoli"
-  );
-
-}
+  const data = Object.hasOwn(window.RB_MARKET_DATA, city) ? window.RB_MARKET_DATA[city] : null;
+  if(!data){
+    for(const id of ["benchmark-price", "benchmark-occupancy", "benchmark-revenue"]){
+      const node = document.getElementById(id); if(node) node.textContent = "—";
+    }
+    const comparison = document.getElementById("market-comparison");
+    if(comparison) comparison.textContent = window.currentLang === "en"
+      ? "No local benchmark is available for this location. Use your own data for the simulation."
+      : "Nessun benchmark locale disponibile per questa località. Simula con i tuoi dati.";
+    return;
+  }
 
   const text = getText();
 
@@ -117,8 +109,10 @@ if(!window.RB_MARKET_DATA[city]){
 
   let userRevenue = Number(window.currentRevenue);
 
-  if(!userRevenue || userRevenue <= 0){
-    userRevenue = data.annualRevenue;
+  if(window.currentRevenue === undefined || window.currentRevenue === null || !Number.isFinite(userRevenue) || userRevenue < 0){
+    const node = document.getElementById("market-comparison");
+    if(node) node.textContent = window.currentLang === "en" ? "Run a simulation to compare your revenue." : "Completa una simulazione per confrontare i ricavi.";
+    return;
   }
 
   /* ================= CALCOLO ================= */
@@ -133,7 +127,7 @@ if(!window.RB_MARKET_DATA[city]){
 
   const isAbove = diff >= 0;
 
-  const color = isAbove ? "#10b981" : "#ef4444";
+  const color = "#64748b";
   const badge = isAbove ? text.above : text.below;
 
   /* ================= UI ================= */

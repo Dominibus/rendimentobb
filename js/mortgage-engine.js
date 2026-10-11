@@ -101,7 +101,7 @@ export function compareMortgages(amount, years, rates){
 if(!amount || !years) return [];
 
 if(!Array.isArray(rates) || rates.length === 0){
-console.warn("Mortgage rates non disponibili");
+(void 0);
 return [];
 }
 

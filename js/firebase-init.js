@@ -1,4 +1,6 @@
-import { resolveAccountPlan } from "./account-plan.js";
+import './subscription-ui.js?v=20261011-rc102';
+import "./investment-journey.js?v=20261008-rc60";
+import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
 import "./account-report-cache.js";
 // =============================== 
 // FIREBASE INIT – RENDIMENTOBB
@@ -12,6 +14,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -27,19 +30,23 @@ import {
 // CONFIG
 // ===============================
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU",
-  authDomain: "rendimento-bb.firebaseapp.com",
-  projectId: "rendimento-bb",
-  storageBucket: "rendimento-bb.firebasestorage.app",
-  messagingSenderId: "144452546362",
-  appId: "1:144452546362:web:829e08d7b1703137b16a03",
-  measurementId: "G-749B8PW4ST"
-};
+import { firebaseConfig } from "./firebase-config.js?v=20261011-rc97";
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+window.rbSendVerificationEmail=async()=>{
+ const user=auth.currentUser;
+ if(!user||user.uid!==window.currentUser?.uid)throw Error('LOGIN_REQUIRED');
+ if(user.emailVerified)return;
+ auth.languageCode=window.currentLang==='en'?'en':'it';
+ await sendEmailVerification(user);
+};
 export const db = getFirestore(app);
+
+// URL query versions can evaluate this module more than once in a page.
+// Keep shared account state and observers owned by the first bootstrap.
+if(!window.__rbFirebaseBootstrapInitialized){
+window.__rbFirebaseBootstrapInitialized = true;
 
 // rende Firebase Auth globale per tutto il sito
 window.firebaseAuth = auth;
@@ -60,7 +67,8 @@ window.firebaseReady = false;
 
 window.getUserAccess = function(){
 
-  const plan = String(window.currentPlan || "free")
+  const effectivePlan = window.rbAccountData && window.rbAccountOwner === window.currentUser?.uid ? resolveAccountPlan(window.rbAccountData,window.location.hostname) : window.currentPlan;
+  const plan = String(effectivePlan || "free")
     .trim()
     .toLowerCase();
 
@@ -156,13 +164,13 @@ if(window.hasPlan && window.hasPlan(required)){
     setTimeout(()=>{
       alert(
         getCurrentLang()==="it"
-        ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
-        : "⚠️ You are making decisions without real data"
+        ? "Consulta gli indicatori aggiuntivi e le ipotesi del piano richiesto"
+        : "Review the additional indicators and assumptions included in the required plan"
       );
     },300);
 
   }else{
-    window.location.href = "/pricing/";
+    window.location.href = "/#pricing";
   }
 
   return false;
@@ -224,12 +232,12 @@ async function loadUserPlan(uid) {
   
 if(window.RB_DEBUG === true){
 
-console.log("🧠 USER STATE", {
-  plan: window.currentPlan,
-  role: window.userRole,
-  isAdmin: window.isAdmin ? window.isAdmin() : false,
-  isPro: window.isPro()
-});
+(void 0)
+
+
+
+
+;
 
 }
 
@@ -243,13 +251,14 @@ let role = "user";
 if (docSnap.exists()) {
   const data = docSnap.data();
 
+  window.rbAccountData=data; window.rbAccountOwner=uid;
   plan = resolveAccountPlan(data, window.location.hostname);
   role = data.role || "user";
   
   window.userName = data.name || "";
 } else {
       if(window.RB_DEBUG === true){
-  console.warn("⚠️ Documento NON trovato");
+  (void 0);
 }
     }
 
@@ -277,7 +286,7 @@ window.isAdminUser = isAdmin;
 if(window.isAdminUser){
 
   if(window.RB_DEBUG === true){
-  console.log("👑 ADMIN OVERRIDE ATTIVO");
+  (void 0);
 }
 
   // forza piano
@@ -292,12 +301,12 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
 
 if(window.RB_DEBUG === true){
 
-console.log(
-"🔥 Piano finale CLEAN:",
-window.currentPlan,
-"| ruolo:",
-window.userRole
-);
+(void 0)
+
+
+
+
+;
 
 } 
 
@@ -400,7 +409,7 @@ window.hasPlan = function(required){
 
   }catch(err){
 
-    console.error("❌ ERRORE loadUserPlan:", err);
+    (void 0);
 
     if(!window.currentPlan){
   window.currentPlan = "free";
@@ -415,6 +424,12 @@ window.hasPlan = function(required){
 // ===============================
 
 function updateUserUI(user) {
+
+  // Shared header owns its markup; keep Dashboard, plan badge and language coherent.
+  if(typeof window.rbRenderHeaderUser === "function"){
+    window.rbRenderHeaderUser(user);
+    return;
+  }
 
   const userArea = document.getElementById("user-area");
   if (!userArea) return;
@@ -479,6 +494,8 @@ function updateUserUI(user) {
 onAuthStateChanged(auth, async (user) => {
 
   window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
+  // Discard a scenario from a different account or an expired session.
+  window.RBInvestmentJourney.read(sessionStorage, user?.uid || null);
 
   if (rbAuthSnapshotOwner !== (user?.uid || null)) {
     window.rbPMSData = null;
@@ -497,6 +514,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
 
     
+    window.rbAccountData=null; window.rbAccountOwner=null;
     window.currentUser = null;
     window.currentPlan = "free";
     window.userRole = "user";
@@ -656,7 +674,7 @@ setTimeout(()=>{
 
   } catch (err) {
 
-    console.error("❌ Errore init utente:", err);
+    (void 0);
 
     window.currentPlan = "free";
     window.firebaseReady = true;
@@ -771,3 +789,5 @@ if (stripeSession) {
   }
 
 });
+
+} // Single Firebase bootstrap per page.

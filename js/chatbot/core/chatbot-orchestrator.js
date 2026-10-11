@@ -7,6 +7,22 @@
 // 🚀 MAIN AI PIPELINE
 // ===============================================
 
+// Product limits take priority over document, PMS and general knowledge routes.
+// A question about an external action must never be answered as if it happened.
+window.rbBuildProductLimitsResponse = function(message){
+  const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagno|guadagni)\b/.test(q);
+  const guarantee = /garanti|guarante|assicurat|assured|certo|certain|sicuro|sure|promett|promise/.test(q);
+  const external = /alloggiati|airbnb|booking\.com|\bota\b|schedin|questura|police|istat/.test(q);
+  const action = /sincron|sync|invi|send|sent|trasmess|transmi|automat|automatic|gia fatto|already|integrat|collegat|connect/.test(q);
+  if(!(financial && guarantee) && !(external && action)) return null;
+  return {
+    type:'product_limits',confidence:1,actions:[],signals:['product_limits_explained'],metadata:{source:'product_scope'},
+    textIT:'Il ROI, il cashflow, i ricavi e i punteggi sono stime del modello basate sui dati inseriti: non sono rendimenti garantiti, risultati già conseguiti o una probabilità di successo. Verifica le ipotesi e le condizioni effettive prima di decidere.\n\nRendimentoBB non sincronizza automaticamente Airbnb o Booking.com e non invia automaticamente schedine ad Alloggiati Web, comunicazioni ISTAT o altri adempimenti. Il PMS e Autopilot organizzano dati, scadenze e attività; le istruzioni o gli eventuali file di esportazione richiedono la tua verifica e l’esecuzione sui portali competenti. Una risposta del chatbot non conferma che un invio o una sincronizzazione siano avvenuti.\n\nPer sapere se hai completato un adempimento, controlla la ricevuta del portale competente. Le valutazioni del modello non sostituiscono una verifica fiscale, legale o bancaria.',
+    textEN:'ROI, cash flow, revenue and scores are model estimates based on the inputs: they are not guaranteed returns, achieved results or a probability of success. Review the assumptions and actual conditions before deciding.\n\nRendimentoBB does not automatically sync Airbnb or Booking.com and does not automatically send guest registrations to Alloggiati Web, ISTAT reports or other statutory filings. PMS and Autopilot organize data, deadlines and tasks; instructions and any export files require your review and submission through the relevant portals. A chatbot reply does not confirm that a submission or synchronization took place.\n\nTo check whether a filing was completed, inspect the receipt from the relevant portal. Model assessments do not replace tax, legal or lender checks.'
+  };
+};
+
 window.rbProcessAIMessage =
 async function(message){
 
@@ -18,8 +34,44 @@ async function(message){
 
     const text =
 
-      String(message || "")
+      (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
+
+    const limitsResponse = window.rbBuildProductLimitsResponse(text);
+    if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
+
+    if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
+    // Handle explicit document requests once before the multi-intent/live pipeline.
+    const activePDF = window.rbDocumentManager?.getLast?.();
+    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
+    const explicitLiveRequest = /simulazion|simulation|simulator|simulatore|autopilot investimento|investment autopilot|mercato|market|altra citt|another city/i.test(text);
+    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
+        /(risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        !explicitLiveRequest;
+    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
+    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
+    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
+        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
+        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
+            window.rbPDFConversationDocumentId = activePDF.id;
+            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
+            return {success:true,response,intent:{intent:"pdf_analysis"}};
+        }
+    }
+
+    window.rbPDFConversationDocumentId = null;
+
+    const recoveryResponse=window.rbBuildRenovationRecoveryResponse?.(text);
+    if(recoveryResponse){
+      window.rbPDFConversationDocumentId=null;
+      return {success:true,response:recoveryResponse,intent:{intent:'renovation_recovery'}};
+    }
+    const portfolioResponse=window.rbBuildConfirmedPortfolioResponse?.(text);
+    if(portfolioResponse){
+      window.rbPDFConversationDocumentId=null;
+      window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'confirmed_portfolio'}});
+      return {success:true,response:portfolioResponse,intent:{intent:'confirmed_portfolio'}};
+    }
 
     const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
     if(investmentResponse){
@@ -42,24 +94,20 @@ async function(message){
       return {success:true,response:portalResponse,intent:{intent:"portal_facts"}};
     }
 
-    // Handle explicit document requests once before the multi-intent/live pipeline.
-    const activePDF = window.rbDocumentManager?.getLast?.();
-    const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
-    const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
-        /(indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
-        !/(simulazion|simulation|mercato|market|altra citt|another city)/i.test(text);
-    const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
-    const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
-    if(activePDF && pdfRequest && !planRequest && window.rbGenerateResponse){
-        const response = window.rbGenerateResponse({message:explicitPDFRequest ? text : `${text} (PDF corrente)`,documentKnowledge:{activeDocument:activePDF},analysisData:window.rbChatbotLive || window.lastAnalysisData || {}});
-        if(["document_grounded","document_data_quality","document_unavailable"].includes(response?.type)){
-            window.rbPDFConversationDocumentId = activePDF.id;
-            window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"pdf_analysis"}});
-            return {success:true,response,intent:{intent:"pdf_analysis"}};
-        }
+    // Educational questions do not require a completed simulation. Keep
+    // explicit/current PDF requests above this route so document evidence wins.
+    const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery);
+    const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
+    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b|\bnullo\b)|(?:\bzero\b|\b0\b|\bnullo\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity|no own capital/.test(educationalQuery);
+    if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
+      return {success:true,intent:{intent:'education'},response:{
+        type:'education',confidence:1,
+        textIT:'Il ROI sul capitale proprio confronta il cashflow annuo stimato, dopo i costi, le imposte e le rate previste dal modello, con il capitale proprio investito: cashflow annuo ÷ capitale proprio × 100.\n\nSe il capitale proprio è zero, il denominatore è zero: il ROI equity e il recupero dell’equity sono N/A, non 0% e non un rendimento infinito. Questa componente è esclusa da rischio e punteggio; restano cashflow, leva, copertura del debito e occupazione. Valuta anche il rendimento sull’immobile, specificando la sua base di calcolo.\n\nÈ una spiegazione del metodo, non una valutazione del tuo investimento. Un finanziamento al 100% non implica approvazione bancaria: verifica anche costi accessori, riserva di liquidità e condizioni effettive.',
+        textEN:'Return on equity compares estimated annual cash flow, after the costs, taxes and loan payments included in the model, with invested equity: annual cash flow ÷ equity × 100.\n\nWith zero equity, the denominator is zero: equity ROI and equity payback are N/A, rather than 0% or an infinite return. This component is excluded from risk and scoring; cash flow, leverage, debt coverage and occupancy still apply. Also assess the property return, stating its calculation basis.\n\nThis explains the method; it does not assess your investment. Full financing does not imply bank approval: check purchase costs, cash reserves and actual financing terms.',
+        suggestionsIT:['Controlla i dati','Leggi la mia analisi'],suggestionsEN:['Review the simulator inputs','Read my analysis'],actions:[],signals:['roi_method_explained'],metadata:{source:'calculation_method'}
+      }};
     }
-
-    window.rbPDFConversationDocumentId = null;
 
     // =========================================
     // 🧠 ENTITY EXTRACTION
@@ -160,10 +208,10 @@ if(mentionsGuestIssues && (hasOpenGuestIssues || /ospit|guest|soggiorn|stay/.tes
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 DETECTED INTENT",
-    detectedIntent
-  );
+  (void 0)
+
+
+;
 
 }
  // =========================================
@@ -577,10 +625,10 @@ if(!uniqueIntents.length){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🔥 FINAL INTENTS:",
-    uniqueIntents
-  );
+  (void 0)
+
+
+;
 
 }
     // =========================================
@@ -1184,16 +1232,16 @@ const isCombinedWhatIf =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF DETECTOR",
-    {
-      isCombinedWhatIf,
-      keys:
-        combinedWhatIfKeys,
-      changes:
-        combinedWhatIfChanges
-    }
-  );
+  (void 0)
+
+
+
+
+
+
+
+
+;
 
 }   
 
@@ -1439,10 +1487,10 @@ analysisData.revenueAnnual =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 COMBINED WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1457,6 +1505,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -1498,10 +1547,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1615,10 +1664,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 COMBINED WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -1829,6 +1878,7 @@ if(isEquityWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -2083,6 +2133,7 @@ const calculatedMortgageBaselineScore =
     : Number(
         window.rbGenerateInvestmentScore?.({
           roi: mortgageBaselineROI,
+          roiAvailable: Number(window.lastAnalysisData?.equity ?? analysisData.equity ?? analysisData.investment) !== 0,
           risk: Number(
             window.lastAnalysisData?.risk ??
             analysisData.risk ??
@@ -2339,10 +2390,10 @@ analysisData.risk =
         : 80;
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2355,6 +2406,7 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
 
   const scenarioScore =
     window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
       roi:
         Number(analysisData.roi || 0),
@@ -2388,10 +2440,10 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2493,10 +2545,10 @@ propertyPrice:
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏦 MORTGAGE WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2707,10 +2759,10 @@ if(isPropertyPriceWhatIf){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 PRICE WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2721,6 +2773,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -2764,10 +2817,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 PRICE WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -2871,10 +2924,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏠 PROPERTY PRICE WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3139,10 +3192,10 @@ analysisData.risk =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
-    scenarioResult
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3158,6 +3211,7 @@ if(window.RB_DEBUG === true){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -3199,10 +3253,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 OCCUPANCY WHAT-IF SCORE RECALCULATED",
-    scenarioScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3288,10 +3342,10 @@ if(window.RB_DEBUG === true){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏨 OCCUPANCY WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -3570,6 +3624,7 @@ if(isADRWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -3907,6 +3962,7 @@ if(isMonthlyCostsWhatIf){
 
         const scenarioScore =
           window.rbGenerateInvestmentScore({
+            roiAvailable: analysisData.roiAvailable !== false && Number(analysisData.equity ?? analysisData.investment) !== 0,
 
             roi:
               Number(
@@ -4346,36 +4402,36 @@ const advisor =
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 ADVISOR ENGINE RESULT",
-    {
-      enabled:
-        !!advisor,
+  (void 0)
 
-      shouldRunAdvisor,
 
-      intent:
-        intent.intent,
 
-      roi:
-        analysisData.realROI ??
-        analysisData.roi ??
-        0,
 
-      risk:
-        analysisData.risk ?? 0,
 
-      occupancy:
-        analysisData.occupancy ?? 0,
 
-      cashflow:
-        analysisData.net ??
-        analysisData.cashflow ??
-        0,
 
-      advisor
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 
@@ -4409,23 +4465,23 @@ const documentKnowledge = {
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "📄 DOCUMENT KNOWLEDGE",
-    {
-      activeDocument:
-        !!documentKnowledge.activeDocument,
+  (void 0)
 
-      activeReport:
-        !!documentKnowledge.activeReport,
 
-      uploadedReports:
-        Array.isArray(
-          documentKnowledge.uploadedReports
-        )
-        ? documentKnowledge.uploadedReports.length
-        : 0
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 
@@ -4533,10 +4589,10 @@ if(!analysisData?.whatIfScenario){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 CANONICAL INVESTMENT DECISION",
-    window.lastInvestmentScore
-  );
+  (void 0)
+
+
+;
 
 }
 
@@ -4546,31 +4602,31 @@ if(advisor){
 
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧪 ADVISOR INPUTS",
-    {
-      roi:
-        analysisData.roi,
+  (void 0)
 
-      risk:
-        analysisData.risk,
 
-      occupancy:
-        analysisData.occupancy,
 
-      net:
-        analysisData.net,
 
-      annualProfit:
-        analysisData.annualProfit,
 
-      cashflow:
-        analysisData.cashflow,
 
-      lastAnalysis:
-        window.lastAnalysisData
-    }
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
 
 }
 }
@@ -5370,9 +5426,9 @@ if(window.rbRememberMessage){
 
   catch(error){
 
-console.error(
-  "AI Orchestrator error"
-);
+(void 0)
+
+;
 
     return {
 

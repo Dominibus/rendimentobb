@@ -147,9 +147,14 @@
 
   function initLang(){
 
+    // Explicit language links must work independently of browser preferences.
+    const requested = new URLSearchParams(window.location?.search || "").get("lang");
     const saved = localStorage.getItem("rb_lang");
 
-    if(saved && window.RB_LANG.supported.includes(saved)){
+    if(window.RB_LANG.supported.includes(requested)){
+      window.RB_LANG.current = requested;
+      localStorage.setItem("rb_lang", requested);
+    } else if(saved && window.RB_LANG.supported.includes(saved)){
       window.RB_LANG.current = saved;
     } else {
       window.RB_LANG.current =

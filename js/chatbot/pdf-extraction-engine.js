@@ -6,11 +6,11 @@
 "use strict";
 
 const rbPDFDebug = (...args) => {
-    if(window.RB_DEBUG === true) console.debug(...args);
+    if(window.RB_DEBUG === true) (void 0);
 };
 
 const rbPDFDebugWarn = (...args) => {
-    if(window.RB_DEBUG === true) console.warn(...args);
+    if(window.RB_DEBUG === true) (void 0);
 };
 
 window.rbExtractPDFText = async function(documentObject){
@@ -235,7 +235,7 @@ window.rbExtractPDFText = async function(documentObject){
         documentObject.extractionStatus = error?.name === "PasswordException"
             ? "password_required"
             : error?.name === "PDFReadTimeoutError" ? "timeout" : "failed";
-        console.error("PDF Extraction Error");
+        (void 0);
         rbPDFDebugWarn(error);
 
         return documentObject;

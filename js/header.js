@@ -1,9 +1,11 @@
+import './subscription-ui.js?v=20261011-rc103';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
 
-import { auth } from "/js/firebase-init.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+// Render navigation independently of remote authentication imports.
+let auth;
+let signOut;
 
 const GA_MEASUREMENT_ID = "G-749B8PW4ST";
 const RB_CONSENT_KEY = "rb_analytics_consent_v1";
@@ -248,19 +250,20 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261011-rc99"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261004-rc04";
+  script.src = "/js/chatbot-loader.js?v=20261011-rc99";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
   document.body.appendChild(script);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeSharedHeader(){
 
   const container = document.getElementById("global-header");
-  if(!container) return;
+  if(!container || container.dataset.rbInitialized === "true") return;
+  container.dataset.rbInitialized = "true";
 
   container.innerHTML = `
 
@@ -437,7 +440,7 @@ Guide
     </p>
 
     <ul>
-      <li data-it="✔ ROI reale avanzato" data-en="✔ Advanced real ROI"></li>
+      <li data-it="✔ ROI stimato avanzato" data-en="✔ Advanced estimated ROI"></li>
       <li data-it="✔ Analisi mutuo completa" data-en="✔ Full mortgage analysis"></li>
       <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
       <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>
@@ -474,107 +477,43 @@ document.addEventListener("rb_language_changed", () => {
   }
 });
 
-onAuthStateChanged(auth, (user) => {
-
-  window.currentUser = user;
-
-  // 👻 GUEST → render immediato
-  if(!user){
-  // 🔥 aspetta comunque RB_USER fallback
-  setTimeout(()=>{
-    renderUser(null);
-  }, 100);
-  return;
+async function bindHeaderAccount(){
+  try{
+    const [app, firebaseAuth] = await Promise.all([
+      import("/js/firebase-init.js?v=20261011-rc99"),
+      import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
+    ]);
+    auth = app.auth;
+    signOut = firebaseAuth.signOut;
+    firebaseAuth.onAuthStateChanged(auth, (user) => {
+      // The Firebase bootstrap publishes the loaded plan through its ready events.
+      // Do not race that bootstrap with a second navbar renderer or polling timer.
+      if(!user){ renderUser(null); return; }
+      if(window.firebaseReady && window.currentUser?.uid === user.uid){ renderUser(user); }
+    });
+  }catch(error){
+    (void 0);
+    // Keep navigation visible; do not infer a plan or authenticated state.
+    const accountArea = document.getElementById("user-area");
+    if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">Accedi</a>`;
+  }
 }
+window.rbRenderHeaderUser = renderUser;
+const refreshHeaderAccount = () => renderUser(window.currentUser || null);
+document.addEventListener("rb_auth_ready", refreshHeaderAccount);
+document.addEventListener("rb_plan_loaded", refreshHeaderAccount);
+document.addEventListener("rb_language_changed", refreshHeaderAccount);
+window.addEventListener("rb_plan_ready", refreshHeaderAccount);
+if(window.firebaseReady) refreshHeaderAccount();
+void bindHeaderAccount();
 
-  // 🔥 utente loggato → aspetta RB_USER
-  let attempts = 0;
+  }
 
-  const interval = setInterval(()=>{
-
-    attempts++;
-
-    const RB = window.RB_USER;
-
-    if(!window.getUserAccess){
-  return;
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", initializeSharedHeader, {once:true});
+}else{
+  initializeSharedHeader();
 }
-
-    // 🔥 WAIT REAL ACCESS CLASS
-const hasRealAccess =
-  RB &&
-  typeof RB.isFree === "boolean" &&
-  typeof RB.isInvestor === "boolean" &&
-  typeof RB.isPro === "boolean" &&
-  typeof RB.isAdmin === "boolean";
-
-if(hasRealAccess){
-
-  
-  clearInterval(interval);
-
-  renderUser(user);
-
-      // ===============================
-      // 🔥 INVESTOR CLEAN (TEASER MODE)
-      // ===============================
-     if(RB.isInvestor && !RB.isPro){
-
-
-  // rimuove SOLO hard lock
-  document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
-    el.remove();
-  });
-
-  // ❌ NON applicare blur qui (lo gestisce app.js)
-}
-
-      // ===============================
-      // 🔥 ACCESS CONTROL UI
-      // ===============================
-
-      // 🟢 PRO / ADMIN → FULL
-      if(RB.isPro || RB.isAdmin){
-        
-        unlockUI();
-      }
-
-     else if(RB.isInvestor){
-
-
-  // 💣 NON toccare UI → gestita da app.js (PRO-LIKE)
-
-  // pulizia SOLO sicurezza (no override logica)
-  document.querySelectorAll(`
-    .locked-overlay,
-    .hard-lock
-  `).forEach(el=>{
-    el.remove();
-  });
-
-}
-
-      // 🔴 FREE → BLOCCATO
-      else{
-        
-      }
-
-      return;
-    }
-
-    if(attempts > 40){
-      console.warn("⚠️ HEADER fallback");
-
-      clearInterval(interval);
-
-      renderUser(user);
-    }
-
-  }, 120);
-
-});
-
-  });
 /* =====================
 📱 MENU + LANG
 ===================== */
@@ -656,7 +595,7 @@ function initHeaderInteractions(){
       localStorage.setItem("rb_lang", lang);
       if(window.setLang) window.setLang(lang);
       updateLangButtons(lang);
-      renderUser(auth.currentUser || null);
+      renderUser(auth?.currentUser || window.currentUser || null);
     };
   });
 
@@ -664,7 +603,7 @@ function initHeaderInteractions(){
 
   // 🔥 SYNC PLAN
   window.addEventListener("rb_plan_ready", ()=>{
-    renderUser(auth.currentUser || null);
+    renderUser(auth?.currentUser || window.currentUser || null);
   });
 
   // 🔥 HEADER SCROLL UX
@@ -782,7 +721,7 @@ if(
   const isProOnly = isPro && !isInvestor;
   const accountSummary = document.getElementById("rb-mobile-account");
   if(accountSummary) {
-    const label = isAdmin ? "ADMIN" : isPro ? (window.currentPlan === "pro_yearly" ? "PRO ANNUALE" : "PRO") : isInvestor ? "INVESTOR" : "FREE";
+    const label = isAdmin ? "ADMIN" : window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : isPro ? (window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO") : isInvestor ? "INVESTOR" : "FREE";
     accountSummary.textContent = user ? `${window.currentLang === "en" ? "Your plan" : "Il tuo piano"} · ${label}` : (window.currentLang === "en" ? "Explore RendimentoBB" : "Esplora RendimentoBB");
   }
 
@@ -799,10 +738,10 @@ if(isAdmin){
   badge = `<span class="badge-pro">ADMIN</span>`;
 }
 else if(access.isPro){
-  badge = `<span class="badge-pro">${window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
+  badge = `<span class="badge-pro">${window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : window.currentPlan === "pro_yearly" ? (window.currentLang === "en" ? "PRO ANNUAL" : "PRO ANNUALE") : "PRO"}</span>`;
 }
 else if(access.isInvestor){
-  badge = `<span class="badge-pro">INVESTOR</span>`;
+  badge = `<span class="badge-pro">${window.rbIsTrial?.() ? (window.currentLang === "en" ? "INVESTOR TRIAL" : "INVESTOR IN PROVA") : "INVESTOR"}</span>`;
 }
 else{
   badge = `<span class="badge-pro">FREE</span>`;
@@ -843,6 +782,7 @@ class="dashboard-label">
       html += `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`;
     }
 
+    html += `<button type="button" class="rb-btn secondary" onclick="window.rbOpenSubscription?.()">${window.currentLang === "en" ? "Subscription" : "Abbonamento"}</button>`;
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
 
@@ -894,6 +834,7 @@ Assistente RendimentoBB
           mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
         }
 
+        mobileHTML += `<a href="#" onclick="event.preventDefault();window.rbOpenSubscription?.()">${window.currentLang === "en" ? "Subscription" : "Abbonamento"}</a>`;
         mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
 
       } else {
@@ -932,6 +873,7 @@ Assistente RendimentoBB
         mobileLogout.onclick = async (e)=>{
           e.preventDefault();
           window.RBReportCache?.clear(sessionStorage, localStorage);
+          window.RBInvestmentJourney?.clear(sessionStorage);
           await signOut(auth);
           location.reload();
         };
@@ -980,6 +922,7 @@ Assistente RendimentoBB
    // LOGOUT
 document.getElementById("logout").onclick = async ()=>{
   window.RBReportCache?.clear(sessionStorage, localStorage);
+          window.RBInvestmentJourney?.clear(sessionStorage);
           await signOut(auth);
   location.reload();
 };

@@ -115,13 +115,13 @@ window.goToUpgradeFlow = function(){
 
   // 🛑 access non pronto → NON fare redirect
   if(!access){
-    console.log("⏳ Access non pronto → skip upgrade flow");
+    (void 0);
     return;
   }
 
   // 🛑 utenti paganti → NO redirect
   if(access.isInvestor || access.isPro || access.isAdmin){
-    console.log("⛔ Upgrade flow bloccato (utente pagante)");
+    (void 0);
     return;
   }
 

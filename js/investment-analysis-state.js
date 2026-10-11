@@ -1,7 +1,7 @@
 // A dedicated snapshot of a completed simulator calculation. Never reads PDF data
 // or the shared lastAnalysisData cache, which other portal flows can overwrite.
 export function createInvestmentAnalysisState(window, document) {
-  const fields = ['price','equity','priceNight','occupancy','expenses','commission','tax','loanAmount','interestRate','loanYears','market-city','custom-location'];
+  const fields = ['property-mode','owned-loan-amount','price','equity','priceNight','occupancy','expenses','commission','tax','loanAmount','interestRate','loanYears','market-city','custom-location'];
   let snapshot = null;
   const tier = () => {
     const access = window.getUserAccess?.() || {};
@@ -27,7 +27,7 @@ export function createInvestmentAnalysisState(window, document) {
     const annualCashflow = number(result.netAfterMortgage);
     const roi = number(paid ? result.roi : result.realROI);
     if (annualCashflow === null || roi === null) { snapshot = null; return false; }
-    const metrics = {roi, roiBasis: paid ? 'equity' : 'property', annualCashflow, monthlyCashflow: annualCashflow / 12};
+    const metrics = {roi, roiAvailable: paid ? result.roiAvailable !== false : result.propertyROIAvailable !== false, propertyMode:result.propertyMode || 'purchase', roiBasis: paid ? 'equity' : 'property', annualCashflow, monthlyCashflow: annualCashflow / 12};
     if (paid) Object.assign(metrics, {
       annualRevenue: number(result.gross), risk: number(result.risk), dscr: number(result.dscr),
       annualDebtService: number(result.mortgageYearly), equity: number(inputs.equity)

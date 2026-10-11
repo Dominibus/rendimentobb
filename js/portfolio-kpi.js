@@ -11,15 +11,16 @@ export function summarizeInvestments(rows = []){
   const values = key => rows.map(row => financialNumber(row[key])).filter(value => value !== null);
   const mean = list => list.length ? list.reduce((sum,value)=>sum+value,0)/list.length : null;
   const total = list => count && list.length === count ? list.reduce((sum,value)=>sum+value,0) : null;
-  const rois = values('roi');
+  const rois = rows.filter(row => row.roiAvailable !== false && financialNumber(row.equity) !== 0).map(row => financialNumber(row.roi)).filter(value => value !== null);
   const cashflows = values('net');
   const equities = rows.map(row => financialNumber(row.equity)).filter(value => value !== null && value >= 0);
   const prices = rows.map(row => financialNumber(row.price)).filter(value => value !== null && value >= 0);
   const scores = values('investmentScore').filter(value => value >= 0 && value <= 100);
   const equity = total(equities);
   const cashflow = total(cashflows);
-  const weightedROI = count && rois.length === count && equity > 0
-    ? rows.reduce((sum,row)=>sum+financialNumber(row.roi)*financialNumber(row.equity),0)/equity : null;
+  // Include every confirmed property's cashflow, including fully financed ones.
+  const weightedROI = count && cashflow !== null && equity > 0
+    ? cashflow / equity * 100 : null;
   return {count, averageROI:mean(rois), averageCashflow:mean(cashflows), price:total(prices),
     equity, cashflow, weightedROI, score:scores.length ? Math.round(mean(scores)) : null,
     coverage:{roi:rois.length,cashflow:cashflows.length,equity:equities.length,score:scores.length}};
@@ -32,6 +33,7 @@ export function interpretPortfolio(rows = []){
   const negativeCashflows = rows.filter(row=>{const cash=financialNumber(row.net);return cash !== null && cash < 0;}).length;
   let status = 'incomplete';
   if(!metrics.count) status = 'empty';
+  else if(metrics.equity === 0 && metrics.cashflow !== null) status = 'financed';
   else if(metrics.weightedROI !== null && metrics.cashflow !== null){
     if(metrics.weightedROI < 0 || metrics.cashflow < 0) status = 'loss';
     else if(metrics.weightedROI === 0 || metrics.cashflow === 0) status = 'balanced';
@@ -42,7 +44,7 @@ export function interpretPortfolio(rows = []){
 }
 
 export function highestScenarioROI(rows = []){
-  const values = rows.map(row=>financialNumber(row.roi)).filter(value=>value !== null);
+  const values = rows.filter(row => row.roiAvailable !== false && financialNumber(row.equity) !== 0).map(row=>financialNumber(row.roi)).filter(value=>value !== null);
   return values.length ? Math.max(...values) : null;
 }
 

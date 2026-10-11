@@ -1,4 +1,4 @@
-import { readInvestmentAssumptions, investmentAssumptionsHTML } from "./investment-assumptions.js?v=20261007-rc54";
+import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
 import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
@@ -8,13 +8,14 @@ import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
 import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
-import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261004-rc10";
-import { resolveAccountPlan } from "./account-plan.js";
+import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
+import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
+import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261009-rc76";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js";
+import { app } from "./firebase-init.js?v=20261011-rc99";
 
 // 🔥 FIRESTORE
 import {
@@ -93,15 +94,15 @@ const IS_DEVELOPMENT =
 
 const dashboardDebug = (...args) => {
   if (IS_DEVELOPMENT) {
-    console.debug(...args);
+    (void 0);
   }
 };
 
 const dashboardError = (message, error) => {
-  console.error(message);
+  (void 0);
 
   if (IS_DEVELOPMENT && error) {
-    console.error(error);
+    (void 0);
   }
 };
 
@@ -714,11 +715,11 @@ cutout:"65%"
 }
 // ================= LOAD DASHBOARD =================
 
-async function loadDashboard(){
+async function loadDashboard({languageOnly = false} = {}){
 
   if(
     window.__dashboardLoaded &&
-    !window.__forceReload
+    !window.__forceReload && !languageOnly
   ){
     dashboardDebug(
       "Dashboard già inizializzata → skip"
@@ -728,8 +729,10 @@ async function loadDashboard(){
 
   window.__dashboardLoaded = true;
   window.__forceReload = false;
+  window.rbConfirmedPortfolio = null;
+  const portfolioOwnerUid = window.currentUser?.uid;
 
-  closeAllOverlays();
+  if(!languageOnly) closeAllOverlays();
 
   roiValues = [];
   labels = [];
@@ -830,8 +833,13 @@ if(
 
     );
 
-    querySnapshot =
-      await getDocs(q);
+    const ownerKey = `${window.currentUser.uid}:${window.currentPlan}`;
+    if(languageOnly && window.__rbDashboardSnapshot?.ownerKey === ownerKey){
+      querySnapshot = window.__rbDashboardSnapshot.snapshot;
+    }else{
+      querySnapshot = await getDocs(q);
+      window.__rbDashboardSnapshot = {ownerKey, snapshot:querySnapshot};
+    }
 
 }else{
 
@@ -882,9 +890,11 @@ const analyses = querySnapshot.docs.map(doc => {
   return {
 
     id: doc.id,
+    propertyMode: assumptions?.source === "owned_property" ? "owned" : "purchase",
 
     roi:
-      financialNumber(data.roi),
+      financialNumber(data.equity) === 0 || data.roiAvailable === false ? null : financialNumber(data.roi),
+    roiAvailable: financialNumber(data.equity) === 0 || data.roiAvailable === false ? false : true,
 
     visualROI:
       data.visualROI || 0,
@@ -1119,7 +1129,8 @@ window.investmentHistory =
       a.marketCity,
 
     roi:
-      Number(a.roi || 0),
+      financialNumber(a.roi),
+    roiAvailable: a.roiAvailable !== false,
 
     risk:
       Number(a.risk || 0),
@@ -1399,6 +1410,13 @@ const highestSavedROI = highestScenarioROI(analyses);
 const portfolioAnalyses = analyses.filter(
   data => data.isPortfolio === true
 );
+// Publish only the explicitly confirmed, loaded account snapshot. Never the last simulation.
+if(!window.isDemoDashboard && !window.isDemoData && portfolioOwnerUid && window.currentUser?.uid === portfolioOwnerUid){
+  window.rbConfirmedPortfolio = {
+    ownerUid:window.currentUser.uid, loadedAt:new Date().toISOString(),
+    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
+  };
+}
 
 const totalROI = analyses.reduce(
   (sum, data) => sum + Number(data.roi || 0),
@@ -1446,16 +1464,11 @@ const visibleAnalyses =
     const price = data.price;
     const equity = data.equity;
 
-    const occupancy = 65;
-    const adr = 120;
-
-    const revenueNeeded = Math.round(
-      adr * occupancy * 365 / 100
-    );  
+    const revenueNeeded = requiredAnnualRevenue(data.assumptions);  
 
     const yearlyProfit = financialNumber(data.net);
 
-    const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
+    const roiClass = roi === null ? "" : roi >= 0 ? "roi-positive" : "roi-negative";
 
     const analysisDate =
   data.createdAt?.seconds
@@ -1509,19 +1522,19 @@ if(isNew){
       </div>
 
       <div class="metric">
-        <span>${t("Prezzo immobile","Property price")}</span>
-        <strong>${formatCurrency(price)}</strong>
+        <span>${data.propertyMode === "owned" ? t("Valore immobile (facoltativo)","Property value (optional)") : t("Prezzo immobile","Property price")}</span>
+        <strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong>
       </div>
 
       <div class="metric">
-        <span>${t("Equity investita","Equity invested")}</span>
+        <span>${data.propertyMode === "owned" ? t("Capitale di avvio","Startup capital") : t("Equity investita","Equity invested")}</span>
         <strong>${formatCurrency(equity)}</strong>
       </div>
 
       <div class="metric">
         <span>${t("ROI annuale","Annual ROI")}</span>
         <strong class="${roiClass}">
-          ${formatPercent(roi)}
+          ${data.roiAvailable === false ? "N/A" : formatPercent(roi)}
         </strong>
       </div>
 
@@ -1536,7 +1549,7 @@ if(isNew){
       </div>
 
       <div class="metric">
-        <span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
+        <span>${t("Ricavi lordi annui per cashflow ≥ 0 (modello)","Annual gross revenue for cash flow ≥ 0 (model)")}</span>
         <strong>${formatCurrency(revenueNeeded)}</strong>
       </div>
 
@@ -1661,8 +1674,8 @@ const helper = document.getElementById("report-helper-text");
 
 if(helper){
   helper.innerHTML = t(
-    "Perfetto per convincere banca o investitori",
-    "Perfect to convince banks or investors"
+    "Presenta le ipotesi economiche a banca o investitori",
+    "Present financial assumptions to banks or investors"
   );
 }
 
@@ -1676,14 +1689,18 @@ window.bestInvestmentData = best;
 
 window.lastAnalysisData = {
 
+  propertyMode: best?.propertyMode || "purchase",
+  assumptions: best?.assumptions || null,
+  propertyROIAvailable: Number(best?.price) > 0,
   roi:
-    Number(best?.roi || 0),
+    financialNumber(best?.roi),
+  roiAvailable: best?.roiAvailable !== false,
 
   realROI:
     Number(best?.realROI ?? best?.roi ?? 0),
 
   visualROI:
-    Number(best?.roi || 0),
+    financialNumber(best?.roi),
 
   risk:
     Number(best?.risk || 0),
@@ -1840,12 +1857,12 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- DATI BASE (SEMPRE VISIBILI) -->
 <div class="metric">
-<span>${t("Prezzo immobile","Property price")}</span>
-<strong>${formatCurrency(best.price)}</strong>
+<span>${best.propertyMode === "owned" ? t("Valore immobile (facoltativo)","Property value (optional)") : t("Prezzo immobile","Property price")}</span>
+<strong>${best.propertyMode === "owned" && best.price === 0 ? t("Non indicato", "Not provided") : formatCurrency(best.price)}</strong>
 </div>
 
 <div class="metric">
-<span>${t("Equity investita","Equity invested")}</span>
+<span>${best.propertyMode === "owned" ? t("Capitale di avvio","Startup capital") : t("Equity investita","Equity invested")}</span>
 <strong>${formatCurrency(best.equity)}</strong>
 </div>
 
@@ -2049,7 +2066,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
     const roi = financialNumber(data.roi);
     const yearlyCashflow = financialNumber(data.net);
     const risk = financialNumber(data.risk);
-    const complete = price > 0 && equity > 0 && Number.isFinite(roi) && Number.isFinite(yearlyCashflow);
+    const complete = (price > 0 || (data.propertyMode === "owned" && price === 0)) && equity !== null && equity >= 0 && (equity === 0 || Number.isFinite(roi)) && Number.isFinite(yearlyCashflow);
 
     return `
       <article class="portfolio-manager__item">
@@ -2066,9 +2083,9 @@ function renderPortfolioManager(portfolioAnalyses = []){
         </div>
 
         <div class="portfolio-manager__metrics">
-          <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
+          <div><span>${t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
-          <div><span>ROI</span><strong>${formatPercent(roi)}</strong></div>
+          <div><span>ROI</span><strong>${equity === 0 ? "N/A" : formatPercent(roi)}</strong></div>
           <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
           <div><span>${t("Rischio", "Risk")}</span><strong>${Number.isFinite(risk) ? `${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", { maximumFractionDigits: 0 }).format(risk)}/100` : "--"}</strong></div>
         </div>
@@ -2314,8 +2331,8 @@ color = "#3b82f6";
 icon = "🔵";
 
 insight = t(
-"Le performance sono superiori alla media del mercato. Mantieni la strategia attuale monitorando nuove opportunità.",
-"Performance is above the illustrative reference. Maintain the current strategy while monitoring new investment opportunities."
+"Il ROI medio degli scenari supera il riferimento illustrativo. Non dimostra un rendimento superiore al mercato: verifica base di calcolo e ipotesi di ogni immobile.",
+"Average scenario ROI exceeds the illustrative reference. This does not demonstrate market outperformance: verify the calculation basis and each property’s assumptions."
 );
 
 }
@@ -2325,8 +2342,8 @@ color = "#f59e0b";
 icon = "🟠";
 
 insight = t(
-"Il rendimento è inferiore al benchmark di mercato. Valuta immobili con ROI più elevato o riduci i costi operativi.",
-"Performance is below the market benchmark. Consider higher ROI properties or optimize operating costs."
+"Il ROI medio degli scenari è sotto il riferimento illustrativo. Verifica ricavi, costi e finanziamento senza trattarlo come una quotazione di mercato.",
+"Average scenario ROI is below the illustrative reference. Review revenue, costs and financing without treating the reference as a market valuation."
 );
 
 }
@@ -2679,8 +2696,7 @@ function reloadDashboardLanguage(){
 document.addEventListener("rb_language_changed", () => {
 
   
-  window.__forceReload = true;
-  loadDashboard();
+  loadDashboard({languageOnly:true});
 
 });
 
@@ -2694,6 +2710,10 @@ if(window.__dashboardAuthInit){
 window.addEventListener("DOMContentLoaded", () => {
 
   onAuthStateChanged(auth, async (user) => {
+    window.rbConfirmedPortfolio = null;
+    window.rbRenovationRecoveryData = null;
+    const recoveryPanel=document.getElementById("renovation-recovery");
+    if(recoveryPanel){recoveryPanel.hidden=true;recoveryPanel.innerHTML="";}
 
     // ================= USER NON LOGGATO =================
     if(!user){
@@ -2716,6 +2736,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if(userDoc.exists()){
         const data = userDoc.data();
+        window.rbAccountData=data; window.rbAccountOwner=user.uid;
         window.currentPlan = resolveAccountPlan(data, window.location.hostname);
         window.rbNotificationPreferences = data.notificationPreferences || {};
       }else{
@@ -2910,6 +2931,7 @@ function portfolioNarrative(rows){
     loss: [t("Patrimonio con rendimento negativo", "Portfolio with negative return"), t("ROI o cashflow complessivo sono negativi nelle ipotesi salvate. Verifica gli immobili in perdita, i costi e il finanziamento prima di considerare nuovi investimenti.", "Overall ROI or cash flow is negative under the saved assumptions. Review loss-making properties, costs and financing before considering new investments."), "#ef4444"],
     balanced: [t("Patrimonio in equilibrio", "Portfolio at break-even"), t("Almeno uno tra ROI e cashflow complessivo è pari a zero. Non emerge un margine positivo su entrambi gli indicatori: verifica la tenuta in uno scenario prudente.", "At least one of overall ROI and cash flow is zero. Both indicators do not show a positive margin: check resilience under conservative assumptions."), "#f59e0b"],
     attention: [t("Patrimonio positivo, criticità da verificare", "Positive portfolio, issues to review"), t("Il totale è positivo, ma almeno un immobile ha cashflow negativo o rischio elevato. L'aggregato può nascondere una criticità: verifica ogni immobile.", "The total is positive, but at least one property has negative cash flow or high risk. The aggregate can hide an issue: review each property."), "#f59e0b"],
+    financed: [t("Patrimonio senza capitale proprio", "Portfolio with no invested equity"), t("ROI equity non applicabile: il capitale proprio totale è zero. Il cashflow resta disponibile; verifica il suo segno, la leva e la copertura delle rate. Questo caso non è un dato mancante.", "Equity ROI is not applicable: total invested equity is zero. Cash flow remains available; review its sign, leverage and debt coverage. This is not missing data."), "#64748b"],
     positive: [t("Patrimonio con margine positivo stimato", "Portfolio with an estimated positive margin"), t("ROI e cashflow complessivo sono positivi nelle ipotesi salvate. Verifica costi, occupazione e finanziamento in scenari prudenti; il risultato non dimostra incassi reali.", "Overall ROI and cash flow are positive under the saved assumptions. Check costs, occupancy and financing under conservative scenarios; this does not establish actual receipts."), "#10b981"]
   };
   const [title,text,color] = content[facts.status];
@@ -2939,7 +2961,8 @@ function renderInvestmentIntelligence(rows = []){
   const {metrics} = facts;
   container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
     <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
-    <div class="metric"><span>${t("ROI equity ponderato", "Equity-weighted ROI")}</span><strong>${formatPercent(metrics.weightedROI)}</strong></div>
+    <div class="metric"><span>${t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
+    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%. Per le case già possedute, il capitale di avvio esclude il valore della casa.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties. For already owned properties, startup capital excludes the value of the house.")}</p>
     <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
     <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
     <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
@@ -3226,8 +3249,18 @@ try{
 
 function downloadReport(){ handleReportClick(); }
 
+// Report snapshots require a completed PMS read for the same authenticated owner.
+async function getOwnedReportPMS(ownerUid){
+  const ready = pms => pms && pms.ownerUid === ownerUid && pms.portalSnapshotReady === true;
+  if(!ready(window.rbPMSData)) await loadPMSStats();
+  if(auth.currentUser?.uid !== ownerUid || window.currentUser?.uid !== ownerUid || !ready(window.rbPMSData)){
+    throw new Error("report/pms_snapshot_unavailable");
+  }
+  return window.rbPMSData;
+}
+
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
-function handleReportClick(){
+async function handleReportClick(){
 
   const user = window.RB_USER || {};
 
@@ -3256,7 +3289,7 @@ function handleReportClick(){
   // ✅ PRO → DASHBOARD REPORT
   const data = window.bestInvestmentData;
   const price = Number(data?.propertyPrice ?? data?.price);
-  if(!data || !Number.isFinite(price) || price <= 0){
+  if(!data || !Number.isFinite(price) || price < 0 || (price === 0 && data.propertyMode !== "owned" && data.assumptions?.source !== "owned_property")){
     alert(t(
       "Salva una simulazione valida prima di aprire il report professionale.",
       "Save a valid simulation before opening the professional report."
@@ -3266,10 +3299,13 @@ function handleReportClick(){
   const reportOwner = auth.currentUser?.uid;
   if(!reportOwner) return;
 
-  // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
+  // Il report finanziario non dipende dalla disponibilità dei dati PMS.
+  // Se lo snapshot operativo non è pronto, il report si apre senza inventare
+  // metriche PMS; la pagina report gestisce i dati operativi assenti.
+  let reportPMS = null;
   try{
-    const pms = window.rbPMSData || {};
-    const reportPMS = {
+    const pms = await getOwnedReportPMS(reportOwner);
+    reportPMS = {
       properties: Number(pms.properties || 0),
       bookings: Number(pms.bookings || 0),
       totalRevenue: Number(pms.totalRevenue || 0),
@@ -3292,17 +3328,17 @@ function handleReportClick(){
           }))
         : []
     };
-    window.RBReportCache.write(
-      reportOwner,
-      [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
-      {generatedAt: new Date().toISOString(), pms: reportPMS},
-      sessionStorage, localStorage
-    );
   }catch(error){
-    dashboardDebug("Dashboard report PMS snapshot unavailable", error);
-    alert(t("Impossibile preparare il report. Riprova dalla dashboard.", "Unable to prepare the report. Please retry from the dashboard."));
-    return;
+    dashboardDebug("Optional PMS snapshot unavailable for investment report", error);
   }
+  // Non procedere se la sessione è cambiata durante la lettura asincrona.
+  if(auth.currentUser?.uid !== reportOwner || window.currentUser?.uid !== reportOwner) return;
+  window.RBReportCache.write(
+    reportOwner,
+    [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
+    {generatedAt: new Date().toISOString(), ...(reportPMS ? {pms: reportPMS} : {})},
+    sessionStorage, localStorage
+  );
 
   const params = new URLSearchParams({source: "dashboard"});
 
@@ -3397,26 +3433,10 @@ firenze:"Firenze"
 /* ================= HERO CONTENT ================= */
 
 const HERO_CONTENT = {
-roma:[
-"Domanda turistica costante e ROI stabile",
-"Capitale del turismo internazionale",
-"Mercato premium ad alta occupazione"
-],
-napoli:[
-"ROI sopra la media nazionale",
-"Forte crescita turistica",
-"Ottimo rapporto prezzo / rendimento"
-],
-milano:[
-"Business travel e alta occupazione",
-"Mercato stabile e liquido",
-"Alta domanda tutto l’anno"
-],
-firenze:[
-"Turismo internazionale premium",
-"Alta redditività stagionale",
-"Domanda costante tutto l’anno"
-]
+roma:["Scenario illustrativo su Roma", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+napoli:["Scenario illustrativo su Napoli", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+milano:["Scenario illustrativo su Milano", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"],
+firenze:["Scenario illustrativo su Firenze", "Verifica prezzi e domanda nella zona", "Confronta ricavi, costi e finanziamento"]
 };
 
 /* ================= MARKET STATS ================= */
@@ -6057,6 +6077,9 @@ async function loadProperties(){
   if(!container) return;
 
   if(!canUseFirestorePMS()){
+    window.rbRenovationRecoveryData=null;
+    const recovery = document.getElementById("renovation-recovery");
+    if(recovery){recovery.hidden=true;recovery.innerHTML="";}
 
     container.innerHTML = `
 
@@ -6127,8 +6150,18 @@ return;
       )
     );
 
+  const propertyOwnerUid = window.currentUser.uid;
   const snap =
     await getDocs(q);
+
+  if(window.currentUser?.uid !== propertyOwnerUid || !canUseFirestorePMS()) return;
+  const recoveryProperties=snap.docs.map(d=>({...d.data(),id:d.id}));
+  window.rbRenovationRecoveryData={ownerUid:propertyOwnerUid,loadedAt:new Date().toISOString(),...renovationRecovery(recoveryProperties)};
+  const recovery = document.getElementById("renovation-recovery");
+  if(recovery){
+    recovery.hidden=false;
+    recovery.innerHTML=renovationRecoveryHTML(recoveryProperties,window.currentLang);
+  }
 
   if(snap.empty){
 
@@ -6190,6 +6223,7 @@ const bookingsSnap =
 let totalNights = 0;
 let occupiedNightsThisMonth = 0;
 let realRevenue = 0;
+let revenueThisMonth = 0;
 let totalGuests = 0;  
 
 activeBookingDocs.forEach(b=>{
@@ -6210,6 +6244,7 @@ Number(
   const nights = calendarBookingNights(booking);
 
   totalNights += nights;
+  revenueThisMonth += getBookingRevenueInMonth(booking);
   occupiedNightsThisMonth += getBookingNightsInMonth(
     booking.checkin,
     booking.checkout
@@ -6236,12 +6271,12 @@ const occupancy =
   );
 
  let occupancyStatus =
-  t("🔴 Vuoto","🔴 Empty");
+  t("🔴 Occupazione mensile bassa","🔴 Low monthly occupancy");
 
 if(occupancy >= 80){
 
   occupancyStatus =
-    t("🟢 Alta","🟢 High");
+    t("🟢 Occupazione mensile alta","🟢 High monthly occupancy");
 
 }
 else if(
@@ -6249,18 +6284,12 @@ else if(
 ){
 
   occupancyStatus =
-    t("🟡 Media","🟡 Medium");
+    t("🟡 Occupazione mensile media","🟡 Medium monthly occupancy");
 
 }   
 
-  const revpar =
-(
-  data.priceNight || 0
-)
-*
-(
-  occupancy / 100
-);  
+  const adrThisMonth = occupiedNightsThisMonth > 0 ? revenueThisMonth / occupiedNightsThisMonth : null;
+  const revpar = revenueThisMonth / daysInMonth;  
 
 html += `
 
@@ -6405,7 +6434,7 @@ flex-wrap:wrap;
       ${t("Analisi finanziaria collegata", "Financial analysis linked")}
     </strong>
     <span style="color:#64748b;font-size:12px;">
-      ${t("Dati verificati per Dashboard e Autopilot", "Verified data for Dashboard and Autopilot")}
+      ${t("Ipotesi salvate per Dashboard e Autopilot", "Saved assumptions for Dashboard and Autopilot")}
     </span>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -6479,7 +6508,7 @@ ${t("Tariffa base", "Base nightly rate")}
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-${t("Occupazione","Occupancy")}
+${t("Occupazione · mese corrente","Occupancy · current month")}
 </div>
 
 <div class="property-kpi-value">
@@ -6491,7 +6520,7 @@ ${occupancy}%
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-RevPAR
+${t("RevPAR · mese corrente", "RevPAR · current month")}
 </div>
 
 <div class="property-kpi-value">
@@ -6606,8 +6635,8 @@ letter-spacing:.8px;
 ">
 
 ${t(
-"Ricavi Totali",
-"Total Revenue"
+"Ricavi registrati · tutti i periodi",
+"Recorded revenue · all periods"
 )}
 
 </div>
@@ -6624,6 +6653,7 @@ ${formatCurrency(realRevenue)}
 
 </div>
 
+<p style="font-size:12px;opacity:.9;margin-top:12px">${t("KPI mensili: importi prenotazioni ripartiti per notte; una unità disponibile per immobile. Non certificano incassi.", "Monthly KPIs: booking amounts allocated per night; one available unit per property. They do not certify receipts.")}</p>
 <div class="property-revenue-meta" style="
 margin-top:18px;
 display:flex;
@@ -6640,12 +6670,12 @@ opacity:.92;
 
 <div>
 <strong>${occupancy}%</strong>
-<span>${t("Occupazione","Occupancy")}</span>
+<span>${t("Occupazione · mese corrente","Occupancy · current month")}</span>
 </div>
 
 <div>
-<strong>ADR</strong>
-<span>€${escapeDashboardHTML(data.priceNight || 0)}</span>
+<strong>${t("ADR · mese corrente","ADR · current month")}</strong>
+<span>${formatCurrency(adrThisMonth)}</span>
 </div>
 
 </div>
@@ -7974,8 +8004,8 @@ else if (bookingScore >= 70) {
 
     analysis.verdict =
         lang === "it"
-            ? "🟢 Ottima Prenotazione"
-            : "🟢 Great Booking";
+            ? "🟢 Profilo economico positivo"
+            : "🟢 Positive economic profile";
 
     analysis.executiveSummary =
         lang === "it"
@@ -8041,12 +8071,12 @@ ${totalRevenue >= 1000 ? "High" : totalRevenue >= 500 ? "Medium" : "Limited"} va
         ? `L'ADR è di €${adr.toFixed(0)}. ${
             adr < 130
                 ? "Aumentare la tariffa media potrebbe migliorare la redditività."
-                : "La tariffa è in linea con il mercato."
+                : "La tariffa supera la soglia interna di esempio; confrontala con dati verificati della zona."
           }`
         : `Current ADR is €${adr.toFixed(0)}. ${
             adr < 130
                 ? "Increasing the average daily rate could improve profitability."
-                : "ADR is aligned with the market."
+                : "ADR exceeds the internal example threshold; compare it with verified local data."
           }`;
 
 }
@@ -8058,14 +8088,14 @@ if (adr < 130) {
 
     analysis.why.push(
         lang === "it"
-            ? "ADR sotto il target di mercato"
-            : "ADR below market target"
+            ? "ADR sotto la soglia interna di esempio (€130)"
+            : "ADR below the internal example threshold (€130)"
     );
 
     analysis.actions.push(
         lang === "it"
-            ? "Aumenta l’ADR di 10 €"
-            : "Increase ADR by €10"
+            ? "Simula una variazione di ADR di €10 e verifica domanda e disponibilità"
+            : "Simulate a €10 ADR change and verify demand and availability"
     );
 
 }
@@ -8147,7 +8177,7 @@ if (!analysis.why.length) {
 if (!analysis.actions.length) {
 
     analysis.actions.push(
-        "No action required"
+        lang === "it" ? "Nessuna variazione economica suggerita. Verifica le attività operative PMS." : "No economic change suggested. Review the PMS operational tasks."
     );
 
 }
@@ -9079,8 +9109,8 @@ ${action}
 `).join("")
 : `<div style="color:#64748b;font-size:14px;">
 ${window.t(
-"Nessuna azione richiesta.",
-"No action required."
+"Nessuna variazione economica suggerita. Verifica le attività operative PMS.",
+"No economic change suggested. Review the PMS operational tasks."
 )}
 </div>`
 }
@@ -9149,8 +9179,8 @@ color:#15803d;
 ">
 
 ${window.t(
-"Affidabilità analisi",
-"Analysis confidence"
+"Base della sintesi",
+"Summary basis"
 )}
 
 </div>
@@ -9162,9 +9192,10 @@ font-weight:800;
 color:#166534;
 ">
 
-96%
+${window.t("Dati registrati", "Recorded data")}
 
 </div>
+<p style="font-size:12px;line-height:1.6;color:#475569;margin-top:12px">${window.t("Punteggio descrittivo basato su tariffa e durata. Non misura l’utile netto o il completamento degli adempimenti: verifica le attività operative PMS.", "Descriptive score based on rate and duration. It does not measure net profit or completed requirements: review the PMS operational tasks.")}</p>
 
 </div>
 
@@ -12153,9 +12184,7 @@ async function loadPMSStats({fresh=false}={}){
       )
     : 0;
 
-  const revpar =
-    adr *
-    (occupancy / 100);
+  const revpar = properties > 0 ? revenueThisMonth / (properties * daysInMonth) : 0;
 
   // ======================
   // KPI UPDATE
@@ -12805,108 +12834,67 @@ borderSkipped:false
 }
 
 function getDayBookingState(currentDate, bookingList, isEnglish){
+  const bookings = bookingList.filter(booking =>
+    isConfirmedBooking(booking) && booking.checkin && booking.checkout &&
+    currentDate >= String(booking.checkin) && currentDate <= String(booking.checkout)
+  );
+  const isCheckin = bookings.some(booking => currentDate === String(booking.checkin));
+  const isCheckout = bookings.some(booking => currentDate === String(booking.checkout));
+  const isStay = bookings.some(booking => currentDate >= String(booking.checkin) && currentDate < String(booking.checkout));
+  const color = isCheckout ? "#f97316" : isCheckin ? "#3b82f6" : isStay ? "#10b981" : "";
+  const tooltip = bookings.map(booking => {
+    const guest = booking.guestName || (isEnglish ? "Guest" : "Ospite");
+    const event = currentDate === String(booking.checkout) ? (isEnglish ? "Departure" : "Partenza")
+      : currentDate === String(booking.checkin) ? (isEnglish ? "Arrival" : "Arrivo")
+      : (isEnglish ? "Stay" : "Soggiorno");
+    return `${event}: ${guest}`;
+  }).join(" · ");
+  return {color, tooltip, bookingInfo: bookings.length === 1 ? bookings[0] : null,
+    bookings, isCheckin, isCheckout, isStay};
+}
 
-    let color = "";
-    let tooltip = "";
-    let bookingInfo = null;
-
-    let isCheckin = false;
-    let isCheckout = false;
-    let isStay = false;
-
-    bookingList.forEach(booking=>{
-
-        if(!isConfirmedBooking(booking)) return;
-
-        const checkin = String(booking.checkin || "");
-        const checkout = String(booking.checkout || "");
-
-        const guestName =
-            booking.guestName ||
-            (isEnglish ? "Guest" : "Ospite");
-
-        const status =
-            String(
-                booking.status || ""
-            ).toLowerCase();
-
-        if(
-            currentDate >= checkin &&
-            currentDate < checkout
-        ){
-
-            color = "#10b981";
-            tooltip = guestName;
-            bookingInfo = booking;
-            isStay = true;
-
-        }
-
-        if(
-            currentDate === checkin
-        ){
-
-            isCheckin = true;
-
-            color = "#3b82f6";
-
-            tooltip =
-                isEnglish
-                    ? `Arrival: ${guestName}`
-                    : `Arrivo: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-        if(
-            currentDate === checkout
-        ){
-
-            isCheckout = true;
-
-            color = "#f97316";
-
-            tooltip =
-                isEnglish
-                    ? `Departure: ${guestName}`
-                    : `Partenza: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-        if(
-            status === "cancelled" &&
-            currentDate >= checkin &&
-            currentDate <= checkout
-        ){
-
-            color = "#ef4444";
-
-            tooltip =
-                isEnglish
-                    ? `Cancelled: ${guestName}`
-                    : `Cancellata: ${guestName}`;
-
-            bookingInfo = booking;
-
-        }
-
-    });
-
-    return {
-
-        color,
-        tooltip,
-        bookingInfo,
-
-        isCheckin,
-        isCheckout,
-        isStay
-
+function openCalendarDayBookings(bookings, isEnglish){
+  if(bookings.length === 1){
+    window.showBookingDetails?.(bookings[0]);
+    return;
+  }
+  if(!bookings.length) return;
+  const ownerUid = window.currentUser?.uid;
+  document.getElementById("pms-calendar-booking-picker")?.remove();
+  const dialog = document.createElement("dialog");
+  dialog.id = "pms-calendar-booking-picker";
+  dialog.setAttribute("aria-labelledby", "pms-calendar-picker-title");
+  dialog.style.cssText = "position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(560px,90vw);height:fit-content;max-height:80vh;overflow:auto;border:1px solid #dbe7e1;border-radius:20px;padding:24px;background:#fff;color:#153b30;box-shadow:0 20px 80px #0003";
+  const title = document.createElement("h2");
+  title.id = "pms-calendar-picker-title";
+  title.textContent = isEnglish ? "Bookings on this day" : "Prenotazioni del giorno";
+  dialog.append(title);
+  const hint = document.createElement("p");
+  hint.textContent = isEnglish ? "Choose the booking to view. Arrivals, stays and departures may belong to different properties."
+    : "Scegli la prenotazione da vedere. Arrivi, soggiorni e partenze possono appartenere a strutture diverse.";
+  dialog.append(hint);
+  bookings.forEach(booking => {
+    const property = window.rbPMSData?.propertyList?.find(item => item.id === booking.propertyId);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${booking.guestName || (isEnglish ? "Guest" : "Ospite")} · ${property?.name || booking.propertyName || (isEnglish ? "Property" : "Struttura")} · ${booking.checkin} → ${booking.checkout}`;
+    button.style.cssText = "display:block;width:100%;margin:10px 0;padding:14px;text-align:left;border:1px solid #cfe4d9;border-radius:12px;background:#f3faf6;color:#153b30;cursor:pointer";
+    button.onclick = () => {
+      dialog.close();
+      if(window.currentUser?.uid !== ownerUid) return;
+      window.showBookingDetails?.(booking);
     };
-
+    dialog.append(button);
+  });
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = isEnglish ? "Close" : "Chiudi";
+  close.style.cssText = "margin-top:8px;padding:10px 18px;border:1px solid #cfe4d9;border-radius:12px;background:#f3faf6;color:#153b30;font:inherit;font-weight:600;cursor:pointer";
+  close.onclick = () => dialog.close();
+  dialog.append(close);
+  dialog.addEventListener("close", () => dialog.remove(), {once:true});
+  document.body.append(dialog);
+  dialog.showModal();
 }
 
 function renderPMSCalendar(bookings){
@@ -13229,6 +13217,7 @@ data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
 data-calendar-state="${isCheckout ? "departure" : isCheckin ? "arrival" : isStay ? "stay" : "available"}"
 data-today="${isToday}"
+data-bookings='${escapeDashboardHTML(JSON.stringify(dayState.bookings))}'
 data-booking='${
   bookingInfo
     ? escapeDashboardHTML(
@@ -13300,7 +13289,7 @@ ${day}
 </div>
 
 ${
-bookingInfo
+dayState.bookings.length
 ?
 `
 <div style="
@@ -13311,7 +13300,9 @@ overflow:hidden;
 max-width:90%;
 text-overflow:ellipsis;
 ">
-${escapeDashboardHTML(bookingInfo.guestName || "")}
+${escapeDashboardHTML(dayState.bookings.length > 1
+  ? `${dayState.bookings.length} ${isEnglish ? "bookings" : "prenotazioni"}`
+  : (bookingInfo.guestName || ""))}
 </div>
 `
 :
@@ -13469,39 +13460,9 @@ container
         dayCell.onclick =
           () => {
 
-            const bookingRaw =
-              dayCell.dataset.booking;
-
-
-            if(!bookingRaw){
-
-             
-              return;
-
-            }
-
-
             try{
-
-              const bookingData =
-                JSON.parse(
-                  bookingRaw
-                );
-
-
-              
-
-              if(
-                typeof window.showBookingDetails === "function"
-              ){
-
-                window.showBookingDetails(
-                  bookingData
-                );
-
-              }
-
-
+              const bookings = JSON.parse(dayCell.dataset.bookings || "[]");
+              openCalendarDayBookings(bookings, isEnglish);
             }catch(error){
 
               dashboardError(
@@ -13759,7 +13720,7 @@ const bookings =
 Number(data.bookings || 0);
 
 const hasPMSPerformanceData =
-bookings > 0 || revenue > 0;
+revenue > 0 || occupancy > 0 || revpar > 0;
 
 if(!hasPMSPerformanceData){
 
@@ -13788,8 +13749,8 @@ box-shadow:0 12px 40px rgba(15,23,42,.08);
 
   <p style="margin:0;color:#64748b;line-height:1.7;">
     ${t(
-      "Dati PMS non disponibili. Registra almeno una prenotazione o un ricavo per generare score, valutazione e raccomandazioni operative.",
-      "PMS data is not available. Record at least one booking or revenue entry to generate a score, assessment and operating recommendations."
+      "Nessuna attività economica registrata nel periodo corrente. Le prenotazioni storiche o future non dimostrano performance insufficiente: verifica completezza e periodo dei dati prima di trarre conclusioni.",
+      "No economic activity recorded in the current period. Past or future bookings do not demonstrate poor performance: verify data completeness and the reporting period before drawing conclusions."
     )}
   </p>
 </div>
@@ -14309,8 +14270,8 @@ margin-bottom:8px;
 ">
 
 💰 ${t(
-"Ricavi Totali",
-"Total Revenue"
+"Ricavi attribuiti al mese corrente",
+"Revenue allocated to the current month"
 )}
 
 </div>
@@ -14541,7 +14502,7 @@ color:#0f172a;
 ">
 
 ${t(
-"Performance Positive",
+"Performance positiva",
 "Positive Performance"
 )}
 
@@ -15347,3 +15308,28 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 document.addEventListener("rb_language_changed",()=>renderBookingTaskTracking());
+
+// Language refresh uses the existing PMS snapshot and keeps chart revenue unchanged.
+function refreshPMSLanguage(){
+  const pms = window.rbPMSData;
+  if(!pms || (!pms.isDemo && pms.ownerUid !== window.currentUser?.uid)) return;
+  for(const [id,value] of Object.entries({
+    "pms-total-revenue":formatCurrency(pms.revenue),
+    "pms-adr":formatCurrency(pms.adr),
+    "pms-revpar":formatCurrency(pms.revpar),
+    "pms-occupancy":formatPercent(pms.occupancy)
+  })){
+    const element = document.getElementById(id);
+    if(element) element.innerText = value;
+  }
+  const canvas = document.getElementById("pms-performance-chart");
+  const chart = canvas && Chart.getChart(canvas);
+  if(chart){
+    chart.data.labels = window.currentLang === "en"
+      ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+      : ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"];
+    chart.data.datasets.forEach(dataset => { dataset.label = t("Ricavi","Revenue"); });
+    chart.update("none");
+  }
+}
+document.addEventListener("rb_language_changed", refreshPMSLanguage);

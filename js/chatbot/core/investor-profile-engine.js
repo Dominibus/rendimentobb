@@ -614,10 +614,10 @@ if(
 
 if (window.RB_DEBUG) {
 
-    console.log(
-        "INVESTOR PROFILE UPDATED",
-        profile
-    );
+    (void 0)
+
+
+;
 
 }
 
@@ -627,10 +627,10 @@ if (window.RB_DEBUG) {
 
   catch(error){
 
-    console.error(
-      "❌ INVESTOR PROFILE ERROR:",
-      error
-    );
+    (void 0)
+
+
+;
 
     return null;
 
@@ -660,9 +660,9 @@ window.rbLoadInvestorProfile = function(){
 
       if (window.RB_DEBUG) {
 
-    console.log(
-        "INVESTOR PROFILE LOADED"
-    );
+    (void 0)
+
+;
 
 }
 
@@ -672,10 +672,10 @@ window.rbLoadInvestorProfile = function(){
 
   catch(error){
 
-    console.error(
-      "❌ PROFILE LOAD ERROR:",
-      error
-    );
+    (void 0)
+
+
+;
 
   }
 

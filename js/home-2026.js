@@ -264,7 +264,7 @@
 
     // Un piano Free non corrisponde
     // a nessuna delle tre schede a pagamento.
-    if(currentPlan === "free"){
+    if(currentPlan === "free" || window.rbIsTrial?.()){
       return;
     }
 

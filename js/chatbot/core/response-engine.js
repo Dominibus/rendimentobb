@@ -37,13 +37,13 @@ const RB_DEBUG = window.RB_DEBUG === true;
 
 const rbDebugLog = (...args) => {
     if (RB_DEBUG) {
-        console.log(...args);
+        (void 0);
     }
 };
 
 const rbDebugWarn = (...args) => {
     if (RB_DEBUG) {
-        console.warn(...args);
+        (void 0);
     }
 };
   
@@ -74,6 +74,28 @@ const rbAsksPlanPDF =
   /(inclus|disponib|available|include|access|puo|posso|can i|does|is the)/.test(rbPlanQuestion);
 if(rbAsksFreeFeatures || rbAsksPlanPDF){
   intent = { ...intent, intent: "subscriptions" };
+}
+
+// Product questions must not depend on a simulation or uploaded PDF.
+const rbExplicitPlanQuestion = /(?:prezz|cost|differ|includ).*(?:pian[oi]|plans?)/i.test(rbPlanQuestion) || /\b(pro|investor|abbonament[oi]|subscription|pricing)\b/i.test(rbPlanQuestion) || /(?:pian[oi]|plans?).*(?:prezz|cost|differ|mensil|annual|month|year|includ|funzion)/i.test(rbPlanQuestion);
+if(rbExplicitPlanQuestion || rbAsksFreeFeatures || rbAsksPlanPDF || intent.intent === "subscriptions"){
+  const cancel = /disdire|disdetta|annull|cancell|cancel|renewal|rinnovo/.test(rbPlanQuestion);
+  const annual = /annuale|annuali|annual|yearly|year|mensile|monthly/.test(rbPlanQuestion);
+  const textIT = cancel
+    ? "Per gestire il rinnovo o cambiare un abbonamento attivo, contatta l’assistenza. Non è presente una gestione autonoma del rinnovo nell’area account."
+    : rbAsksPlanPDF
+    ? "Free e Investor non includono il PDF Executive. È disponibile con Pro mensile e Pro annuale."
+    : annual
+    ? "Pro mensile: 29 € al mese. Pro annuale: 199 € pagati in un’unica soluzione per l’anno, equivalenti a circa 16,58 €/mese. Le funzioni Pro sono le stesse: analisi salvate, dashboard, PMS prenotazioni, assistente e report PDF. Risparmi 149 € rispetto a 12 mesi di Pro mensile (348 €). Autopilot propone priorità e azioni assistite; la sincronizzazione automatica con i portali OTA non è inclusa."
+    : "Free permette di provare il simulatore. Investor: 19 €/mese, con analisi salvate, dashboard, assistente e PMS prenotazioni. Pro: 29 €/mese, aggiunge report PDF Executive e report dashboard. Pro annuale: 199 €/anno, con le stesse funzioni Pro e un risparmio di 149 € rispetto a 12 mesi mensili. Le analisi sono stime sulle ipotesi inserite; Autopilot guida le attività e non sincronizza automaticamente i portali OTA.";
+  const textEN = cancel
+    ? "Contact support to manage renewal or change an active subscription. Account self-service renewal management is not available."
+    : rbAsksPlanPDF
+    ? "Free and Investor do not include the Executive PDF. Monthly and annual Pro include it."
+    : annual
+    ? "Monthly Pro: €29/month. Annual Pro: €199 paid upfront for one year, about €16.58/month. Both include the same Pro features: saved analyses, dashboard, booking PMS, assistant and PDF reports. Annual billing saves €149 compared with 12 monthly payments (€348). Autopilot suggests priorities and guided actions; automatic OTA channel synchronization is not included."
+    : "Free lets you try the simulator. Investor: €19/month, with saved analyses, dashboard, assistant and booking PMS. Pro: €29/month, adding Executive PDFs and dashboard reports. Annual Pro: €199/year, with the same Pro features and €149 savings versus 12 monthly payments. Analyses are estimates based on inputs; Autopilot guides tasks and does not automatically synchronize OTA channels.";
+  return {type:"subscriptions",confidence:1,textIT,textEN,suggestionsIT:["Confronta i piani nella home"],suggestionsEN:["Compare plans on the home page"],signals:[],metadata:{source:"product_plans"}};
 }
 
 // A failed current upload must never be replaced by a previous report or live simulation.
@@ -520,7 +542,7 @@ Puoi continuare a visualizzare l’anteprima disponibile nel simulatore.
 
 Con l’upgrade puoi sbloccare:
 
-• ROI reale
+• ROI stimato sulle ipotesi
 • cashflow e profitto netto
 • rischio operativo
 • Investment Score e Verdict AI
@@ -534,7 +556,7 @@ You can continue viewing the preview available in the simulator.
 
 Upgrade to unlock:
 
-• real ROI
+• estimated ROI based on inputs
 • cashflow and net profit
 • operational risk
 • Investment Score and AI Verdict
@@ -1078,6 +1100,7 @@ const investmentScore =
 
           window.rbGenerateInvestmentScore?.({
 
+            roiAvailable: Number(liveData.equity ?? liveData.investment) !== 0,
             roi,
 
             risk,
@@ -2118,7 +2141,7 @@ if(
 `📊 Sto leggendo dati parziali dalla simulazione rapida.
 
 Per ottenere:
-• ROI reale
+• ROI stimato sulle ipotesi
 • cashflow avanzato
 • rischio operativo
 • analisi AI completa
@@ -2130,7 +2153,7 @@ esegui una simulazione nel simulatore principale.`,
 `📊 I am currently reading partial quick-simulation data.
 
 To unlock:
-• real ROI
+• estimated ROI based on inputs
 • advanced cashflow
 • operational risk
 • full AI analysis
@@ -2604,7 +2627,7 @@ else if(
   // 🚨 NEGATIVE CASHFLOW
   // =====================================
 
-  else if(net <= 0){
+  else if(net < 0){
 
     response.signals.push(
       "negative_cashflow"
@@ -2612,10 +2635,10 @@ else if(
 
     response.textIT =
 
-`🚨 Cashflow operativo negativo.
+`🚨 Cashflow annuo stimato dopo mutuo negativo.
 
-💸 Profitto netto stimato:
-€${net.toLocaleString("it-IT")}
+💸 Cashflow stimato (€/anno):
+€${net.toLocaleString("it-IT", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
 ⚠️ L'investimento potrebbe generare perdite operative.
 
@@ -2623,10 +2646,10 @@ else if(
 
     response.textEN =
 
-`🚨 Negative operational cashflow detected.
+`🚨 Negative estimated annual cash flow after debt service.
 
-💸 Estimated net profit:
-€${net.toLocaleString("en-US")}
+💸 Estimated cash flow (€/year):
+€${net.toLocaleString("en-US", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
 ⚠️ The investment may generate operational losses.
 
@@ -2642,21 +2665,21 @@ else if(
 
     response.textIT =
 
-`✅ Cashflow operativo positivo.
+`✅ Cashflow annuo stimato dopo mutuo non negativo.
 
-💰 Profitto netto stimato:
-€${net.toLocaleString("it-IT")}
+💰 Cashflow stimato (€/anno):
+€${net.toLocaleString("it-IT", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
-📈 La simulazione mostra una sostenibilità finanziaria potenzialmente stabile.`;
+📈 Verifica costi, rata e occupazione con uno scenario prudente. Questo risultato non certifica incassi.`;
 
     response.textEN =
 
-`✅ Positive operational cashflow detected.
+`✅ Non-negative estimated annual cash flow after debt service.
 
-💰 Estimated net profit:
-€${net.toLocaleString("en-US")}
+💰 Estimated cash flow (€/year):
+€${net.toLocaleString("en-US", {minimumFractionDigits:2,maximumFractionDigits:2})}
 
-📈 The simulation shows potentially stable financial sustainability.`;
+📈 Check costs, debt service and occupancy with a conservative scenario. This result does not certify receipts.`;
 
   }
 
@@ -10739,7 +10762,7 @@ ${estimatedProperties} immobili
 
 ${growthProfileIT}
 
-L'obiettivo appare realistico se mantieni un ROI sostenibile, controlli il rischio operativo e reinvesti progressivamente i profitti generati.
+Questo è uno scenario sulle ipotesi, non una verifica della fattibilità dell’obiettivo. Occorre verificare costi accessori, liquidità, disponibilità degli immobili e finanziamento effettivamente ottenibile.
 
 📈 Strategia consigliata
 
@@ -10768,7 +10791,7 @@ Fase 3
 
 🚀 Consiglio del Consulente AI
 
-Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attuale consente realisticamente l'acquisizione iniziale di circa ${aggressiveProperties} immobili utilizzando una leva finanziaria sostenibile e una crescita progressiva del portafoglio.`;
+Con il capitale indicato di €${availableCapital.toLocaleString("it-IT")}, il modello ipotizza circa ${aggressiveProperties} immobili nello scenario dinamico. È un calcolo illustrativo: non verifica l’accesso al credito, il prezzo degli immobili o la sostenibilità della leva. Non è un invito all’acquisto.`;
 
   // =====================================
   // 🇬🇧
@@ -10830,7 +10853,7 @@ ${estimatedProperties} properties
 
 ${growthProfileEN}
 
-The objective appears realistic if sustainable ROI is maintained, operational risk is controlled and profits are continuously reinvested.
+This is a scenario based on assumptions, not a feasibility check of the target. Purchase expenses, cash reserves, property availability and actually obtainable financing must be checked.
 
 📈 Recommended Strategy
 
@@ -10859,7 +10882,7 @@ Phase 3
 
 🚀 AI Consultant Advice
 
-With €${availableCapital.toLocaleString("en-US")} available, your current capital could realistically support the initial acquisition of approximately ${aggressiveProperties} properties using sustainable leverage and progressive portfolio growth.`;
+With the stated capital of €${availableCapital.toLocaleString("en-US")}, the model assumes approximately ${aggressiveProperties} properties in the growth scenario. This is an illustration: it does not verify access to credit, property prices or sustainable leverage. It is not a recommendation to buy.`;
 
 }
 
