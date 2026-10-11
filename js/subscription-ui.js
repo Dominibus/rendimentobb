@@ -38,12 +38,12 @@ window.rbOpenSubscription=()=>{
  if(!window.currentUser){location.assign('/login/');return;}
  const d=dialog(t('Il tuo abbonamento','Your subscription'));
  const data=ownedData(),sandbox=isSandboxHost(location.hostname),billing=getBillingPlanForScope(data,sandbox),prefix=sandbox?'sandboxTrial':'trial';
- const inTrial=window.rbIsTrial();
+ const paid=['investor','pro','pro_yearly'].includes(billing);
+ const inTrial=!paid&&window.rbIsTrial();
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
- add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. Per continuare le funzioni Investor scegli un piano a pagamento; Pro aggiunge i report PDF.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. Choose a paid plan to continue using Investor features; Pro adds PDF reports.'));
+ if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. Per continuare le funzioni Investor scegli un piano a pagamento; Pro aggiunge i report PDF.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. Choose a paid plan to continue using Investor features; Pro adds PDF reports.'));
  conditions(d);
  const notice=add(d,'p','');notice.setAttribute('role','status');
- const paid=['investor','pro','pro_yearly'].includes(billing);
  if(!paid&&!inTrial&&!data[`${prefix}StartedAt`]){
   if(window.currentUser.emailVerified!==true){
     const verify=button(d,t('Richiedi email di verifica','Request verification email'));
