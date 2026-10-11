@@ -26,7 +26,7 @@ test("normal user alerts do not emit warnings or traces in production", () => {
 
   assert.match(alertSource, /window\.RB_DEBUG === true/);
   assert.match(alertSource, /appDebugWarn/);
-  assert.match(alertSource, /console\.trace/);
+  assert.doesNotMatch(alertSource, /console\.(?:warn|trace)\s*\(/);
 });
 
 test("simulator fallback warnings are debug-only", () => {

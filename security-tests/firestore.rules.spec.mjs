@@ -264,3 +264,12 @@ test('full snapshot survives atomic property creation and analysis link',async()
  const saved=await assertSucceeds(getDoc(a));assert.equal(saved.data().assumptions.expenses,2500);
  await assertSucceeds(updateDoc(p,{name:'Immobile aggiornato'}));
 });
+
+test('owned house snapshot permits zero property value and startup capital without weakening owner or tier guards',async()=>{
+ const a={...assumptionsPayload(),source:'owned_property',propertyPrice:0,equity:0,loanAmount:0};
+ await assertSucceeds(setDoc(doc(dbFor('investor'),'analyses','owned-zero'),{uid:'investor',propertyPrice:0,equity:0,roi:0,net:9410.875,assumptions:a}));
+ await assertSucceeds(setDoc(doc(dbFor('pro'),'analyses','owned-startup'),{uid:'pro',assumptions:{...a,equity:20000,loanAmount:40000}}));
+ await assertFails(setDoc(doc(dbFor('free'),'analyses','owned-free'),{uid:'free',assumptions:a}));
+ await assertFails(getDoc(doc(dbFor('pro'),'analyses','owned-zero')));
+ await assertFails(updateDoc(doc(dbFor('investor'),'analyses','owned-zero'),{'assumptions.source':'simulator'}));
+});

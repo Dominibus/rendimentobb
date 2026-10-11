@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
+import {renderPropertyModeResults} from '../js/property-mode.js';
 import {renderFreeSimulationPreview} from '../js/free-preview.js';
 globalThis.window={};
 const {calculateROI}=await import('../js/roi-engine.js');
@@ -39,7 +40,7 @@ test('actual calculation UI sequence restores Free preview after legacy post-ana
  const end=source.indexOf('// ================= MARKET =================',start);
  assert.ok(start>0&&end>start);
  const h=harness();
- const context={buildInvestmentAssumptions,commission:15,tax:21,loanYears:20,loanAmount:120000,isTool:true,access:{isFree:true},document:{getElementById:id=>h.elements[id]},window:{currentLang:'it'},result:{loan:90000,realROI:6.5,netAfterMortgage:9799.82},renderFreeSimulationPreview,roiText:'6.5%',net:9799.82,gross:30000,price:150000,equity:30000,occupancy:70,priceNight:150,expenses:800,interestRate:3.5,formatCurrency:String,renderUniversalKPI(){},renderCashflowProjection(){},runPostAnalysis(_result, savedContext){assert.equal(savedContext.loanAmount,90000);assert.equal(savedContext.mortgage,90000);h.elements['roi-live'].textContent='—';}};
+ const context={propertyMode:"purchase",renderPropertyModeResults,buildInvestmentAssumptions,commission:15,tax:21,loanYears:20,loanAmount:120000,isTool:true,access:{isFree:true},document:{getElementById:id=>h.elements[id]},window:{currentLang:'it'},result:{loan:90000,realROI:6.5,netAfterMortgage:9799.82},renderFreeSimulationPreview,roiText:'6.5%',net:9799.82,gross:30000,price:150000,equity:30000,occupancy:70,priceNight:150,expenses:800,interestRate:3.5,formatCurrency:String,renderUniversalKPI(){},renderCashflowProjection(){},runPostAnalysis(_result, savedContext){assert.equal(savedContext.loanAmount,90000);assert.equal(savedContext.mortgage,90000);h.elements['roi-live'].textContent='—';}};
  vm.createContext(context);vm.runInContext(source.slice(start,end),context);
  assert.equal(h.elements['roi-live'].textContent,'6,5%');assert.equal(h.elements['roi-preview-live'].textContent,'6,5%');assert.ok(h.elements['cashflow-month-preview'].textContent.includes('816,65'));
 });
@@ -53,6 +54,6 @@ test('paid zero ROI is rendered and missing equity ROI is never replaced by the 
 });
 test('actual legacy rendering sequence cannot leave property ROI as the paid main KPI after a loss',async()=>{
  const source=await readFile(new URL('../js/app.js',import.meta.url),'utf8');const start=source.indexOf('["roi-live","roi-preview-live","roi-card-live"].forEach');const end=source.indexOf('// ================= MARKET =================',start);
- const h=harness({isPro:true});const context={buildInvestmentAssumptions,commission:15,tax:21,loanYears:20,loanAmount:120000,isTool:true,access:{isPro:true},document:{getElementById:id=>h.elements[id]},window:{currentLang:'it'},result:{roi:-.938566,realROI:-.187713,netAfterMortgage:-281.57},renderFreeSimulationPreview,roiText:'-0.2%',net:-281.57,gross:21900,price:150000,equity:30000,occupancy:50,priceNight:120,expenses:700,interestRate:3.5,formatCurrency:String,renderUniversalKPI(){},renderCashflowProjection(){},runPostAnalysis(){}};
+ const h=harness({isPro:true});const context={propertyMode:"purchase",renderPropertyModeResults,buildInvestmentAssumptions,commission:15,tax:21,loanYears:20,loanAmount:120000,isTool:true,access:{isPro:true},document:{getElementById:id=>h.elements[id]},window:{currentLang:'it'},result:{roi:-.938566,realROI:-.187713,netAfterMortgage:-281.57},renderFreeSimulationPreview,roiText:'-0.2%',net:-281.57,gross:21900,price:150000,equity:30000,occupancy:50,priceNight:120,expenses:700,interestRate:3.5,formatCurrency:String,renderUniversalKPI(){},renderCashflowProjection(){},runPostAnalysis(){}};
  vm.runInNewContext(source.slice(start,end),context);assert.equal(h.elements['roi-live'].textContent,'-0,9%');assert.equal(h.elements['roi-preview-live'].textContent,'-0,2%');
 });

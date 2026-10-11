@@ -30,7 +30,7 @@ test('missing or non-string legacy cities do not crash the card', () => {
 test('property name, city, address and legacy nightly price cannot inject markup', async () => {
   const html = await renderProperties({ name: payload, city: payload, address: payload, priceNight: payload });
   assert.doesNotMatch(html, /<img\b|<svg\s+onload=/i);
-  assert.equal(html.split('&lt;img src=x').length - 1, 5);
+  assert.equal(html.split('&lt;img src=x').length - 1, 4);
   assert.ok(html.includes('O&#039;Brien &amp; Casa'));
 });
 

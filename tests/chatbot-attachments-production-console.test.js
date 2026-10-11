@@ -25,8 +25,8 @@ test("chatbot attachment diagnostics are silent in production", () => {
 
   const pdf = read(files[0]);
   assert.match(pdf, /window\.RB_DEBUG === true/);
-  assert.match(pdf, /console\.error\("PDF Extraction Error"\)/);
+  assert.doesNotMatch(pdf, /console\.(?:log|debug|warn|error|trace)\s*\(/);
 
   const parser = read("js/chatbot/pdf-parser-engine.js");
-  assert.match(parser, /console\.error\("PDF Parser Error"\)/);
+  assert.doesNotMatch(parser, /console\.(?:log|debug|warn|error|trace)\s*\(/);
 });

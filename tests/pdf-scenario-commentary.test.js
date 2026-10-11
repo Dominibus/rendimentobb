@@ -26,26 +26,26 @@ test('DSCR states do not certify financing and distinguish limited coverage from
 test('PDF verdict localizes the outcome without changing canonical machine values',()=>{
  const src=readFileSync(new URL('../js/app.js',import.meta.url),'utf8');const start=src.indexOf('const pdfVerdictLabel =');const end=src.indexOf('const confidence =',start);
  for(const [verdict,label] of [['BUY','Favorevole'],['WAIT','Da verificare'],['WATCH','Da verificare'],['AVOID','Critico']]){
-  const c={verdict,T:it=>it};vm.runInNewContext(src.slice(start,end)+'\nresult=pdfVerdictLabel;',c);assert.equal(c.result,label);assert.equal(c.verdict,verdict);
+  const c={verdict,isOwnedProperty:false,equity:30000,profit:1000,T:it=>it};vm.runInNewContext(src.slice(start,end)+'\nresult=pdfVerdictLabel;',c);assert.equal(c.result,label);assert.equal(c.verdict,verdict);
  }
  const pdf=src.slice(src.indexOf('window.generateExecutivePDF ='),src.indexOf('// SAVE',start));
  assert.doesNotMatch(pdf,/Qualità istituzionale|Investment Grade|T\("Completi"|Punti di forza|Finanziamento stimato sostenibile/);
  assert.match(pdf,/non è una raccomandazione di acquisto/);
 });
-test('complete PDF generator preserves seven pages and prints scenario metrics with revised commentary',async()=>{
+test('complete PDF generator preserves eight pages including actual report assumptions and prints scenario metrics with revised commentary',async()=>{
  const app=readFileSync(new URL('../js/app.js',import.meta.url),'utf8');
  const code=app.slice(app.indexOf('window.generateExecutivePDF ='),app.indexOf('// ================= AUTO CITY DETECTION'));
  for(const net of [2446.89,0,-6678]){
   const texts=[];let pages=1;let filename;
   const doc=new Proxy({getNumberOfPages:()=>pages,addPage(){pages++;},text(value,x,y){texts.push({value:String(value),y,page:pages});},splitTextToSize:value=>[value],save:name=>filename=name},{get(target,key){return target[key]||(()=>{});}});
   const window={currentLang:'it',getUserAccess:()=>({isPro:true,canDownloadPDF:true}),jspdf:{jsPDF:function(){return doc;}},
-   RB_MARKET_DATA:{roma:{roi:9.8}},lastAnalysisData:{roi:net/300,realROI:net/1500,annualProfit:net,revenueAnnual:27375,price:150000,equity:30000,loan:120000,annualDebtService:8351,mortgageYearly:8351,netOperatingIncome:13669,noi:13669,dscr:1.64,risk:58,investmentScore:41,verdict:'WAIT',city:'roma',occupancy:50}};
+   RB_MARKET_DATA:{roma:{roi:9.8}},lastAnalysisData:{assumptions:{loanYears:25,interestRate:3.5},roi:net/300,realROI:net/1500,annualProfit:net,revenueAnnual:27375,price:150000,equity:30000,loan:120000,annualDebtService:8351,mortgageYearly:8351,netOperatingIncome:13669,noi:13669,dscr:1.64,risk:58,investmentScore:41,verdict:'WAIT',city:'roma',occupancy:50}};
   const c={window,sessionStorage:{getItem:()=> 'roma'},document:{getElementById:()=>null},buildPDFScenarioCommentary,
    buildRevenueScenarios,
    calculateMortgage:()=>8351,showToast(){throw Error('Unexpected toast');},openUpgradeModal(){throw Error('Unexpected upgrade');}};
   vm.runInNewContext(code,c);await window.generateExecutivePDF();
-  assert.equal(pages,7);assert.match(filename,/RendimentoBB-Fattibilita/);
-  const joined=texts.map(t=>t.value).join('\n');assert.match(joined,/Da verificare/);assert.match(joined,/Ipotesi/);assert.match(joined,/Elementi da valutare/);
+  assert.equal(pages,8);assert.match(filename,/RendimentoBB-Fattibilita/);
+  const joined=texts.map(t=>t.value).join('\n');assert.match(joined,/25 anni/);assert.doesNotMatch(joined,/20 anni/);assert.match(joined,/Da verificare/);assert.match(joined,/Ipotesi/);assert.match(joined,/Elementi da valutare/);
   assert.match(joined,net<0?/disavanzo/:net===0?/pareggio/:/positivo nelle ipotesi/);
   for(const item of texts)assert.ok(item.y===undefined || item.y<=278,`Text overflow on page ${item.page}: ${item.y}`);
  }

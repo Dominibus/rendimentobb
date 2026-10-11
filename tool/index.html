@@ -39,12 +39,12 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
 <!-- 🔥 LIBS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
+<script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
 
 <!-- 🔥 FIREBASE -->
-<script type="module" src="/js/firebase-init.js"></script>
-<script type="module" src="/js/mortgage-rates.js"></script>
+<script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
+<script type="module" src="/js/mortgage-rates.js?v=20261008-rc58"></script>
 
 <!-- 🔥 TRUST SIGNAL (Schema JSON-LD) -->
 <script type="application/ld+json">
@@ -771,7 +771,9 @@ SAFE
 <link rel="stylesheet" href="/css/tool-2026.css">
 
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
-<link rel="stylesheet" href="/css/investment-workspace.css?v=20261006-rc41">
+<link rel="stylesheet" href="/css/investment-workspace.css?v=20261009-rc80">
+<link rel="stylesheet" href="/css/assumptions-2027.css?v=20261008-rc58">
+<link rel="stylesheet" href="/css/trial-invite.css?v=20261009-rc88">
 </head>
 
 <body class="tool-page">
@@ -826,12 +828,213 @@ data-en="Not now">
 </div>
 </div>  
 
-<div id="global-header"></div>  
+<!-- Navigation is available before authentication modules finish loading. -->
+<div id="global-header">
+
+  <header class="rb-header">
+
+    <div class="rb-inner">
+
+      <div class="rb-left">
+        <a href="/">
+          <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
+        </a>
+      </div>
+
+      <nav class="rb-center" aria-label="Navigazione principale">
+  <a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+
+Analizza
+
+</a>
+
+  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
+    Aprire un B&B
+  </a>
+
+  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">
+    Mutui
+  </a>
+
+  <a href="/market/" data-it="Mercato" data-en="Market">
+    Mercato
+  </a>
+
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
+
+Trova immobili
+
+</a>
+
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+
+Guide
+
+</a>
+
+  <a href="/about/" data-it="Chi siamo" data-en="About">
+    Chi siamo
+  </a>
+</nav>
+
+      <div class="rb-right">
+
+        <div class="rb-lang">
+          <button data-lang="it">IT</button>
+          <button data-lang="en">EN</button>
+        </div>
+
+        <button
+        id="rb-header-ai-btn"
+        class="rb-header-ai-btn">
+          <span
+          class="rb-assistant-label-desktop"
+          data-it="Assistente"
+          data-en="Assistant">Assistente</span>
+          <span
+          class="rb-assistant-label-mobile"
+          data-it="Aiuto"
+          data-en="Help">Aiuto</span>
+        </button>
+
+        <div id="user-area"></div>
+
+        <button id="rb-burger" aria-label="Menu" aria-controls="rb-mobile" aria-expanded="false">☰</button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+<div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
+
+<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" inert>
+  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu">×</button></div>
+  <div id="rb-mobile-account" class="rb-mobile-account"></div>
+  <nav id="rb-mobile-nav">
+
+    <a href="/tool/" 
+    data-it="Analizza" 
+    data-en="Analyze">
+    Analizza
+    </a>
+
+    <a href="/aprire-bnb-conviene/" 
+    data-it="Aprire un B&B" 
+    data-en="Start a B&B">
+    Aprire un B&B
+    </a>
+
+    <a href="/mutui/" 
+    data-it="Mutui" 
+    data-en="Mortgages">
+    Mutui
+    </a>
+
+    <a href="/market/" 
+    data-it="Mercato" 
+    data-en="Market">
+    Mercato
+    </a>
+
+    <a href="/immobili/" 
+    data-it="Trova immobili" 
+    data-en="Find Properties">
+    Trova immobili
+    </a>
+
+    <a href="/academy/" 
+    data-it="Guide" 
+    data-en="Guides">
+    Guide
+    </a>
+
+    <a href="/about/" 
+    data-it="Chi siamo" 
+    data-en="About">
+    Chi siamo
+    </a>
+
+  </nav>
+
+    <div class="rb-mobile-lang">
+
+  <span
+    data-it="Lingua"
+    data-en="Language">
+    Lingua
+  </span>
+
+  <div class="rb-mobile-lang-buttons">
+
+    <button type="button" data-lang="it">
+      🇮🇹 IT
+    </button>
+
+    <button type="button" data-lang="en">
+      🇬🇧 EN
+    </button>
+
+  </div>
+
+</div>
+  
+</div>
+
+  <!-- 🔥 MODAL PRO -->
+  <div id="rb-pro-modal" class="rb-modal">
+  <div class="rb-modal-box">
+
+    <h3
+      data-it="🚀 Sblocca analisi completa"
+      data-en="🚀 Unlock full analysis">
+      🚀 Sblocca analisi completa
+    </h3>
+
+    <p
+      data-it="Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro."
+      data-en="You are analyzing a real investment. Without full data you risk losing thousands.">
+    </p>
+
+    <ul>
+      <li data-it="✔ ROI stimato avanzato" data-en="✔ Advanced estimated ROI"></li>
+      <li data-it="✔ Analisi mutuo completa" data-en="✔ Full mortgage analysis"></li>
+      <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
+      <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>
+    </ul>
+
+    <button id="rb-upgrade-btn" class="rb-btn primary"
+      data-it="🔥 Sblocca ora – €29"
+      data-en="🔥 Unlock now – €29">
+    </button>
+
+    <span class="continue-free"
+      id="rb-close-modal"
+      data-it="Continua senza"
+      data-en="Continue free">
+    </span>
+
+  </div>
+</div>
+
+</div>  
 <!-- 🔥 MOBILE MENU ROOT (CRITICO) -->
 
   
 
 <main>
+<aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
+<div><strong data-it="Prova Investor gratis per 7 giorni" data-en="Try Investor free for 7 days">Prova Investor gratis per 7 giorni</strong>
+<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
+<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
+<a href="/login/" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
 
 
 <!-- 🔥 SOURCE + TRUST -->
@@ -853,10 +1056,10 @@ box-shadow:
 
 <div
 style="font-weight:700;margin-bottom:6px;color:#065f46;font-size:16px;"
-data-it="✔️ Analisi con benchmark di mercato indicativi"
-data-en="✔️ Analysis with indicative market benchmarks">
+data-it="✔️ Analisi delle tue ipotesi con riferimenti illustrativi"
+data-en="✔️ Analyze your assumptions with illustrative references">
 
-✔️ Analisi con benchmark di mercato indicativi
+✔️ Analisi delle tue ipotesi con riferimenti illustrativi
 
 </div>
 
@@ -890,20 +1093,20 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
     </h1>
 
     <p
-      data-it="ROI e cashflow stimati, rischio e benchmark indicativi in un’unica analisi."
-      data-en="Estimated ROI and cash flow, risk and indicative benchmarks in one analysis.">
-      ROI e cashflow stimati, rischio e benchmark indicativi in un’unica analisi.
+      data-it="Inserisci prezzo, capitale e costi. Valuta cashflow, rata, ROI e rischio nelle tue ipotesi; salva lo scenario e confrontalo nella dashboard."
+      data-en="Enter price, equity and costs. Review cash flow, loan payments, ROI and risk under your assumptions; save the scenario and compare it in the dashboard.">
+      Inserisci prezzo, capitale e costi. Valuta cashflow, rata, ROI e rischio nelle tue ipotesi; salva lo scenario e confrontalo nella dashboard.
     </p>
   </div>
 
   <div class="tool-2026-market-status"
-    data-it="Benchmark indicativi di mercato"
-    data-en="Indicative market benchmarks">
-    Benchmark indicativi di mercato
+    data-it="Riferimenti illustrativi per città"
+    data-en="Illustrative city references">
+    Riferimenti illustrativi per città
   </div>
 </div>
 
-<section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Il tuo investimento, passo dopo passo" data-en="Your investment, step by step">Il tuo investimento, passo dopo passo</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="#price"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="#rb-simulation-summary"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="inputs" data-it="Controlla i dati" data-en="Check inputs">Controlla i dati</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="results" data-it="Leggi la mia analisi" data-en="Read my analysis">Leggi la mia analisi</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section>
+<details class="rb-tool-guidance"><summary><strong data-it="Il percorso: dati → risultati → gestione" data-en="Your path: inputs → results → management">Il percorso: dati → risultati → gestione</strong><span data-it="Apri la guida e l’assistente" data-en="Open guidance and assistant">Apri la guida e l’assistente</span></summary><section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Il tuo investimento, passo dopo passo" data-en="Your investment, step by step">Il tuo investimento, passo dopo passo</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="#price"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="#rb-simulation-summary"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="inputs" data-it="Controlla i dati" data-en="Check inputs">Controlla i dati</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="results" data-it="Leggi la mia analisi" data-en="Read my analysis">Leggi la mia analisi</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section></details>
 <div class="container simulator-container">
 
   <div class="simulator-grid">
@@ -942,34 +1145,50 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <input  
             type="text"  
             id="custom-location"
+            maxlength="80"
             placeholder="Es. Portici (NA)"
             data-it-placeholder="Es. Portici (NA)"
             data-en-placeholder="e.g. Portici (NA)"
             style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid #e2e8f0;"
           />
 
-          <div
+          <div id="location-helper" role="status"
           style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="Prezzo medio, occupazione e benchmark vengono caricati automaticamente."
-          data-en="Average price, occupancy and benchmark are loaded automatically.">
+          data-it="I riferimenti di esempio della città vengono caricati automaticamente. Verifica tariffa e occupazione del tuo immobile."
+          data-en="Illustrative city references are loaded automatically. Verify your property’s nightly rate and occupancy.">
          </div>
 
         </div>
 
+        <section id="mortgage-transfer-summary" hidden role="status" style="padding:16px;border:1px solid #99d6ce;border-radius:14px;background:#f0fdfa;margin:14px 0">
+          <strong data-it="Scenario trasferito da Mutui" data-en="Scenario transferred from Mortgages">Scenario trasferito da Mutui</strong>
+          <p id="mortgage-transfer-values"></p>
+          <p id="mortgage-transfer-note"></p>
+          <button id="mortgage-transfer-clear" type="button" class="btn btn-secondary" data-it="Scollega lo scenario" data-en="Unlink scenario">Scollega lo scenario</button>
+        </section>
         <!-- INPUTS -->
+        <div class="input-group rb-property-mode">
+          <label for="property-mode" data-it="Cosa vuoi analizzare?" data-en="What would you like to analyze?">Cosa vuoi analizzare?</label>
+          <select id="property-mode" style="width:100%;padding:12px;border:1px solid #99d6ce;border-radius:12px;background:#f0fdfa;color:#123b32;font-weight:700">
+            <option value="purchase" data-it="Voglio acquistare un immobile" data-en="I want to buy a property">Voglio acquistare un immobile</option>
+            <option value="owned" data-it="Ho già l’immobile" data-en="I already own the property">Ho già l’immobile</option>
+          </select>
+          <p id="owned-property-help" hidden role="note" data-it="Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili." data-en="Estimate revenue, costs and cashflow for a property you already own. Property value is optional and does not create a new loan. With zero startup capital, return on capital and payback are not applicable.">Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili.</p>
+        </div>
         <div class="input-group">
-          <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-          <input type="number" id="price" placeholder="150000">
+          <label id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+          <input type="number" id="price" min="0.01" step="any" required placeholder="150000">
         </div>
 
         <div class="input-group">
-          <label data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
-          <input type="number" id="equity" placeholder="30000">
+          <label id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
+          <input type="number" id="equity" min="0" step="any" required placeholder="30000">
+<p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
         </div>
 
         <div class="input-group">
           <label data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
-          <input type="number" id="priceNight" placeholder="120">
+          <input type="number" id="priceNight" min="0" step="any" required placeholder="120">
         </div>
 
         <div class="input-group">
@@ -978,8 +1197,8 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <input
 type="range"
 id="occupancy"
-min="30"
-max="90"
+min="0"
+max="100"
 value="70">
 
           <div class="range-value">
@@ -989,7 +1208,7 @@ value="70">
 
         <div class="input-group">
           <label data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
-          <input type="number" id="expenses" min="0" step="10" inputmode="decimal" placeholder="1200" required>
+          <input type="number" id="expenses" min="0" step="any" inputmode="decimal" placeholder="1200" required>
           <small
             style="display:block;margin-top:6px;color:#64748b;line-height:1.4;"
             data-it="Importo totale stimato al mese. Il valore è sempre espresso in euro, mai in percentuale."
@@ -998,6 +1217,26 @@ value="70">
           </small>
         </div>
 
+<details class="rb-assumptions-panel">
+<summary data-it="Finanziamento, commissioni e imposte del modello" data-en="Financing, commissions and model tax assumptions">Finanziamento, commissioni e imposte del modello</summary>
+<p data-it="Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale." data-en="These values enter the calculation. Defaults are editable assumptions, not lender offers or tax advice.">Questi valori entrano nel calcolo. I valori preimpostati sono ipotesi modificabili, non offerte bancarie o una verifica fiscale.</p>
+<div id="owned-loan-group" class="input-group" hidden>
+<label for="owned-loan-amount" data-it="Mutuo residuo da simulare (€)" data-en="Remaining loan principal to model (€)">Mutuo residuo da simulare (€)</label>
+<input id="owned-loan-amount" type="number" value="0" min="0" step="any" inputmode="decimal">
+<p data-it="Lascia 0 se non hai un mutuo. Se inserisci il residuo, imposta sotto tasso e anni rimanenti: la rata è una stima del modello, da confrontare con quella effettiva. Non inserire la stessa rata anche nei costi mensili." data-en="Leave 0 if there is no loan. Otherwise enter the remaining principal and set the rate and remaining years below. The model estimates payments: compare them with actual payments. Do not also include the same payment in monthly costs.">Lascia 0 se non hai un mutuo. Se inserisci il residuo, imposta sotto tasso e anni rimanenti: la rata è una stima del modello, da confrontare con quella effettiva. Non inserire la stessa rata anche nei costi mensili.</p>
+</div>
+<div class="rb-assumptions-grid">
+<div class="input-group"><label for="interestRate" data-it="Tasso annuo mutuo (%)" data-en="Annual loan interest (%)">Tasso annuo mutuo (%)</label><input id="interestRate" type="number" value="3.5" min="0" max="100" step="0.01" inputmode="decimal"></div>
+<div class="input-group"><label for="loanYears" data-it="Durata mutuo (anni)" data-en="Loan term (years)">Durata mutuo (anni)</label><input id="loanYears" type="number" value="20" min="1" max="100" step="1"></div>
+<div class="input-group"><label for="commission" data-it="Commissioni sui ricavi (%)" data-en="Revenue commissions (%)">Commissioni sui ricavi (%)</label><input id="commission" type="number" value="15" min="0" max="100" step="any" inputmode="decimal"></div>
+<div class="input-group"><label for="tax" data-it="Aliquota applicata dal modello (%)" data-en="Model tax rate (%)">Aliquota applicata dal modello (%)</label><input id="tax" type="number" value="21" min="0" max="100" step="any" inputmode="decimal"></div>
+<p data-it="Il modello applica questa aliquota al margine positivo dopo commissioni e costi operativi, prima delle rate del mutuo. È una semplificazione: non calcola la cedolare secca sui ricavi né determina il regime fiscale applicabile." data-en="The model applies this rate to the positive margin after commissions and operating costs, before loan payments. This is a simplification: it does not calculate Italian flat-rate rental tax on gross revenue or determine the applicable tax regime.">Il modello applica questa aliquota al margine positivo dopo commissioni e costi operativi, prima delle rate del mutuo. È una semplificazione: non calcola la cedolare secca sui ricavi né determina il regime fiscale applicabile.</p>
+</div>
+<p id="purchase-loan-help" data-it="Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente." data-en="The loan is derived from price minus equity. Monthly costs should not duplicate commissions and taxes already counted separately.">Il mutuo è ricavato da prezzo meno capitale proprio. I costi mensili non devono duplicare commissioni e imposte già conteggiate separatamente.</p>
+</details>
+<p class="rb-save-disclosure" role="note" data-it="Investor e Pro: il salvataggio automatico viene confermato dal messaggio sotto i risultati. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione." data-en="Investor and Pro: automatic saving is confirmed by the message below the results. Results remain simulations, not confirmed properties. Free: results are available in the session.">Investor e Pro: il salvataggio automatico viene confermato dal messaggio sotto i risultati. I dati restano simulazioni, non immobili confermati. Free: risultati disponibili nella sessione.</p>
+
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;color:#475569"><input id="analysis-reminder-consent" type="checkbox" style="margin-top:3px"><span data-it="Voglio ricevere fino a due promemoria email su questa analisi. Facoltativo: conferma dalla mail del riepilogo; puoi interromperli dal link nelle email." data-en="Send me up to two email reminders about this analysis. Optional: confirm from the summary email; stop them using the email link.">Voglio ricevere fino a due promemoria email su questa analisi. Facoltativo: conferma dalla mail del riepilogo; puoi interromperli dal link nelle email.</span></label>
         <button id="analyze-btn" class="btn btn-primary" style="margin-top:10px;"
           data-it="🚀 Analizza investimento"
           data-en="🚀 Analyze investment">
@@ -1100,8 +1339,8 @@ margin-top:12px;
           text-align:center;
         "
         class="free-only tool-2026-free-notice"
-        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo d’acquisto; è diverso dal ROI sul capitale proprio. Non è un incasso garantito."
-        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / purchase price; it differs from equity ROI. This is not guaranteed income.">
+        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo o valore indicato; senza questo importo non è applicabile. Non è un incasso garantito."
+        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / stated price or value; without that value it is not applicable. This is not guaranteed income.">
         </div>
 
       </div>
@@ -1228,10 +1467,10 @@ class="investment-panel">
   "></div>
 
 <div class="score-label"
-data-it="Punteggio AI investimento"
-data-en="AI Investment Score">
+data-it="Punteggio del modello investimento"
+data-en="Investment model score">
 
-Punteggio AI investimento
+Punteggio del modello investimento
 
 </div>
 </div>
@@ -1293,9 +1532,9 @@ EXECUTIVE KPI CARDS
 
     <div
     class="executive-stat-title"
-    data-it="Break-even"
-    data-en="Break-even">
-    Break-even
+    data-it="Recupero equity stimato"
+    data-en="Estimated equity recovery">
+    Recupero equity stimato
     </div>
 
     <div
@@ -1436,8 +1675,8 @@ data-en="Investor: full analyses, scenarios, saved simulations and portfolio/PMS
 <!-- 🔥 BULLET VALUE -->
 <div style="font-size:13px;color:#334155;margin-top:10px;text-align:center;display:flex;flex-direction:column;gap:8px;font-weight:500;">
 
-  <div data-it="✔️ ROI reale" data-en="✔️ Real ROI">
-    ✔️ ROI reale
+  <div data-it="✔️ ROI stimato" data-en="✔️ Estimated ROI">
+    ✔️ ROI stimato
   </div>
 
   <div data-it="✔️ Analisi mutuo" data-en="✔️ Mortgage analysis">
@@ -1586,10 +1825,12 @@ style="margin-top:22px;"></div>
 <!-- BENCHMARK -->
 <div class="results-card investor-teaser">
   <h3
-    data-it="Benchmark mercato città"
-    data-en="City market benchmark">
+    data-it="Riferimento illustrativo per città"
+    data-en="Illustrative city reference">
   </h3>
 
+  <p class="section-note" data-it="Fonte: tabella interna statica RendimentoBB. Fonte esterna e data di rilevazione non documentate: non sono medie di mercato aggiornate. La presenza di un riferimento non implica la disponibilità di scenari nella pagina Immobili."
+    data-en="Source: static internal RendimentoBB table. External source and observation date are undocumented: these are not current market averages. A reference here does not imply that scenarios are available on the Properties page.">Fonte: tabella interna statica RendimentoBB. Fonte esterna e data di rilevazione non documentate: non sono medie di mercato aggiornate. La presenza di un riferimento non implica la disponibilità di scenari nella pagina Immobili.</p>
   <div id="market-benchmark" class="kpi-grid">
 
     <div class="kpi-box">
@@ -1618,7 +1859,7 @@ style="margin-top:22px;"></div>
 
 <!-- MARKET COMPARISON -->
 <div class="results-card investor-teaser">
-  <h3 data-it="Performance vs mercato" data-en="Market performance"></h3>
+  <h3 data-it="Ricavi simulati e riferimento illustrativo" data-en="Simulated revenue and illustrative reference"></h3>
   <div id="market-comparison" class="kpi-grid"></div>
 </div>
 
@@ -1689,11 +1930,11 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261006-rc44" defer></script>
+<script src="/js/chatbot-loader.js?v=20261011-rc101" defer></script>
   
-<script type="module" src="/js/header.js"></script>
-<script src="/js/ui-system.js" defer></script>  
-<script type="module" src="/js/footer.js"></script>  
+<script type="module" src="/js/header.js?v=20261011-rc103"></script>
+<script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
+<script type="module" src="/js/footer.js?v=20261011-rc102"></script>  
 
 <script type="module" src="/js/market-data.js"></script>
 
@@ -1773,8 +2014,10 @@ window.updateInvestmentScore = function(score){
         ? "B"
         : "C";
 
-  const recommendation =
-    safeScore >= 75
+  const ownedMode = window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property";
+  const recommendation = ownedMode
+    ? (safeScore >= 75 ? (lang === "en" ? "Favorable management under assumptions" : "Gestione favorevole nelle ipotesi") : safeScore > 40 ? (lang === "en" ? "Management needs optimization" : "Gestione da ottimizzare") : (lang === "en" ? "Management needs review" : "Gestione da rivedere"))
+    : safeScore >= 75
       ? (
           lang === "en"
             ? "Buy recommended"
@@ -1840,13 +2083,13 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261007-rc54"></script>
+<script type="module" src="/js/app.js?v=20261011-rc101"></script>
 
 <script>
 
 const toolDebug = (...args) => {
   if(window.RB_DEBUG === true){
-    console.debug(...args);
+    (void 0);
   }
 };
 
@@ -2125,5 +2368,6 @@ setTimeout(()=>{
 
 </script>
 <script src="/js/investment-workspace.js?v=20261006-rc43"></script>
+<script type="module" src="/js/trial-invite.js?v=20261009-rc88"></script>
 </body>
 </html>

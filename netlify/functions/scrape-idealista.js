@@ -87,7 +87,7 @@ price = parseInt(price);
 }
 
 
-console.log("Extracted price:", price);
+(void 0);
 
 return {
 
@@ -105,7 +105,7 @@ price: price || 0
 
 }catch(e){
 
-console.log("SCRAPE ERROR", e);
+(void 0);
 
 return {
 

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import vm from "node:vm";
 
 const dashboardHtml = fs.readFileSync(
   new URL("../dashboard/index.html", import.meta.url),
@@ -26,8 +27,14 @@ test("dashboard labels investment averages and PMS performance explicitly", () =
   assert.match(dashboardSource, /PMS Operating Performance/);
 });
 
-test("executive PMS panel refuses to score an empty operational dataset", () => {
-  assert.match(dashboardSource, /const hasPMSPerformanceData\s*=\s*bookings > 0 \|\| revenue > 0/);
-  assert.match(dashboardSource, /Dati PMS non disponibili/);
-  assert.match(dashboardSource, /PMS data is not available/);
+test("historical bookings alone do not produce a poor current-period score", () => {
+  const start = dashboardSource.indexOf("function renderExecutiveSummary(data)");
+  const end = dashboardSource.indexOf('document.addEventListener("rb_language_changed"', start);
+  const box = { style: {}, innerHTML: "" };
+  const context = { document: { getElementById: () => box }, t: (it) => it };
+  vm.createContext(context);
+  vm.runInContext(dashboardSource.slice(start, end), context);
+  context.renderExecutiveSummary({ bookings: 13, properties: 4, revenue: 0, occupancy: 0, revpar: 0, adr: 0 });
+  assert.match(box.innerHTML, /Nessuna attività economica registrata nel periodo corrente/);
+  assert.doesNotMatch(box.innerHTML, /Richiede attenzione|OTA|exec-score/);
 });

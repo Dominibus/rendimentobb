@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import {readFile,readdir} from 'node:fs/promises';
 const read=f=>readFile(new URL('../'+f,import.meta.url),'utf8');
 const header=await read('js/header.js');
-const helper=header.slice(header.indexOf('function ensureSharedChatbot(){'),header.indexOf('document.addEventListener("DOMContentLoaded", () => {',header.indexOf('function ensureSharedChatbot(){')));
+const helper=header.slice(header.indexOf('function ensureSharedChatbot(){'),header.indexOf('function initializeSharedHeader(){',header.indexOf('function ensureSharedChatbot(){')));
 function harness({loaded=false,ready=false,existing=false}={}){
  const appended=[];let scriptExists=existing;
  const c={window:{__rbChatbotLoaded:loaded,rbChatbotReady:ready},document:{querySelector:()=>scriptExists?{}:null,createElement:()=>({remove(){scriptExists=false;}}),body:{appendChild:s=>{scriptExists=true;appended.push(s);}}}};
@@ -28,7 +28,7 @@ test('every page exposing the shared Assistant has a centralized loader fallback
  for(const url of await htmlFiles()){
   const html=await readFile(url,'utf8');
   if(html.includes('/js/header.js')){covered++;const tags=html.match(/<script\b[^>]*src="[^"]*chatbot-loader\.js[^\"]*"[^>]*>/g)||[];assert.ok(tags.length<=1,`${url.pathname}: duplicate explicit loader`);}
-  else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html'),`Unexpected page without shared header: ${url.pathname}`);
+  else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html')||url.pathname.endsWith('/account-action/index.html'),`Unexpected page without shared header: ${url.pathname}`);
  }
- assert.equal(covered,36);
+ assert.equal(covered,37);
 });

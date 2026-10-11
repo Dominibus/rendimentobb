@@ -1,3 +1,6 @@
+import {WithdrawalError,normalizeWithdrawal,submitWithdrawal,drainWithdrawalReceipts} from '../lib/withdrawal-service.js';
+import {scanFunnelDocuments} from '../lib/funnel-scan.js';
+import {hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL} from "../lib/funnel-consent.js";
 import {dispatchTaskNotification,urgentNotificationId} from '../lib/pms-notification-queue.js';
 import {reconcilePMSTasks} from '../js/pms-tasks.js';
 import {drainTaskNotifications} from '../lib/pms-notification-queue.js';
@@ -9,23 +12,36 @@ import crypto from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {buildBrandedEmail,sendCheckedEmail} from '../lib/email-templates.js';
 function harness(file,failRecipient=''){
- const stores=new Map(),sent=[];let sequence=0;
+ const stores=new Map(),sent=[],logs=[];let sequence=0;
  const apply=(target,patch)=>{for(const [key,value] of Object.entries(patch)){const path=key.split('.');let obj=target;while(path.length>1){const k=path.shift();obj=obj[k]??=( {} );}obj[path[0]]=value;}};
  const collection=name=>{
   if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);
   const ref=id=>({id,get:async()=>({exists:store.has(id),data:()=>store.get(id)}),set:async(value,options)=>{if(options?.merge){const current=store.get(id)||{};apply(current,value);store.set(id,current);}else store.set(id,{...value});},update:async value=>{if(!store.has(id))throw Error('missing');apply(store.get(id),value);},delete:async()=>store.delete(id)});
-  const query=(constraints=[],max=Infinity)=>({where:(key,op,value)=>query([...constraints,[key,op,value]],max),orderBy:()=>query(constraints,max),limit:n=>query(constraints,n),get:async()=>{const docs=[...store].filter(([,v])=>constraints.every(([k,op,x])=>op==='=='?v[k]===x:typeof v[k]==='number' && v[k]<=x)).slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
+  const query=(constraints=[],max=Infinity,cursor='',ordered=false)=>({where:(key,op,value)=>query([...constraints,[key,op,value]],max,cursor,ordered),orderBy:key=>query(constraints,max,cursor,key==='__name__'),startAfter:id=>query(constraints,max,id,ordered),limit:n=>query(constraints,n,cursor,ordered),get:async()=>{let rows=[...store].filter(([id,v])=>(!cursor || id>cursor) && constraints.every(([k,op,x])=>op==='=='?v[k]===x:typeof v[k]==='number' && v[k]<=x));if(ordered)rows.sort(([a],[b])=>a<b?-1:a>b?1:0);const docs=rows.slice(0,max).map(([id,v])=>({id,data:()=>v}));return {docs,empty:!docs.length};}});
   return {...query(),doc:ref,add:async data=>{const id=`mock-lead-${String(++sequence).padStart(12,'0')}`;store.set(id,{...data});return ref(id);}};
  };
  const db={collection,runTransaction:async fn=>fn({getAll:async(...refs)=>Promise.all(refs.map(r=>r.get())),get:r=>r.get(),set:(r,v)=>r.set(v),update:(r,v)=>r.update(v)})};
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:file==='api/work-email.js'?'user@example.test':'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error(){}},Buffer,Date,Intl,setTimeout};
+ const ctx={WithdrawalError,normalizeWithdrawal,submitWithdrawal,drainWithdrawalReceipts,scanFunnelDocuments,hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
- return {run,stores,sent,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
+ return {run,stores,sent,logs,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
 }
+test('zero equity is N/A in user/admin email and persists for optional reminders',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'owner@example.test',type:'analysis',roi:0,equity:0,price:150000,profit:1200,marketingConsent:true});
+ assert.equal(r.status,200);
+ for(const mail of h.sent){assert.match(mail.payload.text,/N\/A/);assert.doesNotMatch(mail.payload.text,/ROI[^\n]*0%/);}
+ assert.equal([...h.stores.get('email_funnel').values()][0].roiAvailable,false);
+});
+test('fully financed funnel reminder keeps N/A in HTML and plain text',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('zero-equity').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:0,roiAvailable:false,city:'Roma',lang:'en',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);assert.equal(h.sent.length,1);
+ assert.match(h.sent[0].payload.text,/ROI: N\/A/);assert.match(h.sent[0].payload.html,/N\/A/);assert.doesNotMatch(h.sent[0].payload.html,/Recorded estimated ROI[^]*?0%/);
+});
 test('shared email is fluid table-based, escapes submitted content and supplies complete plain text',()=>{
  const mail=buildBrandedEmail({title:'<script>x</script>',intro:'Test',rows:[['Note','A & B\nsecond line']],ctaLabel:'Open',ctaURL:'javascript:alert(1)'});
  assert.ok(mail.html.includes('max-width:600px'));assert.ok(mail.html.includes('#087f5b'));assert.ok(mail.html.includes('&lt;script&gt;'));assert.ok(!mail.html.includes('href="javascript:'));assert.ok(mail.text.includes('A & B\nsecond line'));
@@ -35,12 +51,15 @@ test('resolved email provider error and absent accepted id both reject',async()=
 });
 for(const type of ['analysis','mutui','immobili','partner','work','auth']){
  test(`lead ${type} sends separate exhaustive user and Italian admin confirmations`,async()=>{
-  const h=harness('api/send-lead.js');const result=await h.run({type,email:'owner@example.test',name:'Domenico',city:'napoli',roi:-4.2,profit:-6678,price:530000,equity:159000,dscr:.94,years:20,rate:'3.5',role:'Gestore',message:'Note <script>',lang:'en',source:'test_form',requestId:`request-${type}`});
+  const h=harness('api/send-lead.js');
+  if(type==='auth')h.ctx.admin.auth=()=>({verifyIdToken:async(token,revocationCheck)=>{assert.equal(token,'registration');assert.equal(revocationCheck,true);return {uid:'new-account',email:'owner@example.test'};}});
+  const result=await h.run({type,email:'owner@example.test',name:'Domenico',city:'napoli',roi:-4.2,profit:-6678,price:530000,equity:159000,dscr:.94,years:20,rate:'3.5',role:'Gestore',message:'Note <script>',lang:'en',source:'test_form',requestId:`request-${type}`},'POST',type==='auth'?'registration':'');
   assert.equal(result.status,200);assert.equal(result.body.leadSaved,true);assert.equal(h.sent.length,2);
   const user=h.sent[0].payload,adminMail=h.sent[1].payload;
   assert.deepEqual(Array.from(user.to),['owner@example.test']);assert.deepEqual(Array.from(adminMail.to),['rendimentobb@gmail.com']);assert.equal(adminMail.replyTo,'owner@example.test');
   assert.ok(user.html.includes('Note &lt;script&gt;'));assert.ok(adminMail.text.includes('test_form'));assert.ok(adminMail.html.includes('/dashboard-leads/'));
   if(type==='analysis'){assert.ok(user.text.includes('-€6,678.00')||user.text.includes('-€6,678'));assert.ok(adminMail.text.includes('-6.678,00'));assert.ok(adminMail.text.includes('0,94'));}
+  if(type==='auth'){assert.match(user.text,/does not activate a subscription/);assert.doesNotMatch(user.text,/approval or acceptance|Profile \/ role/);}
   assert.ok([...h.stores.get('leads').values()][0].emailDelivery.user.providerId);
  });
 }
@@ -74,12 +93,12 @@ test('urgent host email honors ownership and notification preferences',async()=>
 
 test('funnel provider rejection never marks the reminder as sent and releases the lock',async()=>{
  const h=harness('api/cron-funnel.js','owner@example.test');h.ctx.process.env.CRON_SECRET='mock-secret';
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
- const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);const data=(await h.collection('email_funnel').doc('funnel-id').get()).data();assert.equal(data.sentSteps.length,0);assert.equal(data.sending,false);assert.equal(data.lastError,'mock provider rejected');
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.funnel.errors,1);const data=(await h.collection('email_funnel').doc('funnel-id').get()).data();assert.equal(data.sentSteps.length,0);assert.equal(data.sending,false);assert.equal(data.lastError,'mock provider rejected');
 });
 test('successful funnel reminder is branded and cannot be sent again as the same step',async()=>{
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'<b>Roma</b>',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'<b>Roma</b>',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);assert.ok(h.sent[0].payload.html.includes('&lt;b&gt;Roma'));assert.ok(h.sent[0].payload.html.includes('#087f5b'));
  await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
 });
@@ -105,7 +124,7 @@ test('authenticated cron drains durable PMS notifications and records safe job c
 });
 test('PMS recovery error is visible but does not prevent the existing funnel from running',async()=>{
  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.drainTaskNotifications=async()=>{throw Error('database unavailable');};
- await h.collection('email_funnel').doc('funnel-id').set({email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.collection('email_funnel').doc('funnel-id').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:10,city:'Roma',lang:'it',createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
  const r=await h.run({},'GET','mock-secret');assert.equal(r.status,503);assert.equal(r.body.error,'pms_recovery_failed');assert.equal(h.sent.length,1);
 });
 
@@ -152,4 +171,98 @@ test('uncertain urgent delivery beyond safe idempotency window requires review w
 });
 test('legacy failed urgent delivery is not replayed with a potentially unsafe new provider request',async()=>{
  const h=harness('api/guest-report.js'),body=await seedPublicUrgent(h),id=urgentNotificationId(body.bookingId,body);await h.collection('_pms_notifications').doc(id).set({type:'guest_issue_urgent',status:'failed',uid:'user-id'});await h.run(body);assert.equal(h.sent.length,0);assert.equal(h.stores.get('_pms_notifications').get(id).status,'manual_review');
+});
+
+test('analysis email without optional consent does not enter a reminder funnel',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'user@example.test',type:'analysis',roi:20,price:150000,equity:30000});
+ assert.equal(r.status,200);assert.equal(h.stores.get('email_funnel')?.size || 0,0);assert.ok(h.sent.length>0);
+});
+test('optional consent queues an unconfirmed record and a recipient confirmation link',async()=>{
+ const h=harness('api/send-lead.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({email:'user@example.test',type:'analysis',roi:20,marketingConsent:true});
+ assert.equal(r.status,200);const records=[...h.stores.get('email_funnel').values()];assert.equal(records.length,1);
+ assert.equal(records[0].consentConfirmed,false);assert.equal(hasFunnelConsent(records[0]),false);
+ assert.ok(h.sent.some(x=>x.payload.html.includes('action=confirm')));
+});
+test('cron suppresses legacy, unconfirmed and revoked commercial funnels',async()=>{
+ for(const consent of [{},{marketingConsent:true,consentConfirmed:false,consentVersion:'analysis-reminders-v1'},{marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',unsubscribed:true}]){
+  const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+  await h.collection('email_funnel').doc('legacy').set({...consent,email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+  assert.equal((await h.run({},'GET','mock-secret')).status,200);assert.equal(h.sent.length,0);
+ }
+});
+test('confirmed reminders carry signed opt-out in HTML, text and provider header',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('confirmed').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[]});
+ await h.run({},'GET','mock-secret');assert.equal(h.sent.length,1);
+ const mail=h.sent[0].payload;assert.ok(mail.headers['List-Unsubscribe'].includes('send-followup?token='));assert.ok(mail.html.includes('Interrompi i promemoria'));assert.ok(mail.text.includes('send-followup?token='));
+});
+
+test('ambiguous funnel attempts older than the safe window require review without another send',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ await h.collection('email_funnel').doc('old-attempt').set({marketingConsent:true,consentConfirmed:true,consentVersion:'analysis-reminders-v1',email:'owner@example.test',roi:20,createdAt:{toMillis:()=>Date.now()-86400001},steps:[{type:'reminder_1',delay:0}],sentSteps:[],deliveryAttempts:{0:{firstAt:Date.now()-86400001}}});
+ const r=await h.run({},'GET','mock-secret');assert.equal(h.sent.length,0);assert.equal(r.body.funnel.manualReview,1);
+ assert.equal((await h.collection('email_funnel').doc('old-attempt').get()).data().manualReview,true);
+});
+
+test('preview cron cannot send email or change production queue records',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';h.ctx.process.env.VERCEL_ENV='preview';
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);assert.equal(r.body.reason,'production_only');assert.equal(h.sent.length,0);assert.equal(h.stores.size,0);
+});
+
+test('reusing a public request ID for another email does not expose delivery metadata',async()=>{
+ const h=harness('api/send-lead.js');await h.run({email:'first@example.test',type:'analysis',requestId:'same-public-request'});
+ const count=h.sent.length;const r=await h.run({email:'second@example.test',type:'analysis',requestId:'same-public-request'});
+ assert.equal(r.status,409);assert.equal(r.body.error,'request_id_conflict');assert.equal(r.body.emailDelivery,undefined);assert.equal(h.sent.length,count);
+});
+
+
+test('cron initializes only after authorization and reports missing configuration safely',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.admin.apps=[];
+ h.ctx.process.env.CRON_SECRET='private-secret';
+ assert.equal((await h.run({},'GET','wrong')).status,401);
+ assert.equal(h.logs.length,0);assert.equal(h.stores.size,0);
+ const r=await h.run({},'GET','private-secret');
+ assert.equal(r.status,500);assert.equal(r.body.error,'cron_configuration_missing');
+ assert.equal(typeof r.body.runId,'string');assert.equal(h.sent.length,0);
+ assert.equal(h.logs[0][0],'RB_CRON_START');assert.equal(h.logs[1][0],'RB_CRON_FAILED');
+ assert.equal(h.logs[1][1].phase,'initialization');
+ assert.ok(!JSON.stringify(h.logs).includes('private-secret'));
+});
+test('successful empty cron has correlated start/completion logs with safe zero counters',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,200);
+ const start=h.logs.find(row=>row[0]==='RB_CRON_START')[1];
+ const complete=h.logs.find(row=>row[0]==='RB_CRON_COMPLETE')[1];
+ assert.equal(start.runId,complete.runId);assert.equal(complete.funnel.sent,0);
+ assert.equal(complete.success,true);assert.equal(complete.pms.sent,0);
+});
+test('cron failure log identifies its phase without leaking the database error message',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ const original=h.ctx.admin.firestore;
+ h.ctx.admin.firestore=()=>({collection:()=>{throw Error('sensitive@example.test private-key');}});
+ h.ctx.admin.firestore.FieldValue=original.FieldValue;
+ const r=await h.run({},'GET','mock-secret');assert.equal(r.status,500);
+ const failure=h.logs.find(row=>row[0]==='RB_CRON_FAILED')[1];
+ assert.equal(failure.phase,'withdrawal_receipts');assert.equal(failure.error,'cron_error');
+ assert.ok(!JSON.stringify(h.logs).includes('sensitive@example.test'));
+});
+
+test('cron reads beyond a full funnel page and resets its cursor after a complete scan',async()=>{
+ const h=harness('api/cron-funnel.js');h.ctx.process.env.CRON_SECRET='mock-secret';
+ for(let i=0;i<105;i++)await h.collection('email_funnel').doc('record-'+String(i).padStart(3,'0')).set({});
+ const result=await h.run({},'GET','mock-secret');
+ assert.equal(result.status,200);assert.equal(result.body.funnel.checked,105);
+ assert.equal(result.body.funnel.pages,2);assert.equal(result.body.funnel.hasMore,false);
+ assert.equal(h.stores.get('_pms_jobs').get('analysis_reminders').cursor,'');
+});
+
+test('public withdrawal records a receipt separately from leads and recovers email outage on cron',async()=>{
+ const h=harness('api/send-lead.js','owner@example.test');
+ const value={type:'withdrawal',name:'Owner',email:'owner@example.test',contract:'Investor purchased 2026-10-10',confirmed:true,requestId:'c41b6aaa-6608-42ca-91f5-aaa111222333'};
+ const r=await h.run(value);assert.equal(r.status,200);assert.equal(r.body.receiptEmail,'pending');assert.equal(h.stores.get('leads')?.size||0,0);assert.equal(h.stores.get('email_funnel')?.size||0,0);
+ h.setRejectedRecipient('');const recovery=await drainWithdrawalReceipts({db:h.ctx.admin.firestore(),resend:new h.ctx.Resend()});assert.equal(recovery.pending,0);
+ const again=await h.run(value);assert.equal(again.body.receivedAt,r.body.receivedAt);assert.equal(again.body.receiptEmail,'accepted_by_provider');assert.equal(h.stores.get('_withdrawal_requests').size,1);
+ const invalid=await h.run({...value,confirmed:false});assert.equal(invalid.status,400);
 });
