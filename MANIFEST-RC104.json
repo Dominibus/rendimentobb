@@ -1,0 +1,201 @@
+{
+  "base": "rendimentobb-main (18).zip",
+  "files": [
+    {
+      "path": "LEGGIMI-RC104.txt",
+      "sha256": "47ca74734f102901e0f89bcb5f54f7402b447bc3fbde371940775524079eb27c"
+    },
+    {
+      "path": "about/index.html",
+      "sha256": "e71290d74135f1cf71620b34d6ba9c2d49da912593939523859afe3326ffc167"
+    },
+    {
+      "path": "academy/errori/index.html",
+      "sha256": "f4c0ed60042e5b18fdda246d7aa38118f047b5ec3e5510966aba0cc1b59aa415"
+    },
+    {
+      "path": "academy/index.html",
+      "sha256": "ab35051a84d7fece4c654d226b42111723bceb5b78faa6682ed91e7349d7bc40"
+    },
+    {
+      "path": "academy/mutuo/index.html",
+      "sha256": "df18cc6f79b56298e2230c0e8a2401b5716a552133fc372d4466b577325be1cd"
+    },
+    {
+      "path": "academy/roi/index.html",
+      "sha256": "40ca2528559234096c411e353053017a7f2db591f7d74b221e044ee4c034681b"
+    },
+    {
+      "path": "academy/strategia/index.html",
+      "sha256": "93b927b7badeb6144cfd888a2c97ce4f17a82db6f29fdb1e5115bd17e46c5cf3"
+    },
+    {
+      "path": "aprire-bnb-conviene/index.html",
+      "sha256": "74cc91b4ceda683acaa0577378c59b0ea9cc1c17581aef4d1ee0d37a9f7d1fb0"
+    },
+    {
+      "path": "contact.html",
+      "sha256": "83459faa87efa2804b84d65c4bb73735281d48a5a6a6dc169cbfd289111c1d13"
+    },
+    {
+      "path": "costi-aprire-bnb/index.html",
+      "sha256": "4a78b7043628ec39a7a625350c2514cb06400051fbfff6c6e8cd0baa31aa7720"
+    },
+    {
+      "path": "dashboard/index.html",
+      "sha256": "29e73a5c079163911f78e3628b24f38b6cccb4c18175a6d32a9c6b57468b1705"
+    },
+    {
+      "path": "dashboard-leads/index.html",
+      "sha256": "08085aa8fc388cef8e073cd485d22a47f0d5c7ed8bc2f2c025c558313f71ced4"
+    },
+    {
+      "path": "dashboard-report/index.html",
+      "sha256": "3fb8219a2274cc62dbbb56a6762811f0a6e5d131e45a7cbf25df87cc2d3ed59a"
+    },
+    {
+      "path": "docs/audit-superfici-RC104.json",
+      "sha256": "c7f6a6feff036a42dd9e3cd7735eddf7dc81f447fc05014997a22f7f3ee0db2d"
+    },
+    {
+      "path": "immobili/firenze/index.html",
+      "sha256": "935b91d8303e34601787e8408a25a087913cd2cd767a9459fda09e8b59856c5f"
+    },
+    {
+      "path": "immobili/index.html",
+      "sha256": "ee8ff5c99b7ecb39bf401f739be807a8c72ef7468e5a1f9f1e9d1537e0d0e703"
+    },
+    {
+      "path": "immobili/milano/index.html",
+      "sha256": "8018c579e7e2a0cc79b784be7d984d94472423edc910db53d3b786897b21dd7c"
+    },
+    {
+      "path": "immobili/napoli/index.html",
+      "sha256": "b80ede2d84550d68ab9ce9b22fc008d78f5a6a45e14d6ed44823db7a1b93719a"
+    },
+    {
+      "path": "immobili/roma/index.html",
+      "sha256": "d739e1902b1b95a78f557052ff8ba56d42127e61f146b4431ea5ca67c82f22dd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "dc5514151d4c9dee66568584d9cfa77612b96a2452f885ba99a1d2e2b261418e"
+    },
+    {
+      "path": "js/app.js",
+      "sha256": "1c67358a1e9553ac36791fb83a08a3ea03dec26a2e800057a811d39f6501fa01"
+    },
+    {
+      "path": "js/chatbot/core/investment-autopilot-engine.js",
+      "sha256": "7e6e50c6b65ded2789adc14a0f106f1b882a8fb50c229c4ee7df1c61b62634f4"
+    },
+    {
+      "path": "js/chatbot-loader.js",
+      "sha256": "44a46bba8f1a9b69a8d5425cbed3534faf56f4ce4e3607d8b366bd8817c1d3e9"
+    },
+    {
+      "path": "js/dashboard.js",
+      "sha256": "69877f301b56e742443674c1f87d27b42aa9791b6d7f4b9fcae08814259be728"
+    },
+    {
+      "path": "js/header.js",
+      "sha256": "1bc71ebc81dba931359807038a8d7eb2c979310aac9dc899f2f8bb0c509905be"
+    },
+    {
+      "path": "js/property-mode.js",
+      "sha256": "e24309bc332e31e6aa6c802b7c17f15bd85c77dcf57c51907f80d59129d9ee36"
+    },
+    {
+      "path": "lavora-con-noi/index.html",
+      "sha256": "cc9169a0aaaa054f9c67d1fb9c7b53690c2db83610ff2329e542cc9453dc71a9"
+    },
+    {
+      "path": "market/firenze/index.html",
+      "sha256": "b27894586df9e0b3bb4d39cb082189d8023b422dc38f4c8905319a12a567d2a4"
+    },
+    {
+      "path": "market/index.html",
+      "sha256": "ad97852eb0e63e63a52a618f5fea19201c4ea6081966b5a2ecce54beeec88de2"
+    },
+    {
+      "path": "market/milano/index.html",
+      "sha256": "e7aa433c2791d5af8be39974c9e966e703ec4a8f9d4fc7885c07fc0dc6fe6cda"
+    },
+    {
+      "path": "market/napoli/index.html",
+      "sha256": "b543b01e840bd096fa9cd75894e9aa975f9588c51e24eb43879f5d98fc902768"
+    },
+    {
+      "path": "market/roma/index.html",
+      "sha256": "dbe9a43cd913d78a424725008b106bb9974314e73b7979b978ff1fbcfc316ef3"
+    },
+    {
+      "path": "mutui/index.html",
+      "sha256": "63ef809a1f3d11155aefba4f481006e4ce38c3933ce559919e4d86c6dcac252f"
+    },
+    {
+      "path": "partner/index.html",
+      "sha256": "edbf1df675d06f8eed5eb43e6efff57c28965b47a20f1053171cc863e86a8e34"
+    },
+    {
+      "path": "privacy.html",
+      "sha256": "1858923c420249c1a32561d3bb77cebdbec01277a956715c971823230902f79f"
+    },
+    {
+      "path": "pro-success/index.html",
+      "sha256": "0af1383d9aeba38845133bfa7667c9655d181dd0b203af31d5706197311a7a92"
+    },
+    {
+      "path": "quanto-guadagna-bnb/index.html",
+      "sha256": "44918608a546e72f31843331aab6e7bcf5095bc37fd02c863a10b80fe6c84b5b"
+    },
+    {
+      "path": "roi-bnb/firenze/index.html",
+      "sha256": "e0279e30b2ac038e0b34d6aa6b6f612b9fc9946a6e96d7016bb35bb6bb52c303"
+    },
+    {
+      "path": "roi-bnb/index.html",
+      "sha256": "9e72010f7701874762708c2c91e972bdd432db5a47a70d4ab12e6fcc314c3b67"
+    },
+    {
+      "path": "roi-bnb/milano/index.html",
+      "sha256": "6b6edf9dc19d427a16f0ad557f3cad423a232b21df22a667b97767579094651a"
+    },
+    {
+      "path": "roi-bnb/napoli/index.html",
+      "sha256": "971d82b674f8fa42d27a50143547ce4a6d2e1c1d6ba01641414781f5de3cab11"
+    },
+    {
+      "path": "roi-bnb/roma/index.html",
+      "sha256": "7c3677abfd459be9a980f034b19335222aee5e812d38342ce9f96020f5456c59"
+    },
+    {
+      "path": "terms.html",
+      "sha256": "4a11937ec805919725e4e45e03b3ae116acd660a393681d4894f5a9fc27ebeba"
+    },
+    {
+      "path": "tests/rc104-owned-service.test.js",
+      "sha256": "04c4db14a85bdef39a3ea77c1fb033aefee1f49e5d9b2b46452574500142f3e4"
+    },
+    {
+      "path": "tests/rc62-report.test.js",
+      "sha256": "2ada4c0501e3367ca8947980d6e96c7d8d7d0aa953064f5318a75a15d0bda56b"
+    },
+    {
+      "path": "tests/rc64-header-bootstrap.test.js",
+      "sha256": "b35fae07b971198a9c37e4fceb4e27b0f6d7bbed2ee0e13da4ff49276ff5e9fe"
+    },
+    {
+      "path": "tests/rc66-language-refresh.test.js",
+      "sha256": "9475f5c7742e39db6ee6c440a56f1f8e38296781af858aad9e5c4dc62cd4b9df"
+    },
+    {
+      "path": "tool/index.html",
+      "sha256": "2566d00d5041e166c1c30d596d844b371aae3ac54308df6142d6047a029c4b14"
+    },
+    {
+      "path": "withdrawal.html",
+      "sha256": "6d0faad38c98d54ffc15f631ec059779c3b1b74ea281304eef2d45fbc9168778"
+    }
+  ]
+}

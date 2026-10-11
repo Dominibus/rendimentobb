@@ -9,7 +9,7 @@ import { calculateROI } from "./roi-engine.js?v=20261011-rc99";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
-import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc97";
+import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
 import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
@@ -1435,10 +1435,11 @@ function renderROIMarketComparison(roi, cityKey){
   const equity = window.lastAnalysisData?.equity;
   const zeroEquity=(typeof equity === "number" || (typeof equity === "string" && equity.trim() !== "")) && Number(equity) === 0;
   const hasEquity = !zeroEquity;
+  const owned = window.lastAnalysisData?.propertyMode === 'owned' || window.lastAnalysisData?.assumptions?.source === 'owned_property';
   const number = value => new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {maximumFractionDigits:1}).format(Number(value));
   container.innerHTML = `
     <div class="kpi-box">
-      <span>${t("ROI sul capitale proprio","Return on equity")}</span>
+      <span>${owned ? t("ROI sul capitale di avvio","Return on startup capital") : t("ROI sul capitale proprio","Return on equity")}</span>
       <strong>${hasEquity ? number(roi)+"%" : "N/A"}</strong>
     </div>
     <div class="kpi-box">
@@ -1448,7 +1449,7 @@ function renderROIMarketComparison(roi, cityKey){
     <div class="kpi-box">
       <span>${t("Comparabilità","Comparability")}</span>
       <strong>${t("Basi non comparabili","Bases not comparable")}</strong>
-      <p>${hasEquity
+      <p>${owned ? t("Il ROI di avvio esclude il valore della casa e non è confrontabile con un ROI di acquisto. Se il capitale è zero, il ROI è N/A: valuta ricavi, costi e cashflow.", "Startup ROI excludes the house value and is not comparable with purchase ROI. With zero capital, ROI is N/A: assess revenue, costs and cashflow.") : hasEquity
         ? t("Il riferimento interno non documenta gli stessi costi e la stessa leva della simulazione. Non misura una sovraperformance di mercato.", "The internal reference does not document the same costs and leverage as this simulation. It does not measure market outperformance.")
         : t("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow e servizio del debito.", "Equity ROI is not applicable with zero equity. Assess cash flow and debt service.")}</p>
     </div>`;
@@ -5690,7 +5691,7 @@ const riskScore = Math.max(
 );
   
 // ================= SAFE FINANCIAL DATA =================
-const isOwnedProperty = d.assumptions?.source === "owned_property";
+const isOwnedProperty = d.propertyMode === "owned" || d.assumptions?.source === "owned_property";
 
 const revenue = safe(
   d.revenueAnnual ??
@@ -6132,10 +6133,7 @@ doc.text(
 doc.setFontSize(9);
 
 doc.text(
-  T(
-    "ROI SUL CAPITALE PROPRIO",
-    "EQUITY ROI"
-  ),
+  isOwnedProperty ? T("ROI SUL CAPITALE DI AVVIO","RETURN ON STARTUP CAPITAL") : T("ROI SUL CAPITALE PROPRIO","EQUITY ROI"),
   28,
   y + 10
 );
@@ -6239,7 +6237,7 @@ profit >= 0
 },
 
 {
-title:T("ROI equity","Equity ROI"),
+title:isOwnedProperty ? T("ROI di avvio","Startup ROI") : T("ROI equity","Equity ROI"),
 value:equity > 0 ? pct(roi) : "N/A",
 subtitle:rating
 }
@@ -6653,7 +6651,7 @@ y += 16;
 const marketKey = String(city).toLowerCase().trim();
 const internalReference = window.RB_MARKET_DATA?.[marketKey]?.roi;
 const hasLocalBenchmark = internalReference !== null && internalReference !== undefined && Number.isFinite(Number(internalReference));
-row(T("ROI equity","Equity ROI"),equity > 0 ? pct(roi) : "N/A");
+row(isOwnedProperty ? T("ROI sul capitale di avvio","Return on startup capital") : T("ROI equity","Equity ROI"),equity > 0 ? pct(roi) : "N/A");
 row(isOwnedProperty && equity <= 0 ? T("Confronto ROI","ROI comparison") : T("Riferimento interno illustrativo","Illustrative internal reference"),isOwnedProperty && equity <= 0 ? T("Non applicabile","Not applicable") : hasLocalBenchmark ? pct(internalReference) : T("Non disponibile","Unavailable"));
 y += 14;
 doc.setFontSize(11);doc.setTextColor(...gray);
@@ -6661,7 +6659,9 @@ doc.text(T("BASI NON COMPARABILI","BASES NOT COMPARABLE"),20,y);
 y += 10;
 doc.setFillColor(248,250,252);doc.roundedRect(20,y,170,50,5,5,"F");
 doc.setFontSize(10);doc.setTextColor(...dark);
-const referenceNote = equity <= 0
+const referenceNote = isOwnedProperty && equity > 0
+  ? T("Il ROI di avvio usa solo il capitale inserito per avvio, arredo e lavori: esclude il valore della casa. Non è confrontabile con un ROI di acquisto o con il rendimento dell’intero patrimonio immobiliare.","Startup ROI uses only the entered startup, furnishing and renovation capital: it excludes the house value. It is not comparable with purchase ROI or return on the entire property asset.")
+  : equity <= 0
   ? (isOwnedProperty ? T("Immobile già posseduto: ROI sul capitale di avvio non applicabile. Valuta ricavi, costi e cashflow; il rischio considera solo i fattori disponibili.","Already owned property: return on startup capital is not applicable. Assess revenue, costs and cashflow; risk covers only available factors.") : T("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow, servizio del debito e costi accessori. Il riferimento interno non misura la performance dello scenario.","Equity ROI is not applicable with zero equity. Assess cash flow, debt service and transaction costs. The internal reference does not measure this scenario's performance."))
   : T("La tabella interna è statica e illustrativa: non documenta una fonte esterna aggiornata né gli stessi costi e la stessa leva della simulazione. Il confronto non misura una sovraperformance o sottoperformance di mercato.","The internal table is static and illustrative: it documents neither an updated external source nor the same costs and leverage as the simulation. It does not measure market outperformance or underperformance.");
 doc.text(doc.splitTextToSize(referenceNote,155),25,y+12);

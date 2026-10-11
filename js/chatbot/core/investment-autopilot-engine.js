@@ -22,6 +22,8 @@
       else if(/prossimo passo|next step|cosa.*(?:fare|faccio).*adesso|what.*(?:next|now)|come.*(?:proced|continu)/.test(query)) mode='next';
       else if(/da dove.*(?:iniz|part)|come.*iniz|where.*start|how.*start/.test(query)) mode='guide';
     }
+    const ownedQuestion = /(?:ho|abbiamo).*gia.*(?:casa|immobile)|possiedo.*(?:casa|immobile)|(?:casa|immobile).*(?:gia.*propriet|gia.*possed)|already own|owned (?:home|property)/.test(query);
+    if(!mode && ownedQuestion && !otherDomain) mode='guide';
     if(!mode)return null;
     let analysis={status:'missing'};
     if(isTool && typeof window.rbGetInvestmentAnalysisState==='function'){
@@ -59,12 +61,12 @@
           const decimal=value=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(value);
           const time=new Date(analysis.calculatedAt).toLocaleString(locale);
           lines.push((en?'Current simulator analysis':'Analisi corrente del simulatore')+(analysis.city?' · '+analysis.city:'')+' · '+time);
-          lines.push((metrics.roiBasis==='equity'?(en?'Return on equity: ':'ROI sul capitale proprio: '):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiAvailable===false || (metrics.roiBasis==='equity' && metrics.equity===0) ? 'N/A' : percent(metrics.roi)));
+          lines.push((metrics.roiBasis==='equity'?(metrics.propertyMode==='owned' ? (en?'Return on startup capital: ':'ROI sul capitale di avvio: ') : (en?'Return on equity: ':'ROI sul capitale proprio: ')):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiAvailable===false || (metrics.roiBasis==='equity' && metrics.equity===0) ? 'N/A' : percent(metrics.roi)));
           if(metrics.roiBasis==='equity' && metrics.equity===0)lines.push(en?'Invested equity is zero: equity ROI cannot be calculated. Review cash flow, leverage and debt coverage.':'Il capitale proprio è zero: il ROI equity non è calcolabile. Verifica cashflow, leva e copertura delle rate.');
           lines.push((en?'Simulated annual cashflow after debt: ':'Cashflow annuo simulato dopo mutuo: ')+currency(metrics.annualCashflow),
             (en?'Monthly average: ':'Media mensile: ')+currency(metrics.monthlyCashflow));
           if(analysis.tier==='paid'){
-            if(metrics.equity!==null)lines.push((en?'Equity used by the calculation: ':'Capitale proprio usato dal calcolo: ')+currency(metrics.equity));
+            if(metrics.equity!==null)lines.push((metrics.propertyMode==='owned' ? (en?'Startup capital used by the calculation: ':'Capitale di avvio usato dal calcolo: ') : (en?'Equity used by the calculation: ':'Capitale proprio usato dal calcolo: '))+currency(metrics.equity));
             if(metrics.annualRevenue!==null)lines.push((en?'Simulated annual revenue: ':'Ricavi annui simulati: ')+currency(metrics.annualRevenue));
             if(metrics.risk!==null)lines.push((en?'Model risk index: ':'Indice rischio del modello: ')+decimal(metrics.risk)+'/100');
             if(metrics.annualDebtService>0 && metrics.dscr!==null){
@@ -94,7 +96,7 @@
           en?'3. Run a separate simulation with lower occupancy or rate, keeping costs unchanged. Verify the property and local requirements.':'3. Esegui una simulazione separata con occupazione o tariffa più bassa, a parità di costi. Verifica immobile e requisiti locali.');
       }else if(!isTool || mode==='guide'){
         lines.push(en?'1. Open the simulator and choose the location.':'1. Apri il simulatore e scegli la località.',
-          en?'2. Enter price, equity, nightly rate, occupancy and monthly costs.':'2. Inserisci prezzo, capitale, tariffa, occupazione e costi mensili.',
+          en?'2. Choose Purchase or I already own the property. For an owned home, value and startup capital may be zero: enter nightly rate, occupancy, monthly costs and any remaining mortgage separately.':'2. Scegli Acquisto oppure Ho già l’immobile. Per una casa già posseduta, valore e capitale di avvio possono essere zero: inserisci tariffa, occupazione, costi mensili ed eventuale mutuo residuo separatamente.',
           en?'3. Run the analysis; use the dashboard to manage properties and bookings after signing in.':'3. Avvia l’analisi; per gestire strutture e prenotazioni, accedi alla Dashboard.');
       }else if(mode==='inputs'){
         lines.push(...(checks.length?checks.map(c=>c[en?2:1]):[en?'No missing or out-of-range values found in these five fields. This does not validate the investment.':'Nessun valore mancante o fuori intervallo rilevato in questi cinque campi. Questo non convalida l’investimento.']),

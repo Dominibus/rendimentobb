@@ -1414,7 +1414,7 @@ const portfolioAnalyses = analyses.filter(
 if(!window.isDemoDashboard && !window.isDemoData && portfolioOwnerUid && window.currentUser?.uid === portfolioOwnerUid){
   window.rbConfirmedPortfolio = {
     ownerUid:window.currentUser.uid, loadedAt:new Date().toISOString(),
-    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
+    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,propertyMode:data.propertyMode,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
   };
 }
 
@@ -2083,7 +2083,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
         </div>
 
         <div class="portfolio-manager__metrics">
-          <div><span>${t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
+          <div><span>${data.propertyMode === 'owned' ? t("Valore immobile", "Property value") : t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
           <div><span>ROI</span><strong>${equity === 0 ? "N/A" : formatPercent(roi)}</strong></div>
           <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
@@ -2961,8 +2961,8 @@ function renderInvestmentIntelligence(rows = []){
   const {metrics} = facts;
   container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
     <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
-    <div class="metric"><span>${t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
-    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%. Per le case già possedute, il capitale di avvio esclude il valore della casa.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties. For already owned properties, startup capital excludes the value of the house.")}</p>
+    <div class="metric"><span>${rows.some(row=>row.propertyMode==="owned") ? t("ROI sul capitale indicato totale", "Return on total entered capital") : t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
+    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale indicato totale. Include anche gli scenari con capitale zero. Per le case già possedute, il capitale di avvio esclude il valore della casa: se mescoli acquisti e case già possedute, questo indicatore non misura il rendimento dell’intero patrimonio e non consente di confrontare le due basi.", "Total cashflow divided by total entered capital. Includes zero-capital scenarios. For already owned properties, startup capital excludes the house value: when purchases and owned homes are combined, this indicator does not measure return on the entire property asset and does not compare the two capital bases.")}</p>
     <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
     <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
     <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>

@@ -250,9 +250,9 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261011-rc99"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261011-rc104"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261011-rc99";
+  script.src = "/js/chatbot-loader.js?v=20261011-rc104";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();

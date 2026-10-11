@@ -57,3 +57,10 @@ test('owned zero-value PDF keeps property yields and LTV unavailable and identif
  assert.equal(result.saved,true);assert.match(result.text,/Immobile già di proprietà/);assert.match(result.text,/Non indicato/);
  assert.doesNotMatch(result.text,/NaN|Infinity/);
 });
+
+test('owned positive-capital PDF names the startup denominator in both languages',async()=>{
+ for(const lang of ['it','en']){
+  const result=await render({lang,equityAmount:12000,propertyAmount:0,snapshot:{...assumptions,source:'owned_property',propertyPrice:0,equity:12000,loanAmount:0}});
+  assert.equal(result.saved,true);assert.match(result.text,lang==='en'?/STARTUP ROI/:/ROI DI AVVIO/);assert.doesNotMatch(result.text,/NaN|Infinity/);
+ }
+});
