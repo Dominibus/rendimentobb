@@ -1,4 +1,4 @@
-import {activeTrial} from './subscription-offer.js?v=20261009-rc85';
+import {activeTrial} from './subscription-offer.js?v=20261011-rc102';
 /* Separate billing entitlements even when preview and production share Firebase. */
 export function getBillingPlanForScope(data = {}, sandbox = false){
   const legacyTest = data.stripeLiveMode !== true && String(data.stripeSessionId || '').startsWith('cs_test_');

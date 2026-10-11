@@ -1,4 +1,5 @@
 import {scanFunnelDocuments} from "../lib/funnel-scan.js";
+import {drainWithdrawalReceipts} from '../lib/withdrawal-service.js';
 import {hasFunnelConsent,funnelUnsubscribeURL} from "../lib/funnel-consent.js";
 import {queueDailyReminders} from "../lib/pms-reminders.js";
 // ===============================
@@ -78,6 +79,10 @@ export default async function handler(req, res){
   try{
     const {db,resend} = cronServices();
     const now = startedAt;
+    // Recover undelivered contractual receipts before optional reminders.
+    phase = "withdrawal_receipts";
+    const withdrawalReceipts=await drainWithdrawalReceipts({db,resend,now});
+    await db.collection("_pms_jobs").doc("withdrawal_receipts").set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...withdrawalReceipts,needsAttention:withdrawalReceipts.pending>0});
     phase = "pms";
     let pmsNotifications,pmsReminders,pmsError=false;
     try{
@@ -256,8 +261,8 @@ ${lang==="en"?"Stop analysis reminders":"Interrompi i promemoria"}: ${unsubscrib
     funnelStats.hasMore=scan.hasMore;
     funnelStats.pages=scan.pages;
     await scanRef.set({cursor:scan.cursor,lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...funnelStats,success:funnelStats.errors===0,needsAttention:funnelStats.errors>0 || funnelStats.manualReview>0 || funnelStats.budgetExhausted || scan.hasMore});
-    console.info("RB_CRON_COMPLETE", {runId,durationMs:Date.now()-startedAt,success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pms:{sent:pmsNotifications?.sent || 0,queued:pmsReminders?.queued || 0,error:pmsError}});
-    return res.status(pmsError || funnelStats.errors>0?503:200).json({success:!pmsError && funnelStats.errors===0,funnel:funnelStats,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
+    console.info("RB_CRON_COMPLETE", {runId,durationMs:Date.now()-startedAt,success:!pmsError && funnelStats.errors===0,withdrawalReceipts,funnel:funnelStats,pms:{sent:pmsNotifications?.sent || 0,queued:pmsReminders?.queued || 0,error:pmsError}});
+    return res.status(pmsError || funnelStats.errors>0?503:200).json({success:!pmsError && funnelStats.errors===0,withdrawalReceipts,funnel:funnelStats,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
 
   }
 

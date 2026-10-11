@@ -1,4 +1,4 @@
-import './subscription-ui.js?v=20261011-rc98';
+import './subscription-ui.js?v=20261011-rc102';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */

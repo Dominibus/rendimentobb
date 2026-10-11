@@ -1,4 +1,4 @@
-import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261009-rc88';
+import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261011-rc102';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261009-rc85';
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
@@ -12,7 +12,7 @@ function dialog(title){
  document.body.append(d);return d;
 }
 function button(parent,text){const b=add(parent,'button',text);b.type='button';b.style.cssText='padding:11px 16px;border:1px solid #cbd5e1;border-radius:10px;margin:8px 8px 0 0;cursor:pointer;background:#f1f5f9;color:#142b3b;';return b;}
-function conditions(d){const p=add(d,'p','');link(p,'/terms.html',t('Condizioni di abbonamento','Subscription terms'));link(p,'/privacy.html',t('Informativa privacy','Privacy notice'));link(p,'/withdrawal.html',t('Recesso e modulo','Withdrawal and form'));}
+function conditions(d){const p=add(d,'p','');link(p,'/terms.html',t('Condizioni di abbonamento','Subscription terms'));link(p,'/privacy.html',t('Informativa privacy','Privacy notice'));link(p,'/withdrawal.html#withdrawal-form',t('Recedere dal contratto qui','Withdraw from the contract here'));}
 function acceptance(d){const label=add(d,'label','');label.style.cssText='display:flex;gap:10px;align-items:start;margin:18px 0;';const box=document.createElement('input');box.type='checkbox';box.style.cssText='width:18px;height:18px;flex-shrink:0;margin-top:4px;';label.append(box);add(label,'span',t('Ho letto e accetto le condizioni di abbonamento. Ho preso visione dell’informativa privacy.','I have read and accept the subscription terms and have reviewed the privacy notice.'));return box;}
 window.rbReviewPurchase=plan=>new Promise(resolve=>{
  const offer=OFFERS[plan];if(!offer)return resolve(false);
@@ -43,6 +43,7 @@ window.rbOpenSubscription=()=>{
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
  if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. Per continuare le funzioni Investor scegli un piano a pagamento; Pro aggiunge i report PDF.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. Choose a paid plan to continue using Investor features; Pro adds PDF reports.'));
  conditions(d);
+ add(d,'p',t('Il recesso online prevede un riepilogo e una conferma, con ricevuta scaricabile e inviata via email. È distinto dalla disattivazione del rinnovo su Stripe.','Online withdrawal has a review and confirmation step, with a downloadable receipt sent by email. It is separate from stopping renewal on Stripe.'));
  const notice=add(d,'p','');notice.setAttribute('role','status');
  if(!paid&&!inTrial&&!data[`${prefix}StartedAt`]){
   if(window.currentUser.emailVerified!==true){

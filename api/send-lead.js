@@ -1,4 +1,5 @@
 import {hasFunnelConsent,funnelConfirmationURL} from "../lib/funnel-consent.js";
+import {submitWithdrawal,normalizeWithdrawal,WithdrawalError} from '../lib/withdrawal-service.js';
 // ===============================
 // 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (SILICON FINAL)
 // ===============================
@@ -105,6 +106,7 @@ const RATE_LIMITS = {
   partner: { ip:5, email:2 },
   work: { ip:5, email:2 },
   auth: { ip:10, email:2 },
+  withdrawal: { ip:12, email:6 },
   generic: { ip:5, email:3 }
 };
 
@@ -234,6 +236,17 @@ export default async function handler(req, res){
     const bodySize = Buffer.byteLength(JSON.stringify(req.body || {}), "utf8");
     if(bodySize > 20000){
       return res.status(413).json({ error:"Payload too large" });
+    }
+
+    if(req.body?.type==='withdrawal'){
+      try{
+        const value=normalizeWithdrawal(req.body);
+        await consumeRateLimit({ip:getClientIp(req),email:value.email,type:'withdrawal'});
+        return res.status(200).json(await submitWithdrawal({db,resend,body:req.body}));
+      }catch(error){
+        if(error instanceof WithdrawalError)return res.status(error.status).json({success:false,code:error.code});
+        throw error;
+      }
     }
 
     let {

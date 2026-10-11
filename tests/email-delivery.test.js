@@ -1,3 +1,4 @@
+import {WithdrawalError,normalizeWithdrawal,submitWithdrawal,drainWithdrawalReceipts} from '../lib/withdrawal-service.js';
 import {scanFunnelDocuments} from '../lib/funnel-scan.js';
 import {hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL} from "../lib/funnel-consent.js";
 import {dispatchTaskNotification,urgentNotificationId} from '../lib/pms-notification-queue.js';
@@ -23,7 +24,7 @@ function harness(file,failRecipient=''){
  const firestore=()=>db;firestore.FieldValue={serverTimestamp:()=>({seconds:1790848800,toDate:()=>new Date('2026-10-01T10:00:00Z')}),arrayUnion:(...items)=>items};
  const admin={apps:[{}],firestore,auth:()=>({getUser:async uid=>({uid,email:file==='api/work-email.js'?'user@example.test':'owner@example.test',emailVerified:true}),verifyIdToken:async token=>token==='admin'?{uid:'admin-id',email:'rendimentobb@gmail.com',email_verified:true}:token==='unverified-admin'?{uid:'unverified-id',email:'rendimentobb@gmail.com',email_verified:false}:{uid:'user-id',email:'user@example.test'}})};
  class Resend{constructor(){this.emails={send:async(payload,options)=>{sent.push({payload,options});return payload.to?.includes(failRecipient)?{error:{message:'mock provider rejected'}}:{data:{id:`mail-${sent.length}`}};}}};}
- const ctx={scanFunnelDocuments,hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
+ const ctx={WithdrawalError,normalizeWithdrawal,submitWithdrawal,drainWithdrawalReceipts,scanFunnelDocuments,hasFunnelConsent,funnelUnsubscribeURL,funnelConfirmationURL,queueDailyReminders:async()=>({checked:0,queued:0,errors:0}),dispatchTaskNotification,urgentNotificationId,reconcilePMSTasks,createHostBookingHandler:()=>()=>{throw Error("unexpected host operation");},drainTaskNotifications:options=>drainTaskNotifications({...options,pause:async()=>{}}),admin,Resend,crypto,buildBrandedEmail,sendCheckedEmail,process:{env:{}},console:{error:(...args)=>logs.push(args),info:(...args)=>logs.push(args)},Buffer,Date,Intl,setTimeout};
  vm.createContext(ctx);if(file==='api/work-email.js'||file==='api/guest-report.js'){const shared=readFileSync(new URL('../lib/pms-urgent-email.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export async function','async function');vm.runInContext(shared,ctx);}let src=readFileSync(new URL('../'+file,import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.runInContext(src,ctx);
  const run=async(body,method='POST',token='')=>{const out={};const res={setHeader(){},status(code){out.status=code;return this;},json(data){out.body=data;return this;}};await ctx.handler({method,headers:{'accept-language':'it',authorization:token?`Bearer ${token}`:''},body,socket:{remoteAddress:'test'}},res);return out;};
  return {run,stores,sent,logs,collection,ctx,setRejectedRecipient:value=>{failRecipient=value;}};
@@ -244,7 +245,7 @@ test('cron failure log identifies its phase without leaking the database error m
  h.ctx.admin.firestore.FieldValue=original.FieldValue;
  const r=await h.run({},'GET','mock-secret');assert.equal(r.status,500);
  const failure=h.logs.find(row=>row[0]==='RB_CRON_FAILED')[1];
- assert.equal(failure.phase,'analysis_reminders');assert.equal(failure.error,'cron_error');
+ assert.equal(failure.phase,'withdrawal_receipts');assert.equal(failure.error,'cron_error');
  assert.ok(!JSON.stringify(h.logs).includes('sensitive@example.test'));
 });
 
@@ -255,4 +256,13 @@ test('cron reads beyond a full funnel page and resets its cursor after a complet
  assert.equal(result.status,200);assert.equal(result.body.funnel.checked,105);
  assert.equal(result.body.funnel.pages,2);assert.equal(result.body.funnel.hasMore,false);
  assert.equal(h.stores.get('_pms_jobs').get('analysis_reminders').cursor,'');
+});
+
+test('public withdrawal records a receipt separately from leads and recovers email outage on cron',async()=>{
+ const h=harness('api/send-lead.js','owner@example.test');
+ const value={type:'withdrawal',name:'Owner',email:'owner@example.test',contract:'Investor purchased 2026-10-10',confirmed:true,requestId:'c41b6aaa-6608-42ca-91f5-aaa111222333'};
+ const r=await h.run(value);assert.equal(r.status,200);assert.equal(r.body.receiptEmail,'pending');assert.equal(h.stores.get('leads')?.size||0,0);assert.equal(h.stores.get('email_funnel')?.size||0,0);
+ h.setRejectedRecipient('');const recovery=await drainWithdrawalReceipts({db:h.ctx.admin.firestore(),resend:new h.ctx.Resend()});assert.equal(recovery.pending,0);
+ const again=await h.run(value);assert.equal(again.body.receivedAt,r.body.receivedAt);assert.equal(again.body.receiptEmail,'accepted_by_provider');assert.equal(h.stores.get('_withdrawal_requests').size,1);
+ const invalid=await h.run({...value,confirmed:false});assert.equal(invalid.status,400);
 });

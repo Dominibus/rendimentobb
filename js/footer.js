@@ -163,6 +163,7 @@ data-en="Privacy">
 Privacy
 </a>
 
+<a href="/withdrawal.html#withdrawal-form" data-it="Recedere dal contratto qui" data-en="Withdraw from the contract here">Recedere dal contratto qui</a>
 <a href="/terms.html"
 data-it="Termini"
 data-en="Terms">
