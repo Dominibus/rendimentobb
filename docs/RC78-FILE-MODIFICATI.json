@@ -1,0 +1,134 @@
+{
+  "release": "RC78",
+  "base": "rendimentobb-main (11).zip",
+  "apiEndpointCount": 12,
+  "localTests": {
+    "baseline": 757,
+    "final": 760,
+    "failed": 0
+  },
+  "productionAudit": "partial",
+  "files": [
+    {
+      "path": "about/index.html",
+      "status": "modified",
+      "sha256": "c412b1a8af89b99985e900cb63a76e8a8734d86f0eefca1d9f868a63584c4247",
+      "bytes": 17954
+    },
+    {
+      "path": "academy/index.html",
+      "status": "modified",
+      "sha256": "06533c56e3de9f6711453e8a43dad8b7a7112905bf299a34b4551d19461679f8",
+      "bytes": 16883
+    },
+    {
+      "path": "aprire-bnb-conviene/index.html",
+      "status": "modified",
+      "sha256": "75878e599be16766ceb6170470e8472544d9bbfc0156164b9166b886bc691534",
+      "bytes": 17738
+    },
+    {
+      "path": "dashboard/index.html",
+      "status": "modified",
+      "sha256": "91ebec45a3e57c3c02f668ff71b863908a7c925f557fe827de03bb28aae1a921",
+      "bytes": 105336
+    },
+    {
+      "path": "dashboard-report/index.html",
+      "status": "modified",
+      "sha256": "5fa7d424e1ba1dc330ba9b4e2d4c1c3af2615edf08f434f3b923c2b73f03d44a",
+      "bytes": 75033
+    },
+    {
+      "path": "docs/AUDIT-20261009-RC78.md",
+      "status": "new",
+      "sha256": "45dd37b2510c6a92921b86bccd071feb3053246efd062dde6d44aa0b05078fdf",
+      "bytes": 17091
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC78.md",
+      "status": "new",
+      "sha256": "12288974187f2ad6525be7249030c3ad1ad0ff70ca620cb3465d66064968ba97",
+      "bytes": 1373
+    },
+    {
+      "path": "immobili/firenze/index.html",
+      "status": "modified",
+      "sha256": "6e7a806f417f9863c394a5aed185a4e9d82f5831c4581b42c01568e93a5c475d",
+      "bytes": 12922
+    },
+    {
+      "path": "immobili/index.html",
+      "status": "modified",
+      "sha256": "0c6db6644b175ae002ebfe6dd553819ef956c4a54f38fa138a46c0929890a3ce",
+      "bytes": 46931
+    },
+    {
+      "path": "immobili/milano/index.html",
+      "status": "modified",
+      "sha256": "29e825bfd2018b1f7109e18e78f4244d6698329a9aa583c33c4212df39fb4350",
+      "bytes": 15473
+    },
+    {
+      "path": "immobili/napoli/index.html",
+      "status": "modified",
+      "sha256": "c9df6bc9842a30191406f47d4c709f6ef645022c65fcb4e31ec2807f8be9a5f3",
+      "bytes": 12850
+    },
+    {
+      "path": "immobili/roma/index.html",
+      "status": "modified",
+      "sha256": "d35d9b1ecde6f9665cf13ad28e7a7d22541aad5504e80933a703e1ea32212fea",
+      "bytes": 15672
+    },
+    {
+      "path": "index.html",
+      "status": "modified",
+      "sha256": "2b609e70ff14f08f1b5295ead75bf7dc5ff79c604bdb8a2ae3de6440a32fc4ee",
+      "bytes": 92094
+    },
+    {
+      "path": "js/chatbot/core/chatbot-orchestrator.js",
+      "status": "modified",
+      "sha256": "26f2df88f0d2b848b8e8518467165705d87e66cbc110cf658950cf67482962d7",
+      "bytes": 106116
+    },
+    {
+      "path": "js/chatbot-loader.js",
+      "status": "modified",
+      "sha256": "33f67e2a756bd4f5d2189b839c4440dea0242b4652a910d41194bd2c5ba95b89",
+      "bytes": 6380
+    },
+    {
+      "path": "js/lang.js",
+      "status": "modified",
+      "sha256": "bc98fa08b8fb0756b9803098268d29c5d6eed71df5d2c3296a2a9571e3cfee84",
+      "bytes": 5041
+    },
+    {
+      "path": "market/index.html",
+      "status": "modified",
+      "sha256": "e7c87ef3097a737330e7c63a9826740d172237de027e3195c3ecf5caee537747",
+      "bytes": 17963
+    },
+    {
+      "path": "mutui/index.html",
+      "status": "modified",
+      "sha256": "9e28b5e1e23dcf326b5f9617ac85b7f1cbf708d9221bc051103087b4d970184b",
+      "bytes": 47877
+    },
+    {
+      "path": "tests/rc78-audit-regressions.test.js",
+      "status": "new",
+      "sha256": "b0ddd04c7566c43200440945d7f5dec9a2abd4a4dcf18f2b53ff6d3fdac4c975",
+      "bytes": 2793
+    },
+    {
+      "path": "tool/index.html",
+      "status": "modified",
+      "sha256": "5b8d2c74d52aa402041a188603e1e779f0f6a29a8ac6a6f551b2de4908fafafc",
+      "bytes": 61387
+    }
+  ],
+  "manifestNote": "Manifest itself is included in ZIP but not self-hashed."
+}

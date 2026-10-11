@@ -1,0 +1,806 @@
+{
+  "release": "RC103",
+  "branch": "stripe-sandbox-test",
+  "files": [
+    {
+      "path": "about/index.html",
+      "sha256": "a2cebd67a7f86f7a8d0251da3afbb832d84a5f93f7c904b35ff3ef13a6c16d4d"
+    },
+    {
+      "path": "academy/errori/index.html",
+      "sha256": "8c0acb5f6f5a89ad8e939a809f4aa3e0434ac823bc617d344369dabed4d03e28"
+    },
+    {
+      "path": "academy/index.html",
+      "sha256": "126c99e1e9a145ee50e6041c162360d5bb5620657edacb5402da6e76a150bb03"
+    },
+    {
+      "path": "academy/mutuo/index.html",
+      "sha256": "7bc4a6430bbfe08f09a9185bd76843b4e13c14592bfdd00097ac3b85970660a2"
+    },
+    {
+      "path": "academy/roi/index.html",
+      "sha256": "ff45e760916ed7be98b2b5781700a9c9ea12c9c737d779ccdc9ea77ae67e7449"
+    },
+    {
+      "path": "academy/strategia/index.html",
+      "sha256": "8210509a0689dea190a91e6054e33df82f31ada94af4fb7c5af95a1775a9bbd4"
+    },
+    {
+      "path": "account-action/index.html",
+      "sha256": "4f4fb72fcc329a3ff3ab8a8773c736f78dbb5d1fafe1ed8ddf8548aea4dd978f"
+    },
+    {
+      "path": "api/create-checkout-session.js",
+      "sha256": "fd3ef68ca00851adcced17d4b8d0039c37ae874d9e54e46d78f305c63170195b"
+    },
+    {
+      "path": "api/cron-funnel.js",
+      "sha256": "c3d0e7bbf19d213fa2bdee9d1cff62a525549d37531814dac065819c337c5d0e"
+    },
+    {
+      "path": "api/delete-lead.js",
+      "sha256": "5255e1738a9dd8cd35f1d443deb2f03e08e5cd84966fa1dbddede85af04f7342"
+    },
+    {
+      "path": "api/property-search.js",
+      "sha256": "cd8085d81393c83861baa1803bb971403ce61c3f022a866fbb92c84c560136c2"
+    },
+    {
+      "path": "api/send-followup.js",
+      "sha256": "2a4133fec2ab1eecf049d59f35d0b5c39fd6c3acae287e4cde6095ec8fcdaf43"
+    },
+    {
+      "path": "api/send-lead.js",
+      "sha256": "1019df40dfc2626be4f8c3fc37cfe7c1a456d531ed7222893f6c82b57e2011e9"
+    },
+    {
+      "path": "api/stripe-webhook.js",
+      "sha256": "0ee0d3ff2bfc695ea31e13eb919992213b1fa438cf849aea83d0b3eca1b602e7"
+    },
+    {
+      "path": "aprire-bnb-conviene/index.html",
+      "sha256": "88550ee91697db46cb991d6f484e3874fe571e80436239f2e810489d24d97549"
+    },
+    {
+      "path": "contact.html",
+      "sha256": "fcd36e15052dd993084c581db62319cf0dc804007396f55f5ff4aa594e2cb919"
+    },
+    {
+      "path": "costi-aprire-bnb/index.html",
+      "sha256": "e347d1a52f2db01209ba4afed8766ffb5996097140deb6e90d5f1e61259868db"
+    },
+    {
+      "path": "css/academy-evidence.css",
+      "sha256": "5a203a632c522ad9130173dd89527a7a812d332868bee59fbe2311e21c6debf6"
+    },
+    {
+      "path": "css/account-action.css",
+      "sha256": "b238bbf3f38a252c63a6f31378f00c86e1bbaf15f4c88bf30b3e0b0bfa6240b2"
+    },
+    {
+      "path": "css/assumptions-2027.css",
+      "sha256": "064d25c689ff102459e3f88473c26cc8e0d8030e2a206044affe1f22060d5918"
+    },
+    {
+      "path": "css/auth-2027.css",
+      "sha256": "3ba0d182100044fca589636fbea434c2b668346cd44938f28ae7bc4c86c677fc"
+    },
+    {
+      "path": "css/home-video-tutorials.css",
+      "sha256": "1a5fdab37e350df1a0204a3c8f6c8c6d689a783364edbdc2f82e3b5ac98617e9"
+    },
+    {
+      "path": "css/investment-workspace.css",
+      "sha256": "3c518e22d196897951731130259ea85312f6bef535f1b2620b7d59dcaa48610f"
+    },
+    {
+      "path": "css/trial-invite.css",
+      "sha256": "87a43ba8a7d4cc21a340e417ec7ff85471cd87fc57f11f6099caee90058eb4a4"
+    },
+    {
+      "path": "css/withdrawal.css",
+      "sha256": "b74d2f0ca9801c6d13bf61cc65129f25f36cf26153f88b3ad264c74196649f32"
+    },
+    {
+      "path": "dashboard/index.html",
+      "sha256": "6e1209020debba00d58ed89e7f5833afec6c9fdb2e9fa705e73cc77feab879d9"
+    },
+    {
+      "path": "dashboard-leads/index.html",
+      "sha256": "fc3231b4963429ee36dd9dcda91cb7caca69cdb2a31691c6447d550247f9a316"
+    },
+    {
+      "path": "dashboard-report/index.html",
+      "sha256": "b96bb5822d44b93a62b56cb0aa6fec07fe352f30cdeef5f585551a102bc275c5"
+    },
+    {
+      "path": "docs/AUDIT-20261008-RC58.md",
+      "sha256": "97dc40858ba0f67e00b0955771893e119d378d82f3e3b44fc8184ea9b8c2e69e"
+    },
+    {
+      "path": "docs/AUDIT-20261009-RC78.md",
+      "sha256": "45dd37b2510c6a92921b86bccd071feb3053246efd062dde6d44aa0b05078fdf"
+    },
+    {
+      "path": "docs/AUDIT-20261011-RC101.md",
+      "sha256": "c0aa94e699c93a436d80d782fa6e3529b9bd0f06b55b5063d59ce1955f11d263"
+    },
+    {
+      "path": "docs/AUDIT-20261011-RC102.md",
+      "sha256": "2201eee3fba983510dea2e16411fb9b3a2d11c7d83c2b1b1497c00dfc85fc721"
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC101.md",
+      "sha256": "f55832d80888fe3370cb689bce6f9f9bcc8325f8af28c61f93fd41337dd766c6"
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC102.md",
+      "sha256": "0a17376270e750b0ccb0ae39868aef625508246e0ddfed0e7e8d088725a65ee7"
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC58.md",
+      "sha256": "2436a295ab00447d3d52362b0f7288756705db8ccb3cda98078f18c3c227249c"
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC78.md",
+      "sha256": "12288974187f2ad6525be7249030c3ad1ad0ff70ca620cb3465d66064968ba97"
+    },
+    {
+      "path": "docs/INSTALLAZIONE-SANDBOX-RC103.md",
+      "sha256": "c9d138f58341fb8de9cfdd03e6d1603e53f6ec67aa073fb13819608cf74d9863"
+    },
+    {
+      "path": "docs/MANIFEST-RC102.json",
+      "sha256": "0c3d8095f6cf8523efa431019fa0fdfd36e4728b4d6fd4b9b896ff5eec675a58"
+    },
+    {
+      "path": "docs/RC101-FILE-MODIFICATI.json",
+      "sha256": "5d4073bcd337a12ca797f856dd51b9c9e5e1a6f1592c6f1da7d73962d787a42c"
+    },
+    {
+      "path": "docs/RC58-FILE-MODIFICATI.json",
+      "sha256": "e27cf649eb8c6b430467280632f26e411165fd6f90ee4eb4fdf8c8980f4c70d5"
+    },
+    {
+      "path": "docs/RC78-FILE-MODIFICATI.json",
+      "sha256": "a95903a8466fef711e17b45bac8e7d47fed5513238e70f767d3634b975e8ab1b"
+    },
+    {
+      "path": "firestore.rules",
+      "sha256": "7f866cd0d79e4c597cae654ef11686a6bf3c3caa548cb55b90a785f67ab8aff5"
+    },
+    {
+      "path": "immobili/firenze/index.html",
+      "sha256": "6e4e6172b837d19d1a76b3ccecb03a895cca270f28d4bb4b65aba93c3ddd2e5f"
+    },
+    {
+      "path": "immobili/index.html",
+      "sha256": "2ce56580ffb6d0f0b02b3e772d1d37237b618dd312f6087f685b1c3b9231c1d9"
+    },
+    {
+      "path": "immobili/milano/index.html",
+      "sha256": "85d3f6120d7ba59613a928aa2243bfa1cea797faa0d7b85bf797018107a4fdb7"
+    },
+    {
+      "path": "immobili/napoli/index.html",
+      "sha256": "d63aeec0a26924c08a692c1d3df54a04e32c438d02b056ba7f55a941b8dc854c"
+    },
+    {
+      "path": "immobili/roma/index.html",
+      "sha256": "a825bbec73a429bd2f71687e1715c0b951617e260c7e4caafaf1770f4366007c"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5fd7a7f52a613b5c7777c54eb7d8f08260c6846be720fd423fb31e947a9b0013"
+    },
+    {
+      "path": "js/access-control.js",
+      "sha256": "56bdf105072fd1e175ad1f0dff8aa9d413787e9817a78aacbd346b98fd314621"
+    },
+    {
+      "path": "js/account-action.js",
+      "sha256": "a9c908e9e2ba2a9a195ebf58dccbe54243efcdbd7dc56835c2e03b750071b5ba"
+    },
+    {
+      "path": "js/account-plan.js",
+      "sha256": "b22be501fc2a236857f5e6bd02349da1892915231df394a80a29d910bd7cdc89"
+    },
+    {
+      "path": "js/admin-leads.js",
+      "sha256": "847b2b944e86719640c4a5ece6169a4e22dc567e94aaa100d52efb046960ff91"
+    },
+    {
+      "path": "js/ai-engine.js",
+      "sha256": "23ffc760363dbe5c8e36dae2ca58cd6a7b7f4f8aec0755b6c88fdef139b9911c"
+    },
+    {
+      "path": "js/app.js",
+      "sha256": "96ab7c7b865061cf2a9ba3cf85b6c332d239efffd5e41ec64aed619e45890915"
+    },
+    {
+      "path": "js/auth-page.js",
+      "sha256": "0c16effb20d214fd4a384239b65353fce2077f7bc2e6a75b4eb7d7d96e3ea133"
+    },
+    {
+      "path": "js/auth-safety.js",
+      "sha256": "4cc5907e849734e5b8b0a05b3aa28d058f3c7c98af5e48d5223014b08dd8e3a2"
+    },
+    {
+      "path": "js/chatbot/advisor-engine.js",
+      "sha256": "e19202327a570b6409874f9434e1fadec7852b28f771ad9cc178a8d56adba290"
+    },
+    {
+      "path": "js/chatbot/core/ai-brain.js",
+      "sha256": "288d4ac18ef8d1ec3441b1b93a09815cb1b784241af917ef2b036684bf36460a"
+    },
+    {
+      "path": "js/chatbot/core/chatbot-orchestrator.js",
+      "sha256": "1d01847c2893ae710e93fdd49e013539259fe7c637c6b4bc5291ec9497b738e8"
+    },
+    {
+      "path": "js/chatbot/core/confirmed-portfolio-engine.js",
+      "sha256": "7b1da84e86fdfdd4281abc407da4d024db6f28fb6523b85d2510363a44436a2c"
+    },
+    {
+      "path": "js/chatbot/core/entity-engine.js",
+      "sha256": "4ed4ca075b512e19cac43ef6aad3a0ad3ea00f44552c9552c7ccb6ee9201ea68"
+    },
+    {
+      "path": "js/chatbot/core/executive-brain-v2.js",
+      "sha256": "45bb9eacefa0459264a6cb33cd9b2e73cfbc8070666d573516f3e9dd20b892b8"
+    },
+    {
+      "path": "js/chatbot/core/executive-response-builder.js",
+      "sha256": "ddf0c05c886a1c0c5b7ea451795b18e673b78e5eb94c9c8e3b7f91c59e97c4d3"
+    },
+    {
+      "path": "js/chatbot/core/intent-engine.js",
+      "sha256": "02070603eeb66a78e74cb4ad066126fd1545f0a531870cfd328c3a7751ac4b01"
+    },
+    {
+      "path": "js/chatbot/core/investment-autopilot-engine.js",
+      "sha256": "519f616d547f998e7e145d7dbd4069466acefec6e00116de8a810eabed5f85de"
+    },
+    {
+      "path": "js/chatbot/core/investor-profile-engine.js",
+      "sha256": "ced61ca69a6d758b0aafa96556e38136dda031ee4905e8db1628314ba85736d6"
+    },
+    {
+      "path": "js/chatbot/core/memory-engine.js",
+      "sha256": "d7731d4fe5b45aec7680510a679c44f342664fb122ec04b1cf38ed401d770eaa"
+    },
+    {
+      "path": "js/chatbot/core/pms-autopilot-engine.js",
+      "sha256": "914e532a2ea53302ab354a5e12a7ac38010b06acad23093ab56f31baa828b89d"
+    },
+    {
+      "path": "js/chatbot/core/query-normalizer.js",
+      "sha256": "1da5505555381c56155d799858acc556d0f4884172be8af8695713590a8cb0d6"
+    },
+    {
+      "path": "js/chatbot/core/renovation-recovery-engine.js",
+      "sha256": "ad4f53f70b46bef54761b538ec26342eb3d96413f49538e28327a839fcda0949"
+    },
+    {
+      "path": "js/chatbot/core/response-engine.js",
+      "sha256": "37c3d2e936f758a6cc6e0e81e9a658f8b3ffd8ac7cd4022ec5776a0ec9384ba3"
+    },
+    {
+      "path": "js/chatbot/core/score-engine.js",
+      "sha256": "544e82c4cc0fc6da5581053594cbe2da31da3fe91ee882dcb7fcc7c4e5922500"
+    },
+    {
+      "path": "js/chatbot/core/semantic-router.js",
+      "sha256": "6fab4c757b93ecf64d89b425ac2019f1e50cedd95acebcdf475dd7745f21bb1f"
+    },
+    {
+      "path": "js/chatbot/document-engine.js",
+      "sha256": "4183a51b958d361208454b79f0ece8d97cfc0871ae5bb66b4cc6082dfeb610a0"
+    },
+    {
+      "path": "js/chatbot/knowledge/subscriptions.js",
+      "sha256": "26576f724092cae7fb122383f5483de0d2f5b8f60955fc358c9c739e561fbd85"
+    },
+    {
+      "path": "js/chatbot/pdf-extraction-engine.js",
+      "sha256": "dc3fd2415dd5ccf64e4cd5c7e0bfddf7afd070f711e69476fbedf56244a6dd14"
+    },
+    {
+      "path": "js/chatbot/pdf-parser-engine.js",
+      "sha256": "fa18ae6b0eb6a1fcb78cbd594b3967fd3584151d29971489becc4461f6f08a4f"
+    },
+    {
+      "path": "js/chatbot/reasoning-engine.js",
+      "sha256": "d9a6fc2919b8de3eadb6e8e4371b075b0b77f746efe9e4e9c5b18bde5723a9aa"
+    },
+    {
+      "path": "js/chatbot/ui/chatbot-attachments.js",
+      "sha256": "0f80460166a155f8b51b548c82ee83400b1d0f56d9f281254d175db05780c8ea"
+    },
+    {
+      "path": "js/chatbot/ui/chatbot-ui.js",
+      "sha256": "1acb712d1448dcb346b03df561c85efd3f13b14910a00ab0d6d73231499c33c9"
+    },
+    {
+      "path": "js/chatbot-loader.js",
+      "sha256": "7fa95fa749ab191a3b5d340d1735d081368609c29ad83b5542e24c965f8655c7"
+    },
+    {
+      "path": "js/chatbot.js",
+      "sha256": "41d9c471aa45f3ebcdb9fec23d7a4703d0edb6260e0bb859545f83a6445b8f25"
+    },
+    {
+      "path": "js/contract-terms.js",
+      "sha256": "183caf7b3f4efdb5da2b39d638c596b4cfb443faabf039b94c6a70b4b7c8346c"
+    },
+    {
+      "path": "js/dashboard.js",
+      "sha256": "3cae8d947f1cf4818e60d578463ba026e6c31e16215d2707778d3db4b6144982"
+    },
+    {
+      "path": "js/firebase-config.js",
+      "sha256": "ed1aec41ab60f333423189dbcba6628ddffad3bf41560712a65112c7bd3825e1"
+    },
+    {
+      "path": "js/firebase-init.js",
+      "sha256": "570f0cb545dbf428c3b8d9ff98a2b66d0fe16fbde98dd60ee6fb52ee6fa924c3"
+    },
+    {
+      "path": "js/footer.js",
+      "sha256": "71959f465dc1dc70354022689f014f51747b900b7bec0d23ddaa591ce96a4565"
+    },
+    {
+      "path": "js/free-preview.js",
+      "sha256": "8ea9671f29571bc491e09795235325ae11abaccb6da715f9801aa5a65cb1252d"
+    },
+    {
+      "path": "js/header.js",
+      "sha256": "782656985a98e0debc5ab98d8963dd4b5108e8f4d5b812365e1de3d86ff59492"
+    },
+    {
+      "path": "js/home-2026.js",
+      "sha256": "76fde9f9a4ac235dd818ec2e6bc529151bb82990a914160c4884edd25e54ce95"
+    },
+    {
+      "path": "js/investment-analysis-state.js",
+      "sha256": "2312ed31b99a551abb5c615c58b569468bae25f9c6edec3c17d250fabc220d1c"
+    },
+    {
+      "path": "js/investment-assumptions.js",
+      "sha256": "5c0c859c747cd19f0b6d69f5b33144aaf2768bced79e16fbfa8b73ee7517d7eb"
+    },
+    {
+      "path": "js/investment-journey.js",
+      "sha256": "a690168cb4fc11233a382528f2e50380c3d889db5ec314f98e59fc1d503fa94e"
+    },
+    {
+      "path": "js/lang.js",
+      "sha256": "bc98fa08b8fb0756b9803098268d29c5d6eed71df5d2c3296a2a9571e3cfee84"
+    },
+    {
+      "path": "js/leads.js",
+      "sha256": "4d7933fc235e5d82ee313c052c2a0037308afe081e2549ca79104f081b3c44fd"
+    },
+    {
+      "path": "js/market-engine.js",
+      "sha256": "134476cc79e0d8caeb5cb07749f86dc684d2462c76d0aab1f922bc6336fd6aca"
+    },
+    {
+      "path": "js/mortgage-engine.js",
+      "sha256": "be0d9b71c24a191cdaeb73b7dd93d64b31a5afde4176f7ecb75892249c44e94c"
+    },
+    {
+      "path": "js/mortgage-rates.js",
+      "sha256": "1173c9f5063482e8ced84627d6733d153dc7ab862f84792971a433448c0847d9"
+    },
+    {
+      "path": "js/portfolio-kpi.js",
+      "sha256": "faa46b9fa47f99dddcdd8891f26faa050e9213d9484df932a316bc7759f652fe"
+    },
+    {
+      "path": "js/property-mode.js",
+      "sha256": "ebd19ff854f71f0a7b6d721b41cd179f6d882bb48d6ea1351a9ea7b730cf9313"
+    },
+    {
+      "path": "js/renovation-payback.js",
+      "sha256": "31133040165da0c655ea90f658680224df1333c27f8200749f7b24718c3a1dc3"
+    },
+    {
+      "path": "js/roi-engine.js",
+      "sha256": "d59f83b79a826951f25493a17c36299e27926330dfae12df30b05676a2040c3f"
+    },
+    {
+      "path": "js/subscription-offer.js",
+      "sha256": "05fe7392fd5f2aa6471bb3a03464f829225b957ad10dea9a5a72886dbd3a90eb"
+    },
+    {
+      "path": "js/subscription-ui.js",
+      "sha256": "7b569f9fb87689fbbcc1d93f31dd1ee7b763f8fa6056ce41bc0cd760fb1edca6"
+    },
+    {
+      "path": "js/trial-invite.js",
+      "sha256": "283e9c988e6edcddc0bd3ba32febdeb5e27d0a1a5f0d425a0bb7ee73cbb39326"
+    },
+    {
+      "path": "js/ui-system.js",
+      "sha256": "2a4364c38f02e3420401489f8a5beb7be05dbe3c4340ffbeb5b47562b13befc2"
+    },
+    {
+      "path": "js/vendor/LICENSE-chart.js.txt",
+      "sha256": "41a84aa2caba645f966a18d9c2056b73e6d3a81d80bc0046bc0011a2634d4cce"
+    },
+    {
+      "path": "js/vendor/LICENSE-jspdf.txt",
+      "sha256": "dc388ec35ff463288cdde3588a36fd4ed12a45deff053243b37309acc9ef583b"
+    },
+    {
+      "path": "js/vendor/chart-4.5.1.umd.min.js",
+      "sha256": "31afbecadaef6da89edf023df400e08b3dfb44dd099c57e711d5e69c4c731784"
+    },
+    {
+      "path": "js/vendor/jspdf-4.2.1.umd.min.js",
+      "sha256": "0537038a63476c79f4377186f37108ca20da505157576e8ad44959dc1176a9d4"
+    },
+    {
+      "path": "js/withdrawal.js",
+      "sha256": "8b93d9670159c566eb50bbbd7b638eeaabb34cb4827ca5623201b481ee714c1d"
+    },
+    {
+      "path": "lavora-con-noi/index.html",
+      "sha256": "0f26b07348ba38ecf82133fd9e9e4cc25c1dbf2e029cb47bef185426ab241d0f"
+    },
+    {
+      "path": "lib/account-subscription-service.js",
+      "sha256": "a58da682c99ac08e4423ceaddb96414ef4533ada61f1b18bda93f1a0aeeec5f3"
+    },
+    {
+      "path": "lib/funnel-consent.js",
+      "sha256": "17752772840f64176ed857e3f8e0392e8738834b02fd78d768f1bbf451cc2401"
+    },
+    {
+      "path": "lib/funnel-scan.js",
+      "sha256": "20d2f6213a583a14cc9a2290cbd2742c991db9c51c9a2140c1c9b08494cb133c"
+    },
+    {
+      "path": "lib/pms-booking-service.js",
+      "sha256": "5e2f7faa62a06102c9ec32131427181900d43f5b32c2e94ed8e5faf411cef836"
+    },
+    {
+      "path": "lib/stripe-checkout-guard.js",
+      "sha256": "6c7c7209e40b87e33cb09e2e0d9425a18342daf7f620972109e20d3f3d95c5f8"
+    },
+    {
+      "path": "lib/stripe-plan-config.js",
+      "sha256": "7a3e9305d04ce3e062929de9e65cbe089a42318f99fd393a2efb72e2aa97dcf1"
+    },
+    {
+      "path": "lib/withdrawal-service.js",
+      "sha256": "b778c3d75dbab8e1ac0440623dade235a87ca140c3bca25b847e08028e1f9d03"
+    },
+    {
+      "path": "login/index.html",
+      "sha256": "5e23ea04ae423642be17c182d04f1046a587dee46e481bdef8d6938220218f69"
+    },
+    {
+      "path": "market/firenze/index.html",
+      "sha256": "652428ef890e22d13e99dca1116f5923859ad19eb38da319f26ce3e1beef996d"
+    },
+    {
+      "path": "market/index.html",
+      "sha256": "b3904f6041c0a40dad29fae1e794c367206af6028e5d14a844401d667e2fe49a"
+    },
+    {
+      "path": "market/milano/index.html",
+      "sha256": "5a1fe27255f221e6b84b2d398a2de80d59ab9e1d288aa5aa8635bf23cd4b7fd9"
+    },
+    {
+      "path": "market/napoli/index.html",
+      "sha256": "999ce06b29c4c39b1c983b083987710a15e66cc29760e4201b3265b37df4a91e"
+    },
+    {
+      "path": "market/roma/index.html",
+      "sha256": "9fd6bcf57548fb20b186ae7f0a5d77e75316a20f6e46b1f0fb5d8a36f21b4d71"
+    },
+    {
+      "path": "mutui/index.html",
+      "sha256": "eafce7b5c320fac24da2e8af41cf9bd8a3b29eb3ff612d7d7c53e36e02350d01"
+    },
+    {
+      "path": "netlify/functions/scrape-idealista.js",
+      "sha256": "8024676ec4ce94a711df8af00978ecb9abff744528e17c9d4b51d4b9ce645527"
+    },
+    {
+      "path": "netlify/functions/scrape-immobiliare.js",
+      "sha256": "59865586b3683f1d8e7e51398f12f43d1fc1e3a5a6a0e33adc6117aedf152921"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "89b7dbc7a7e62acc1a22ee6cf172ce69ee8900aa0218c82e57b816e3bd96f056"
+    },
+    {
+      "path": "package.json",
+      "sha256": "bace8995c4d200f7c72fecb5ff2f1963660f037f8a213086e8753821b44c5cc9"
+    },
+    {
+      "path": "partner/index.html",
+      "sha256": "c188ecabf174e9199d2836a2be3b1776bfd354d783dc06e228de8993a5411853"
+    },
+    {
+      "path": "privacy.html",
+      "sha256": "2770f0fea9068a8b5449fec8f0d88cf0d691e93ec22702b177f10b33209798e7"
+    },
+    {
+      "path": "pro-success/index.html",
+      "sha256": "f53dda611703670db2aa67cc502383bc84704ed9ac26dd78eecfcf0ce41dd22e"
+    },
+    {
+      "path": "quanto-guadagna-bnb/index.html",
+      "sha256": "c7a6077c6364799d353594346c6be071d8d6caeafdd5fa9838ce70b03780f468"
+    },
+    {
+      "path": "robots.txt",
+      "sha256": "de2416f35454cb2fe7954a921dea200f0a83bd1838a358a29865e5179fc2d22f"
+    },
+    {
+      "path": "roi-bnb/firenze/index.html",
+      "sha256": "a845dba8bb8ab271f07f592329bcfdf8ae9f8b578183f19e67bbd63199b82b59"
+    },
+    {
+      "path": "roi-bnb/index.html",
+      "sha256": "2548ffab63f938cbc1fa9810d60af98c50523921de760ce30ca51c85d0b40446"
+    },
+    {
+      "path": "roi-bnb/milano/index.html",
+      "sha256": "8292ac54312f56214e765b0750c58a8d45c58e9933284675e6d1765fd1116006"
+    },
+    {
+      "path": "roi-bnb/napoli/index.html",
+      "sha256": "9e8f6d5a864d3f4b3bb65fac193f299b7d2a0aecbaab8309a6724503df5fe5dc"
+    },
+    {
+      "path": "roi-bnb/roma/index.html",
+      "sha256": "807455cda90496acdd69d1912dc50dc67eb3856fc36ced47bf18936595207f4c"
+    },
+    {
+      "path": "security-tests/firestore.rules.spec.mjs",
+      "sha256": "b729669745ae05f5cb042b56d60fe323355265448a5c19657a14499ac2f25cf7"
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "4f54f5c5b600f0f07902313268a24f05fce8c92fb9af05464df3fb9141585d7a"
+    },
+    {
+      "path": "terms.html",
+      "sha256": "2273bbaf2de23e18d368533e7a6ce7bd453708cdf4f7282bb5b5c9a0ac1e467b"
+    },
+    {
+      "path": "tests/admin-lead-email-language.test.js",
+      "sha256": "6d33c8a6c49b6a0c27fb2536e04a5f2fea8824fc1d8140a22c3e9fdb1d251ece"
+    },
+    {
+      "path": "tests/auth-revocation.test.js",
+      "sha256": "e459c94e7d4ae3048368460d72063b844e4844c594a5f2b9db82b2f0e554912a"
+    },
+    {
+      "path": "tests/auth-safety.test.js",
+      "sha256": "0622a3a0d172296331730e7bff36a2a36937598c8a7f476e6d161d42af522d77"
+    },
+    {
+      "path": "tests/chatbot-attachments-production-console.test.js",
+      "sha256": "2c41be7c667e1fba1b8c01f902327b96a714be874811133857f7b75123f2fce4"
+    },
+    {
+      "path": "tests/chatbot-page-coverage.test.js",
+      "sha256": "4d7f3a5651ea8d5f203bfda0f27ba5f0a5776b37c3224070bfe712a0b8b44566"
+    },
+    {
+      "path": "tests/dashboard-demo-coherence.test.js",
+      "sha256": "fa83cf6528f04792a0a20be67c505214d53745172ab32923130b87349d674765"
+    },
+    {
+      "path": "tests/dashboard-html-boundaries.test.js",
+      "sha256": "ed462d9a1efb49b5ca4ecf37d8e6cf732e4f083c67f1661ad778bdf6f4539e12"
+    },
+    {
+      "path": "tests/dashboard-production-console.test.js",
+      "sha256": "005dfb69ecf030149f3b0d6b2e5de15061332e103cfdb5b36c5e6cb3133abb86"
+    },
+    {
+      "path": "tests/email-delivery.test.js",
+      "sha256": "3afb873c1010d58f7123fefe834b36c40774f0ff5659d478b7a672fe9449a6d7"
+    },
+    {
+      "path": "tests/free-preview.test.js",
+      "sha256": "4fc17f804763478e927465d0d1d68cdc65628aa4a69a5e923ce5728334a8a396"
+    },
+    {
+      "path": "tests/funnel-consent.test.js",
+      "sha256": "ce19217d2048d2c02303277b05539008620487b93a763dbb0f6fe91eaadd532e"
+    },
+    {
+      "path": "tests/funnel-scan.test.js",
+      "sha256": "0ce00950417c570925cd92c1b807d0b484c94065574cea6f79a56f3ff20e9a17"
+    },
+    {
+      "path": "tests/helpers/dashboard-html-harness.js",
+      "sha256": "4698dcdd90d29d6ddfcca4a8c6ec4b696ce74d1a4572c9a830ee3a17e8adc7d7"
+    },
+    {
+      "path": "tests/investment-autopilot.test.js",
+      "sha256": "0e1039e0c303366883415fa7b6801d8115d2cc5ad6c004525d91f854aecce27c"
+    },
+    {
+      "path": "tests/pdf-scenario-commentary.test.js",
+      "sha256": "b10b4a7edb924187292f04073274666d66bc9a372993ead4da01c047fe0531c8"
+    },
+    {
+      "path": "tests/production-console.test.js",
+      "sha256": "cb26ba27303e8304e10406806937476220ba0bd6fb26b93bbe155299e16d77e8"
+    },
+    {
+      "path": "tests/property-search-query.test.js",
+      "sha256": "2bfd8e494aefe8ca4cf1b544e6bec210f6b7e23ad2158a093247b8ec2e103ba4"
+    },
+    {
+      "path": "tests/rc101-product-audit.test.js",
+      "sha256": "6481a94d00cebe352380173e45a931f9fa8484ed4eeb8b649f3dedc14acaed34"
+    },
+    {
+      "path": "tests/rc101-sdk-and-pdf-compatibility.test.js",
+      "sha256": "3114fcdd9fd83ef902bd503608b3e6c506d6bbc12c757a858e4b281cadb9f8b6"
+    },
+    {
+      "path": "tests/rc103-sandbox.test.js",
+      "sha256": "f975fc7ba5f56bbcf9b221b9156a1828dab3f3107db3237b4eeddd195937b0a0"
+    },
+    {
+      "path": "tests/rc59-regressions.test.js",
+      "sha256": "4837406989a045ba61ea49d7733fcbe2a539a73526023767c56f9158559dd5ef"
+    },
+    {
+      "path": "tests/rc60-journey.test.js",
+      "sha256": "714fb199f43db3f99e505958b022a8b502e4a9086077d973410eb9767f75c002"
+    },
+    {
+      "path": "tests/rc62-report.test.js",
+      "sha256": "b9f6d432d944068aa7d47b71ed16f6af2a983ee4e737b32e3fc8fb0ee070fb9c"
+    },
+    {
+      "path": "tests/rc63-navigation-plans.test.js",
+      "sha256": "aad9d1789ffee7aa54802bd66275bc41e6a17c3351314d7536be88af0c4f08eb"
+    },
+    {
+      "path": "tests/rc64-header-bootstrap.test.js",
+      "sha256": "5ae88cf5e299475b2ccee71f53ec64e4fd87e92a8c0d248090f2680de4ae93f6"
+    },
+    {
+      "path": "tests/rc65-audit-consistency.test.js",
+      "sha256": "c231105e114959e7d77c88452b65cdbc311a72eb036cd0a76308765b40d812cf"
+    },
+    {
+      "path": "tests/rc66-language-refresh.test.js",
+      "sha256": "ce2c7258736c9bad408437ac634606837e98fe727c871ff2b9cec170ee2f9562"
+    },
+    {
+      "path": "tests/rc67-full-mortgage-transfer.test.js",
+      "sha256": "ac9710cd270fb30176f46e6243dc04c630043173718f512d47282eb9c7ad868a"
+    },
+    {
+      "path": "tests/rc68-zero-equity.test.js",
+      "sha256": "1e7c121c4be5f700794fcfd569431257d5597c606cf8a41008a5eaf8a206a31b"
+    },
+    {
+      "path": "tests/rc69-header-language.test.js",
+      "sha256": "e50d6b8b30b8c20334d0ef17740bd6c2e95776e93e736dda32f0f51689277845"
+    },
+    {
+      "path": "tests/rc72-return-presentation.test.js",
+      "sha256": "686ac5e830706f6694353c9ff7e199b3b7ffbd8ea27f7fab49bfd7edfc282ecf"
+    },
+    {
+      "path": "tests/rc74-tool-pdf-reference.test.js",
+      "sha256": "b832c7b23f67d53b9688ec6dbbd5a4347e7c681a3a8d60411e56dcf26cb1e4db"
+    },
+    {
+      "path": "tests/rc75-save-status.test.js",
+      "sha256": "ffc3510aacda53b805aa84553cb2df12aebcf5f4516c4230fd4970c73f832a2e"
+    },
+    {
+      "path": "tests/rc76-chatbot-understanding.test.js",
+      "sha256": "3d108553a290e83c24e7a5eff8186b91b18800dfdc456c47b28eb1df6b23007e"
+    },
+    {
+      "path": "tests/rc76-zero-equity-consistency.test.js",
+      "sha256": "7c4aa22336a8a9f8fe42619fdcc3c51ddf5c8396b5eefa3318b81212c7334e53"
+    },
+    {
+      "path": "tests/rc77-roi-education.test.js",
+      "sha256": "a0bd915ce12d11f75d06fcfd090d35698ed47e6038df34789eaeb9df1a93f0e9"
+    },
+    {
+      "path": "tests/rc78-audit-regressions.test.js",
+      "sha256": "b0ddd04c7566c43200440945d7f5dec9a2abd4a4dcf18f2b53ff6d3fdac4c975"
+    },
+    {
+      "path": "tests/rc79-report-selector.test.js",
+      "sha256": "083a52a7a37f50c11912939bcde636511b5e813c359c2c5ab8d24454d00c0196"
+    },
+    {
+      "path": "tests/rc80-report-snapshot.test.js",
+      "sha256": "e696a107574e12a8498568239bf1488871b855fb4e211a7d147843faa5542c7b"
+    },
+    {
+      "path": "tests/rc81-roi-chart.test.js",
+      "sha256": "b5b29b56fd1363ac44034ef28b7d36756b0abb1c3ab2468c65aecde6c36a5d64"
+    },
+    {
+      "path": "tests/rc82-calendar-multiple.test.js",
+      "sha256": "f19b0b2b685e862b1f59afb6abca7bdc9aa9e582c80816d0edbf06f63e01570b"
+    },
+    {
+      "path": "tests/rc85-subscription.test.js",
+      "sha256": "21d1775e4b08be4a2f08e215b67b0485ef5c8f244ac06d2440c8102a8ade74d0"
+    },
+    {
+      "path": "tests/rc91-owned-property.test.js",
+      "sha256": "3f6a2239d084f7d4c72601838445a449de8c054fcc7b1e7871ec6d312b839ff4"
+    },
+    {
+      "path": "tests/rc93-owned-report-download.test.js",
+      "sha256": "e160a536574210f03f1060bd85653c7c9a1cc796e7ce0f9615173fa8c9e7542c"
+    },
+    {
+      "path": "tests/rc97-account-and-owned-report.test.js",
+      "sha256": "b96977fa0f37e631ad0c5bfb7e665a172ddc782cf1107493cd2b204279daaf1f"
+    },
+    {
+      "path": "tests/rc98-subscription-visibility.test.js",
+      "sha256": "f22694371968ab89417f66cc4719483eab7552549012a20222d785d62ed1b969"
+    },
+    {
+      "path": "tests/rc99-auth-feedback.test.js",
+      "sha256": "b0793af13613c9884951dc8108b5623037336f8a9e681258ea6186015c46b645"
+    },
+    {
+      "path": "tests/renovation-payback.test.js",
+      "sha256": "a5e4fce15dc9e3a91a3b0feb1a798aadc0ab5c88b93fe7031d2d414e4008076c"
+    },
+    {
+      "path": "tests/serverless-budget.test.js",
+      "sha256": "39327b657b853a7edf5834de3e7c87f257daa660f00921404cbd4a717e9e979d"
+    },
+    {
+      "path": "tests/stripe-checkout-guard.test.js",
+      "sha256": "899e41421f715784c82b7bf5acd591c066ddd06fb0edec61ab22ba2d65abb918"
+    },
+    {
+      "path": "tests/withdrawal-ui.test.js",
+      "sha256": "51fd982c46b3c9f34df99a05966fa01704eccce86c5fb9e4221d67b897280cda"
+    },
+    {
+      "path": "tests/withdrawal.test.js",
+      "sha256": "cfcb1067bc7b1d6e42f25aecb35b472a6c487c11b9dcfdd32b91233f5fb07ca5"
+    },
+    {
+      "path": "tool/index.html",
+      "sha256": "ad51db443728fddd85fc1dacfd63b466a46a1850216f63703cbe340039c2557e"
+    },
+    {
+      "path": "vercel.json",
+      "sha256": "e28bf7311f7e1989d4677dc5d16b7f7804696e6eb6f8f7645e3fb95c82dba211"
+    },
+    {
+      "path": "video/RendimentoBB-Panoramica-20261011.jpg",
+      "sha256": "5a30176113afdf566c86e223983eb1f386d7ab20cab649a90d9f7aa87f6cf14d"
+    },
+    {
+      "path": "video/RendimentoBB-Panoramica-20261011.mp4",
+      "sha256": "8828769065c873749abb19b141e218c7ca1d693840bff2fe81cc47b85fbba3e2"
+    },
+    {
+      "path": "withdrawal.html",
+      "sha256": "79e979ae0379c4308f4733eb577f1626fab1b17ec98054ac34145fcbf1500249"
+    }
+  ]
+}

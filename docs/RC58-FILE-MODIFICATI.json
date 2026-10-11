@@ -1,0 +1,301 @@
+{
+  "release": "RC58",
+  "base": "RC57 gia caricata",
+  "files": [
+    {
+      "path": "about/index.html",
+      "sha256": "cc333a5f7ebf38913ee07347ac785f905ef70fd444df2fb4d6725f010ff5ad19",
+      "bytes": 17954
+    },
+    {
+      "path": "academy/errori/index.html",
+      "sha256": "35496a0d3c330c072fe5a3967054b0d73db612974a65d6c6b28f4ae2863159b8",
+      "bytes": 14289
+    },
+    {
+      "path": "academy/index.html",
+      "sha256": "cedfb0320a7ceade2c858a49bbf3946d267ff1fead2e011c90997e4ed1ff2416",
+      "bytes": 14771
+    },
+    {
+      "path": "academy/mutuo/index.html",
+      "sha256": "0d9dec45f63ebfcb00d5786a9d32b717352e8540736043b10acb0eae9ef9080e",
+      "bytes": 16172
+    },
+    {
+      "path": "academy/roi/index.html",
+      "sha256": "bfd88ede6c00f2ef574a04b78917e0fbb65330ade38ed90038bea781e2d247cb",
+      "bytes": 17015
+    },
+    {
+      "path": "academy/strategia/index.html",
+      "sha256": "3fcf72fd09fc864f07f62226256a43d96cf922beec41fced5177870af90e3aca",
+      "bytes": 13252
+    },
+    {
+      "path": "api/create-checkout-session.js",
+      "sha256": "64df2ce369459afb4070400215ce3a0272195b44bf9d1d97806345ac9ec355ab",
+      "bytes": 3172
+    },
+    {
+      "path": "api/delete-lead.js",
+      "sha256": "5255e1738a9dd8cd35f1d443deb2f03e08e5cd84966fa1dbddede85af04f7342",
+      "bytes": 2409
+    },
+    {
+      "path": "api/property-search.js",
+      "sha256": "d76fd9cf8f2ba81450ca3e59d131a1b4a7d08e89192af87331b5bd62ffe44755",
+      "bytes": 33811
+    },
+    {
+      "path": "aprire-bnb-conviene/index.html",
+      "sha256": "7037700b124b93adff579e2685215860e4e46aac385041f53e1886268616bbd3",
+      "bytes": 17738
+    },
+    {
+      "path": "contact.html",
+      "sha256": "ca54953a557dbb8f129705e4725d8d9fabea01b767957c471d76bf26cad63a51",
+      "bytes": 4019
+    },
+    {
+      "path": "costi-aprire-bnb/index.html",
+      "sha256": "1fca9697c8d92c373183a4a5b09170633032cf9a9d7c22fd70ef84c5b99e493e",
+      "bytes": 5242
+    },
+    {
+      "path": "css/assumptions-2027.css",
+      "sha256": "064d25c689ff102459e3f88473c26cc8e0d8030e2a206044affe1f22060d5918",
+      "bytes": 620
+    },
+    {
+      "path": "css/auth-2027.css",
+      "sha256": "3ba0d182100044fca589636fbea434c2b668346cd44938f28ae7bc4c86c677fc",
+      "bytes": 1583
+    },
+    {
+      "path": "dashboard/index.html",
+      "sha256": "1d272fc76a12e11a1e9290919d6899e6a4a5253bed082db1ee5cdd5c523a63d5",
+      "bytes": 105180
+    },
+    {
+      "path": "dashboard-leads/index.html",
+      "sha256": "0437ba8b926d25fd13d79a3bd74c7bb89d865cf1d062660994dc02947637d558",
+      "bytes": 10853
+    },
+    {
+      "path": "dashboard-report/index.html",
+      "sha256": "70113eefc8dc7bf90e16d06657470162b911e706e5a94eaf5ded4bed27fbd0eb",
+      "bytes": 69537
+    },
+    {
+      "path": "docs/AUDIT-20261008-RC58.md",
+      "sha256": "97dc40858ba0f67e00b0955771893e119d378d82f3e3b44fc8184ea9b8c2e69e",
+      "bytes": 21407
+    },
+    {
+      "path": "docs/INSTALLAZIONE-RC58.md",
+      "sha256": "2436a295ab00447d3d52362b0f7288756705db8ccb3cda98078f18c3c227249c",
+      "bytes": 1722
+    },
+    {
+      "path": "immobili/firenze/index.html",
+      "sha256": "2aba2e415feaabf8d0b932ee5a95d3d4ddfa6bcdbde3f780811280d3341bf321",
+      "bytes": 13133
+    },
+    {
+      "path": "immobili/index.html",
+      "sha256": "020abf4829e4a1bb5f953b7e93bf51a5ca1fb7ae08731970059a19358693a9ad",
+      "bytes": 51650
+    },
+    {
+      "path": "immobili/milano/index.html",
+      "sha256": "95e57955138622e91f899e94a6203734e2d3a8a4e3a4fa9dd440b57114ec568a",
+      "bytes": 15839
+    },
+    {
+      "path": "immobili/napoli/index.html",
+      "sha256": "cddb4643b628593cf6f0828a71c1298971a9901ab87713b2c8ad8ec1f80ea257",
+      "bytes": 12974
+    },
+    {
+      "path": "immobili/roma/index.html",
+      "sha256": "ab3a091ecfe292a3efa0215270cb902c696e2371a810b0a20ebe28ab872eda53",
+      "bytes": 14926
+    },
+    {
+      "path": "index.html",
+      "sha256": "bfd1256212d7f9c82eb727ee948b4562619f10351449866b5660df48399d54e2",
+      "bytes": 90671
+    },
+    {
+      "path": "js/app.js",
+      "sha256": "4de2aa645a38117951be57e87d8ee436aadbc7e74d9c68d71f880750c485c645",
+      "bytes": 183607
+    },
+    {
+      "path": "js/auth-page.js",
+      "sha256": "bbe77a66018dc9602ea81ff12060c2a67558aefe38e1848b48b7f4bcb92b22ca",
+      "bytes": 7367
+    },
+    {
+      "path": "js/auth-safety.js",
+      "sha256": "4cc5907e849734e5b8b0a05b3aa28d058f3c7c98af5e48d5223014b08dd8e3a2",
+      "bytes": 1058
+    },
+    {
+      "path": "js/dashboard.js",
+      "sha256": "08fb0c9b18f72c2dd5abb444d0d61734a5bc7821de3f1da6e25d72d2a828578b",
+      "bytes": 392607
+    },
+    {
+      "path": "js/firebase-init.js",
+      "sha256": "df16a13c5ef8ec2d173cc83398d083610b157e4425bc546694a63734fa409868",
+      "bytes": 16042
+    },
+    {
+      "path": "js/header.js",
+      "sha256": "96570540c2df7dc55ddcb4ddea41b68f9805d0c17bfbdee7d2771d6302c8dabc",
+      "bytes": 28229
+    },
+    {
+      "path": "js/mortgage-rates.js",
+      "sha256": "1173c9f5063482e8ced84627d6733d153dc7ab862f84792971a433448c0847d9",
+      "bytes": 1050
+    },
+    {
+      "path": "lavora-con-noi/index.html",
+      "sha256": "dde4f2dc9fdd79ba0879a089d2d3f485c0f66716a27ede1383931dc10180d479",
+      "bytes": 7257
+    },
+    {
+      "path": "login/index.html",
+      "sha256": "e35796f17f53f2bcfea7f6f0924ae5fce9974afb6c3c660442ae2948268a2c73",
+      "bytes": 10032
+    },
+    {
+      "path": "market/firenze/index.html",
+      "sha256": "d5d5748b657558ce519271d3082c03792293070d2c62c2def496b6a4219a8761",
+      "bytes": 14243
+    },
+    {
+      "path": "market/index.html",
+      "sha256": "5b57a86c96b7548103aa791045140d6a79456688e0f246243da149c6998a0ed7",
+      "bytes": 17963
+    },
+    {
+      "path": "market/milano/index.html",
+      "sha256": "b916f0e5f170e49aafa9d8be2b829e51074441c6a010865d266694890fc90d10",
+      "bytes": 12216
+    },
+    {
+      "path": "market/napoli/index.html",
+      "sha256": "69730c92dc4759c4a86ac1b5f866e70f3ea32bb0ef67e1954c4ac98052a38ea4",
+      "bytes": 12358
+    },
+    {
+      "path": "market/roma/index.html",
+      "sha256": "46b800307f302bfd52676739db876a438cb97e8005b51ea7e07030f4845e0916",
+      "bytes": 16218
+    },
+    {
+      "path": "mutui/index.html",
+      "sha256": "05256f62da9ec2d77b47a96c326aa6f0e5bcfa83cacfbd187abe224c9e7e6c34",
+      "bytes": 41981
+    },
+    {
+      "path": "partner/index.html",
+      "sha256": "0285f299c242bd0350ebfdf3902f2d4c4e9686d90a360d0e2ac09d3e7e2a5d8c",
+      "bytes": 7655
+    },
+    {
+      "path": "privacy.html",
+      "sha256": "ba248642b1309d74632ab2f171d9b80b2053be9ca78a21678fcab0d6cf19ee5f",
+      "bytes": 10528
+    },
+    {
+      "path": "pro-success/index.html",
+      "sha256": "ef5f0c06ffee8bfd005ddf1500b771ff44ae57e8309d841808a70959da7edb12",
+      "bytes": 4604
+    },
+    {
+      "path": "quanto-guadagna-bnb/index.html",
+      "sha256": "18edc4d60995d38f28d0814967dc0639349fbf8fbd94dccf0f8e0bfd2fae3b9d",
+      "bytes": 6053
+    },
+    {
+      "path": "robots.txt",
+      "sha256": "de2416f35454cb2fe7954a921dea200f0a83bd1838a358a29865e5179fc2d22f",
+      "bytes": 88
+    },
+    {
+      "path": "roi-bnb/firenze/index.html",
+      "sha256": "ee37bcf40496552d8bf438422bcb409205205efc63dfdae24cdf384f947aeecd",
+      "bytes": 17152
+    },
+    {
+      "path": "roi-bnb/index.html",
+      "sha256": "282d38b91227cddd4739f8156f124ebea96bb442f0504f7399d020a1177c049f",
+      "bytes": 29463
+    },
+    {
+      "path": "roi-bnb/milano/index.html",
+      "sha256": "2e24df90e4b769c705febc2363affae24a1b8801322e30035e0929c6cb10affe",
+      "bytes": 16185
+    },
+    {
+      "path": "roi-bnb/napoli/index.html",
+      "sha256": "9be87328e0c383d4245701438c1235c7ea896fa1ac7392f11e9e24d51d17b10b",
+      "bytes": 16176
+    },
+    {
+      "path": "roi-bnb/roma/index.html",
+      "sha256": "126f83775319746d10e3acb7e68ab83419d93bc5b5a8dea981755a4e9f30e47e",
+      "bytes": 15664
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "4f54f5c5b600f0f07902313268a24f05fce8c92fb9af05464df3fb9141585d7a",
+      "bytes": 2460
+    },
+    {
+      "path": "terms.html",
+      "sha256": "54dc29be9063a970b2a7fa9a83efb417788430942f1e6b03382ee3b1fd4a13a2",
+      "bytes": 8554
+    },
+    {
+      "path": "tests/auth-revocation.test.js",
+      "sha256": "56dec555c5388be64ced800347c2b02f41edbaa92926554b0e0726ea758688a7",
+      "bytes": 1616
+    },
+    {
+      "path": "tests/auth-safety.test.js",
+      "sha256": "0622a3a0d172296331730e7bff36a2a36937598c8a7f476e6d161d42af522d77",
+      "bytes": 1670
+    },
+    {
+      "path": "tests/dashboard-demo-coherence.test.js",
+      "sha256": "fa83cf6528f04792a0a20be67c505214d53745172ab32923130b87349d674765",
+      "bytes": 1838
+    },
+    {
+      "path": "tests/investment-autopilot.test.js",
+      "sha256": "1139c2f41f7af4b268222881f6c3669df4282d9dedf246c400fb5ed2aa9f2d18",
+      "bytes": 5622
+    },
+    {
+      "path": "tests/property-search-query.test.js",
+      "sha256": "097e6f6ba882543d9d0c31abfe94a6703f8859df0b6ca5206ca8bc6219a5f4eb",
+      "bytes": 1259
+    },
+    {
+      "path": "tool/index.html",
+      "sha256": "6fd66ab5246b57cde04894733d5fba0c7cc9a13639684a01d5785606359e7e58",
+      "bytes": 54083
+    },
+    {
+      "path": "vercel.json",
+      "sha256": "588d3d07d54c9d658f9c1ec4309435fad45520db3473d9d3d3aa6e803d863d3f",
+      "bytes": 3573
+    }
+  ]
+}

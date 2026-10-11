@@ -1,3 +1,4 @@
+import {saveCheckoutContract} from '../lib/account-subscription-service.js';
 import { stripeFieldName, buildStripeEntitlementUpdate } from "../lib/stripe-entitlements.js";
 import { canApplyStripeBinding, checkoutIdentityMatches } from "../lib/stripe-subscription-binding.js";
 import Stripe from "stripe"; 
@@ -461,6 +462,10 @@ export default async function handler(
         event,
         { source: "checkout", customerId: getStripeId(session.customer), subscriptionId }
       );
+
+      if(hasAccess && session.metadata?.termsVersion){
+        await saveCheckoutContract({db,session,subscription,liveMode:IS_LIVE_STRIPE});
+      }
 
     }
 

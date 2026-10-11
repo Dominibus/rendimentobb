@@ -5,18 +5,28 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
 
-  const city =
-    (req.query.city || "napoli")
-    .toLowerCase();
-
-  const budget =
-    Number(req.query.budget || 200000);
-
-  const sqm =
-    Number(req.query.sqm || 60);
-
-  const goal =
-    req.query.goal || "roi";
+  const validScalar = value => value === undefined || typeof value === "string";
+  if(![req.query.city,req.query.budget,req.query.sqm,req.query.goal].every(validScalar)){
+    return res.status(400).json({success:false,error:"Invalid search parameters"});
+  }
+  const supportedCities = ["napoli", "roma", "milano", "firenze"];
+  const city = (req.query.city || "").trim().toLowerCase();
+  const budgetRaw = req.query.budget?.trim();
+  const sqmRaw = req.query.sqm?.trim();
+  const budget = budgetRaw ? Number(budgetRaw) : 100000000;
+  const sqm = sqmRaw ? Number(sqmRaw) : 0;
+  const goal = req.query.goal || "roi";
+  if(city.length > 80 || (city && !/^[\p{L}\p{N} .,'’()\-]+$/u.test(city)) ||
+    !Number.isFinite(budget) || budget <= 0 || budget > 100000000 ||
+    !Number.isFinite(sqm) || sqm < 0 || sqm > 10000 || !["roi", "cashflow", "safe"].includes(goal)){
+    return res.status(400).json({success:false,code:"invalid_filters",error:"Invalid search parameters"});
+  }
+  res.setHeader("Cache-Control", "no-store");
+  if(!supportedCities.includes(city)){
+    return res.status(200).json({success:true, city, budget, sqm, goal,
+      code:city ? "unsupported_location" : "location_required", supportedCities,
+      totalResults:0, dataType:"indicative-scenarios", results:[]});
+  }
 
   // =====================================
   // 🏠 IMMOBILIARE.IT
@@ -1537,56 +1547,6 @@ export default async function handler(req, res) {
 
   );
 
-// =====================================
-// 🤖 SMART FALLBACK ENGINE
-// =====================================
-
-if(results.length === 0){
-
-  const cityProperties =
-    properties.filter(
-      p => p.city === city
-    );
-
-  if(cityProperties.length){
-
-    results =
-      cityProperties
-      .sort((a,b)=>
-        a.price - b.price
-      )
-      .slice(0,5);
-
-  }
-
-}
-
-// =====================================
-// 🇮🇹 NATIONAL FALLBACK
-// =====================================
-
-if(results.length === 0){
-
-  results =
-    [...properties]
-
-    .sort((a,b)=>
-      b.roi - a.roi
-    )
-
-    .slice(0,5)
-
-    .map(p=>({
-
-      ...p,
-
-      aiReason:
-      "Market Similarity"
-
-    }));
-
-}
-
   // =====================================
   // 🤖 AI ENRICHMENT
   // =====================================
@@ -1621,7 +1581,7 @@ if(results.length === 0){
 
     results.sort(
       (a,b)=>
-        b.score - a.score
+        b.roi - a.roi
     );
 
   }

@@ -33,3 +33,14 @@ body.tool-page .simulator-container{margin-bottom:0!important}
 body.tool-page .tool-hero{padding-bottom:28px!important}
 body.tool-page #results{margin-top:24px!important}
 body.tool-page #rb-simulation-summary{scroll-margin-top:100px}
+
+/* RC80: keep the simulator inputs in view; guidance remains available by keyboard. */
+.rb-tool-guidance{max-width:1120px;margin:20px auto;border:1px solid #dce6e5;border-radius:16px;background:#fff;box-shadow:0 8px 24px #143b3208}
+.rb-tool-guidance>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;cursor:pointer;color:#163b33;list-style:none;min-height:64px}
+.rb-tool-guidance>summary::-webkit-details-marker{display:none}
+.rb-tool-guidance>summary::after{content:'+';font-size:22px;color:#087e65}
+.rb-tool-guidance[open]>summary::after{content:'−'}
+.rb-tool-guidance>summary span{margin-left:auto;color:#536760;font-size:13px}
+.rb-tool-guidance>summary:focus-visible{outline:3px solid #087e65;outline-offset:3px}
+body.tool-page .rb-tool-guidance .rb-investment-hub{margin:0;box-shadow:none;border:0;border-top:1px solid #dce6e5;border-radius:0 0 16px 16px}
+@media(max-width:760px){.rb-tool-guidance{margin:16px 12px}.rb-tool-guidance>summary{flex-wrap:wrap;padding:16px;gap:8px}.rb-tool-guidance>summary strong{font-size:14px}.rb-tool-guidance>summary span{margin-left:0}.rb-tool-guidance>summary::after{margin-left:auto}}

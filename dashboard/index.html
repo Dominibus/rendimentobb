@@ -1902,6 +1902,7 @@ margin-bottom:16px;
 <link rel="stylesheet" href="/css/product-2027.css?v=20261001-22">
 <link rel="stylesheet" href="/css/pms-tasks.css?v=20261005-rc28">
 <link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc38">
+<link rel="stylesheet" href="/css/trial-invite.css?v=20261009-rc88">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -2041,6 +2042,11 @@ z-index:9999;
 
 
 <main>
+<aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
+<div><strong data-it="Prova Investor gratis per 7 giorni" data-en="Try Investor free for 7 days">Prova Investor gratis per 7 giorni</strong>
+<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
+<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
+<a href="/login/" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
 
 <div class="dashboard-container">
 <div class="dashboard-main">  
@@ -2052,15 +2058,15 @@ z-index:9999;
 
   <div class="rb-hero-left">
     <h1 
-    data-it="📊 Controllo investimenti"
-    data-en="📊 Investment control">
-    📊 Controllo investimenti
+    data-it="Il tuo centro di controllo"
+    data-en="Your control center">
+    Il tuo centro di controllo
     </h1>
 
     <p
-    data-it="Analizza performance, rischio e crescita del tuo portfolio"
-    data-en="Analyze performance, risk and growth of your portfolio">
-    Analizza performance, rischio e crescita del tuo portfolio
+    data-it="Investimenti, immobili, lavori e prenotazioni. Scegli la prossima attività, verifica i dati e tieni sotto controllo il tuo B&B."
+    data-en="Investments, properties, renovations and bookings. Choose your next task, review the data and keep your B&B under control.">
+    Investimenti, immobili, lavori e prenotazioni. Scegli la prossima attività, verifica i dati e tieni sotto controllo il tuo B&B.
     </p>
 
     <div id="dashboard-data-source" class="rb-hero-live"
@@ -2278,10 +2284,10 @@ class="btn-dashboard"
 onclick="showPMSTab('properties')">
 
 <span
-data-it="📊 Portfolio immobili"
-data-en="📊 Property Portfolio">
+data-it="🏠 Strutture e lavori"
+data-en="🏠 Properties and renovations">
 
-📊 Portfolio immobili
+🏠 Strutture e lavori
 
 </span>
 
@@ -2292,10 +2298,10 @@ class="btn-dashboard"
 onclick="showPMSTab('roi')">
 
 <span
-data-it="Analisi strategica"
-data-en="Strategic analysis">
+data-it="Scenari e portafoglio"
+data-en="Scenarios and portfolio">
 
-Analisi strategica
+Scenari e portafoglio
 
 </span>
 
@@ -2395,6 +2401,8 @@ data-en="+ Add property">
 </button>
 
 </div>
+
+<section id="renovation-recovery" class="analysis-card" hidden style="margin:20px 0;" aria-live="polite"></section>
 
 <div id="properties-list">
 
@@ -2547,8 +2555,8 @@ class="pms-section">
     <!-- Occupancy -->
     <div class="rb-kpi">
       <span
-      data-it="📈 Occupazione"
-      data-en="📈 Occupancy">
+      data-it="📈 Occupazione mese"
+      data-en="📈 Monthly occupancy">
       📈 Occupazione
       </span>
 
@@ -2558,8 +2566,8 @@ class="pms-section">
     <!-- ADR -->
     <div class="rb-kpi">
       <span
-      data-it="💵 ADR"
-      data-en="💵 ADR">
+      data-it="💵 ADR mese"
+      data-en="💵 Monthly ADR">
       💵 ADR
       </span>
 
@@ -2569,8 +2577,8 @@ class="pms-section">
     <!-- RevPAR -->
     <div class="rb-kpi">
       <span
-      data-it="📊 RevPAR"
-      data-en="📊 RevPAR">
+      data-it="📊 RevPAR mese"
+      data-en="📊 Monthly RevPAR">
       📊 RevPAR
       </span>
 
@@ -3131,10 +3139,10 @@ font-weight:900;
 letter-spacing:-1px;
 line-height:1.1;
 "
-data-it="📊 Performance Live"
-data-en="📊 Live Performance">
+data-it="📊 Ipotesi del patrimonio"
+data-en="📊 Portfolio assumptions">
 
-📊 Performance Live
+📊 Ipotesi del patrimonio
 
 </h2>
 
@@ -3147,7 +3155,7 @@ color:#64748b;
 max-width:720px;
 "
 data-it="Scenari salvati e ipotesi collegate al patrimonio confermato."
-data-en="Real-time performance of your investment portfolio.">
+data-en="Saved scenarios and assumptions linked to confirmed properties.">
 
 Scenari salvati e ipotesi collegate al patrimonio confermato.
 
@@ -3698,9 +3706,9 @@ Livello strategico
 </h3>
 
 <p
-data-it="Insight predittivi basati su performance e rischio"
-data-en="Predictive insights based on performance and risk">
-Insight predittivi basati su performance e rischio
+data-it="Sintesi delle ipotesi salvate e del rischio del modello"
+data-en="Summary of saved assumptions and model risk">
+Sintesi delle ipotesi salvate e del rischio del modello
 </p>
 
 </div>  
@@ -3708,9 +3716,9 @@ Insight predittivi basati su performance e rischio
 <div class="analysis-card" style="margin-bottom:18px">
 
   <h3
-  data-it="📊 Live Investment Feed"
-  data-en="📊 Live Investment Feed">
-  📊 Live Investment Feed
+  data-it="📊 Archivio delle simulazioni"
+  data-en="📊 Saved simulation archive">
+  📊 Archivio delle simulazioni
   </h3>
 
   <p
@@ -3744,7 +3752,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261006-rc38" defer></script>
+<script src="/js/chatbot-loader.js?v=20261011-rc101" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3752,28 +3760,28 @@ Insight predittivi basati su performance e rischio
 <script src="/js/chatbot/support-data.js" defer></script>
 
 <!-- 🤖 CHATBOT ENGINE -->
-<script src="/js/ai-engine.js" defer></script>
+<script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js"></script>
-<script src="/js/ui-system.js" defer></script>
-<script src="/js/footer.js" defer></script>
+<script type="module" src="/js/header.js?v=20261011-rc103"></script>
+<script src="/js/ui-system.js?v=20261011-rc99" defer></script>
+<script src="/js/footer.js?v=20261011-rc102" defer></script>
 
 <!-- 🔥 DATA -->
 <script src="/js/market-data.js"></script>
 
 <!-- 🔥 FIREBASE -->
-<script type="module" src="/js/firebase-init.js"></script>
+<script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
 
 <!-- 🧪 DEMO INVESTMENTS -->
 <script src="/js/demo/demo-investments.js?v=20260930-10"></script>  
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261007-rc54"></script>
+<script type="module" src="/js/dashboard.js?v=20261011-rc99"></script>
 
 <!-- 🔥 CHART -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
 
 
 <!-- ================= LANGUAGE LIVE REFRESH ================= -->
@@ -4952,5 +4960,6 @@ border-radius:18px;
 </div>
 
 </div>
+<script type="module" src="/js/trial-invite.js?v=20261009-rc88"></script>
 </body>
 </html>

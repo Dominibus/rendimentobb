@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<meta name="robots" content="noindex, nofollow">
 
 <link rel="icon" href="/img/favicon.png">  
 <meta charset="UTF-8">
@@ -8,13 +9,13 @@
 
 <title>Report investimento B&B</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
+<script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
 
 <script src="/js/lang.js"></script>
 <script src="/js/market-data.js?v=20261001-22"></script>
 <script src="/js/account-report-cache.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
+<script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -740,7 +741,7 @@ border-bottom:1px solid #eef2f7;
   box-shadow:
   0 10px 30px rgba(16,185,129,0.12);
   ">
-    REPORT DI SIMULAZIONE • IPOTESI ESPLICITE
+    <span data-it="REPORT DI SIMULAZIONE • IPOTESI ESPLICITE" data-en="SIMULATION REPORT • EXPLICIT ASSUMPTIONS">REPORT DI SIMULAZIONE • IPOTESI ESPLICITE</span>
   </div>
 
 </div>
@@ -865,7 +866,7 @@ SCENARIO SCORE
         font-weight:800;
         margin-top:4px;
         ">
-          92/100
+          —
         </div>
       </div>
 
@@ -888,7 +889,7 @@ LIVELLO RISCHIO
         font-weight:800;
         margin-top:4px;
         ">
-          LOW
+          —
         </div>
       </div>
 
@@ -1048,7 +1049,7 @@ Analisi performance
     ">
       <span
 data-it="IPOTESI SALVATE"
-data-en="LIVE DATA">
+data-en="SAVED ASSUMPTIONS">
 IPOTESI SALVATE
 </span>
     </div>
@@ -1056,12 +1057,13 @@ IPOTESI SALVATE
   </div>
 
   <!-- CHART -->
-  <div style="
+  <div id="roi-chart-frame" style="
   height:420px;
   position:relative;
   width:100%;
   ">
     <canvas id="roiChart"></canvas>
+    <div id="roi-chart-unavailable" role="status" hidden style="padding:32px;background:#f8fafc;border-radius:16px;color:#334155;line-height:1.6"></div>
   </div>
 
   <!-- ACTION BAR -->
@@ -1129,9 +1131,9 @@ data-en="📊 RendimentoBB model">
 </div>
 
 <div
-data-it="🤖 Potenziato AI"
-data-en="🤖 AI Powered">
-🤖 Potenziato AI
+data-it="Ipotesi e indicatori espliciti"
+data-en="Explicit assumptions and indicators">
+Ipotesi e indicatori espliciti
 </div>
 
       </div>
@@ -1229,6 +1231,7 @@ const canonicalSimulation =
   storedSimulations[0] ||
   {};
 
+const ownedProperty = canonicalSimulation.propertyMode === "owned" || canonicalSimulation.assumptions?.source === "owned_property";
 const price =
   Number(
     canonicalSimulation.propertyPrice ??
@@ -1307,6 +1310,7 @@ function getFinancingMetrics(
     Math.max(
       0,
       safeNumber(
+        source.assumptions?.loanAmount ??
         source.loan ??
         source.loanAmount ??
         source.mortgageAmount ??
@@ -1440,7 +1444,7 @@ const canonicalVerdict =
 
 
 // ================= LANG =================
-const lang = window.currentLang || "it";
+let lang = window.currentLang || "it";
 
 // ================= USER =================
 function checkUserPlan(){
@@ -1461,9 +1465,14 @@ function euro(v){
 
 // ================= RENDER =================
 function renderData(){
-  document.getElementById("price").innerText = euro(price);
+  if(ownedProperty){
+    let note=document.getElementById('owned-report-note');
+    if(!note){note=document.createElement('p');note.id='owned-report-note';note.style.cssText='padding:16px;background:#f0fdfa;border-radius:12px;color:#123b32;line-height:1.5';document.querySelector('.report')?.prepend(note);}
+    note.textContent=lang==='en'?'Already owned property. Startup capital excludes the value of the house. No purchase or new mortgage is assumed; any remaining principal comes from the saved analysis.':'Immobile già di proprietà. Il capitale di avvio esclude il valore della casa. Non è presunto un acquisto o un nuovo mutuo: l’eventuale residuo proviene dall’analisi salvata.';
+  }
+  document.getElementById("price").innerText = ownedProperty && price === 0 ? (lang === "en" ? "Not provided" : "Non indicato") : euro(price);
   document.getElementById("equity").innerText = euro(equity);
-  document.getElementById("roi").innerText = roi.toFixed(1)+"%";
+  document.getElementById("roi").innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
   document.getElementById("risk").innerText = risk+"/100";
   const realROIHero =
   document.getElementById(
@@ -1473,7 +1482,7 @@ function renderData(){
 if(realROIHero){
 
   realROIHero.innerText =
-    realROI.toFixed(1) + "%";
+    price > 0 ? realROI.toFixed(1) + "%" : "N/A";
 }
 
   const dscrHero =
@@ -1503,8 +1512,7 @@ if(dscrHero){
 
 if(ltvHero){
 
-  const loan =
-    Math.max(0, price - equity);
+  const loan = getFinancingMetrics(canonicalSimulation,price,equity,annualProfit).loan;
 
   const ltv =
     price > 0
@@ -1512,11 +1520,11 @@ if(ltvHero){
       : 0;
 
   ltvHero.innerText =
-    ltv.toFixed(0) + "%";
+    price > 0 ? ltv.toFixed(0) + "%" : "N/A";
 }
 
 if(heroROI){
-  heroROI.innerText = roi.toFixed(1)+"%";
+  heroROI.innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
 
   const bankScoreHero =
   document.getElementById("bankScoreHero");
@@ -1549,9 +1557,9 @@ const riskHero =
 if(riskHero){
 
   riskHero.innerText =
-  risk < 30
+  risk < 40
     ? (lang==="en" ? "LOW" : "BASSO")
-    : risk < 60
+    : risk < 65
     ? (lang==="en" ? "MEDIUM" : "MEDIO")
     : (lang==="en" ? "HIGH" : "ALTO");
 }
@@ -1571,10 +1579,10 @@ function renderOperationalReport(){
   const cards = [
     [t("Proprietà","Properties"), n(pms.properties)],
     [t("Prenotazioni","Bookings"), n(pms.bookings)],
-    [t("Ricavi totali","Total revenue"), euro(n(pms.totalRevenue))],
-    [t("Occupazione","Occupancy"), percent(pms.occupancy)],
-    ["ADR", euro(n(pms.adr))],
-    ["RevPAR", euro(n(pms.revpar))],
+    [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), euro(n(pms.totalRevenue))],
+    [t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), percent(pms.occupancy)],
+    [t("ADR · mese dello snapshot","ADR · snapshot month"), euro(n(pms.adr))],
+    [t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), euro(n(pms.revpar))],
     [t("Ospiti","Guests"), n(pms.guests)],
     [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
   ];
@@ -1589,7 +1597,7 @@ function renderOperationalReport(){
     ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
         <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
           <strong>${escaped(item.propertyName || item.name || t("Immobile","Property"))}</strong><br>
-          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
+          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(({planning:t("Pianificazione","Planning"),in_progress:t("In corso","In progress"),completed:t("Completata","Completed"),paused:t("In pausa","Paused")})[item.status] || item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
         </div>`).join("")
     : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
 
@@ -1614,7 +1622,11 @@ function renderVerdict(){
   let verdict = normalizedVerdict;
   let text = "";
 
-  if(
+  if(ownedProperty){
+    text = lang === "en"
+      ? "Existing property: assess operating cashflow, costs and risks. No purchase recommendation applies."
+      : "Immobile già di proprietà: valuta cashflow operativo, costi e rischi. Non si applica alcuna raccomandazione di acquisto.";
+  }else if(
     normalizedVerdict === "BUY"
   ){
 
@@ -1646,7 +1658,9 @@ function renderVerdict(){
 
   }
 
-  document.getElementById("verdict").innerText = verdict === "BUY"
+  document.getElementById("verdict").innerText = ownedProperty
+    ? (lang === "en" ? "MANAGEMENT SCENARIO" : "SCENARIO DI GESTIONE")
+    : verdict === "BUY"
     ? (lang === "en" ? "FAVORABLE SCENARIO" : "SCENARIO FAVOREVOLE")
     : verdict === "AVOID" ? (lang === "en" ? "CRITICAL SCENARIO" : "SCENARIO CRITICO")
     : (lang === "en" ? "ASSUMPTIONS TO REVIEW" : "IPOTESI DA RIVEDERE");
@@ -1671,15 +1685,35 @@ function renderChart(){
     roiChartInstance = null;
   }
 
+  const unavailable = document.getElementById("roi-chart-unavailable");
+  const frame = document.getElementById("roi-chart-frame");
+  if(frame){ frame.hidden = equity <= 0; frame.style.display = equity <= 0 ? "none" : "block"; frame.style.height = equity <= 0 ? "auto" : "420px"; }
+  let roiNote = document.getElementById("roi-chart-zero-note");
+  if(!roiNote && frame?.parentElement){
+    roiNote = document.createElement("p"); roiNote.id = "roi-chart-zero-note";
+    roiNote.style.cssText = "padding:14px;border-radius:12px;background:#f8fafc;color:#334155;line-height:1.5";
+    frame.insertAdjacentElement("afterend", roiNote);
+  }
+  if(roiNote){ roiNote.hidden = equity > 0; roiNote.textContent = lang === "en" ? "ROI chart not applicable: no startup capital was invested. Assess annual cashflow, costs and risk instead." : "Grafico ROI non applicabile: nessun capitale di avvio investito. Valuta invece cashflow annuo, costi e rischio."; }
+  canvas.hidden = equity <= 0;
+  canvas.style.display = equity <= 0 ? "none" : "block";
+  if(unavailable){
+    unavailable.hidden = equity > 0;
+    unavailable.textContent = lang === "en"
+      ? "Equity ROI: N/A. With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately."
+      : "ROI sul capitale proprio: N/A. Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.";
+  }
+  if(equity <= 0) return;
+
   requestAnimationFrame(()=>{
     roiChartInstance = new Chart(canvas,{
       type:"bar",
       data:{
         labels: lang==="en"
-          ? ["Equity ROI (%)","Scenario risk (0–100)"]
-          : ["ROI equity (%)","Rischio scenario (0–100)"],
+          ? [equity > 0 ? "Equity ROI (%)" : "Equity ROI: N/A"]
+          : [equity > 0 ? "ROI equity (%)" : "ROI equity: N/A"],
         datasets:[{
-          data:[roi, risk],
+          data:[equity > 0 ? roi : null],
           backgroundColor:["#10b981","#ef4444","#3b82f6"],
           borderRadius:10
         }]
@@ -1730,9 +1764,8 @@ function applyLock(){
 // ================= ADVANCED =================
 function renderAdvanced(){
 
-  if(document.getElementById("advancedBox")) return;
-
-  const box = document.createElement("div");
+  const existingBox = document.getElementById("advancedBox");
+  const box = existingBox || document.createElement("div");
   box.id = "advancedBox";
   box.className = "verdict";
 
@@ -1747,7 +1780,7 @@ const investmentClass =
   "E";
 
   // 🔥 FIX divisione sicura
-  const breakEven = annualProfit > 0 ? (equity / annualProfit) : 0;
+  const breakEven = annualProfit > 0 && equity > 0 ? (equity / annualProfit) : 0;
 
   box.innerHTML = `
 
@@ -1832,7 +1865,7 @@ ${euro(annualProfit)}
 <div class="kpi">
 <span>${lang==="en"?"Break-even":"Pareggio"}</span>
 <strong style="font-size:22px">
-${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
+${equity === 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
 </div>
 
@@ -1841,7 +1874,7 @@ ${annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (
 
   // 🔥 FIX sicurezza DOM
   const reportEl = document.querySelector(".report");
-  if(reportEl){
+  if(reportEl && !existingBox){
     reportEl.appendChild(box);
   }
 
@@ -1876,6 +1909,8 @@ async function generatePDF(){
       return isFinite(n) ? n : 0;
     };
 
+    const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261009-rc91");
+    if(window.currentUser?.uid !== reportOwnerUid || !(window.getUserAccess?.()?.isPro || window.getUserAccess?.()?.isAdmin)) return;
     // ================= DATA =================
     const dashboardList = window.dashboardSimulations || [];
     const selectedValue = document.getElementById("simulationSelector")?.value;
@@ -1891,6 +1926,7 @@ async function generatePDF(){
       [...dashboardList].sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
       {};
 
+    const ownedProperty = fallback.propertyMode === "owned" || fallback.assumptions?.source === "owned_property";
     const roi = safe(fallback.roi);
     const price = safe(fallback.price);
     const equity = safe(fallback.equity);
@@ -1970,17 +2006,13 @@ const monthlyProfit = safe(
         : 0;
 
     // ================= FORMAT =================
-    const eur = v => {
-      const rounded = Math.round(safe(v));
-      const sign = rounded < 0 ? "-" : "";
-      const grouped = String(Math.abs(rounded)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : ".");
-      return lang === "en" ? `${sign}€${grouped}` : `${sign}${grouped} €`;
-    };
+    const eur = v => new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT", {style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(safe(v));
 
     const dark = [15,23,42];
     const green = [16,185,129];
     const blue = [59,130,246];
     const amber = [245,158,11];
+    const gray = [100,116,139];
     const red = [220,38,38];
 
     const drawBrand = (x=20,y=14)=>{
@@ -2140,7 +2172,7 @@ doc.setFontSize(30);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  roi.toFixed(1) + "%",
+  (equity > 0 ? roi.toFixed(1) + "%" : "N/A"),
   28,
   y + 36
 );
@@ -2269,13 +2301,13 @@ const drawExecutiveKPI = (
 
 drawExecutiveKPI(
   20,
-  t("PREZZO","PURCHASE PRICE"),
-  eur(price)
+  ownedProperty ? t("VALORE IMMOBILE","PROPERTY VALUE") : t("PREZZO","PURCHASE PRICE"),
+  ownedProperty && price === 0 ? t("Non indicato","Not provided") : eur(price)
 );
 
 drawExecutiveKPI(
   20 + kpiW + kpiGap,
-  t("CAPITALE PROPRIO","EQUITY"),
+  ownedProperty ? t("CAPITALE AVVIO","STARTUP CAPITAL") : t("CAPITALE PROPRIO","EQUITY"),
   eur(equity)
 );
 
@@ -2291,10 +2323,12 @@ drawExecutiveKPI(
   ).toUpperCase();
 
 const verdict =
-  canonicalVerdict === "BUY"
+  ownedProperty && equity <= 0
+    ? (annualProfit > 0 ? t("Cashflow previsionale positivo","Positive projected cashflow") : t("Cashflow da verificare","Cashflow to review"))
+    : canonicalVerdict === "BUY"
     ? t(
-        "Investimento consigliato",
-        "Investment recommended"
+        "Scenario favorevole",
+        "Favourable scenario"
       )
     : canonicalVerdict === "WAIT"
       ? t(
@@ -2306,8 +2340,8 @@ const verdict =
           canonicalVerdict === "NO_BUY"
         )
         ? t(
-            "Investimento sconsigliato",
-            "Investment not recommended"
+            "Scenario sfavorevole",
+            "Unfavourable scenario"
           )
         : t(
             "Valutazione non disponibile",
@@ -2337,7 +2371,15 @@ const verdictColor =
     doc.setTextColor(...dark);
     doc.text(t("Performance finanziaria","Financial performance"),20,20);
 
-    try{
+    if(equity <= 0){
+      doc.setFillColor(248,250,252);
+      doc.roundedRect(20,32,170,55,4,4,"F");
+      doc.setFontSize(12);
+      doc.setTextColor(...dark);
+      doc.text(t("ROI sul capitale proprio: N/A","Equity ROI: N/A"),26,45);
+      doc.setFontSize(10);
+      doc.text(doc.splitTextToSize(t("Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.","With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately."),156),26,57);
+    }else try{
       const canvas = document.getElementById("roiChart");
       if(canvas){
         const img = canvas.toDataURL("image/png");
@@ -2425,7 +2467,7 @@ drawPerformanceKPI(
 drawPerformanceKPI(
   20 + performanceKpiW + performanceKpiGap,
   t("BREAK-EVEN","BREAK-EVEN"),
-  annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
+  equity <= 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
 );
 
 drawPerformanceKPI(
@@ -2517,7 +2559,7 @@ drawFinancingKPI(
   20 + financingCardW + financingGap,
   32,
   "LTV",
-  `${ltv.toFixed(1)}%`
+  price > 0 ? `${ltv.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -2534,14 +2576,14 @@ drawFinancingKPI(
   20,
   64,
   "CAP RATE",
-  `${capRate.toFixed(1)}%`
+  price > 0 ? `${capRate.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(
   20 + financingCardW + financingGap,
   64,
   "ROE",
-  `${roe.toFixed(1)}%`
+  equity > 0 ? `${roe.toFixed(1)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -2597,7 +2639,9 @@ drawFinancingKPI(
   );
 
 const riskLabel =
-  riskScore < 40
+  ownedProperty && equity <= 0
+    ? t("RISCHIO MODELLO: PARZIALE","MODEL RISK: PARTIAL")
+    : riskScore < 40
     ? t("RISCHIO BASSO","LOW RISK")
     : riskScore < 65
       ? t("RISCHIO MEDIO","MEDIUM RISK")
@@ -2736,7 +2780,7 @@ if(riskBreakdown){
   doc.setTextColor(71,85,105);
   doc.text(
     [
-      `${t("Base prudenziale","Prudential base")} +${safe(riskBreakdown.base)}  ·  ${t("ROI equity","Equity ROI")} +${safe(riskBreakdown.roi)}  ·  ${t("Occupazione","Occupancy")} +${safe(riskBreakdown.occupancy)}`,
+      `${t("Base prudenziale","Prudential base")} +${safe(riskBreakdown.base)}  ·  ${equity <= 0 ? t("ROI N/A: escluso","ROI N/A: excluded") : `${t("ROI equity","Equity ROI")} +${safe(riskBreakdown.roi)}`}  ·  ${t("Occupazione","Occupancy")} +${safe(riskBreakdown.occupancy)}`,
       `${t("Leva LTV","LTV leverage")} +${safe(riskBreakdown.leverage)}  ·  ${t("Copertura DSCR","DSCR coverage")} +${safe(riskBreakdown.debtCoverage)}  ·  ${t("Cashflow","Cashflow")} +${safe(riskBreakdown.cashflow)}`
     ],
     20,
@@ -2757,31 +2801,11 @@ if(riskBreakdown){
     const marketKey = String(city || "").toLowerCase().trim();
     const localROI = window.RB_MARKET_DATA?.[marketKey]?.roi;
     const hasLocalBenchmark = Number.isFinite(Number(localROI)) && localROI != null;
-    const marketROI = hasLocalBenchmark ? Number(localROI) : 8.4;
-const diff = roi - marketROI;
-
-const comparisonColor =
-  diff > 0
-    ? green
-    : diff < 0
-      ? red
-      : amber;
-
-const comparisonLabel =
-  diff > 0
-    ? t(
-        "SOPRA IL BENCHMARK",
-        "ABOVE BENCHMARK"
-      )
-    : diff < 0
-      ? t(
-          "SOTTO IL BENCHMARK",
-          "BELOW BENCHMARK"
-        )
-      : t(
-          "IN LINEA CON IL BENCHMARK",
-          "IN LINE WITH BENCHMARK"
-        );
+    const marketROI = hasLocalBenchmark ? Number(localROI) : null;
+// The internal reference has no verified matching costs or leverage.
+// Do not grade outperformance or show a comparative numerical gap.
+const comparisonColor = amber;
+const comparisonLabel = t("BASI NON COMPARABILI", "BASES NOT COMPARABLE");
 
 // ================= MARKET COMPARISON CARD =================
 
@@ -2815,7 +2839,7 @@ doc.setFontSize(24);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  `${roi.toFixed(1)}%`,
+  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A"),
   28,
   63
 );
@@ -2836,7 +2860,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  hasLocalBenchmark ? t("BENCHMARK LOCALE","LOCAL BENCHMARK") : t("RIFERIMENTO GENERALE","GENERAL REFERENCE"),
+  ownedProperty && equity <= 0 ? t("CONFRONTO ROI","ROI COMPARISON") : hasLocalBenchmark ? t("RIFERIMENTO ILLUSTRATIVO","ILLUSTRATIVE REFERENCE") : t("RIFERIMENTO NON DISPONIBILE","REFERENCE UNAVAILABLE"),
   115,
   44
 );
@@ -2847,7 +2871,7 @@ doc.setFontSize(24);
 doc.setTextColor(...dark);
 
 doc.text(
-  `${marketROI.toFixed(1)}%`,
+  ownedProperty && equity <= 0 ? "N/A" : hasLocalBenchmark ? `${marketROI.toFixed(1)}%` : "—",
   115,
   63
 );
@@ -2871,7 +2895,7 @@ doc.setFontSize(16);
 doc.setTextColor(255,255,255);
 
 doc.text(
-  `${diff > 0 ? "+" : ""}${diff.toFixed(1)}%`,
+  "—",
   28,
   107
 );
@@ -2879,7 +2903,7 @@ doc.text(
 doc.setFontSize(8);
 
 doc.text(
-  comparisonLabel,
+  hasLocalBenchmark ? comparisonLabel : t("NESSUN CONFRONTO","NO COMPARISON"),
   182,
   106,
   { align:"right" }
@@ -2892,25 +2916,21 @@ doc.setFontSize(8);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  diff > 0
-    ? t(
-        hasLocalBenchmark ? "Il rendimento del progetto supera il benchmark locale disponibile." : "Il rendimento supera il riferimento generale; il confronto non è specifico per la città.",
-        hasLocalBenchmark ? "The project return exceeds the available local benchmark." : "The project return exceeds the general reference; the comparison is not city-specific."
-      )
-    : diff < 0
-      ? t(
-          hasLocalBenchmark ? "Il rendimento del progetto è inferiore al benchmark locale disponibile." : "Il rendimento è inferiore al riferimento generale; il confronto non è specifico per la città.",
-          hasLocalBenchmark ? "The project return is below the available local benchmark." : "The project return is below the general reference; the comparison is not city-specific."
-        )
-      : t(
-          hasLocalBenchmark ? "Il rendimento è allineato al benchmark locale disponibile." : "Il rendimento è allineato al riferimento generale, non specifico per la città.",
-          hasLocalBenchmark ? "The return is aligned with the available local benchmark." : "The return is aligned with the general reference, which is not city-specific."
-        ),
+  equity <= 0 ? (ownedProperty ? t("Immobile già posseduto: ROI sul capitale di avvio non applicabile. Nessun confronto percentuale significativo.", "Already owned property: return on startup capital is not applicable. No meaningful percentage comparison.") : t("ROI equity non applicabile con capitale proprio pari a zero.", "Equity ROI is not applicable with zero equity.")) : hasLocalBenchmark
+    ? t("Riferimento interno illustrativo: non misura la performance del mercato né un rendimento superiore.", "Internal illustrative reference: it does not measure market performance or outperformance.")
+    : t("Nessun riferimento disponibile per questa città.", "No reference is available for this city."),
   20,
   130,
   { maxWidth:170 }
 );
 
+    doc.setFontSize(8);
+    doc.setTextColor(100,116,139);
+    doc.text(doc.splitTextToSize(
+      ownedProperty && equity <= 0
+        ? t("Nessun benchmark percentuale viene applicato a questo scenario. Il cashflow è una stima basata sugli input, non una misura di rendimento del patrimonio immobiliare.", "No percentage benchmark applies to this scenario. Cashflow is an input-based estimate, not a return on the property's market value.")
+        : t("Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.", "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."),
+      170),20,153);
     addFooter();
 
     // ================= PAGE 6 =================
@@ -3104,7 +3124,7 @@ const drawFinalKPI = (
 drawFinalKPI(
   20,
   t("ROI EQUITY","EQUITY ROI"),
-  `${roi.toFixed(1)}%`
+  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A")
 );
 
 drawFinalKPI(
@@ -3207,7 +3227,12 @@ doc.text(
       doc.setFont("helvetica","normal");
       doc.setFontSize(8);
       doc.setTextColor(100,116,139);
-      doc.text(t("Fotografia operativa dei dati disponibili in dashboard.","Operational snapshot of the data available in the dashboard."),20,28);
+      doc.text(t("Dati PMS complessivi della dashboard, non attribuiti alla singola simulazione.","Dashboard-wide PMS data, not attributed to this simulation."),20,28);
+      const snapshotTime = new Date(dashboardReportContext.generatedAt || "");
+      if(Number.isFinite(snapshotTime.getTime())){
+        doc.setFontSize(7);
+        doc.text(t("Snapshot PMS: ","PMS snapshot: ")+snapshotTime.toLocaleString(lang === "en"?"en-GB":"it-IT"),20,35);
+      }
       doc.setFillColor(236,253,245);
       doc.setTextColor(4,120,87);
       doc.roundedRect(145,17,45,10,3,3,"F");
@@ -3217,8 +3242,8 @@ doc.text(
 
       const rows = [
         [t("Proprietà","Properties"), String(safe(pms.properties)), t("Prenotazioni","Bookings"), String(safe(pms.bookings))],
-        [t("Ricavi totali","Total revenue"), eur(safe(pms.totalRevenue)), t("Occupazione","Occupancy"), `${safe(pms.occupancy).toFixed(0)}%`],
-        ["ADR", eur(safe(pms.adr)), "RevPAR", eur(safe(pms.revpar))],
+        [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), eur(safe(pms.totalRevenue)), t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), `${safe(pms.occupancy).toFixed(0)}%`],
+        [t("ADR · mese dello snapshot","ADR · snapshot month"), eur(safe(pms.adr)), t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), eur(safe(pms.revpar))],
         [t("Ospiti","Guests"), String(safe(pms.guests)), t("Da attenzionare","Requiring attention"), String(safe(pms.attentionCount))],
         [t("Arrivi oggi","Arrivals today"), String(safe(pms.arrivalsToday)), t("Partenze oggi","Departures today"), String(safe(pms.departuresToday))]
       ];
@@ -3268,6 +3293,44 @@ doc.text(
       }
       addFooter();
     }
+
+    // Saved inputs are never rebuilt from defaults for a legacy report.
+    doc.addPage();
+    doc.setFont("helvetica","bold");doc.setFontSize(15);doc.setTextColor(...dark);
+    doc.text(t("Ipotesi salvate della simulazione","Saved simulation assumptions"),20,20);
+    const assumptions = readInvestmentAssumptions(fallback.assumptions);
+    const number = v => new Intl.NumberFormat(lang === "en"?"en-GB":"it-IT",{maximumFractionDigits:6}).format(v);
+    doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);
+    doc.text(doc.splitTextToSize(t("Input simulati, non dati operativi verificati. Le aliquote appartengono al modello semplificato.","Simulated inputs, not verified operating data. Tax rates belong to the simplified model."),170),20,30);
+    let assumptionsY=46;
+    if(!assumptions){
+      doc.text(doc.splitTextToSize(t("Ipotesi complete non disponibili per questa analisi salvata. Non sono ricostruite da valori predefiniti: riapri Analizza per creare uno scenario con input espliciti.","Complete assumptions are unavailable for this saved analysis. No defaults are used to reconstruct them: open Analyze to create a scenario with explicit inputs."),170),20,assumptionsY);
+    }else{
+      const rows=[
+        [t("ID analisi","Analysis ID"),String(fallback.id || "—").slice(0,80)],
+        [t("Versione calcolo","Calculation version"),assumptions.calculationVersion],
+        [t("Origine input","Input source"),assumptions.source === "owned_property"?t("Immobile già di proprietà","Already owned property"):assumptions.source === "simulator"?t("Simulatore","Simulator"):t("Anteprima home","Home preview")],
+        [assumptions.source === "owned_property"?t("Valore immobile","Property value"):t("Prezzo immobile","Property price"),assumptions.source === "owned_property" && assumptions.propertyPrice === 0 ? t("Non indicato","Not provided"):eur(assumptions.propertyPrice)],
+        [assumptions.source === "owned_property"?t("Capitale di avvio","Startup capital"):t("Capitale proprio","Equity"),eur(assumptions.equity)],
+        [t("Tariffa notte","Nightly rate"),number(assumptions.priceNight)+" EUR"],
+        [t("Occupazione","Occupancy"),number(assumptions.occupancy)+"%"],
+        [assumptions.expensesUnit === "monthly_eur"?t("Costi mensili","Monthly costs"):t("Costi (% ricavi)","Costs (% revenue)"),assumptions.expensesUnit === "monthly_eur"?eur(assumptions.expenses):number(assumptions.expenses)+"%"],
+        [t("Commissioni","Commissions"),number(assumptions.commission)+"%"],
+        [t("Aliquota del modello","Model tax rate"),number(assumptions.tax)+"%"],
+        [t("Importo mutuo","Loan amount"),eur(assumptions.loanAmount)],
+        [t("Tasso annuo","Annual interest rate"),number(assumptions.interestRate)+"%"],
+        [t("Durata mutuo","Loan term"),number(assumptions.loanYears)+t(" anni"," years")]
+      ];
+      rows.forEach(([label,value])=>{
+        doc.setFillColor(248,250,252);doc.roundedRect(20,assumptionsY-5,170,10,2,2,"F");
+        doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);doc.text(label,24,assumptionsY+1);
+        doc.setFont("helvetica","bold");doc.setTextColor(...dark);doc.text(value,186,assumptionsY+1,{align:"right"});
+        assumptionsY+=12;
+      });
+      doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);
+      doc.text(doc.splitTextToSize(t("Ricavi annui = tariffa x 365 x occupazione / 100. Costi mensili x 12. ROI equity = cashflow netto annuo / capitale proprio x 100. Il risultato dipende anche da commissioni, imposte e servizio del debito del modello; l'occupazione è costante nell'anno.","Annual revenue = nightly rate x 365 x occupancy / 100. Monthly costs x 12. Equity ROI = annual net cash flow / equity x 100. Results also depend on modeled commissions, tax and debt service; occupancy is constant throughout the year."),170),20,assumptionsY+8);
+    }
+    addFooter();
 
     // ================= REGISTER DASHBOARD REPORT =================
     if(
@@ -3325,10 +3388,12 @@ doc.text(
     }
 
     // ================= SAVE =================
+    if(window.currentUser?.uid !== reportOwnerUid || !(window.getUserAccess?.()?.isPro || window.getUserAccess?.()?.isAdmin)) return;
     doc.save(`RendimentoBB-Investimento-Gestione-${city}.pdf`);
 
   }catch(err){
-    console.error("PDF ERROR:", err);
+    (void 0);
+    alert(window.currentLang === "en" ? "Unable to generate the PDF. Please retry from the dashboard." : "Impossibile generare il PDF. Riprova dalla dashboard.");
   }
 
 }
@@ -3368,8 +3433,15 @@ function populateSimulations(){
     const opt = document.createElement("option");
     opt.value = index.toString();
 
+    // ROI on own capital is applicable only when a positive equity is known.
+    const simulationEquity = Number(sim.equity);
+    const rawROI = sim.visualROI ?? sim.roi;
+    const simulationROI = rawROI == null || rawROI === "" ? NaN : Number(rawROI);
+    const roiLabel = simulationEquity > 0 && Number.isFinite(simulationROI)
+      ? `${simulationROI.toFixed(1)}%`
+      : "N/A";
     opt.innerText =
-      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${(sim.roi || 0).toFixed(1)}%`;
+      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${roiLabel}`;
 
     select.appendChild(opt);
 
@@ -3388,13 +3460,13 @@ function init(){
   window.__reportStarted = true;
 
   if(!window.getUserAccess){
-    console.warn("⏳ Access non pronto → skip");
+    (void 0);
     return;
   }
 
   loadSimulations();
 
-  if(!Number.isFinite(price) || price <= 0){
+  if(!Number.isFinite(price) || price < 0 || (price === 0 && !ownedProperty)){
     const report = document.querySelector(".report");
     if(report){
       report.textContent = lang === "en"
@@ -3436,6 +3508,20 @@ function init(){
 // ================= START =================
 window.generatePDF = generatePDF;
 init();
+document.addEventListener("rb_language_changed", () => {
+  if(window.currentUser?.uid !== reportOwnerUid || !Number.isFinite(price) || price < 0 || (price === 0 && !ownedProperty)) return;
+  lang = window.currentLang || "it";
+  renderData();
+  renderVerdict();
+  renderOperationalReport();
+  renderChart();
+  if(isPro) renderAdvanced();
+  const selector = document.getElementById("simulationSelector");
+  const selected = selector?.value;
+  populateSimulations();
+  if(selector) selector.value = selected;
+  window.applyTranslations?.();
+});
 }
 document.addEventListener("rb_auth_ready", event => {
   startOwnedReport(event.detail?.user || window.currentUser || null);
@@ -3538,7 +3624,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261001-28" defer></script>
+<script src="/js/chatbot-loader.js?v=20261011-rc101" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3546,11 +3632,11 @@ data-en="✔ Professional PDF report">
 <script src="/js/chatbot/support-data.js" defer></script>
 
 <!-- 🤖 CHATBOT ENGINE -->
-<script src="/js/ai-engine.js" defer></script>
+<script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js"></script>
-<script src="/js/ui-system.js" defer></script>
-<script type="module" src="/js/footer.js"></script>
+<script type="module" src="/js/header.js?v=20261011-rc103"></script>
+<script src="/js/ui-system.js?v=20261011-rc99" defer></script>
+<script type="module" src="/js/footer.js?v=20261011-rc102"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import {hasFunnelConsent,funnelConfirmationURL} from "../lib/funnel-consent.js";
+import {submitWithdrawal,normalizeWithdrawal,WithdrawalError} from '../lib/withdrawal-service.js';
 // ===============================
 // 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (SILICON FINAL)
 // ===============================
@@ -39,6 +41,17 @@ const clamp = (value, min, max) => Math.min(max, Math.max(min, safe(value)));
 function isValidEmail(value){
   return value.length <= 254
     && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
+async function authenticateRegistration(req, email){
+  const bearer = String(req.headers?.authorization || '').match(/^Bearer (\S+)$/);
+  if(!bearer) return false;
+  try{
+    const identity = await admin.auth().verifyIdToken(bearer[1], true);
+    return Boolean(identity.uid) && String(identity.email || '').trim().toLowerCase() === email;
+  }catch{
+    return false;
+  }
 }
 
 function escapeHTML(value){
@@ -93,6 +106,7 @@ const RATE_LIMITS = {
   partner: { ip:5, email:2 },
   work: { ip:5, email:2 },
   auth: { ip:10, email:2 },
+  withdrawal: { ip:12, email:6 },
   generic: { ip:5, email:3 }
 };
 
@@ -210,6 +224,8 @@ function getScore({roi, type}){
 
 // ================= HANDLER =================
 export default async function handler(req, res){
+  res.setHeader("Cache-Control","no-store");
+  res.setHeader("X-Content-Type-Options","nosniff");
 
   if(req.method !== "POST"){
     return res.status(405).json({ error:"Method not allowed" });
@@ -220,6 +236,17 @@ export default async function handler(req, res){
     const bodySize = Buffer.byteLength(JSON.stringify(req.body || {}), "utf8");
     if(bodySize > 20000){
       return res.status(413).json({ error:"Payload too large" });
+    }
+
+    if(req.body?.type==='withdrawal'){
+      try{
+        const value=normalizeWithdrawal(req.body);
+        await consumeRateLimit({ip:getClientIp(req),email:value.email,type:'withdrawal'});
+        return res.status(200).json(await submitWithdrawal({db,resend,body:req.body}));
+      }catch(error){
+        if(error instanceof WithdrawalError)return res.status(error.status).json({success:false,code:error.code});
+        throw error;
+      }
     }
 
     let {
@@ -242,10 +269,12 @@ export default async function handler(req, res){
       bank,
       rate,
       years,
+      income,
       name,
       role,
       message,
-      requestId
+      requestId,
+      marketingConsent
     } = req.body || {};
 
     // ================= CLEAN =================
@@ -269,7 +298,22 @@ export default async function handler(req, res){
     phone = clean(phone, 40);
     bank = clean(bank, 100);
     rate = clean(rate, 20);
-    years = clamp(years, 0, 50);
+    years = clamp(years, 0, 100);
+    if(type === "mutui"){
+      const raw = req.body || {};
+      const amountNumber = Number(raw.price);
+      const rateNumber = raw.rate === null || raw.rate === undefined || String(raw.rate).trim() === "" ? NaN : Number(String(raw.rate).replace(/%$/, "").replace(",", "."));
+      const yearsNumber = Number(raw.years);
+      const hasIncome = raw.income !== undefined && raw.income !== null && raw.income !== "";
+      const incomeNumber = hasIncome ? Number(raw.income) : null;
+      if(!Number.isFinite(amountNumber) || amountNumber <= 0 || amountNumber > 100000000 ||
+         !Number.isFinite(rateNumber) || rateNumber < 0 || rateNumber > 100 ||
+         !Number.isInteger(yearsNumber) || yearsNumber < 1 || yearsNumber > 100 ||
+         (hasIncome && (!Number.isFinite(incomeNumber) || incomeNumber < 0 || incomeNumber > 100000000))){
+        return res.status(400).json({error:"Invalid mortgage parameters"});
+      }
+      price = amountNumber; rate = String(rateNumber); years = yearsNumber; income = incomeNumber;
+    }else{ income = null; }
     name = clean(name, 100);
     role = clean(role, 100);
     message = clean(message, 2000);
@@ -280,6 +324,12 @@ export default async function handler(req, res){
       return res.status(400).json({ error:"Invalid email" });
     }
 
+    // Public lead forms remain available; an account confirmation must be
+    // bound to the authenticated account, never a caller-supplied address.
+    if(type === 'auth' && !(await authenticateRegistration(req, email))){
+      return res.status(401).json({success:false,error:'authentication_required'});
+    }
+
     if(requestId){
       const repeatedRequest = await db
         .collection("leads")
@@ -287,6 +337,7 @@ export default async function handler(req, res){
         .limit(1)
         .get();
       if(!repeatedRequest.empty){
+        if(repeatedRequest.docs[0].data().email !== email)return res.status(409).json({success:false,error:"request_id_conflict"});
         return res.status(200).json({ success:true, duplicate:true, leadSaved:true, emailDelivery:repeatedRequest.docs[0].data().emailDelivery || {} });
       }
     }
@@ -313,6 +364,12 @@ export default async function handler(req, res){
 
     // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
+    // Only an explicitly supplied zero equity makes equity ROI inapplicable.
+    // Missing equity remains unknown; do not infer it from the cleaned default.
+    const rawEquity = req.body?.equity;
+    const roiAvailable = !((typeof rawEquity === 'number' ||
+      (typeof rawEquity === 'string' && rawEquity.trim() !== '')) && Number(rawEquity) === 0);
+    const roiDisplay = language => roiAvailable ? `${formatNumber(roiRounded,language,1)}%` : 'N/A';
     const loan = price - equity;
 
     // NOI, Cap Rate and DSCR are calculated by the canonical ROI engine.
@@ -379,6 +436,7 @@ const leadPayload = {
 bank: clean(bank || ""),
 rate: clean(rate || ""),
 years,
+income,
 name: clean(name || ""),
 role: clean(role || ""),
 message: clean(message || ""),
@@ -453,9 +511,10 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
+let reminderConfirmationURL = "";
 // Property-update requests have their own confirmation email and must not enter
 // the generic investment-analysis reminder sequence.
-if(!["immobili", "mutui", "partner", "work", "auth"].includes(type)){
+if(type === "analysis" && marketingConsent === true && process.env.CRON_SECRET && (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production")){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -464,19 +523,26 @@ const funnelQuery = await db
 
 if(funnelQuery.empty){
 
-  await db.collection("email_funnel").add({
+  const createdFunnel = await db.collection("email_funnel").add({
 
     email,
 
     city,
 
     roi: roiRounded,
+    roiAvailable,
 
     lang: detectedLang,
 
     createdAt:
     admin.firestore.FieldValue.serverTimestamp(),
 
+    consentConfirmed: false,
+    marketingConsent: true,
+    consentVersion: "analysis-reminders-v1",
+    consentSource: "roi_simulator",
+    consentAt: admin.firestore.FieldValue.serverTimestamp(),
+    unsubscribed: false,
     sentSteps: [],
 
     steps:[
@@ -500,6 +566,11 @@ if(funnelQuery.empty){
 
   });
 
+  reminderConfirmationURL=funnelConfirmationURL(createdFunnel.id,process.env.CRON_SECRET);
+}else{
+  const existing=funnelQuery.docs[0];
+  await db.collection("email_funnel").doc(existing.id).update({city,roi:roiRounded,roiAvailable,lang:detectedLang,...(!hasFunnelConsent(existing.data())?{consentConfirmed:false,marketingConsent:true,consentVersion:"analysis-reminders-v1",consentSource:"roi_simulator",consentAt:admin.firestore.FieldValue.serverTimestamp(),unsubscribed:false}:{})});
+  if(!hasFunnelConsent(existing.data()))reminderConfirmationURL=funnelConfirmationURL(existing.id,process.env.CRON_SECRET);
 }
 }
 
@@ -580,19 +651,20 @@ const userRows = [[t(detectedLang,"Email","Email"),email]];
 if(name) userRows.push([t(detectedLang,"Nome / azienda","Name / company"),name]);
 if(phone) userRows.push([t(detectedLang,"Telefono","Phone"),phone]);
 if(city !== "N/A" && !["partner","work","auth"].includes(type)) userRows.push([t(detectedLang,"Città","City"),displayCity]);
-if(role) userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]);
+if(role && type !== 'auth') userRows.push([t(detectedLang,"Profilo / ruolo","Profile / role"),role]);
 if(message) userRows.push([t(detectedLang,"Messaggio inviato","Submitted message"),message]);
 if(type === "mutui"){
   if(provided("price")) userRows.push([t(detectedLang,"Importo simulato","Modeled amount"),formatMoney(price,detectedLang)]);
+  if(provided("income") && income !== null) userRows.push([t(detectedLang,"Ricavi annui ipotizzati","Assumed annual revenue"),formatMoney(income,detectedLang)]);
   if(years) userRows.push([t(detectedLang,"Durata","Term"),`${years} ${t(detectedLang,"anni","years")}`]);
   if(rate) userRows.push([t(detectedLang,"Tasso ipotizzato","Assumed rate"),`${rate}%`]);
-  if(bank) userRows.push([t(detectedLang,"Banca indicata","Selected bank"),bank]);
+  if(bank) userRows.push([t(detectedLang,"Scenario selezionato","Selected scenario"),bank]);
 }
 if(showInvestmentResults){
   for(const [key,label,enLabel,val] of [
     ["price","Prezzo immobile","Property price",formatMoney(price,detectedLang)],
     ["equity","Capitale proprio","Equity",formatMoney(equity,detectedLang)],
-    ["roi","ROI stimato","Estimated ROI",`${formatNumber(roiRounded,detectedLang,1)}%`],
+    ["roi","ROI stimato","Estimated ROI",roiDisplay(detectedLang)],
     ["profit","Cashflow / profitto annuo simulato","Modeled annual cash flow / profit",formatMoney(profit, detectedLang)],
     ["noi","Reddito operativo netto simulato","Modeled net operating income",formatMoney(noi,detectedLang)],
     ["annualDebtService","Rate annue simulate","Modeled annual debt service",formatMoney(annualDebtService,detectedLang)],
@@ -600,17 +672,18 @@ if(showInvestmentResults){
   ]) if(provided(key)) userRows.push([t(detectedLang,label,enLabel),val]);
 }
 const userMail = buildBrandedEmail({lang:detectedLang,title:userHeading,intro:userDescription.replaceAll(htmlCity,displayCity),rows:userRows,
-  note:showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
+  note:type === 'auth'?t(detectedLang,"Accedi con l’indirizzo con cui ti sei registrato. La verifica dell’email e l’eventuale attivazione della prova Investor sono passaggi separati: questa conferma non attiva un abbonamento.","Sign in with the address you registered. Email verification and any Investor trial activation are separate steps: this confirmation does not activate a subscription."):showInvestmentResults?t(detectedLang,"Dati di simulazione, non risultati operativi verificati. Controlla costi, occupazione e debito prima di decidere.","Simulation figures, not verified operating results. Review costs, occupancy and debt before deciding."):t(detectedLang,"Conserva questo riepilogo della richiesta. Puoi rispondere a questa email per aggiungere informazioni; non implica approvazione o accettazione della proposta.","Keep this request summary. Reply to this email to add information; it does not imply approval or acceptance."),
+  secondaryLabel:reminderConfirmationURL?t(detectedLang,"Conferma i promemoria facoltativi","Confirm optional reminders"):undefined,secondaryURL:reminderConfirmationURL || undefined,
   ctaLabel,ctaURL:cta,eyebrow:t(detectedLang,"Conferma richiesta","Request confirmation")});
 
 // ================= SUBJECT =================
 
 let subject = t(
   detectedLang,
-  roiRounded > 0
+  roiAvailable && roiRounded > 0
     ? `📈 Analisi completata • ROI ${formatNumber(roiRounded, "it", 1)}%`
     : "📊 La tua analisi è pronta",
-  roiRounded > 0
+  roiAvailable && roiRounded > 0
     ? `📈 Analysis completed • ROI ${formatNumber(roiRounded, "en", 1)}%`
     : "📊 Your analysis is ready"
 );
@@ -751,7 +824,7 @@ const adminSubject = isPartnerLead
         ? `🏠 RICHIESTA AGGIORNAMENTI IMMOBILIARI | ${displayCity}`
       : isMortgageLead
         ? `🏦 RICHIESTA MUTUO | ${price > 0 ? formatMoney(price, "it") : "IMPORTO NON INDICATO"} | ${email}`
-    : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
+    : `${leadTitle} | ${displayCity} | ROI ${roiDisplay("it")} | €${value} | ${type.toUpperCase()}`;
 
 const adminSuggestion = isPartnerLead
   ? "Valutare la proposta commerciale e ricontattare il referente entro un giorno lavorativo."
@@ -773,7 +846,7 @@ const adminSuggestion = isPartnerLead
 
 const adminRows = [["Email",email],["Tipo richiesta",type.toUpperCase()],["Nome / azienda",name||"Non indicato"],["Telefono",phone||"Non indicato"],["Città",["partner","work","auth"].includes(type)?"Non indicata":displayCity],["Provenienza",source],["Funnel",funnel === "unknown"?"Non indicato":funnel],["Lingua utente",detectedLang.toUpperCase()],["Profilo / ruolo",role||"Non indicato"],["Messaggio",message||"Non indicato"]];
 if(!isOperationalLead){
-  adminRows.push(["ROI",`ROI ${formatNumber(roiRounded, "it", 1)}%`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
+  adminRows.push(["ROI",`ROI ${roiDisplay("it")}`],["Prezzo immobile",provided("price")?formatMoney(price,"it"):"Non indicato"],["Capitale proprio",provided("equity")?formatMoney(equity,"it"):"Non indicato"],["Cashflow / profitto annuo simulato",provided("profit")?formatMoney(profit, "it"):"Non indicato"],["NOI simulato",provided("noi")?formatMoney(noi,"it"):"Non indicato"],["Rate annue simulate",provided("annualDebtService")?formatMoney(annualDebtService,"it"):"Non indicato"],["DSCR",provided("dscr")?formatNumber(canonicalDSCR, "it", 2):"Non indicato"],["Priorità",score.toUpperCase()],["Valore lead convenzionale",`${formatMoney(value,"it")} · indice interno, non ricavo`]);
 }
 if(isMortgageLead)adminRows.push(["Importo simulato",formatMoney(price,"it")],["Durata",`${years} anni`],["Tasso ipotizzato",rate?`${rate}%`:"Non indicato"],["Banca",bank||"Non indicato"]);
 const adminMail=buildBrandedEmail({lang:"it",title:leadTitle,intro:"Nuovo lead acquisito da RendimentoBB",rows:adminRows.filter(([,value]) => value !== "Non indicato" && value !== "Non indicata" && value !== "unknown" && value !== null && value !== undefined && value !== ""),note:`Suggerimento operativo: ${adminSuggestion}`,ctaLabel:"Apri Dashboard",ctaURL:"https://rendimentobb.it/dashboard-leads/",secondaryLabel:"Contatta Lead",secondaryURL:`mailto:${encodeURIComponent(email)}`,eyebrow:"Centro gestione lead · Admin"});
