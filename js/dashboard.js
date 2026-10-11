@@ -5,7 +5,7 @@ import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
-import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
+import {createPMSApiClient} from "./pms-api-client.js?v=20261011-rc105";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
@@ -460,6 +460,7 @@ function renderBookingTaskTracking(booking=window.currentSelectedBooking){
 
 function bookingOperationError(error){
   const messages = {
+    "booking/server_unavailable": ["Servizio PMS temporaneamente non disponibile. Riprova con gli stessi dati; se il problema persiste contatta il supporto.", "PMS service temporarily unavailable. Retry with the same data; contact support if the problem persists."],
     "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
     "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
     "booking/stale_task": ["I dati dell’attività sono cambiati. Aggiorna le prenotazioni.", "Task details changed. Refresh bookings."],
@@ -6191,6 +6192,9 @@ const data =
 
 const investment =
   data.investmentSnapshot || null;
+const linkedInvestment = (window.dashboardSimulations || []).find(item => item.id === data.analysisId);
+const investmentOwned = linkedInvestment?.propertyMode === "owned" || linkedInvestment?.assumptions?.source === "owned_property";
+const investmentROIAvailable = investment && Number.isFinite(Number(investment.equity)) && Number(investment.equity) > 0 && Number.isFinite(Number(investment.roi));
 
 const renovation =
   data.renovationPlan || null;
@@ -6439,10 +6443,10 @@ flex-wrap:wrap;
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
     <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
-      ROI ${formatPercent(investment.roi)}
+      ${investmentOwned ? t("ROI di avvio", "Startup ROI") : "ROI"} ${investmentROIAvailable ? formatPercent(investment.roi) : "N/A"}
     </span>
     <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
-      ${t("Equity", "Equity")} ${formatCurrency(investment.equity)}
+      ${investmentOwned ? t("Capitale di avvio", "Startup capital") : t("Capitale indicato", "Entered capital")} ${formatCurrency(investment.equity)}
     </span>
   </div>
 </div>

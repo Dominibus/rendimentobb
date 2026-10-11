@@ -40,3 +40,17 @@ test('user change cannot reuse previous account request identity',async()=>{
   const mutate=createPMSApiClient({getUser:()=>current,cryptoImpl:webcrypto,fetchImpl:async(url,req)=>{ids.push(JSON.parse(req.body).requestId);throw Error('offline');}});
   await assert.rejects(mutate('save',{}));current={...user,uid:'u2'};await assert.rejects(mutate('save',{}));assert.notEqual(ids[0],ids[1]);
 });
+test('HTML server failure is actionable and keeps the deletion identity for retry',async()=>{
+  const ids=[];let fail=true;
+  const mutate=createPMSApiClient({getUser:()=>user,cryptoImpl:webcrypto,fetchImpl:async(url,request)=>{
+    ids.push(JSON.parse(request.body).requestId);
+    if(fail)return {ok:false,status:500,json:async()=>{throw new SyntaxError('private HTML diagnostic');}};
+    return reply({success:true});
+  }});
+  await assert.rejects(mutate('delete_property',{propertyId:'p1'}),error=>error.code==='booking/server_unavailable' && !error.message.includes('private'));
+  fail=false;await mutate('delete_property',{propertyId:'p1'});assert.equal(ids[0],ids[1]);
+});
+test('malformed successful response remains uncertain rather than claiming a deletion',async()=>{
+  const mutate=createPMSApiClient({getUser:()=>user,cryptoImpl:webcrypto,fetchImpl:async()=>({ok:true,status:200,json:async()=>{throw Error('invalid');}})});
+  await assert.rejects(mutate('delete_property',{propertyId:'p1'}),error=>error.code==='booking/write_uncertain');
+});

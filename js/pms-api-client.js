@@ -21,7 +21,13 @@ export function createPMSApiClient({getUser, fetchImpl = globalThis.fetch, crypt
         method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},
         body:JSON.stringify({...body,requestId})
       });
-      const result = await response.json();
+      let result;
+      try{ result = await response.json(); }
+      catch{
+        const error = new Error(response.ok ? 'write_uncertain' : 'server_unavailable');
+        error.code = response.ok ? 'booking/write_uncertain' : 'booking/server_unavailable';
+        throw error;
+      }
       if(!response.ok || result.success !== true){
         const error=new Error(result.error || 'server_unavailable'); error.code=`booking/${result.error || 'server_unavailable'}`; throw error;
       }

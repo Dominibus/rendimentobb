@@ -5947,10 +5947,7 @@ doc.setFontSize(11);
 doc.setTextColor(...gray);
 
 doc.text(
-  T(
-    "ROI stimato sul capitale proprio",
-    "Estimated equity ROI"
-  ),
+  (isOwnedProperty ? T("ROI stimato sul capitale di avvio", "Estimated startup ROI") : T("ROI stimato sul capitale proprio", "Estimated equity ROI")),
   22,
   165
 );
