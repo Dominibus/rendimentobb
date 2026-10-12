@@ -1930,7 +1930,7 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261012-rc106" defer></script>
+<script src="/js/chatbot-loader.js?v=20261012-rc107" defer></script>
   
 <script type="module" src="/js/header.js?v=20261012-rc106"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
@@ -2020,19 +2020,19 @@ window.updateInvestmentScore = function(score){
     : safeScore >= 75
       ? (
           lang === "en"
-            ? "Buy recommended"
-            : "Acquisto consigliato"
+            ? "Favorable scenario under assumptions"
+            : "Scenario favorevole nelle ipotesi"
         )
       : safeScore > 40
         ? (
             lang === "en"
-              ? "Wait and optimize"
-              : "Attendere e ottimizzare"
+              ? "Scenario needs optimization"
+              : "Scenario da ottimizzare"
           )
         : (
             lang === "en"
-              ? "Investment not recommended"
-              : "Operazione non consigliata"
+              ? "Scenario needs review"
+              : "Scenario da rivedere"
           );
 
   const gradeColor =

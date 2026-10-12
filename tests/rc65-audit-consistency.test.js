@@ -22,7 +22,7 @@ test('annual shared header has Dashboard, badge and logout from resolved access'
 test('risk hero uses the same 40 and 65 boundaries as the PDF',()=>{
  const src=read('dashboard-report/index.html');const start=src.indexOf('  riskHero.innerText =');const end=src.indexOf('\n}',start);const expression=src.slice(start,end);
  for(const [risk,expected] of [[0,'BASSO'],[33,'BASSO'],[39,'BASSO'],[40,'MEDIO'],[64,'MEDIO'],[65,'ALTO'],[100,'ALTO']]){
-  const riskHero={};vm.runInNewContext(expression,{riskHero,risk,lang:'it'});assert.equal(riskHero.innerText,expected);
+  const riskHero={};vm.runInNewContext(expression,{riskHero,risk,equity:30000,lang:'it'});assert.equal(riskHero.innerText,expected);
  }
 });
 test('duplicate Firebase module evaluation keeps the loaded annual state and one observer',()=>{
