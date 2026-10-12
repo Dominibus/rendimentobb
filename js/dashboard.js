@@ -1,3 +1,4 @@
+import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
@@ -11,7 +12,7 @@ import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBo
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
 import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
-import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261009-rc76";
+import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261012-rc110";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
@@ -6424,7 +6425,7 @@ flex-wrap:wrap;
     </span>
   </div>
 </div>
-` : ""}
+` : propertyFinancialGuidanceHTML(docItem.id, window.currentLang)}
 
 ${renovation ? `
 <div style="margin-bottom:18px;padding:14px 16px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
