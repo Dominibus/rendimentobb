@@ -9124,30 +9124,30 @@ if(advisor){
   if(executiveDecision === "BUY"){
 
     verdictIT =
-      "🟢 VERDETTO AI: INVESTIMENTO CONSIGLIATO";
+      "🟢 ESITO DEL MODELLO: SCENARIO FAVOREVOLE NELLE IPOTESI";
 
     verdictEN =
-      "🟢 AI VERDICT: RECOMMENDED INVESTMENT";
+      "🟢 MODEL ASSESSMENT: FAVORABLE SCENARIO UNDER ASSUMPTIONS";
 
   }
 
   else if(executiveDecision === "WAIT"){
 
     verdictIT =
-      "🟡 VERDETTO AI: ATTENDERE O OTTIMIZZARE";
+      "🟡 ESITO DEL MODELLO: SCENARIO DA OTTIMIZZARE";
 
     verdictEN =
-      "🟡 AI VERDICT: WAIT OR OPTIMIZE";
+      "🟡 MODEL ASSESSMENT: SCENARIO NEEDS OPTIMIZATION";
 
   }
 
   else{
 
     verdictIT =
-      "🔴 VERDETTO AI: INVESTIMENTO NON CONSIGLIATO";
+      "🔴 ESITO DEL MODELLO: SCENARIO DA RIVEDERE";
 
     verdictEN =
-      "🔴 AI VERDICT: NOT RECOMMENDED";
+      "🔴 MODEL ASSESSMENT: SCENARIO NEEDS REVIEW";
 
   }
 
@@ -12805,13 +12805,13 @@ if(response.type === "mortgage"){
 if(response.type === "executive"){
 
   response.suggestionsIT.push(
-    "Confrontare benchmark reali",
+    "Chiarire i riferimenti illustrativi",
     "Analizzare scenario pessimistico",
     "Ottimizzare redditività"
   );
 
   response.suggestionsEN.push(
-    "Compare real benchmarks",
+    "Explain the illustrative references",
     "Analyze pessimistic scenario",
     "Optimize profitability"
   );

@@ -635,12 +635,12 @@ case "cashflow":
     else{
 
         result.summaryIT =
-            "Il cashflow positivo dimostra che l'immobile è in grado di generare liquidità, contribuendo alla sostenibilità economica dell'investimento.";
+            "Il cashflow stimato è positivo nelle ipotesi inserite; non dimostra incassi effettivi o sostenibilità futura.";
 
     }
 
     result.summaryEN =
-        "The simulation highlights a good ability to generate liquidity thanks to positive cashflow.";
+        "Estimated cashflow is positive under the inputs; this does not establish actual receipts or future sustainability.";
 
     break;
 
@@ -691,10 +691,10 @@ case "cashflow":
 default:
 
     result.explanationIT =
-        "Non emergono elementi critici tali da compromettere l'equilibrio dell'investimento, anche se alcuni aspetti meritano comunque monitoraggio nel tempo.";
+        "Gli indicatori disponibili non rappresentano una verifica completa: restano da controllare costi, dati effettivi e rischi non inclusi nel modello.";
 
     result.explanationEN =
-        "No critical issues emerge that would compromise the investment balance, although some aspects should continue to be monitored over time.";
+        "The available indicators are not a complete assessment: actual costs, data and risks outside the model still need checking.";
 
 }
 
@@ -727,10 +727,10 @@ switch(strongestPoint){
     case "cashflow":
 
         result.strongestPointIT =
-            "Il cashflow positivo garantisce una buona sostenibilità economica.";
+            "Il cashflow stimato positivo è un elemento favorevole da verificare con costi effettivi e scenari prudenti.";
 
         result.strongestPointEN =
-            "Positive cashflow provides strong financial sustainability.";
+            "Positive estimated cashflow is a favorable factor to check against actual costs and conservative scenarios.";
 
         break;
 

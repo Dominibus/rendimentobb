@@ -52,6 +52,13 @@ function getExecutiveFinancialData(
 // 🧱 VERDICT BLOCK
 // ===============================================
 
+function rbExecutiveVerdictLabel(verdict, lang = "it") {
+    const labels = lang === "en"
+      ? {BUY:"Favorable scenario under assumptions",WAIT:"Scenario needs optimization",NO_BUY:"Scenario needs review",AVOID:"Scenario needs review"}
+      : {BUY:"Scenario favorevole nelle ipotesi",WAIT:"Scenario da ottimizzare",NO_BUY:"Scenario da rivedere",AVOID:"Scenario da rivedere"};
+    return labels[verdict] || (lang === "en" ? "Assessment unavailable" : "Valutazione non disponibile");
+}
+
 function buildVerdictBlock(advisor){
 
     if(!advisor){
@@ -98,19 +105,11 @@ const verdict =
 
         it:
 
-`${icon} VERDETTO AI: ${
-    advisor?.verdictIT ||
-     verdict ||
-    "-"
-}`,
+`${icon} ESITO DEL MODELLO: ${rbExecutiveVerdictLabel(verdict, "it")}`,
 
         en:
 
-`${icon} AI VERDICT: ${
-    advisor?.verdictEN ||
-      verdict ||
-    "-"
-}`
+`${icon} MODEL ASSESSMENT: ${rbExecutiveVerdictLabel(verdict, "en")}`
 
     };
 
@@ -600,10 +599,10 @@ if(isConvenienceQuestion){
     if(verdict === "BUY"){
 
         openingIT =
-            "Sì. Sulla base della simulazione, l'investimento presenta condizioni favorevoli per procedere.";
+            "Lo scenario è favorevole nelle ipotesi inserite. Non è una verifica dell'immobile né una raccomandazione di acquisto.";
 
         openingEN =
-            "Yes. Based on the simulation, the investment shows favorable conditions to proceed.";
+            "The scenario is favorable under the inputs. This is not a property verification or purchase recommendation.";
 
     }
     else if(verdict === "NO_BUY"){
@@ -669,7 +668,7 @@ if(isConvenienceQuestion){
     blocksEN.length = 0;
 
     blocksIT.push(
-`${verdict === "BUY" ? "🟢" : verdict === "NO_BUY" ? "🔴" : "🟡"} VERDETTO AI: ${verdict}
+`${verdict === "BUY" ? "🟢" : verdict === "NO_BUY" ? "🔴" : "🟡"} ESITO DEL MODELLO: ${rbExecutiveVerdictLabel(verdict, "it")}
 
 ${openingIT}
 
@@ -693,7 +692,7 @@ ${executiveBrain?.strongestPointIT || "La combinazione tra rendimento, rischio e
     );
 
     blocksEN.push(
-`${verdict === "BUY" ? "🟢" : verdict === "NO_BUY" ? "🔴" : "🟡"} AI VERDICT: ${verdict}
+`${verdict === "BUY" ? "🟢" : verdict === "NO_BUY" ? "🔴" : "🟡"} MODEL ASSESSMENT: ${rbExecutiveVerdictLabel(verdict, "en")}
 
 ${openingEN}
 
@@ -1483,6 +1482,48 @@ ${improvesScenario
 // ===============================================
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
+
+// Owned-property assessment uses only the available simulation values, without purchase advice.
+const ownedAssessment = liveData.propertyMode === "owned" || liveData.assumptions?.source === "owned_property";
+if (ownedAssessment && (context.isExecutive || context.isStrategy)) {
+    const valid = value => value != null && value !== "" && Number.isFinite(Number(value));
+    const rawCashflow = liveData.net ?? liveData.netAfterMortgage ?? liveData.cashflow ?? liveData.annualProfit;
+    const rawCapital = liveData.equity ?? liveData.assumptions?.equity;
+    const rawROI = liveData.roi;
+    const rawRisk = liveData.risk ?? liveData.riskScore;
+    const rawScore = liveData.investmentScore ?? investmentScore?.score;
+    const cashAvailable = valid(rawCashflow);
+    const roiAvailable = valid(rawCapital) && Number(rawCapital) > 0 && liveData.roiAvailable !== false && valid(rawROI);
+    const cashIT = cashAvailable ? Number(rawCashflow).toLocaleString("it-IT",{style:"currency",currency:"EUR"}) : "Non disponibile";
+    const cashEN = cashAvailable ? Number(rawCashflow).toLocaleString("en-GB",{style:"currency",currency:"EUR"}) : "Unavailable";
+    const scoreText = valid(rawScore) ? Math.round(Number(rawScore)) + "/100" : "N/A";
+    const riskText = valid(rawRisk) ? Math.round(Number(rawRisk)) + "/100" : "N/A";
+    const statusIT = !cashAvailable ? "Dati insufficienti" : Number(rawCashflow) > 0 ? "Cashflow positivo nelle ipotesi" : Number(rawCashflow) < 0 ? "Cashflow negativo nelle ipotesi" : "Cashflow nullo nelle ipotesi";
+    const statusEN = !cashAvailable ? "Insufficient data" : Number(rawCashflow) > 0 ? "Positive cashflow under assumptions" : Number(rawCashflow) < 0 ? "Negative cashflow under assumptions" : "Zero cashflow under assumptions";
+    blocksIT.length = 0; blocksEN.length = 0;
+    blocksIT.push(`ESITO DEL MODELLO DI GESTIONE: ${statusIT}
+
+Immobile già posseduto: non è una raccomandazione di acquisto.
+Cashflow annuo stimato: ${cashIT}
+ROI sul capitale di avvio: ${roiAvailable ? Number(rawROI).toLocaleString("it-IT",{maximumFractionDigits:1}) + "%" : "N/A"}
+Indice dello scenario: ${scoreText}
+Indice rischio del modello: ${riskText}${roiAvailable ? "" : " — parziale: componente ROI esclusa o non disponibile"}
+
+Il risultato dipende da tariffa, occupazione, costi, commissioni, aliquota del modello ed eventuale mutuo residuo. Con capitale di avvio zero il ROI e il recupero del capitale non sono applicabili. Il valore della casa è escluso dal capitale di avvio.
+
+Il cashflow è una stima, non un incasso verificato né una garanzia di sostenibilità. L'indice non misura tutti i rischi dell'immobile. Verifica i costi effettivi e confronta uno scenario con ricavi inferiori prima di decidere.`);
+    blocksEN.push(`MANAGEMENT MODEL ASSESSMENT: ${statusEN}
+
+Already-owned property: this is not a purchase recommendation.
+Estimated annual cashflow: ${cashEN}
+Return on startup capital: ${roiAvailable ? Number(rawROI).toLocaleString("en-GB",{maximumFractionDigits:1}) + "%" : "N/A"}
+Scenario score: ${scoreText}
+Model risk index: ${riskText}${roiAvailable ? "" : " — partial: ROI component excluded or unavailable"}
+
+The result depends on nightly rate, occupancy, costs, commissions, the model tax rate and any remaining mortgage. With zero startup capital, ROI and capital payback are not applicable. The property value is excluded from startup capital.
+
+Cashflow is an estimate, not verified receipts or a guarantee of sustainability. The index does not cover all property risks. Check actual costs and compare a lower-revenue scenario before deciding.`);
+}
 
 textIT =
     blocksIT
