@@ -9,5 +9,9 @@
     "@firebase/rules-unit-testing": "5.0.2",
     "firebase": "12.1.0",
     "firebase-tools": "14.27.0"
+  },
+  "overrides": {
+    "tar": "7.5.22",
+    "@grpc/grpc-js": "1.14.6"
   }
 }

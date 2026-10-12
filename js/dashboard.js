@@ -1,3 +1,4 @@
+import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
@@ -15,7 +16,7 @@ import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js?v=20261011-rc99";
+import { app } from "./firebase-init.js?v=20261012-rc106";
 
 // 🔥 FIRESTORE
 import {
@@ -33,6 +34,7 @@ doc,
 addDoc,
 updateDoc,
 writeBatch,
+runTransaction,
 serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -3171,13 +3173,13 @@ if(!window.currentUser){
 
 const ref = doc(db,"analyses",id);
 
-const snap = await getDoc(ref);
-
-
-
-await deleteDoc(
-  doc(db,"analyses",id)
-);
+await runTransaction(db,async tx=>{
+  const snap=await tx.get(ref);
+  if(!snap.exists())return;
+  if(snap.data().uid!==window.currentUser.uid)throw Error("ANALYSIS_OWNER_MISMATCH");
+  if(snap.data().propertyId)throw Error("ANALYSIS_LINKED");
+  tx.delete(ref);
+});
 
 
 
@@ -3189,6 +3191,8 @@ await loadDashboard();
 
 }catch(err){
 
+  if(err.message!=="ANALYSIS_LINKED")alert(t("Eliminazione non confermata. Ricarica la dashboard per verificare lo stato prima di riprovare.","Deletion not confirmed. Reload the dashboard to check the current state before retrying."));
+  if(err.message==="ANALYSIS_LINKED")alert(t("Questa analisi è collegata a una proprietà. Scollegala da Modifica immobile prima di eliminarla.","This analysis is linked to a property. Unlink it in Edit property before deleting it."));
   dashboardError(
     "Delete error:",
     err
@@ -5957,50 +5961,19 @@ window.saveProperty = async function(){
       return;
     }
 
-    const batch = writeBatch(db);
-    const propertyRef = editingPropertyId
-      ? doc(db, "properties", editingPropertyId)
-      : doc(collection(db, "properties"));
-
-    if(!editingPropertyId) propertyData.createdAt = serverTimestamp();
-    batch.set(propertyRef, propertyData, { merge: Boolean(editingPropertyId) });
-
-    if(editingPropertyId){
-      const previousSnap = await getDoc(propertyRef);
-      const previousAnalysisId = previousSnap.exists()
-        ? previousSnap.data().analysisId
-        : null;
-
-      if(previousAnalysisId && previousAnalysisId !== linkedAnalysis.id){
-        batch.update(
-          doc(db, "analyses", previousAnalysisId),
-          { isPortfolio: false, propertyId: null }
-        );
-      }
-    }
-
-    batch.update(
-      doc(db, "analyses", linkedAnalysis.id),
-      { isPortfolio: true, propertyId: propertyRef.id }
-    );
-    await batch.commit();
+    const propertyRef = editingPropertyId ? doc(db,"properties",editingPropertyId) : doc(collection(db,"properties"));
+    if(!editingPropertyId)propertyData.createdAt=serverTimestamp();
+    await saveLinkedProperty({
+      runTransaction:callback=>runTransaction(db,callback),
+      propertyRef,analysisRef:doc(db,"analyses",linkedAnalysis.id),
+      analysisRefForId:id=>doc(db,"analyses",id),uid:window.currentUser.uid,propertyData,isNewProperty:!editingPropertyId
+    });
   }else if(editingPropertyId){
-    const propertyRef = doc(db, "properties", editingPropertyId);
-    const previousSnap = await getDoc(propertyRef);
-    const previousAnalysisId = previousSnap.exists()
-      ? previousSnap.data().analysisId
-      : null;
-    const batch = writeBatch(db);
-    batch.set(propertyRef, propertyData, { merge: true });
-
-    if(previousAnalysisId){
-      batch.update(
-        doc(db, "analyses", previousAnalysisId),
-        { isPortfolio: false, propertyId: null }
-      );
-    }
-
-    await batch.commit();
+    await saveUnlinkedProperty({
+      runTransaction:callback=>runTransaction(db,callback),
+      propertyRef:doc(db,"properties",editingPropertyId),analysisRefForId:id=>doc(db,"analyses",id),
+      uid:window.currentUser.uid,propertyData
+    });
   }else{
     propertyData.createdAt = serverTimestamp();
     await addDoc(collection(db, "properties"), propertyData);
@@ -6037,6 +6010,7 @@ window.saveProperty = async function(){
 
   }catch(err){
 
+    alert(err.code==="property/analysis_already_linked" ? t("Analisi già collegata a un’altra proprietà. Aggiorna la dashboard e scegli un’analisi diversa.","Analysis already linked to another property. Refresh the dashboard and select a different analysis.") : t("Immobile non salvato. Verifica la connessione, aggiorna la dashboard e riprova.","Property not saved. Check your connection, refresh the dashboard and retry."));
     dashboardError(
       "PROPERTY SAVE ERROR:",
       err

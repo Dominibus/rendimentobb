@@ -5,9 +5,9 @@ import vm from 'node:vm';
 import {OFFERS,activeTrial,timestampMillis} from '../js/subscription-offer.js';
 import {getBillingPlanForScope,isSandboxHost} from '../js/account-plan.js';
 const source=fs.readFileSync(new URL('../js/subscription-ui.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
-function render(plan,lang='it',trial=false,sandbox=false){
+function render(plan,lang='it',trial=false,sandbox=false,manual=false){
  const now=Date.now(),prefix=sandbox?'sandboxTrial':'trial';
- const data={plan,sandboxPlan:plan,stripeLiveMode:true};
+ const data={plan,sandboxPlan:plan,stripeLiveMode:true,...(!manual?{stripeCustomerId:"cus_live",sandboxStripeCustomerId:"cus_test"}:{})};
  if(trial)Object.assign(data,{[`${prefix}StartedAt`]:new Date(now-1000),[`${prefix}EndsAt`]:new Date(now+86400000)});
  const nodes=[];
  const document={body:{append(){}},createElement(tag){const el={tag,textContent:'',style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){}};nodes.push(el);return el;}};
@@ -29,3 +29,5 @@ for(const lang of ['it','en']){
   });
  }
 }
+
+for(const lang of ['it','en'])test(`${lang}: manual paid plan has explanation instead of unavailable Stripe action`,()=>{const text=render('pro_yearly',lang,false,false,true);assert.match(text,/Piano assegnato direttamente|Directly assigned plan/);assert.doesNotMatch(text,/Gestisci rinnovo e fatture su Stripe|Manage renewal and invoices on Stripe/);});

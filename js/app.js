@@ -5,7 +5,7 @@ import "./investment-journey.js?v=20261008-rc60";
 // ===============================================
 // ================= FIRESTORE ================
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
-import { calculateROI } from "./roi-engine.js?v=20261011-rc99";
+import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
@@ -25,7 +25,7 @@ renderExecutiveKPI
 import {
 calculateMortgage,
 compareMortgages as compareMortgagesEngine
-} from "./mortgage-engine.js?v=20261011-rc99";
+} from "./mortgage-engine.js?v=20261012-rc106";
 
 
 import {
@@ -35,7 +35,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js?v=20261011-rc99";
+import { app } from "./firebase-init.js?v=20261012-rc106";
 const db = getFirestore(app);
 
 let roiChartInstance = null;
@@ -1782,6 +1782,8 @@ function renderRiskMeter(riskScore){
     icon = "🔴";
   }
 
+  const partialRisk = (window.lastAnalysisData?.propertyMode === "owned" || window.lastAnalysisData?.assumptions?.source === "owned_property") && Number(window.lastAnalysisData?.equity) <= 0;
+  if(partialRisk){label=t("Rischio modello: parziale","Model risk: partial");color="#64748b";icon="⚪";}
   container.innerHTML = `
 
   <div style="
@@ -6062,7 +6064,9 @@ doc.text(String(investmentScore),28,249);
 doc.text(pdfVerdictLabel,82,249);
 
 doc.text(
-  riskScore < 40
+  isOwnedProperty && equity <= 0
+    ? T("Parziale","Partial")
+    : riskScore < 40
     ? T("Basso","Low")
     : riskScore < 65
       ? T("Moderato","Moderate")
@@ -6684,7 +6688,9 @@ doc.text(
 y += 15;
 
 const riskLabel =
-  riskScore < 40
+  isOwnedProperty && equity <= 0
+  ? T("Rischio modello: parziale","Model risk: partial")
+  : riskScore < 40
   ? T("Rischio basso","Low risk")
   : riskScore < 65
   ? T("Rischio moderato","Moderate risk")
@@ -6711,7 +6717,7 @@ const pdfRiskBreakdown = d.riskBreakdown || null;
 const pdfRiskDetails = pdfRiskBreakdown
   ? [
       `${T("Base prudenziale","Prudential base")} +${safe(pdfRiskBreakdown.base)}`,
-      equity > 0 ? `${T("ROI equity","Equity ROI")} +${safe(pdfRiskBreakdown.roi)}` : T("ROI equity: N/A, componente esclusa", "Equity ROI: N/A, component excluded"),
+      equity > 0 ? `${isOwnedProperty ? T("ROI di avvio","Startup ROI") : T("ROI equity","Equity ROI")} +${safe(pdfRiskBreakdown.roi)}` : (isOwnedProperty ? T("ROI di avvio: N/A, componente esclusa", "Startup ROI: N/A, component excluded") : T("ROI equity: N/A, componente esclusa", "Equity ROI: N/A, component excluded")),
       `${T("Occupazione","Occupancy")} +${safe(pdfRiskBreakdown.occupancy)}`,
       `${T("Leva LTV","LTV leverage")} +${safe(pdfRiskBreakdown.leverage)}`,
       `${T("Copertura DSCR","DSCR coverage")} +${safe(pdfRiskBreakdown.debtCoverage)}`,

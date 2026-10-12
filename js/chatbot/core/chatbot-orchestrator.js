@@ -9,6 +9,15 @@
 
 // Product limits take priority over document, PMS and general knowledge routes.
 // A question about an external action must never be answered as if it happened.
+// Privacy refusal runs before PMS, portfolio and document routes.
+window.rbBuildAccountPrivacyResponse = function(message){
+ const q=String(message || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+ const thirdParty=/(?:un |di |dell[’']|da |per )?(?:altro|altrui|altri)\s*(?:account|utente|utenti|cliente|clienti|ospite|ospiti)|(?:another|other|someone else'?s)\s*(?:account|user|users|customer|customers|client|guest)|dati altrui|other people/.test(q);
+ const access=/(prenot|booking|email|e-mail|dati|data|account|indirizz|address|portfolio|patrimonio|immobil|propert|report|password|token|credenzial)/.test(q);
+ if(!thirdParty || !access)return null;
+ return {type:'account_privacy',confidence:1,actions:[],metadata:{source:'account_boundary'},textIT:'Non posso accedere o mostrare dati di altri account. Posso aiutarti soltanto con i dati caricati e autorizzati del tuo account. Non ho consultato né modificato dati altrui.',textEN:'I cannot access or show other accounts’ data. I can help only with the loaded, authorized data from your account. I have not accessed or changed anyone else’s data.'};
+};
+
 window.rbBuildProductLimitsResponse = function(message){
   const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagno|guadagni)\b/.test(q);
@@ -36,6 +45,9 @@ async function(message){
 
       (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
+
+    const privacyResponse = window.rbBuildAccountPrivacyResponse(text);
+    if(privacyResponse)return {success:true,response:privacyResponse,intent:{intent:'account_privacy'}};
 
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};

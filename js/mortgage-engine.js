@@ -31,9 +31,8 @@ if(monthlyRate === 0){
 }
 
 const monthlyPayment =
-principal *
-(monthlyRate * Math.pow(1 + monthlyRate, months)) /
-(Math.pow(1 + monthlyRate, months) - 1);
+// log1p/expm1 preserve precision near zero and avoid overflow at high rates.
+principal * monthlyRate / -Math.expm1(-months * Math.log1p(monthlyRate));
 
 const yearlyCost = monthlyPayment * 12;
 
@@ -73,9 +72,8 @@ if(monthlyRate === 0){
 }
 
 const monthlyPayment =
-principal *
-(monthlyRate * Math.pow(1 + monthlyRate, months)) /
-(Math.pow(1 + monthlyRate, months) - 1);
+// log1p/expm1 preserve precision near zero and avoid overflow at high rates.
+principal * monthlyRate / -Math.expm1(-months * Math.log1p(monthlyRate));
 
 const totalPaid = monthlyPayment * months;
 

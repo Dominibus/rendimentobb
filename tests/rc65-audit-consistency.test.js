@@ -1,3 +1,4 @@
+import {isVerifiedAdministrator} from '../js/auth-safety.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -28,7 +29,7 @@ test('duplicate Firebase module evaluation keeps the loaded annual state and one
  const src=read('js/firebase-init.js');const start=src.indexOf('if(!window.__rbFirebaseBootstrapInitialized){');const code=src.slice(start);
  let observers=0;const listeners=[];const window={dispatchEvent(){},addEventListener(){},location:{hostname:'www.rendimentobb.it'},RBReportCache:{},RBInvestmentJourney:{}};
  const document={addEventListener:name=>listeners.push(name)};
- const c={window,document,auth:{},db:{},onAuthStateChanged(){observers++;},console,setTimeout(){},Event:function(){},resolveAccountPlan(){return 'free';}};
+ const c={isVerifiedAdministrator,window,document,auth:{},db:{},onAuthStateChanged(){observers++;},console,setTimeout(){},Event:function(){},resolveAccountPlan(){return 'free';}};
  vm.createContext(c);vm.runInContext('{'+code+'}',c);
  window.currentUser={uid:'annual'};window.currentPlan='pro_yearly';window.firebaseReady=true;
  const count=listeners.length;vm.runInContext('{'+code+'}',c);

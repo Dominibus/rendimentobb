@@ -180,7 +180,7 @@
     "/js/chatbot/core/pms-autopilot-engine.js?v=20261009-rc76",
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261011-rc104",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261011-rc101",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261012-rc106",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

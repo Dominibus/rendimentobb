@@ -159,7 +159,7 @@ export default async function handler(req, res){
           });
         }
       }catch(error){
-        console.error("Guest report urgent email failed", error?.message || error);
+        console.error("Guest report urgent email failed");
       }
     }
     return res.status(201).json({ success: true });
@@ -170,7 +170,7 @@ export default async function handler(req, res){
     if(error?.message === "RATE_LIMITED"){
       return res.status(429).json({ success: false, error: "too_many_requests" });
     }
-    console.error("Guest report API error", error);
+    console.error("Guest report API error");
     return res.status(500).json({ success: false, error: "internal_error" });
   }
 }

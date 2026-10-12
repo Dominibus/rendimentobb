@@ -1,3 +1,4 @@
+import {subscriptionPeriodEnd,invoiceSubscriptionId} from '../lib/stripe-period.js';
 import {saveCheckoutContract} from '../lib/account-subscription-service.js';
 import { stripeFieldName, buildStripeEntitlementUpdate } from "../lib/stripe-entitlements.js";
 import { canApplyStripeBinding, checkoutIdentityMatches } from "../lib/stripe-subscription-binding.js";
@@ -455,6 +456,7 @@ export default async function handler(
           subscriptionId,
 
           subscriptionStatus: status,
+          currentPeriodEnd: subscriptionPeriodEnd(subscription),
 
           cancelAtPeriodEnd:
             subscription.cancel_at_period_end === true
@@ -553,11 +555,7 @@ export default async function handler(
               true,
 
             currentPeriodEnd:
-              Number(
-                subscription
-                  .current_period_end ||
-                0
-              )
+              subscriptionPeriodEnd(subscription)
           },
           event,
           { source: "subscription", customerId, subscriptionId }
@@ -650,9 +648,7 @@ export default async function handler(
         );
 
       const subscriptionId =
-        getStripeId(
-          invoice.subscription
-        );
+        invoiceSubscriptionId(invoice);
 
       const uid =
         await findUserId(

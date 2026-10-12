@@ -1,3 +1,4 @@
+import {subscriptionPeriodEnd,invoiceSubscriptionId} from '../lib/stripe-period.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -19,7 +20,7 @@ function harness(initial, {checkout=session(), latest, live=true}={}){
  const firestore=()=>db;
  firestore.FieldValue={serverTimestamp:()=> 'timestamp'};
  const stripe={webhooks:{constructEvent(raw,signature){if(signature!=='valid') throw Error('signature');return currentEvent;}},checkout:{sessions:{retrieve:async()=>checkout}},subscriptions:{retrieve:async id=>latest ?? (currentEvent.type==='checkout.session.completed'?subscription(id):currentEvent.data.object)}};
- const context={Buffer,process:{env:{STRIPE_SECRET_KEY:live?'sk_live_mock':'sk_test_mock'}},console:{error(){},warn(){}},stripeFieldName,buildStripeEntitlementUpdate,canApplyStripeBinding,checkoutIdentityMatches,Stripe:function(){return stripe;},admin:{apps:[{}],firestore},getStripePrices:()=>({pro:price}),assertStripeEventMode:e=>{if(e.livemode!==live)throw Error('mode');}};
+ const context={Buffer,process:{env:{STRIPE_SECRET_KEY:live?'sk_live_mock':'sk_test_mock'}},console:{error(){},warn(){}},subscriptionPeriodEnd,invoiceSubscriptionId,stripeFieldName,buildStripeEntitlementUpdate,canApplyStripeBinding,checkoutIdentityMatches,Stripe:function(){return stripe;},admin:{apps:[{}],firestore},getStripePrices:()=>({pro:price}),assertStripeEventMode:e=>{if(e.livemode!==live)throw Error('mode');}};
  let source=fs.readFileSync(new URL('../api/stripe-webhook.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export const config','const config').replace('export default async function handler','async function handler');
  vm.createContext(context);vm.runInContext(source+'\nglobalThis.handler=handler;',context);
  return {accounts,get writes(){return writes;},async send(e, signature='valid'){currentEvent=e;const req={method:'POST',headers:{'stripe-signature':signature},async *[Symbol.asyncIterator](){yield Buffer.from('{}');}};const res={code:0,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};await context.handler(req,res);return res;}};

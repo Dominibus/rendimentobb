@@ -1,8 +1,9 @@
+import {saveLinkedProperty} from '../js/property-analysis-link.js';
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { initializeTestEnvironment, assertSucceeds, assertFails } from '@firebase/rules-unit-testing';
-import { doc, setDoc, updateDoc, getDoc, deleteDoc, writeBatch, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, getDoc, deleteDoc, writeBatch, runTransaction, collection, query, where, getDocs } from 'firebase/firestore';
 
 const projectId = 'demo-rendimentobb-security';
 const profiles = {
@@ -272,4 +273,47 @@ test('owned house snapshot permits zero property value and startup capital witho
  await assertFails(setDoc(doc(dbFor('free'),'analyses','owned-free'),{uid:'free',assumptions:a}));
  await assertFails(getDoc(doc(dbFor('pro'),'analyses','owned-zero')));
  await assertFails(updateDoc(doc(dbFor('investor'),'analyses','owned-zero'),{'assumptions.source':'simulator'}));
+});
+
+for(const [label,profile,allowed] of [
+ ['active',{trialStartedAt:new Date(Date.now()-86400000),trialEndsAt:new Date(Date.now()+86400000)},true],
+ ['expired',{trialStartedAt:new Date(Date.now()-8*86400000),trialEndsAt:new Date(Date.now()-86400000)},false],
+ ['future',{trialStartedAt:new Date(Date.now()+86400000),trialEndsAt:new Date(Date.now()+2*86400000)},false],
+ ['too-long',{trialStartedAt:new Date(Date.now()-86400000),trialEndsAt:new Date(Date.now()+7*86400000)},false],
+ ['missing-end',{trialStartedAt:new Date(Date.now()-86400000)},false],
+ ['wrong-type',{trialStartedAt:'yesterday',trialEndsAt:'tomorrow'},false],
+ ['sandbox-only',{sandboxTrialStartedAt:new Date(Date.now()-86400000),sandboxTrialEndsAt:new Date(Date.now()+86400000)},false]
+])test(`RC106 trial ${label}: rules enforce actual timestamps and production scope`,async()=>{
+ const uid=`trial-${label}`;
+ await env.withSecurityRulesDisabled(async context=>{await setDoc(doc(context.firestore(),'users',uid),{email:`${uid}@example.invalid`,role:'user',plan:'free',...profile});await setDoc(doc(context.firestore(),'analyses',`${uid}-read`),{uid,roi:0,equity:0});});
+ const db=dbFor(uid),check=allowed?assertSucceeds:assertFails;
+ await check(setDoc(doc(db,'analyses',`${uid}-write`),{uid,roi:0,equity:0}));
+ await check(setDoc(doc(db,'properties',`${uid}-property`),{uid,name:'Casa trial'}));
+ await assertSucceeds(getDoc(doc(db,'analyses',`${uid}-read`)));
+ await assertFails(updateDoc(doc(db,'users',uid),{trialEndsAt:new Date(Date.now()+86400000)}));
+});
+
+test('RC106 deleting a linked analysis is blocked until the property is unlinked',async()=>{
+ const uid='pro',aid='audit-linked-analysis',pid='audit-linked-property';
+ await env.withSecurityRulesDisabled(async context=>{const db=context.firestore();await setDoc(doc(db,'analyses',aid),{uid,roi:10,propertyId:pid,isPortfolio:true});await setDoc(doc(db,'properties',pid),{uid,name:'Casa',analysisId:aid});});
+ const db=dbFor(uid);
+ await assertFails(deleteDoc(doc(db,'analyses',aid)));
+ const batch=writeBatch(db);batch.update(doc(db,'analyses',aid),{propertyId:null,isPortfolio:false});batch.update(doc(db,'properties',pid),{analysisId:null,investmentSnapshot:null});await assertSucceeds(batch.commit());
+ await assertSucceeds(deleteDoc(doc(db,'analyses',aid)));
+});
+
+test('RC106 normalized admin role variants cannot be self-issued during profile creation',async()=>{
+ const db=dbFor('roleVariantNew');
+ for(const role of ['admin ','ADMIN',' Admin','admin\n'])await assertFails(setDoc(doc(db,'users','roleVariantNew'),{email:'roleVariantNew@example.invalid',plan:'free',role}));
+});
+
+
+test('RC106 concurrent property linking also commits once in the actual Firestore emulator',async()=>{
+ const uid='pro',aid='audit-emulator-race';
+ await env.withSecurityRulesDisabled(async context=>setDoc(doc(context.firestore(),'analyses',aid),{uid,roi:0,equity:0,propertyId:null,isPortfolio:false}));
+ const db=dbFor(uid),analysisRef=doc(db,'analyses',aid);
+ const outcomes=await Promise.allSettled(['audit-race-p1','audit-race-p2'].map(pid=>saveLinkedProperty({runTransaction:fn=>runTransaction(db,fn),propertyRef:doc(db,'properties',pid),analysisRef,analysisRefForId:id=>doc(db,'analyses',id),uid,propertyData:{uid,name:pid,analysisId:aid},isNewProperty:true})));
+ assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);
+ const analysis=(await getDoc(analysisRef)).data();const property=(await getDoc(doc(db,'properties',analysis.propertyId))).data();assert.equal(property.analysisId,aid);
+ const properties=await getDocs(query(collection(db,'properties'),where('uid','==',uid)));assert.equal(properties.docs.filter(item=>item.data().analysisId===aid).length,1);
 });
