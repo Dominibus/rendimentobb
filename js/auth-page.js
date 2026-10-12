@@ -1,3 +1,4 @@
+import { NEW_PASSWORD_MIN_LENGTH, NEW_PASSWORD_MAX_LENGTH, newPasswordIssue } from './password-policy.js?v=20261012-rc109';
 import { app } from '/js/firebase-init.js?v=20261012-rc106';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, setPersistence, browserSessionPersistence,
@@ -24,7 +25,11 @@ function ui() {
   $('name').required = register;
   $('terms-accepted').required = register;
   $('password').autocomplete = register ? 'new-password' : 'current-password';
-  $('password').minLength = register ? 6 : 1;
+  $('password').minLength = register ? NEW_PASSWORD_MIN_LENGTH : 1;
+  if (register) $('password').maxLength = NEW_PASSWORD_MAX_LENGTH;
+  else $('password').removeAttribute('maxlength');
+  $('password-help').hidden = !register;
+  $('password-help').textContent = t('Usa almeno 15 caratteri. Puoi usare una frase lunga e un password manager; non sono obbligatori numeri o simboli. Non riutilizzare password di altri servizi.', 'Use at least 15 characters. You can use a long passphrase and a password manager; numbers or symbols are not required. Do not reuse passwords from other services.');
   $('switch-text').textContent = t(register ? 'Hai già un account?' : 'Non hai un account?', register ? 'Already have an account?' : 'Don’t have an account?');
   $('switch-action').textContent = t(register ? 'Accedi' : 'Registrati', register ? 'Sign in' : 'Sign up');
   $('show-password').textContent = $('password').type === 'password' ? t('Mostra password', 'Show password') : t('Nascondi password', 'Hide password');
@@ -38,8 +43,8 @@ function error(code) {
     'auth/user-not-found': ['Accesso non riuscito. Controlla email e password.', 'Sign-in failed. Check your email and password.'],
     'auth/wrong-password': ['Accesso non riuscito. Controlla email e password.', 'Sign-in failed. Check your email and password.'],
     'auth/email-already-in-use': ['Registrazione non completata. Prova ad accedere o recuperare la password.', 'Registration incomplete. Try signing in or resetting your password.'],
-    'auth/weak-password': ['La password non soddisfa i requisiti del servizio.', 'The password does not meet the service requirements.'],
-    'auth/password-does-not-meet-requirements': ['La password non soddisfa i requisiti del servizio.', 'The password does not meet the service requirements.'],
+    'auth/weak-password': ['La password non soddisfa i requisiti: usa almeno 15 caratteri e consulta le indicazioni del modulo.', 'The password does not meet the requirements: use at least 15 characters and check the form guidance.'],
+    'auth/password-does-not-meet-requirements': ['La password non soddisfa i requisiti: usa almeno 15 caratteri e consulta le indicazioni del modulo.', 'The password does not meet the requirements: use at least 15 characters and check the form guidance.'],
     'auth/too-many-requests': ['Troppi tentativi. Attendi prima di riprovare.', 'Too many attempts. Please wait before trying again.'],
     'auth/network-request-failed': ['Connessione non disponibile. Riprova quando sei online.', 'Connection unavailable. Try again when online.']
   };
@@ -51,7 +56,17 @@ $('switch-action').onclick = () => { if (guard.busy) return; mode = mode === 'lo
 $('show-password').onclick = () => { $('password').type = $('password').type === 'password' ? 'text' : 'password'; ui(); };
 $('auth-form').addEventListener('submit', async event => {
   event.preventDefault();
-  if (guard.busy || !$('auth-form').reportValidity()) return;
+  if (guard.busy) return;
+  // Explicit check also covers submissions whose HTML validation was bypassed.
+  if (mode === 'register') {
+    const issue = newPasswordIssue($('password').value);
+    if (issue) {
+      if (issue === 'too-short') message('Scegli una password di almeno 15 caratteri.', 'Choose a password with at least 15 characters.');
+      else message('La password supera il limite di 4096 caratteri.', 'The password exceeds the 4096-character limit.');
+      return;
+    }
+  }
+  if (!$('auth-form').reportValidity()) return;
   await guard.run(async () => {
     ui(); $('login-message').textContent = '';
     const email = $('email').value.trim(), password = $('password').value;
@@ -94,9 +109,9 @@ $('forgot-password').onclick = async () => {
     ui();
     try {
       await sendPasswordResetEmail(auth,$('email').value.trim());
-      message('Se l’indirizzo è associato a un account, riceverai le istruzioni. Controlla anche lo spam.', 'If the address belongs to an account, you will receive instructions. Check your spam folder too.',true);
+      message('Se l’indirizzo è associato a un account, riceverai le istruzioni. Controlla anche lo spam. Per la nuova password usa almeno 15 caratteri.', 'If the address belongs to an account, you will receive instructions. Check your spam folder too. Use at least 15 characters for your new password.',true);
     } catch (failure) {
-      if (failure?.code === 'auth/user-not-found') message('Se l’indirizzo è associato a un account, riceverai le istruzioni. Controlla anche lo spam.', 'If the address belongs to an account, you will receive instructions. Check your spam folder too.',true);
+      if (failure?.code === 'auth/user-not-found') message('Se l’indirizzo è associato a un account, riceverai le istruzioni. Controlla anche lo spam. Per la nuova password usa almeno 15 caratteri.', 'If the address belongs to an account, you will receive instructions. Check your spam folder too. Use at least 15 characters for your new password.',true);
       else error(failure?.code);
     }
   });
