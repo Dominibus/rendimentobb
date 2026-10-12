@@ -2312,13 +2312,14 @@ Scenari e portafoglio
 </div>      
   
 <!-- KPI GRID -->
+<p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
 <div class="rb-kpi-grid">
 
   <div class="rb-kpi">
     <span
-data-it="ROI portafoglio"
-data-en="Portfolio ROI">
-ROI portafoglio
+data-it="Cashflow / capitale indicato"
+data-en="Cash flow / entered capital">
+Cashflow / capitale indicato
 </span>
     <h3 id="kpi-roi">—</h3>
   </div>
@@ -2329,12 +2330,12 @@ ROI portafoglio
   </div>
 
   <div class="rb-kpi">
-    <span data-it="Equity investita" data-en="Invested equity">Equity investita</span>
+    <span data-it="Capitale indicato" data-en="Entered capital">Capitale indicato</span>
     <h3 id="kpi-invest">—</h3>
   </div>
 
   <div class="rb-kpi">
-    <span data-it="Break-even" data-en="Break-even">Break-even</span>
+    <span data-it="Recupero semplice del capitale" data-en="Simple capital recovery">Recupero semplice del capitale</span>
     <h3 id="kpi-break">—</h3>
   </div>
 
@@ -3207,6 +3208,8 @@ box-shadow:
 
 </div>
 
+<p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
+
 <div class="portfolio-grid">
 
 <div class="portfolio-stat">
@@ -3250,10 +3253,10 @@ style="
 font-weight:700;
 margin-top:8px;
 "
-data-it="ROI medio portafoglio"
-data-en="Average portfolio ROI">
+data-it="Cashflow / capitale indicato"
+data-en="Cash flow / entered capital">
 
-ROI medio
+Cashflow / capitale indicato
 
 </p>
 
@@ -3372,10 +3375,10 @@ style="
 font-weight:700;
 margin-top:8px;
 "
-data-it="Equity investita"
-data-en="Invested equity">
+data-it="Capitale indicato"
+data-en="Entered capital">
 
-Equity investita
+Capitale indicato
 
 </p>
 
@@ -3386,7 +3389,7 @@ font-size:12px;
 color:#64748b;
 ">
 
-Portfolio Value
+<span data-it="Capitale delle simulazioni" data-en="Simulation capital">Capitale delle simulazioni</span>
 
 </div>
 
@@ -3778,7 +3781,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261012-rc110"></script>
+<script type="module" src="/js/dashboard.js?v=20261012-rc111"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>

@@ -2146,7 +2146,7 @@ const confirmedEquity = portfolioMetrics.equity;
 const confirmedYearlyCashflow = portfolioMetrics.cashflow;
 const confirmedROI = portfolioMetrics.weightedROI;
 const confirmedMonthlyCashflow = confirmedYearlyCashflow === null ? null : confirmedYearlyCashflow / 12;
-const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity !== null
+const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity > 0
   ? confirmedEquity / confirmedYearlyCashflow
   : null;
 
@@ -2261,7 +2261,7 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
+      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedEquity === 0 ? "N/A" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
