@@ -157,6 +157,8 @@ data-en="Legal">
 Legale
 </strong>
 
+<a href="/plans.html" data-it="Piani e condizioni" data-en="Plans and terms">Piani e condizioni</a>
+
 <a href="/privacy.html"
 data-it="Privacy"
 data-en="Privacy">
