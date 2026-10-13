@@ -1,4 +1,5 @@
 import "./investment-journey.js?v=20261008-rc60";
+import {TERMS_VERSION} from "./subscription-offer.js?v=20261011-rc102";
 // ===============================================
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
@@ -7274,7 +7275,7 @@ window.buyPlan = async function(plan){
           },
 
           body: JSON.stringify({
-            plan: requestedPlan, acceptedTerms:true, termsVersion:"2026-10-09-rc85"
+            plan: requestedPlan, acceptedTerms:true, termsVersion:TERMS_VERSION
           })
         }
       );
