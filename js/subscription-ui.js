@@ -60,7 +60,10 @@ window.rbOpenSubscription=()=>{
  const billingCustomer=data[sandbox?'sandboxStripeCustomerId':'stripeCustomerId'];
  if(paid&&!billingCustomer)add(d,'p',t('Piano assegnato direttamente: nessun rinnovo automatico gestibile su Stripe. Per informazioni contatta il supporto.','Directly assigned plan: there is no automatic renewal to manage on Stripe. Contact support for information.'));
  if(typeof billingCustomer==='string'&&billingCustomer.startsWith('cus_')){const manage=button(d,t('Gestisci rinnovo e fatture su Stripe','Manage renewal and invoices on Stripe'));manage.onclick=async()=>{manage.disabled=true;try{const result=await request('portal');if(!result.url?.startsWith('https://billing.stripe.com/'))throw Error('INVALID_URL');location.assign(result.url);}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Portale non disponibile: contatta support@rendimentobb.com.','Portal unavailable: contact support@rendimentobb.com.');manage.disabled=false;}};}
- if(data.stripeSessionId||data.sandboxStripeSessionId){
+ // Only offer a receipt from the current billing environment. A sandbox
+ // purchase must never create a live download action (or vice versa).
+ const contractSession=data[sandbox?'sandboxStripeSessionId':'stripeSessionId'];
+ if(typeof contractSession==='string'&&/^cs_[A-Za-z0-9_]+$/.test(contractSession)){
   const download=button(d,t('Scarica conferma e condizioni','Download confirmation and terms'));
   download.onclick=async()=>{download.disabled=true;try{
     const {contract:c}=await request('contract');
