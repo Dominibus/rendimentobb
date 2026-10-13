@@ -1895,6 +1895,26 @@ margin-bottom:16px;
 
 }  
  
+
+/* RC116: keep the complete account email readable in narrow dashboard cards. */
+#dashboard-stats > .analysis-card:first-child{
+  min-width:0;
+}
+#dashboard-stats > .analysis-card:first-child .metric:first-of-type{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+#dashboard-stats > .analysis-card:first-child .metric:first-of-type strong{
+  min-width:0;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  font-size:clamp(14px,1.2vw,18px);
+  line-height:1.4;
+}
+
 </style>
 
 <link rel="stylesheet" href="/css/dashboard-2026.css?v=20261001-21">
