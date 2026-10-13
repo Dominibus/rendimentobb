@@ -15,7 +15,7 @@
 <script src="/js/lang.js"></script>
 <script src="/js/market-data.js?v=20261001-22"></script>
 <script src="/js/account-report-cache.js"></script>
-<script type="module" src="/js/firebase-init.js?v=20261011-rc99"></script>
+<script type="module" src="/js/firebase-init.js?v=20261012-rc106"></script>
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -1557,6 +1557,7 @@ const riskHero =
 if(riskHero){
 
   riskHero.innerText =
+  equity <= 0 ? (lang === "en" ? "PARTIAL" : "PARZIALE") :
   risk < 40
     ? (lang==="en" ? "LOW" : "BASSO")
     : risk < 65
@@ -2159,10 +2160,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  t(
-    "ROI EQUITY PREVISIONALE",
-    "FORECAST EQUITY ROI"
-  ),
+  (ownedProperty ? t("ROI DI AVVIO PREVISIONALE", "FORECAST STARTUP ROI") : t("ROI EQUITY PREVISIONALE", "FORECAST EQUITY ROI")),
   28,
   y + 19
 );
@@ -2376,9 +2374,9 @@ const verdictColor =
       doc.roundedRect(20,32,170,55,4,4,"F");
       doc.setFontSize(12);
       doc.setTextColor(...dark);
-      doc.text(t("ROI sul capitale proprio: N/A","Equity ROI: N/A"),26,45);
+      doc.text((ownedProperty ? t("ROI sul capitale di avvio: N/A","Startup ROI: N/A") : t("ROI sul capitale proprio: N/A","Equity ROI: N/A")),26,45);
       doc.setFontSize(10);
-      doc.text(doc.splitTextToSize(t("Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.","With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately."),156),26,57);
+      doc.text(doc.splitTextToSize((ownedProperty ? t("Con capitale di avvio zero il ROI non è applicabile. Valuta cashflow, costi e sostenibilità della gestione.", "With zero startup capital, ROI is not applicable. Assess cashflow, costs and operating sustainability.") : t("Con capitale proprio zero non è possibile calcolare un rendimento percentuale. Valuta separatamente cashflow, copertura delle rate e rischio.","With zero equity, a percentage return cannot be calculated. Assess cash flow, debt service and risk separately.")),156),26,57);
     }else try{
       const canvas = document.getElementById("roiChart");
       if(canvas){
@@ -2828,7 +2826,7 @@ doc.setFontSize(7);
 doc.setTextColor(100,116,139);
 
 doc.text(
-  t("ROI EQUITY","EQUITY ROI"),
+  ownedProperty ? t("ROI DI AVVIO","STARTUP ROI") : t("ROI EQUITY","EQUITY ROI"),
   28,
   44
 );
@@ -2927,7 +2925,7 @@ doc.text(
     doc.setFontSize(8);
     doc.setTextColor(100,116,139);
     doc.text(doc.splitTextToSize(
-      ownedProperty && equity <= 0
+      ownedProperty
         ? t("Nessun benchmark percentuale viene applicato a questo scenario. Il cashflow è una stima basata sugli input, non una misura di rendimento del patrimonio immobiliare.", "No percentage benchmark applies to this scenario. Cashflow is an input-based estimate, not a return on the property's market value.")
         : t("Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.", "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."),
       170),20,153);
@@ -3123,7 +3121,7 @@ const drawFinalKPI = (
 
 drawFinalKPI(
   20,
-  t("ROI EQUITY","EQUITY ROI"),
+  ownedProperty ? t("ROI DI AVVIO","STARTUP ROI") : t("ROI EQUITY","EQUITY ROI"),
   (equity > 0 ? `${roi.toFixed(1)}%` : "N/A")
 );
 
@@ -3328,7 +3326,7 @@ doc.text(
         assumptionsY+=12;
       });
       doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(100,116,139);
-      doc.text(doc.splitTextToSize(t("Ricavi annui = tariffa x 365 x occupazione / 100. Costi mensili x 12. ROI equity = cashflow netto annuo / capitale proprio x 100. Il risultato dipende anche da commissioni, imposte e servizio del debito del modello; l'occupazione è costante nell'anno.","Annual revenue = nightly rate x 365 x occupancy / 100. Monthly costs x 12. Equity ROI = annual net cash flow / equity x 100. Results also depend on modeled commissions, tax and debt service; occupancy is constant throughout the year."),170),20,assumptionsY+8);
+      doc.text(doc.splitTextToSize((ownedProperty ? t("Ricavi annui = tariffa x 365 x occupazione / 100. Costi mensili x 12. ROI di avvio = cashflow netto annuo / capitale di avvio x 100; non applicabile con capitale zero. Il valore della casa è escluso dal capitale di avvio. Il risultato dipende da commissioni, imposte e mutuo residuo indicato.", "Annual revenue = nightly rate x 365 x occupancy / 100. Monthly costs x 12. Startup ROI = annual net cashflow / startup capital x 100; not applicable with zero capital. House value is excluded from startup capital. Results depend on commissions, tax and the entered residual mortgage.") : t("Ricavi annui = tariffa x 365 x occupazione / 100. Costi mensili x 12. ROI equity = cashflow netto annuo / capitale proprio x 100. Il risultato dipende anche da commissioni, imposte e servizio del debito del modello; l'occupazione è costante nell'anno.","Annual revenue = nightly rate x 365 x occupancy / 100. Monthly costs x 12. Equity ROI = annual net cash flow / equity x 100. Results also depend on modeled commissions, tax and debt service; occupancy is constant throughout the year.")),170),20,assumptionsY+8);
     }
     addFooter();
 
@@ -3441,7 +3439,7 @@ function populateSimulations(){
       ? `${simulationROI.toFixed(1)}%`
       : "N/A";
     opt.innerText =
-      `${sim.city || "City"} – ${lang === "en" ? "Equity ROI" : "ROI equity"} ${roiLabel}`;
+      `${sim.city || "City"} – ${sim.propertyMode === 'owned' || sim.assumptions?.source === 'owned_property' ? (lang === 'en' ? 'Startup ROI' : 'ROI di avvio') : (lang === 'en' ? 'Equity ROI' : 'ROI equity')} ${roiLabel}`;
 
     select.appendChild(opt);
 
@@ -3624,7 +3622,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261011-rc101" defer></script>
+<script src="/js/chatbot-loader.js?v=20261012-rc108" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3635,7 +3633,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261011-rc103"></script>
+<script type="module" src="/js/header.js?v=20261012-rc106"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261011-rc102"></script>
 </body>
