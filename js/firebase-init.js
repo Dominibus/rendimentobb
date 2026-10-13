@@ -1,4 +1,6 @@
-import './subscription-ui.js?v=20261011-rc102';
+import {isVerifiedAdministrator} from './auth-safety.js?v=20261012-rc106';
+import {observeAccountAccess,ensureAccountProfile} from './account-access-observer.js?v=20261012-rc106';
+import './subscription-ui.js?v=20261012-rc106';
 import "./investment-journey.js?v=20261008-rc60";
 import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
 import "./account-report-cache.js";
@@ -22,7 +24,9 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  onSnapshot,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -58,6 +62,7 @@ window.firebaseAuth = auth;
 
 window.currentUser = null;
 let rbAuthSnapshotOwner = null;
+let stopAccountAccessObserver = null;
 window.currentPlan = null;
 window.firebaseReady = false;
 
@@ -79,7 +84,7 @@ window.getUserAccess = function(){
   const isLogged = !!window.currentUser;
 
   const isAdmin =
-    isLogged && role === "admin";
+    isLogged && isVerifiedAdministrator(window.currentUser);
 
   const isPro =
     isLogged && (plan === "pro" ||
@@ -273,13 +278,13 @@ const clean = (v)=>String(v || "")
 
 // 👉 SET GLOBALE REALE
 window.currentPlan = clean(plan);
-window.userRole = clean(role);
+window.userRole = isVerifiedAdministrator(auth.currentUser) ? "admin" : "user";
 
     // ===============================
 // 👑 ADMIN OVERRIDE (MASTER KEY)
 // ===============================
 
-const isAdmin = window.userRole === "admin";
+const isAdmin = isVerifiedAdministrator(auth.currentUser);
 window.isAdminUser = isAdmin;
 
 // 🔥 ADMIN = ACCESSO TOTALE
@@ -493,6 +498,9 @@ function updateUserUI(user) {
 
 onAuthStateChanged(auth, async (user) => {
 
+  stopAccountAccessObserver?.();
+  stopAccountAccessObserver=null;
+
   window.RBReportCache.sync(user?.uid || null, sessionStorage, localStorage);
   // Discard a scenario from a different account or an expired session.
   window.RBInvestmentJourney.read(sessionStorage, user?.uid || null);
@@ -564,12 +572,12 @@ document.body.classList.remove(
     if (!snap.exists()) {
 
 
-      await setDoc(userRef, {
-        email: user.email,
-        plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
-        role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
-        createdAt: new Date()
-      });
+      await ensureAccountProfile({runTransaction:callback=>runTransaction(db,callback),userRef,profile:{
+        email:user.email,
+        plan:isVerifiedAdministrator(user)?"pro":"free",
+        role:isVerifiedAdministrator(user)?"admin":"user",
+        createdAt:new Date()
+      }});
 
     } else {
       
@@ -589,7 +597,7 @@ document.body.classList.remove(
   email: userData?.email || window.currentUser?.email || ""
 };
 
-    window.isAdmin = () => userData?.role === "admin";
+    window.isAdmin = () => isVerifiedAdministrator(auth.currentUser);
 
     window.getUserData = () => ({
       user: window.currentUser,
@@ -658,6 +666,28 @@ setTimeout(()=>{
     // ===============================
 
     updateUserUI(user);
+    if(auth.currentUser?.uid !== user.uid)return;
+    stopAccountAccessObserver=observeAccountAccess({
+      uid:user.uid,
+      subscribe:(next,error)=>onSnapshot(userRef,next,error),
+      getCurrentUid:()=>auth.currentUser?.uid,
+      getPrevious:()=>window.rbAccountOwner===user.uid?window.rbAccountData:null,
+      accessKey:data=>JSON.stringify([resolveAccountPlan(data,window.location.hostname),data.role || "user"]),
+      onData:(data,uid)=>{window.rbAccountData=data;window.rbAccountOwner=uid;},
+      onAccessChange:()=>{
+        window.RBReportCache.clear(sessionStorage,localStorage);
+        location.reload(); // Rebuild all page gates after entitlement change.
+      },
+      onError:()=>{
+        // Fail closed on lost account authorization, without leaking diagnostics.
+        window.rbAccountData=null;window.rbAccountOwner=null;
+        window.currentPlan="free";window.userRole="user";window.isAdminUser=false;
+        window.isAdmin=()=>false;
+        window.RBReportCache.clear(sessionStorage,localStorage);
+        window.syncAccessClasses?.();updateUserUI(window.currentUser);
+        window.dispatchEvent(new Event("rb_plan_ready"));
+      }
+    });
 
     // ===============================
     // 🔥 EVENTI GLOBALI (UNICO PUNTO)

@@ -3,7 +3,7 @@
 // Silicon Valley grade – Stable / Safe / Predictable
 // ===============================================
 
-import { calculateMortgage } from "./mortgage-engine.js?v=20261011-rc99";
+import { calculateMortgage } from "./mortgage-engine.js?v=20261012-rc106";
 
 // ================= CORE ENGINE =================
 function calculateROI(input = {}){

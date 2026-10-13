@@ -42,6 +42,10 @@ window.rbOpenSubscription=()=>{
  const inTrial=!paid&&window.rbIsTrial();
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
  if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. Per continuare le funzioni Investor scegli un piano a pagamento; Pro aggiunge i report PDF.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. Choose a paid plan to continue using Investor features; Pro adds PDF reports.'));
+ const billingPrefix=sandbox?'sandbox':'';
+ const billingField=name=>data[billingPrefix?billingPrefix+name[0].toUpperCase()+name.slice(1):name];
+ const periodEnd=Number(billingField('currentPeriodEnd'));
+ if(paid&&Number.isFinite(periodEnd)&&periodEnd>0)add(d,'p',(billingField('cancelAtPeriodEnd')===true?t('Rinnovo disattivato · accesso fino al ','Renewal stopped · access until '):t('Periodo corrente fino al ','Current period ends '))+new Date(periodEnd*1000).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'));
  conditions(d);
  add(d,'p',t('Il recesso online prevede un riepilogo e una conferma, con ricevuta scaricabile e inviata via email. È distinto dalla disattivazione del rinnovo su Stripe.','Online withdrawal has a review and confirmation step, with a downloadable receipt sent by email. It is separate from stopping renewal on Stripe.'));
  const notice=add(d,'p','');notice.setAttribute('role','status');
@@ -54,11 +58,9 @@ window.rbOpenSubscription=()=>{
   start.onclick=async()=>{if(!box.checked)return;start.disabled=true;try{await request('trial',{acceptedTerms:true,termsVersion:TERMS_VERSION});localStorage.removeItem('pending_plan');location.reload();}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Operazione non disponibile. Riprova o contatta il supporto.','Operation unavailable. Retry or contact support.');start.disabled=!box.checked;}};
  }
  const billingCustomer=data[sandbox?'sandboxStripeCustomerId':'stripeCustomerId'];
- const hasBillingCustomer=typeof billingCustomer==='string'&&/^cus_[A-Za-z0-9]+$/.test(billingCustomer);
- if(paid&&!hasBillingCustomer)add(d,'p',t('Nessuna fatturazione Stripe collegata. Per informazioni contatta il supporto.','No Stripe billing account is linked. Contact support for information.'));
- if(hasBillingCustomer){const manage=button(d,t('Gestisci rinnovo e fatture su Stripe','Manage renewal and invoices on Stripe'));manage.onclick=async()=>{manage.disabled=true;try{const result=await request('portal');if(!result.url?.startsWith('https://billing.stripe.com/'))throw Error('INVALID_URL');location.assign(result.url);}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Portale non disponibile: contatta support@rendimentobb.com.','Portal unavailable: contact support@rendimentobb.com.');manage.disabled=false;}};}
- const contractSession=data[sandbox?'sandboxStripeSessionId':'stripeSessionId'];
- if(typeof contractSession==='string'&&contractSession.startsWith(sandbox?'cs_test_':'cs_live_')){
+ if(paid&&!billingCustomer)add(d,'p',t('Piano assegnato direttamente: nessun rinnovo automatico gestibile su Stripe. Per informazioni contatta il supporto.','Directly assigned plan: there is no automatic renewal to manage on Stripe. Contact support for information.'));
+ if(typeof billingCustomer==='string'&&billingCustomer.startsWith('cus_')){const manage=button(d,t('Gestisci rinnovo e fatture su Stripe','Manage renewal and invoices on Stripe'));manage.onclick=async()=>{manage.disabled=true;try{const result=await request('portal');if(!result.url?.startsWith('https://billing.stripe.com/'))throw Error('INVALID_URL');location.assign(result.url);}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Portale non disponibile: contatta support@rendimentobb.com.','Portal unavailable: contact support@rendimentobb.com.');manage.disabled=false;}};}
+ if(data.stripeSessionId||data.sandboxStripeSessionId){
   const download=button(d,t('Scarica conferma e condizioni','Download confirmation and terms'));
   download.onclick=async()=>{download.disabled=true;try{
     const {contract:c}=await request('contract');

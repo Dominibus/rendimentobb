@@ -1,3 +1,4 @@
+import {saveLinkedProperty} from '../js/property-analysis-link.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -11,7 +12,8 @@ function harness(){
  const nodes=new Map(),writes=[],events=[],alerts=[];
  const node=id=>{if(!nodes.has(id))nodes.set(id,{value:'',style:{},focus(){this.focused=true;}});return nodes.get(id);};
  const c={window:{currentUser:{uid:'owner'},dashboardSimulations:[{id:'a1',city:'Firenze',price:200000,equity:45000,roi:-4.2,realROI:-0.9,net:-1260,risk:78,occupancy:50}]},
- document:{getElementById:node},t:x=>x,canUseFirestorePMS:()=>true,db:{},
+ document:{getElementById:node},t:x=>x,canUseFirestorePMS:()=>true,db:{},saveLinkedProperty,
+ runTransaction:async(_,callback)=>{await callback({get:async ref=>({exists:()=>ref.id==='a1',data:()=>({uid:'owner',propertyId:null})}),set:(ref,data)=>writes.push(['property',ref,data]),update:(ref,data)=>writes.push(['analysis',ref,data])});events.push('commit');},
  populatePropertyAnalysisSelect:()=>{},updatePropertyTouristTaxVisibility:()=>{},
  alert:x=>alerts.push(x),dashboardError:(...args)=>events.push(['error',...args]),
  serverTimestamp:()=> 'SERVER_TIME',doc:(...args)=>({id:args.length===1?'new-property':args.at(-1)}),collection:(db,name)=>name,
@@ -32,7 +34,7 @@ test('analysis add opens preselected form without database writes and cancel res
  c.window.closePropertyModal();assert.equal(c.window.pendingPropertyAnalysisId,null);
  c.window.openPropertyModal();assert.equal(node('property-analysis').value,'');
 });
-test('save from analysis creates linked property batch then shows properties after refresh',async()=>{
+test('save from analysis creates linked property transaction then shows properties after refresh',async()=>{
  const {c,node,writes,events}=harness();
  await c.window.openPropertyFromAnalysis('a1');node('property-name').value='Casa Firenze';
  await c.window.saveProperty();

@@ -1,3 +1,5 @@
+import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
+import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
 import {bookingOperations,operationSelection} from './pms-booking-operations.js?v=20261005-rc24';
 import {dailyChecklist,checklistDay} from './pms-daily-checklist.js?v=20261006-rc29';
@@ -5,17 +7,17 @@ import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
-import {createPMSApiClient} from "./pms-api-client.js?v=20261004-rc13";
+import {createPMSApiClient} from "./pms-api-client.js?v=20261011-rc105";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
 import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
-import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261009-rc76";
+import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261012-rc110";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js?v=20261011-rc99";
+import { app } from "./firebase-init.js?v=20261012-rc106";
 
 // 🔥 FIRESTORE
 import {
@@ -33,6 +35,7 @@ doc,
 addDoc,
 updateDoc,
 writeBatch,
+runTransaction,
 serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -460,6 +463,7 @@ function renderBookingTaskTracking(booking=window.currentSelectedBooking){
 
 function bookingOperationError(error){
   const messages = {
+    "booking/server_unavailable": ["Servizio PMS temporaneamente non disponibile. Riprova con gli stessi dati; se il problema persiste contatta il supporto.", "PMS service temporarily unavailable. Retry with the same data; contact support if the problem persists."],
     "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
     "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
     "booking/stale_task": ["I dati dell’attività sono cambiati. Aggiorna le prenotazioni.", "Task details changed. Refresh bookings."],
@@ -1414,7 +1418,7 @@ const portfolioAnalyses = analyses.filter(
 if(!window.isDemoDashboard && !window.isDemoData && portfolioOwnerUid && window.currentUser?.uid === portfolioOwnerUid){
   window.rbConfirmedPortfolio = {
     ownerUid:window.currentUser.uid, loadedAt:new Date().toISOString(),
-    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
+    rows:portfolioAnalyses.map(data=>({id:data.id,city:data.city,propertyMode:data.propertyMode,net:financialNumber(data.net),roi:financialNumber(data.roi),equity:financialNumber(data.equity)}))
   };
 }
 
@@ -2083,7 +2087,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
         </div>
 
         <div class="portfolio-manager__metrics">
-          <div><span>${t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
+          <div><span>${data.propertyMode === 'owned' ? t("Valore immobile", "Property value") : t("Prezzo", "Price")}</span><strong>${data.propertyMode === "owned" && price === 0 ? t("Non indicato", "Not provided") : formatCurrency(price)}</strong></div>
           <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
           <div><span>ROI</span><strong>${equity === 0 ? "N/A" : formatPercent(roi)}</strong></div>
           <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow === null ? null : yearlyCashflow / 12)}</strong></div>
@@ -2142,7 +2146,7 @@ const confirmedEquity = portfolioMetrics.equity;
 const confirmedYearlyCashflow = portfolioMetrics.cashflow;
 const confirmedROI = portfolioMetrics.weightedROI;
 const confirmedMonthlyCashflow = confirmedYearlyCashflow === null ? null : confirmedYearlyCashflow / 12;
-const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity !== null
+const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity > 0
   ? confirmedEquity / confirmedYearlyCashflow
   : null;
 
@@ -2257,7 +2261,7 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
+      ? (confirmedCount ? (confirmedYearlyCashflow === null || confirmedEquity === null ? "--" : confirmedEquity === 0 ? "N/A" : confirmedBreakEven === null ? t("Non raggiunto","Not reached") : formatYears(confirmedBreakEven.toFixed(1))) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
@@ -2961,8 +2965,8 @@ function renderInvestmentIntelligence(rows = []){
   const {metrics} = facts;
   container.innerHTML = `<h3 style="color:${facts.color}">${facts.title}</h3><p>${facts.text}</p>
     <div class="metric"><span>${t("Immobili confermati", "Confirmed properties")}</span><strong>${metrics.count}</strong></div>
-    <div class="metric"><span>${t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
-    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale proprio totale. Include il cashflow degli immobili finanziati al 100%. Per le case già possedute, il capitale di avvio esclude il valore della casa.", "Total cash flow divided by total invested equity. Includes cash flow from fully financed properties. For already owned properties, startup capital excludes the value of the house.")}</p>
+    <div class="metric"><span>${rows.some(row=>row.propertyMode==="owned") ? t("ROI sul capitale indicato totale", "Return on total entered capital") : t("ROI sul capitale proprio totale", "Return on total invested equity")}</span><strong>${metrics.equity === 0 ? "N/A" : formatPercent(metrics.weightedROI)}</strong></div>
+    <p style="font-size:12px;color:#64748b">${t("Cashflow complessivo diviso per il capitale indicato totale. Include anche gli scenari con capitale zero. Per le case già possedute, il capitale di avvio esclude il valore della casa: se mescoli acquisti e case già possedute, questo indicatore non misura il rendimento dell’intero patrimonio e non consente di confrontare le due basi.", "Total cashflow divided by total entered capital. Includes zero-capital scenarios. For already owned properties, startup capital excludes the house value: when purchases and owned homes are combined, this indicator does not measure return on the entire property asset and does not compare the two capital bases.")}</p>
     <div class="metric"><span>${t("Cashflow annuo stimato", "Estimated annual cash flow")}</span><strong>${formatCurrency(metrics.cashflow)}</strong></div>
     <div class="metric"><span>${t("Rischio medio riconosciuto", "Recognized average risk")} · ${facts.riskCount}/${metrics.count}</span><strong>${facts.averageRisk === null ? "--" : `${Math.round(facts.averageRisk)}/100`}</strong></div>
     <div class="metric"><span>${t("Immobili con cashflow negativo", "Properties with negative cash flow")}</span><strong>${facts.negativeCashflows} · ${t("dati disponibili", "available data")} ${metrics.coverage.cashflow}/${metrics.count}</strong></div>
@@ -3170,13 +3174,13 @@ if(!window.currentUser){
 
 const ref = doc(db,"analyses",id);
 
-const snap = await getDoc(ref);
-
-
-
-await deleteDoc(
-  doc(db,"analyses",id)
-);
+await runTransaction(db,async tx=>{
+  const snap=await tx.get(ref);
+  if(!snap.exists())return;
+  if(snap.data().uid!==window.currentUser.uid)throw Error("ANALYSIS_OWNER_MISMATCH");
+  if(snap.data().propertyId)throw Error("ANALYSIS_LINKED");
+  tx.delete(ref);
+});
 
 
 
@@ -3188,6 +3192,8 @@ await loadDashboard();
 
 }catch(err){
 
+  if(err.message!=="ANALYSIS_LINKED")alert(t("Eliminazione non confermata. Ricarica la dashboard per verificare lo stato prima di riprovare.","Deletion not confirmed. Reload the dashboard to check the current state before retrying."));
+  if(err.message==="ANALYSIS_LINKED")alert(t("Questa analisi è collegata a una proprietà. Scollegala da Modifica immobile prima di eliminarla.","This analysis is linked to a property. Unlink it in Edit property before deleting it."));
   dashboardError(
     "Delete error:",
     err
@@ -5956,50 +5962,19 @@ window.saveProperty = async function(){
       return;
     }
 
-    const batch = writeBatch(db);
-    const propertyRef = editingPropertyId
-      ? doc(db, "properties", editingPropertyId)
-      : doc(collection(db, "properties"));
-
-    if(!editingPropertyId) propertyData.createdAt = serverTimestamp();
-    batch.set(propertyRef, propertyData, { merge: Boolean(editingPropertyId) });
-
-    if(editingPropertyId){
-      const previousSnap = await getDoc(propertyRef);
-      const previousAnalysisId = previousSnap.exists()
-        ? previousSnap.data().analysisId
-        : null;
-
-      if(previousAnalysisId && previousAnalysisId !== linkedAnalysis.id){
-        batch.update(
-          doc(db, "analyses", previousAnalysisId),
-          { isPortfolio: false, propertyId: null }
-        );
-      }
-    }
-
-    batch.update(
-      doc(db, "analyses", linkedAnalysis.id),
-      { isPortfolio: true, propertyId: propertyRef.id }
-    );
-    await batch.commit();
+    const propertyRef = editingPropertyId ? doc(db,"properties",editingPropertyId) : doc(collection(db,"properties"));
+    if(!editingPropertyId)propertyData.createdAt=serverTimestamp();
+    await saveLinkedProperty({
+      runTransaction:callback=>runTransaction(db,callback),
+      propertyRef,analysisRef:doc(db,"analyses",linkedAnalysis.id),
+      analysisRefForId:id=>doc(db,"analyses",id),uid:window.currentUser.uid,propertyData,isNewProperty:!editingPropertyId
+    });
   }else if(editingPropertyId){
-    const propertyRef = doc(db, "properties", editingPropertyId);
-    const previousSnap = await getDoc(propertyRef);
-    const previousAnalysisId = previousSnap.exists()
-      ? previousSnap.data().analysisId
-      : null;
-    const batch = writeBatch(db);
-    batch.set(propertyRef, propertyData, { merge: true });
-
-    if(previousAnalysisId){
-      batch.update(
-        doc(db, "analyses", previousAnalysisId),
-        { isPortfolio: false, propertyId: null }
-      );
-    }
-
-    await batch.commit();
+    await saveUnlinkedProperty({
+      runTransaction:callback=>runTransaction(db,callback),
+      propertyRef:doc(db,"properties",editingPropertyId),analysisRefForId:id=>doc(db,"analyses",id),
+      uid:window.currentUser.uid,propertyData
+    });
   }else{
     propertyData.createdAt = serverTimestamp();
     await addDoc(collection(db, "properties"), propertyData);
@@ -6036,6 +6011,7 @@ window.saveProperty = async function(){
 
   }catch(err){
 
+    alert(err.code==="property/analysis_already_linked" ? t("Analisi già collegata a un’altra proprietà. Aggiorna la dashboard e scegli un’analisi diversa.","Analysis already linked to another property. Refresh the dashboard and select a different analysis.") : t("Immobile non salvato. Verifica la connessione, aggiorna la dashboard e riprova.","Property not saved. Check your connection, refresh the dashboard and retry."));
     dashboardError(
       "PROPERTY SAVE ERROR:",
       err
@@ -6191,6 +6167,9 @@ const data =
 
 const investment =
   data.investmentSnapshot || null;
+const linkedInvestment = (window.dashboardSimulations || []).find(item => item.id === data.analysisId);
+const investmentOwned = linkedInvestment?.propertyMode === "owned" || linkedInvestment?.assumptions?.source === "owned_property";
+const investmentROIAvailable = investment && Number.isFinite(Number(investment.equity)) && Number(investment.equity) > 0 && Number.isFinite(Number(investment.roi));
 
 const renovation =
   data.renovationPlan || null;
@@ -6439,14 +6418,14 @@ flex-wrap:wrap;
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
     <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
-      ROI ${formatPercent(investment.roi)}
+      ${investmentOwned ? t("ROI di avvio", "Startup ROI") : "ROI"} ${investmentROIAvailable ? formatPercent(investment.roi) : "N/A"}
     </span>
     <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
-      ${t("Equity", "Equity")} ${formatCurrency(investment.equity)}
+      ${investmentOwned ? t("Capitale di avvio", "Startup capital") : t("Capitale indicato", "Entered capital")} ${formatCurrency(investment.equity)}
     </span>
   </div>
 </div>
-` : ""}
+` : propertyFinancialGuidanceHTML(docItem.id, window.currentLang)}
 
 ${renovation ? `
 <div style="margin-bottom:18px;padding:14px 16px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">

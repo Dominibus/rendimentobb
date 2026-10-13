@@ -1,10 +1,11 @@
+import {isVerifiedAdministrator} from '../js/auth-safety.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 const firebase=readFileSync(new URL('../js/firebase-init.js',import.meta.url),'utf8');
 const accessSource=firebase.slice(firebase.indexOf('window.getUserAccess = function(){'),firebase.indexOf('// 🔥 MIRROR GLOBALE'));
-function access(plan,role='user',logged=true){const c={window:{currentPlan:plan,userRole:role,currentUser:logged?{uid:'owner'}:null}};vm.createContext(c);vm.runInContext(accessSource,c);return c.window.getUserAccess();}
+function access(plan,role='user',logged=true,verified=true,adminIdentity=role==='admin'){const c={isVerifiedAdministrator,window:{currentPlan:plan,userRole:role,currentUser:logged?{uid:'owner',email:adminIdentity?'rendimentobb@gmail.com':'ordinary@example.invalid',emailVerified:verified}:null}};vm.createContext(c);vm.runInContext(accessSource,c);return c.window.getUserAccess();}
 test('Free Investor Pro annual and admin have the required distinct analysis/PDF entitlements',()=>{
  const expected=[['free','user',false,false],['investor','user',true,false],['pro','user',true,true],['pro_yearly','user',true,true],['free','admin',true,true]];
  for(const [plan,role,analysis,pdf] of expected){const a=access(plan,role);assert.equal(a.canSeeFullAnalysis,analysis,plan);assert.equal(a.canDownloadPDF,pdf,plan);}
@@ -19,3 +20,5 @@ test('Investor KPI render shows full figures, restores hidden values and creates
  vm.createContext(c);vm.runInContext(fn,c);c.renderUniversalKPI({net:-14261.69,revenue:28506.5,investment:159000});
  assert.equal(nodes.get('profit-annual').innerText,'-14261.69');assert.equal(nodes.get('profit-annual').style.opacity,'1');assert.equal(nodes.get('profit-annual').style.pointerEvents,'auto');assert.equal(staleRemoved,true);
 });
+
+test('a forged or unverified administrator profile cannot grant premium UI rights',()=>{for(const a of [access('free','admin',true,true,false),access('free','admin',true,false,true)]){assert.equal(a.isAdmin,false);assert.equal(a.canDownloadPDF,false);assert.equal(a.canSeeFullAnalysis,false);}});

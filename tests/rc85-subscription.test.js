@@ -1,3 +1,4 @@
+import {isVerifiedAdministrator} from '../js/auth-safety.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -107,7 +108,7 @@ test('purchase review cannot call Stripe until acceptance, and account change ca
 });
 test('real access resolver grants trial Investor features and denies Pro PDF, then expires',()=>{
  const source=fs.readFileSync(new URL('../js/firebase-init.js',import.meta.url),'utf8');const start=source.indexOf('window.getUserAccess = function(){');const end=source.indexOf('\n};',start)+3;
- const trialNow=Date.now();const c={resolveAccountPlan:(data,host)=>getPlanForScope(data,false),window:{location:{hostname:'www.rendimentobb.it'},currentUser:{uid:'u1'},rbAccountOwner:'u1',rbAccountData:{plan:'free',trialStartedAt:timestamp(trialNow-1000),trialEndsAt:timestamp(trialNow+86400000)},currentPlan:'investor',userRole:'user'}};
+ const trialNow=Date.now();const c={isVerifiedAdministrator,resolveAccountPlan:(data,host)=>getPlanForScope(data,false),window:{location:{hostname:'www.rendimentobb.it'},currentUser:{uid:'u1'},rbAccountOwner:'u1',rbAccountData:{plan:'free',trialStartedAt:timestamp(trialNow-1000),trialEndsAt:timestamp(trialNow+86400000)},currentPlan:'investor',userRole:'user'}};
  vm.createContext(c);vm.runInContext(source.slice(start,end),c);const access=c.window.getUserAccess();assert.equal(access.isInvestor,true);assert.equal(access.canSeeFullAnalysis,true);assert.equal(access.canDownloadPDF,false);assert.equal(access.isPro,false);
  c.window.rbAccountData.trialEndsAt=timestamp(trialNow-1);assert.equal(c.window.getUserAccess().isFree,true);assert.equal(c.window.getUserAccess().canDownloadPDF,false);
 });

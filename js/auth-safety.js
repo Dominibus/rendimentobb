@@ -19,3 +19,8 @@ export function createAuthActionGuard() {
     try { await action(); return true; } finally { busy = false; }
   }};
 }
+
+// Same administrator identity requirement as the database/server boundary.
+export function isVerifiedAdministrator(user){
+  return user?.emailVerified===true && user.email==='rendimentobb@gmail.com';
+}

@@ -1,3 +1,4 @@
+import {isVerifiedAdministrator} from '../js/auth-safety.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -21,14 +22,14 @@ test('annual shared header has Dashboard, badge and logout from resolved access'
 test('risk hero uses the same 40 and 65 boundaries as the PDF',()=>{
  const src=read('dashboard-report/index.html');const start=src.indexOf('  riskHero.innerText =');const end=src.indexOf('\n}',start);const expression=src.slice(start,end);
  for(const [risk,expected] of [[0,'BASSO'],[33,'BASSO'],[39,'BASSO'],[40,'MEDIO'],[64,'MEDIO'],[65,'ALTO'],[100,'ALTO']]){
-  const riskHero={};vm.runInNewContext(expression,{riskHero,risk,lang:'it'});assert.equal(riskHero.innerText,expected);
+  const riskHero={};vm.runInNewContext(expression,{riskHero,risk,equity:30000,lang:'it'});assert.equal(riskHero.innerText,expected);
  }
 });
 test('duplicate Firebase module evaluation keeps the loaded annual state and one observer',()=>{
  const src=read('js/firebase-init.js');const start=src.indexOf('if(!window.__rbFirebaseBootstrapInitialized){');const code=src.slice(start);
  let observers=0;const listeners=[];const window={dispatchEvent(){},addEventListener(){},location:{hostname:'www.rendimentobb.it'},RBReportCache:{},RBInvestmentJourney:{}};
  const document={addEventListener:name=>listeners.push(name)};
- const c={window,document,auth:{},db:{},onAuthStateChanged(){observers++;},console,setTimeout(){},Event:function(){},resolveAccountPlan(){return 'free';}};
+ const c={isVerifiedAdministrator,window,document,auth:{},db:{},onAuthStateChanged(){observers++;},console,setTimeout(){},Event:function(){},resolveAccountPlan(){return 'free';}};
  vm.createContext(c);vm.runInContext('{'+code+'}',c);
  window.currentUser={uid:'annual'};window.currentPlan='pro_yearly';window.firebaseReady=true;
  const count=listeners.length;vm.runInContext('{'+code+'}',c);

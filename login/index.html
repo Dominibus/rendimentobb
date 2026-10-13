@@ -383,10 +383,12 @@ data-it="Email"
 data-en="Email">
 
 <!-- 🔥 PASSWORD -->
-<input id="password" type="password" autocomplete="current-password" required aria-label="Password"
+<input id="password" type="password" autocomplete="current-password" required aria-label="Password" aria-describedby="password-help"
 placeholder="Password"
 data-it="Password"
 data-en="Password">
+
+<p id="password-help" class="account-help" hidden></p>
 
 <button type="button" id="show-password" class="auth-secondary">Mostra password</button>
 <label class="auth-choice"><input type="checkbox" id="remember-access"><span data-it="Mantieni l’accesso su questo dispositivo personale" data-en="Stay signed in on this personal device">Mantieni l’accesso su questo dispositivo personale</span></label>
@@ -460,7 +462,7 @@ data-en="Password">
 
 <script src="/js/lang.js"></script>
 
-<script type="module" src="/js/auth-page.js?v=20261011-rc101"></script>
+<script type="module" src="/js/auth-page.js?v=20261012-rc109"></script>
 
 </body>
 </html>

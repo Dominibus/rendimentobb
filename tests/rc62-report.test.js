@@ -54,6 +54,16 @@ test('zero-equity PDF never represents ROE or equity payback as zero',async()=>{
 
 test('owned zero-value PDF keeps property yields and LTV unavailable and identifies the owned source',async()=>{
  const result=await render({equityAmount:0,propertyAmount:0,snapshot:{...assumptions,source:'owned_property',propertyPrice:0,equity:0,loanAmount:0}});
- assert.equal(result.saved,true);assert.match(result.text,/Immobile già di proprietà/);assert.match(result.text,/Non indicato/);
+ assert.equal(result.saved,true);assert.match(result.text,/Immobile già di proprietà/);
+ assert.ok(result.calls.some(x=>x.page===1 && x.text==='ROI DI AVVIO PREVISIONALE'));
+ assert.ok(result.calls.some(x=>x.page===2 && x.text==='ROI sul capitale di avvio: N/A'));
+ assert.match(result.text,/ROI di avvio = cashflow netto annuo \/ capitale di avvio/);assert.match(result.text,/Non indicato/);
  assert.doesNotMatch(result.text,/NaN|Infinity/);
+});
+
+test('owned positive-capital PDF names the startup denominator in both languages',async()=>{
+ for(const lang of ['it','en']){
+  const result=await render({lang,equityAmount:12000,propertyAmount:0,snapshot:{...assumptions,source:'owned_property',propertyPrice:0,equity:12000,loanAmount:0}});
+  assert.equal(result.saved,true);assert.match(result.text,lang==='en'?/STARTUP ROI/:/ROI DI AVVIO/);assert.doesNotMatch(result.text,/NaN|Infinity/);
+ }
 });

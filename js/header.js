@@ -1,4 +1,4 @@
-import './subscription-ui.js?v=20261011-rc103';
+import './subscription-ui.js?v=20261012-rc106';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
@@ -250,9 +250,9 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261011-rc99"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261012-rc106"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261011-rc99";
+  script.src = "/js/chatbot-loader.js?v=20261012-rc106";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -480,7 +480,7 @@ document.addEventListener("rb_language_changed", () => {
 async function bindHeaderAccount(){
   try{
     const [app, firebaseAuth] = await Promise.all([
-      import("/js/firebase-init.js?v=20261011-rc99"),
+      import("/js/firebase-init.js?v=20261012-rc106"),
       import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
     ]);
     auth = app.auth;

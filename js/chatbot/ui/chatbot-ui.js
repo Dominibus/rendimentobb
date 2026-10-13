@@ -4,6 +4,14 @@
 // Modular + AI Orchestrator Ready
 // ===============================================
 
+function rbFormatPropertySnapshotROI(value, analysis = window.lastAnalysisData || {}) {
+    const owned = analysis.propertyMode === "owned" || analysis.assumptions?.source === "owned_property";
+    const price = analysis.propertyPrice ?? analysis.price ?? analysis.assumptions?.propertyPrice;
+    if (analysis.propertyROIAvailable === false || (owned && price != null && Number(price) <= 0)) return "N/A";
+    if (value == null || value === "" || !Number.isFinite(Number(value))) return "--";
+    return Number(value).toFixed(1) + "%";
+}
+
 window.initRBChatbotUI = function(){
 
     const IS_DEVELOPMENT =
@@ -230,11 +238,8 @@ HOME
                             <strong>
 
                                 ${
-    canSeeFullSnapshot() &&
-    Number.isFinite(
-        Number(window.rbChatMemory.lastROI)
-    )
-        ? Number(window.rbChatMemory.lastROI).toFixed(1) + "%"
+    canSeeFullSnapshot()
+        ? rbFormatPropertySnapshotROI(window.rbChatMemory.lastROI)
         : "--"
 }
 
@@ -896,9 +901,8 @@ const fullSnapshotAllowed =
     canSeeFullSnapshot();
 
 metrics[1].textContent =
-    fullSnapshotAllowed &&
-    Number.isFinite(Number(roi))
-        ? Number(roi).toFixed(1) + "%"
+    fullSnapshotAllowed
+        ? rbFormatPropertySnapshotROI(roi, analysis)
         : "--";
 
 metrics[2].textContent =

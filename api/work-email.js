@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     const {httpStatus,...payload}=result;
     return res.status(httpStatus || 200).json(payload);
   }catch(error){
-    console.error("PMS urgent notification failed", error?.message || error);
+    console.error("PMS urgent notification failed");
     return res.status(500).json({ success:false, error:"notification_failed" });
   }
 }

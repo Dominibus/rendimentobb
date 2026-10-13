@@ -18,7 +18,7 @@ function ui(data,host='rendimentobb.it'){
  const code=readFileSync(new URL('../js/subscription-ui.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'');vm.createContext(ctx);vm.runInContext(code,ctx);ctx.window.rbOpenSubscription();return all;
 }
 test('manual annual plan shows no Stripe control or purchase download',()=>{
- const nodes=ui({plan:'pro_yearly'});assert.ok(nodes.some(n=>n.textContent.includes('Nessuna fatturazione Stripe')));assert.ok(!nodes.some(n=>n.textContent==='Gestisci rinnovo e fatture su Stripe'));assert.ok(!nodes.some(n=>n.textContent==='Scarica conferma e condizioni'));
+ const nodes=ui({plan:'pro_yearly'});assert.ok(nodes.some(n=>n.textContent.includes('Piano assegnato direttamente: nessun rinnovo automatico gestibile su Stripe')));assert.ok(!nodes.some(n=>n.textContent==='Gestisci rinnovo e fatture su Stripe'));assert.ok(!nodes.some(n=>n.textContent==='Scarica conferma e condizioni'));
 });
 test('billing buttons use only identifiers in the current environment',()=>{
  const data={plan:'pro_yearly',sandboxPlan:'investor',stripeCustomerId:'cus_liveABC',stripeSessionId:'cs_live_ABC',sandboxStripeCustomerId:'cus_testABC',sandboxStripeSessionId:'cs_test_ABC'};

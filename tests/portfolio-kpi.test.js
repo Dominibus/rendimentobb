@@ -81,3 +81,26 @@ test('new snapshot normalization retains actual loan, rate, term and saved debt 
  assert.equal(rows[0].loan,90000);assert.equal(rows[0].mortgageAmount,90000);assert.equal(rows[0].interestRate,4.1);assert.equal(rows[0].loanYears,25);assert.equal(rows[0].mortgageYearly,6000);assert.equal(rows[0].monthlyMortgage,500);assert.equal(rows[0].assumptions.expenses,2500);
  assert.equal(rows[1].loan,0);assert.equal(rows[1].interestRate,0);assert.equal(rows[1].mortgageYearly,0);
 });
+
+
+test('zero-capital portfolio retains cashflow but has no ROI or capital recovery duration',()=>{
+ const rows=[{propertyMode:'owned',roiAvailable:false,roi:null,equity:0,net:1200,price:0,investmentScore:75}];
+ for(const lang of ['it','en']){
+  const elements=render(rows,rows,{lang});
+  assert.equal(elements.get('kpi-break').innerText,'N/A');
+  assert.equal(elements.get('kpi-roi').innerText,'--');
+  assert.equal(elements.get('portfolio-roi').textContent,'--');
+  assert.match(elements.get('kpi-cash').innerText,/100/);
+ }
+});
+
+test('mixed portfolio keeps all cashflow while explaining the limited capital denominator in both languages',async()=>{
+ const rows=[{roi:10,equity:30000,net:3000,price:150000},{propertyMode:'owned',roiAvailable:false,equity:0,net:1200,price:0}];
+ const metrics=summarizeInvestments(rows);
+ assert.equal(metrics.cashflow,4200);assert.ok(Math.abs(metrics.weightedROI-14)<1e-10);
+ const html=await readFile(new URL('../dashboard/index.html',import.meta.url),'utf8');
+ assert.match(html,/Cashflow \/ capitale indicato/);assert.match(html,/Cash flow \/ entered capital/);
+ assert.match(html,/Non è il rendimento sul valore totale degli immobili/);
+ assert.match(html,/not a return on total property value/);
+ assert.doesNotMatch(html,/Average portfolio ROI|ROI medio portafoglio|Portfolio Value/);
+});

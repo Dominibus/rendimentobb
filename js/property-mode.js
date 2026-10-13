@@ -41,6 +41,7 @@ export function initPropertyMode(window, document){
   document.addEventListener('rb_language_changed',present);
   window.rbSetPropertyMode=change;
   present();
+  if(window.location?.search && new URLSearchParams(window.location.search).get('propertyMode')==='owned') change('owned');
 }
 
 // Add operational context after all legacy investment panels have rendered.
