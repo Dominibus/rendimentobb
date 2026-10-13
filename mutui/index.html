@@ -2037,59 +2037,10 @@ function goToPricing(){
 }
 
 async function startPlanPurchase(plan){
-
- // Production: nessun log
-
-  const access = getAccess();
-
-  // 🔥 SE INVESTOR → NON deve vedere popup
-  if(access.isInvestor){
-    alert("Hai già accesso Investor");
-    return;
-  }
-
-  // 🔥 SE NON LOGGATO → popup
-  if(!access.isLogged){
-
-  alert(
-    t(
-      "🔓 Accedi per sbloccare il confronto completo",
-      "🔓 Login to unlock the complete comparison"
-    )
-  );
-
-  // salva intento (importantissimo per funnel)
-  localStorage.setItem("pending_plan", plan);
-
-  window.location.href = "/login/";
-
-  return;
-}
-
-  try{
-
-    const res = await fetch("/api/create-checkout-session",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ 
-  plan,
-  uid: window.currentUser?.uid || null,
-  email: window.currentUser?.email || null
-})
-    });
-
-    const data = await res.json();
-
-    if(data.url){
-      window.location.href = data.url;
-    }else{
-      alert("Errore pagamento (no URL)");
-    }
-
-  }catch(e){
-    
-    alert("Errore connessione pagamento");
-  }
+  if(!['investor','pro','pro_yearly'].includes(plan)) return;
+  // One checkout entry point: choose the plan and review its terms on Home.
+  // Never send an unauthenticated legacy checkout or trust a client UID/email.
+  window.location.href = "/#pricing";
 }
   function showUpgradeModal(){
   document.getElementById("upgrade-modal").style.display = "flex";

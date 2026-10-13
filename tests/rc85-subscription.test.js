@@ -101,7 +101,7 @@ test('actual portal endpoint ignores client supplied customer and owner',async()
 test('purchase review cannot call Stripe until acceptance, and account change cancels it',async()=>{
  const full=fs.readFileSync(new URL('../js/app.js',import.meta.url),'utf8');const code=full.slice(full.indexOf('window.buyPlan = async function(plan){'),full.indexOf('// ================= PROPERTY SCRAPER',full.indexOf('window.buyPlan = async function(plan){')));
  let accept,requests=0;const user={uid:'u1',getIdToken:async()=> 'synthetic-token'};
- const c={window:{currentUser:user,currentLang:'it',rbReviewPurchase:()=>new Promise(r=>accept=r),location:{assign(){}}},showToast(){},fetch:async()=>{requests++;return {ok:true,status:200,json:async()=>({url:'https://checkout.stripe.com/owned'})};}};vm.createContext(c);vm.runInContext(code,c);
+ const c={TERMS_VERSION,window:{currentUser:user,currentLang:'it',rbReviewPurchase:()=>new Promise(r=>accept=r),location:{assign(){}}},showToast(){},fetch:async()=>{requests++;return {ok:true,status:200,json:async()=>({url:'https://checkout.stripe.com/owned'})};}};vm.createContext(c);vm.runInContext(code,c);
  const cancelled=c.window.buyPlan('pro');assert.equal(requests,0);accept(false);await cancelled;assert.equal(requests,0);
  const switched=c.window.buyPlan('pro');c.window.currentUser={uid:'other'};accept(true);await switched;assert.equal(requests,0);
  c.window.currentUser=user;const accepted=c.window.buyPlan('pro');assert.equal(requests,0);accept(true);await accepted;assert.equal(requests,1);
