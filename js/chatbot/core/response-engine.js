@@ -70,7 +70,7 @@ const rbAsksFreeFeatures =
   /(include|includes|included|comprende|contiene|offre|features|funzioni)/.test(rbPlanQuestion);
 const rbAsksPlanPDF =
   /\bpdf\b/.test(rbPlanQuestion) &&
-  /\b(free|investor)\b/.test(rbPlanQuestion) &&
+  /\b(free|investor|trial)\b|prova gratuita|in prova/.test(rbPlanQuestion) &&
   /(inclus|disponib|available|include|access|puo|posso|can i|does|is the)/.test(rbPlanQuestion);
 if(rbAsksFreeFeatures || rbAsksPlanPDF){
   intent = { ...intent, intent: "subscriptions" };
@@ -78,23 +78,27 @@ if(rbAsksFreeFeatures || rbAsksPlanPDF){
 
 // Product questions must not depend on a simulation or uploaded PDF.
 const rbExplicitPlanQuestion = /(?:prezz|cost|differ|includ).*(?:pian[oi]|plans?)/i.test(rbPlanQuestion) || /\b(pro|investor|abbonament[oi]|subscription|pricing)\b/i.test(rbPlanQuestion) || /(?:pian[oi]|plans?).*(?:prezz|cost|differ|mensil|annual|month|year|includ|funzion)/i.test(rbPlanQuestion);
-if(rbExplicitPlanQuestion || rbAsksFreeFeatures || rbAsksPlanPDF || intent.intent === "subscriptions"){
+const rbTrialQuestion = /\btrial\b|prova gratuita|prova gratis|investor.*prova|prova.*investor|7 giorni|sette giorni|7.days|seven.days/.test(rbPlanQuestion);
+const rbWithdrawalQuestion = /recesso|withdrawal|withdraw from/.test(rbPlanQuestion);
+if(rbExplicitPlanQuestion || rbAsksFreeFeatures || rbAsksPlanPDF || rbTrialQuestion || rbWithdrawalQuestion || intent.intent === "subscriptions"){
   const cancel = /disdire|disdetta|annull|cancell|cancel|renewal|rinnovo/.test(rbPlanQuestion);
   const annual = /annuale|annuali|annual|yearly|year|mensile|monthly/.test(rbPlanQuestion);
-  const textIT = cancel
-    ? "Per gestire il rinnovo o cambiare un abbonamento attivo, contatta l’assistenza. Non è presente una gestione autonoma del rinnovo nell’area account."
-    : rbAsksPlanPDF
-    ? "Free e Investor non includono il PDF Executive. È disponibile con Pro mensile e Pro annuale."
-    : annual
+  const trialIT = "La prova Investor dura 7 giorni ed è riservata agli account Free con email verificata che non l’hanno già utilizzata. Attivala esplicitamente dall’area Abbonamento accettando le condizioni: la sola verifica email non la attiva. Nessuna carta, nessun addebito e nessuna conversione automatica a pagamento. Include analisi salvate, dashboard e PMS; i PDF restano riservati a Pro. Alla scadenza i permessi tornano a Free e i dati salvati non sono eliminati automaticamente. È prevista una sola prova per account e indirizzo email. Controlla disponibilità e scadenza nel tuo account: questa risposta non attiva, proroga o annulla alcun piano.";
+  const trialEN = "The Investor trial lasts 7 days and is available to Free accounts with a verified email that have not used it before. Activate it explicitly through Subscription by accepting the terms: email verification alone does not activate it. No card, no charge and no automatic conversion to a paid plan. It includes saved analyses, dashboard and PMS; PDFs still require Pro. At expiry, permissions return to Free and saved data is not automatically deleted. One trial per account and email address. Check availability and expiry in your account: this reply does not activate, extend or cancel a plan.";
+  const withdrawalIT = "Per esercitare il recesso consulta /withdrawal.html, disponibile anche dal collegamento Recesso nel footer. Il percorso online raccoglie la dichiarazione e fornisce una conferma di ricezione; non conferma un rimborso già eseguito. Condizioni e riepilogo sono consultabili prima dell’invio. Disattivare il rinnovo su Stripe è distinto dal recesso. Per assistenza contatta support@rendimentobb.com. Questa risposta non invia una richiesta né modifica l’abbonamento.";
+  const withdrawalEN = "To exercise withdrawal, see /withdrawal.html, also linked from the footer. The online flow records your statement and provides an acknowledgement; it does not confirm that a refund has been completed. Review the conditions and summary before submitting. Turning off renewal in Stripe is separate from withdrawal. Contact support@rendimentobb.com for assistance. This reply does not submit a request or change your subscription.";
+  const cancelIT = "Per disattivare il rinnovo di un abbonamento acquistato tramite Stripe, apri Abbonamento e seleziona Gestisci rinnovo e fatture su Stripe, quando disponibile. Nel portale puoi controllare il piano e le opzioni di annullamento. Se scegli l’annullamento a fine periodo, l’accesso resta fino alla scadenza già pagata. Per piani assegnati manualmente, portale non disponibile o problemi, contatta l’assistenza: support@rendimentobb.com. Disattivazione del rinnovo e recesso sono procedure distinte. Questa risposta non modifica il tuo abbonamento.";
+  const cancelEN = "To turn off renewal for a subscription purchased through Stripe, open Subscription and select the Stripe renewal and invoice management button, when available. Review your plan and cancellation options in the portal. If you cancel at the end of the period, access remains until the paid period expires. For manually assigned plans, an unavailable portal or problems, contact support@rendimentobb.com. Turning off renewal and exercising withdrawal are separate procedures. This reply does not change your subscription.";
+  const textIT = rbWithdrawalQuestion ? withdrawalIT : rbAsksPlanPDF
+    ? "Free, Investor e la prova Investor non includono i report PDF. Sono disponibili con Pro mensile e Pro annuale."
+    : rbTrialQuestion ? trialIT : cancel ? cancelIT : annual
     ? "Pro mensile: 29 € al mese. Pro annuale: 199 € pagati in un’unica soluzione per l’anno, equivalenti a circa 16,58 €/mese. Le funzioni Pro sono le stesse: analisi salvate, dashboard, PMS prenotazioni, assistente e report PDF. Risparmi 149 € rispetto a 12 mesi di Pro mensile (348 €). Autopilot propone priorità e azioni assistite; la sincronizzazione automatica con i portali OTA non è inclusa."
-    : "Free permette di provare il simulatore. Investor: 19 €/mese, con analisi salvate, dashboard, assistente e PMS prenotazioni. Pro: 29 €/mese, aggiunge report PDF Executive e report dashboard. Pro annuale: 199 €/anno, con le stesse funzioni Pro e un risparmio di 149 € rispetto a 12 mesi mensili. Le analisi sono stime sulle ipotesi inserite; Autopilot guida le attività e non sincronizza automaticamente i portali OTA.";
-  const textEN = cancel
-    ? "Contact support to manage renewal or change an active subscription. Account self-service renewal management is not available."
-    : rbAsksPlanPDF
-    ? "Free and Investor do not include the Executive PDF. Monthly and annual Pro include it."
-    : annual
-    ? "Monthly Pro: €29/month. Annual Pro: €199 paid upfront for one year, about €16.58/month. Both include the same Pro features: saved analyses, dashboard, booking PMS, assistant and PDF reports. Annual billing saves €149 compared with 12 monthly payments (€348). Autopilot suggests priorities and guided actions; automatic OTA channel synchronization is not included."
-    : "Free lets you try the simulator. Investor: €19/month, with saved analyses, dashboard, assistant and booking PMS. Pro: €29/month, adding Executive PDFs and dashboard reports. Annual Pro: €199/year, with the same Pro features and €149 savings versus 12 monthly payments. Analyses are estimates based on inputs; Autopilot guides tasks and does not automatically synchronize OTA channels.";
+    : "Free permette di provare il simulatore. Investor: 19 €/mese, con analisi salvate, dashboard, assistente e PMS prenotazioni. Pro: 29 €/mese, aggiunge report PDF Executive e report dashboard. Pro annuale: 199 €/anno, con le stesse funzioni Pro e un risparmio di 149 € rispetto a 12 mesi mensili. È disponibile una prova Investor di 7 giorni per account Free idonei con email verificata: attivazione esplicita, senza carta o addebiti, PDF esclusi e ritorno a Free alla scadenza. Le analisi sono stime sulle ipotesi inserite; Autopilot guida le attività e non sincronizza automaticamente i portali OTA.";
+  const textEN = rbWithdrawalQuestion ? withdrawalEN : rbAsksPlanPDF
+    ? "Free, Investor and the Investor trial do not include PDF reports. They require monthly Pro or yearly Pro."
+    : rbTrialQuestion ? trialEN : cancel ? cancelEN : annual
+    ? "Monthly Pro costs €29/month. Yearly Pro costs €199 paid upfront for the year, equivalent to about €16.58/month. Both include the same Pro features: saved analyses, dashboard, booking PMS, assistant and PDF reports. Annual billing saves €149 compared with 12 monthly payments (€348). Autopilot suggests priorities and guided actions; automatic OTA channel synchronization is not included."
+    : "Free lets you try the simulator. Investor: €19/month, with saved analyses, dashboard, assistant and booking PMS. Pro: €29/month, adding Executive PDFs and dashboard reports. Annual Pro: €199/year, with the same Pro features and €149 savings versus 12 monthly payments. Eligible Free accounts with a verified email can explicitly activate a 7-day Investor trial: no card or charges, PDFs excluded and a return to Free at expiry. Analyses are estimates based on inputs; Autopilot guides tasks and does not automatically synchronize OTA channels.";
   return {type:"subscriptions",confidence:1,textIT,textEN,suggestionsIT:["Confronta i piani nella home"],suggestionsEN:["Compare plans on the home page"],signals:[],metadata:{source:"product_plans"}};
 }
 
