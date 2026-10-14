@@ -53,7 +53,7 @@ async function(message){
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
     // Product questions must not be swallowed by active PDFs or PMS prompts.
-    const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial)\b|prova gratuit[ao]|prova gratis|7 giorni|sette giorni|7.days|seven.days|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
+    const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial)\b|prova gratuit[ao]|prova gratis|prova.{0,30}(?:7|sette).{0,8}giorni|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
     if(productQuestion && window.rbGenerateResponse){
       const productResponse=window.rbGenerateResponse({message:text,intent:{intent:'subscriptions'}});
       if(productResponse?.type==='subscriptions')return {success:true,response:productResponse,intent:{intent:'subscriptions'}};
