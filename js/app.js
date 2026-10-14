@@ -7133,33 +7133,45 @@ doc.text(doc.splitTextToSize(T(
 ),168),20,43);
 const rc96Numeric = value => value == null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
 const rc96Assumptions = d.assumptions || {};
-const rc96Costs = rc96Numeric(d.expenses ?? d.monthlyCosts ?? d.expensesMonthly ?? rc96Assumptions.monthlyCosts);
-const rc96Nightly = rc96Numeric(d.priceNight ?? d.pricePerNight ?? rc96Assumptions.nightlyRate ?? rc96Assumptions.pricePerNight);
-const rc96Occupancy = rc96Numeric(d.occupancy ?? rc96Assumptions.occupancy);
+// RC123: use the completed scenario snapshot, never the current form or defaults.
+const rc123Number = value => new Intl.NumberFormat(isEN ? "en-GB" : "it-IT", {maximumFractionDigits:6}).format(value);
+const rc123Unavailable = T("Non disponibile", "Unavailable");
+const rc123Percent = value => { const n = rc96Numeric(value); return n === null ? rc123Unavailable : `${rc123Number(n)}%`; };
+const rc123Money = (value, precision = 2) => { const n = rc96Numeric(value); return n === null ? rc123Unavailable : `${new Intl.NumberFormat(isEN ? "en-GB" : "it-IT", {maximumFractionDigits:precision}).format(n)} EUR`; };
+const rc96Costs = rc96Numeric(rc96Assumptions.expenses ?? d.expenses ?? d.monthlyCosts ?? d.expensesMonthly ?? rc96Assumptions.monthlyCosts);
+const rc96Nightly = rc96Numeric(rc96Assumptions.priceNight ?? d.priceNight ?? d.pricePerNight ?? rc96Assumptions.nightlyRate ?? rc96Assumptions.pricePerNight);
+const rc96Occupancy = rc96Numeric(rc96Assumptions.occupancy ?? d.occupancy);
+const rc123PercentageCosts = (rc96Assumptions.expensesUnit ?? d.expensesUnit) === "percentage";
 const rc96Rows = [
   [T("Tipo scenario","Scenario type"), isOwnedProperty ? T("Immobile già posseduto","Already owned property") : T("Acquisto / altro","Purchase / other")],
-  [T("Valore immobile","Property value"), isOwnedProperty && price === 0 ? T("Non indicato","Not provided") : eur(price)],
-  [T("Capitale proprio / avvio","Equity / startup capital"), eur(equity)],
-  [T("Tariffa per notte","Nightly rate"), rc96Nightly === null ? T("Non disponibile","Unavailable") : eur(rc96Nightly)],
-  [T("Occupazione","Occupancy"), rc96Occupancy === null ? T("Non disponibile","Unavailable") : `${rc96Occupancy}%`],
-  [T("Costi mensili","Monthly costs"), rc96Costs === null ? T("Non disponibili","Unavailable") : eur(rc96Costs)],
-  [T("Ricavi annui","Annual revenue"), eur(revenue)],
-  [T("NOI del modello","Model NOI"), eur(netOperatingIncome)],
-  [T("Cashflow netto annuo","Annual net cashflow"), eur(profit)]
+  [T("Versione calcolo","Calculation version"), rc96Assumptions.calculationVersion || rc123Unavailable],
+  [T("Valore immobile","Property value"), isOwnedProperty && price === 0 ? T("Non indicato","Not provided") : rc123Money(price)],
+  [T("Capitale proprio / avvio","Equity / startup capital"), rc123Money(equity)],
+  [T("Tariffa per notte","Nightly rate"), rc123Money(rc96Nightly, 6)],
+  [T("Occupazione","Occupancy"), rc123Percent(rc96Occupancy)],
+  [rc123PercentageCosts ? T("Costi (% dei ricavi)","Costs (% of revenue)") : T("Costi mensili","Monthly costs"), rc123PercentageCosts ? rc123Percent(rc96Costs) : rc123Money(rc96Costs)],
+  [T("Commissioni","Commissions"), rc123Percent(rc96Assumptions.commission ?? d.commission)],
+  [T("Aliquota del modello","Model tax rate"), rc123Percent(rc96Assumptions.tax ?? d.tax)],
+  [T("Importo mutuo","Loan amount"), rc123Money(rc96Assumptions.loanAmount ?? d.mortgageAmount ?? d.loan ?? d.loanAmount)],
+  [T("Tasso annuo","Annual interest rate"), rc123Percent(rc96Assumptions.interestRate ?? d.interestRate)],
+  [T("Durata mutuo","Loan term"), rc96Numeric(rc96Assumptions.loanYears ?? d.loanYears) === null ? rc123Unavailable : `${rc123Number(Number(rc96Assumptions.loanYears ?? d.loanYears))} ${T("anni","years")}`],
+  [T("Ricavi annui","Annual revenue"), rc123Money(revenue)],
+  [T("NOI del modello","Model NOI"), rc123Money(netOperatingIncome)],
+  [T("Cashflow netto annuo","Annual net cashflow"), rc123Money(profit)]
 ];
-let rc96Y = 76;
+let rc96Y = 70;
 for(const [label,value] of rc96Rows){
   doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(...gray);
   doc.text(label,22,rc96Y);
   doc.setFont("helvetica","bold"); doc.setTextColor(...dark);
   doc.text(String(value),188,rc96Y,{align:"right"});
-  rc96Y += 16;
+  rc96Y += 11;
 }
 doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(...gray);
 doc.text(doc.splitTextToSize(T(
-  "I valori sono stime e non risultati PMS. Per un confronto valido tra PDF, usare la medesima simulazione e gli stessi input, quindi rigenerare entrambi i documenti.",
-  "These are estimates, not PMS actuals. To compare PDFs, use the same simulation and inputs, then regenerate both documents."
-),168),20,239);
+  "I valori sono stime e non risultati PMS. Le aliquote appartengono al modello semplificato. I dati mancanti non sono ricostruiti da valori predefiniti. Per confrontare i PDF usa la stessa simulazione e gli stessi input, poi rigenera entrambi i documenti.",
+  "These are estimates, not PMS actuals. Tax rates belong to the simplified model. Missing inputs are not reconstructed from defaults. To compare PDFs, use the same simulation and inputs, then regenerate both documents."
+),168),20,250);
 footer();
 
 // SAVE

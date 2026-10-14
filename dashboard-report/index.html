@@ -1857,7 +1857,7 @@ gap:14px;
 ">
 
 <div class="kpi">
-<span>${lang==="en"?"Annual Profit":"Profitto annuo"}</span>
+<span>${lang==="en"?"Estimated annual net cashflow":"Cashflow netto stimato annuo"}</span>
 <strong style="font-size:22px">
 ${euro(annualProfit)}
 </strong>
@@ -2279,9 +2279,9 @@ const drawExecutiveKPI = (
   doc.setTextColor(100,116,139);
 
   doc.text(
-    label,
+    doc.splitTextToSize(label, 42),
     x + 5,
-    kpiY + 8
+    kpiY + 6
   );
 
   // VALUE
@@ -2292,7 +2292,7 @@ const drawExecutiveKPI = (
   doc.text(
     value,
     x + 5,
-    kpiY + 18
+    kpiY + 20
   );
 
 };
@@ -2311,7 +2311,7 @@ drawExecutiveKPI(
 
 drawExecutiveKPI(
   20 + (kpiW + kpiGap) * 2,
-  t("PROFITTO ANNUO","ANNUAL PROFIT"),
+  t("CASHFLOW NETTO STIMATO ANNUO","ESTIMATED ANNUAL NET CASHFLOW"),
   eur(annualProfit)
 );
 
@@ -2438,9 +2438,9 @@ const drawPerformanceKPI = (
   doc.setTextColor(100,116,139);
 
   doc.text(
-    label,
+    doc.splitTextToSize(label, 42),
     x + 5,
-    performanceKpiY + 8
+    performanceKpiY + 6
   );
 
   // VALUE
@@ -2451,7 +2451,7 @@ const drawPerformanceKPI = (
   doc.text(
     value,
     x + 5,
-    performanceKpiY + 18
+    performanceKpiY + 20
   );
 
 };
@@ -2470,7 +2470,7 @@ drawPerformanceKPI(
 
 drawPerformanceKPI(
   20 + (performanceKpiW + performanceKpiGap) * 2,
-  t("PROFITTO MENSILE","MONTHLY PROFIT"),
+  t("CASHFLOW NETTO STIMATO MENSILE","ESTIMATED MONTHLY NET CASHFLOW"),
   eur(monthlyProfit)
 );
 

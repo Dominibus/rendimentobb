@@ -200,7 +200,7 @@ window.rbParseExecutivePDF = async function(documentObject){
         // EXECUTIVE PDF VALUES
         // ===========================================
 
-        const roi =
+        let roi =
 
             extractPercentage(
 
@@ -290,7 +290,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const propertyPrice = (() => {
+        let propertyPrice = (() => {
 
             const priceLabels =
                 "PROPERTY PRICE|ASKING PRICE|PREZZO IMMOBILE|VALORE IMMOBILE|PREZZO";
@@ -374,7 +374,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     );
 
-        const mortgage =
+        let mortgage =
 
             parseAmount(loanRevenuePair?.[1]) ??
 
@@ -403,7 +403,7 @@ window.rbParseExecutivePDF = async function(documentObject){
         // Match the entire schema instead of taking the first amount after each label.
         const feasibilityKPI = text.match(/PREZZO IMMOBILE\s+RICAVI ANNUI\s+CASHFLOW NETTO\s+ROI EQUITY\s+([\d.,]+)\s*€\s+([\d.,]+)\s*€\s+(-?[\d.,]+)\s*€\s+([\d.,]+)\s*%/i);
 
-        const gross =
+        let gross =
 
     parseAmount(feasibilityKPI?.[2]) ??
 
@@ -415,7 +415,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     );
 
-        const annualProfit =
+        let annualProfit =
 
             extractAmount(
 
@@ -423,7 +423,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const cashflow =
+        let cashflow =
 
             extractAmount(/(?:CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE))[^0-9\-]{0,30}(-?[\d.,]+)/i) ??
             parseAmount(feasibilityKPI?.[3]) ??
@@ -589,6 +589,32 @@ window.rbParseExecutivePDF = async function(documentObject){
         if(surfaceEvidence && /sq\.?\s*ft/i.test(surfaceEvidence[2])){
             const sqft = parseAmount(surfaceEvidence[1]);
             propertyFacts.surfaceSqm = sqft === null ? null : Math.round(sqft * 0.09290304 * 100) / 100;
+        }
+
+        // RC123: our own report appendix is explicit evidence, unlike broad
+        // regex matches that can cross an N/A field and pick up another KPI.
+        const appendixHeadings = [...text.matchAll(/(?:Ipotesi effettive del report|Actual report assumptions|Ipotesi salvate della simulazione|Saved simulation assumptions)/gi)];
+        const appendix = /RendimentoBB/i.test(text) && appendixHeadings.length
+            ? text.slice(appendixHeadings.at(-1).index) : null;
+        if(appendix){
+            const amountAt = labels => {
+                const match = appendix.match(new RegExp(`(?:${labels})\\s*(?:(Non indicato|Not provided|Non disponibile|Unavailable|N/A)|(?:EUR|€|\\$)\\s*(-?[\\d.,]+)|(-?[\\d.,]+)\\s*(?:EUR|€|\\$))`, 'i'));
+                return match ? {found:true,value:match[1] ? null : parseAmount(match[2] ?? match[3])} : {found:false};
+            };
+            const priceEvidence=amountAt('Valore immobile|Property value|Prezzo immobile|Purchase price');
+            const equityEvidence=amountAt('Capitale proprio / avvio|Equity / startup capital|Capitale proprio|Capitale di avvio|Startup capital|Equity');
+            const loanEvidence=amountAt('Importo mutuo|Loan amount');
+            const cashflowEvidence=amountAt('Cashflow netto annuo|Annual net cashflow|Cashflow netto|Net cashflow');
+            const revenueEvidence=amountAt('Ricavi annui|Annual revenue');
+            if(priceEvidence.found) propertyPrice=priceEvidence.value;
+            if(equityEvidence.found) equity=equityEvidence.value;
+            if(loanEvidence.found) mortgage=loanEvidence.value;
+            if(cashflowEvidence.found){cashflow=cashflowEvidence.value;annualProfit=cashflowEvidence.value;}
+            if(revenueEvidence.found) gross=revenueEvidence.value;
+            const roiEvidence=text.match(/(?:FORECAST EQUITY ROI|FORECAST STARTUP ROI|ROI EQUITY PREVISIONALE|ROI DI AVVIO PREVISIONALE)\s*(N\/A|-?\d+(?:[.,]\d+)?\s*%)/i)
+                || text.match(/(N\/A|-?\d+(?:[.,]\d+)?\s*%)\s*(?:Estimated equity ROI|Estimated startup ROI|ROI stimato sul capitale proprio|ROI stimato sul capitale di avvio)/i);
+            if(roiEvidence) roi=/N\/A/i.test(roiEvidence[1]) ? null : parsePercentage(roiEvidence[1].replace('%',''));
+            if(equityEvidence.found && equity === 0) roi=null;
         }
 
         const financialEvidence = [
