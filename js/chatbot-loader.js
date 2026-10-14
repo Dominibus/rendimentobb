@@ -173,7 +173,7 @@
     "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
     "/js/chatbot/core/executive-brain-v2.js?v=20261012-rc108",
     "/js/chatbot/core/executive-response-builder.js?v=20261012-rc108",
-    "/js/chatbot/core/response-engine.js?v=20261014-rc121",
+    "/js/chatbot/core/response-engine.js?v=20261014-rc122",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261001-28",

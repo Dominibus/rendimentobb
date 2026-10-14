@@ -1,4 +1,5 @@
-import './subscription-ui.js?v=20261013-rc115';
+import {createAnalyticsConsent} from './analytics-consent.js?v=20261014-rc122';
+import './subscription-ui.js?v=20261014-rc122';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
@@ -7,65 +8,11 @@ import './subscription-ui.js?v=20261013-rc115';
 let auth;
 let signOut;
 
-const GA_MEASUREMENT_ID = "G-749B8PW4ST";
-const RB_CONSENT_KEY = "rb_analytics_consent_v1";
-
-window.dataLayer = window.dataLayer || [];
-window.gtag = window.gtag || function(){
-  window.dataLayer.push(arguments);
-};
-
-window.gtag("consent", "default", {
-  analytics_storage: "denied",
-  ad_storage: "denied",
-  ad_user_data: "denied",
-  ad_personalization: "denied"
-});
-
-function loadGoogleAnalytics(){
-  if(window.__rbGA4Initialized) return;
-
-  window.__rbGA4Initialized = true;
-
-  if(!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`)){
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-  }
-
-  window.gtag("js", new Date());
-  window.gtag("config", GA_MEASUREMENT_ID);
-}
-
-function getAnalyticsConsent(){
-  try{
-    return localStorage.getItem(RB_CONSENT_KEY);
-  }catch(error){
-    return null;
-  }
-}
-
-function setAnalyticsConsent(value){
-  try{
-    localStorage.setItem(RB_CONSENT_KEY, value);
-  }catch(error){
-    // The preference still applies for the current page if storage is unavailable.
-  }
-
-  window.gtag("consent", "update", {
-    analytics_storage: value === "granted" ? "granted" : "denied",
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied"
-  });
-
-  if(value === "granted") loadGoogleAnalytics();
-}
-
-if(getAnalyticsConsent() === "granted"){
-  setAnalyticsConsent("granted");
-}
+let consentStorage;
+try { consentStorage = window.localStorage; } catch {}
+const analyticsConsent = createAnalyticsConsent({window, document, storage: consentStorage});
+function getAnalyticsConsent(){ return analyticsConsent.getChoice(); }
+function setAnalyticsConsent(value){ analyticsConsent.setChoice(value); }
 
 function initializeConsentUI(){
   if(document.getElementById("rb-consent-style")) return;
@@ -95,11 +42,13 @@ function initializeConsentUI(){
   settings.style.display = "none";
 
   function renderConsentLanguage(){
-    const english = (localStorage.getItem("rb_lang") || "it") === "en";
+    let language = window.currentLang || "it";
+    try { language = localStorage.getItem("rb_lang") || language; } catch {}
+    const english = language === "en";
     banner.innerHTML = english ? `
-      <div class="rb-consent__copy"><strong id="rb-consent-title">Your privacy, your choice</strong><p>We use essential storage to operate the site. With your permission, Google Analytics helps us understand aggregated usage. Advertising storage remains disabled. <a href="/privacy.html">Privacy policy</a></p></div>
+      <div class="rb-consent__copy"><strong id="rb-consent-title">Your privacy, your choice</strong><p>We use essential storage to operate the site. With your permission, Google Analytics helps us understand aggregated usage. Advertising storage remains disabled. <a href="/privacy.html#cookies">Privacy and cookies</a></p></div>
       <div class="rb-consent__actions"><button type="button" data-choice="denied">Reject analytics</button><button type="button" data-choice="granted">Accept analytics</button></div>` : `
-      <div class="rb-consent__copy"><strong id="rb-consent-title">La tua privacy, la tua scelta</strong><p>Usiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. <a href="/privacy.html">Privacy policy</a></p></div>
+      <div class="rb-consent__copy"><strong id="rb-consent-title">La tua privacy, la tua scelta</strong><p>Usiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. <a href="/privacy.html#cookies">Privacy e cookie</a></p></div>
       <div class="rb-consent__actions"><button type="button" data-choice="denied">Rifiuta analytics</button><button type="button" data-choice="granted">Accetta analytics</button></div>`;
     settings.textContent = english ? "Cookie settings" : "Preferenze cookie";
   }
