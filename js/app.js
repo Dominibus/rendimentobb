@@ -1,5 +1,5 @@
 import "./investment-journey.js?v=20261008-rc60";
-import {TERMS_VERSION} from "./subscription-offer.js?v=20261011-rc102";
+import {TERMS_VERSION} from "./subscription-offer.js?v=20261014-rc122";
 // ===============================================
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine

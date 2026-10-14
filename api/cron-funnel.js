@@ -1,3 +1,4 @@
+import {drainSubscriptionConfirmations} from '../lib/subscription-confirmation.js';
 import {scanFunnelDocuments} from "../lib/funnel-scan.js";
 import {drainWithdrawalReceipts} from '../lib/withdrawal-service.js';
 import {hasFunnelConsent,funnelUnsubscribeURL} from "../lib/funnel-consent.js";
@@ -83,6 +84,11 @@ export default async function handler(req, res){
     phase = "withdrawal_receipts";
     const withdrawalReceipts=await drainWithdrawalReceipts({db,resend,now});
     await db.collection("_pms_jobs").doc("withdrawal_receipts").set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...withdrawalReceipts,needsAttention:withdrawalReceipts.pending>0});
+    phase = 'subscription_confirmations';
+    try {
+      const confirmations=await drainSubscriptionConfirmations({db,resend,now});
+      await db.collection('_pms_jobs').doc('subscription_confirmations').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...confirmations});
+    } catch { console.error('Subscription confirmation recovery failed'); }
     phase = "pms";
     let pmsNotifications,pmsReminders,pmsError=false;
     try{

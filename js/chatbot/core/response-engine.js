@@ -4976,7 +4976,7 @@ ${performanceIT}
 
 ${adviceIT}
 
-🧠 Il PMS sta monitorando in tempo reale le performance operative della struttura.`;
+🧠 Il PMS riepiloga i dati delle prenotazioni caricate. I ricavi possono includere soggiorni futuri: non sono incassi verificati né utile netto.`;
 
   response.textEN =
 
@@ -4998,7 +4998,7 @@ ${performanceEN}
 
 ${adviceEN}
 
-🧠 The PMS is actively monitoring property performance in real time.`;
+🧠 The PMS summarises loaded booking data. Revenue may include future stays: it is not verified receipts or net profit.`;
 
 
   return response;

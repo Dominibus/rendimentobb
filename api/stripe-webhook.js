@@ -1,3 +1,5 @@
+import {deliverSubscriptionConfirmation} from '../lib/subscription-confirmation.js';
+import {Resend} from 'resend';
 import {subscriptionPeriodEnd,invoiceSubscriptionId} from '../lib/stripe-period.js';
 import {saveCheckoutContract} from '../lib/account-subscription-service.js';
 import { stripeFieldName, buildStripeEntitlementUpdate } from "../lib/stripe-entitlements.js";
@@ -467,6 +469,9 @@ export default async function handler(
 
       if(hasAccess && session.metadata?.termsVersion){
         await saveCheckoutContract({db,session,subscription,liveMode:IS_LIVE_STRIPE});
+        // The immutable contract is persisted before notification; no email error changes access.
+        try { await deliverSubscriptionConfirmation({db,id:`${IS_LIVE_STRIPE?'live':'test'}_${session.id}`,resend:process.env.RESEND_API_KEY?new Resend(process.env.RESEND_API_KEY):null}); }
+        catch { console.error('Subscription confirmation pending recovery'); }
       }
 
     }

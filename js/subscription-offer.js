@@ -1,4 +1,4 @@
-export const TERMS_VERSION = '2026-10-11-rc102';
+export const TERMS_VERSION = '2026-10-14-rc122';
 export const TRIAL_DAYS = 7;
 export const OFFERS = Object.freeze({
   investor: {name:'Investor', amount:19, interval:'month', pdf:false},
