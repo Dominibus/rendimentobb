@@ -6,6 +6,11 @@
     const query=normalize(text);
     if(/^(autopilot investimento:|investment autopilot:)/.test(query))return false;
     if(/\b(pdf|brochure|simulatore|simulation|roi|mutuo|mortgage|password|login|registrarmi|subscription)\b/.test(query))return false;
+    // An explicit operational PMS question must not fall through to city/ROI
+    // knowledge when its English wording differs or the first letter is missing.
+    const operational = /oggi|today|domani|tomorrow|attivit|tasks?|priorit|document|pulizi|cleaning|da fare|need to do|have to do|devo fare|da gestire/.test(query);
+    if(/\bpms\b/.test(query) && operational)return true;
+    if(/\b(?:what|hat)\s+do i (?:need|have) to (?:do|manage)\b/.test(query) && /today|tomorrow|tasks?|bookings?|reservations?/.test(query))return true;
     if(wantsHorizon(query))return true;
     if(/(?:qualcosa|attivita|task|tasks|operazioni).*(?:fare|gestire|aperte|pending|today|oggi)|(?:rimast|resta|left).*(?:fare|gestire|do)|(?:documenti|documents).*(?:mancanti|missing)|(?:priorita|priorities).*(?:giornat|today|oggi)/.test(query))return true;
     return /checklist|riepilogo operativo|daily (plan|tasks|priorities)|what (should|do) i (do|manage)|cosa (devo |posso )?(fare|gestire)|da dove (parto|inizio)|tutto sotto controllo|what needs attention|priorita.*(oggi|prenot|pms)|autopilot.*(oggi|domani|priorita|pms)|\b(urgenti|urgenze|urgent)\b|documenti.*manc|missing.*documents|documents.*missing|pulizi.*(complet|gestire|fare)|cleaning.*(pending|complete)|cosa.*(manca|da gestire)/.test(query);

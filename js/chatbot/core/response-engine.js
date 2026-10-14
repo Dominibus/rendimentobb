@@ -71,7 +71,7 @@ const rbAsksFreeFeatures =
 const rbAsksPlanPDF =
   /\bpdf\b/.test(rbPlanQuestion) &&
   /\b(free|investor|trial)\b|prova gratuita|in prova/.test(rbPlanQuestion) &&
-  /(inclus|disponib|available|include|access|puo|posso|can i|does|is the)/.test(rbPlanQuestion);
+  /(inclus|disponib|available|include|access|puo|posso|can i|does|is the|scaric|download|report)/.test(rbPlanQuestion);
 if(rbAsksFreeFeatures || rbAsksPlanPDF){
   intent = { ...intent, intent: "subscriptions" };
 }
