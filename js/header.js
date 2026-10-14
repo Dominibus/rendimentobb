@@ -495,7 +495,7 @@ async function bindHeaderAccount(){
     (void 0);
     // Keep navigation visible; do not infer a plan or authenticated state.
     const accountArea = document.getElementById("user-area");
-    if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">Accedi</a>`;
+    if(accountArea) accountArea.innerHTML = `<a href="/login/" class="rb-login" data-it="Accedi" data-en="Login">${window.currentLang === "en" ? "Login" : "Accedi"}</a>`;
   }
 }
 window.rbRenderHeaderUser = renderUser;
@@ -854,7 +854,7 @@ Assistente RendimentoBB
       href="/login/"
       data-it="Accedi"
       data-en="Login">
-      Accedi
+      ${window.currentLang === "en" ? "Login" : "Accedi"}
     </a>
 
   `;
@@ -1032,7 +1032,7 @@ document.getElementById("logout").onclick = async ()=>{
     class="mobile-cta"
     data-it="🔐 Accedi"
     data-en="🔐 Login">
-    🔐 Accedi
+    ${window.currentLang === "en" ? "🔐 Login" : "🔐 Accedi"}
   </a>
 
 `;
@@ -1063,7 +1063,7 @@ class="rb-login">
 data-it="Accedi"
 data-en="Login">
 
-Accedi
+${window.currentLang === "en" ? "Login" : "Accedi"}
 
 </span>
 
