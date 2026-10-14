@@ -78,7 +78,7 @@ if(rbAsksFreeFeatures || rbAsksPlanPDF){
 
 // Product questions must not depend on a simulation or uploaded PDF.
 const rbExplicitPlanQuestion = /(?:prezz|cost|differ|includ).*(?:pian[oi]|plans?)/i.test(rbPlanQuestion) || /\b(pro|investor|abbonament[oi]|subscription|pricing)\b/i.test(rbPlanQuestion) || /(?:pian[oi]|plans?).*(?:prezz|cost|differ|mensil|annual|month|year|includ|funzion)/i.test(rbPlanQuestion);
-const rbTrialQuestion = /\btrial\b|prova gratuita|prova gratis|investor.*prova|prova.*investor|7 giorni|sette giorni|7.days|seven.days/.test(rbPlanQuestion);
+const rbTrialQuestion = /\btrial\b|prova gratuita|prova gratis|investor.*prova|prova.*investor|prova.{0,30}(?:7|sette).{0,8}giorni/.test(rbPlanQuestion);
 const rbWithdrawalQuestion = /recesso|withdrawal|withdraw from/.test(rbPlanQuestion);
 if(rbExplicitPlanQuestion || rbAsksFreeFeatures || rbAsksPlanPDF || rbTrialQuestion || rbWithdrawalQuestion || intent.intent === "subscriptions"){
   const cancel = /disdire|disdetta|annull|cancell|cancel|renewal|rinnovo/.test(rbPlanQuestion);
