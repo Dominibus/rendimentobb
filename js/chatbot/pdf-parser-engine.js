@@ -411,7 +411,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     extractAmount(
 
-        /(?:RICAVI ANNUI|ANNUAL REVENUE|GROSS REVENUE|RICAVI LORDI|FATTURATO LORDO)[^0-9€\-]{0,30}€?\s*(-?[\d.,]+)/i
+        /(?:RICAVI ANNUI|ANNUAL REVENUE|GROSS REVENUE|RICAVI LORDI|FATTURATO LORDO)\s*[:=]?\s*(?:EUR|€|\$)?\s*(-?[\d.,]+)/i
 
     );
 

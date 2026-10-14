@@ -3317,7 +3317,9 @@ doc.text(
         [t("Aliquota del modello","Model tax rate"),number(assumptions.tax)+"%"],
         [t("Importo mutuo","Loan amount"),eur(assumptions.loanAmount)],
         [t("Tasso annuo","Annual interest rate"),number(assumptions.interestRate)+"%"],
-        [t("Durata mutuo","Loan term"),number(assumptions.loanYears)+t(" anni"," years")]
+        [t("Durata mutuo","Loan term"),number(assumptions.loanYears)+t(" anni"," years")],
+        // RC124: label the model amount explicitly; the formula below is not a monetary value.
+        [t("Ricavi annui","Annual revenue"),eur(assumptions.priceNight * 365 * assumptions.occupancy / 100)]
       ];
       rows.forEach(([label,value])=>{
         doc.setFillColor(248,250,252);doc.roundedRect(20,assumptionsY-5,170,10,2,2,"F");
