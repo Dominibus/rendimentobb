@@ -52,6 +52,13 @@ async function(message){
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
+    // Product questions must not be swallowed by active PDFs or PMS prompts.
+    const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial)\b|prova gratuit[ao]|prova gratis|7 giorni|sette giorni|7.days|seven.days|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
+    if(productQuestion && window.rbGenerateResponse){
+      const productResponse=window.rbGenerateResponse({message:text,intent:{intent:'subscriptions'}});
+      if(productResponse?.type==='subscriptions')return {success:true,response:productResponse,intent:{intent:'subscriptions'}};
+    }
+
     if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
     // Handle explicit document requests once before the multi-intent/live pipeline.
     const activePDF = window.rbDocumentManager?.getLast?.();
