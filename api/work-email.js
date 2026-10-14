@@ -43,6 +43,10 @@ export default async function handler(req, res) {
     const {httpStatus,...payload}=result;
     return res.status(httpStatus || 200).json(payload);
   }catch(error){
+    // RC125: rejected credentials are authentication failures, not delivery faults.
+    if(["auth/argument-error", "auth/invalid-id-token", "auth/id-token-expired", "auth/id-token-revoked", "auth/user-disabled", "auth/user-not-found"].includes(error?.code)){
+      return res.status(401).json({success:false,error:"invalid_authentication"});
+    }
     console.error("PMS urgent notification failed");
     return res.status(500).json({ success:false, error:"notification_failed" });
   }
