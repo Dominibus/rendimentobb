@@ -399,7 +399,7 @@ window.updateOverlayVisibility =
           aria-label="RendimentoBB: panoramica in 20 secondi">
           <source src="/video/RendimentoBB-Panoramica-20261011.mp4" type="video/mp4">
           Il tuo browser non supporta la riproduzione video.
-          <a href="/video/RendimentoBB-Panoramica-20261011.mp4">Scarica il video</a>.
+          <a href="/video/RendimentoBB-Panoramica-20261011.mp4" data-it="Scarica il video" data-en="Download the video">Scarica il video</a>.
         </video>
       </div>
     </article>
@@ -1429,10 +1429,9 @@ Come si calcola il ROI di un B&B
 </h3>
 
 <p
-data-it="Il ROI (Return on Investment) si calcola considerando ricavi annuali, costi operativi e investimento iniziale. In Italia il rendimento medio varia tra l’8% e il 18%, ma solo con una valutazione corretta dell’immobile."
-data-en="ROI (Return on Investment) is calculated using annual revenue, operating costs and initial investment. In Italy, average returns range between 8% and 18%, but only with correct property evaluation.">
-Il ROI (Return on Investment) si calcola considerando ricavi annuali, costi operativi e investimento iniziale.
-In Italia il rendimento medio varia tra l’8% e il 18%, ma solo con una valutazione corretta dell’immobile.
+data-it="Il ROI stimato rapporta il risultato annuo al capitale considerato. Il risultato dipende da ricavi, costi, imposte del modello e finanziamento: indica sempre se il capitale comprende il valore della casa o solo le spese di avvio. Non esiste un rendimento garantito."
+data-en="Estimated ROI compares the annual result with the capital used as its basis. It depends on revenue, costs, modelled taxes and financing: always state whether capital includes the property value or only startup costs. Returns are not guaranteed.">
+Il ROI stimato rapporta il risultato annuo al capitale considerato. Il risultato dipende da ricavi, costi, imposte del modello e finanziamento: indica sempre se il capitale comprende il valore della casa o solo le spese di avvio. Non esiste un rendimento garantito.
 </p>
 
 <!-- 🔥 HOOK PSICOLOGICO -->
@@ -1455,9 +1454,9 @@ Il risultato dipende da tariffe, occupazione, costi, fiscalità e finanziamento:
 </p>
 
 <p style="margin-top:10px;font-weight:600"
-data-it="Per questo è fondamentale analizzare ROI, break-even, mutuo e rischio reale prima di investire."
-data-en="That’s why it’s essential to analyze ROI, break-even, mortgage and real risk before investing.">
-Per questo è fondamentale analizzare ROI, break-even, mutuo e rischio reale prima di investire.
+data-it="Confronta ROI stimato, recupero del capitale, mutuo e scenari con ricavi inferiori. L’indice di rischio del modello non misura tutti i rischi dell’immobile."
+data-en="Compare estimated ROI, capital payback, mortgage and scenarios with lower revenue. The model risk index does not measure every property risk.">
+Confronta ROI stimato, recupero del capitale, mutuo e scenari con ricavi inferiori. L’indice di rischio del modello non misura tutti i rischi dell’immobile.
 </p>
 
 <!-- 🔥 CTA PRINCIPALE -->
@@ -1495,9 +1494,9 @@ Dove investire nel 2026?
 </h2>
 
 <p
-data-it="Seleziona una città e scopri subito il potenziale reale"
-data-en="Select a city and instantly see real potential">
-Seleziona una città e scopri subito il potenziale reale
+data-it="Scegli una città e analizza il tuo immobile con i dati che hai verificato."
+data-en="Choose a city and analyse your property using data you have verified.">
+Scegli una città e analizza il tuo immobile con i dati che hai verificato.
 </p>
 
 <!-- 🔥 CITY SELECTOR -->
@@ -1510,22 +1509,20 @@ Seleziona una città e scopri subito il potenziale reale
 
 </div>
 
-<!-- 🔥 DYNAMIC CARD -->
+<!-- Scenario indicators are calculated from the user's inputs, not city averages. -->
 <div class="hub-card" id="hub-card">
-
-<span data-it="ROI medio" data-en="Average ROI">ROI medio</span>
-<strong>12.8%</strong>
+<span data-it="ROI dello scenario" data-en="Scenario ROI">ROI dello scenario</span>
+<strong data-it="Dai tuoi dati" data-en="From your inputs">Dai tuoi dati</strong>
 </div>
-
 <div class="hub-metric">
-<span>Occupazione</span>
-<strong>68%</strong>
+<span data-it="Occupazione ipotizzata" data-en="Assumed occupancy">Occupazione ipotizzata</span>
+<strong data-it="Da inserire" data-en="Enter your estimate">Da inserire</strong>
 </div>
-
 <div class="hub-metric">
-<span>Break-even</span>
-<strong>6.5 anni</strong>
+<span data-it="Recupero del capitale" data-en="Capital payback">Recupero del capitale</span>
+<strong data-it="Da calcolare" data-en="To be calculated">Da calcolare</strong>
 </div>
+<p data-it="Questa sezione non mostra medie di mercato. Nel simulatore inserisci tariffa, occupazione, costi e capitale per ottenere una stima personalizzata." data-en="This section does not show market averages. Enter nightly rate, occupancy, costs and capital in the simulator to get a personalised estimate.">Questa sezione non mostra medie di mercato. Nel simulatore inserisci tariffa, occupazione, costi e capitale per ottenere una stima personalizzata.</p>
 
 <!-- CTA -->
 <button onclick="startAnalysis()" class="btn btn-primary btn-lg"
@@ -3066,19 +3063,7 @@ const CITY_DB = [
   {name:"Arezzo",slug:"arezzo"}
 ];
 
-// ================= 📊 ROI PREVIEW =================
-const ROI_PREVIEW = {
-  roma:12.8,milano:11.2,napoli:14.1,torino:9.8,palermo:13.6,
-  genova:10.1,bologna:10.4,firenze:10.9,bari:11.3,catania:12.3,
-  venezia:11.5,verona:10.2,messina:11.7,padova:10.6,trieste:9.9,
-  brescia:10.3,parma:10.5,taranto:11.8,modena:10.4,reggio_calabria:12.0,
-  perugia:10.2,livorno:10.7,ravenna:10.1,cagliari:11.4,foggia:11.1,
-  rimini:12.6,salerno:12.2,ferrara:9.9,sassari:11.0,latina:10.8,
-  monza:10.6,siracusa:12.5,pescara:11.3,bergamo:10.9,forli:10.2,
-  trento:10.1,vicenza:10.3,terni:9.7,bolzano:10.0,novara:9.8,
-  piacenza:9.9,ancona:10.4,aosta:9.5,lecce:12.7,pisa:11.2,
-  lucca:11.0,como:10.8,arezzo:10.3
-};
+// City search selects a location; it does not publish unsourced market returns.
 
 // ================= 🔍 AUTOCOMPLETE ENGINE =================
 (function(){
@@ -3128,8 +3113,8 @@ if(match){
   box.style.display = "none";
 
   liveBox.innerHTML = `
-    ${t("ROI medio","Average ROI")} ${match.name}: 
-    <strong>${ROI_PREVIEW[match.slug] || "-"}%</strong>
+    <strong>${match.name}</strong><br>
+    ${t("Analizza il tuo immobile con i tuoi dati; non mostriamo una media di mercato per questa città.","Analyse your property using your inputs; we do not show a market average for this city.")}
   `;
   liveBox.classList.add("active");
 
