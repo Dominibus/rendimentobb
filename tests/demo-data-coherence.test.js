@@ -1,3 +1,4 @@
+import {managePMSChartLayout} from '../js/pms-chart-layout.js';
 import {bookingNights as calendarBookingNights, nightsInMonth} from '../js/pms-calendar.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,10 +8,11 @@ const demo = readFileSync(new URL('../js/demo/demo-investments.js',import.meta.u
 const dashboard = readFileSync(new URL('../js/dashboard.js',import.meta.url),'utf8');
 function context(date='2026-09-30T12:00:00') {
   class FixedDate extends Date { constructor(...args){super(...(args.length?args:[date]));} }
-  const elements=new Map();
-  const ctx={Date:FixedDate,Intl,console,calendarBookingNights,nightsInMonth,document:{getElementById(id){if(!elements.has(id))elements.set(id,{getContext(){return {};}});return elements.get(id);}},
+  const elements=new Map(),frames=[];
+  const environment={requestAnimationFrame:fn=>{frames.push(fn);return frames.length;},cancelAnimationFrame(){}};
+  const ctx={managePMSChartLayout:args=>managePMSChartLayout({...args,environment}),flushCharts:()=>{while(frames.length)frames.shift()();},Date:FixedDate,Intl,console,calendarBookingNights,nightsInMonth,document:{getElementById(id){if(!elements.has(id))elements.set(id,{parentElement:{getBoundingClientRect:()=>({width:900,height:260})},getContext(){return {};}});return elements.get(id);}},
     window:{currentLang:'it',isDemoDashboard:true,devicePixelRatio:1,dispatchEvent(){}},CustomEvent:class {},
-    Chart:class {static getChart(){return null;} constructor(canvas,config){ctx.chart=config;}},
+    Chart:class {static getChart(){return null;} constructor(canvas,config){ctx.chart=config;}resize(){}update(){}destroy(){}},
     t:(it)=>it,formatCurrency:n=>String(n),formatPercent:n=>String(n)};
   vm.createContext(ctx);vm.runInContext(demo,ctx);
   const helpers=dashboard.slice(dashboard.indexOf('function getBookingNightsInMonth'),dashboard.indexOf('// Every availability decision reads the server'));
@@ -33,7 +35,7 @@ test('all illustrative investment cashflows agree with equity and ROI',()=>{
 });
 for(const date of ['2026-09-30T12:00:00','2028-02-15T12:00:00','2030-01-01T12:00:00']){
   test(`PMS demo metrics and chart share complete, nonoverlapping bookings at ${date}`,async()=>{
-    const {ctx,elements}=context(date);await ctx.loadPMSStats();
+    const {ctx,elements}=context(date);await ctx.loadPMSStats();ctx.flushCharts();
     const fixture=ctx.window.rbBuildDemoPMS();
     assert.equal(fixture.currentBookings.length,11);
     assert.equal(fixture.bookings.length,132);

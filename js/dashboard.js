@@ -1,3 +1,4 @@
+import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261015-rc134';
 import {ownedPMSReport,pmsReviewHTML} from './pms-review.js?v=20261015-rc133';
 import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc133';
@@ -12761,6 +12762,8 @@ function renderPMSPerformanceChart(
     );
 
   if(!canvas) return;
+  const ownerUid=window.currentUser?.uid||null,demo=window.isDemoDashboard===true;
+  window.rbPMSChartLayout?.destroy();
 
   const monthlyRevenue =
     Array(12).fill(0);
@@ -12788,7 +12791,7 @@ function renderPMSPerformanceChart(
 
   }
 
-  new Chart(canvas,{
+  window.rbPMSChartLayout=managePMSChartLayout({canvas,valid:()=> (window.currentUser?.uid||null)===ownerUid && (window.isDemoDashboard===true)===demo,draw:()=>new Chart(canvas,{
 
     type:"bar",
 
@@ -12817,6 +12820,7 @@ borderSkipped:false
     options:{
 
       responsive:true,
+      animation:false,
       maintainAspectRatio:false,
       devicePixelRatio:Math.min(window.devicePixelRatio || 1, 2),
 
@@ -12828,7 +12832,7 @@ borderSkipped:false
 
     }
 
-  });
+  })});
 
 }
 
@@ -13807,6 +13811,7 @@ window.showPMSTab = function(tab){
 
       sections.dashboard.hidden = false;
       sections.dashboard.style.display = "grid";
+      window.rbPMSChartLayout?.refresh();
 
     }
 
@@ -13879,5 +13884,6 @@ function refreshPMSLanguage(){
     chart.data.datasets.forEach(dataset => { dataset.label = t("Ricavi","Revenue"); });
     chart.update("none");
   }
+  window.rbPMSChartLayout?.refresh();
 }
 document.addEventListener("rb_language_changed", refreshPMSLanguage);

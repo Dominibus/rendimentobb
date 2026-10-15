@@ -2710,7 +2710,7 @@ style="display:none;">
 📈 PMS PERFORMANCE
 ===================================== -->
 
-<div class="analysis-card pro-pms-only rb-pms-chart-card">
+<div class="analysis-card pro-pms-only rb-pms-chart-card" style="height:auto !important;min-height:0">
 
   <h3
   data-it="Ricavi PMS per mese"
@@ -2720,10 +2720,9 @@ style="display:none;">
 
   </h3>
 
-  <canvas
-  id="pms-performance-chart" role="img" aria-label="Ricavi PMS mensili"
-  height="120">
-  </canvas>
+  <div class="rb-pms-chart-frame" style="position:relative;min-width:0;width:100%;height:260px">
+  <canvas id="pms-performance-chart" role="img" aria-label="Ricavi PMS mensili" style="display:block;width:100% !important;height:100% !important;max-height:none !important"></canvas>
+  </div>
 
 </div>  
 </div>  
@@ -3777,7 +3776,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261015-rc137" defer></script>
+<script src="/js/chatbot-loader.js?v=20261015-rc138" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3788,7 +3787,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261015-rc137"></script>
+<script type="module" src="/js/header.js?v=20261015-rc138"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script src="/js/footer.js?v=20261015-rc128" defer></script>
 
@@ -3804,7 +3803,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261015-rc136"></script>
+<script type="module" src="/js/dashboard.js?v=20261015-rc138"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>

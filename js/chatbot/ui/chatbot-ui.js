@@ -2094,9 +2094,14 @@ ${file.fileName}
 document.addEventListener("rb:document_ready", event => {
     if(event.detail?.status !== "ready") return;
     refreshQuickActions();
-    addSuggestions(window.currentLang === "en"
-      ? ["Interpret this PDF", "What about ROI?", "Which data are missing in the PDF?"]
-      : ["Interpretami il PDF", "E il ROI?", "Quali dati mancano nel PDF?"]);
+    const operational=window.rbReadPMSDocument?.(event.detail);
+    addSuggestions(operational?.kind!=='integrated'&&operational
+      ? (window.currentLang === "en"
+        ? ["Explain this PDF", "Explain occupancy in this PDF", "Which data are missing in the PDF?"]
+        : ["Spiegami questo PDF", "Spiegami l’occupazione del PDF", "Quali dati mancano nel PDF?"])
+      : (window.currentLang === "en"
+        ? ["Interpret this PDF", "What about ROI?", "Which data are missing in the PDF?"]
+        : ["Interpretami il PDF", "E il ROI?", "Quali dati mancano nel PDF?"]));
 });
 
   // ===========================================

@@ -20,7 +20,14 @@ window.rbShowSalesPause=(plan,{reason=''}={})=>{
  const inTrial=!!window.currentUser&&window.rbIsTrial();
  const activePro=!!window.currentUser&&!!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
  const report=reason==='report';
- const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):activePro?t('Accesso Pro già attivo','Pro access already active'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
+ if(activePro){
+  const d=dialog(t('Accesso Pro già attivo','Pro access already active'));
+  add(d,'p',t('Hai già accesso ai report Pro, ai PDF e alla guida alla lettura. Non serve prenotarti o richiedere un nuovo accesso.','You already have access to Pro reports, PDFs and guided reading. You do not need to register interest or request access again.'));
+  link(d,'/dashboard/',t('Apri i tuoi report Pro','Open your Pro reports'));
+  button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};
+  d.addEventListener('cancel',()=>d.remove());d.showModal();return;
+ }
+ const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
  if(report||inTrial||activePro){
   if(report)add(d,'p',inTrial?t('La tua prova Investor è già attiva e non include i PDF. Questa funzione è riservata ai piani Pro.','Your Investor trial is already active and does not include PDFs. This feature requires a Pro plan.'):t('Questa funzione è riservata ai piani Pro. Free e Investor, anche in prova, non includono i PDF.','This feature requires a Pro plan. Free and Investor, including the trial, do not include PDFs.'));
   else if(activePro)add(d,'p',t('Hai già accesso alle funzioni Pro. Apri la dashboard per report, PDF e guida alla lettura; non occorre attivare una prova.','You already have access to Pro features. Open the dashboard for reports, PDFs and guided reading; no trial activation is needed.'));
@@ -35,7 +42,41 @@ window.rbShowSalesPause=(plan,{reason=''}={})=>{
  button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};
  d.addEventListener('cancel',()=>d.remove());d.showModal();
 };
+const proInterestOriginals=new WeakMap();
+const activeProAccess=()=>!!window.currentUser&&!!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
+const proInterestURL=value=>/^(?:https:\/\/(?:www\.)?rendimentobb\.(?:it|com))?\/plan-interest\.html\?plan=pro(?:_yearly)?(?:&|$)/.test(String(value||''));
+const proPricingAction=node=>/plan\s*:\s*['"]pro(?:_yearly)?['"]/.test(node?.getAttribute?.('onclick')||'');
+function renderProInterestAccess(){
+ const pro=activeProAccess();
+ for(const e of document.querySelectorAll('a[href*="plan-interest.html?plan=pro"],a[data-rb-pro-interest]')){
+  if(!proInterestOriginals.has(e)){
+   const href=e.getAttribute('href');if(!proInterestURL(href))continue;
+   proInterestOriginals.set(e,{href,it:e.getAttribute('data-it'),en:e.getAttribute('data-en'),text:e.textContent});
+   e.setAttribute('data-rb-pro-interest','true');
+  }
+  const old=proInterestOriginals.get(e);
+  e.setAttribute('href',pro?'/dashboard/':old.href);
+  const it=pro?'Apri i tuoi report Pro':old.it||old.text,en=pro?'Open your Pro reports':old.en||old.text;
+  e.setAttribute('data-it',it);e.setAttribute('data-en',en);e.textContent=t(it,en);
+ }
+ const form=document.getElementById?.('plan-interest-form'),select=document.getElementById?.('interest-plan');
+ if(form&&select){
+  const alreadyActive=pro&&['pro','pro_yearly'].includes(select.value);
+  form.hidden=alreadyActive;
+  let notice=document.getElementById('pro-active-interest-notice');
+  if(alreadyActive&&!notice){notice=document.createElement('aside');notice.id='pro-active-interest-notice';notice.setAttribute('role','status');form.parentElement.insertBefore(notice,form);}
+  if(notice){notice.hidden=!alreadyActive;if(alreadyActive){notice.textContent=t('Hai già accesso alle funzioni Pro. Non serve inviare una richiesta d’interesse. ','You already have access to Pro features. You do not need to submit an interest request. ');link(notice,'/dashboard/',t('Apri i tuoi report Pro','Open your Pro reports'));}}
+ }
+}
+document.addEventListener('click',event=>{
+ if(!window.rbLiveSalesPaused()||!activeProAccess())return;
+ const node=event.target?.closest?.('a,button');if(!node)return;
+ if(!node.hasAttribute?.('data-rb-pro-interest')&&!proInterestURL(node.getAttribute?.('href'))&&!proPricingAction(node))return;
+ event.preventDefault();event.stopImmediatePropagation();window.location.assign('/dashboard/');
+},true);
+document.addEventListener('change',event=>{if(event.target?.id==='interest-plan')renderProInterestAccess();});
 function renderSalesPause(){
+ renderProInterestAccess();
  if(!window.rbLiveSalesPaused()){for(const e of document.querySelectorAll('[data-rb-sales-notice]'))e.hidden=true;return;}
  for(const e of document.querySelectorAll('[data-rb-sales-notice]')){
   const access=window.getUserAccess?.()||{},pro=!!window.currentUser&&(access.isPro||access.isAdmin),inTrial=!!window.currentUser&&window.rbIsTrial();
@@ -44,8 +85,9 @@ function renderSalesPause(){
     inTrial?t('La tua prova Investor è già attiva: analisi, dashboard e PMS sono disponibili fino alla scadenza indicata nell’account. Report integrati e PDF richiedono Pro. I nuovi acquisti sono sospesi; puoi richiedere un avviso senza impegno.','Your Investor trial is already active: analyses, dashboard and PMS remain available until your account expiry. Integrated reports and PDFs require Pro. New purchases are paused; you may request a non-binding opening notice.'):t(SALES_NOTICE.it,SALES_NOTICE.en);
  }
  for(const e of document.querySelectorAll('#pricing [onclick*="triggerUpgradeFlow"]')){
-  e.setAttribute('data-it','Avvisami all’apertura');e.setAttribute('data-en','Notify me when subscriptions open');
-  e.textContent=t('Avvisami all’apertura','Notify me when subscriptions open');
+  const pro=activeProAccess()&&proPricingAction(e);
+  e.setAttribute('data-it',pro?'Apri i tuoi report Pro':'Avvisami all’apertura');e.setAttribute('data-en',pro?'Open your Pro reports':'Notify me when subscriptions open');
+  e.textContent=t(pro?'Apri i tuoi report Pro':'Avvisami all’apertura',pro?'Open your Pro reports':'Notify me when subscriptions open');
  }
 }
 document.addEventListener('DOMContentLoaded',renderSalesPause);
