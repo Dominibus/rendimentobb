@@ -11612,6 +11612,10 @@ window.rbPMSData = {
     window.rbPMSData || {}
   ),
 
+  // A filtered booking view is not a complete account snapshot for reports.
+  // Force getOwnedReportPMS to rebuild all operational totals before export.
+  portalSnapshotReady: false,
+
   bookings:
     activeBookingsCount,
 

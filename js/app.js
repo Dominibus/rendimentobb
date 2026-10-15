@@ -1117,6 +1117,25 @@ if(oldModal){
 
   if(!config) return;
 
+  const testerMode = window.rbLiveSalesPaused?.() === true;
+  if(testerMode){
+    Object.assign(config, {
+      title_it: "Partecipa ai test di RendimentoBB",
+      title_en: "Join RendimentoBB testing",
+      desc_it: "Prova Investor per 30 giorni, se il tuo account è idoneo, e aiutaci con il tuo feedback. I nuovi acquisti non sono disponibili in questa fase.",
+      desc_en: "Try Investor for 30 days, if your account is eligible, and share your feedback. New purchases are not available during this phase.",
+      features_it: ["Analisi e scenari salvati", "Dashboard investimenti", "Gestione immobili e prenotazioni PMS", "PDF esclusi: riservati a Pro"],
+      features_en: ["Saved analyses and scenarios", "Investment dashboard", "Property and booking PMS", "PDFs excluded: Pro only"],
+      proof_it: "Una prova per account ed email verificata; alla scadenza torni a Free",
+      proof_en: "One trial per account and verified email; return to Free at expiry",
+      cta_it: "Scopri i 30 giorni Investor gratis",
+      cta_en: "Explore 30 free days of Investor",
+      warning_it: "Nessun pagamento o abbonamento automatico. L’avviso di apertura dei piani si richiede separatamente.",
+      warning_en: "No payment or automatic subscription. Request a subscription-opening notice separately.",
+      action: () => window.rbOpenSubscription()
+    });
+  }
+
   const lang = window.currentLang === "en" ? "en" : "it";
 
   const safeT = t;
@@ -1180,10 +1199,9 @@ cta.innerHTML = `
     🔓 ${config["cta_" + lang]}
   </div>
   <div style="font-size:11px;opacity:.85;margin-top:4px;">
-    ${safeT(
-      "Accesso immediato • Nessun vincolo",
-      "Instant access • No commitment"
-    )}
+    ${testerMode
+      ? safeT("Senza carta • Nessun addebito automatico", "No card • No automatic charges")
+      : safeT("Accesso immediato • Nessun vincolo", "Instant access • No commitment")}
   </div>
 `;
 
@@ -1244,10 +1262,9 @@ cta.onclick = ()=>{
       ⚠️ ${config["warning_" + lang]}
     </div>
     <div style="font-size:11px;color:#64748b;margin-top:4px;">
-      ${safeT(
-        "Senza analisi completa stai andando alla cieca",
-        "Without full analysis you're investing blind"
-      )}
+      ${testerMode
+        ? safeT("Condividi suggerimenti e problemi con il supporto.", "Share suggestions and issues with support.")
+        : safeT("Senza analisi completa stai andando alla cieca", "Without full analysis you're investing blind")}
     </div>
   `;
 
