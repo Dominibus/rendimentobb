@@ -1226,6 +1226,7 @@ const params =
 
 const storedSimulations = ownedSnapshot?.simulations || [];
 const dashboardReportContext = ownedSnapshot?.context || {};
+let reportIntegration=null;
 
 const canonicalSimulation =
   storedSimulations[0] ||
@@ -1568,45 +1569,11 @@ if(riskHero){
 }
 
 function renderOperationalReport(){
-  const section = document.getElementById("operational-report");
-  const grid = document.getElementById("operational-report-kpis");
-  const renovationsBox = document.getElementById("operational-report-renovations");
-  const pms = dashboardReportContext.pms;
-  if(!section || !grid || !pms || typeof pms !== "object") return;
-
-  const n = value => Number.isFinite(Number(value)) ? Number(value) : 0;
-  const escaped = value => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-  const percent = value => `${n(value).toFixed(0)}%`;
-  const cards = [
-    [t("Proprietà","Properties"), n(pms.properties)],
-    [t("Prenotazioni","Bookings"), n(pms.bookings)],
-    [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), euro(n(pms.totalRevenue))],
-    [t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), percent(pms.occupancy)],
-    [t("ADR · mese dello snapshot","ADR · snapshot month"), euro(n(pms.adr))],
-    [t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), euro(n(pms.revpar))],
-    [t("Ospiti","Guests"), n(pms.guests)],
-    [t("Da attenzionare","Requiring attention"), n(pms.attentionCount)]
-  ];
-
-  grid.innerHTML = cards.map(([label,value]) => `
-    <div class="kpi" style="min-height:92px;padding:14px;">
-      <span>${label}</span><strong style="font-size:20px;">${value}</strong>
-    </div>`).join("");
-
-  const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
-  renovationsBox.innerHTML = renovations.length
-    ? `<h3 style="font-size:16px;margin:0 0 10px;">${t("Ristrutturazioni","Renovations")}</h3>` + renovations.map(item => `
-        <div style="padding:14px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;margin-top:8px;">
-          <strong>${escaped(item.propertyName || item.name || t("Immobile","Property"))}</strong><br>
-          <span style="font-size:12px;color:#64748b;">${t("Stato","Status")}: ${escaped(({planning:t("Pianificazione","Planning"),in_progress:t("In corso","In progress"),completed:t("Completata","Completed"),paused:t("In pausa","Paused")})[item.status] || item.status || "—")} · ${t("Avanzamento","Progress")}: ${n(item.progressPercent)}% · ${t("Budget","Budget")}: ${euro(n(item.plannedTotal))} · ${t("Speso","Spent")}: ${euro(n(item.actualSpent))}</span>
-        </div>`).join("")
-    : `<div style="padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;color:#64748b;">${t("Nessun piano di ristrutturazione monitorato.","No renovation plan is currently monitored.")}</div>`;
-
-  const dateBox = document.getElementById("operational-report-date");
-  if(dateBox && dashboardReportContext.generatedAt){
-    dateBox.textContent = `${t("Dati aggiornati","Data updated")}: ${new Date(dashboardReportContext.generatedAt).toLocaleString(lang === "en" ? "en-US" : "it-IT")}`;
-  }
-  section.style.display = "block";
+  if(reportIntegration){reportIntegration.render(lang);return;}
+  // Await the explicit property/analysis handoff; never attribute legacy account totals.
+  const pending=document.getElementById("operational-report");
+  if(pending)pending.style.display="none";
+  return;
 }
 
 // ================= VERDICT =================
@@ -1892,6 +1859,9 @@ async function generatePDF(){
       return;
     }
 
+    await integrationReady;
+    if(window.currentUser?.uid!==reportOwnerUid || !(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin))return;
+    if(!reportIntegration)throw Error('REPORT_INTEGRATION_UNAVAILABLE');
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -1916,16 +1886,14 @@ async function generatePDF(){
     const dashboardList = window.dashboardSimulations || [];
     const selectedValue = document.getElementById("simulationSelector")?.value;
 
+    if(selectedValue === "" || selectedValue == null)throw Error("SELECT_REPORT_ANALYSIS");
     const selectedSimulation =
       selectedValue !== ""
         ? dashboardList[Number(selectedValue)]
         : null;
 
-    const fallback =
-      selectedSimulation ||
-      window.bestInvestmentData ||
-      [...dashboardList].sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
-      {};
+    if(!selectedSimulation)throw Error("SELECT_REPORT_ANALYSIS");
+    const fallback = selectedSimulation;
 
     const ownedProperty = fallback.propertyMode === "owned" || fallback.assumptions?.source === "owned_property";
     const roi = safe(fallback.roi);
@@ -2054,7 +2022,7 @@ const monthlyProfit = safe(
         {align:"center"}
       );
       doc.text(
-        `${t("Riservato","Confidential")} • ${doc.getNumberOfPages()}`,
+        `${t("Riservato","Confidential")} • ${(doc.internal?.getCurrentPageInfo?.()?.pageNumber ?? doc.getNumberOfPages())}`,
         190,
         285,
         {align:"right"}
@@ -2360,6 +2328,14 @@ const verdictColor =
     doc.setFontSize(12);
     doc.text(verdict,25,y+97);
 
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(...dark);
+    doc.text(t('Analisi e ambito dei dati','Analysis and data scope'),20,175);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(100,116,139);
+    let sourceY=183;
+    for(const value of reportIntegration.coverLines(lang)){
+      for(const line of doc.splitTextToSize(String(value),170)){doc.text(line,20,sourceY);sourceY+=5;}
+      sourceY+=4;
+    }
     addFooter();
 
     // ================= PAGE 2 =================
@@ -3030,8 +3006,8 @@ doc.setFontSize(8);
 doc.setTextColor(100,116,139);
 
 const disclaimerText = t(
-  "Il documento integra tre fonti: risultati previsionali della simulazione selezionata, dati operativi PMS disponibili al momento della generazione e stime del piano di ristrutturazione. I valori previsionali e stimati non costituiscono risultati garantiti.",
-  "This document integrates three sources: forecast results from the selected simulation, PMS operating data available at generation time, and renovation-plan estimates. Forecast and estimated values are not guaranteed results."
+  "Il documento distingue le previsioni della simulazione selezionata dai dati PMS del solo immobile con collegamento verificato. Un eventuale riepilogo di tutte le proprietà PMS è separato e non va sommato al singolo immobile. I periodi operativi sono indicati nelle rispettive sezioni. Le stime non sono risultati garantiti.",
+  "This document separates forecasts for the selected simulation from PMS data of its verified linked property. Any overview of all PMS properties is separate and must not be added to the individual property. Operational periods are stated in their sections. Forecasts are not guaranteed results."
 );
 
 const disclaimerLines =
@@ -3213,84 +3189,15 @@ doc.text(
 
     addFooter();
 
-    // ================= PAGE 7 · PMS / RENOVATIONS =================
-    const pms = dashboardReportContext.pms;
-    if(pms && typeof pms === "object"){
-      const safe = value => Number.isFinite(Number(value)) ? Number(value) : 0;
-      doc.addPage();
-      doc.setTextColor(...dark);
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(15);
-      doc.text(t("Gestione operativa PMS","PMS operations"),20,20);
-      doc.setFont("helvetica","normal");
-      doc.setFontSize(8);
-      doc.setTextColor(100,116,139);
-      doc.text(t("Dati PMS complessivi della dashboard, non attribuiti alla singola simulazione.","Dashboard-wide PMS data, not attributed to this simulation."),20,28);
-      const snapshotTime = new Date(dashboardReportContext.generatedAt || "");
-      if(Number.isFinite(snapshotTime.getTime())){
-        doc.setFontSize(7);
-        doc.text(t("Snapshot PMS: ","PMS snapshot: ")+snapshotTime.toLocaleString(lang === "en"?"en-GB":"it-IT"),20,35);
-      }
-      doc.setFillColor(236,253,245);
-      doc.setTextColor(4,120,87);
-      doc.roundedRect(145,17,45,10,3,3,"F");
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(6.5);
-      doc.text(t("DATI OPERATIVI","OPERATIONAL DATA"),167.5,23.5,{align:"center"});
-
-      const rows = [
-        [t("Proprietà","Properties"), String(safe(pms.properties)), t("Prenotazioni","Bookings"), String(safe(pms.bookings))],
-        [t("Ricavi registrati · tutti i periodi","Recorded revenue · all periods"), eur(safe(pms.totalRevenue)), t("Occupazione · mese dello snapshot","Occupancy · snapshot month"), `${safe(pms.occupancy).toFixed(0)}%`],
-        [t("ADR · mese dello snapshot","ADR · snapshot month"), eur(safe(pms.adr)), t("RevPAR · mese dello snapshot","RevPAR · snapshot month"), eur(safe(pms.revpar))],
-        [t("Ospiti","Guests"), String(safe(pms.guests)), t("Da attenzionare","Requiring attention"), String(safe(pms.attentionCount))],
-        [t("Arrivi oggi","Arrivals today"), String(safe(pms.arrivalsToday)), t("Partenze oggi","Departures today"), String(safe(pms.departuresToday))]
-      ];
-      let pmsY = 40;
-      rows.forEach(row => {
-        doc.setFillColor(248,250,252);
-        doc.setDrawColor(226,232,240);
-        doc.roundedRect(20,pmsY,170,22,3,3,"FD");
-        doc.setFont("helvetica","normal"); doc.setFontSize(7); doc.setTextColor(100,116,139);
-        doc.text(row[0],27,pmsY+8); doc.text(row[2],112,pmsY+8);
-        doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(...dark);
-        doc.text(row[1],27,pmsY+17); doc.text(row[3],112,pmsY+17);
-        pmsY += 27;
-      });
-
-      const renovations = Array.isArray(pms.renovationList) ? pms.renovationList : [];
-      doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(...dark);
-      doc.text(t("Ristrutturazioni","Renovations"),20,pmsY+8);
-      pmsY += 17;
-      if(!renovations.length){
-        doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(100,116,139);
-        doc.text(t("Nessun piano monitorato.","No monitored plan."),20,pmsY);
-      }else{
-        renovations.slice(0,4).forEach(item => {
-          const title = item.propertyName || item.name || t("Immobile","Property");
-          const statusMap = {
-            planning: t("Pianificazione","Planning"),
-            in_progress: t("In corso","In progress"),
-            completed: t("Completata","Completed"),
-            paused: t("In pausa","Paused")
-          };
-          const controlMap = {
-            on_track: t("Sotto controllo","On track"),
-            attention: t("Da verificare","Review needed"),
-            critical: t("Priorità alta","High priority")
-          };
-          const remaining = Math.max(0, safe(item.plannedTotal) - safe(item.actualSpent));
-          const detail = `${t("Stato","Status")}: ${statusMap[item.status] || item.status || "—"} · ${t("Avanzamento","Progress")}: ${safe(item.progressPercent)}% · ${t("Budget","Budget")}: ${eur(safe(item.plannedTotal))} · ${t("Speso","Spent")}: ${eur(safe(item.actualSpent))}`;
-          const control = `${t("Residuo","Remaining")}: ${eur(remaining)} · ${t("Controllo","Control")}: ${controlMap[item.controlLevel] || t("Non disponibile","Not available")}`;
-          doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(...dark); doc.text(title,24,pmsY);
-          doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(100,116,139);
-          doc.text(doc.splitTextToSize(detail,160),24,pmsY+6);
-          doc.setTextColor(item.controlLevel === "critical" ? 220 : item.controlLevel === "attention" ? 180 : 4, item.controlLevel === "critical" ? 38 : item.controlLevel === "attention" ? 83 : 120, item.controlLevel === "critical" ? 38 : item.controlLevel === "attention" ? 9 : 87);
-          doc.text(doc.splitTextToSize(control,160),24,pmsY+12);
-          pmsY += 24;
-        });
-      }
-      addFooter();
-    }
+    // Shared property report: no legacy account totals attached to a scenario.
+    await integrationReady;
+    if(window.currentUser?.uid!==reportOwnerUid || !(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin))return;
+    if(!reportIntegration)throw Error('REPORT_INTEGRATION_UNAVAILABLE');
+    const integrationFirstPage=doc.getNumberOfPages()+1;
+    reportIntegration.appendPDF(doc,lang);
+    const integrationLastPage=doc.getNumberOfPages();
+    for(let n=integrationFirstPage;n<=integrationLastPage;n++){doc.setPage(n);addFooter();}
+    doc.setPage(integrationLastPage);
 
     // Saved inputs are never rebuilt from defaults for a legacy report.
     doc.addPage();
@@ -3428,7 +3335,10 @@ function populateSimulations(){
     </option>
   `;
 
+  let firstVisible=null;
   list.forEach((sim, index)=>{
+    if(typeof reportIntegration!=="undefined" && reportIntegration && !reportIntegration.visible(sim))return;
+    if(firstVisible===null)firstVisible=index;
 
     const opt = document.createElement("option");
     opt.value = index.toString();
@@ -3443,12 +3353,13 @@ function populateSimulations(){
     opt.innerText =
       `${sim.city || "City"} – ${sim.propertyMode === 'owned' || sim.assumptions?.source === 'owned_property' ? (lang === 'en' ? 'Startup ROI' : 'ROI di avvio') : (lang === 'en' ? 'Equity ROI' : 'ROI equity')} ${roiLabel}`;
 
+    if(typeof reportIntegration!=="undefined" && reportIntegration)opt.innerText=reportIntegration.label(sim,lang)+" | "+opt.innerText;
     select.appendChild(opt);
 
   });
 
   if(list.length){
-    select.value = "0";
+    select.value = firstVisible===0?"0":"";
   }
 
 }
@@ -3486,7 +3397,7 @@ function init(){
     const selected = storedSimulations[index];
     window.RBReportCache.write(reportOwnerUid,
       [selected, ...storedSimulations.filter((_, position) => position !== index)],
-      dashboardReportContext, sessionStorage, localStorage);
+      {...dashboardReportContext,reporting:dashboardReportContext.reporting?{...dashboardReportContext.reporting,preferences:reportIntegration?.settings()}:undefined}, sessionStorage, localStorage);
     location.reload();
   });
   renderData();
@@ -3506,6 +3417,15 @@ function init(){
 }
 
 // ================= START =================
+const reportAllowed=()=>window.currentUser?.uid===reportOwnerUid && Boolean(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
+const integrationReady=import('/js/dashboard-report-integration.js?v=20261015-rc134').then(({mountReportIntegration})=>{
+  if(!reportAllowed())return null;
+  reportIntegration=mountReportIntegration({context:dashboardReportContext.reporting,ownerUid:reportOwnerUid,analysisId:canonicalSimulation.id,allowed:reportAllowed,onChoicesChanged:populateSimulations});
+  reportIntegration.render(lang);populateSimulations();return reportIntegration;
+}).catch(()=>{
+  if(reportAllowed()){const el=document.getElementById('operational-report');if(el){el.style.display='block';el.textContent=lang==='en'?'Linked reporting is unavailable. Reopen from the dashboard.':'Report collegato non disponibile. Riapri dalla dashboard.';}}
+  return null;
+});
 window.generatePDF = generatePDF;
 init();
 document.addEventListener("rb_language_changed", () => {

@@ -1,3 +1,4 @@
+import {buildReportContext} from './report-provenance.js?v=20261015-rc134';
 import {ownedPMSReport,pmsReviewHTML} from './pms-review.js?v=20261015-rc133';
 import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc133';
 import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261015-rc131';
@@ -2102,6 +2103,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
             ? t("I dati finanziari sono gestiti dalla proprietà PMS collegata.", "Financial data is managed by the linked PMS property.")
             : t("Questa simulazione contribuisce ai totali del portafoglio.", "This simulation contributes to portfolio totals.")}
           </span>
+          <button type="button" class="btn-dashboard" data-dashboard-report="true" data-analysis-id="${escapeDashboardHTML(data.id)}">${t("Report di questa analisi - Pro", "Report for this analysis - Pro")}</button>
           ${linked
             ? `<button type="button" class="btn-dashboard" data-property-id="${escapeDashboardHTML(data.propertyId)}" onclick="openPropertyEditor(this.dataset.propertyId)">✏️ ${t("Modifica immobile", "Edit property")}</button>`
             : `<button class="portfolio-analysis portfolio-manager__remove" data-id="${escapeDashboardHTML(data.id)}" data-active="true" data-linked="false">${t("Rimuovi dal portafoglio", "Remove from portfolio")}</button>`}
@@ -3350,33 +3352,21 @@ window.openPropertyPerformance = async function(propertyId=''){
 
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
 async function handleReportClick(){
+  const analysisId=arguments[0]||"";
 
-  const user = window.RB_USER || {};
-
-  const isPro =
-    user.isAdmin ||
-    user.isPro ||
-    user.plan === "pro" ||
-    user.plan === "pro_yearly";
-
+  const access=window.getUserAccess?.()||{};
+  const isPro=canExportPMSReport(window.currentUser,access);
 
   // 🔒 NON PRO → upgrade
   if(!isPro){
 
-    if(typeof startPlanPurchase === "function"){
-      startPlanPurchase("pro", {
-        source: "dashboard",
-        trigger: "roi_block",
-      });
-    }else{
-      window.location.href = "/#pricing";
-    }
+    window.rbShowSalesPause?.('pro',{reason:'report'});
 
     return;
   }
 
   // ✅ PRO → DASHBOARD REPORT
-  const data = window.bestInvestmentData;
+  const data = analysisId ? (window.dashboardSimulations||[]).find(item=>item.id===analysisId) : window.bestInvestmentData;
   const price = Number(data?.propertyPrice ?? data?.price);
   if(!data || !Number.isFinite(price) || price < 0 || (price === 0 && data.propertyMode !== "owned" && data.assumptions?.source !== "owned_property")){
     alert(t(
@@ -3392,8 +3382,13 @@ async function handleReportClick(){
   // Se lo snapshot operativo non è pronto, il report si apre senza inventare
   // metriche PMS; la pagina report gestisce i dati operativi assenti.
   let reportPMS = null;
+  let reporting = null;
   try{
+    await loadPMSStats({fresh:true});
     const pms = await getOwnedReportPMS(reportOwner);
+    const records=await getDocsFromServer(query(collection(db,'analyses'),where('uid','==',reportOwner)));
+    if(auth.currentUser?.uid!==reportOwner||window.currentUser?.uid!==reportOwner)return;
+    reporting=buildReportContext({ownerUid:reportOwner,snapshot:pms,analyses:records.docs.map(item=>({...item.data(),id:item.id}))});
     reportPMS = {
       properties: Number(pms.properties || 0),
       bookings: Number(pms.bookings || 0),
@@ -3421,11 +3416,11 @@ async function handleReportClick(){
     dashboardDebug("Optional PMS snapshot unavailable for investment report", error);
   }
   // Non procedere se la sessione è cambiata durante la lettura asincrona.
-  if(auth.currentUser?.uid !== reportOwner || window.currentUser?.uid !== reportOwner) return;
+  if(auth.currentUser?.uid !== reportOwner || window.currentUser?.uid !== reportOwner || !canExportPMSReport(window.currentUser,window.getUserAccess?.()||{})) return;
   window.RBReportCache.write(
     reportOwner,
     [data, ...(window.dashboardSimulations || []).filter(item => item !== data)],
-    {generatedAt: new Date().toISOString(), ...(reportPMS ? {pms: reportPMS} : {})},
+    {generatedAt: new Date().toISOString(), ...(reportPMS ? {pms: reportPMS} : {}), ...(reporting?{reporting}:{})},
     sessionStorage, localStorage
   );
 
@@ -3449,7 +3444,7 @@ document.addEventListener("click",(e)=>{
   }
 
   if(e.target.closest("#download-report, [data-dashboard-report='true']")){
-    handleReportClick();
+    handleReportClick(e.target.closest("#download-report, [data-dashboard-report='true']")?.dataset.analysisId || "");
   }
 
 });

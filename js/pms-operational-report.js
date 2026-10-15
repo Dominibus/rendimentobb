@@ -67,9 +67,11 @@ export function buildPMSOperationalReport({snapshot,ownerUid,propertyId='',month
   return {month:month||period.start.slice(0,7),periodLabel,period:{start:new Date(first*86400000).toISOString().slice(0,10),end:new Date(next*86400000).toISOString().slice(0,10)},days,generatedAt,scope:propertyId?'property':'portfolio',scopeName:propertyId?rows[0].name:null,rows,totals,renovations,warnings};
 }
 
-export function renderPMSOperationalPDF(report,{jsPDF,lang='it'}){
+export function renderPMSOperationalPDF(report,{jsPDF,lang='it',doc:existingDoc=null,footer=true}){
   const en=lang==='en',t=(it,eng)=>en?eng:it,locale=en?'en-GB':'it-IT';
-  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const doc=existingDoc||new jsPDF({unit:'mm',format:'a4'});
+  if(existingDoc)doc.addPage();
+  const firstPage=doc.getNumberOfPages();
   const clean=value=>String(value??'').replace(/[\u0000-\u001f]/g,' ').replace(/[\u2010-\u2015]/g,'-').replace(/\u2022/g,' - ');
   const num=(v,d=0)=>v===null?t('N/D','N/A'):new Intl.NumberFormat(locale,{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
   const money=v=>num(v,2)+' EUR';
@@ -120,6 +122,6 @@ export function renderPMSOperationalPDF(report,{jsPDF,lang='it'}){
   const w=report.warnings;
   if(Object.values(w).some(Boolean))text(t('Controlli dati - date non valide: ','Data checks - invalid dates: ')+w.invalidDates+t('; importi mancanti/non validi: ','; missing/invalid amounts: ')+w.missingAmounts+t('; notti sovrapposte: ','; overlapping nights: ')+w.overlappingNights+t('; prenotazioni senza proprietà valida: ','; bookings without a valid property: ')+w.unlinkedBookings+t('; stati sconosciuti: ','; unknown statuses: ')+w.unknownStatuses+t('. Verifica i dati prima di usare i risultati.','. Check records before using these results.'),{size:9,color:[153,27,27]});
   if(report.performance)renderPerformanceSections(report.performance,{section,text,metric,ensure,doc,getY:()=>y,setY:value=>{y=value;},t,num,money});
-  const count=doc.getNumberOfPages();for(let n=1;n<=count;n++){doc.setPage(n);doc.setDrawColor(220,228,226);doc.line(16,281,194,281);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,116,139);doc.text('RendimentoBB | '+t('Dati operativi registrati','Recorded operational data'),16,287);doc.text(n+' / '+count,194,287,{align:'right'});}
+  const count=doc.getNumberOfPages();for(let n=firstPage;footer&&n<=count;n++){doc.setPage(n);doc.setDrawColor(220,228,226);doc.line(16,281,194,281);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,116,139);doc.text('RendimentoBB | '+t('Dati operativi registrati','Recorded operational data'),16,287);doc.text(n+' / '+count,194,287,{align:'right'});}
   return doc;
 }
