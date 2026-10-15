@@ -998,7 +998,8 @@ window.triggerHomeUpgradeFlow = function(data = {}){
 window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const access = window.getUserAccess?.() || {};
-  if(!access || access.canDownloadPDF) return;
+  if(!access || access.canDownloadPDF || access.isPro || access.isAdmin) return;
+  if(access.isInvestor&&window.rbLiveSalesPaused?.()&&window.rbShowSalesPause){window.rbShowSalesPause("pro",{reason:"report"});return;}
 
   if(access.isInvestor) type = "pro";
 
@@ -1068,36 +1069,29 @@ if(oldModal){
   // ================= PRO =================
   if(type === "pro"){
 
-    const dynamicTextIT =
-  safeROI > 12
-    ? `Questo investimento è sopra la media (${Math.round(safeROI)}%). Senza analisi completa rischi di sottovalutarlo o prendere una decisione sbagliata. Questo è il punto esatto in cui gli investitori fanno errori costosi.`
-    : "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti. Questo è il punto in cui gli investitori perdono soldi.";
-
-    const dynamicTextEN =
-  safeROI > 12
-    ? `This investment is above average (${Math.round(safeROI)}%). Without full analysis you may underestimate it or make the wrong decision. This is exactly where investors make costly mistakes.`
-    : "You're making a decision without seeing real risk, mortgage and hidden costs. This is where investors lose money.";
+    const dynamicTextIT = 'Collega analisi e immobile, scegli il periodo e leggi ricavi prenotati, occupazione e scostamenti nel report integrato Pro. Investor mantiene analisi complete e PMS.';
+    const dynamicTextEN = 'Link analysis and property, choose a period and review booked revenue, occupancy and variances in the integrated Pro report. Investor keeps full analyses and PMS.';
 
     config = {
-      title_it: "🚀 Sblocca analisi completa",
-      title_en: "🚀 Unlock full analysis",
+      title_it: "Report integrati e PDF · Pro",
+      title_en: "Integrated reports and PDFs · Pro",
 
       desc_it: dynamicTextIT,
       desc_en: dynamicTextEN,
 
       features_it: [
-        "ROI stimato completo (netto)",
-        "Analisi rischio avanzata",
-        "Break-even reale",
-        "Simulazione mutuo integrata",
-        "Report PDF professionale"
+        "Report collegato ad analisi e immobile",
+        "Confronto prenotazioni e ipotesi",
+        "Ambito e periodo selezionabili",
+        "Guida Autopilot alla lettura",
+        "PDF in italiano e inglese"
       ],
       features_en: [
-        "Full estimated ROI (net)",
-        "Advanced risk analysis",
-        "Real break-even",
-        "Integrated mortgage simulation",
-        "Professional PDF report"
+        "Report linked to analysis and property",
+        "Recorded bookings versus assumptions",
+        "Selectable scope and period",
+        "Autopilot reading guide",
+        "PDFs in Italian and English"
       ],
 
       proof_it: "Analizza rischio, mutuo e sostenibilità nello stesso report",
@@ -1106,8 +1100,8 @@ if(oldModal){
       cta_it: "Sblocca analisi completa – €29/mese",
       cta_en: "Unlock full analysis – €29/month",
 
-      warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
-      warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
+      warning_it: "Ricavi prenotati e incassi sono diversi; il margine effettivo richiede dati economici completi.",
+      warning_en: "Booked revenue differs from receipts; actual margin requires complete financial records.",
 
       action: () => window.location.pathname.startsWith("/tool")
         ? window.location.assign("/#pricing")

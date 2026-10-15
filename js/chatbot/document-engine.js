@@ -518,6 +518,8 @@ window.rbActiveExecutiveDocument = {
 // Financial document answers use only the current PDF, never page defaults.
 window.rbBuildPDFResponse = function(message, doc, live = {}){
     if(doc?.status !== "ready") return null;
+    const operationalResponse=window.rbBuildPMSDocumentResponse?.(message,doc);
+    if(operationalResponse)return operationalResponse;
     const query = String(message || "").toLowerCase();
     if(!/(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(query)) return null;
     if(/\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/.test(query)) return null;
@@ -703,13 +705,14 @@ window.rbAnalyzeUploadedPDF = async function(file){
         if(typeof window.rbRunDocumentReasoning === "function") await window.rbRunDocumentReasoning(doc);
         if(!isCurrent()) return {success:false,error:"cancelled"};
         const analysis = doc.analysis || {};
-        const known = ["propertyPrice","roi","equity","mortgage","cashflow","gross","risk","occupancy"].filter(key => analysis[key] !== null && analysis[key] !== undefined);
+        const operational=analysis.operational;
+        const known = operational?["properties","stays","revenue","nights","occupancy","adr","revpar"].filter(key=>operational[key]!==null):["propertyPrice","roi","equity","mortgage","cashflow","gross","risk","occupancy"].filter(key => analysis[key] !== null && analysis[key] !== undefined);
         window.rbPDFConversationDocumentId = doc.id;
         const response = window.rbBuildPDFResponse("Riassumi questo PDF", doc);
         window.addMessage?.("bot", `PDF letto: ${doc.pageCount || 0} ${window.currentLang === "en" ? "pages" : "pagine"}.\n${window.currentLang === "en" ? response.textEN : response.textIT}`);
         doc.dataQuality = {
             recognizedFields:known,
-            missingFields:["propertyPrice","equity","gross","cashflow"].filter(key => analysis[key] === null || analysis[key] === undefined),
+            missingFields:operational?["revenue","nights","occupancy","adr","revpar"].filter(key=>operational[key]===null):["propertyPrice","equity","gross","cashflow"].filter(key => analysis[key] === null || analysis[key] === undefined),
             source:"extracted_pdf_text",
             pageCount:doc.pageCount || 0
         };

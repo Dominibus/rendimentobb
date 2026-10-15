@@ -206,35 +206,11 @@ RendimentoBB includes multiple professional access levels.
 `,
 
     aiInsightIT:`
-📊 Piani disponibili:
-
-• Free
-• Investor
-• PRO
-
-🔓 I piani premium sbloccano:
-
-• analisi avanzate
-• benchmark mercato
-• AI insights
-• PDF executive
-• simulazioni professionali
+Investor include simulazioni salvate, dashboard e gestione PMS. Pro mensile e Pro annuale aggiungono report integrati, PDF in italiano e inglese e guida Autopilot alla lettura. Il report operativo PMS descrive le prenotazioni registrate; il report andamento confronta lo stesso ambito e periodo con le ipotesi collegate; il report integrato distingue lo scenario finanziario annuale dai dati PMS. Nessuno dei tre certifica incassi o margine effettivo. I nuovi acquisti sono sospesi; /plan-interest.html?plan=pro raccoglie richieste senza impegno. La prova Investor dura 30 giorni per account idonei e non include PDF.
 `,
 
     aiInsightEN:`
-📊 Available plans:
-
-• Free
-• Investor
-• PRO
-
-🔓 Premium plans unlock:
-
-• advanced analysis
-• market benchmarks
-• AI insights
-• executive PDF
-• professional simulations
+Investor includes saved simulations, dashboard and PMS management. Monthly and yearly Pro add integrated reports, PDFs in Italian and English and the Autopilot reading guide. The PMS operations report describes recorded bookings; the performance report compares the same scope and period with linked assumptions; the integrated report separates the annual financial scenario from PMS data. None of these certifies receipts or actual profit. New purchases are paused; /plan-interest.html?plan=pro collects non-binding interest. The Investor trial lasts 30 days for eligible accounts and excludes PDFs.
 `,
 
     recommendationsIT:[
@@ -337,8 +313,8 @@ The executive PDF report is available for PRO users.
 📊 Include:
 
 • ROI avanzato
-• benchmark mercato
-• cashflow
+• riferimenti interni illustrativi
+• cashflow stimato
 • rischio
 • sostenibilità mutuo
 • AI insights
@@ -350,9 +326,9 @@ The executive PDF report is available for PRO users.
 📊 Includes:
 
 • advanced ROI
-• market benchmarks
-• cashflow
-• risk
+• internal illustrative references
+• cashflow stimato
+• model risk index
 • mortgage sustainability
 • AI insights
 

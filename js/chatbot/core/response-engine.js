@@ -123,6 +123,9 @@ if(!rbAsksFreeFeatures && !rbAsksPlanPDF &&
     };
 }
 
+const operationalPDFResponse=window.rbBuildPMSDocumentResponse?.(message,documentKnowledge?.activeDocument);
+if(operationalPDFResponse)return operationalPDFResponse;
+
 // A bounded, grounded answer for data completeness, without inventing estimates.
 const rbCurrentPDF = documentKnowledge?.activeDocument;
 if(rbCurrentPDF?.status === "ready" &&

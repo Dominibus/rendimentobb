@@ -18,12 +18,31 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         }
 
-        const text =
+        let text =
 
             documentObject
                 .extractedText
                 .replace(/\s+/g, " ")
                 .trim();
+
+        const pmsHeader=/REPORT OPERATIVO PMS|PMS OPERATIONS REPORT|ANDAMENTO IMMOBILI E PORTFOLIO|PROPERTY AND PORTFOLIO PERFORMANCE/i;
+        const pmsStart=text.search(pmsHeader);
+        const mixed=pmsStart>=0&&/REPORT INVESTIMENTO E GESTIONE|INVESTMENT\s*&\s*OPERATIONS REPORT/i.test(text.slice(0,pmsStart));
+        if(pmsStart>=0&&!mixed){
+            const operational=window.rbReadPMSDocument?.(documentObject)||null;
+            const reportType=/REPORT OPERATIVO PMS|PMS OPERATIONS REPORT/i.test(text)?'pms_operational':'property_performance';
+            documentObject.type=reportType;
+            documentObject.analysis=Object.fromEntries(['roi','realROI','risk','occupancy','investmentScore','dscr','benchmarkROI','propertyPrice','equity','mortgage','gross','annualProfit','cashflow','adr','verdict','financingRate','debtService'].map(key=>[key,null]));
+            Object.assign(documentObject.analysis,{reportType,operational,roiBasis:'unavailable',cashflowBasis:'unavailable',propertyFacts:{}});
+            documentObject.executiveContext={generatedBy:'pdf-parser-engine',parserVersion:'1.2',isFinancialReport:false,hasAnalysis:!!operational,financialEvidence:0,grounding:'document_only'};
+            documentObject.aiSummary={reportType,operational};
+            return documentObject;
+        }
+        // Annual financial regexes must never consume property-specific PMS forecasts.
+        if(mixed){
+            const appendix=[...text.matchAll(/Ipotesi effettive del report|Actual report assumptions|Ipotesi salvate della simulazione|Saved simulation assumptions/gi)].at(-1);
+            text=(text.slice(0,pmsStart)+(appendix&&appendix.index>pmsStart?' '+text.slice(appendix.index):'')).trim();
+        }
 
         // ===========================================
         // HELPERS

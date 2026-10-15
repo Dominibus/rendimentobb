@@ -41,25 +41,25 @@ window.rbSupportKnowledge = {
       "📄 Executive Investment Report",
 
     aiSummaryIT: `
-Il report Executive AI genera un’analisi professionale avanzata dell’investimento utilizzando ROI reale, cashflow, rischio operativo, leva finanziaria e benchmark di mercato.
+Il PDF Executive descrive lo scenario simulato: ROI stimato, cashflow previsto, indice di rischio del modello e finanziamento. I riferimenti di città sono interni e illustrativi.
 
-Il sistema simula la sostenibilità reale dell’investimento e genera insight automatici basati sui dati inseriti.
+Pro include anche PDF operativo PMS, andamento e report integrato analisi + immobile + PMS, con ambito e periodo espliciti e guida alla lettura.
 `,
 
     aiSummaryEN: `
-The Executive AI report generates an advanced professional investment analysis using real ROI, cashflow, operational risk, financial leverage and market benchmarks.
+The Executive PDF describes the simulated scenario: estimated ROI, forecast cash flow, model risk index and financing. City references are internal and illustrative.
 
-The system simulates real investment sustainability and generates automatic insights based on user data.
+Pro also includes PMS operations, performance and integrated analysis + property + PMS reports, with explicit scope and period and guided reading.
 `,
 
     aiInsightIT: `
 🧠 Insight AI:
-molti investimenti apparentemente profittevoli mostrano criticità nascoste quando vengono analizzati cashflow reale, rischio operativo e sostenibilità del mutuo.
+molti investimenti apparentemente profittevoli mostrano criticità nascoste quando vengono analizzati cashflow stimato, rischio operativo e sostenibilità del mutuo.
 `,
 
     aiInsightEN: `
 🧠 AI Insight:
-many apparently profitable investments reveal hidden weaknesses when real cashflow, operational risk and mortgage sustainability are analyzed.
+many apparently profitable investments reveal hidden weaknesses when estimated cash flow, operational risk and mortgage sustainability are analyzed.
 `,
 
     warningIT:
@@ -70,10 +70,10 @@ many apparently profitable investments reveal hidden weaknesses when real cashfl
 
     featuresIT: [
 
-      "ROI reale avanzato",
+      "ROI stimato sul capitale proprio",
       "Analisi cashflow",
       "Risk score AI",
-      "Benchmark città",
+      "Riferimenti città illustrativi",
       "DSCR e sostenibilità mutuo",
       "Break-even analysis",
       "Analisi operativa",
@@ -84,10 +84,10 @@ many apparently profitable investments reveal hidden weaknesses when real cashfl
 
     featuresEN: [
 
-      "Advanced real ROI",
+      "Estimated return on equity",
       "Cashflow analysis",
       "AI risk score",
-      "City benchmarks",
+      "Illustrative city references",
       "DSCR & mortgage sustainability",
       "Break-even analysis",
       "Operational analysis",
@@ -170,7 +170,7 @@ Simulations are compared with real market benchmarks to identify anomalies, hidd
 
       "Inserisci occupazione realistica.",
       "Mantieni costi operativi accurati.",
-      "Analizza il cashflow reale."
+      "Analizza il cashflow stimato."
 
     ],
 
@@ -178,7 +178,7 @@ Simulations are compared with real market benchmarks to identify anomalies, hidd
 
       "Use realistic occupancy assumptions.",
       "Maintain accurate operational costs.",
-      "Analyze real cashflow."
+      "Analyze estimated cash flow."
 
     ],
 
@@ -222,19 +222,19 @@ Simulations are compared with real market benchmarks to identify anomalies, hidd
       "🌍 Market Benchmarks",
 
     aiSummaryIT: `
-RendimentoBB confronta la simulazione con benchmark reali di mercato per valutare competitività e sostenibilità dell’investimento.
+RendimentoBB mostra riferimenti interni illustrativi per confrontare ipotesi. Non sono medie di mercato aggiornate o quotazioni verificate.
 `,
 
     aiSummaryEN: `
-RendimentoBB compares simulations with real market benchmarks to evaluate investment competitiveness and sustainability.
+RendimentoBB shows internal illustrative references for comparing assumptions. These are not updated market averages or verified quotes.
 `,
 
     aiInsightIT: `
-Occupazione, ADR, rischio operativo e ROI vengono confrontati con i valori medi della città selezionata.
+Occupazione, ADR e ROI dello scenario dipendono dalle ipotesi inserite. Il confronto PMS usa prenotazioni salvate, stesso ambito e periodo; non attesta sovraperformance di mercato.
 `,
 
     aiInsightEN: `
-Occupancy, ADR, operational risk and ROI are compared against city market averages.
+Scenario occupancy, ADR and ROI depend on entered assumptions. PMS comparisons use recorded bookings for the same scope and period; they do not establish market outperformance.
 `,
 
     warningIT:

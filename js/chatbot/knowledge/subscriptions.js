@@ -36,8 +36,8 @@ Object.assign(window.rbKnowledgeBase, {
     ],
     "aiTitleIT": "📊 PIANO INVESTOR",
     "aiTitleEN": "📊 INVESTOR PLAN",
-    "aiSummaryIT": "Investor: €19 al mese, per analisi salvate e gestione PMS.",
-    "aiSummaryEN": "Investor: €19 per month, for saved analyses and PMS.",
+    "aiSummaryIT": "Listino previsto Investor: €19 al mese, per analisi salvate e gestione PMS.",
+    "aiSummaryEN": "Planned Investor price: €19 per month, for saved analyses and PMS.",
     "aiInsightIT": "ROI, cashflow, scenari salvati, dashboard, confronto immobili e PMS prenotazioni. Include assistente per analisi e attività. I report PDF Executive e i report dashboard sono riservati a Pro.",
     "aiInsightEN": "ROI, cashflow, saved scenarios, dashboard, property comparison and booking PMS. Includes the analysis and task assistant. Executive PDFs and dashboard reports require Pro.",
     "recommendationsIT": [
@@ -61,8 +61,8 @@ Object.assign(window.rbKnowledgeBase, {
     ],
     "aiTitleIT": "🚀 PIANO PRO",
     "aiTitleEN": "🚀 PRO PLAN",
-    "aiSummaryIT": "Pro: €29 al mese. Aggiunge PDF professionali e report dashboard alle funzioni Investor.",
-    "aiSummaryEN": "Pro: €29 per month. Adds professional PDFs and dashboard reports to Investor features.",
+    "aiSummaryIT": "Listino previsto Pro: €29 al mese. Aggiunge PDF professionali e report dashboard alle funzioni Investor.",
+    "aiSummaryEN": "Planned Pro price: €29 per month. Adds professional PDFs and dashboard reports to Investor features.",
     "aiInsightIT": "Report integrato analisi + immobile + PMS: periodo selezionabile, ricavi prenotati, occupazione, ADR, RevPAR, lavori e scostamenti dalle ipotesi, PDF IT/EN e guida alla lettura. Investor mantiene il PMS. Autopilot propone priorità e azioni assistite: non certifica documenti e non sincronizza automaticamente i portali OTA.",
     "aiInsightEN": "Integrated analysis + property + PMS report: selectable period, booked revenue, occupancy, ADR, RevPAR, renovation budgets and variances from assumptions, IT/EN PDFs and guided reading. Investor keeps PMS. Autopilot suggests priorities and guided actions: it does not certify documents or automatically synchronize OTA channels.",
     "recommendationsIT": [
@@ -114,8 +114,8 @@ Object.assign(window.rbKnowledgeBase, {
     "aiTitleEN": "❌ SUBSCRIPTION MANAGEMENT",
     "aiSummaryIT": "Per richiedere la disattivazione del rinnovo, contatta l’assistenza dalla pagina Contatti.",
     "aiSummaryEN": "Contact support through the Contact page to request renewal cancellation.",
-    "aiInsightIT": "Controlla il piano attivo e la sua scadenza. La dashboard attuale non offre un pannello per modificare autonomamente la carta o annullare il rinnovo.",
-    "aiInsightEN": "Check your active plan and its expiry date. The current dashboard does not provide a self-service panel for changing payment cards or cancelling renewal.",
+    "aiInsightIT": "Controlla il piano attivo e la sua scadenza. Per gli abbonamenti Stripe, usa Gestisci rinnovo e fatture su Stripe nell’area Abbonamento, quando disponibile. I piani manuali richiedono assistenza.",
+    "aiInsightEN": "Check your active plan and its expiry date. For Stripe subscriptions, use the Stripe renewal and invoice management button in Subscription, when available. Manually assigned plans require support.",
     "recommendationsIT": [
       "Confronta i piani nella home",
       "Verifica il piano attivo nella dashboard"
@@ -140,8 +140,8 @@ Object.assign(window.rbKnowledgeBase, {
     "aiTitleEN": "💰 RENDIMENTOBB PRICING",
     "aiSummaryIT": "Investor €19/mese; Pro €29/mese; Pro annuale €199/anno.",
     "aiSummaryEN": "Investor €19/month; Pro €29/month; Yearly Pro €199/year.",
-    "aiInsightIT": "Investor include analisi salvate e PMS. Pro aggiunge report PDF e report dashboard. L’annuale include le stesse funzioni Pro con un risparmio di €149 rispetto a dodici mensilità Pro. Prezzi e fatturazione sono riportati anche nella home.",
-    "aiInsightEN": "Investor includes saved analyses and PMS. Pro adds PDF and dashboard reports. Yearly Pro includes the same Pro features, saving €149 compared with twelve monthly Pro payments. Prices and billing terms are also shown on the home page.",
+    "aiInsightIT": "Investor include analisi salvate e PMS. Pro aggiunge report integrati analisi + PMS, PDF IT/EN e guida alla lettura. L’annuale include le stesse funzioni Pro con un risparmio di €149 rispetto a dodici mensilità Pro. Prezzi e fatturazione sono riportati anche nella home.",
+    "aiInsightEN": "Investor includes saved analyses and PMS. Pro adds integrated analysis + PMS reports, IT/EN PDFs and guided reading. Yearly Pro includes the same Pro features, saving €149 compared with twelve monthly Pro payments. Prices and billing terms are also shown on the home page.",
     "recommendationsIT": [
       "Confronta i piani nella home",
       "Verifica il piano attivo nella dashboard"
@@ -165,8 +165,8 @@ Object.assign(window.rbKnowledgeBase, {
     ],
     "aiTitleIT": "PRO ANNUALE",
     "aiTitleEN": "YEARLY PRO",
-    "aiSummaryIT": "Pro annuale: tutte le funzioni Pro a €199 all’anno, pagati in un’unica soluzione.",
-    "aiSummaryEN": "Yearly Pro: all Pro features for €199 per year, paid upfront.",
+    "aiSummaryIT": "Listino previsto Pro annuale: tutte le funzioni Pro a €199 all’anno, pagati in un’unica soluzione.",
+    "aiSummaryEN": "Planned yearly Pro price: all Pro features for €199 per year, paid upfront.",
     "aiInsightIT": "Risparmi €149 rispetto a 12 mesi di Pro mensile (€348), circa il 42,8%. Il costo medio è €16,58 al mese; il pagamento resta annuale. Include PDF, dashboard, prenotazioni, calendario e attività PMS. Le funzioni sono le stesse del Pro mensile; non sono promessi servizi esterni aggiuntivi.",
     "aiInsightEN": "Save €149 versus 12 months of monthly Pro (€348), about 42.8%. The average cost is €16.58 per month; billing remains annual. Includes PDFs, dashboard, bookings, calendar and PMS tasks. Features match monthly Pro; no additional external services are promised.",
     "recommendationsIT": [

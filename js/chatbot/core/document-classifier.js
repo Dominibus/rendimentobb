@@ -25,6 +25,9 @@ function classifyDocument(file){
 
     const name=(file.name || "").toLowerCase();
 
+    if(name.includes('rendimentobb-pms-'))return {type:'pms_operational',label:'PMS operations report',confidence:95};
+    if(name.includes('rendimentobb-andamento-'))return {type:'property_performance',label:'Property and portfolio performance',confidence:95};
+    // Filename is only a hint; the parser verifies content before extracting metrics.
     // ===================================
     // Executive Report
     // ===================================

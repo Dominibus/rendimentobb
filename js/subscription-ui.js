@@ -18,10 +18,12 @@ function acceptance(d){const label=add(d,'label','');label.style.cssText='displa
 window.rbLiveSalesPaused=()=>isLiveSalesPaused(!isSandboxHost(location.hostname));
 window.rbShowSalesPause=(plan,{reason=''}={})=>{
  const inTrial=!!window.currentUser&&window.rbIsTrial();
+ const activePro=!!window.currentUser&&!!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
  const report=reason==='report';
- const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
- if(report||inTrial){
+ const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):activePro?t('Accesso Pro già attivo','Pro access already active'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
+ if(report||inTrial||activePro){
   if(report)add(d,'p',inTrial?t('La tua prova Investor è già attiva e non include i PDF. Questa funzione è riservata ai piani Pro.','Your Investor trial is already active and does not include PDFs. This feature requires a Pro plan.'):t('Questa funzione è riservata ai piani Pro. Free e Investor, anche in prova, non includono i PDF.','This feature requires a Pro plan. Free and Investor, including the trial, do not include PDFs.'));
+  else if(activePro)add(d,'p',t('Hai già accesso alle funzioni Pro. Apri la dashboard per report, PDF e guida alla lettura; non occorre attivare una prova.','You already have access to Pro features. Open the dashboard for reports, PDFs and guided reading; no trial activation is needed.'));
   else add(d,'p',t('La tua prova Investor è già attiva. Puoi continuare a usare analisi, dashboard e PMS; i PDF sono riservati a Pro.','Your Investor trial is already active. You can keep using analyses, dashboard and PMS; PDFs require Pro.'));
   add(d,'p',t('In questa fase i nuovi acquisti non sono disponibili. Puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti, senza impegno o attivazioni automatiche.','New purchases are currently unavailable. Register your interest to be notified when subscriptions open, without commitment or automatic activation.'));
  }else{
@@ -36,7 +38,10 @@ window.rbShowSalesPause=(plan,{reason=''}={})=>{
 function renderSalesPause(){
  if(!window.rbLiveSalesPaused()){for(const e of document.querySelectorAll('[data-rb-sales-notice]'))e.hidden=true;return;}
  for(const e of document.querySelectorAll('[data-rb-sales-notice]')){
-  e.hidden=false;e.textContent=t(SALES_NOTICE.it,SALES_NOTICE.en);
+  const access=window.getUserAccess?.()||{},pro=!!window.currentUser&&(access.isPro||access.isAdmin),inTrial=!!window.currentUser&&window.rbIsTrial();
+  e.hidden=false;
+  e.textContent=pro?t('Hai già accesso alle funzioni Pro: report integrati, PDF e guida alla lettura. I nuovi acquisti restano sospesi; puoi continuare a usare il piano attivo.','You already have access to Pro features: integrated reports, PDFs and guided reading. New purchases remain paused; you can keep using your active plan.'):
+    inTrial?t('La tua prova Investor è già attiva: analisi, dashboard e PMS sono disponibili fino alla scadenza indicata nell’account. Report integrati e PDF richiedono Pro. I nuovi acquisti sono sospesi; puoi richiedere un avviso senza impegno.','Your Investor trial is already active: analyses, dashboard and PMS remain available until your account expiry. Integrated reports and PDFs require Pro. New purchases are paused; you may request a non-binding opening notice.'):t(SALES_NOTICE.it,SALES_NOTICE.en);
  }
  for(const e of document.querySelectorAll('#pricing [onclick*="triggerUpgradeFlow"]')){
   e.setAttribute('data-it','Avvisami all’apertura');e.setAttribute('data-en','Notify me when subscriptions open');
@@ -45,13 +50,14 @@ function renderSalesPause(){
 }
 document.addEventListener('DOMContentLoaded',renderSalesPause);
 document.addEventListener('rb_language_changed',renderSalesPause);
+for(const event of ['rb_plan_ready','rb_user_logged','rb_user_logged_out']){document.addEventListener(event,renderSalesPause);window.addEventListener?.(event,renderSalesPause);}
 if(document.readyState!=='loading')renderSalesPause();
 window.rbReviewPurchase=plan=>new Promise(resolve=>{
  if(window.rbLiveSalesPaused()){window.rbShowSalesPause(plan);return resolve(false);}
  const offer=OFFERS[plan];if(!offer)return resolve(false);
  const d=dialog(t('Prima di acquistare','Before you purchase'));
  add(d,'p',`${offer.name} · €${offer.amount} / ${offer.interval==='year'?t('anno','year'):t('mese','month')}`);
- add(d,'p',offer.pdf?t('Analisi salvate, dashboard, PMS e report PDF.','Saved analyses, dashboard, PMS and PDF reports.'):t('Analisi salvate, dashboard e PMS. Report PDF esclusi.','Saved analyses, dashboard and PMS. PDF reports excluded.'));
+ add(d,'p',offer.pdf?t('Analisi salvate, dashboard e PMS, più report integrati, PDF IT/EN e guida alla lettura.','Saved analyses, dashboard and PMS, plus integrated reports, IT/EN PDFs and guided reading.'):t('Analisi salvate, dashboard e PMS. Report PDF esclusi.','Saved analyses, dashboard and PMS. PDF reports excluded.'));
  add(d,'p',t('Pagamento immediato e rinnovo automatico con la periodicità indicata. Per Pro Annuale, 199 € sono addebitati in un’unica soluzione ogni anno. Controlla importo totale e imposte nel checkout; in caso di differenze non procedere.','Immediate payment and automatic renewal at the stated frequency. Pro Annual is charged as a single €199 payment each year. Check the total and taxes at checkout; do not proceed if there are discrepancies.'));
  add(d,'p',t('La prova gratuita è separata: acquistando qui avvii un abbonamento a pagamento. Puoi richiedere la disattivazione del rinnovo dall’area Abbonamento o al supporto. Il recesso è distinto dalla disattivazione; non viene richiesta una rinuncia automatica ai diritti del consumatore.','The free trial is separate: purchasing here starts a paid subscription. Request stopping renewal through Subscription or support. Withdrawal is distinct from stopping renewal; no automatic waiver of consumer rights is requested.'));
  conditions(d);const box=acceptance(d);

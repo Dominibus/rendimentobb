@@ -1,5 +1,5 @@
 import {createAnalyticsConsent} from './analytics-consent.js?v=20261014-rc122';
-import './subscription-ui.js?v=20261015-rc133';
+import './subscription-ui.js?v=20261015-rc137';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
@@ -384,8 +384,8 @@ Guide
     </h3>
 
     <p
-      data-it="Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro."
-      data-en="You are analyzing a real investment. Without full data you risk losing thousands.">
+      data-it="Investor include analisi complete e gestione PMS. Pro aggiunge report integrati, PDF IT/EN e guida alla lettura. I nuovi acquisti sono sospesi."
+      data-en="Investor includes full analyses and PMS management. Pro adds integrated reports, IT/EN PDFs and guided reading. New purchases are paused.">
     </p>
 
     <ul>

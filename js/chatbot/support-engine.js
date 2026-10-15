@@ -114,51 +114,7 @@ function(text){
   // 💳 PRICING
   // ===========================================
 
-  if(intent === "pricing"){
-
-    return window.t(
-
-`👑 RendimentoBB utilizza 3 livelli:
-
-🔓 FREE
-• simulazioni base
-• accesso limitato AI
-
-📈 INVESTOR
-• analisi avanzata
-• AI insights
-• più utilizzo chatbot
-
-👑 PRO
-• PDF executive
-• AI avanzata
-• analisi complete
-• accesso illimitato
-
-💡 Più il piano è avanzato, più le simulazioni diventano realistiche e professionali.`,
-
-`👑 RendimentoBB uses 3 access levels:
-
-🔓 FREE
-• basic simulations
-• limited AI access
-
-📈 INVESTOR
-• advanced analysis
-• AI insights
-• more chatbot usage
-
-👑 PRO
-• executive PDF
-• advanced AI
-• full analysis
-• unlimited access
-
-💡 Advanced plans unlock more realistic and professional analysis.`
-
-    );
-
-  }
+  if(intent === "pricing")return window.t('Listino previsto: Investor 19 €/mese, Pro 29 €/mese, Pro annuale 199 €/anno. Investor include analisi salvate, dashboard e gestione PMS. Pro mensile e annuale aggiungono report integrati, PDF operativo PMS, PDF andamento, PDF IT/EN e guida alla lettura. I nuovi acquisti sono sospesi. La prova Investor di 30 giorni è per account idonei e non include PDF; non è una prova Pro. Puoi lasciare interesse senza impegno su /plan-interest.html?plan=pro. Le simulazioni dipendono dagli input: un piano diverso non rende i dati più reali o garantiti.','Planned prices: Investor €19/month, Pro €29/month, yearly Pro €199/year. Investor includes saved analyses, dashboard and PMS management. Monthly and yearly Pro add integrated reports, PMS operations PDFs, performance PDFs, IT/EN PDFs and guided reading. New purchases are paused. The 30-day Investor trial is for eligible accounts and excludes PDFs; it is not a Pro trial. Express non-binding interest at /plan-interest.html?plan=pro. Simulations depend on inputs: another plan does not make the figures more real or guaranteed.');
 
   // ===========================================
   // 🔐 LOGIN
@@ -192,43 +148,7 @@ function(text){
   // 📄 PDF
   // ===========================================
 
-  if(intent === "pdf"){
-
-    if(access.isFree){
-
-      return window.t(
-
-`📄 Il PDF executive è disponibile nel piano PRO.
-
-Include:
-• analisi bancaria
-• rischio
-• cashflow
-• benchmark
-• executive insights AI`,
-
-`📄 Executive PDF is available in the PRO plan.
-
-Includes:
-• banking analysis
-• risk
-• cashflow
-• benchmarks
-• AI executive insights`
-
-      );
-
-    }
-
-    return window.t(
-
-`📄 Il PDF executive permette di esportare l'analisi completa dell'investimento.`,
-
-`📄 Executive PDF allows exporting the full investment analysis.`
-
-    );
-
-  }
+  if(intent === "pdf")return window.t('Pro include PDF Executive, operativo PMS, andamento e report integrato investimento/gestione. Il PDF operativo contiene prenotazioni registrate, non ROI o cashflow effettivi. Investor include il PMS ma non questi report. I nuovi acquisti sono sospesi; /plan-interest.html?plan=pro raccoglie interesse senza impegno.','Pro includes Executive, PMS operations, performance and integrated investment/operations PDFs. Operations PDFs contain recorded bookings, not actual ROI or cash flow. Investor includes PMS but not these reports. New purchases are paused; express non-binding interest at /plan-interest.html?plan=pro.');
 
   // ===========================================
   // 🤖 CHATBOT
@@ -297,60 +217,9 @@ Includes:
   // ===========================================
 
   if(intent === "plans"){
-
-    if(access.isFree){
-
-      return window.t(
-
-`🔓 Attualmente stai utilizzando il piano FREE.
-
-💡 Investor sblocca analisi finanziarie avanzate e dashboard investimenti.
-👑 PRO aggiunge PDF Executive, PMS prenotazioni e dashboard operativa B&B.`,
-
-`🔓 You are currently using the FREE plan.
-
-💡 Investor unlocks advanced financial analysis and the investment dashboard.
-👑 PRO adds Executive PDF, booking PMS and the operational B&B dashboard.`
-
-      );
-
-    }
-
-    if(access.isInvestor){
-
-      return window.t(
-
-`📈 Stai utilizzando INVESTOR.
-
-👑 PRO aggiunge:
-• PDF executive
-• AI completa
-• accesso illimitato
-• analisi professionali avanzate.`,
-
-`📈 You are currently using INVESTOR.
-
-👑 PRO adds:
-• executive PDF
-• full AI
-• unlimited access
-• advanced professional analysis.`
-
-      );
-
-    }
-
-    return window.t(
-
-`👑 Hai accesso completo PRO attivo.`,
-
-`👑 You currently have full PRO access.`
-
-    );
-
+    if(window.currentUser&&(access.isPro||access.isAdmin))return window.t('Hai già accesso alle funzioni Pro, inclusi report integrati e PDF. Controlla piano e scadenza in Abbonamento.','You already have access to Pro features, including integrated reports and PDFs. Check your plan and expiry in Subscription.');
+    return window.t('Listino previsto: Investor 19 €/mese, Pro 29 €/mese, Pro annuale 199 €/anno. Investor include analisi salvate, dashboard e gestione PMS. Pro mensile e annuale aggiungono report integrati, PDF operativo PMS, PDF andamento, PDF IT/EN e guida alla lettura. I nuovi acquisti sono sospesi. La prova Investor di 30 giorni è per account idonei e non include PDF; non è una prova Pro. Puoi lasciare interesse senza impegno su /plan-interest.html?plan=pro. Le simulazioni dipendono dagli input: un piano diverso non rende i dati più reali o garantiti.','Planned prices: Investor €19/month, Pro €29/month, yearly Pro €199/year. Investor includes saved analyses, dashboard and PMS management. Monthly and yearly Pro add integrated reports, PMS operations PDFs, performance PDFs, IT/EN PDFs and guided reading. New purchases are paused. The 30-day Investor trial is for eligible accounts and excludes PDFs; it is not a Pro trial. Express non-binding interest at /plan-interest.html?plan=pro. Simulations depend on inputs: another plan does not make the figures more real or guaranteed.');
   }
-
-  return null;
 
 };
 
