@@ -1,0 +1,125 @@
+RendimentoBB — PATCH RC127 — 15 ottobre 2026
+Lista d'interesse e invito a diventare tester
+
+BASE RICHIESTA: RC126 già applicata, sia main sia stripe-sandbox-test.
+Questa è una patch incrementale, non l'intero progetto. Nessun deploy eseguito.
+
+CAMBIAMENTI
+1. Home: il riquadro della prova ora invita a diventare tester, esplorare analisi,
+   dashboard e PMS e condividere feedback. Mantiene i limiti reali: 7 giorni,
+   Free idoneo con email verificata, una prova per account/email, PDF esclusi,
+   senza carta e con ritorno a Free. Non promette accessi Pro gratuiti.
+2. Messaggi e pulsanti IT/EN invitano a chiedere l'avviso all'apertura dei piani,
+   mantenendo chiaro che i nuovi acquisti non sono disponibili in questa fase.
+3. Cliccando Investor, Pro o annuale, il dialogo permette di esplorare la prova
+   oppure andare al NUOVO plan-interest.html con il piano preselezionato.
+4. Il modulo raccoglie email, piano, lingua e consenso specifico non preselezionato
+   all'avviso di apertura; nessuna newsletter, pagamento, ordine, prezzo bloccato,
+   accesso anticipato garantito o modifica ai permessi dell'account.
+5. Il salvataggio riusa /api/send-lead con type plan_interest, su un percorso
+   separato dai lead/funnel. Rate limit persistente, origine consentita, honeypot,
+   validazione server e transazione contro duplicati. TEST e LIVE separati.
+6. Richieste salvate in _plan_interest, inaccessibile dal client con le regole
+   esistenti. Non sono clienti paganti né indirizzi verificati: emailVerified=false.
+   Non viene inviata nessuna email automatica, neppure di conferma; il modulo
+   mostra chiaramente il risultato a video solo dopo la risposta del server.
+7. Privacy: aggiunta informativa specifica e versionata per questo trattamento.
+8. La pulizia usa il cron già esistente: elimina solo richieste della nuova
+   raccolta scadute, massimo 200 per esecuzione. Nessun servizio aggiuntivo.
+
+INVARIATO
+La trial e la sua scadenza NON sono state modificate. Il ritorno a Free è già
+stato verificato dall'utente e non richiede di attendere altri 7 giorni.
+Nessuna modifica a regole Firebase, prezzi, documenti contrattuali già accettati,
+webhook, checkout/portale Stripe, logica di calcolo, PMS o accessi Pro esistenti.
+La pausa dei nuovi checkout LIVE introdotta da RC126 resta attiva.
+Nessuna nuova dipendenza o nuova variabile d'ambiente.
+
+PUBBLICARE
+1. Conservare il commit precedente di entrambi i branch e questo archivio.
+2. Copiare SOLO i file forniti, mantenendo i percorsi nella radice del progetto;
+   non sostituire intere cartelle con quelle parziali dello ZIP.
+3. Includere tutti i nuovi file: plan-interest.html, js/plan-interest.js,
+   js/plan-interest-copy.js, lib/plan-interest-service.js e il nuovo test.
+4. I file tests/ possono restare nel repository per la verifica npm test.
+   NON pubblicare Documentazione: contiene istruzioni, backup, diff e test.
+5. Pubblicare prima sandbox, eseguire i test sotto; poi main e attendere Ready.
+6. Non occorre ripubblicare regole Firebase, cambiare chiavi o impostare TTL.
+   È richiesto il cron Vercel già configurato per /api/cron-funnel.
+7. Ricaricare completamente le pagine; controllare anche .com.
+
+TEST DA FARE SUBITO
+A. Home IT/EN: titolo tester e limiti della trial chiari; pulsante prova porta
+   al percorso esistente (ospite -> login; utente idoneo -> Abbonamento).
+B. Fare clic su ognuno dei tre piani LIVE, poi Avvisami: il modulo deve
+   preselezionare Investor, Pro mensile o Pro annuale rispettivamente.
+C. Senza spuntare il consenso il modulo non invia. Email invalida respinta.
+D. In sandbox aprire direttamente /plan-interest.html?plan=pro_yearly e inviare
+   una richiesta con una propria email di test. Attendere conferma a video.
+   Non arriva una mail automatica: è il comportamento previsto.
+E. In Firebase -> Firestore -> Dati cercare la raccolta _plan_interest;
+   il record sandbox deve avere scope=test, piano giusto, consentVersion
+   plan-opening-notice-v1, privacyVersion 2026-10-15-rc127, status=requested,
+   emailVerified=false, marketingConsent=false e expiresAt successivo a createdAt.
+F. Ricaricare il modulo e ripetere stessa email/piano: resta un solo record in
+   quell'ambiente. Cambiare piano crea una richiesta distinta. Dopo tre richieste
+   orarie per la stessa email il rate limit può rispondere 429: è previsto.
+G. Dopo il deploy main ripetere una richiesta LIVE; deve avere scope=live e
+   non sostituire quella TEST. Nessun checkout Stripe o upgrade deve avviarsi.
+H. Controllo visivo da telefono e desktop: consenso leggibile, modulo intero,
+   conferma/errori visibili e cambio IT/EN senza perdere il piano richiesto.
+I. Il checkout sandbox resta attivo; la pausa acquisti LIVE resta attiva.
+   Non ripetere test di pagamento reale o prove di 7 giorni già completate.
+
+COME GESTIRE LE RICHIESTE
+- Per ora si consultano dalla console Firebase, non dal pannello Leads del sito.
+- Per valutare domanda reale usare scope=live, status=requested ed expiresAt
+  maggiore della data corrente (millisecondi Unix). La somma dei piani non è
+  il numero di persone: la stessa email può avere più piani di interesse.
+- Le email sono dichiarate, non verificate: non presentare i contatti come
+  clienti, preordini, conversioni o indirizzi certificati. Prima di usare la lista
+  eseguire una revisione manuale contro errori e richieste sospette.
+- Non vengono inviati messaggi all'operatore o agli interessati da questa patch.
+  L'eventuale avviso di apertura verrà gestito separatamente e con autorizzazione,
+  solo per la finalità richiesta, dopo la decisione sull'avvio commerciale.
+- In caso di revoca a support@rendimentobb.com, rimuovere tempestivamente tutti
+  i record di quella email e comunicarne la gestione; account/trial restano intatti.
+- Dopo aver inviato l'avviso eliminare le relative richieste. Non usare copie
+  nei backup per ricostruire contatti cancellati; se si ripristina un backup,
+  riapplicare le revoche e la pulizia prima di qualsiasi invio.
+
+CONSERVAZIONE E CRON
+La richiesta vale 90 giorni dal primo invio; i duplicati non prorogano la scadenza.
+Al primo cron utile dopo expiresAt i record scaduti vengono rimossi; il limite
+per esecuzione è 200. Controllare _pms_jobs/plan_interest_cleanup:
+lastRunAt, deleted, limitReached, needsAttention. Se needsAttention è true,
+verificare i log del cron e completare la pulizia prima di usare la lista.
+Se il cron è fermo, non considerare attive le richieste scadute; eseguire la
+cancellazione manuale mirata in Firebase. Nessun invio avviene da questo cron.
+Non creare record sintetici scaduti in produzione per provare la pulizia:
+i test automatici verificano la cancellazione con dati interamente simulati.
+
+TEST TECNICI E LIMITI
+1017 test automatici locali superati, zero errori. Comprendono servizi in memoria,
+API reale con provider simulati, isolamento ambienti, deduplica concorrente,
+input e consenso, origine/rate limit, scadenza/pulizia mirata, client IT/EN,
+errori di rete/JSON, doppio clic e mantenimento del piano selezionato.
+Nessun dato, pagamento o email reale è stato creato durante la verifica.
+Il browser locale non era disponibile; la verifica visiva e i test sul deployment
+pubblicato restano da eseguire. Il test statico delle regole non sostituisce
+una nuova esecuzione dell'emulatore; le regole non sono state modificate.
+La parte di informativa e gestione del consenso va inclusa nel fascicolo per
+il professionista, senza dichiarare conformità legale certificata.
+Riferimento: GDPR artt. 5, 6, 7, 13 (testo ufficiale EUR-Lex):
+https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng/
+
+ROLLBACK VERSO RC126
+Ripristinare il commit precedente oppure estrarre Documentazione/RC127-backup-RC126.zip
+sopra i file del repository. Rimuovere esclusivamente i nuovi file elencati in
+Documentazione/RC127-FILE-MODIFICATI.json come nuovi (i cinque elencati sopra).
+Pubblicare di nuovo dopo i test. Il rollback NON riapre i checkout LIVE: torna
+alla pausa RC126. La raccolta _plan_interest non viene cancellata automaticamente
+dal rollback: preservare le richieste per la gestione autorizzata oppure rimuoverle
+in modo mirato su decisione del titolare; mantenere la gestione di revoche e scadenze.
+Se ripristini anche privacy.html, prima gestisci i dati già raccolti: non rimuovere
+l'informativa mentre mantieni un trattamento di lista d'interesse operativo.

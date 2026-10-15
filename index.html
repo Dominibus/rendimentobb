@@ -1107,9 +1107,10 @@ Scegli il piano più adatto al tuo livello: investitore, gestore o professionist
 </p> 
 
 <div style="margin:0 auto 24px;max-width:900px;padding:20px;border:1px solid #cbe5dc;border-radius:16px;background:#effaf5;">
-<h3 data-it="Scopri la prova Investor di 7 giorni, senza carta" data-en="Explore the 7-day Investor trial, no card required">Scopri la prova Investor di 7 giorni, senza carta</h3>
-<p data-it="Quando disponibile, attivazione esplicita per account con email verificata. Nessun addebito o rinnovo automatico. Alla scadenza torni a Free; i dati salvati non vengono eliminati automaticamente. Una prova per account e indirizzo email." data-en="When available, explicit activation for accounts with verified email. No charge or automatic renewal. At expiry you return to Free; saved data is not automatically deleted. One trial per account and email address.">Quando disponibile, attivazione esplicita per account con email verificata. Nessun addebito o rinnovo automatico. Alla scadenza torni a Free; i dati salvati non vengono eliminati automaticamente. Una prova per account e indirizzo email.</p>
-<button type="button" class="btn-primary" onclick="window.rbOpenSubscription?.()" data-it="Apri la prova Investor" data-en="Open Investor trial">Apri la prova Investor</button>
+<h3 data-it="Diventa tester di RendimentoBB: 7 giorni di Investor gratis" data-en="Become a RendimentoBB tester: 7 free days of Investor">Diventa tester di RendimentoBB: 7 giorni di Investor gratis</h3>
+<p data-it="Esplora analisi, dashboard e PMS e aiutaci a migliorare RendimentoBB con il tuo feedback. Attiva la prova se sei Free, hai verificato l’email e non l’hai già usata: senza carta, addebiti o rinnovo automatico. PDF esclusi. Dopo 7 giorni torni a Free; i dati salvati non vengono eliminati automaticamente. Una prova per account e indirizzo email." data-en="Explore analyses, dashboard and PMS and help us improve RendimentoBB with your feedback. Activate the trial if you are Free, have verified your email and have not used it before: no card, charges or automatic renewal. PDFs excluded. After 7 days you return to Free; saved data is not automatically deleted. One trial per account and email address.">Esplora analisi, dashboard e PMS e aiutaci a migliorare RendimentoBB con il tuo feedback. Attiva la prova se sei Free, hai verificato l’email e non l’hai già usata: senza carta, addebiti o rinnovo automatico. PDF esclusi. Dopo 7 giorni torni a Free; i dati salvati non vengono eliminati automaticamente. Una prova per account e indirizzo email.</p>
+<button type="button" class="btn-primary" onclick="window.rbOpenSubscription?.()" data-it="Partecipa ai test: prova Investor" data-en="Join testing: try Investor">Partecipa ai test: prova Investor</button>
+<p><a href="/plan-interest.html" data-it="Avvisami all’apertura degli abbonamenti" data-en="Notify me when subscriptions open">Avvisami all’apertura degli abbonamenti</a></p>
 <p><a href="/terms.html" data-it="Condizioni di abbonamento" data-en="Subscription terms">Condizioni di abbonamento</a> · <a href="/withdrawal.html" data-it="Recesso e modulo" data-en="Withdrawal and form">Recesso e modulo</a></p>
 </div>
 <div class="pricing-grid">
@@ -1776,7 +1777,7 @@ Scopri di più →
 <script src="/js/chatbot-loader.js?v=20261012-rc108" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261015-rc126"></script>
+<script type="module" src="/js/header.js?v=20261015-rc127"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script> 
 <script src="/js/home-2026.js?v=20260930-10" defer></script> 
 <script src="/js/footer.js?v=20261013-rc112" defer></script>
@@ -1790,7 +1791,7 @@ Scopri di più →
 <!-- 🔥 DATA + ENGINE -->
 <script src="/js/market-data.js"></script> 
 <script type="module" src="/js/roi-engine.js?v=20261012-rc106"></script>
-<script type="module" src="/js/app.js?v=20261015-rc126"></script>
+<script type="module" src="/js/app.js?v=20261015-rc127"></script>
  
 <script>
 
@@ -2966,7 +2967,7 @@ window.triggerUpgradeFlow = function({
     return;
   }
 
-  if(window.rbLiveSalesPaused?.()){window.rbShowSalesPause?.();return;}
+  if(window.rbLiveSalesPaused?.()){window.rbShowSalesPause?.(plan);return;}
 
   // Utente non autenticato:
   // conserva il piano richiesto e apre la registrazione.

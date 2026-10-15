@@ -1,3 +1,4 @@
+import {purgeExpiredPlanInterests} from '../lib/plan-interest-service.js';
 import {drainSubscriptionConfirmations} from '../lib/subscription-confirmation.js';
 import {scanFunnelDocuments} from "../lib/funnel-scan.js";
 import {drainWithdrawalReceipts} from '../lib/withdrawal-service.js';
@@ -89,6 +90,14 @@ export default async function handler(req, res){
       const confirmations=await drainSubscriptionConfirmations({db,resend,now});
       await db.collection('_pms_jobs').doc('subscription_confirmations').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...confirmations});
     } catch { console.error('Subscription confirmation recovery failed'); }
+    // Separate collection: no interest request enters the marketing funnel.
+    try{
+      const interestCleanup=await purgeExpiredPlanInterests({db,now});
+      await db.collection('_pms_jobs').doc('plan_interest_cleanup').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...interestCleanup,needsAttention:interestCleanup.limitReached});
+    }catch{
+      console.error('Plan interest cleanup failed');
+      try{await db.collection('_pms_jobs').doc('plan_interest_cleanup').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),needsAttention:true});}catch{}
+    }
     phase = "pms";
     let pmsNotifications,pmsReminders,pmsError=false;
     try{

@@ -1,6 +1,6 @@
 import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261014-rc122';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261009-rc85';
-import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc126';
+import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc127';
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
 window.rbIsTrial=()=>activeTrial(ownedData(),isSandboxHost(location.hostname));
@@ -16,10 +16,12 @@ function button(parent,text){const b=add(parent,'button',text);b.type='button';b
 function conditions(d){const p=add(d,'p','');link(p,'/terms.html',t('Condizioni di abbonamento','Subscription terms'));link(p,'/privacy.html',t('Informativa privacy','Privacy notice'));link(p,'/withdrawal.html#withdrawal-form',t('Recedere dal contratto qui','Withdraw from the contract here'));}
 function acceptance(d){const label=add(d,'label','');label.style.cssText='display:flex;gap:10px;align-items:start;margin:18px 0;';const box=document.createElement('input');box.type='checkbox';box.style.cssText='width:18px;height:18px;flex-shrink:0;margin-top:4px;';label.append(box);add(label,'span',t('Ho letto e accetto le condizioni di abbonamento. Ho preso visione dell’informativa privacy.','I have read and accept the subscription terms and have reviewed the privacy notice.'));return box;}
 window.rbLiveSalesPaused=()=>isLiveSalesPaused(!isSandboxHost(location.hostname));
-window.rbShowSalesPause=()=>{
- const d=dialog(t('Nuovi acquisti in pausa','New purchases paused'));
+window.rbShowSalesPause=(plan)=>{
+ const d=dialog(t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
  add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
- link(d,'/contact.html',t('Richiedi informazioni','Request information'));
+ button(d,t('Scopri la prova Investor','Explore the Investor trial')).onclick=()=>{d.close();d.remove();window.rbOpenSubscription();};
+ link(d,'/plan-interest.html'+(['investor','pro','pro_yearly'].includes(plan)?'?plan='+encodeURIComponent(plan):''),t('Avvisami all’apertura','Notify me when subscriptions open'));
+ link(d,'/contact.html',t('Contatti','Contact'));
  button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};
  d.addEventListener('cancel',()=>d.remove());d.showModal();
 };
@@ -29,15 +31,15 @@ function renderSalesPause(){
   e.hidden=false;e.textContent=t(SALES_NOTICE.it,SALES_NOTICE.en);
  }
  for(const e of document.querySelectorAll('#pricing [onclick*="triggerUpgradeFlow"]')){
-  e.setAttribute('data-it','Richiedi informazioni');e.setAttribute('data-en','Request information');
-  e.textContent=t('Richiedi informazioni','Request information');
+  e.setAttribute('data-it','Avvisami all’apertura');e.setAttribute('data-en','Notify me when subscriptions open');
+  e.textContent=t('Avvisami all’apertura','Notify me when subscriptions open');
  }
 }
 document.addEventListener('DOMContentLoaded',renderSalesPause);
 document.addEventListener('rb_language_changed',renderSalesPause);
 if(document.readyState!=='loading')renderSalesPause();
 window.rbReviewPurchase=plan=>new Promise(resolve=>{
- if(window.rbLiveSalesPaused()){window.rbShowSalesPause();return resolve(false);}
+ if(window.rbLiveSalesPaused()){window.rbShowSalesPause(plan);return resolve(false);}
  const offer=OFFERS[plan];if(!offer)return resolve(false);
  const d=dialog(t('Prima di acquistare','Before you purchase'));
  add(d,'p',`${offer.name} · €${offer.amount} / ${offer.interval==='year'?t('anno','year'):t('mese','month')}`);

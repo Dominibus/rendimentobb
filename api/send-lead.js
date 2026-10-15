@@ -1,3 +1,4 @@
+import {normalizePlanInterest,savePlanInterest,InterestError} from '../lib/plan-interest-service.js';
 import {hasFunnelConsent,funnelConfirmationURL} from "../lib/funnel-consent.js";
 import {submitWithdrawal,normalizeWithdrawal,WithdrawalError} from '../lib/withdrawal-service.js';
 // ===============================
@@ -107,6 +108,7 @@ const RATE_LIMITS = {
   work: { ip:5, email:2 },
   auth: { ip:10, email:2 },
   withdrawal: { ip:12, email:6 },
+  plan_interest: { ip:10, email:3 },
   generic: { ip:5, email:3 }
 };
 
@@ -236,6 +238,17 @@ export default async function handler(req, res){
     const bodySize = Buffer.byteLength(JSON.stringify(req.body || {}), "utf8");
     if(bodySize > 20000){
       return res.status(413).json({ error:"Payload too large" });
+    }
+
+    if(req.body?.type==='plan_interest'){
+      try{
+        const value=normalizePlanInterest(req.body,req.headers?.origin);
+        await consumeRateLimit({ip:getClientIp(req),email:value.email,type:'plan_interest'});
+        return res.status(200).json(await savePlanInterest({db,value}));
+      }catch(error){
+        if(error instanceof InterestError)return res.status(error.status).json({success:false,code:error.code});
+        throw error;
+      }
     }
 
     if(req.body?.type==='withdrawal'){

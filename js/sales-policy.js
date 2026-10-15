@@ -3,6 +3,6 @@
 export const LIVE_SALES_PAUSED = true;
 export const isLiveSalesPaused = liveMode => LIVE_SALES_PAUSED && liveMode === true;
 export const SALES_NOTICE = Object.freeze({
- it: 'I nuovi abbonamenti a pagamento sono temporaneamente non acquistabili. I prezzi mostrati sono il listino previsto. La prova Investor di 7 giorni resta disponibile per gli account idonei, senza carta né addebiti. Gli abbonamenti esistenti continuano secondo le condizioni già accettate. Per informazioni usa la pagina Contatti.',
- en: 'New paid subscriptions are temporarily unavailable for purchase. The prices shown are the planned price list. The 7-day Investor trial remains available to eligible accounts, with no card or charges. Existing subscriptions continue under their previously accepted terms. For information, use the Contact page.'
+ it: 'Partecipa ai test di RendimentoBB: prova Investor per 7 giorni, senza carta né addebiti, se il tuo account è idoneo. Puoi esplorare analisi, dashboard e PMS e condividere il tuo feedback. I PDF sono riservati a Pro. In questa fase i nuovi acquisti non sono disponibili: i prezzi mostrati sono il listino previsto. Lascia il tuo interesse per ricevere un avviso all’apertura degli abbonamenti, senza impegno o attivazioni automatiche.',
+ en: 'Join RendimentoBB testing: try Investor for 7 days, without a card or charges, if your account is eligible. Explore analyses, dashboard and PMS and share your feedback. PDFs require Pro. New purchases are not available during this phase: prices shown are the planned price list. Register your interest to receive a notice when subscriptions open, with no commitment or automatic activation.'
 });
