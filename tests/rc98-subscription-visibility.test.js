@@ -10,9 +10,9 @@ function render(plan,lang='it',trial=false,sandbox=false,manual=false){
  const data={plan,sandboxPlan:plan,stripeLiveMode:true,...(!manual?{stripeCustomerId:"cus_live",sandboxStripeCustomerId:"cus_test"}:{})};
  if(trial)Object.assign(data,{[`${prefix}StartedAt`]:new Date(now-1000),[`${prefix}EndsAt`]:new Date(now+86400000)});
  const nodes=[];
- const document={body:{append(){}},createElement(tag){const el={tag,textContent:'',style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){}};nodes.push(el);return el;}};
+ const document={readyState:'loading',addEventListener(){},querySelectorAll(){return [];},body:{append(){}},createElement(tag){const el={tag,textContent:'',style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){}};nodes.push(el);return el;}};
  const window={currentLang:lang,currentUser:{uid:'owner',emailVerified:true},rbAccountOwner:'owner',rbAccountData:data};
- vm.runInNewContext(source,{window,document,location:{hostname:sandbox?'localhost':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION:'test',setInterval(){}});
+ vm.runInNewContext(source,{isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'localhost':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION:'test',setInterval(){}});
  window.rbOpenSubscription();return nodes.map(x=>x.textContent).join('\n');
 }
 for(const lang of ['it','en']){

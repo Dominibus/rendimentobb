@@ -1,3 +1,4 @@
+import './subscription-ui.js?v=20261015-rc126';
 import "./investment-journey.js?v=20261008-rc60";
 import {TERMS_VERSION} from "./subscription-offer.js?v=20261014-rc122";
 // ===============================================
@@ -7221,6 +7222,7 @@ function handleAutoCityRedirect(){
 // ================= STRIPE SUBSCRIPTION =================
 
 window.buyPlan = async function(plan){
+  if(window.rbLiveSalesPaused?.()){window.rbShowSalesPause?.();return;}
 
   const t = (it, en) =>
     window.currentLang === "en"
@@ -8325,6 +8327,7 @@ if(access.isFree){
 // ================= START PLAN PURCHASE (FINAL CLEAN) =================
 
 window.startPlanPurchase = function(plan){
+  if(window.rbLiveSalesPaused?.()){window.rbShowSalesPause?.();return;}
 
   
 

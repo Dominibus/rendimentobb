@@ -1,5 +1,6 @@
 import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261014-rc122';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261009-rc85';
+import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc126';
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
 window.rbIsTrial=()=>activeTrial(ownedData(),isSandboxHost(location.hostname));
@@ -14,7 +15,29 @@ function dialog(title){
 function button(parent,text){const b=add(parent,'button',text);b.type='button';b.style.cssText='padding:11px 16px;border:1px solid #cbd5e1;border-radius:10px;margin:8px 8px 0 0;cursor:pointer;background:#f1f5f9;color:#142b3b;';return b;}
 function conditions(d){const p=add(d,'p','');link(p,'/terms.html',t('Condizioni di abbonamento','Subscription terms'));link(p,'/privacy.html',t('Informativa privacy','Privacy notice'));link(p,'/withdrawal.html#withdrawal-form',t('Recedere dal contratto qui','Withdraw from the contract here'));}
 function acceptance(d){const label=add(d,'label','');label.style.cssText='display:flex;gap:10px;align-items:start;margin:18px 0;';const box=document.createElement('input');box.type='checkbox';box.style.cssText='width:18px;height:18px;flex-shrink:0;margin-top:4px;';label.append(box);add(label,'span',t('Ho letto e accetto le condizioni di abbonamento. Ho preso visione dell’informativa privacy.','I have read and accept the subscription terms and have reviewed the privacy notice.'));return box;}
+window.rbLiveSalesPaused=()=>isLiveSalesPaused(!isSandboxHost(location.hostname));
+window.rbShowSalesPause=()=>{
+ const d=dialog(t('Nuovi acquisti in pausa','New purchases paused'));
+ add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
+ link(d,'/contact.html',t('Richiedi informazioni','Request information'));
+ button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};
+ d.addEventListener('cancel',()=>d.remove());d.showModal();
+};
+function renderSalesPause(){
+ if(!window.rbLiveSalesPaused()){for(const e of document.querySelectorAll('[data-rb-sales-notice]'))e.hidden=true;return;}
+ for(const e of document.querySelectorAll('[data-rb-sales-notice]')){
+  e.hidden=false;e.textContent=t(SALES_NOTICE.it,SALES_NOTICE.en);
+ }
+ for(const e of document.querySelectorAll('#pricing [onclick*="triggerUpgradeFlow"]')){
+  e.setAttribute('data-it','Richiedi informazioni');e.setAttribute('data-en','Request information');
+  e.textContent=t('Richiedi informazioni','Request information');
+ }
+}
+document.addEventListener('DOMContentLoaded',renderSalesPause);
+document.addEventListener('rb_language_changed',renderSalesPause);
+if(document.readyState!=='loading')renderSalesPause();
 window.rbReviewPurchase=plan=>new Promise(resolve=>{
+ if(window.rbLiveSalesPaused()){window.rbShowSalesPause();return resolve(false);}
  const offer=OFFERS[plan];if(!offer)return resolve(false);
  const d=dialog(t('Prima di acquistare','Before you purchase'));
  add(d,'p',`${offer.name} · €${offer.amount} / ${offer.interval==='year'?t('anno','year'):t('mese','month')}`);
@@ -37,11 +60,12 @@ const errors={TRIAL_NOT_ENABLED:["La prova Investor non è ancora attiva. Contat
 window.rbOpenSubscription=()=>{
  if(!window.currentUser){location.assign('/login/');return;}
  const d=dialog(t('Il tuo abbonamento','Your subscription'));
+ if(window.rbLiveSalesPaused())add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
  const data=ownedData(),sandbox=isSandboxHost(location.hostname),billing=getBillingPlanForScope(data,sandbox),prefix=sandbox?'sandboxTrial':'trial';
  const paid=['investor','pro','pro_yearly'].includes(billing);
  const inTrial=!paid&&window.rbIsTrial();
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
- if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. Per continuare le funzioni Investor scegli un piano a pagamento; Pro aggiunge i report PDF.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. Choose a paid plan to continue using Investor features; Pro adds PDF reports.'));
+ if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. I PDF sono riservati ai piani Pro. La disponibilità dei nuovi acquisti è indicata qui.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. PDFs require a Pro plan. New purchase availability is shown here.'));
  const billingPrefix=sandbox?'sandbox':'';
  const billingField=name=>data[billingPrefix?billingPrefix+name[0].toUpperCase()+name.slice(1):name];
  const periodEnd=Number(billingField('currentPeriodEnd'));

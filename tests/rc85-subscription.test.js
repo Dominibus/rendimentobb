@@ -72,11 +72,11 @@ test('rules protect trial profile fields and use server time with a seven-day bo
 import vm from 'node:vm';
 import {SubscriptionError} from '../lib/account-subscription-service.js';
 import {CheckoutConflict} from '../lib/stripe-checkout-guard.js';
-function apiHarness(enabled=true,legacyEnabled="false"){
+function apiHarness(enabled=true,legacyEnabled="false",salesPaused=false,liveMode=true){
  const db=seed();let checkoutCalls=0;const portalCalls=[];
  const stripe={billingPortal:{sessions:{create:async p=>{portalCalls.push(p);return {url:'https://billing.stripe.com/p/owned'};}}}};
  const firestore=()=>db;firestore.Timestamp={fromMillis:timestamp};
- const context={process:{env:{STRIPE_SECRET_KEY:'sk_live_test_boundary',BASE_URL:'https://example.test',RB_INVESTOR_TRIAL_ENABLED:legacyEnabled,RB_TRIAL_TEST_EMAIL:'pilot@example.test',RB_INVESTOR_TRIAL_PAUSED:enabled?'false':'true'}},console:{error(){}},Stripe:function(){return stripe;},admin:{apps:[{}],firestore,auth:()=>({verifyIdToken:async()=>({uid:'u1',email:'a@example.test',email_verified:true})})},getStripePrices:()=>({pro:'price_pro'}),TERMS_VERSION,startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError,CheckoutConflict,guardedCheckout:async()=>{checkoutCalls++;return {url:'https://checkout.stripe.com/owned'};}};
+ const context={process:{env:{STRIPE_SECRET_KEY:liveMode?'sk_live_test_boundary':'sk_test_boundary',BASE_URL:'https://example.test',RB_INVESTOR_TRIAL_ENABLED:legacyEnabled,RB_TRIAL_TEST_EMAIL:'pilot@example.test',RB_INVESTOR_TRIAL_PAUSED:enabled?'false':'true'}},console:{error(){}},Stripe:function(){return stripe;},admin:{apps:[{}],firestore,auth:()=>({verifyIdToken:async()=>({uid:'u1',email:'a@example.test',email_verified:true})})},isLiveSalesPaused:mode=>salesPaused&&mode===true,getStripePrices:()=>({pro:'price_pro',investor:'price_investor',pro_yearly:'price_yearly'}),TERMS_VERSION,startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError,CheckoutConflict,guardedCheckout:async()=>{checkoutCalls++;return {url:'https://checkout.stripe.com/owned'};}};
  if(legacyEnabled===null)delete context.process.env.RB_INVESTOR_TRIAL_ENABLED;
  const source=fs.readFileSync(new URL('../api/create-checkout-session.js',import.meta.url),'utf8').replace(/^import .*;\s*$/gm,'').replace('export default async function handler','async function handler');vm.createContext(context);vm.runInContext(source+'\nglobalThis.handler=handler;',context);
  return {db,portalCalls,get checkoutCalls(){return checkoutCalls;},async send(body,authorized=true){const res={setHeader(){},status(c){this.code=c;return this;},json(b){this.body=b;return this;}};await context.handler({method:'POST',headers:authorized?{authorization:'Bearer synthetic-token'}:{},body},res);return res;}};
@@ -121,4 +121,25 @@ test('public trial works with absent, false and true legacy activation settings'
   assert.equal(result.code,200);assert.equal(h.checkoutCalls,0);
   assert.equal((await h.send({action:'trial',acceptedTerms:true,termsVersion:TERMS_VERSION})).body.code,'TRIAL_ALREADY_USED');
  }
+});
+
+test('RC126 live purchase pause blocks checkout without writes; sandbox remains operational',async()=>{
+ const h=apiHarness(true,'false',true,true);
+ const before=JSON.stringify([...h.db.documents]);
+ for(const plan of ['investor','pro','pro_yearly']){
+  const result=await h.send({plan,acceptedTerms:true,termsVersion:TERMS_VERSION,liveMode:false});
+  assert.equal(result.code,503);assert.equal(result.body.code,'LIVE_SALES_PAUSED');
+ }
+ assert.equal(h.checkoutCalls,0);assert.equal(JSON.stringify([...h.db.documents]),before);
+ const sandbox=apiHarness(true,'false',true,false);
+ assert.equal((await sandbox.send({plan:'pro',acceptedTerms:true,termsVersion:TERMS_VERSION})).code,200);
+ assert.equal(sandbox.checkoutCalls,1);
+});
+test('RC126 pause preserves authenticated trial, portal, contract ownership and auth checks',async()=>{
+ const h=apiHarness(true,'false',true);
+ assert.equal((await h.send({action:'trial',acceptedTerms:true,termsVersion:TERMS_VERSION})).code,200);
+ h.db.documents.get('users/u1').stripeCustomerId='cus_owned';
+ assert.equal((await h.send({action:'portal'})).code,200);assert.equal(h.portalCalls.length,1);
+ assert.equal((await h.send({action:'contract'})).body.code,'CONTRACT_NOT_AVAILABLE');
+ assert.equal((await h.send({plan:'pro'},false)).code,401);assert.equal(h.checkoutCalls,0);
 });

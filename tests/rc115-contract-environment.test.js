@@ -10,13 +10,13 @@ import {MemoryFirestore} from './helpers/pms-memory-firestore.js';
 const source=fs.readFileSync(new URL('../js/subscription-ui.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
 function render(data,sandbox=false,lang='it'){
  const nodes=[],requests=[],downloads=[];
- const document={body:{append(){}},createElement(tag){
+ const document={readyState:'loading',addEventListener(){},querySelectorAll(){return [];},body:{append(){}},createElement(tag){
   const node={tag,textContent:'',style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){},click(){if(tag==='a'&&this.download)downloads.push(this.download);}};
   nodes.push(node);return node;
  }};
  const window={currentLang:lang,currentUser:{uid:'owner',emailVerified:true,getIdToken:async()=> 'test-token'},rbAccountOwner:'owner',rbAccountData:{plan:'pro_yearly',sandboxPlan:'free',stripeLiveMode:true,...data}};
  const contract={plan:'pro',purchasedAt:'2026-10-13',amountTotal:2900,currency:'eur',termsVersion:TERMS_VERSION,acceptedAt:'2026-10-13',sessionId:sandbox?'cs_test_owned':'cs_live_owned',liveMode:!sandbox,terms:{terms:[],withdrawal:[]}};
- vm.runInNewContext(source,{window,document,location:{hostname:sandbox?'rendimentobb-git-stripe-sandbox-test-dominibus-projects.vercel.app':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION,setInterval(){},setTimeout(){},Blob,URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},fetch:async(url,options)=>{requests.push({url,options});return {ok:true,json:async()=>({contract})};}});
+ vm.runInNewContext(source,{isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'rendimentobb-git-stripe-sandbox-test-dominibus-projects.vercel.app':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION,setInterval(){},setTimeout(){},Blob,URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},fetch:async(url,options)=>{requests.push({url,options});return {ok:true,json:async()=>({contract})};}});
  window.rbOpenSubscription();
  return {nodes,requests,downloads,download:nodes.find(n=>n.tag==='button'&&/Scarica conferma|Download confirmation/.test(n.textContent))};
 }

@@ -122,7 +122,7 @@ test('unknown provider status cannot release a reservation', async () => {
 
 test('real API maps checkout conflicts, authenticates first and returns only a URL', async () => {
   const h = harness(); let verified = 0;
-  const context = { process: { env: { STRIPE_SECRET_KEY: 'sk_live_mock', BASE_URL: 'https://example.test' } }, console: { error() {} }, Stripe: function () { return h.stripe; }, getStripePrices: () => ({ investor: 'price_i' }), guardedCheckout, CheckoutConflict, TERMS_VERSION, SubscriptionError,
+  const context = { process: { env: { STRIPE_SECRET_KEY: 'sk_live_mock', BASE_URL: 'https://example.test' } }, console: { error() {} }, Stripe: function () { return h.stripe; }, isLiveSalesPaused: () => false, getStripePrices: () => ({ investor: 'price_i' }), guardedCheckout, CheckoutConflict, TERMS_VERSION, SubscriptionError,
     admin: { apps: [{}], auth: () => ({ verifyIdToken: async () => { verified++; return { uid: 'u1' }; } }), firestore: () => h.args.db } };
   const source = fs.readFileSync(new URL('../api/create-checkout-session.js', import.meta.url), 'utf8').replace(/^import .*;\s*$/gm, '').replace('export default async function handler', 'async function handler');
   vm.createContext(context); vm.runInContext(source + '\nglobalThis.handler=handler', context);

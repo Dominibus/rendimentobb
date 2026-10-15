@@ -1,6 +1,7 @@
 import {startAccountTrial,createAccountPortal,getAccountContract,SubscriptionError} from '../lib/account-subscription-service.js';
 import {TERMS_VERSION} from '../js/subscription-offer.js';
 import { guardedCheckout, CheckoutConflict } from "../lib/stripe-checkout-guard.js";
+import {isLiveSalesPaused} from '../js/sales-policy.js';
 import Stripe from "stripe";
 import admin from "firebase-admin";
 import { getStripePrices } from "../lib/stripe-plan-config.js";
@@ -117,6 +118,7 @@ export default async function handler(req, res) {
     if(req.body?.acceptedTerms !== true || req.body?.termsVersion !== TERMS_VERSION){
       return res.status(400).json({code:"TERMS_REQUIRED"});
     }
+    if(isLiveSalesPaused(liveMode)) return res.status(503).json({code:"LIVE_SALES_PAUSED"});
     const session = await guardedCheckout({
       db: firebaseAdmin.firestore(), stripe, uid, plan, priceId, email, baseUrl,
       liveMode: !process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")
