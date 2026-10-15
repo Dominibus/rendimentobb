@@ -1,3 +1,4 @@
+import {ownedPMSReport} from '../../js/pms-review.js';
 import {propertyFinancialGuidanceHTML} from '../../js/property-financial-guidance.js';
 import {bookingNights as calendarBookingNights,nightsInMonth} from '../../js/pms-calendar.js';
 import {investmentAssumptionsHTML} from '../../js/investment-assumptions.js';
@@ -20,6 +21,7 @@ if (!analysisTemplate || propertiesStart < 0 || propertiesEnd < 0 || headerStart
 }
 
 const base = overrides => ({
+  ownedPMSReport,
   investmentAssumptionsHTML,
   propertyFinancialGuidanceHTML,
   renovationRecoveryHTML,

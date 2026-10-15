@@ -16,10 +16,18 @@ function button(parent,text){const b=add(parent,'button',text);b.type='button';b
 function conditions(d){const p=add(d,'p','');link(p,'/terms.html',t('Condizioni di abbonamento','Subscription terms'));link(p,'/privacy.html',t('Informativa privacy','Privacy notice'));link(p,'/withdrawal.html#withdrawal-form',t('Recedere dal contratto qui','Withdraw from the contract here'));}
 function acceptance(d){const label=add(d,'label','');label.style.cssText='display:flex;gap:10px;align-items:start;margin:18px 0;';const box=document.createElement('input');box.type='checkbox';box.style.cssText='width:18px;height:18px;flex-shrink:0;margin-top:4px;';label.append(box);add(label,'span',t('Ho letto e accetto le condizioni di abbonamento. Ho preso visione dell’informativa privacy.','I have read and accept the subscription terms and have reviewed the privacy notice.'));return box;}
 window.rbLiveSalesPaused=()=>isLiveSalesPaused(!isSandboxHost(location.hostname));
-window.rbShowSalesPause=(plan)=>{
- const d=dialog(t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
- add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
- button(d,t('Scopri la prova Investor','Explore the Investor trial')).onclick=()=>{d.close();d.remove();window.rbOpenSubscription();};
+window.rbShowSalesPause=(plan,{reason=''}={})=>{
+ const inTrial=!!window.currentUser&&window.rbIsTrial();
+ const report=reason==='report';
+ const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
+ if(report||inTrial){
+  if(report)add(d,'p',inTrial?t('La tua prova Investor è già attiva e non include i PDF. Questa funzione è riservata ai piani Pro.','Your Investor trial is already active and does not include PDFs. This feature requires a Pro plan.'):t('Questa funzione è riservata ai piani Pro. Free e Investor, anche in prova, non includono i PDF.','This feature requires a Pro plan. Free and Investor, including the trial, do not include PDFs.'));
+  else add(d,'p',t('La tua prova Investor è già attiva. Puoi continuare a usare analisi, dashboard e PMS; i PDF sono riservati a Pro.','Your Investor trial is already active. You can keep using analyses, dashboard and PMS; PDFs require Pro.'));
+  add(d,'p',t('In questa fase i nuovi acquisti non sono disponibili. Puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti, senza impegno o attivazioni automatiche.','New purchases are currently unavailable. Register your interest to be notified when subscriptions open, without commitment or automatic activation.'));
+ }else{
+  add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
+  button(d,t('Scopri la prova Investor','Explore the Investor trial')).onclick=()=>{d.close();d.remove();window.rbOpenSubscription();};
+ }
  link(d,'/plan-interest.html'+(['investor','pro','pro_yearly'].includes(plan)?'?plan='+encodeURIComponent(plan):''),t('Avvisami all’apertura','Notify me when subscriptions open'));
  link(d,'/contact.html',t('Contatti','Contact'));
  button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};

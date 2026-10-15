@@ -1,5 +1,5 @@
 import {createAnalyticsConsent} from './analytics-consent.js?v=20261014-rc122';
-import './subscription-ui.js?v=20261015-rc128';
+import './subscription-ui.js?v=20261015-rc133';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */

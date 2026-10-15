@@ -18,6 +18,14 @@
     else if(/oggi|today/.test(query)){start=today;end=new Date(y,m,now.getDate()+1);}
     else if(/settimana|week/.test(query)){start=today;end=new Date(y,m,now.getDate()+7);}
     else if(/quest.*anno|this year/.test(query)){start=new Date(y,0,1);end=new Date(y+1,0,1);}
+    const months=[['gennaio','january'],['febbraio','february'],['marzo','march'],['aprile','april'],['maggio','may'],['giugno','june'],['luglio','july'],['agosto','august'],['settembre','september'],['ottobre','october'],['novembre','november'],['dicembre','december']];
+    const found=months.flatMap((names,index)=>names.flatMap(name=>{const hit=new RegExp('\\b'+name+'(?:\\s+(?:del\\s+)?([12]\\d{3}))?\\b').exec(query);return hit?[{index,year:hit[1]?Number(hit[1]):y}]:[];}));
+    if(found.length>1)return null;
+    if(found.length){start=new Date(found[0].year,found[0].index,1);end=new Date(found[0].year,found[0].index+1,1);}
+    const quarter=/\b(?:q([1-4])|([1-4])(?:o|°)?\s*trimestre)\s*(?:del\s*)?([12]\d{3})\b/.exec(query);
+    if(quarter){const yy=Number(quarter[3]),mm=(Number(quarter[1]||quarter[2])-1)*3;start=new Date(yy,mm,1);end=new Date(yy,mm+3,1);}
+    const yearOnly=/\b(?:anno|year)\s+([12]\d{3})\b/.exec(query);
+    if(yearOnly&&!found.length&&!quarter){start=new Date(Number(yearOnly[1]),0,1);end=new Date(Number(yearOnly[1])+1,0,1);}
     const explicit=[...query.matchAll(/\b(\d{4}-\d{2}-\d{2})\b/g)].map(match=>match[1]);
     if(explicit.length){
       if(explicit.some(value=>!validDate(value)) || explicit.length>2 || (explicit.length===2 && explicit[1]<explicit[0]))return null;
@@ -30,7 +38,9 @@
     if(/\bpdf\b|document|brochure|abbonamento|subscription/.test(query))return null;
     const valueRequest=/valore.*immobil|quanto vale|property value|valuation/.test(query);
     const costRequest=/quanto.*(?:pagare|pagar|spendere)|(?:devo|da)\s+pagare|pagamenti.*(?:domani|oggi|scaden|prossim)|what.*(?:pay|owe)|payments? due|costi.*(arriv|prossim|scaden|pagare)|spese.*(arriv|prossim|pagare)|upcoming costs|bills? due|budget residuo|remaining budget/.test(query);
-    const ledgerRequest=/consuntiv|rendicont|quanto.*(incassat|guadagnat)|ricavi.*(mese|anno|prenot|pms)|incassi.*(mese|anno)|revenue.*(month|year|booking)|operating summary/.test(query);
+    const referencesOwnedName=(window.rbPMSData?.propertyList||[]).some(p=>normalize(p.name).length>=3&&query.includes(normalize(p.name)));
+    const performanceRequest=/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
+    const ledgerRequest=performanceRequest||/consuntiv|rendicont|quanto.*(incassat|guadagnat)|ricavi.*(mese|anno|prenot|pms)|incassi.*(mese|anno)|revenue.*(month|year|booking)|operating summary/.test(query);
     const bookingsRequest=/prenotazion|bookings|reservations/.test(query) && /prossim|arriv|riepilog|elenc|quante|settimana|oggi|domani|mese|next|upcoming|list|how many|today|tomorrow|month|week/.test(query) && !/tariff|prezz|pulizi|document|segnal|ospit.*proble|cancell|modific|crea|salva|delete|edit/.test(query);
     const overviewRequest=/riepilog.*(portale|pms|gestione)|stato.*(portale|pms)|portal summary/.test(query);
     if(!valueRequest&&!costRequest&&!ledgerRequest&&!bookingsRequest&&!overviewRequest)return null;
@@ -46,11 +56,18 @@
     const selected=propertyMatches.length?propertyMatches:cityMatches.length?cityMatches:allProperties;
     const scopeExplicit=/\b(?:per|di|for|in|a)\s+(?:l['’])?(?:immobile|property)\s+(.+)$/i.exec(query);
     if(scopeExplicit && !propertyMatches.length && !cityMatches.length)return respond("Non ho identificato l’immobile richiesto nei dati caricati. Usa il nome salvato in Immobili; non sommo altri immobili al suo posto.","I could not identify the requested property in the loaded data. Use its saved name; I will not substitute the whole portfolio.","unknown_property");
+    if(performanceRequest&&!propertyMatches.length&&!cityMatches.length&&!/tutt[oi]|portfolio|portafoglio|\bpms\b/.test(query))return respond("Quale immobile vuoi analizzare? Indica il nome salvato oppure tutto il portfolio.","Which property should I analyze? Use its saved name or the whole portfolio.","unknown_property");
     const ids=new Set(selected.map(p=>p.id));
     const bookings=(Array.isArray(data.portalBookingList)?data.portalBookingList:Array.isArray(data.bookingList)?data.bookingList:[]).filter(b=>(!propertyMatches.length&&!cityMatches.length)||ids.has(b.propertyId));
     const renovations=(Array.isArray(data.renovationList)?data.renovationList:[]).filter(r=>(!propertyMatches.length&&!cityMatches.length)||ids.has(r.propertyId));
-    const range=period(query,now,(bookingsRequest||costRequest)&&!ledgerRequest&&!overviewRequest);
+    const dateQuery=propertyMatches.reduce((text,p)=>text.replace(normalize(p.name),""),query);
+    const range=period(dateQuery,now,(bookingsRequest||costRequest)&&!ledgerRequest&&!overviewRequest);
     if(!range)return respond("Intervallo date non valido. Usa una data YYYY-MM-DD oppure due date in ordine cronologico.","Invalid date range. Use YYYY-MM-DD or two dates in chronological order.","invalid_period");
+    let sharedReport=null;
+    if((ledgerRequest||overviewRequest)&&!demo&&typeof window.rbBuildPMSOperationalReport==='function'){
+      try{sharedReport=window.rbBuildPMSOperationalReport({period:{start:range.start,end:range.end},propertyIds:[...ids]});}
+      catch(error){return respond("Il modello PMS non e disponibile per questo ambito o periodo. Apri la dashboard e ricarica i dati.","The PMS model is unavailable for this scope or period. Open the dashboard and reload the records.","unavailable");}
+    }
     const render=lang=>{
       const en=lang==="en", t=(it,english)=>en?english:it;
       const money=value=>new Intl.NumberFormat(en?"en-GB":"it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:2,useGrouping:true}).format(value);
@@ -67,7 +84,7 @@
       }
       if(ledgerRequest||overviewRequest){
         let rental=0,nights=0,incomplete=0,pending=0;
-        for(const b of active){
+        if(!sharedReport)for(const b of active){
           if(!validDate(b.checkin)||!validDate(b.checkout)||b.checkout<=b.checkin){incomplete++;continue;}
           const overlap=Math.max(0,Math.min(day(b.checkout),day(range.end))-Math.max(day(b.checkin),day(range.start)));
           if(!overlap)continue;
@@ -75,9 +92,17 @@
           const total=amount(b.totalAmount);if(total===null||b.amountRecognized===false){incomplete++;continue;}
           rental+=total*overlap/(day(b.checkout)-day(b.checkin));nights+=overlap;
         }
+        if(sharedReport){rental=sharedReport.totals.revenue;nights=sharedReport.totals.nights;incomplete=sharedReport.warnings.invalidDates+sharedReport.warnings.missingAmounts+sharedReport.warnings.unknownStatuses;}
         lines.push(t(`Consuntivazione delle prenotazioni: ${range.start} → ${range.last}.`,`Booking revenue breakdown: ${range.start} → ${range.last}.`));
         lines.push(t(`Ricavi registrati attribuiti alle notti del periodo: ${money(rental)} · ${nights} notti.`,`Recorded rental revenue allocated to period nights: ${money(rental)} · ${nights} nights.`));
         lines.push(t("Il conteggio ripartisce l’importo del soggiorno per notte ed esclude cancellazioni e richieste pending. Non certifica incassi o utile netto: mancano un registro pagamenti e un registro completo delle spese.","Amounts are allocated per stay night; cancellations and pending requests are excluded. This does not certify cash receipts or net profit: there is no payment ledger or complete expense ledger."));
+        if(sharedReport){
+          const a=sharedReport.totals,fmt=v=>v===null?t('N/D','N/A'):new Intl.NumberFormat(en?'en-GB':'it-IT',{maximumFractionDigits:2}).format(v);
+          lines.push(t(`Occupazione registrata: ${fmt(a.occupancy)}% · ADR: ${a.adr===null?'N/D':money(a.adr)} · RevPAR: ${a.revpar===null?'N/D':money(a.revpar)}.`,`Recorded occupancy: ${fmt(a.occupancy)}% · ADR: ${a.adr===null?'N/A':money(a.adr)} · RevPAR: ${a.revpar===null?'N/A':money(a.revpar)}.`));
+          lines.push(t('Una unita disponibile per immobile ogni giorno; chiusure e completezza del calendario non sono verificate.','One available unit per property every day; closures and calendar completeness are not verified.'));
+          if(sharedReport.warnings.overlappingNights)lines.push(t('Sono presenti notti sovrapposte: verifica le prenotazioni.','Overlapping nights exist: review bookings.'));
+        }
+        if(range.end>iso(now))lines.push(t('Periodo in corso o futuro: sono importi prenotati, non un consuntivo chiuso.','Current or future period: these are booked amounts, not a closed-period actual.'));
         if(incomplete||pending)lines.push(t(`Esclusioni: ${incomplete} record incompleti; ${pending} richieste pending nel periodo.`,`Excluded: ${incomplete} incomplete records; ${pending} pending requests in the period.`));
       }
       if(valueRequest||overviewRequest){

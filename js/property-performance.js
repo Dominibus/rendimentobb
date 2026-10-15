@@ -31,6 +31,8 @@ export function annualPeriodFactor(period){
 export function buildPropertyPerformance({snapshot,analyses=[],ownerUid,propertyId='',period,generatedAt=new Date().toISOString()}){
  const report=buildPMSOperationalReport({snapshot,ownerUid,propertyId,period,generatedAt});
  const factor=annualPeriodFactor(period),start=calendarDay(period.start),end=calendarDay(period.end);
+ const snapshotTime=Date.parse(generatedAt),today=Number.isFinite(snapshotTime)?Math.floor(snapshotTime/86400000):null;
+ const periodOpen=today===null||end>today;
  const previousPeriod={start:iso(start-report.days),end:period.start};
  const previous=buildPMSOperationalReport({snapshot,ownerUid,propertyId,period:previousPeriod,generatedAt});
  const counts=new Map();for(const p of snapshot.propertyList)if(p.analysisId)counts.set(p.analysisId,(counts.get(p.analysisId)||0)+1);
@@ -56,9 +58,9 @@ export function buildPropertyPerformance({snapshot,analyses=[],ownerUid,property
   if(row.unknownStatuses)notices.push({code:'unknown_statuses',value:row.unknownStatuses});
   if(row.invalidDates)notices.push({code:'invalid_dates',value:row.invalidDates});
   if(row.overlapNights)notices.push({code:'overlaps',value:row.overlapNights});
-  if(comparable&&expectedRevenue>0&&row.revenue<expectedRevenue)notices.push({code:'revenue_gap',value:expectedRevenue-row.revenue});
-  if(comparable&&expectedOccupancy!==null&&row.occupancy<expectedOccupancy)notices.push({code:'occupancy_gap',value:expectedOccupancy-row.occupancy});
-  if(comparable&&expectedADR>0&&row.adr!==null&&row.adr<expectedADR)notices.push({code:'adr_gap',value:expectedADR-row.adr});
+  if(comparable&&!periodOpen&&expectedRevenue>0&&row.revenue<expectedRevenue)notices.push({code:'revenue_gap',value:expectedRevenue-row.revenue});
+  if(comparable&&!periodOpen&&expectedOccupancy!==null&&row.occupancy<expectedOccupancy)notices.push({code:'occupancy_gap',value:expectedOccupancy-row.occupancy});
+  if(comparable&&!periodOpen&&expectedADR>0&&row.adr!==null&&row.adr<expectedADR)notices.push({code:'adr_gap',value:expectedADR-row.adr});
   return {...row,linkState,analysisId:a?.id||null,expectedRevenue,expectedOccupancy,expectedADR,
    revenueDelta:comparable?diff(row.revenue,expectedRevenue):null,revenueDeltaPercent:comparable?percent(row.revenue,expectedRevenue):null,
    occupancyDelta:comparable?diff(row.occupancy,expectedOccupancy):null,adrDelta:comparable?diff(row.adr,expectedADR):null,
@@ -74,11 +76,10 @@ export function buildPropertyPerformance({snapshot,analyses=[],ownerUid,property
   const r=buildPMSOperationalReport({snapshot,ownerUid,propertyId,period:{start:iso(cursor),end:iso(next)},generatedAt});
   trend.push({month:iso(cursor).slice(0,7),days:next-cursor,revenue:r.totals.revenue,stays:r.totals.stays,occupancy:r.totals.occupancy,incomplete:r.rows.some(p=>p.missingPeriodAmounts>0||p.overlapNights>0)});cursor=next;
  }
- const generated=Date.parse(generatedAt),today=Number.isFinite(generated)?Math.floor(generated/86400000):null;
  const performance={period,previousPeriod,factor,rows:performanceRows,trend,
   summary:{linked:performanceRows.filter(r=>r.linkState==='linked').length,comparable:comparable.length,properties:performanceRows.length,
    observed:matchedObserved,expected:matchedExpected,deltaPercent:comparable.length?percent(matchedObserved,matchedExpected):null},
-  includesCurrentOrFuture:today===null||end>today,actualCashflow:null,actualROI:null,actualDSCR:null,actualPayments:null};
+  includesCurrentOrFuture:periodOpen,actualCashflow:null,actualROI:null,actualDSCR:null,actualPayments:null};
  return {...report,performance};
 }
 export function performanceNotice(notice,lang='it'){
