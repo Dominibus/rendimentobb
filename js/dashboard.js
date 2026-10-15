@@ -1,4 +1,4 @@
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc131';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc132';
 import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261015-rc131';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
@@ -3285,7 +3285,7 @@ window.openPMSReportDialog = async function(propertyId=''){
     if(propertyId && !snapshot.propertyList?.some(p=>p.id===propertyId))throw Error('REPORT_PROPERTY_NOT_FOUND');
     document.getElementById('pms-operational-export-dialog')?.remove();
     const modal=document.createElement('dialog');modal.id='pms-operational-export-dialog';
-    modal.style.cssText='border:1px solid #dbe5e1;border-radius:18px;padding:24px;width:min(460px,90vw);max-height:85vh;overflow:auto;color:#0f172a;';
+    modal.style.cssText='margin:auto;inset:0;font-family:inherit;border:1px solid #dbe5e1;border-radius:18px;padding:24px;width:min(460px,90vw);max-height:85vh;overflow:auto;color:#0f172a;';
     const add=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;modal.appendChild(e);return e;};
     const title=add('h2',t('Report operativo PMS','PMS operations report'));title.id='pms-export-title';modal.setAttribute('aria-labelledby',title.id);
     add('p',t('Esporta dati registrati di proprietà, prenotazioni e lavori. Non serve una simulazione. Ricavi e utile sono misure diverse.','Export recorded property, booking and renovation data. No simulation is required. Revenue and profit are different measures.'));

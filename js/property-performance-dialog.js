@@ -1,3 +1,4 @@
+import {performanceCSV} from './report-csv.js?v=20261015-rc132';
 import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261015-rc131';
 import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261015-rc131';
 // Native DOM text nodes only. Data never enters HTML or inline handlers.
@@ -8,7 +9,7 @@ export function showPropertyPerformance({snapshot,analyses,ownerUid,propertyId='
  const money=v=>v===null||v===undefined?t('N/D','N/A'):num(v,2)+' EUR';
  document.getElementById('property-performance-dialog')?.close();
  const modal=document.createElement('dialog');modal.id='property-performance-dialog';modal.setAttribute('aria-labelledby','property-performance-title');
- modal.style.cssText='border:1px solid #dbe5e1;border-radius:18px;padding:24px;width:min(1080px,94vw);max-height:90vh;overflow:auto;box-sizing:border-box;color:#0f172a;background:#fff;';
+ modal.style.cssText='margin:auto;inset:0;font-family:inherit;border:1px solid #dbe5e1;border-radius:18px;padding:24px;width:min(1080px,94vw);max-height:90vh;overflow:auto;box-sizing:border-box;color:#0f172a;background:#fff;';
  const node=(parent,tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;parent.appendChild(e);return e;};
  const title=node(modal,'h2',t('Andamento immobili e portfolio','Property and portfolio performance'));title.id='property-performance-title';
  const snapshotAt=new Date().toISOString();
@@ -76,9 +77,7 @@ export function showPropertyPerformance({snapshot,analyses,ownerUid,propertyId='
  pdf.onclick=()=>{if(!allowed()||!report)return;const result=renderPMSOperationalPDF(report,{jsPDF,lang});if(!allowed())return;result.save('RendimentoBB-Andamento-'+(report.scope==='property'?'Immobile':'Portfolio')+'-'+report.period.start+'.pdf');};
  csv.onclick=()=>{
   if(!allowed()||!report)return;
-  const safe=v=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
-  const data=[['property_id','property','period_start_inclusive','period_end_exclusive','recorded_booking_revenue_eur','expected_revenue_eur','revenue_delta_percent','booked_nights','occupancy_percent','adr_eur','link_status','missing_amounts','overlap_nights'],...report.performance.rows.map(r=>[r.id,r.name,report.period.start,report.period.end,r.revenue,r.expectedRevenue,r.revenueDeltaPercent,r.nights,r.occupancy,r.adr,r.linkState,r.missingPeriodAmounts,r.overlapNights])];
-  const blob=new Blob(['\uFEFF'+data.map(r=>r.map(safe).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='RendimentoBB-Andamento-'+report.period.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const blob=new Blob([performanceCSV(report)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='RendimentoBB-Andamento-'+report.period.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  };
  document.body.appendChild(modal);modal.showModal();
  if(subscribeAuth)unsubscribe=subscribeAuth(onAuth);render();return modal;
