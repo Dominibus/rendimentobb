@@ -52,6 +52,9 @@ async function(message){
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
+    const reportGuide=window.rbBuildProReportGuide?.(text);
+    if(reportGuide)return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
+
     // Product questions must not be swallowed by active PDFs or PMS prompts.
     const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial|tester)\b|prova gratuit[ao]|prova gratis|prova.{0,30}(?:7|sette|30|trenta).{0,8}giorni|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
     if(productQuestion && window.rbGenerateResponse){

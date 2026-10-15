@@ -1253,23 +1253,13 @@ const roi =
     0
   );
 
-const realROI =
-  Number(
-    canonicalSimulation.realROI ??
-    canonicalSimulation.capRate ??
-    (
-      price > 0
-        ? (
-            Number(
-              canonicalSimulation.net ??
-              canonicalSimulation.cashflow ??
-              canonicalSimulation.annualProfit ??
-              0
-            ) / price
-          ) * 100
-        : 0
-    )
-  );
+function reportPropertyYield(source,price,equity){
+  const m=getFinancingMetrics(source,price,equity);
+  const saved=source.realROI??source.capRate;
+  if(saved!==null&&saved!==undefined&&saved!==''&&Number.isFinite(Number(saved))&&!(Number(saved)===0&&source.reportFieldsVersion!==1&&m.netOperatingIncome===null))return Number(saved);
+  return price>0&&m.netOperatingIncome!==null?m.netOperatingIncome/price*100:null;
+}
+const realROI = reportPropertyYield(canonicalSimulation,price,equity);
 
 const risk =
   Number(
@@ -1370,7 +1360,7 @@ function renderData(){
 if(realROIHero){
 
   realROIHero.innerText =
-    price > 0 ? realROI.toFixed(1) + "%" : "N/A";
+    price > 0 && realROI !== null ? realROI.toFixed(1) + "%" : (lang==='en'?'N/A':'N/D');
 }
 
   const dscrHero =
@@ -3419,7 +3409,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261015-rc128" defer></script>
+<script src="/js/chatbot-loader.js?v=20261015-rc136" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>

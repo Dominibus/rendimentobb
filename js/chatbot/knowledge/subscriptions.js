@@ -63,8 +63,8 @@ Object.assign(window.rbKnowledgeBase, {
     "aiTitleEN": "🚀 PRO PLAN",
     "aiSummaryIT": "Pro: €29 al mese. Aggiunge PDF professionali e report dashboard alle funzioni Investor.",
     "aiSummaryEN": "Pro: €29 per month. Adds professional PDFs and dashboard reports to Investor features.",
-    "aiInsightIT": "Analisi, archivio e gestione PMS con report esportabili. Autopilot propone priorità e azioni assistite: non certifica documenti e non sincronizza automaticamente i portali OTA.",
-    "aiInsightEN": "Analysis, saved scenarios and PMS with exportable reports. Autopilot suggests priorities and guided actions: it does not certify documents or automatically synchronize OTA channels.",
+    "aiInsightIT": "Report integrato analisi + immobile + PMS: periodo selezionabile, ricavi prenotati, occupazione, ADR, RevPAR, lavori e scostamenti dalle ipotesi, PDF IT/EN e guida alla lettura. Investor mantiene il PMS. Autopilot propone priorità e azioni assistite: non certifica documenti e non sincronizza automaticamente i portali OTA.",
+    "aiInsightEN": "Integrated analysis + property + PMS report: selectable period, booked revenue, occupancy, ADR, RevPAR, renovation budgets and variances from assumptions, IT/EN PDFs and guided reading. Investor keeps PMS. Autopilot suggests priorities and guided actions: it does not certify documents or automatically synchronize OTA channels.",
     "recommendationsIT": [
       "Confronta i piani nella home",
       "Verifica il piano attivo nella dashboard"

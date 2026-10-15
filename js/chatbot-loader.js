@@ -143,7 +143,7 @@
     "/js/chatbot/knowledge/mistakes.js",
     "/js/chatbot/knowledge/beginner.js",
     "/js/chatbot/knowledge/markets.js",
-    "/js/chatbot/knowledge/subscriptions.js?v=20261008-rc63",
+    "/js/chatbot/knowledge/subscriptions.js?v=20261015-rc136",
     "/js/chatbot/knowledge/support.js",
     "/js/chatbot/knowledge/airbnb.js",
     "/js/chatbot/knowledge/roi.js",
@@ -173,20 +173,21 @@
     "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
     "/js/chatbot/core/executive-brain-v2.js?v=20261012-rc108",
     "/js/chatbot/core/executive-response-builder.js?v=20261012-rc108",
-    "/js/chatbot/core/response-engine.js?v=20261015-rc128",
+    "/js/chatbot/core/response-engine.js?v=20261015-rc136",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261015-rc133",
     "/js/chatbot/core/pms-autopilot-engine.js?v=20261014-rc120",
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261011-rc104",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261015-rc128",
+    "/js/chatbot/core/pro-report-guide.js?v=20261015-rc136",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261015-rc136",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261012-rc107",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261015-rc136",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];

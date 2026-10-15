@@ -1840,9 +1840,11 @@ debugLog(
       return;
     }
     autopilotRequestPending=true;
-    input.value=mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):mode==='tomorrow'?t('Prepara gli arrivi di domani','Prepare tomorrow’s arrivals'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
+    input.value=mode==='report'?t('Spiegami il report integrato Pro','Explain the integrated Pro report'):mode==='week'?t('Prossimi 7 giorni nel PMS','Next 7 days in the PMS'):mode==='tomorrow'?t('Prepara gli arrivi di domani','Prepare tomorrow’s arrivals'):t('Cosa devo fare oggi nel PMS?','What should I do today in the PMS?');
     try{await sendMessage();}finally{autopilotRequestPending=false;}
   };
+
+  window.rbAskProReportGuide=()=>window.rbAskPMSAutopilot('report');
 
   window.rbAskInvestmentAutopilot=async function(mode='guide'){
     windowEl.classList.add('open');
