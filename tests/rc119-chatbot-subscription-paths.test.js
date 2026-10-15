@@ -17,10 +17,10 @@ test('renewal questions in both languages point to Stripe and never claim cancel
   assert.doesNotMatch(r.response.textIT,/Non è presente una gestione autonoma/);
  }
 });
-test('trial activation and expiry questions describe the same seven-day no-charge trial',async()=>{
+test('trial activation and expiry questions describe the same 30-day tester trial',async()=>{
  for(const q of ['Come attivo la prova gratuita?','Cosa succede alla scadenza della prova Investor?','How do I activate the trial?','What happens when my 7-day trial expires?','Devo annullare la prova gratuita?']){
   const r=await assistant().rbProcessAIMessage(q);assert.equal(r.response.type,'subscriptions',q);
-  assert.match(r.response.textIT,/7 giorni/);assert.match(r.response.textIT,/email verificata/);assert.match(r.response.textIT,/permessi tornano a Free/);
+  assert.match(r.response.textIT,/30 giorni/);assert.match(r.response.textIT,/email verificata/);assert.match(r.response.textIT,/permessi tornano a Free/);
   assert.match(r.response.textEN,/No card, no charge/);assert.match(r.response.textEN,/does not activate, extend or cancel/);
  }
 });

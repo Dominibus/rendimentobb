@@ -1,6 +1,6 @@
-import './subscription-ui.js?v=20261015-rc127';
+import './subscription-ui.js?v=20261015-rc128';
 import "./investment-journey.js?v=20261008-rc60";
-import {TERMS_VERSION} from "./subscription-offer.js?v=20261014-rc122";
+import {TERMS_VERSION} from "./subscription-offer.js?v=20261015-rc128";
 // ===============================================
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
@@ -37,7 +37,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js?v=20261012-rc106";
+import { app } from "./firebase-init.js?v=20261015-rc128";
 const db = getFirestore(app);
 
 let roiChartInstance = null;

@@ -36,7 +36,7 @@ async function run(){
   icon.textContent='✓';title.textContent=t('Email verificata. Benvenuto!','Email verified. Welcome!');
   message.textContent=t('Il tuo indirizzo email è stato confermato. Ora puoi tornare su RendimentoBB e continuare nel tuo account.','Your email address has been confirmed. You can now return to RendimentoBB and continue in your account.');
   next.textContent=t('Continua su RendimentoBB →','Continue to RendimentoBB →');next.href='/?investor_trial=1';next.hidden=false;
-  note.textContent=t('Se vuoi provare Investor, puoi attivare 7 giorni gratuiti dall’area Abbonamento. Nessuna carta e nessun addebito automatico. La verifica email non attiva la prova.','You can activate 7 free days of Investor through Subscription. No card and no automatic charges. Email verification does not activate the trial.');
+  note.textContent=t('Se vuoi provare Investor, puoi attivare 30 giorni gratuiti dall’area Abbonamento. Nessuna carta e nessun addebito automatico. La verifica email non attiva la prova.','You can activate 30 free days of Investor through Subscription. No card and no automatic charges. Email verification does not activate the trial.');
   history.replaceState(null,'',location.pathname+'?lang='+(en?'en':'it'));
  }catch{fail();}
 }

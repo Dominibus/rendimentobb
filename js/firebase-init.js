@@ -1,8 +1,8 @@
 import {isVerifiedAdministrator} from './auth-safety.js?v=20261012-rc106';
 import {observeAccountAccess,ensureAccountProfile} from './account-access-observer.js?v=20261012-rc106';
-import './subscription-ui.js?v=20261014-rc122';
+import './subscription-ui.js?v=20261015-rc128';
 import "./investment-journey.js?v=20261008-rc60";
-import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
+import { resolveAccountPlan } from "./account-plan.js?v=20261015-rc128";
 import "./account-report-cache.js";
 // =============================== 
 // FIREBASE INIT – RENDIMENTOBB

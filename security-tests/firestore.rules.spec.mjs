@@ -317,3 +317,25 @@ test('RC106 concurrent property linking also commits once in the actual Firestor
  const analysis=(await getDoc(analysisRef)).data();const property=(await getDoc(doc(db,'properties',analysis.propertyId))).data();assert.equal(property.analysisId,aid);
  const properties=await getDocs(query(collection(db,'properties'),where('uid','==',uid)));assert.equal(properties.docs.filter(item=>item.data().analysisId===aid).length,1);
 });
+
+// RC128: real rules compilation and access enforcement for the tester policy.
+for(const [label,version,days,elapsed,allowed] of [
+ ['tester-day-29','2026-10-15-rc128',30,29,true],
+ ['tester-expired','2026-10-15-rc128',30,31,false],
+ ['tester-too-long','2026-10-15-rc128',31,1,false],
+ ['legacy-seven','2026-10-14-rc122',7,6,true],
+ ['legacy-extended','2026-10-14-rc122',30,10,false],
+ ['missing-version-extended',null,30,10,false]
+])test(`RC128 ${label}: tester duration and version are independently enforced`,async()=>{
+ const uid=`rc128-${label}`,start=Date.now()-elapsed*86400000;
+ await env.withSecurityRulesDisabled(async context=>{
+  const profile={email:`${uid}@example.invalid`,role:'user',plan:'free',trialStartedAt:new Date(start),trialEndsAt:new Date(start+days*86400000)};
+  if(version)profile.trialTermsVersion=version;
+  await setDoc(doc(context.firestore(),'users',uid),profile);
+ });
+ const db=dbFor(uid),check=allowed?assertSucceeds:assertFails;
+ await check(setDoc(doc(db,'properties',uid),{uid,name:'Casa tester'}));
+ await check(setDoc(doc(db,'analyses',uid),{uid,roi:0}));
+ await assertFails(updateDoc(doc(db,'users',uid),{trialTermsVersion:version==='2026-10-15-rc128'?'forged-version':'2026-10-15-rc128'}));
+ await assertFails(updateDoc(doc(db,'users',uid),{trialEndsAt:new Date(Date.now()+60*86400000)}));
+});

@@ -23,6 +23,6 @@ test('an empty next week does not hide later arrivals or imply all tasks are com
 });
 test('explicit Investor trial questions keep product priority over PMS and a PDF',async()=>{
  for(const q of ['Come attivo la prova di 7 giorni?','Come funziona la prova di sette giorni?','7-day Investor trial','How do I activate the free trial?']){
-  const w=setup();w.rbDocumentManager={getLast:()=>({id:'current'})};const r=await w.rbProcessAIMessage(q);assert.equal(r.response.type,'subscriptions',q);assert.match(r.response.textIT,/La prova Investor dura 7 giorni/);
+  const w=setup();w.rbDocumentManager={getLast:()=>({id:'current'})};const r=await w.rbProcessAIMessage(q);assert.equal(r.response.type,'subscriptions',q);assert.match(r.response.textIT,/prova Investor dura 30 giorni/);
  }
 });

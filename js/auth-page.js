@@ -1,5 +1,5 @@
 import { NEW_PASSWORD_MIN_LENGTH, NEW_PASSWORD_MAX_LENGTH, newPasswordIssue } from './password-policy.js?v=20261012-rc109';
-import { app } from '/js/firebase-init.js?v=20261012-rc106';
+import { app } from '/js/firebase-init.js?v=20261015-rc128';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, setPersistence, browserSessionPersistence,
   browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';

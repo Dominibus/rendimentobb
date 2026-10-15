@@ -267,3 +267,15 @@ test('public withdrawal records a receipt separately from leads and recovers ema
  const again=await h.run(value);assert.equal(again.body.receivedAt,r.body.receivedAt);assert.equal(again.body.receiptEmail,'accepted_by_provider');assert.equal(h.stores.get('_withdrawal_requests').size,1);
  const invalid=await h.run({...value,confirmed:false});assert.equal(invalid.status,400);
 });
+
+for(const type of ['partner','work'])for(const lang of ['it','en'])test(`RC128 ${type}/${lang}: contact intake is exploratory and never starts a marketing sequence`,async()=>{
+ const h=harness('api/send-lead.js');
+ const result=await h.run({type,lang,email:'proposal@example.test',name:'Example',role:'Developer',message:'Initial discussion',marketingConsent:true});
+ assert.equal(result.status,200);assert.equal(result.body.leadSaved,true);
+ const record=[...h.stores.get('leads').values()][0];
+ assert.equal(record.requestContext,'exploratory_contact');assert.equal(record.intakeNoticeVersion,'2026-10-15-rc128');
+ assert.equal(h.stores.get('email_funnel')?.size||0,0);
+ const mail=h.sent.find(row=>row.payload.to?.includes('proposal@example.test'));
+ assert.ok(mail);assert.match(mail.payload.text,/esplorativ|exploratory/);
+ assert.match(mail.payload.text,/separat/);
+});

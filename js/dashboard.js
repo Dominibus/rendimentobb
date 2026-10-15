@@ -11,13 +11,13 @@ import {createPMSApiClient} from "./pms-api-client.js?v=20261011-rc105";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
-import { resolveAccountPlan } from "./account-plan.js?v=20261009-rc85";
+import { resolveAccountPlan } from "./account-plan.js?v=20261015-rc128";
 import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback.js?v=20261012-rc110";
 // ===============================================
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js?v=20261012-rc106";
+import { app } from "./firebase-init.js?v=20261015-rc128";
 
 // 🔥 FIRESTORE
 import {

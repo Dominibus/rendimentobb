@@ -134,16 +134,18 @@ data-en="Business">
 Business
 </strong>
 
+<a href="/plans.html#tester-programme" data-it="Programma tester Investor" data-en="Investor tester programme">Programma tester Investor</a>
+<a href="/plan-interest.html" data-it="Avvisami all’apertura dei piani" data-en="Notify me when plans open">Avvisami all’apertura dei piani</a>
 <a href="/partner/"
-data-it="Diventa Partner"
-data-en="Become a Partner">
-Diventa Partner
+data-it="Proponi una collaborazione"
+data-en="Propose a collaboration">
+Proponi una collaborazione
 </a>
 
 <a href="/lavora-con-noi/"
-data-it="Lavora con noi"
-data-en="Work with us">
-Lavora con noi
+data-it="Proponi le tue competenze"
+data-en="Share your skills">
+Proponi le tue competenze
 </a>
 
 </div>

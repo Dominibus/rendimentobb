@@ -456,6 +456,7 @@ message: clean(message || ""),
   email,
   city,
   requestId,
+  ...(["partner","work"].includes(type)?{requestContext:"exploratory_contact",intakeNoticeVersion:"2026-10-15-rc128"}:{}),
 
   roi: roiRounded,
   price,
@@ -631,8 +632,8 @@ if(type === "partner"){
   userHeading = t(detectedLang, "🤝 Richiesta partnership ricevuta", "🤝 Partnership request received");
   userDescription = t(
     detectedLang,
-    "Grazie per averci presentato la tua proposta. Il team RendimentoBB la valuterà e ti ricontatterà usando l'indirizzo indicato.",
-    "Thank you for sharing your proposal. The RendimentoBB team will review it and contact you at the address provided."
+    "Grazie per la proposta. Si tratta di un contatto esplorativo, non di un accordo o una promessa di clienti o compensi. Potremo ricontattarti se pertinente; eventuali condizioni richiederanno un accordo separato.",
+    "Thank you for your proposal. This is an exploratory contact, not an agreement or promise of customers or compensation. We may contact you if relevant; any terms will require a separate agreement."
   );
 }
 
@@ -642,8 +643,8 @@ if(type === "work"){
   userHeading = t(detectedLang, "💼 Candidatura ricevuta", "💼 Application received");
   userDescription = t(
     detectedLang,
-    "Grazie per la candidatura. Il team RendimentoBB esaminerà il tuo profilo e ti contatterà se in linea con le opportunità disponibili.",
-    "Thank you for applying. The RendimentoBB team will review your profile and contact you if it matches an available opportunity."
+    "Grazie per aver presentato le tue competenze. È una proposta esplorativa: nessuna assunzione, incarico o promessa di compenso è attivata. Potremo ricontattarti se pertinente; eventuali attività e compensi richiederanno un accordo separato.",
+    "Thank you for sharing your skills. This is an exploratory proposal: no employment, assignment or compensation promise has started. We may contact you if relevant; any work and compensation will require a separate agreement."
   );
 }
 

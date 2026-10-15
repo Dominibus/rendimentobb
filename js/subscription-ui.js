@@ -1,6 +1,6 @@
-import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261014-rc122';
-import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261009-rc85';
-import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc127';
+import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261015-rc128';
+import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261015-rc128';
+import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc128';
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
 window.rbIsTrial=()=>activeTrial(ownedData(),isSandboxHost(location.hostname));
@@ -67,7 +67,8 @@ window.rbOpenSubscription=()=>{
  const paid=['investor','pro','pro_yearly'].includes(billing);
  const inTrial=!paid&&window.rbIsTrial();
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
- if(billing==='free') add(d,'p',t('Prova Investor: 7 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. I PDF sono riservati ai piani Pro. La disponibilità dei nuovi acquisti è indicata qui.','Investor trial: 7 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. PDFs require a Pro plan. New purchase availability is shown here.'));
+ if(inTrial)add(d,'p',t('La tua prova mantiene la scadenza indicata sopra. I 30 giorni del programma tester si applicano solo alle nuove attivazioni; una prova precedente non viene prolungata o riattivata.','Your trial keeps the expiry shown above. The 30-day tester programme applies only to new activations; an earlier trial is not extended or restarted.'));
+ if(billing==='free') add(d,'p',t('Prova Investor: 30 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. I PDF sono riservati ai piani Pro. La disponibilità dei nuovi acquisti è indicata qui.','Investor trial: 30 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. PDFs require a Pro plan. New purchase availability is shown here.'));
  const billingPrefix=sandbox?'sandbox':'';
  const billingField=name=>data[billingPrefix?billingPrefix+name[0].toUpperCase()+name.slice(1):name];
  const periodEnd=Number(billingField('currentPeriodEnd'));
@@ -80,7 +81,7 @@ window.rbOpenSubscription=()=>{
     const verify=button(d,t('Richiedi email di verifica','Request verification email'));
     verify.onclick=async()=>{verify.disabled=true;try{await window.rbSendVerificationEmail();notice.textContent=t('Email richiesta. Apri il link ricevuto, poi ricarica la pagina.','Email requested. Open the received link, then reload the page.');}catch(e){notice.textContent=t('Richiesta non disponibile: riprova più tardi o contatta il supporto.','Request unavailable: retry later or contact support.');verify.disabled=false;}};
   }
-  const box=acceptance(d),start=button(d,t('Attiva 7 giorni di Investor gratis','Start 7 free days of Investor'));start.disabled=true;box.onchange=()=>start.disabled=!box.checked;
+  const box=acceptance(d),start=button(d,t('Attiva 30 giorni di Investor gratis','Start 30 free days of Investor'));start.disabled=true;box.onchange=()=>start.disabled=!box.checked;
   start.onclick=async()=>{if(!box.checked)return;start.disabled=true;try{await request('trial',{acceptedTerms:true,termsVersion:TERMS_VERSION});localStorage.removeItem('pending_plan');location.reload();}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Operazione non disponibile. Riprova o contatta il supporto.','Operation unavailable. Retry or contact support.');start.disabled=!box.checked;}};
  }
  const billingCustomer=data[sandbox?'sandboxStripeCustomerId':'stripeCustomerId'];

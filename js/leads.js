@@ -2,7 +2,7 @@
 // 🚀 LEADS ENGINE – RENDIMENTOBB (SILICON FINAL)
 // ===============================
 
-import { db } from "/js/firebase-init.js?v=20261012-rc106";
+import { db } from "/js/firebase-init.js?v=20261015-rc128";
 
 import {
   collection,

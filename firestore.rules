@@ -35,7 +35,11 @@ service cloud.firestore {
       let end = data.get("trialEndsAt", null);
       return start is timestamp && end is timestamp
         && start <= request.time && end > request.time
-        && end > start && end <= start + duration.value(7, "d");
+        && end > start
+        && ((data.get("trialTermsVersion", "") == "2026-10-15-rc128"
+              && end <= start + duration.value(30, "d"))
+          || (data.get("trialTermsVersion", "") != "2026-10-15-rc128"
+              && end <= start + duration.value(7, "d")));
     }
 
     function canWritePaidData() {

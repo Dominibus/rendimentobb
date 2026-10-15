@@ -16,7 +16,7 @@ test('pause order preserves account actions and blocks checkout before provider 
  assert.ok(api.indexOf('if(action === "portal")')<api.indexOf('if(isLiveSalesPaused(liveMode))'));
  assert.ok(api.indexOf('if(action === "trial")')<api.indexOf('if(isLiveSalesPaused(liveMode))'));
  assert.ok(api.indexOf('if(isLiveSalesPaused(liveMode))')<api.indexOf('const session = await guardedCheckout'));
- assert.match(read('plans.html'),/updated October 14, 2026/);
+ assert.match(read('plans.html'),/updated October 15, 2026/);
 });
 for(const lang of ['it','en'])test(`${lang}: live review shows information without login, fetch or payment consent`,async()=>{
  const nodes=[];
