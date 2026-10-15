@@ -38,10 +38,10 @@ test('property IDs stay in data attributes and never enter inline JavaScript', a
   const id = `p');window.__injected=1;//" autofocus onfocus="window.__injected=2`;
   const html = await renderProperties({ name: 'Casa', city: 'Roma', priceNight: 120 }, id);
   const attributes = [...html.matchAll(/data-property-id="([^"]*)"/g)];
-  assert.equal(attributes.length, 5);
+  assert.equal(attributes.length, 6);
   assert.ok(attributes.every(([, value]) => value.includes('&#039;') && value.includes('&quot;')));
   const calls = [];
-  const methods = ['openBookings', 'openRenovationPlanner', 'openPropertyEditor', 'deleteProperty'];
+  const methods = ['openBookings', 'openRenovationPlanner', 'openPropertyPerformance', 'openPropertyEditor', 'deleteProperty'];
   for (const method of methods) {
     const handler = html.match(new RegExp(`onclick="(${method}\\([^\"]*\\))"`))?.[1];
     assert.equal(handler, `${method}(this.dataset.propertyId)`);
@@ -65,7 +65,7 @@ test('ordinary names, Unicode and fallback values keep their display and actions
   assert.ok(html.includes('📍 Napoli'));
   assert.ok(html.includes('Via Roma 12'));
   assert.ok(html.includes('€120'));
-  assert.equal((html.match(/data-property-id="property-1"/g) || []).length, 5);
+  assert.equal((html.match(/data-property-id="property-1"/g) || []).length, 6);
   const empty = await renderProperties({});
   assert.ok(empty.includes('📍 -'));
   assert.ok(empty.includes('€0'));

@@ -2270,6 +2270,8 @@ Accedi rapidamente alle funzioni principali del PMS
 </p>  
 
 <div class="quick-actions-grid">
+<button type="button" class="btn-dashboard" onclick="openPropertyPerformance()"><span data-it="Andamento immobili e PDF - Pro" data-en="Property performance and PDF - Pro">Andamento immobili e PDF - Pro</span></button>
+<button type="button" class="btn-dashboard" onclick="openPMSReportDialog()"><span data-it="Report operativo PMS PDF - Pro" data-en="PMS operations PDF report - Pro">Report operativo PMS PDF - Pro</span></button>
 
 <button
 class="btn-dashboard"
@@ -3801,7 +3803,8 @@ Sintesi delle ipotesi salvate e del rischio del modello
 
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261015-rc129"></script>
+<script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
+<script type="module" src="/js/dashboard.js?v=20261015-rc131"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>

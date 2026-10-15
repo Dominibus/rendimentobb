@@ -1,3 +1,5 @@
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc131';
+import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261015-rc131';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
@@ -3264,6 +3266,80 @@ async function getOwnedReportPMS(ownerUid){
   }
   return window.rbPMSData;
 }
+
+// Operational exports are independent of saved investment simulations.
+window.openPMSReportDialog = async function(propertyId=''){
+  const ownerUid=auth.currentUser?.uid;
+  const allowed=()=>auth.currentUser?.uid===ownerUid && window.currentUser?.uid===ownerUid && canExportPMSReport(window.currentUser,window.getUserAccess?.()||{});
+  if(!ownerUid || !allowed()){
+    if(typeof window.rbShowSalesPause==='function' && window.rbLiveSalesPaused?.()) window.rbShowSalesPause('pro');
+    else if(typeof startPlanPurchase==='function') startPlanPurchase('pro');
+    return;
+  }
+  try{
+    await loadPMSStats({fresh:true});
+    if(!allowed())return;
+    const snapshot=await getOwnedReportPMS(ownerUid);
+    const snapshotAt=new Date().toISOString();
+    if(!allowed())return;
+    if(propertyId && !snapshot.propertyList?.some(p=>p.id===propertyId))throw Error('REPORT_PROPERTY_NOT_FOUND');
+    document.getElementById('pms-operational-export-dialog')?.remove();
+    const modal=document.createElement('dialog');modal.id='pms-operational-export-dialog';
+    modal.style.cssText='border:1px solid #dbe5e1;border-radius:18px;padding:24px;width:min(460px,90vw);max-height:85vh;overflow:auto;color:#0f172a;';
+    const add=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;modal.appendChild(e);return e;};
+    const title=add('h2',t('Report operativo PMS','PMS operations report'));title.id='pms-export-title';modal.setAttribute('aria-labelledby',title.id);
+    add('p',t('Esporta dati registrati di proprietà, prenotazioni e lavori. Non serve una simulazione. Ricavi e utile sono misure diverse.','Export recorded property, booking and renovation data. No simulation is required. Revenue and profit are different measures.'));
+    const scopeLabel=add('label',t('Ambito del report','Report scope'));scopeLabel.htmlFor='pms-export-scope';
+    const scope=add('select');scope.id=scopeLabel.htmlFor;scope.style.cssText='display:block;width:100%;margin:8px 0 16px;padding:10px;';
+    for(const p of [{id:'',name:t('Tutte le proprietà','All properties')},...snapshot.propertyList]){const o=document.createElement('option');o.value=p.id;o.textContent=p.name+(p.city?' - '+p.city:'');scope.appendChild(o);}scope.value=propertyId;
+    const monthLabel=add('label',t('Mese di competenza','Reporting month'));monthLabel.htmlFor='pms-export-month';
+    const month=add('input');month.type='month';month.id=monthLabel.htmlFor;const now=new Date();month.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');month.style.cssText='display:block;width:100%;box-sizing:border-box;margin:8px 0 16px;padding:10px;';
+    add('p',t('PDF riservato a Pro. Non include nomi degli ospiti, ROI, cashflow, stime fiscali o previsioni.','Pro-only PDF. Excludes guest names, ROI, cashflow, tax estimates and forecasts.'));
+    const status=add('p');status.setAttribute('role','status');
+    const close=add('button',t('Chiudi','Close'));close.type='button';
+    const download=add('button',t('Scarica PDF operativo','Download operations PDF'));download.type='button';download.className='btn-dashboard';download.style.marginLeft='12px';
+    const cleanup=()=>{document.removeEventListener('rb_auth_ready',onAuth);document.removeEventListener('rb_language_changed',onLanguage);modal.remove();};
+    const onAuth=()=>{if(!allowed())cleanup();};const onLanguage=()=>cleanup();
+    document.addEventListener('rb_auth_ready',onAuth);document.addEventListener('rb_language_changed',onLanguage);
+    close.onclick=()=>modal.close();modal.addEventListener('close',cleanup,{once:true});
+    download.onclick=async()=>{
+      download.disabled=true;status.textContent=t('Preparazione report...','Preparing report...');
+      try{
+        if(!allowed())throw Error('REPORT_ACCESS_CHANGED');
+        const report=buildPMSOperationalReport({snapshot,ownerUid,propertyId:scope.value,month:month.value,generatedAt:snapshotAt});
+        const JsPDF=window.jspdf?.jsPDF;if(!JsPDF)throw Error('PDF_UNAVAILABLE');
+        const pdf=renderPMSOperationalPDF(report,{jsPDF:JsPDF,lang:window.currentLang});
+        if(!allowed())throw Error('REPORT_ACCESS_CHANGED');
+        const suffix=report.scope==='property'?'Proprieta':'Portfolio';
+        pdf.save('RendimentoBB-PMS-'+suffix+'-'+report.month+'.pdf');
+        status.textContent=t('Report generato dai dati registrati.','Report generated from recorded data.');
+      }catch(error){status.textContent=t('Report non disponibile: verifica mese, accesso e dati, poi riprova.','Report unavailable: check month, access and records, then retry.');}
+      finally{download.disabled=false;}
+    };
+    document.body.appendChild(modal);modal.showModal();
+  }catch(error){alert(t('Impossibile leggere i dati PMS. Ricarica e riprova.','Unable to read PMS data. Reload and retry.'));}
+};
+
+// Fresh, owner-scoped inputs; raw analyses preserve absent values instead of normalized zeros.
+window.openPropertyPerformance = async function(propertyId=''){
+  const ownerUid=auth.currentUser?.uid;
+  const allowed=()=>Boolean(ownerUid && auth.currentUser?.uid===ownerUid && window.currentUser?.uid===ownerUid && canExportPMSReport(window.currentUser,window.getUserAccess?.()||{}));
+  if(!allowed()){
+    if(typeof window.rbShowSalesPause==='function')window.rbShowSalesPause('pro');
+    return;
+  }
+  try{
+    await loadPMSStats({fresh:true});
+    if(!allowed())return;
+    const snapshot=await getOwnedReportPMS(ownerUid);
+    const result=await getDocsFromServer(query(collection(db,'analyses'),where('uid','==',ownerUid)));
+    if(!allowed())return;
+    const analyses=result.docs.map(item=>({...item.data(),id:item.id}));
+    showPropertyPerformance({snapshot,analyses,ownerUid,propertyId,allowed,lang:window.currentLang,
+      jsPDF:window.jspdf?.jsPDF,onEdit:id=>window.openPropertyEditor(id),
+      subscribeAuth:callback=>onAuthStateChanged(auth,callback)});
+  }catch(error){alert(t('Analisi non disponibile: verifica accesso e connessione, poi riprova.','Analysis unavailable: check access and connection, then retry.'));}
+};
 
 // ================= REPORT CLICK HANDLER (FIX FLOW) =================
 async function handleReportClick(){
@@ -6700,6 +6776,8 @@ onclick="openRenovationPlanner(this.dataset.propertyId)">
   : t("Pianifica lavori", "Plan renovation")}
 
 </button>
+
+<button type="button" class="btn-dashboard" style="flex:1;min-width:140px;height:48px;" data-property-id="${escapeDashboardHTML(docItem.id)}" onclick="openPropertyPerformance(this.dataset.propertyId)">${t("Analisi e PDF - Pro", "Analysis and PDF - Pro")}</button>
 
 <button
 class="btn-dashboard"
@@ -12575,7 +12653,7 @@ window.rbPMSData = {
   propertyList: propertiesSnap.docs.map(item => {
     const property = item.data() || {};
     const rawPrice = property.investmentSnapshot?.propertyPrice;
-    return {id:item.id, name:String(property.name || ""), city:String(property.city || ""),
+    return {id:item.id, name:String(property.name || ""), city:String(property.city || ""), analysisId:typeof property.analysisId === "string" ? property.analysisId : null,
       acquisitionPrice:rawPrice != null && rawPrice !== "" && Number.isFinite(Number(rawPrice)) ? Number(rawPrice) : null};
   }),
   properties,

@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {buildPropertyPerformance,reportPeriod,annualPeriodFactor,performanceNotice} from '../js/property-performance.js';
+import {renderPMSOperationalPDF} from '../js/pms-operational-report.js';
+const inputs={schemaVersion:1,calculationVersion:'roi-monthly-v1',source:'owned_property',expensesUnit:'monthly_eur',propertyPrice:0,equity:0,loanAmount:0,priceNight:100,occupancy:50,expenses:200,commission:15,tax:21,interestRate:3.5,loanYears:20};
+const fixture=()=>({ownerUid:'owner',portalSnapshotReady:true,isDemo:false,propertyList:[{id:'a',name:'Casa Test',city:'Roma',analysisId:'aa'},{id:'b',name:'Casa Due',city:'Napoli'}],renovationList:[],portalBookingList:[
+ {propertyId:'a',guestName:'PRIVATE GUEST',checkin:'2026-09-28',checkout:'2026-10-04',totalAmount:600,status:'completed'},
+ {propertyId:'a',checkin:'2026-10-04',checkout:'2026-10-06',totalAmount:240,status:'arrival'},
+ {propertyId:'b',checkin:'2026-10-10',checkout:'2026-10-12',totalAmount:300,status:'arrival'},
+ {propertyId:'a',checkin:'2026-10-01',checkout:'2026-11-01',totalAmount:90000,status:'pending'},
+ {propertyId:'a',checkin:'2026-10-01',checkout:'2026-11-01',totalAmount:90000,status:'cancelled'}]});
+const analysis=()=>({id:'aa',uid:'owner',propertyId:'a',gross:36500,net:17000,expenses:200,equity:0,roi:100,dscr:8,assumptions:inputs});
+const build=(extra={})=>buildPropertyPerformance({snapshot:fixture(),analyses:[analysis()],ownerUid:'owner',period:reportPeriod({month:'2026-10'}),generatedAt:'2026-11-15T10:00:00Z',...extra});
+test('month, quarter, leap year and inclusive custom dates',()=>{
+ assert.deepEqual(reportPeriod({month:'2026-10'}),{start:'2026-10-01',end:'2026-11-01'});
+ assert.deepEqual(reportPeriod({mode:'quarter',year:2026,quarter:4}),{start:'2026-10-01',end:'2027-01-01'});
+ assert.deepEqual(reportPeriod({mode:'year',year:2024}),{start:'2024-01-01',end:'2025-01-01'});
+ assert.deepEqual(reportPeriod({mode:'custom',start:'2026-10-01',end:'2026-10-01'}),{start:'2026-10-01',end:'2026-10-02'});
+ for(const args of [{month:'2026-13'},{mode:'quarter',year:2026,quarter:5},{mode:'custom',start:'2026-02-30',end:'2026-03-01'},{mode:'custom',start:'2020-01-01',end:'2026-01-01'}])assert.throws(()=>reportPeriod(args),/INVALID_REPORT_PERIOD/);
+ assert.equal(annualPeriodFactor({start:'2024-01-01',end:'2025-01-01'}),1);
+ assert.ok(Math.abs(annualPeriodFactor({start:'2024-12-31',end:'2025-01-02'})-(1/366+1/365))<1e-10);
+});
+test('linked comparison uses same period and preserves zero-capital ROI N/A',()=>{
+ const r=build({propertyId:'a'}),a=r.performance.rows[0];assert.equal(a.linkState,'linked');assert.equal(a.revenue,540);assert.equal(a.expectedRevenue,3100);assert.equal(a.revenueDelta,-2560);assert.ok(Math.abs(a.revenueDeltaPercent-(540/3100-1)*100)<1e-9);assert.equal(a.expectedADR,100);assert.equal(a.adr,108);assert.equal(a.expectedOccupancy,50);assert.equal(a.forecast.annualCosts,2400);assert.equal(a.forecast.annualCashflow,17000);assert.equal(a.forecast.roi,null);assert.equal(a.forecast.dscr,null);assert.equal(r.performance.actualCashflow,null);assert.equal(r.performance.actualPayments,null);assert.equal(r.performance.includesCurrentOrFuture,false);assert.doesNotMatch(JSON.stringify(r),/PRIVATE GUEST|guestName/);
+});
+test('portfolio compares matched properties only',()=>{const r=build();assert.equal(r.totals.revenue,840);assert.equal(r.performance.summary.observed,540);assert.equal(r.performance.summary.expected,3100);assert.equal(r.performance.summary.comparable,1);assert.equal(r.performance.summary.properties,2);assert.equal(r.performance.rows[1].expectedRevenue,null);});
+test('foreign analyses, ambiguous claims and broken reciprocal links are excluded',()=>{
+ assert.throws(()=>build({ownerUid:'other'}),/UNAVAILABLE/);
+ for(const a of [{...analysis(),uid:'other'},{...analysis(),propertyId:'b'}]){const r=build({analyses:[a]});assert.equal(r.performance.summary.comparable,0);assert.equal(r.performance.rows[0].expectedRevenue,null);assert.doesNotMatch(JSON.stringify(r),/17000/);}
+ const s=fixture();s.propertyList[1].analysisId='aa';assert.equal(build({snapshot:s}).performance.rows[0].linkState,'inconsistent');assert.equal(build({analyses:[analysis(),analysis()]}).performance.rows[0].linkState,'unavailable');
+});
+test('missing financial values stay missing instead of becoming zero',()=>{const r=build({analyses:[{id:'aa',uid:'owner',propertyId:'a'}]}).performance.rows[0];for(const k of ['expectedRevenue','expectedADR','expectedOccupancy','revenueDeltaPercent'])assert.equal(r[k],null);for(const k of ['annualGross','annualCashflow','annualCosts','equity','roi','dscr'])assert.equal(r.forecast[k],null);});
+test('percentage costs are converted using annual gross',()=>{const a=analysis();a.assumptions={...inputs,expensesUnit:'percentage',expenses:20};assert.equal(build({analyses:[a]}).performance.rows[0].forecast.annualCosts,7300);});
+test('missing price suppresses ADR, RevPAR and financial comparison',()=>{const s=fixture();delete s.portalBookingList[0].totalAmount;const r=build({snapshot:s,propertyId:'a'});assert.equal(r.rows[0].missingPeriodAmounts,1);assert.equal(r.rows[0].adr,null);assert.equal(r.totals.adr,null);assert.equal(r.totals.revpar,null);assert.equal(r.performance.rows[0].revenueDeltaPercent,null);});
+test('overlaps and invalid dates suspend economic comparison',()=>{const s=fixture();s.portalBookingList.push({propertyId:'a',checkin:'2026-10-04',checkout:'2026-10-05',totalAmount:100,status:'arrival'});const r=build({snapshot:s});assert.equal(r.rows[0].overlapNights,1);assert.equal(r.rows[0].occupiedNights,5);assert.equal(r.performance.rows[0].revenueDelta,null);s.portalBookingList.push({propertyId:'a',checkin:'bad',checkout:'2026-10-04',totalAmount:100,status:'arrival'});assert.ok(build({snapshot:s}).performance.rows[0].notices.some(n=>n.code==='invalid_dates'));});
+test('unknown statuses do not create revenue or occupied nights',()=>{const s=fixture();s.portalBookingList.push({propertyId:'a',checkin:'2026-10-20',checkout:'2026-10-25',totalAmount:500,status:'blocked'});const r=build({snapshot:s});assert.equal(r.totals.revenue,840);assert.equal(r.warnings.unknownStatuses,1);assert.equal(r.performance.rows[0].revenueDelta,null);});
+test('quarter and year revenue reconcile with monthly trend',()=>{const r=build({period:reportPeriod({mode:'quarter',year:2026,quarter:4})});assert.equal(r.totals.revenue,840);assert.equal(r.performance.trend.length,3);assert.equal(r.performance.trend.reduce((s,m)=>s+m.revenue,0),r.totals.revenue);assert.ok(Math.abs(r.performance.rows[0].expectedRevenue-9200)<1e-9);const y=build({period:reportPeriod({mode:'year',year:2026})});assert.equal(y.totals.revenue,1140);assert.equal(y.performance.rows[0].expectedRevenue,36500);});
+test('previous same-length comparison is unavailable without previous stays',()=>{const a=build({propertyId:'a'}).performance.rows[0];assert.equal(a.previousRevenue,300);assert.ok(Math.abs(a.previousDeltaPercent-80)<1e-9);assert.equal(build({propertyId:'b'}).performance.rows[0].previousRevenue,null);});
+test('empty and future periods never imply actual profit',()=>{const r=build({period:reportPeriod({month:'2026-12'})});assert.equal(r.performance.summary.comparable,0);assert.equal(r.performance.summary.deltaPercent,null);assert.equal(r.performance.includesCurrentOrFuture,true);assert.ok(r.performance.rows.every(r=>r.notices.some(n=>n.code==='no_records')));});
+test('all attention notes have IT and EN text',()=>{for(const code of ['link_analysis','check_link','no_records','missing_prices','overlaps','invalid_dates','revenue_gap','occupancy_gap','adr_gap'])assert.notEqual(performanceNotice({code,value:10},'it'),performanceNotice({code,value:10},'en'));});
+const bundle={exports:{}};vm.runInNewContext(readFileSync(new URL('../js/vendor/jspdf-4.2.1.umd.min.js',import.meta.url),'utf8'),{module:bundle,exports:bundle.exports,console,atob,btoa,setTimeout,clearTimeout,TextEncoder,TextDecoder,Uint8Array,ArrayBuffer});
+for(const lang of ['it','en'])for(const propertyId of ['a',''])test(`performance PDF: ${lang}, ${propertyId||'portfolio'}`,()=>{
+ const r=build({propertyId,period:reportPeriod({mode:'year',year:2026})});r.performance.noticeTexts=r.performance.rows.flatMap(row=>row.notices.map(n=>row.name+': '+performanceNotice(n,lang)));const pdf=renderPMSOperationalPDF(r,{jsPDF:bundle.exports.jsPDF,lang});const bytes=Buffer.from(pdf.output('arraybuffer'));assert.ok(pdf.getNumberOfPages()>=3);assert.ok(bytes.length>10000);assert.doesNotMatch(bytes.toString('latin1'),/PRIVATE GUEST/);if(process.env.RB_PERFORMANCE_QA_DIR){mkdirSync(process.env.RB_PERFORMANCE_QA_DIR,{recursive:true});writeFileSync(process.env.RB_PERFORMANCE_QA_DIR+'/Andamento-'+lang+'-'+(propertyId||'portfolio')+'.pdf',bytes);}
+});
+const source=readFileSync(new URL('../js/dashboard.js',import.meta.url),'utf8');const entry=source.slice(source.indexOf('window.openPropertyPerformance ='),source.indexOf('// ================= REPORT CLICK HANDLER'));
+test('entrypoint denies Free/Investor and stops account changes during loading',async()=>{
+ for(const mode of ['free','investor','swap','pro']){let reads=0,shown=0;const user={uid:'owner'},auth={currentUser:user};const window={currentUser:user,currentLang:'it',getUserAccess:()=>({isPro:mode==='pro'||mode==='swap'}),rbShowSalesPause(){},jspdf:{},openPropertyEditor(){}};const c={window,auth,canExportPMSReport:(u,a)=>a.isPro,loadPMSStats:async()=>{reads++;if(mode==='swap')auth.currentUser={uid:'other'};},getOwnedReportPMS:async()=>fixture(),getDocsFromServer:async()=>({docs:[{data:()=>analysis(),id:'aa'}]}),query:()=>null,collection:()=>null,where:()=>null,db:{},showPropertyPerformance:opts=>{shown++;assert.equal(opts.analyses[0].id,'aa');},onAuthStateChanged:()=>()=>{},alert:()=>assert.fail('unexpected error'),t:a=>a};vm.runInNewContext(entry,c);await c.window.openPropertyPerformance('a');assert.equal(reads,mode==='free'||mode==='investor'?0:1);assert.equal(shown,mode==='pro'?1:0);}
+});
