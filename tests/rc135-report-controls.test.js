@@ -1,0 +1,36 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
+import {mountReportIntegration} from '../js/dashboard-report-integration.js';
+const html=readFileSync(new URL('../dashboard-report/index.html',import.meta.url),'utf8');const financing=html.slice(html.indexOf('function getFinancingMetrics('),html.indexOf('const canonicalInvestmentScore'));
+function metrics(source){const c={};vm.createContext(c);vm.runInContext(financing,c);return c.getFinancingMetrics(source,150000,30000,9799.82);}
+test('legacy report with absent NOI, DSCR and inputs does not invent debt coverage from default rate or net cash flow',()=>{
+ for(const source of [{loan:120000},{loan:120000,annualDebtService:0,noi:0,dscr:0,interestRate:3.5,loanYears:20},{loan:120000,noi:null,dscr:null,reportFieldsVersion:1}]){const m=metrics(source);assert.equal(m.loan,120000);assert.equal(m.annualDebtService,null);assert.equal(m.netOperatingIncome,null);assert.equal(m.dscr,null);}
+});
+test('authentic zero NOI remains zero when debt service is explicitly recorded',()=>{const m=metrics({loan:120000,annualDebtService:10000,noi:0});assert.equal(m.netOperatingIncome,0);assert.equal(m.dscr,0);});
+test('captured assumptions compute debt service and NOI without percentage-unit ambiguity',()=>{
+ const a={schemaVersion:1,calculationVersion:'roi-monthly-v1',expensesUnit:'monthly_eur',loanAmount:120000,interestRate:0.5,loanYears:20,priceNight:150,occupancy:70,expenses:800,commission:15};
+ const m=metrics({assumptions:a});assert.equal(m.netOperatingIncome,22976.25);assert.ok(m.annualDebtService>6000&&m.annualDebtService<6500);assert.ok(m.dscr>3.5);
+});
+function dom(){const ids=new Map();class Node{constructor(tag){this.tag=tag;this.children=[];this.style={};this.events={};this.value='';this.checked=false;}set id(v){this._id=v;ids.set(v,this);}get id(){return this._id;}appendChild(n){if(n.parentElement)n.parentElement.children=n.parentElement.children.filter(x=>x!==n);this.children.push(n);n.parentElement=this;if(this.tag==='select'&&this.children.length===1)this.value=n.value||'';return n;}prepend(n){this.children.unshift(n);n.parentElement=this;}replaceChildren(){this.children=[];}setAttribute(k,v){this[k]=v;}addEventListener(k,fn){this.events[k]=fn;}remove(){this.removed=true;}scrollIntoView(){this.scrolled=true;}get textContent(){return [this.text||'',...this.children.map(x=>x.textContent)].join(' ');}set textContent(v){this.text=String(v);this.children=[];}}
+ const root=new Node('main'),output=new Node('section'),old=new Node('div'),selector=new Node('select');output.id='operational-report';selector.id='simulationSelector';selector.value='0';old.appendChild(selector);root.appendChild(old);root.appendChild(output);return {ids,root,old,selector,output,document:{querySelector:()=>root,getElementById:id=>ids.get(id),createElement:tag=>new Node(tag)}};}
+const context={version:1,ownerUid:'owner',generatedAt:'2026-10-15T12:00:00Z',preferences:{mode:'month',month:'2026-09'},snapshot:{ownerUid:'owner',isDemo:false,portalSnapshotReady:true,propertyList:[{id:'a',name:'Residenza De Luca',analysisId:'s'},{id:'b',name:'Altra casa'}],portalBookingList:[{propertyId:'a',checkin:'2026-09-01',checkout:'2026-09-02',totalAmount:100,status:'completed'}],renovationList:[]},analyses:[{id:'s',uid:'owner',propertyId:'a',isPortfolio:true,gross:36500}]};
+for(const lang of ['it','en'])test(`${lang}: selector, scope feedback and working actions are present together above report`,()=>{
+ const d=dom();globalThis.document=d.document;let downloads=0;globalThis.window={generatePDF:()=>downloads++};
+ try{const ui=mountReportIntegration({context,ownerUid:'owner',analysisId:'s',allowed:()=>true,onChoicesChanged:()=>{d.selector.value='';}});ui.render(lang);const host=d.ids.get('report-provenance');assert.equal(d.selector.parentElement,host);assert.equal(d.old.children.length,0);assert.match(d.ids.get('report-scope-feedback').textContent,/Residenza De Luca/);
+ d.ids.get('report-view-results').onclick();assert.equal(d.output.scrolled,true);d.ids.get('report-download-top').onclick();assert.equal(downloads,1);
+ d.ids.get('report-include-account').checked=true;d.ids.get('report-include-account').events.change();assert.match(d.ids.get('report-scope-feedback').textContent,lang==='it'?/tutte le proprietà/:/all PMS properties/);
+ d.ids.get('report-analysis-filter').events.change();assert.equal(d.ids.get('report-download-top').disabled,true);assert.equal(d.ids.get('report-view-results').disabled,true);assert.doesNotMatch(d.output.textContent,/100 EUR/);d.ids.get('report-download-top').onclick();assert.equal(downloads,1);
+ }finally{delete globalThis.document;delete globalThis.window;}
+});
+
+const bundle={exports:{}};vm.runInNewContext(readFileSync(new URL('../js/vendor/jspdf-4.2.1.umd.min.js',import.meta.url),'utf8'),{module:bundle,exports:bundle.exports,console,atob,btoa,setTimeout,clearTimeout,TextEncoder,TextDecoder,Uint8Array,ArrayBuffer});
+for(const lang of ['it','en'])test(`${lang}: PDF reproducing the reported legacy scenario marks financing unavailable instead of insufficient`,async()=>{
+ const {readInvestmentAssumptions}=await import('../js/investment-assumptions.js');
+ const pdf=html.slice(html.indexOf('async function generatePDF(){'),html.indexOf('// ================= MODAL =================')).replace('const {readInvestmentAssumptions} = await import("/js/investment-assumptions.js?v=20261009-rc91");','const {readInvestmentAssumptions} = reportHelpers;');
+ let result,saved=false;const rows=[],errors=[];
+ const sim={id:'legacy-rome',city:'Roma',price:150000,equity:30000,loan:120000,annualDebtService:0,interestRate:3.5,loanYears:20,noi:0,netOperatingIncome:0,dscr:0,capRate:0,roi:32.7,net:9799.82,risk:25,score:86,verdict:'BUY',assumptions:null};
+ const ctx={reportHelpers:{readInvestmentAssumptions},reportOwnerUid:'owner',integrationReady:Promise.resolve(),reportIntegration:{coverLines:()=>['Legacy scenario - missing financing inputs'],appendPDF(){}},dashboardReportContext:{},window:{currentLang:lang,currentUser:{uid:'owner'},getUserAccess:()=>({isPro:true}),dashboardSimulations:[sim],RB_MARKET_DATA:{},jspdf:{jsPDF:class{constructor(){result=new bundle.exports.jsPDF();const original=result.text.bind(result);result.text=(text,...args)=>{rows.push({text:String(text),page:result.internal.getCurrentPageInfo().pageNumber});return original(text,...args);};result.save=()=>saved=true;return result;}}}},document:{getElementById:id=>id==='simulationSelector'?{value:'0'}:null},showUpgradeModal(){},alert:s=>errors.push(s),console,Date,Intl,Number,isFinite};
+ vm.createContext(ctx);vm.runInContext(financing+pdf,ctx);await ctx.generatePDF();assert.deepEqual(errors,[]);assert.equal(saved,true);
+ const page=rows.filter(r=>r.page===3).map(r=>r.text);assert.match(page.join(' '),lang==='it'?/incompleti/:/Incomplete/);assert.doesNotMatch(page.join(' '),/insufficiente|Insufficient/);
+ for(const label of ['DSCR','NOI','CAP RATE'])assert.equal(page[page.indexOf(label)+1],lang==='it'?'N/D':'N/A');
+ if(process.env.RB_PDF_QA_DIR){const {mkdirSync,writeFileSync}=await import('node:fs');mkdirSync(process.env.RB_PDF_QA_DIR,{recursive:true});writeFileSync(process.env.RB_PDF_QA_DIR+'/legacy-fixed-'+lang+'.pdf',Buffer.from(result.output('arraybuffer')));}
+});

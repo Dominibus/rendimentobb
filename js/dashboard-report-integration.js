@@ -18,13 +18,26 @@ export function mountReportIntegration({context,ownerUid,analysisId,allowed,onCh
  const month=field('report-period-month','Mese di riferimento','Reference month','input','month');
  const now=new Date(context?.generatedAt||Date.now()),previous=new Date(now.getFullYear(),now.getMonth()-1,1);month.value=previous.getFullYear()+'-'+String(previous.getMonth()+1).padStart(2,'0');
  const from=field('report-period-from','Dal, incluso','From, inclusive','input','date'),to=field('report-period-to','Al, incluso','To, inclusive','input','date');
- const checkLabel=make(host,'label');checkLabel.style.cssText='display:block;margin:12px 0;';const includeAll=make(checkLabel,'input');includeAll.type='checkbox';includeAll.id='report-include-account';const checkText=make(checkLabel,'span');labels.push([checkText,' Mostra tutte le proprietà PMS in una sezione distinta',' Show all PMS properties in a separate section']);
+ const checkLabel=make(host,'label');checkLabel.style.cssText='display:flex;align-items:center;gap:10px;margin:16px 0;cursor:pointer;';const includeAll=make(checkLabel,'input');includeAll.type='checkbox';includeAll.id='report-include-account';includeAll.style.cssText='width:18px!important;height:18px!important;min-width:18px;max-width:18px;flex:0 0 18px;display:inline-block!important;margin:0!important;padding:0!important;accent-color:#059669;';const checkText=make(checkLabel,'span');labels.push([checkText,' Includi tutte le proprietà PMS, non solo l’immobile selezionato',' Include all PMS properties, not only the selected property']);
+ const selector=document.getElementById('simulationSelector');
+ if(selector){
+  const selectorLabel=make(host,'label');selectorLabel.htmlFor='simulationSelector';labels.push([selectorLabel,'Scegli l’analisi da aprire','Choose the analysis to open']);
+  host.appendChild(selector);selector.style.cssText='display:block;width:100%;box-sizing:border-box;max-width:100%;padding:12px;margin:6px 0 16px;border:1px solid #94a3b8;border-radius:10px;font:inherit;background:white;color:#0f172a;';
+ }
+ const actions=make(host,'div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;';
+ const show=make(actions,'button');show.type='button';show.id='report-view-results';labels.push([show,'Visualizza risultati PMS ↓','View PMS results ↓']);
+ const download=make(actions,'button');download.type='button';download.id='report-download-top';labels.push([download,'Scarica questo report PDF','Download this PDF report']);
+ for(const button of [show,download])button.style.cssText='padding:12px 18px;border:0;border-radius:10px;background:#047857;color:white;font:inherit;font-weight:600;cursor:pointer;';
+ const feedback=make(host,'p');feedback.id='report-scope-feedback';feedback.setAttribute?.('role','status');feedback.setAttribute?.('aria-live','polite');feedback.style.cssText='padding:12px;background:white;border-left:4px solid #059669;border-radius:6px;font-weight:600;';
  const selectionNote=make(host,'p');selectionNote.style.fontSize='13px';
  const prefs=context?.preferences||{};
  for(const [input,key] of [[filter,'filter'],[mode,'mode'],[month,'month'],[from,'from'],[to,'to']])if(typeof prefs[key]==='string')input.value=prefs[key];
  includeAll.checked=prefs.includeAll===true;
  const state={lang:'it'};
  const output=document.getElementById('operational-report');
+ if(output)output.style.scrollMarginTop='120px';
+ show.onclick=()=>{if(allowed())output?.scrollIntoView?.({behavior:'smooth',block:'start'});};
+ download.onclick=()=>{if(allowed()&&(!selector||selector.value!==''))window.generatePDF?.();};
  const period=()=>{const [year,m]=month.value.split('-').map(Number);return reportPeriod({mode:mode.value,month:month.value,year,quarter:Math.ceil(m/3),start:from.value,end:to.value});};
  function reports(){
   if(!allowed())throw Error('REPORT_ACCESS_CHANGED');
@@ -41,12 +54,15 @@ export function mountReportIntegration({context,ownerUid,analysisId,allowed,onCh
  function render(lang=state.lang){
   state.lang=lang;const t=(it,en)=>lang==='en'?en:it;
   if(!allowed()){host.remove();if(output)output.replaceChildren();return;}
+  const needsSelection=!!selector&&selector.value==='';download.disabled=needsSelection;show.disabled=needsSelection;
+  feedback.textContent=needsSelection?t('Seleziona un’analisi nel menu qui sopra per aprire il documento desiderato.','Select an analysis in the menu above to open the required document.'):includeAll.checked?t('Ambito attivo: tutte le proprietà PMS. Il PDF include anche gli altri immobili.','Active scope: all PMS properties. The PDF also includes the other properties.'):entry?.linkState==='linked'?t('Ambito attivo: solo ','Active scope: only ')+entry.name:t('Solo simulazione: nessun dato PMS attribuito a un immobile.','Simulation only: no PMS data attributed to a property.');
   labels.forEach(([el,it,en])=>el.textContent=t(it,en));
   title.textContent=t('Quale analisi stai leggendo','Which analysis you are reading');origin.textContent=provenanceLabel(entry,lang);
   explain.textContent=entry?.linkState==='linked'?t('Le previsioni appartengono a questa analisi. Per impostazione iniziale i dati PMS riguardano solo l’immobile collegato; se scegli tutte le proprietà, l’ambito generale è indicato separatamente.','Forecasts belong to this analysis. By default PMS data covers only the linked property; if you choose all properties, the general scope is labelled separately.'):t('Questa analisi non ha un collegamento PMS verificato. Non attribuiamo alla simulazione i dati dell’intero account. Per collegarla usa Modifica immobile nella dashboard.','This analysis has no verified PMS link. Account-wide data is not attributed to this simulation. Link it using Edit property in the dashboard.');
-  selectionNote.textContent=t('Il filtro restringe il menu delle simulazioni. Per cambiare il documento seleziona un’analisi nel menu; nome, stato e ID distinguono gli scenari simili. Le ipotesi finanziarie sono annue; il periodo scelto si applica ai dati PMS.','The filter narrows the simulation menu. Select an analysis in that menu to change the document; name, status and ID distinguish similar scenarios. Financial assumptions are annual; the selected period applies to PMS data.');
+  selectionNote.textContent=t('Le modifiche al periodo e alla spunta aggiornano subito i risultati più sotto. Premi Visualizza risultati PMS per raggiungerli. Il filtro restringe il menu: scegli un’analisi per cambiare il documento. Le previsioni finanziarie rimangono annue.','Changes to the period and checkbox update the results below immediately. Press View PMS results to reach them. The filter narrows the menu: choose an analysis to change the document. Financial forecasts remain annual.');
   month.parentElement.hidden=mode.value==='custom';from.parentElement.hidden=to.parentElement.hidden=mode.value!=='custom';
   if(!output)return;output.replaceChildren();output.style.display='block';
+  if(needsSelection){make(output,'p',t('Scegli prima l’analisi da aprire nei controlli iniziali.','First choose the analysis to open in the controls above.'));return;}
   if(!entry){make(output,'p',t('Origine non disponibile: riapri il report dalla dashboard aggiornata.','Origin unavailable: reopen the report from the updated dashboard.'));return;}
   const num=v=>v===null||v===undefined?t('N/D','N/A'):new Intl.NumberFormat(lang==='en'?'en-GB':'it-IT',{maximumFractionDigits:2}).format(v);
   try{

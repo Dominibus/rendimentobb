@@ -1289,148 +1289,35 @@ const annualProfit =
 // FINANCING METRICS — SINGLE SOURCE
 // ===============================
 
-function getFinancingMetrics(
-  source = {},
-  priceValue = 0,
-  equityValue = 0,
-  netAfterMortgage = 0
-){
-
-  const safeNumber = value => {
-
-    const number =
-      Number(value);
-
-    return Number.isFinite(number)
-      ? number
-      : 0;
-
-  };
-
-  const loan =
-    Math.max(
-      0,
-      safeNumber(
-        source.assumptions?.loanAmount ??
-        source.loan ??
-        source.loanAmount ??
-        source.mortgageAmount ??
-        (
-          safeNumber(priceValue) -
-          safeNumber(equityValue)
-        )
-      )
-    );
-
-  let annualDebtService =
-    safeNumber(
-      source.annualDebtService ??
-      source.mortgageYearly ??
-      0
-    );
-
-  if(
-    annualDebtService <= 0
-  ){
-
-    const monthlyDebtService =
-      safeNumber(
-        source.monthlyMortgage ??
-        source.monthlyMortgagePayment ??
-        0
-      );
-
-    if(monthlyDebtService > 0){
-
-      annualDebtService =
-        monthlyDebtService * 12;
-
-    }
-
+function getFinancingMetrics(source={},priceValue=0,equityValue=0){
+  const n=v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))?null:Number(v);
+  const a=source.assumptions;
+  const captured=a?.schemaVersion===1&&a?.calculationVersion==='roi-monthly-v1'&&['monthly_eur','percentage'].includes(a.expensesUnit)&&['loanAmount','interestRate','loanYears','priceNight','occupancy','expenses','commission'].every(k=>typeof a[k]==='number'&&Number.isFinite(a[k])&&a[k]>=0)&&a.loanYears>0;
+  const loan=Math.max(0,n(captured?a.loanAmount:null)??n(source.loan??source.loanAmount??source.mortgageAmount)??Math.max(0,(n(priceValue)??0)-(n(equityValue)??0)));
+  let annualDebtService=n(source.annualDebtService??source.mortgageYearly);
+  if(!(annualDebtService>0)){
+    const monthly=n(source.monthlyMortgage??source.monthlyMortgagePayment);
+    annualDebtService=monthly>0?monthly*12:null;
   }
-
-  // Compatibilità con vecchie analisi
-  // che non contengono la rata salvata.
-  if(
-    annualDebtService <= 0 &&
-    loan > 0
-  ){
-
-    const rateValue =
-      safeNumber(
-        source.interestRate ??
-        3.5
-      );
-
-    const annualRate =
-      rateValue > 1
-        ? rateValue / 100
-        : rateValue;
-
-    const years =
-      Math.max(
-        1,
-        safeNumber(
-          source.loanYears ??
-          20
-        )
-      );
-
-    const months =
-      years * 12;
-
-    const monthlyRate =
-      annualRate / 12;
-
-    const monthlyPayment =
-      monthlyRate > 0
-        ? (
-            loan *
-            monthlyRate *
-            Math.pow(
-              1 + monthlyRate,
-              months
-            )
-          ) /
-          (
-            Math.pow(
-              1 + monthlyRate,
-              months
-            ) - 1
-          )
-        : loan / months;
-
-    annualDebtService =
-      monthlyPayment * 12;
-
+  if(loan===0)annualDebtService=0;
+  else if(annualDebtService===null&&captured){
+    const months=a.loanYears*12,rate=a.interestRate/100/12,power=Math.pow(1+rate,months);
+    annualDebtService=(rate>0?loan*rate*power/(power-1):loan/months)*12;
   }
-
-  const netOperatingIncome =
-    safeNumber(
-      source.noi ??
-      source.netOperatingIncome ??
-      (
-        safeNumber(netAfterMortgage) +
-        annualDebtService
-      )
-    );
-
-  const dscr =
-    annualDebtService > 0
-      ? (
-          netOperatingIncome /
-          annualDebtService
-        )
-      : 0;
-
-  return {
-    loan,
-    annualDebtService,
-    netOperatingIncome,
-    dscr
-  };
-
-}  
+  let netOperatingIncome=n(source.noi??source.netOperatingIncome);
+  if(netOperatingIncome===null&&captured){
+    const gross=a.priceNight*365*a.occupancy/100;
+    const costs=a.expensesUnit==='monthly_eur'?a.expenses*12:gross*a.expenses/100;
+    netOperatingIncome=gross-costs-gross*a.commission/100;
+  }
+  // Older handoffs normalized absent values to zero. Without explicit inputs
+  // or recorded debt service, those zeros are not financial evidence.
+  if(netOperatingIncome===0&&!captured&&!(annualDebtService>0)&&source.reportFieldsVersion!==1)netOperatingIncome=null;
+  const savedDSCR=n(source.dscr);
+  const evidencedDSCR=savedDSCR===0&&source.reportFieldsVersion!==1&&!(annualDebtService>0)?null:savedDSCR;
+  const dscr=loan>0?(annualDebtService>0&&netOperatingIncome!==null?netOperatingIncome/annualDebtService:evidencedDSCR):null;
+  return {loan,annualDebtService,netOperatingIncome,dscr};
+}
 
 const canonicalInvestmentScore =
   Number(
@@ -1500,9 +1387,9 @@ if(dscrHero){
     );
 
   dscrHero.innerText =
-    financingMetrics.annualDebtService > 0
+    financingMetrics.loan > 0 && financingMetrics.dscr !== null
       ? financingMetrics.dscr.toFixed(2)
-      : "N/A";
+      : financingMetrics.loan>0?(lang==='en'?'N/A':'N/D'):"N/A";
 
 }
   
@@ -1933,10 +1820,7 @@ const monthlyProfit = safe(
           .annualDebtService
       );
 
-    const dscr =
-      safe(
-        financingMetrics.dscr
-      );
+    const dscr = financingMetrics.dscr;
 
     const breakEven =
       annualProfit > 0
@@ -1945,18 +1829,8 @@ const monthlyProfit = safe(
 
     // ================= BANK METRICS =================
 
-    const capRate =
-      safe(
-        fallback.capRate ??
-        (
-          price > 0
-            ? (
-                financingMetrics.netOperatingIncome /
-                price
-              ) * 100
-            : 0
-        )
-      );
+    const savedCapRate=fallback.capRate===0&&fallback.reportFieldsVersion!==1&&financingMetrics.netOperatingIncome===null?null:fallback.capRate;
+    const capRate=savedCapRate!==null&&savedCapRate!==undefined&&savedCapRate!==''&&Number.isFinite(Number(savedCapRate))?Number(savedCapRate):price>0&&financingMetrics.netOperatingIncome!==null?financingMetrics.netOperatingIncome/price*100:null;
 
     const roe =
       equity > 0
@@ -2540,9 +2414,9 @@ drawFinancingKPI(
   20 + (financingCardW + financingGap) * 2,
   32,
   "DSCR",
-  annualDebtService > 0
+  loan > 0 && dscr !== null
     ? dscr.toFixed(2)
-    : "N/A"
+    : loan>0?t("N/D","N/A"):"N/A"
 );
 
 // ROW 2
@@ -2550,7 +2424,7 @@ drawFinancingKPI(
   20,
   64,
   "CAP RATE",
-  price > 0 ? `${capRate.toFixed(1)}%` : "N/A"
+  price > 0 && capRate !== null ? `${capRate.toFixed(1)}%` : t("N/D","N/A")
 );
 
 drawFinancingKPI(
@@ -2564,11 +2438,12 @@ drawFinancingKPI(
   20 + (financingCardW + financingGap) * 2,
   64,
   "NOI",
-  eur(financingMetrics.netOperatingIncome)
+  financingMetrics.netOperatingIncome===null?t("N/D","N/A"):eur(financingMetrics.netOperatingIncome)
 );
 
     const decision =
-  annualDebtService <= 0
+  loan > 0 && dscr === null ? t("Dati di finanziamento incompleti: copertura non valutabile","Incomplete financing data: coverage unavailable") :
+  loan <= 0
     ? t(
         "Nessun finanziamento rilevato",
         "No financing detected"
@@ -2589,7 +2464,7 @@ drawFinancingKPI(
         );
 
     doc.setTextColor(...(
-      annualDebtService <= 0
+      loan <= 0 || dscr === null
         ? gray
         : dscr >= 1.2
           ? green
@@ -3418,7 +3293,7 @@ function init(){
 
 // ================= START =================
 const reportAllowed=()=>window.currentUser?.uid===reportOwnerUid && Boolean(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
-const integrationReady=import('/js/dashboard-report-integration.js?v=20261015-rc134').then(({mountReportIntegration})=>{
+const integrationReady=import('/js/dashboard-report-integration.js?v=20261015-rc135').then(({mountReportIntegration})=>{
   if(!reportAllowed())return null;
   reportIntegration=mountReportIntegration({context:dashboardReportContext.reporting,ownerUid:reportOwnerUid,analysisId:canonicalSimulation.id,allowed:reportAllowed,onChoicesChanged:populateSimulations});
   reportIntegration.render(lang);populateSimulations();return reportIntegration;

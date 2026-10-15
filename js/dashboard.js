@@ -898,6 +898,7 @@ const analyses = querySnapshot.docs.map(doc => {
   return {
 
     id: doc.id,
+    reportFieldsVersion: 1,
     propertyMode: assumptions?.source === "owned_property" ? "owned" : "purchase",
 
     roi:
@@ -1051,16 +1052,16 @@ const analyses = querySnapshot.docs.map(doc => {
       ),
 
     dscr:
-      Number(data.dscr ?? 0),
+      financialNumber(data.dscr),
 
     noi:
-      Number(data.noi ?? data.netOperatingIncome ?? 0),
+      financialNumber(data.noi ?? data.netOperatingIncome),
 
     netOperatingIncome:
-      Number(data.netOperatingIncome ?? data.noi ?? 0),
+      financialNumber(data.netOperatingIncome ?? data.noi),
 
     capRate:
-      Number(data.capRate ?? 0),
+      financialNumber(data.capRate),
 
     annualDebtService:
       Number(data.annualDebtService ?? data.mortgageYearly ?? 0),
