@@ -53,7 +53,10 @@ async function(message){
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
     const reportGuide=window.rbBuildProReportGuide?.(text);
-    if(reportGuide)return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
+    if(reportGuide){
+      if(reportGuide.metadata?.source==='extracted_pdf_text' && reportGuide.metadata.documentId)window.rbPDFConversationDocumentId=reportGuide.metadata.documentId;
+      return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
+    }
 
     // Product questions must not be swallowed by active PDFs or PMS prompts.
     const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial|tester)\b|prova gratuit[ao]|prova gratis|prova.{0,30}(?:7|sette|30|trenta).{0,8}giorni|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
@@ -62,13 +65,13 @@ async function(message){
       if(productResponse?.type==='subscriptions')return {success:true,response:productResponse,intent:{intent:'subscriptions'}};
     }
 
-    if(/^roy[?!\.\s]*$/i.test(text))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
+    if(/^roy[?!\.\s]*$/i.test(text) && !(window.rbDocumentManager?.getLast?.()?.id && window.rbPDFConversationDocumentId===window.rbDocumentManager.getLast().id))return {success:true,response:{type:'clarification',confidence:0,textIT:'Intendi il ROI dell’investimento? Dimmi se vuoi la definizione o leggere il rendimento della tua analisi.',textEN:'Do you mean investment ROI? Tell me whether you want its definition or the return from your analysis.',actions:[]},intent:{intent:'clarification'}};
     // Handle explicit document requests once before the multi-intent/live pipeline.
     const activePDF = window.rbDocumentManager?.getLast?.();
     const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
     const explicitLiveRequest = /simulazion|simulation|simulator|simulatore|autopilot investimento|investment autopilot|mercato|market|altra citt|another city/i.test(text);
     const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
-        /(risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        /(risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|roy|adr|revpar|occupazion|occupancy|miglior|prossim|da dove|cosa fare|cosa faccio|non capisco|next step|what should i|where do i|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
         !explicitLiveRequest;
     const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
     const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
@@ -80,6 +83,9 @@ async function(message){
             return {success:true,response,intent:{intent:"pdf_analysis"}};
         }
     }
+
+    const nextStepGuide=window.rbBuildNextStepGuide?.(text);
+    if(nextStepGuide)return {success:true,response:nextStepGuide,intent:{intent:'guided_next_step'}};
 
     window.rbPDFConversationDocumentId = null;
 

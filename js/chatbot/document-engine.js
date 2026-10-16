@@ -520,20 +520,21 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
     if(doc?.status !== "ready") return null;
     const operationalResponse=window.rbBuildPMSDocumentResponse?.(message,doc);
     if(operationalResponse)return operationalResponse;
-    const query = String(message || "").toLowerCase();
-    if(!/(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(query)) return null;
+    const query = String(message || "").toLowerCase().replace(/\broy\b/g,"roi");
+    if(!/(pdf|document|report|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(query)) return null;
     if(/\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/.test(query)) return null;
     if(/(manc|missing|complet|sufficient|non.*riconosci|not.*recogniz)/i.test(query)) return null;
     const a = doc.analysis || {};
     const has = key => a[key] !== null && a[key] !== undefined && a[key] !== "" && Number.isFinite(Number(a[key]));
     const evidence = String(doc.extractedText || "").replace(/\s+/g," ");
-    const equityROI = a.roiBasis === "equity" || /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(evidence);
+    const equityROI = a.roiBasis === "equity" || /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY|FORECAST EQUITY ROI/i.test(evidence);
     const propertyROI = a.roiBasis === "property";
     const afterMortgage = a.cashflowBasis === "after_mortgage" || /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(evidence);
     const keys = {investmentScore:["Punteggio investimento del PDF","PDF investment score"],dscr:["DSCR del PDF","PDF DSCR"],benchmarkROI:["Benchmark ROI del PDF","PDF ROI benchmark"],propertyPrice:["Prezzo immobile","Property price"],roi:[equityROI ? "ROI sul capitale proprio" : propertyROI ? "ROI sul valore immobile" : "ROI riportato",equityROI ? "Return on equity" : propertyROI ? "ROI on property value" : "Reported ROI"],equity:["Capitale proprio","Equity"],mortgage:["Mutuo","Loan"],cashflow:[afterMortgage ? "Cashflow annuo dopo mutuo" : "Cashflow annuo riportato",afterMortgage ? "Annual cash flow after mortgage" : "Reported annual cash flow"],gross:["Ricavi annui","Annual revenue"],risk:["Indice rischio del report","Report risk index"],occupancy:["Occupazione riportata","Reported occupancy"]};
     const compare = /(confront|compar)/i.test(query);
     const summarize = /(riassum|sintesi|riepilog|summar)/i.test(query);
-    const interpret = /(interpret|analizz|analyz|convien|worth|sostenib|sustainab)/i.test(query);
+    const nextStep = /miglior|prossim|da dove|cosa (?:fare|faccio|controll)|come (?:proced|agisc)|priorit|improv|next step|what (?:should|can) i|where (?:do|should) i|non capisco|help me/.test(query);
+    const interpret = nextStep || /(interpret|analizz|analyz|convien|worth|sostenib|sustainab)/i.test(query);
     const allIndicators = /(?:tutti|tutte).*(?:indicatori|metriche)|all.*(?:indicators|metrics)/i.test(query);
     const requested = [
       ["investmentScore",/punteggio|score/],
@@ -559,7 +560,8 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
         const source = en ? `Source: ${doc.fileName}` : `Fonte: ${doc.fileName}`;
         const missing = key => en ? `I did not recognize ${keys[key][1].toLowerCase()} in this PDF. I cannot replace it with a default.` : `Non ho riconosciuto ${keys[key][0].toLowerCase()} nel PDF. Non lo sostituisco con un valore predefinito.`;
         const lines=[];
-        const metric = key => has(key) ? `${keys[key][en?1:0]}: ${format(key,a[key])}.` : missing(key);
+        const roiNotApplicable=has("equity") && Number(a.equity)===0 && !has("roi");
+        const metric = key => key==="roi" && roiNotApplicable ? (en ? "Startup ROI is not applicable: startup capital is zero. Assess estimated cashflow and costs; the house value is excluded from this calculation." : "Il ROI sul capitale di avvio non è applicabile: il capitale è zero. Valuta cashflow stimato e costi; il valore della casa è escluso da questo calcolo.") : has(key) ? `${keys[key][en?1:0]}: ${format(key,a[key])}.` : missing(key);
         const loanRatio = has("mortgage") && has("propertyPrice") && Number(a.propertyPrice)>0 ? 100*Number(a.mortgage)/Number(a.propertyPrice) : null;
         if(mode === "summary"){
             lines.push(en ? "Recognized PDF data" : "Dati riconosciuti nel PDF");
@@ -614,7 +616,7 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
             lines.push(en ? "Only matching recognized metrics are compared. ROI requires the same calculation basis; missing simulation values are not estimated." : "Confronto solo indicatori omogenei riconosciuti. Per il ROI serve la stessa base di calcolo; i dati mancanti della simulazione non vengono stimati.");
         }else{
             lines.push(en ? "Interpretation of the report" : "Interpretazione del report");
-            if(has("roi")) lines.push(metric("roi"));
+            if(has("roi") || roiNotApplicable) lines.push(metric("roi"));
             if(has("cashflow")){
                 lines.push(en ? `The scenario reports ${money(a.cashflow)} in annual cash flow (${money(Number(a.cashflow)/12)} per month on average).` : `Lo scenario riporta ${money(a.cashflow)} di cashflow annuo (${money(Number(a.cashflow)/12)} al mese in media).`);
                 lines.push(Number(a.cashflow)>0 ? (en ? "The model has a positive surplus under the stated assumptions." : "Il modello produce un avanzo positivo nelle ipotesi indicate.") : (en ? "The model has no positive surplus under the stated assumptions." : "Il modello non produce un avanzo positivo nelle ipotesi indicate."));
@@ -631,11 +633,18 @@ window.rbBuildPDFResponse = function(message, doc, live = {}){
             if(!has("roi") && !has("cashflow")) lines.push(en ? "Insufficient recognized financial data to assess profitability." : "Non ho riconosciuto dati finanziari sufficienti per valutare la redditività.");
             lines.push(en ? "Before relying on this scenario, check occupancy assumptions, recurring costs, taxes and acquisition costs against the actual property data." : "Per valutare lo scenario, confronta occupazione, costi ricorrenti, imposte e spese di acquisto con i dati effettivi dell’immobile.");
         }
+        if(nextStep || mode==="interpretation"){
+            lines.push(en ? "Next checks, in order:" : "Prossimi controlli, in ordine:");
+            if(has("roi") && Number(a.roi)>=100) lines.push(en ? "1. This very high modeled ROI depends on the stated capital and revenue. Verify purchase/startup costs and whether the nightly rate and occupancy are supported; the score does not verify those inputs." : "1. Questo ROI simulato molto elevato dipende dal capitale e dai ricavi indicati. Verifica costi di acquisto/avvio, tariffa e occupazione: il punteggio non verifica questi input.");
+            else lines.push(en ? "1. Check that the property and saved assumptions match the scenario you want to assess." : "1. Controlla che immobile e ipotesi salvate corrispondano allo scenario da valutare.");
+            lines.push(en ? "2. Check recurring costs, commissions, taxes and any debt payments for completeness." : "2. Verifica completezza di costi ricorrenti, commissioni, imposte ed eventuali rate.");
+            lines.push(en ? "3. In Analyze, lower revenue assumptions and recalculate. Compare the new cashflow before deciding; I have not changed your scenario." : "3. In Analizza riduci le ipotesi di ricavo e ricalcola. Confronta il nuovo cashflow prima di decidere; non ho modificato lo scenario.");
+        }
         if(mode!=="summary" && mode!=="compare") lines.push(en ? "This explains the PDF scenario; it does not verify actual operating results." : "Questa lettura spiega lo scenario del PDF; non verifica risultati operativi reali.");
         lines.push(source);
         return lines.join("\n");
     };
-    return {type:"document_grounded",confidence:1,textIT:render("it"),textEN:render("en"),suggestionsIT:mode==="summary" ? ["Interpretami il PDF","E il ROI?","Quali dati mancano nel PDF?"] : ["Riassumi questo PDF","Quali dati mancano nel PDF?"],suggestionsEN:mode==="summary" ? ["Interpret this PDF","What about ROI?","Which data are missing in the PDF?"] : ["Summarize this PDF","Which data are missing in the PDF?"],signals:["current_pdf_only"],metadata:{source:"extracted_pdf_text",fileName:doc.fileName,documentId:doc.id,answerMode:mode}};
+    return {type:"document_grounded",confidence:1,textIT:render("it"),textEN:render("en"),suggestionsIT:mode==="summary" ? ["Interpretami il PDF","E il ROI?","Quali dati mancano nel PDF?"] : ["Qual è il prossimo controllo sul PDF?","Quali dati mancano nel PDF?"],suggestionsEN:mode==="summary" ? ["Interpret this PDF","What about ROI?","Which data are missing in the PDF?"] : ["What should I check next in this PDF?","Which data are missing in the PDF?"],signals:["current_pdf_only"],metadata:{source:"extracted_pdf_text",fileName:doc.fileName,documentId:doc.id,answerMode:mode}};
 };
 
 window.rbAnalyzeUploadedPDF = async function(file){

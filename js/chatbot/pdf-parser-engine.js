@@ -636,6 +636,21 @@ window.rbParseExecutivePDF = async function(documentObject){
             if(equityEvidence.found && equity === 0) roi=null;
         }
 
+        // RC141: read labelled monetary cells, never a percentage from "FORECAST EQUITY ROI".
+        // The financial section was bounded above before reading an integrated report.
+        if(mixed){
+            const moneyCell = labels => {
+                const re = new RegExp(`(?:^|\\s)(?:${labels})\\s*:?\\s*(?:(N/A|N/D|Non indicato|Not provided)|(?:EUR|€)\\s*(-?\\d[\\d.,]*)|(-?\\d[\\d.,]*)\\s*(?:EUR|€))(?=\\s|$)`, 'i');
+                const m=text.match(re);
+                return m ? {found:true,value:m[1]?null:parseAmount(m[2]??m[3])} : {found:false,value:null};
+            };
+            const priceCell=moneyCell('PURCHASE PRICE|PROPERTY VALUE|VALORE IMMOBILE|PREZZO IMMOBILE|PREZZO DI ACQUISTO|PREZZO');
+            const equityCell=moneyCell('EQUITY|STARTUP CAPITAL|CAPITALE PROPRIO|CAPITALE DI AVVIO|CAPITALE AVVIO');
+            // An unrecognized cell stays unavailable: broad legacy matches are unsafe here.
+            propertyPrice=priceCell.value;
+            equity=equityCell.value;
+        }
+
         const financialEvidence = [
             roi,
             realROI,
@@ -714,7 +729,7 @@ window.rbParseExecutivePDF = async function(documentObject){
             verdict:
                 verdict,
 
-            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
+            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY|FORECAST EQUITY ROI/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
             cashflowBasis: /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(text) ? "after_mortgage" : "unknown",
             financingRate: extractPercentage(/(?:TASSO IPOTIZZATO|ASSUMED INTEREST RATE)[^0-9]{0,30}([\d.,]+)\s*%/i),
             debtService: extractAmount(/(?:RATA MUTUO ANNUA STIMATA|ESTIMATED ANNUAL LOAN PAYMENTS)[^0-9]{0,30}([\d.,]+)/i),
