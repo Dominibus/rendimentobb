@@ -48,7 +48,7 @@
     const costRequest=/quanto.*(?:pagare|pagar|spendere)|(?:devo|da)\s+pagare|pagamenti.*(?:domani|oggi|scaden|prossim)|what.*(?:pay|owe)|payments? due|costi.*(arriv|prossim|scaden|pagare)|spese.*(arriv|prossim|pagare)|upcoming costs|bills? due|budget residuo|remaining budget/.test(query);
     const referencesOwnedName=(window.rbPMSData?.propertyList||[]).some(p=>normalize(p.name).length>=3&&query.includes(normalize(p.name)));
     const conversationalFollowup=!!conversationScope&&related(query);
-    const performanceRequest=conversationalFollowup||/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
+    const performanceRequest=conversationalFollowup||/come sta andando|how is .+ perform/.test(query)||/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
     const ledgerRequest=performanceRequest||/consuntiv|rendicont|quanto.*(incassat|guadagnat)|ricavi.*(mese|anno|prenot|pms)|incassi.*(mese|anno)|revenue.*(month|year|booking)|operating summary/.test(query);
     const bookingsRequest=/prenotazion|bookings|reservations/.test(query) && /prossim|arriv|riepilog|elenc|quante|settimana|oggi|domani|mese|next|upcoming|list|how many|today|tomorrow|month|week/.test(query) && !/tariff|prezz|pulizi|document|segnal|ospit.*proble|cancell|modific|crea|salva|delete|edit/.test(query);
     const overviewRequest=/riepilog.*(portale|pms|gestione)|stato.*(portale|pms)|portal summary/.test(query);

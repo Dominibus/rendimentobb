@@ -59,6 +59,9 @@ async function(message){
       return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
     }
 
+    const nextStepGuide=window.rbBuildNextStepGuide?.(text);
+    if(nextStepGuide)return {success:true,response:nextStepGuide,intent:{intent:'guided_next_step'}};
+
     // Product questions must not be swallowed by active PDFs or PMS prompts.
     const productQuestion = /\b(free|investor|pro|abbonamenti?|subscriptions?|trial|tester)\b|prova gratuit[ao]|prova gratis|prova.{0,30}(?:7|sette|30|trenta).{0,8}giorni|recesso|withdrawal|withdraw from|(?:prezzi|pricing).*pian/i.test(text);
     if(productQuestion && window.rbGenerateResponse){
@@ -85,8 +88,6 @@ async function(message){
         }
     }
 
-    const nextStepGuide=window.rbBuildNextStepGuide?.(text);
-    if(nextStepGuide)return {success:true,response:nextStepGuide,intent:{intent:'guided_next_step'}};
 
     window.rbPDFConversationDocumentId = null;
 
@@ -100,6 +101,12 @@ async function(message){
       window.rbPDFConversationDocumentId=null;
       window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'confirmed_portfolio'}});
       return {success:true,response:portfolioResponse,intent:{intent:'confirmed_portfolio'}};
+    }
+
+    // Explicit operating-performance questions must not become market benchmarks while records load.
+    if(/come sta andando|how is .+perform/i.test(text) && !/simulazion|simulation|\bpdf\b|document|mutuo|mortgage|\broi\b/i.test(text)){
+      const performanceResponse=window.rbBuildPortalResponse?.(text);
+      if(performanceResponse)return {success:true,response:performanceResponse,intent:{intent:'portal_facts'}};
     }
 
     const investmentResponse=window.rbBuildInvestmentAutopilotResponse?.(text);
