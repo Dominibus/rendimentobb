@@ -40,7 +40,7 @@ test('Pro renders only its owned financial snapshot, ignoring manipulated query 
  const h=harness({isPro:true});
  globalThis.RBReportCache.write('pro-owner',[{propertyPrice:150000,equity:30000,roi:26.3,net:7890,risk:25,city:'Roma',investmentScore:79}],{},h.session,h.local);
  h.authenticate({uid:'pro-owner'});
- assert.equal(h.nodes.get('roi').innerText,'26.3%');
+ assert.equal(h.nodes.get('roi').innerText,'26,3%');
  assert.equal(h.nodes.get('equity').innerText,new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(30000));
  assert.equal(h.context.window.dashboardSimulations[0].roi,26.3);
 });

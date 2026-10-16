@@ -1,5 +1,5 @@
 import {readInvestmentAssumptions} from './investment-assumptions.js?v=20261009-rc91';
-import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261016-rc139';
+import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261016-rc143';
 const clean=v=>String(v??'').slice(0,160);
 const date=v=>{const n=v?.toMillis?.()??(typeof v?.seconds==='number'?v.seconds*1000:Date.parse(v));return Number.isFinite(n)?new Date(n).toISOString():null;};
 // The handoff contains only fields needed by reports, never guest names or contacts.

@@ -5649,6 +5649,7 @@ window.generateExecutivePDF = async function(){
 const access = window.getUserAccess();
 const isEN = window.currentLang === "en";
 const T = (it,en)=> isEN ? en : it;
+const pdfDecimal = (value, digits) => new Intl.NumberFormat(isEN ? "en-GB" : "it-IT",{minimumFractionDigits:digits,maximumFractionDigits:digits,useGrouping:false}).format(value);
 
 if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
@@ -5782,7 +5783,7 @@ const pct = v => {
 
   return Number.isInteger(n)
     ? n + "%"
-    : n.toFixed(1) + "%";
+    : pdfDecimal(n,1) + "%";
 
 };
 
@@ -5947,6 +5948,17 @@ doc.text(
   20,
   109
 );
+
+// Cover identity uses only the completed simulation snapshot, never live form defaults.
+const coverInputs = d.assumptions || {};
+const coverInput = (value,unit='') => value === null || value === undefined || value === '' || !Number.isFinite(Number(value)) ? T('N/D','N/A') : pdfDecimal(Number(value),1)+unit;
+doc.setFontSize(8);
+doc.setTextColor(203,213,225);
+doc.text(doc.splitTextToSize(
+  T('Tariffa notte: ','Nightly rate: ') + coverInput(coverInputs.priceNight ?? d.priceNight ?? coverInputs.nightlyRate,' EUR') + ' | ' +
+  T('Occupazione: ','Occupancy: ') + coverInput(coverInputs.occupancy ?? d.occupancy,'%') + ' | ' +
+  T('Costi: ','Costs: ') + coverInput(coverInputs.expenses ?? d.expenses ?? coverInputs.monthlyCosts,(coverInputs.expensesUnit ?? d.expensesUnit) === 'percentage' ? '%' : T(' EUR/mese',' EUR/month')),
+  170),20,120);
 
 // ================= ROI =================
 
@@ -6542,7 +6554,7 @@ const dscr =
 
 const dscrLabel =
   Number.isFinite(dscr)
-    ? dscr.toFixed(2)
+    ? pdfDecimal(dscr,2)
     : "N/A";
 
 row(
@@ -6555,7 +6567,7 @@ row(
 
 row(
   "LTV",
-  ltv === null ? "N/A" : ltv.toFixed(1) + "%"
+  ltv === null ? "N/A" : pdfDecimal(ltv,1) + "%"
 );
 
 row(
@@ -6563,7 +6575,7 @@ row(
     "Tasso ipotizzato",
     "Assumed interest rate"
   ),
-  financingRate.toFixed(2) + "%"
+  pdfDecimal(financingRate,2) + "%"
 );
 
 row(
@@ -6603,7 +6615,7 @@ if(incomeTaxCost > 0){
 
 row(
   "Cap Rate",
-  price > 0 ? capRate.toFixed(2) + "%" : "N/A"
+  price > 0 ? pdfDecimal(capRate,2) + "%" : "N/A"
 );
 
 row(

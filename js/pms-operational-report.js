@@ -90,6 +90,9 @@ export function renderPMSOperationalPDF(report,{jsPDF,lang='it',doc:existingDoc=
   text(t('Ambito: ','Scope: ')+(report.scope==='property'?report.scopeName:t('Tutte le proprietà','All properties')),{bold:true});
   text(t('Periodo di competenza: ','Reporting period: ')+(report.periodLabel||report.month)+' | '+t('Snapshot: ','Snapshot: ')+new Date(report.generatedAt).toLocaleString(locale),{size:9});
   text(report.performance?t('Dati PMS registrati e ipotesi della simulazione collegata, presentati separatamente. Ricavi prenotati e risultati finanziari sono misure diverse.','Recorded PMS data and linked simulation assumptions, presented separately. Booked revenue and financial results are different measures.'):t('Dati PMS registrati, senza simulazioni finanziarie. Ricavi delle prenotazioni: non certificano incassi, utile, cashflow o ROI.','Recorded PMS data, without financial simulations. Booking revenue does not certify payments received, profit, cashflow or ROI.'),{size:9});
+  const snapshotDay = new Date(report.generatedAt).toLocaleDateString('en-CA', {timeZone:'Europe/Rome'});
+  if(report.period?.end && /^\d{4}-\d{2}-\d{2}$/.test(snapshotDay) && report.period.end > snapshotDay)
+    text(t('Periodo in corso o futuro: include prenotazioni future e non e un consuntivo chiuso.','Current or future period: includes future bookings and is not a closed-period actual.'),{size:9,bold:true,color:[153,27,27]});
   section(t('Risultati del periodo','Period results'));
   const a=report.totals;
   metric(t('Proprieta incluse','Properties included'),num(a.properties));

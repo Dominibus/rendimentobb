@@ -1350,7 +1350,7 @@ function renderData(){
   }
   document.getElementById("price").innerText = ownedProperty && price === 0 ? (lang === "en" ? "Not provided" : "Non indicato") : euro(price);
   document.getElementById("equity").innerText = euro(equity);
-  document.getElementById("roi").innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
+  document.getElementById("roi").innerText = (equity > 0 ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roi)+"%" : "N/A");
   document.getElementById("risk").innerText = risk+"/100";
   const realROIHero =
   document.getElementById(
@@ -1360,7 +1360,7 @@ function renderData(){
 if(realROIHero){
 
   realROIHero.innerText =
-    price > 0 && realROI !== null ? realROI.toFixed(1) + "%" : (lang==='en'?'N/A':'N/D');
+    price > 0 && realROI !== null ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(realROI) + "%" : (lang==='en'?'N/A':'N/D');
 }
 
   const dscrHero =
@@ -1378,7 +1378,7 @@ if(dscrHero){
 
   dscrHero.innerText =
     financingMetrics.loan > 0 && financingMetrics.dscr !== null
-      ? financingMetrics.dscr.toFixed(2)
+      ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false}).format(financingMetrics.dscr)
       : financingMetrics.loan>0?(lang==='en'?'N/A':'N/D'):"N/A";
 
 }
@@ -1398,11 +1398,11 @@ if(ltvHero){
       : 0;
 
   ltvHero.innerText =
-    price > 0 ? ltv.toFixed(0) + "%" : "N/A";
+    price > 0 ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:0,maximumFractionDigits:0,useGrouping:false}).format(ltv) + "%" : "N/A";
 }
 
 if(heroROI){
-  heroROI.innerText = (equity > 0 ? roi.toFixed(1)+"%" : "N/A");
+  heroROI.innerText = (equity > 0 ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roi)+"%" : "N/A");
 
   const bankScoreHero =
   document.getElementById("bankScoreHero");
@@ -1710,7 +1710,7 @@ ${euro(annualProfit)}
 <div class="kpi">
 <span>${lang==="en"?"Break-even":"Pareggio"}</span>
 <strong style="font-size:22px">
-${equity === 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
+${equity === 0 ? "N/A" : annualProfit > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(breakEven)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
 </div>
 
@@ -2002,7 +2002,7 @@ doc.setFontSize(30);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  (equity > 0 ? roi.toFixed(1) + "%" : "N/A"),
+  (equity > 0 ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roi) + "%" : "N/A"),
   28,
   y + 36
 );
@@ -2305,7 +2305,7 @@ drawPerformanceKPI(
 drawPerformanceKPI(
   20 + performanceKpiW + performanceKpiGap,
   t("BREAK-EVEN","BREAK-EVEN"),
-  equity <= 0 ? "N/A" : annualProfit > 0 ? `${breakEven.toFixed(1)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
+  equity <= 0 ? "N/A" : annualProfit > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(breakEven)} ${t("anni","years")}` : t("Non raggiunto","Not reached")
 );
 
 drawPerformanceKPI(
@@ -2397,7 +2397,7 @@ drawFinancingKPI(
   20 + financingCardW + financingGap,
   32,
   "LTV",
-  price > 0 ? `${ltv.toFixed(1)}%` : "N/A"
+  price > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(ltv)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -2405,7 +2405,7 @@ drawFinancingKPI(
   32,
   "DSCR",
   loan > 0 && dscr !== null
-    ? dscr.toFixed(2)
+    ? new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false}).format(dscr)
     : loan>0?t("N/D","N/A"):"N/A"
 );
 
@@ -2414,14 +2414,14 @@ drawFinancingKPI(
   20,
   64,
   "CAP RATE",
-  price > 0 && capRate !== null ? `${capRate.toFixed(1)}%` : t("N/D","N/A")
+  price > 0 && capRate !== null ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(capRate)}%` : t("N/D","N/A")
 );
 
 drawFinancingKPI(
   20 + financingCardW + financingGap,
   64,
   "ROE",
-  equity > 0 ? `${roe.toFixed(1)}%` : "N/A"
+  equity > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roe)}%` : "N/A"
 );
 
 drawFinancingKPI(
@@ -2678,7 +2678,7 @@ doc.setFontSize(24);
 doc.setTextColor(...(roi < 0 ? red : green));
 
 doc.text(
-  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A"),
+  (equity > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roi)}%` : "N/A"),
   28,
   63
 );
@@ -2710,7 +2710,7 @@ doc.setFontSize(24);
 doc.setTextColor(...dark);
 
 doc.text(
-  ownedProperty && equity <= 0 ? "N/A" : hasLocalBenchmark ? `${marketROI.toFixed(1)}%` : "—",
+  ownedProperty && equity <= 0 ? "N/A" : hasLocalBenchmark ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(marketROI)}%` : "—",
   115,
   63
 );
@@ -2963,7 +2963,7 @@ const drawFinalKPI = (
 drawFinalKPI(
   20,
   ownedProperty ? t("ROI DI AVVIO","STARTUP ROI") : t("ROI EQUITY","EQUITY ROI"),
-  (equity > 0 ? `${roi.toFixed(1)}%` : "N/A")
+  (equity > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(roi)}%` : "N/A")
 );
 
 drawFinalKPI(
@@ -3213,7 +3213,7 @@ function populateSimulations(){
     const rawROI = sim.visualROI ?? sim.roi;
     const simulationROI = rawROI == null || rawROI === "" ? NaN : Number(rawROI);
     const roiLabel = simulationEquity > 0 && Number.isFinite(simulationROI)
-      ? `${simulationROI.toFixed(1)}%`
+      ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(simulationROI)}%`
       : "N/A";
     opt.innerText =
       `${sim.city || "City"} – ${sim.propertyMode === 'owned' || sim.assumptions?.source === 'owned_property' ? (lang === 'en' ? 'Startup ROI' : 'ROI di avvio') : (lang === 'en' ? 'Equity ROI' : 'ROI equity')} ${roiLabel}`;
@@ -3283,7 +3283,7 @@ function init(){
 
 // ================= START =================
 const reportAllowed=()=>window.currentUser?.uid===reportOwnerUid && Boolean(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
-const integrationReady=import('/js/dashboard-report-integration.js?v=20261016-rc139').then(({mountReportIntegration})=>{
+const integrationReady=import('/js/dashboard-report-integration.js?v=20261016-rc143').then(({mountReportIntegration})=>{
   if(!reportAllowed())return null;
   reportIntegration=mountReportIntegration({context:dashboardReportContext.reporting,ownerUid:reportOwnerUid,analysisId:canonicalSimulation.id,allowed:reportAllowed,onChoicesChanged:populateSimulations});
   reportIntegration.render(lang);populateSimulations();return reportIntegration;
@@ -3409,7 +3409,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261016-rc142" defer></script>
+<script src="/js/chatbot-loader.js?v=20261016-rc143" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3420,7 +3420,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261016-rc142"></script>
+<script type="module" src="/js/header.js?v=20261016-rc143"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261015-rc128"></script>
 </body>

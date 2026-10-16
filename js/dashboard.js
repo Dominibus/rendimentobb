@@ -1,9 +1,10 @@
+import './dashboard-workspace-layout.js?v=20261016-rc143';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261016-rc140';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
-import {buildReportContext} from './report-provenance.js?v=20261016-rc139';
-import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc139';
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261016-rc139';
-import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc139';
+import {buildReportContext} from './report-provenance.js?v=20261016-rc143';
+import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261016-rc143';
+import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
@@ -1525,8 +1526,35 @@ if(isNew){
 
       ${badge}
 
-      <h3>${t("Analisi investimento","Investment analysis")}</h3>
+      <div class="rb-scenario-status">${data.isPortfolio ? t("Nel portafoglio", "In portfolio") : t("Solo simulazione", "Simulation only")} · ${data.propertyId ? t("Collegata al PMS", "Linked to PMS") : t("Senza collegamento PMS", "Not linked to PMS")}</div>
+      <h3>${escapeDashboardHTML(String(data.city || t("Città non indicata", "City unspecified")))}</h3>
 
+      <div class="metric">
+        <span>${t("ROI annuale","Annual ROI")}</span>
+        <strong class="${roiClass}">
+          ${data.roiAvailable === false ? "N/A" : formatPercent(roi)}
+        </strong>
+      </div>
+
+      <div class="metric">
+  <span>${t("Cashflow netto annuo stimato","Estimated annual net cash flow")}</span>
+
+  ${
+  canViewProfit()
+  ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
+  : `
+  <strong style="filter:blur(4px)">
+    ${formatCurrency(yearlyProfit)}
+  </strong>
+
+  <div style="font-size:12px;color:#64748b;margin-top:4px;">
+    🔒 ${t("Sblocca per vedere il cashflow stimato","Unlock to see estimated cash flow")}
+  </div>
+  `
+  }
+</div>
+
+<details class="rb-scenario-details"><summary>${t("Dati e ipotesi della simulazione", "Simulation inputs and assumptions")}</summary>
       <div class="metric">
         <span>${t("Città","City")}</span>
         <strong>${escapeDashboardHTML(String(data.city ?? "").charAt(0).toUpperCase() + String(data.city ?? "").slice(1))}</strong>
@@ -1540,13 +1568,6 @@ if(isNew){
       <div class="metric">
         <span>${data.propertyMode === "owned" ? t("Capitale di avvio","Startup capital") : t("Equity investita","Equity invested")}</span>
         <strong>${formatCurrency(equity)}</strong>
-      </div>
-
-      <div class="metric">
-        <span>${t("ROI annuale","Annual ROI")}</span>
-        <strong class="${roiClass}">
-          ${data.roiAvailable === false ? "N/A" : formatPercent(roi)}
-        </strong>
       </div>
 
       <div class="metric">
@@ -1564,25 +1585,10 @@ if(isNew){
         <strong>${formatCurrency(revenueNeeded)}</strong>
       </div>
 
-      <div class="metric">
-  <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
-
-  ${
-  canViewProfit()
-  ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
-  : `
-  <strong style="filter:blur(4px)">
-    ${formatCurrency(yearlyProfit)}
-  </strong>
-
-  <div style="font-size:12px;color:#64748b;margin-top:4px;">
-    🔒 ${t("Sblocca per vedere il cashflow stimato","Unlock to see estimated cash flow")}
-  </div>
-  `
-  }
-</div>
-
 ${window.isDemoData ? "" : investmentAssumptionsHTML(data.assumptions, window.currentLang)}
+
+</details>
+${window.isDemoData ? "" : `<button type="button" class="btn-dashboard rb-scenario-report" data-dashboard-report="true" data-analysis-id="${escapeDashboardHTML(data.id)}">${t("Apri report di questa simulazione · Pro", "Open this simulation report · Pro")}</button>`}
 
 ${
 !canViewProfit()
@@ -2118,7 +2124,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
   container.innerHTML = `
     <div class="portfolio-manager__header">
       <div>
-        <span class="portfolio-manager__eyebrow">PATRIMONIO CONFERMATO</span>
+        <span class="portfolio-manager__eyebrow">${t("PATRIMONIO CONFERMATO", "CONFIRMED PORTFOLIO")}</span>
         <h2>📂 ${t("Portafoglio investimenti", "Investment portfolio")}</h2>
         <p>${t(
           "Solo gli immobili confermati alimentano ROI, cashflow, equity e break-even.",
@@ -13730,6 +13736,8 @@ window.openPMSInvestmentTool = function(sectionId){
   if(!section) return false;
   window.showPMSTab("roi");
   requestAnimationFrame(()=>{
+    const disclosure = section.closest?.("details");
+    if(disclosure) disclosure.open = true;
     section.scrollIntoView({behavior:"smooth",block:"start"});
     section.setAttribute("tabindex","-1");
     section.focus({preventScroll:true});

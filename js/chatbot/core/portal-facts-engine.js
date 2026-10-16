@@ -111,6 +111,16 @@
         }
         if(sharedReport){rental=sharedReport.totals.revenue;nights=sharedReport.totals.nights;incomplete=sharedReport.warnings.invalidDates+sharedReport.warnings.missingAmounts+sharedReport.warnings.unknownStatuses;}
         lines.push(t(`Consuntivazione delle prenotazioni: ${range.start} → ${range.last}.`,`Booking revenue breakdown: ${range.start} → ${range.last}.`));
+        const requestedMetric = /\badr\b/.test(query) ? 'adr' : /revpar/.test(query) ? 'revpar' : /occupazion|occupancy/.test(query) ? 'occupancy' : null;
+        const concise = sharedReport && requestedMetric && !overviewRequest && !/andamento|perform|ricav|revenue|miglior|improv|priorit|primo|first|check|controll/.test(query);
+        if(concise){
+          const a=sharedReport.totals, value=a[requestedMetric];
+          const shown=value===null?t('N/D','N/A'):requestedMetric==='occupancy'?new Intl.NumberFormat(en?'en-GB':'it-IT',{maximumFractionDigits:2}).format(value)+'%':money(value);
+          const label=requestedMetric==='occupancy'?t('Occupazione registrata','Recorded occupancy'):requestedMetric.toUpperCase();
+          lines.push(label+': '+shown+'.');
+          lines.push(requestedMetric==='occupancy'?t('Notti occupate uniche / notti disponibili. Disponibilità ipotizzata: una unità per immobile ogni giorno; verifica chiusure e completezza del calendario.','Unique occupied nights / available nights. Assumed availability: one unit per property every day; review closures and calendar completeness.'):requestedMetric==='adr'?t('ADR = ricavi prenotati attribuiti al periodo / notti prenotate. Non misura incassi o utile.','ADR = booked revenue allocated to the period / booked nights. It does not measure receipts or profit.'):t('RevPAR = ricavi prenotati attribuiti al periodo / notti disponibili. Non misura il margine netto.','RevPAR = booked revenue allocated to the period / available nights. It does not measure net margin.'));
+          if(sharedReport.warnings.overlappingNights)lines.push(t('Sono presenti notti sovrapposte: verifica le prenotazioni.','Overlapping nights exist: review bookings.'));
+        }else{
         lines.push(t(`Ricavi registrati attribuiti alle notti del periodo: ${money(rental)} · ${nights} notti.`,`Recorded rental revenue allocated to period nights: ${money(rental)} · ${nights} nights.`));
         lines.push(t("Il conteggio ripartisce l’importo del soggiorno per notte ed esclude cancellazioni e richieste pending. Non certifica incassi o utile netto: mancano un registro pagamenti e un registro completo delle spese.","Amounts are allocated per stay night; cancellations and pending requests are excluded. This does not certify cash receipts or net profit: there is no payment ledger or complete expense ledger."));
         if(sharedReport){
@@ -118,6 +128,7 @@
           lines.push(t(`Occupazione registrata: ${fmt(a.occupancy)}% · ADR: ${a.adr===null?'N/D':money(a.adr)} · RevPAR: ${a.revpar===null?'N/D':money(a.revpar)}.`,`Recorded occupancy: ${fmt(a.occupancy)}% · ADR: ${a.adr===null?'N/A':money(a.adr)} · RevPAR: ${a.revpar===null?'N/A':money(a.revpar)}.`));
           lines.push(t('Una unita disponibile per immobile ogni giorno; chiusure e completezza del calendario non sono verificate.','One available unit per property every day; closures and calendar completeness are not verified.'));
           if(sharedReport.warnings.overlappingNights)lines.push(t('Sono presenti notti sovrapposte: verifica le prenotazioni.','Overlapping nights exist: review bookings.'));
+        }
         }
         if(range.end>iso(now))lines.push(t('Periodo in corso o futuro: sono importi prenotati, non un consuntivo chiuso.','Current or future period: these are booked amounts, not a closed-period actual.'));
         if(incomplete||pending)lines.push(t(`Esclusioni: ${incomplete} record incompleti; ${pending} richieste pending nel periodo.`,`Excluded: ${incomplete} incomplete records; ${pending} pending requests in the period.`));
@@ -153,6 +164,8 @@
       return lines.join("\n");
     };
     if(ledgerRequest&&!demo)conversationScope={ownerUid:data.ownerUid,propertyIds:[...ids],period:{...range}};
-    return respond(render("it"),render("en"),"portal",{ownerUid:data.ownerUid,period:range,propertyIds:[...ids]});
+    const response=respond(render("it"),render("en"),"portal",{ownerUid:data.ownerUid,period:range,propertyIds:[...ids]});
+    if(ledgerRequest && !demo){response.suggestionsIT=['E l’occupazione?','E l’ADR?','Come posso migliorare l’occupazione?'];response.suggestionsEN=['And occupancy?','And ADR?','How can I improve occupancy?'];}
+    return response;
   };
 })();
