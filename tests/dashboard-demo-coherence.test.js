@@ -31,10 +31,10 @@ test("historical bookings alone do not produce a poor current-period score", () 
   const start = dashboardSource.indexOf("function renderExecutiveSummary(data)");
   const end = dashboardSource.indexOf('document.addEventListener("rb_language_changed"', start);
   const box = { style: {}, innerHTML: "" };
-  const context = { document: { getElementById: () => box }, t: (it) => it };
+  const context = { window:{}, document: { getElementById: () => box }, t: (it) => it };
   vm.createContext(context);
   vm.runInContext(dashboardSource.slice(start, end), context);
   context.renderExecutiveSummary({ bookings: 13, properties: 4, revenue: 0, occupancy: 0, revpar: 0, adr: 0 });
-  assert.match(box.innerHTML, /Nessuna attività economica registrata nel periodo corrente/);
+  assert.match(box.innerHTML, /Riepilogo non disponibile/);
   assert.doesNotMatch(box.innerHTML, /Richiede attenzione|OTA|exec-score/);
 });

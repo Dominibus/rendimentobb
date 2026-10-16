@@ -1,4 +1,4 @@
-import {auth,db} from './firebase-init.js?v=20261015-rc128';
+import {auth,db} from './firebase-init.js?v=20261016-rc139';
 import {onAuthStateChanged,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import {collection,getDocs,query,orderBy,limit} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 import {leadType,operationalLead,leadTime,selectLeads,leadCSV} from './admin-lead-model.js';

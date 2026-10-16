@@ -1,5 +1,5 @@
 import {createAnalyticsConsent} from './analytics-consent.js?v=20261014-rc122';
-import './subscription-ui.js?v=20261015-rc138';
+import './subscription-ui.js?v=20261016-rc139';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
@@ -199,9 +199,9 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261015-rc128"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261016-rc139"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261015-rc128";
+  script.src = "/js/chatbot-loader.js?v=20261016-rc139";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -429,7 +429,7 @@ document.addEventListener("rb_language_changed", () => {
 async function bindHeaderAccount(){
   try{
     const [app, firebaseAuth] = await Promise.all([
-      import("/js/firebase-init.js?v=20261015-rc128"),
+      import("/js/firebase-init.js?v=20261016-rc139"),
       import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
     ]);
     auth = app.auth;
@@ -633,6 +633,8 @@ function updateLangButtons(lang){
 ===================== */
 
 function renderUser(user){
+
+  if(user?.uid === "demo-user") user = null;
 
   const el = document.getElementById("user-area");
   if(!el) return;

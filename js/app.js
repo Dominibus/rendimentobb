@@ -1,4 +1,4 @@
-import './subscription-ui.js?v=20261015-rc128';
+import './subscription-ui.js?v=20261016-rc139';
 import "./investment-journey.js?v=20261008-rc60";
 import {TERMS_VERSION} from "./subscription-offer.js?v=20261015-rc128";
 // ===============================================
@@ -37,7 +37,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js?v=20261015-rc128";
+import { app } from "./firebase-init.js?v=20261016-rc139";
 const db = getFirestore(app);
 
 let roiChartInstance = null;
@@ -230,6 +230,9 @@ function renderUniversalKPI(data = {}){
   if(net === null || net === undefined){
   appDebugWarn("⚠️ net mancante → continuo render");
 }
+
+  // The home quick calculator owns its public summary; tool gates stay below.
+  if(document.body?.classList?.contains("home-page")) return;
 
   // 🏠 HOME (qr_*)
   const qrProfit = document.getElementById("qr_profit");

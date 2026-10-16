@@ -226,44 +226,22 @@ They allow you to:
       "👑 RendimentoBB Plans",
 
     aiSummaryIT:
-`RendimentoBB utilizza diversi livelli di accesso:
-
-🔓 Free
-• simulazioni base
-
-📈 Investor
-• analisi avanzata
-• AI insights
-• più utilizzo chatbot
-
-👑 PRO
-• PDF executive
-• analisi complete
-• AI avanzata
-• accesso illimitato`,
+`Gratis: prima stima e simulatore, senza salvataggio, e dashboard dimostrativa.
+Investor: analisi complete, scenari salvati, dashboard e gestione immobili e prenotazioni PMS. Prova di 30 giorni per account idonei, senza carta o addebiti; PDF esclusi.
+Pro: report integrato investimento e gestione, confronto con le ipotesi, PDF IT/EN e guida alla lettura. Pro annuale offre le stesse funzioni.
+I nuovi acquisti sono sospesi; è possibile richiedere un avviso senza impegno. Nessuna prova Pro automatica.`,
 
     aiSummaryEN:
-`RendimentoBB uses multiple access levels:
-
-🔓 Free
-• basic simulations
-
-📈 Investor
-• advanced analysis
-• AI insights
-• more chatbot usage
-
-👑 PRO
-• executive PDF
-• full analysis
-• advanced AI
-• unlimited access`,
+`Free: initial estimate and simulator without saving, and illustrative dashboard.
+Investor: full analyses, saved scenarios, dashboard, property and booking PMS. Eligible accounts can try Investor for 30 days without a card or charges; PDFs excluded.
+Pro: integrated investment and operations report, comparison with assumptions, IT/EN PDFs and guided reading. Annual Pro offers the same features.
+New purchases are paused; request a non-binding opening notice. There is no automatic Pro trial.`,
 
     aiInsightIT:
-`💡 I piani avanzati permettono analisi molto più realistiche e professionali.`,
+`💡 I risultati dipendono dai dati e dalle ipotesi inserite. Il piano non ne garantisce l’accuratezza.`,
 
     aiInsightEN:
-`💡 Advanced plans unlock much more realistic and professional analysis.`
+`💡 Results depend on entered data and assumptions. The plan does not guarantee their accuracy.`
 
   }
 

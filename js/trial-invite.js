@@ -1,7 +1,7 @@
-import './subscription-ui.js?v=20261015-rc128';
+import './subscription-ui.js?v=20261016-rc139';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261015-rc128';
 function eligible(){
- if(!window.currentUser)return true;
+ if(!window.currentUser || window.currentUser.uid==='demo-user')return true;
  if(window.rbAccountOwner!==window.currentUser.uid)return false;
  const data=window.rbAccountData||{},sandbox=isSandboxHost(location.hostname);
  return getBillingPlanForScope(data,sandbox)==='free'&&!data[sandbox?'sandboxTrialStartedAt':'trialStartedAt']&&window.userRole!=='admin';
@@ -9,17 +9,17 @@ function eligible(){
 function refresh(){
  document.querySelectorAll('[data-rb-trial-invite]').forEach(el=>el.hidden=!eligible());
  const url=new URL(location.href);
- if(window.currentUser&&window.firebaseReady&&url.searchParams.get('investor_trial')==='1'){
+ if(window.currentUser&&window.currentUser.uid!=='demo-user'&&window.firebaseReady&&url.searchParams.get('investor_trial')==='1'){
   url.searchParams.delete('investor_trial');history.replaceState(null,'',url.pathname+url.search+url.hash);
   window.rbOpenSubscription();
  }
 }
 document.querySelectorAll('[data-rb-trial-start]').forEach(link=>link.addEventListener('click',event=>{
  event.preventDefault();
- if(!window.currentUser){
+ if(!window.currentUser || window.currentUser.uid==='demo-user'){
   localStorage.setItem('login_redirect','/?investor_trial=1');
   localStorage.removeItem('selected_city');
-  location.assign('/login/');return;
+  location.assign('/login/?intent=investor-trial');return;
  }
  window.rbOpenSubscription();
 }));

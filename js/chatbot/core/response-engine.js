@@ -6375,8 +6375,8 @@ const q =
     response.textEN = `No. Free and Investor do not include the Executive PDF. It is available with PRO.`;
   }
   else if(rbAsksFreeFeatures){
-    response.textIT = `🟢 Free è la demo gratuita per provare il simulatore. Investor aggiunge le analisi finanziarie avanzate e la dashboard investimenti. PRO aggiunge PDF Executive, PMS prenotazioni e dashboard operativa B&B.`;
-    response.textEN = `🟢 Free is the free demo for trying the simulator. Investor adds advanced financial analysis and the investment dashboard. PRO adds Executive PDF, booking PMS and the operational B&B dashboard.`;
+    response.textIT = `🟢 Free è la demo gratuita per provare il simulatore. Investor aggiunge analisi complete, scenari salvati, dashboard e PMS prenotazioni. Pro aggiunge report integrati, PDF IT/EN e guida alla lettura.`;
+    response.textEN = `🟢 Free is the free demo for trying the simulator. Investor adds full analyses, saved scenarios, the dashboard and booking PMS. Pro adds integrated reports, IT/EN PDFs and guided reading.`;
   }
   // =====================================
   // 💰 PREZZI

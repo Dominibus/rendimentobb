@@ -1,3 +1,4 @@
+import {demoPMSReviewHTML} from '../js/pms-review.js';
 import {managePMSChartLayout} from '../js/pms-chart-layout.js';
 import {bookingNights as calendarBookingNights, nightsInMonth} from '../js/pms-calendar.js';
 import test from 'node:test';
@@ -10,7 +11,7 @@ function context(date='2026-09-30T12:00:00') {
   class FixedDate extends Date { constructor(...args){super(...(args.length?args:[date]));} }
   const elements=new Map(),frames=[];
   const environment={requestAnimationFrame:fn=>{frames.push(fn);return frames.length;},cancelAnimationFrame(){}};
-  const ctx={managePMSChartLayout:args=>managePMSChartLayout({...args,environment}),flushCharts:()=>{while(frames.length)frames.shift()();},Date:FixedDate,Intl,console,calendarBookingNights,nightsInMonth,document:{getElementById(id){if(!elements.has(id))elements.set(id,{parentElement:{getBoundingClientRect:()=>({width:900,height:260})},getContext(){return {};}});return elements.get(id);}},
+  const ctx={demoPMSReviewHTML,managePMSChartLayout:args=>managePMSChartLayout({...args,environment}),flushCharts:()=>{while(frames.length)frames.shift()();},Date:FixedDate,Intl,console,calendarBookingNights,nightsInMonth,document:{getElementById(id){if(!elements.has(id))elements.set(id,{style:{},parentElement:{getBoundingClientRect:()=>({width:900,height:260})},getContext(){return {};}});return elements.get(id);}},
     window:{currentLang:'it',isDemoDashboard:true,devicePixelRatio:1,dispatchEvent(){}},CustomEvent:class {},
     Chart:class {static getChart(){return null;} constructor(canvas,config){ctx.chart=config;}resize(){}update(){}destroy(){}},
     t:(it)=>it,formatCurrency:n=>String(n),formatPercent:n=>String(n)};
@@ -18,7 +19,8 @@ function context(date='2026-09-30T12:00:00') {
   const helpers=dashboard.slice(dashboard.indexOf('function getBookingNightsInMonth'),dashboard.indexOf('// Every availability decision reads the server'));
   const chart=dashboard.slice(dashboard.indexOf('function renderPMSPerformanceChart('),dashboard.indexOf('function getDayBookingState'));
   const stats=dashboard.slice(dashboard.indexOf('async function loadPMSStats('),dashboard.indexOf('  if(!window.currentUser) return;',dashboard.indexOf('async function loadPMSStats(')))+'}';
-  vm.runInContext(helpers+'\n'+chart+'\n'+stats,ctx);
+  const summary=dashboard.slice(dashboard.indexOf('function renderExecutiveSummary(data)'),dashboard.indexOf('document.addEventListener("rb_language_changed"',dashboard.indexOf('function renderExecutiveSummary(data)')));
+  vm.runInContext(helpers+'\n'+chart+'\n'+summary+'\n'+stats,ctx);
   return {ctx,elements};
 }
 test('all illustrative investment cashflows agree with equity and ROI',()=>{

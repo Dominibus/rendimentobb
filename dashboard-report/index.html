@@ -15,7 +15,7 @@
 <script src="/js/lang.js"></script>
 <script src="/js/market-data.js?v=20261001-22"></script>
 <script src="/js/account-report-cache.js"></script>
-<script type="module" src="/js/firebase-init.js?v=20261015-rc128"></script>
+<script type="module" src="/js/firebase-init.js?v=20261016-rc139"></script>
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -3283,7 +3283,7 @@ function init(){
 
 // ================= START =================
 const reportAllowed=()=>window.currentUser?.uid===reportOwnerUid && Boolean(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
-const integrationReady=import('/js/dashboard-report-integration.js?v=20261015-rc135').then(({mountReportIntegration})=>{
+const integrationReady=import('/js/dashboard-report-integration.js?v=20261016-rc139').then(({mountReportIntegration})=>{
   if(!reportAllowed())return null;
   reportIntegration=mountReportIntegration({context:dashboardReportContext.reporting,ownerUid:reportOwnerUid,analysisId:canonicalSimulation.id,allowed:reportAllowed,onChoicesChanged:populateSimulations});
   reportIntegration.render(lang);populateSimulations();return reportIntegration;
@@ -3409,7 +3409,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261015-rc138" defer></script>
+<script src="/js/chatbot-loader.js?v=20261016-rc139" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3420,7 +3420,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261015-rc138"></script>
+<script type="module" src="/js/header.js?v=20261016-rc139"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261015-rc128"></script>
 </body>

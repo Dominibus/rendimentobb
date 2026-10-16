@@ -116,7 +116,11 @@ async function request(action,extra={}){
 }
 const errors={TRIAL_NOT_ENABLED:["La prova Investor non è ancora attiva. Contatta il supporto.","The Investor trial is not active yet. Contact support."],EMAIL_VERIFICATION_REQUIRED:['Verifica prima l’email del tuo account. Se non hai ricevuto il link, contatta il supporto.','Verify your account email first. If you have not received a link, contact support.'],TRIAL_ALREADY_USED:['La prova è già stata utilizzata per questo account o indirizzo email.','The trial has already been used for this account or email address.'],ACTIVE_SUBSCRIPTION:['Hai già un abbonamento a pagamento.','You already have a paid subscription.'],BILLING_ACCOUNT_NOT_FOUND:['Nessun account di fatturazione disponibile: contatta il supporto.','No billing account is available: contact support.'],TERMS_REQUIRED:['Le condizioni sono cambiate: ricarica la pagina.','Terms have changed: reload the page.']};
 window.rbOpenSubscription=()=>{
- if(!window.currentUser){location.assign('/login/');return;}
+ if(!window.currentUser || window.currentUser.uid==='demo-user'){
+  localStorage.setItem('login_redirect','/?investor_trial=1');
+  localStorage.removeItem('selected_city');
+  location.assign('/login/?intent=investor-trial');return;
+ }
  const d=dialog(t('Il tuo abbonamento','Your subscription'));
  if(window.rbLiveSalesPaused())add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
  const data=ownedData(),sandbox=isSandboxHost(location.hostname),billing=getBillingPlanForScope(data,sandbox),prefix=sandbox?'sandboxTrial':'trial';

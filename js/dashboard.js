@@ -1,8 +1,8 @@
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
-import {buildReportContext} from './report-provenance.js?v=20261015-rc134';
-import {ownedPMSReport,pmsReviewHTML} from './pms-review.js?v=20261015-rc133';
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261015-rc133';
-import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261015-rc131';
+import {buildReportContext} from './report-provenance.js?v=20261016-rc139';
+import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc139';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261016-rc139';
+import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc139';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
@@ -22,7 +22,7 @@ import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js?v=20261015-rc128";
+import { app } from "./firebase-init.js?v=20261016-rc139";
 
 // 🔥 FIRESTORE
 import {
@@ -11975,6 +11975,7 @@ async function loadPMSStats({fresh=false}={}){
       bookingList:monthBookings, attentionBookings:[], attentionCount:0,
       arrivalsToday:arrivals, departuresToday:departures, guestsInHouse:inHouse,
       arrivals, checkins:arrivals, checkouts:departures, pendingBookings:0};
+    renderExecutiveSummary(window.rbPMSData);
     renderPMSPerformanceChart(fixture.bookings);
     window.dispatchEvent(new CustomEvent("rb_pms_data_updated", {detail:window.rbPMSData}));
     return;
@@ -12690,7 +12691,7 @@ try{
  const reportMonth=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
  const monthly=ownedPMSReport({snapshot:window.rbPMSData,ownerUid:pmsOwnerUid,month:reportMonth}).totals;
  Object.assign(window.rbPMSData,{revenue:monthly.revenue,occupancy:monthly.occupancy,adr:monthly.adr,revpar:monthly.revpar});
- const values={'pms-total-revenue':formatCurrency(monthly.revenue),'pms-occupancy':monthly.occupancy===null?'N/D':formatPercent(Math.round(monthly.occupancy)),'pms-adr':monthly.adr===null?'N/D':formatCurrency(monthly.adr),'pms-revpar':monthly.revpar===null?'N/D':formatCurrency(monthly.revpar)};
+ const values={'pms-total-revenue':formatCurrency(monthly.revenue),'pms-occupancy':monthly.occupancy===null?t('N/D','N/A'):formatPercent(Math.round(monthly.occupancy)),'pms-adr':monthly.adr===null?t('N/D','N/A'):formatCurrency(monthly.adr),'pms-revpar':monthly.revpar===null?t('N/D','N/A'):formatCurrency(monthly.revpar)};
  for(const [id,value] of Object.entries(values)){const el=document.getElementById(id);if(el)el.innerText=value;}
 }catch(error){dashboardError('PMS report model unavailable',error);}
 
@@ -13692,6 +13693,8 @@ cardStatus === status
 function renderExecutiveSummary(data){
  const box=document.getElementById('executive-summary');if(!box)return;
  box.style.display='block';
+ const snapshot=window.rbPMSData;
+ if(window.isDemoDashboard===true && snapshot?.isDemo===true){box.innerHTML=demoPMSReviewHTML(snapshot,window.currentLang);return;}
  try{
   if(typeof window==='undefined'||typeof window.rbBuildPMSOperationalReport!=='function')throw Error('SNAPSHOT_UNAVAILABLE');
   const now=new Date(),month=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
@@ -13699,8 +13702,8 @@ function renderExecutiveSummary(data){
   box.innerHTML=pmsReviewHTML(report,window.currentLang);
  }catch(error){
   box.innerHTML='<h2>'+t('Performance operativa PMS','PMS Operating Performance')+'</h2><p style="padding:24px;background:#fff;border-radius:16px">'+t(
-   'Nessuna attività economica registrata nel periodo corrente o snapshot non disponibile. Verifica il caricamento e la completezza dei dati prima di trarre conclusioni.',
-   'No economic activity recorded in the current period or snapshot unavailable. Check loading and data completeness before drawing conclusions.')+'</p>';
+   'Riepilogo non disponibile: attendi il caricamento o ricarica la pagina. L’assenza del riepilogo non indica ricavi pari a zero.',
+   'Summary unavailable: wait for loading or reload the page. A missing summary does not mean zero revenue.')+'</p>';
  }
 }
 
@@ -13867,10 +13870,10 @@ function refreshPMSLanguage(){
   const pms = window.rbPMSData;
   if(!pms || (!pms.isDemo && pms.ownerUid !== window.currentUser?.uid)) return;
   for(const [id,value] of Object.entries({
-    "pms-total-revenue":formatCurrency(pms.revenue),
-    "pms-adr":formatCurrency(pms.adr),
-    "pms-revpar":formatCurrency(pms.revpar),
-    "pms-occupancy":formatPercent(pms.occupancy)
+    "pms-total-revenue":pms.revenue == null ? t("N/D","N/A") : formatCurrency(pms.revenue),
+    "pms-adr":pms.adr == null ? t("N/D","N/A") : formatCurrency(pms.adr),
+    "pms-revpar":pms.revpar == null ? t("N/D","N/A") : formatCurrency(pms.revpar),
+    "pms-occupancy":pms.occupancy == null ? t("N/D","N/A") : formatPercent(pms.occupancy)
   })){
     const element = document.getElementById(id);
     if(element) element.innerText = value;

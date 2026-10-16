@@ -2,7 +2,7 @@ import {renderPerformanceSections} from './property-performance-pdf.js?v=2026101
 import {calendarDay} from './pms-calendar.js';
 
 export function canExportPMSReport(user, access={}){
-  return Boolean(user?.uid && (access.isPro === true || access.isAdmin === true));
+  return Boolean(user?.uid && user.uid !== "demo-user" && (access.isPro === true || access.isAdmin === true));
 }
 const finite = value => ['number','string'].includes(typeof value) && String(value).trim() !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
 

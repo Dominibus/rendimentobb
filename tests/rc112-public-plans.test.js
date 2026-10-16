@@ -37,5 +37,7 @@ test('public plan information is static, bilingual, matches the offer and is lin
  const publicLink=home.indexOf('href="/plans.html"');
  assert.ok(publicLink>0&&publicLink<home.indexOf('<aside class="rb-trial-invite"'));
  assert.ok(read('js/footer.js').includes('href="/plans.html"'));
- assert.equal(page.includes('hidden'),false);
+ // Only the contextual trial CTA is gated; plan information remains public.
+ assert.doesNotMatch(page,/<(?:main|article|section)[^>]*\bhidden\b/);
+ assert.match(page,/data-rb-trial-invite hidden/);
 });

@@ -1,5 +1,5 @@
 import { NEW_PASSWORD_MIN_LENGTH, NEW_PASSWORD_MAX_LENGTH, newPasswordIssue } from './password-policy.js?v=20261012-rc109';
-import { app } from '/js/firebase-init.js?v=20261015-rc128';
+import { app } from '/js/firebase-init.js?v=20261016-rc139';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, setPersistence, browserSessionPersistence,
   browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
@@ -9,7 +9,12 @@ import { safeAuthDestination, createAuthActionGuard } from './auth-safety.js?v=2
 const auth = getAuth(app), db = getFirestore(app), guard = createAuthActionGuard();
 const $ = id => document.getElementById(id);
 const t = (it, en) => window.RB_LANG?.current === 'en' ? en : it;
-let mode = 'login';
+const trialIntent = new URLSearchParams(location.search).get('intent') === 'investor-trial';
+let mode = trialIntent ? 'register' : 'login';
+if(trialIntent) {
+  localStorage.setItem('login_redirect','/?investor_trial=1');
+  localStorage.removeItem('selected_city');
+}
 function message(it, en, success = false) {
   $('login-message').textContent = t(it, en);
   $('login-message').classList.toggle('success', success);
@@ -18,7 +23,11 @@ function message(it, en, success = false) {
 function ui() {
   const register = mode === 'register';
   $('auth-title').textContent = t(register ? 'Crea account' : 'Accesso', register ? 'Create account' : 'Sign in');
-  $('auth-subtitle').textContent = t(register ? 'Crea un account gratuito per iniziare' : 'Accedi al tuo spazio di lavoro', register ? 'Create a free account to get started' : 'Access your workspace');
+  $('auth-subtitle').textContent = trialIntent
+    ? t(register ? 'Crea un account gratuito per richiedere la prova Investor' : 'Accedi per verificare la disponibilità della prova Investor', register ? 'Create a free account to request the Investor trial' : 'Sign in to check Investor trial eligibility')
+    : t(register ? 'Crea un account gratuito per iniziare' : 'Accedi al tuo spazio di lavoro', register ? 'Create a free account to get started' : 'Access your workspace');
+  const context = $('trial-auth-context');
+  if(context){context.hidden=!trialIntent;context.textContent=t('Investor per 30 giorni, per account idonei: salva analisi e prova dashboard e PMS. Prima verifica l’email, poi conferma la prova nell’area Abbonamento. Nessuna carta o addebito; PDF esclusi. La registrazione non attiva automaticamente la prova.', 'Investor for 30 days, for eligible accounts: save analyses and try the dashboard and PMS. Verify your email first, then confirm the trial in Subscription. No card or charges; PDFs excluded. Registration does not automatically activate the trial.');}
   $('authBtn').textContent = guard.busy ? t('Attendi…', 'Please wait…') : t(register ? 'Crea account gratuito' : 'Accedi', register ? 'Create free account' : 'Sign in');
   for (const id of ['name','role','registration-terms']) $(id).hidden = !register;
   $('name').style.display = $('role').style.display = register ? 'block' : 'none';

@@ -226,7 +226,7 @@ window.updateOverlayVisibility =
 <div><strong data-it="Prova Investor gratis per 30 giorni" data-en="Try Investor free for 30 days">Prova Investor gratis per 30 giorni</strong>
 <p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
 <small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
-<a href="/login/" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
+<a href="/login/?intent=investor-trial" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
       </div>
 
       <div class="rb-home-visual">
@@ -727,9 +727,9 @@ Mutuo e imposte esclusi da questa stima
 
 <div class="metric-card">
   <span
-    data-it="Profitto annuo"
-    data-en="Annual profit">
-    Profitto annuo
+    data-it="Margine annuo stimato"
+    data-en="Estimated annual margin">
+    Margine annuo stimato
   </span>
 
   <strong id="qr_profit">🔒</strong>
@@ -742,16 +742,16 @@ Mutuo e imposte esclusi da questa stima
 
 <div class="metric-card">
   <span
-    data-it="Profitto mensile"
-    data-en="Monthly profit">
-    Profitto mensile
+    data-it="Margine mensile stimato"
+    data-en="Estimated monthly margin">
+    Margine mensile stimato
   </span>
 
   <strong id="qr_month">🔒</strong>
 
   <div class="metric-hint"
-    data-it="Cashflow medio stimato"
-    data-en="Estimated monthly cashflow">
+    data-it="Media prima di mutuo e imposte"
+    data-en="Average before financing and taxes">
   </div>
 </div>
 
@@ -1778,16 +1778,16 @@ Scopri di più →
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261015-rc138" defer></script>
+<script src="/js/chatbot-loader.js?v=20261016-rc139" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261015-rc138"></script>
+<script type="module" src="/js/header.js?v=20261016-rc139"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script> 
 <script src="/js/home-2026.js?v=20260930-10" defer></script> 
 <script src="/js/footer.js?v=20261015-rc128" defer></script>
 
 <!-- 🔥 FIREBASE INIT -->
-<script type="module" src="/js/firebase-init.js?v=20261015-rc128"></script>
+<script type="module" src="/js/firebase-init.js?v=20261016-rc139"></script>
 
 <!-- 🔥 ACCESS / PLAN SYSTEM -->
 <script src="/js/plan-system.js?v=20260826-2"></script>
@@ -1795,7 +1795,7 @@ Scopri di più →
 <!-- 🔥 DATA + ENGINE -->
 <script src="/js/market-data.js"></script> 
 <script type="module" src="/js/roi-engine.js?v=20261012-rc106"></script>
-<script type="module" src="/js/app.js?v=20261015-rc137"></script>
+<script type="module" src="/js/app.js?v=20261016-rc139"></script>
  
 <script>
 
@@ -2040,17 +2040,17 @@ window.quickROI = function(){
   let occ     = safeNum(document.getElementById("qr_occ")?.value,65);
   let cost    = safeNum(document.getElementById("qr_cost")?.value,35);
 
-  occ = Math.min(Math.max(occ,1),95);
-  cost = Math.min(Math.max(cost,1),90);
+  occ = Math.min(Math.max(occ,0),100);
+  cost = Math.min(Math.max(cost,0),100);
 
   // ================= LANG SAFE =================
   const lang = window.currentLang || "it";
 
   const labels = {
     notProfitable: lang === "en" ? "Not profitable" : "Non profittevole",
-    weak: lang === "en" ? "Weak return" : "Rendimento debole",
-    average: lang === "en" ? "Average investment" : "Investimento medio",
-    good: lang === "en" ? "Good investment" : "Buon investimento"
+    weak: lang === "en" ? "Model band: below 6%" : "Fascia del modello: sotto il 6%",
+    average: lang === "en" ? "Model band: 6–12%" : "Fascia del modello: 6–12%",
+    good: lang === "en" ? "Model band: at least 12%" : "Fascia del modello: almeno 12%"
   };
 
   // ================= ACCESS (REAL SOURCE) =================
@@ -2200,7 +2200,7 @@ if(shock){
 }
 
   // ================= FORMAT =================
-  const format = (n)=> Math.round(n).toLocaleString();
+  const format = (n)=> Math.round(n).toLocaleString(lang === "en" ? "en-GB" : "it-IT");
 
   const profitVal = format(netAnnual);
   const monthVal  = format(netAnnual/12);
@@ -2237,9 +2237,9 @@ else if(isInvestor){
   else{
 
     if(elProfit) elProfit.innerText = "~ " + profitVal;
-    if(elMonth)  elMonth.innerText  = "⚠️";
-    if(elRev)    elRev.innerText    = "⚠️";
-    if(elBreak)  elBreak.innerText  = "🔒";
+    if(elMonth)  elMonth.innerText  = monthVal;
+    if(elRev)    elRev.innerText    = revVal;
+    if(elBreak)  elBreak.innerText  = netAnnual > 0 ? breakVal : (lang === "en" ? "N/A" : "N/D");
 
   }
 
@@ -3407,6 +3407,6 @@ if(investorPlanButton){
 
 </div>
 <script src="/js/investment-workspace.js?v=20261006-rc43"></script>
-<script type="module" src="/js/trial-invite.js?v=20261015-rc128"></script>
+<script type="module" src="/js/trial-invite.js?v=20261016-rc139"></script>
 </body>
 </html>
