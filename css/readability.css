@@ -1,0 +1,7 @@
+/* Explicit text colors for light public content surfaces. */
+.rb-readable-accent{color:#047857!important;-webkit-text-fill-color:#047857!important}
+.rb-readable-copy{color:#475569!important;-webkit-text-fill-color:#475569!important}
+
+/* The translated visible badge replaces the duplicate English-only decoration. */
+body.home-page .snapshot-card::before{content:none!important}
+body.market-page .section-dark.cta-section p.rb-readable-copy{color:#475569!important;-webkit-text-fill-color:#475569!important;opacity:1!important}
