@@ -46,6 +46,7 @@ async function(message){
       (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
 
+    window.rbPreparePortalContext?.(text);
     const privacyResponse = window.rbBuildAccountPrivacyResponse(text);
     if(privacyResponse)return {success:true,response:privacyResponse,intent:{intent:'account_privacy'}};
 

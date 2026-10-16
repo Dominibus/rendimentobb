@@ -33,13 +33,22 @@
     }
     return {start:iso(start),end:iso(end),last:iso(new Date(end.getFullYear(),end.getMonth(),end.getDate()-1))};
   }
+  // Only IDs and dates are retained. Numeric answers are rebuilt from the current owned snapshot.
+  let conversationScope=null;
+  window.rbClearPortalContext=()=>{conversationScope=null;};
+  const related=q=>/occupazion|occupancy|\badr\b|revpar|andamento|perform|ricavi|revenue|miglior|improv|priorit|dato.*primo|check.*first/.test(q);
+  window.rbPreparePortalContext=function(message){
+    const q=normalize(message);
+    if(/pdf|document|brochure|simulazion|simulation|\broi\b|\broy\b|mutuo|mortgage|abbonamento|subscription|\bpro\b|investor|airbnb|booking\.com/.test(q)||!related(q))conversationScope=null;
+  };
   window.rbBuildPortalResponse = function(message, now = new Date()) {
     const query=normalize(message);
     if(/\bpdf\b|document|brochure|abbonamento|subscription/.test(query))return null;
     const valueRequest=/valore.*immobil|quanto vale|property value|valuation/.test(query);
     const costRequest=/quanto.*(?:pagare|pagar|spendere)|(?:devo|da)\s+pagare|pagamenti.*(?:domani|oggi|scaden|prossim)|what.*(?:pay|owe)|payments? due|costi.*(arriv|prossim|scaden|pagare)|spese.*(arriv|prossim|pagare)|upcoming costs|bills? due|budget residuo|remaining budget/.test(query);
     const referencesOwnedName=(window.rbPMSData?.propertyList||[]).some(p=>normalize(p.name).length>=3&&query.includes(normalize(p.name)));
-    const performanceRequest=/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
+    const conversationalFollowup=!!conversationScope&&related(query);
+    const performanceRequest=conversationalFollowup||/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
     const ledgerRequest=performanceRequest||/consuntiv|rendicont|quanto.*(incassat|guadagnat)|ricavi.*(mese|anno|prenot|pms)|incassi.*(mese|anno)|revenue.*(month|year|booking)|operating summary/.test(query);
     const bookingsRequest=/prenotazion|bookings|reservations/.test(query) && /prossim|arriv|riepilog|elenc|quante|settimana|oggi|domani|mese|next|upcoming|list|how many|today|tomorrow|month|week/.test(query) && !/tariff|prezz|pulizi|document|segnal|ospit.*proble|cancell|modific|crea|salva|delete|edit/.test(query);
     const overviewRequest=/riepilog.*(portale|pms|gestione)|stato.*(portale|pms)|portal summary/.test(query);
@@ -51,8 +60,16 @@
     if(!demo && (!window.currentUser || !(access.isInvestor||access.isPro||access.isAdmin)))return respond("La lettura dei dati PMS del tuo account è disponibile con Investor e Pro. Apri i piani per sbloccarla.","Account PMS data answers are available with Investor and Pro. Open plans to unlock them.","access");
     if(!data || (!demo && (data.ownerUid!==window.currentUser.uid || data.portalSnapshotReady!==true)))return respond("I dati PMS del tuo account non sono ancora disponibili in questa schermata. Apri Dashboard → Gestione e attendi il caricamento; poi ripeti la domanda. Non uso la simulazione o il PDF per sostituirli.","Your account PMS data are not available on this screen yet. Open Dashboard → Management and wait for loading, then ask again. Simulation or PDF figures cannot replace them.","unavailable");
     const allProperties=Array.isArray(data.propertyList)?data.propertyList:[];
-    const propertyMatches=allProperties.filter(p=>normalize(p.name).length>=3 && query.includes(normalize(p.name)));
+    let propertyMatches=allProperties.filter(p=>normalize(p.name).length>=3 && query.includes(normalize(p.name)));
     const cityMatches=allProperties.filter(p=>normalize(p.city).length>=3 && new RegExp(`\\b${normalize(p.city).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}\\b`).test(query));
+    const hasExplicitPeriod=/\d{4}-\d{2}-\d{2}|gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|january|february|march|april|may|june|july|august|september|october|november|december|oggi|domani|today|tomorrow|mese|month|settimana|week|trimestre|quarter|\bq[1-4]\b|anno|year/.test(query);
+    const allScope=/tutt[oi]|all (?:properties|portfolio)|whole portfolio|portafoglio|portfolio/.test(query);
+    const inherit=conversationalFollowup&&conversationScope.ownerUid===window.currentUser?.uid&&!demo;
+    if(conversationalFollowup&&!inherit){conversationScope=null;return respond('Il contesto PMS precedente non è più valido. Indica immobile e periodo sul tuo account.','The previous PMS context is no longer valid. Specify a property and period for your account.','unavailable');}
+    if(inherit&&!propertyMatches.length&&!cityMatches.length&&!allScope&&!/\b(?:per|di|for|in|a)\s+(?:l['’])?(?:immobile|property)\s+/.test(query)){
+      propertyMatches=allProperties.filter(p=>conversationScope.propertyIds.includes(p.id));
+      if(propertyMatches.length!==conversationScope.propertyIds.length){conversationScope=null;return respond('L’immobile del contesto precedente non è più disponibile. Scegli nuovamente immobile e periodo.','The previous property is no longer available. Select a property and period again.','unknown_property');}
+    }
     const selected=propertyMatches.length?propertyMatches:cityMatches.length?cityMatches:allProperties;
     const scopeExplicit=/\b(?:per|di|for|in|a)\s+(?:l['’])?(?:immobile|property)\s+(.+)$/i.exec(query);
     if(scopeExplicit && !propertyMatches.length && !cityMatches.length)return respond("Non ho identificato l’immobile richiesto nei dati caricati. Usa il nome salvato in Immobili; non sommo altri immobili al suo posto.","I could not identify the requested property in the loaded data. Use its saved name; I will not substitute the whole portfolio.","unknown_property");
@@ -61,7 +78,7 @@
     const bookings=(Array.isArray(data.portalBookingList)?data.portalBookingList:Array.isArray(data.bookingList)?data.bookingList:[]).filter(b=>(!propertyMatches.length&&!cityMatches.length)||ids.has(b.propertyId));
     const renovations=(Array.isArray(data.renovationList)?data.renovationList:[]).filter(r=>(!propertyMatches.length&&!cityMatches.length)||ids.has(r.propertyId));
     const dateQuery=propertyMatches.reduce((text,p)=>text.replace(normalize(p.name),""),query);
-    const range=period(dateQuery,now,(bookingsRequest||costRequest)&&!ledgerRequest&&!overviewRequest);
+    const range=inherit&&!hasExplicitPeriod ? {...conversationScope.period} : period(dateQuery,now,(bookingsRequest||costRequest)&&!ledgerRequest&&!overviewRequest);
     if(!range)return respond("Intervallo date non valido. Usa una data YYYY-MM-DD oppure due date in ordine cronologico.","Invalid date range. Use YYYY-MM-DD or two dates in chronological order.","invalid_period");
     let sharedReport=null;
     if((ledgerRequest||overviewRequest)&&!demo&&typeof window.rbBuildPMSOperationalReport==='function'){
@@ -126,9 +143,16 @@
         const cleanings=active.filter(b=>b.cleaning?.required!==false && b.cleaning?.status!=="completed" && validDate(b.cleaning?.scheduledDate)&&b.cleaning.scheduledDate>=range.start&&b.cleaning.scheduledDate<range.end);
         lines.push(t(`Pulizie previste nel periodo ${range.start} → ${range.last}: ${cleanings.length}. Il relativo costo non è registrato. Il residuo lavori è una previsione, non un debito da pagare.`,`Scheduled cleanings for ${range.start} → ${range.last}: ${cleanings.length}. Their cost is not recorded. Remaining work budget is a forecast, not a payable debt.`));
       }
+      if(ledgerRequest&&(/miglior|improv|priorit|primo|prima|first|controll|check/.test(query))){
+        lines.push(t('Primo controllo: verifica che calendario, chiusure e prenotazioni del periodo siano completi.','First check: verify that the period calendar, closures and bookings are complete.'));
+        if(/occupazion|occupancy/.test(query))lines.push(t('Per l’occupazione, esamina le notti vuote e la stagionalità. Confronta poi l’ADR dello stesso immobile e periodo prima di valutare modifiche di tariffa.','For occupancy, review empty nights and seasonality. Then compare ADR for the same property and period before considering rate changes.'));
+        else lines.push(t('Poi leggi insieme occupazione e ADR dello stesso immobile e periodo: separa l’effetto delle notti prenotate da quello delle tariffe.','Then read occupancy and ADR together for the same property and period: separate the effect of booked nights from rates.'));
+        lines.push(t('Per valutare il margine servono incassi e costi completi dello stesso periodo. Non ho modificato tariffe o prenotazioni.','Profit requires complete receipts and costs for the same period. I have not changed rates or bookings.'));
+      }
       lines.push(t(`Fonte: snapshot PMS ${data.lastBookingsSync||"caricato"}.`,`Source: PMS snapshot ${data.lastBookingsSync||"loaded"}.`));
       return lines.join("\n");
     };
+    if(ledgerRequest&&!demo)conversationScope={ownerUid:data.ownerUid,propertyIds:[...ids],period:{...range}};
     return respond(render("it"),render("en"),"portal",{ownerUid:data.ownerUid,period:range,propertyIds:[...ids]});
   };
 })();

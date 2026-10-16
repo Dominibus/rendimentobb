@@ -1040,6 +1040,7 @@ closeBtn.onclick = ()=>{
 };
 
 newChatBtn.onclick = ()=>{
+    window.rbClearPortalContext?.();
 
     // =======================================
     // 🧹 CLEAR SAVED CONVERSATION
