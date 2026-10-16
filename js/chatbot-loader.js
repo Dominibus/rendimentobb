@@ -181,7 +181,7 @@
     "/js/chatbot/core/pms-autopilot-engine.js?v=20261014-rc120",
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261011-rc104",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
-    "/js/chatbot/core/pro-report-guide.js?v=20261016-rc139",
+    "/js/chatbot/core/pro-report-guide.js?v=20261016-rc140",
     "/js/chatbot/core/chatbot-orchestrator.js?v=20261015-rc136",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",

@@ -1,3 +1,4 @@
+import {hasUsedTrial} from '../js/subscription-offer.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ function render(data,sandbox=false,lang='it'){
  }};
  const window={currentLang:lang,currentUser:{uid:'owner',emailVerified:true,getIdToken:async()=> 'test-token'},rbAccountOwner:'owner',rbAccountData:{plan:'pro_yearly',sandboxPlan:'free',stripeLiveMode:true,...data}};
  const contract={plan:'pro',purchasedAt:'2026-10-13',amountTotal:2900,currency:'eur',termsVersion:TERMS_VERSION,acceptedAt:'2026-10-13',sessionId:sandbox?'cs_test_owned':'cs_live_owned',liveMode:!sandbox,terms:{terms:[],withdrawal:[]}};
- vm.runInNewContext(source,{isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'rendimentobb-git-stripe-sandbox-test-dominibus-projects.vercel.app':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION,setInterval(){},setTimeout(){},Blob,URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},fetch:async(url,options)=>{requests.push({url,options});return {ok:true,json:async()=>({contract})};}});
+ vm.runInNewContext(source,{hasUsedTrial,isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'rendimentobb-git-stripe-sandbox-test-dominibus-projects.vercel.app':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION,setInterval(){},setTimeout(){},Blob,URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},fetch:async(url,options)=>{requests.push({url,options});return {ok:true,json:async()=>({contract})};}});
  window.rbOpenSubscription();
  return {nodes,requests,downloads,download:nodes.find(n=>n.tag==='button'&&/Scarica conferma|Download confirmation/.test(n.textContent))};
 }

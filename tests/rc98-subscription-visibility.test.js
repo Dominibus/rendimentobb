@@ -1,3 +1,4 @@
+import {hasUsedTrial} from '../js/subscription-offer.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -12,7 +13,7 @@ function render(plan,lang='it',trial=false,sandbox=false,manual=false){
  const nodes=[];
  const document={readyState:'loading',addEventListener(){},querySelectorAll(){return [];},body:{append(){}},createElement(tag){const el={tag,textContent:'',style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){}};nodes.push(el);return el;}};
  const window={currentLang:lang,currentUser:{uid:'owner',emailVerified:true},rbAccountOwner:'owner',rbAccountData:data};
- vm.runInNewContext(source,{isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'localhost':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION:'test',setInterval(){}});
+ vm.runInNewContext(source,{hasUsedTrial,isLiveSalesPaused:()=>false,SALES_NOTICE:{it:'',en:''},window,document,location:{hostname:sandbox?'localhost':'rendimentobb.it'},OFFERS,activeTrial,timestampMillis,getBillingPlanForScope,isSandboxHost,TERMS_VERSION:'test',setInterval(){}});
  window.rbOpenSubscription();return nodes.map(x=>x.textContent).join('\n');
 }
 for(const lang of ['it','en']){

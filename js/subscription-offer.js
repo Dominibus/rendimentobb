@@ -14,6 +14,10 @@ export function timestampMillis(value){
   if(value instanceof Date) return value.getTime();
   return Number.NaN;
 }
+export function hasUsedTrial(data={},sandbox=false){
+ const prefix=sandbox?'sandboxTrial':'trial';
+ return ['StartedAt','EndsAt','TermsVersion'].some(key=>data[prefix+key]!==undefined&&data[prefix+key]!==null&&data[prefix+key]!=='');
+}
 export function activeTrial(data={}, sandbox=false, now=Date.now()){
   const prefix=sandbox?'sandboxTrial':'trial';
   const start=timestampMillis(data[`${prefix}StartedAt`]);

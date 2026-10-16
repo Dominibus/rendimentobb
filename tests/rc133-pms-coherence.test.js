@@ -1,3 +1,4 @@
+import {hasUsedTrial} from '../js/subscription-offer.js';
 import {buildPropertyPerformance,reportPeriod} from '../js/property-performance.js';
 import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
 import {ownedPMSReport,pmsReviewHTML} from '../js/pms-review.js';
@@ -56,7 +57,7 @@ for(const lang of ['it','en'])test(`${lang}: active Investor trial never offers 
  const document={readyState:'loading',addEventListener(){},body:{append(){}},createElement(tag){const n={tag,style:{},setAttribute(){},append(){},addEventListener(){},showModal(){},remove(){},close(){}};nodes.push(n);return n;}};
  const window={currentLang:lang,currentUser:{uid:'owner'},rbAccountOwner:'owner',rbAccountData:{trialActive:true}};
  const source=readFileSync(new URL('../js/subscription-ui.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
- vm.runInNewContext(source,{window,document,location:{hostname:'www.rendimentobb.it'},activeTrial:data=>data.trialActive===true,isSandboxHost:()=>false,isLiveSalesPaused:()=>true,setInterval(){}});
+ vm.runInNewContext(source,{hasUsedTrial,window,document,location:{hostname:'www.rendimentobb.it'},activeTrial:data=>data.trialActive===true,isSandboxHost:()=>false,isLiveSalesPaused:()=>true,setInterval(){}});
  for(const options of [{},{reason:'report'}]){
   nodes.length=0;window.rbShowSalesPause('pro',options);
   const texts=nodes.map(n=>n.textContent||'').join(' ');

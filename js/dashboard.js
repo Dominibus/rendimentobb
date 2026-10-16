@@ -1,3 +1,4 @@
+import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261016-rc140';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261016-rc139';
 import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc139';
@@ -22,7 +23,7 @@ import { renovationRecoveryHTML, renovationRecovery } from "./renovation-payback
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
-import { app } from "./firebase-init.js?v=20261016-rc139";
+import { app } from "./firebase-init.js?v=20261016-rc140";
 
 // 🔥 FIRESTORE
 import {
@@ -2325,7 +2326,7 @@ let color = "#10b981";
 let icon = "🟢";
 
 if(avgROI === null){
-insight = t("Dati ROI non disponibili: completa le simulazioni salvate.", "ROI data unavailable: complete your saved simulations.");
+insight = t("ROI non disponibile o non applicabile: controlla il capitale e le ipotesi delle analisi salvate.", "ROI is unavailable or not applicable: check capital and saved analysis assumptions.");
 color = "#64748b"; icon = "⚪";
 }
 else if(avgROI >= marketROI + 5){
@@ -2665,7 +2666,7 @@ function updateDynamicTexts(){
   if(!roiMsg) return;
 
   if(avgROI === null){
-    roiMsg.innerText = t("Dati ROI non disponibili", "ROI data unavailable");
+    roiMsg.innerText = t("ROI non disponibile o non applicabile", "ROI unavailable or not applicable");
   }else if(avgROI >= 10){
 
     roiMsg.innerText = t(
@@ -3610,6 +3611,11 @@ function generateInvestmentVerdict(result){
   const roi = financialNumber(result.roi);
   const cashflow = financialNumber(result.net ?? result.cashflow);
   const risk = financialNumber(result.risk);
+  const zeroCapital=financialNumber(result.equity)===0;
+  if(zeroCapital&&cashflow!==null&&risk!==null&&risk>=0&&risk<=100){
+    const owned=result.propertyMode==='owned';
+    return {type:'capital_zero',color:cashflow<0||risk>=70?'#ef4444':'#64748b',title:t('ROI sul capitale non applicabile','Return on capital not applicable'),subtitle:t('CAPITALE INDICATO PARI A ZERO','ZERO ENTERED CAPITAL'),action:t('Verifica cashflow, costi e finanziamento','Check cash flow, costs and financing'),message:(owned?t('Immobile già posseduto: il valore della casa resta escluso dal capitale di avvio. ','Already owned property: the house value stays outside startup capital. '):t('Scenario senza capitale proprio indicato. ','Scenario with no entered equity. '))+t('Il ROI e il recupero del capitale non sono calcolabili su una base zero. Cashflow e rischio disponibili restano valutabili nelle ipotesi salvate; non sono risultati operativi verificati.','ROI and capital recovery cannot be calculated on a zero base. Available cash flow and risk can still be reviewed under saved assumptions; they are not verified operating results.')};
+  }
   if(roi === null || cashflow === null || risk === null || risk < 0 || risk > 100){
     return {type:"incomplete",color:"#64748b",title:t("Dati dello scenario incompleti", "Incomplete scenario data"),subtitle:t("COMPLETA I DATI", "COMPLETE THE DATA"),action:t("Completa ROI, cashflow e rischio", "Complete ROI, cash flow and risk"),message:t("Non è possibile formulare una sintesi coerente con i dati riconosciuti. I valori mancanti non sono considerati zero.", "The recognized data does not support a coherent summary. Missing values are not treated as zero.")};
   }
@@ -3763,8 +3769,8 @@ font-size:13px;
 color:#065f46;
 ">
 💡 ${t(
-"Strategia attiva: ottimizza prezzo e occupazione per aumentare ROI.",
-"Strategy active: optimize pricing and occupancy to increase ROI."
+"Verifica tariffe, occupazione, costi e finanziamento con ipotesi prudenti. Con capitale zero, il ROI non è applicabile.",
+"Check rates, occupancy, costs and financing under conservative assumptions. With zero capital, ROI is not applicable."
 )}
 </div>
 `
@@ -13890,3 +13896,12 @@ function refreshPMSLanguage(){
   window.rbPMSChartLayout?.refresh();
 }
 document.addEventListener("rb_language_changed", refreshPMSLanguage);
+
+function renderPMSStartGuide(){
+ const box=document.getElementById('pms-start-guide');if(!box)return;
+ const ownerUid=auth.currentUser?.uid;
+ box.innerHTML=ownerUid===window.currentUser?.uid?pmsStartGuideHTML({snapshot:window.rbPMSData,ownerUid,access:window.getUserAccess?.()||{},lang:window.currentLang}):'';
+ box.hidden=!box.innerHTML;
+}
+window.addEventListener('rb_pms_data_updated',renderPMSStartGuide);
+document.addEventListener('rb_language_changed',renderPMSStartGuide);

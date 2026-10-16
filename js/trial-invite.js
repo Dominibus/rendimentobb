@@ -1,10 +1,11 @@
-import './subscription-ui.js?v=20261016-rc139';
+import './subscription-ui.js?v=20261016-rc140';
+import {hasUsedTrial} from './subscription-offer.js?v=20261016-rc140';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261015-rc128';
 function eligible(){
  if(!window.currentUser || window.currentUser.uid==='demo-user')return true;
  if(window.rbAccountOwner!==window.currentUser.uid)return false;
  const data=window.rbAccountData||{},sandbox=isSandboxHost(location.hostname);
- return getBillingPlanForScope(data,sandbox)==='free'&&!data[sandbox?'sandboxTrialStartedAt':'trialStartedAt']&&window.userRole!=='admin';
+ return getBillingPlanForScope(data,sandbox)==='free'&&!hasUsedTrial(data,sandbox)&&window.userRole!=='admin';
 }
 function refresh(){
  document.querySelectorAll('[data-rb-trial-invite]').forEach(el=>el.hidden=!eligible());

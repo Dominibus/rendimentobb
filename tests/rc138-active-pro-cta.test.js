@@ -1,3 +1,4 @@
+import {hasUsedTrial} from '../js/subscription-offer.js';
 import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
 const source=readFileSync(new URL('../js/subscription-ui.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
 function setup({pro=false,investor=false,lang='it',directForm=false,plan='pro'}={}){
@@ -8,7 +9,7 @@ function setup({pro=false,investor=false,lang='it',directForm=false,plan='pro'}=
  let form,select;if(directForm){const parent=new Node('div');form=new Node('form');form.id='plan-interest-form';parent.append(form);select=new Node('select');select.id='interest-plan';select.value=plan;}
  const document={readyState:'loading',body:new Node('body'),createElement:tag=>new Node(tag),getElementById:id=>ids.get(id),addEventListener:(name,fn)=>callbacks[name]=fn,querySelectorAll:q=>q.startsWith('a[href*')?anchors:q.startsWith('#pricing')?[button]:[]};
  const window={currentLang:lang,currentUser:pro||investor?{uid:'u'}:null,getUserAccess:()=>access,location:{assign:route=>routes.push(route)},addEventListener:(name,fn)=>callbacks['window:'+name]=fn};
- vm.runInNewContext(source,{window,document,location:{hostname:'www.rendimentobb.it'},activeTrial:()=>false,isSandboxHost:()=>false,isLiveSalesPaused:()=>true,SALES_NOTICE:{it:'Guest invitation',en:'Guest invitation'},OFFERS:{},TERMS_VERSION:'2026-10-15-rc128',setInterval(){}});
+ vm.runInNewContext(source,{hasUsedTrial,window,document,location:{hostname:'www.rendimentobb.it'},activeTrial:()=>false,isSandboxHost:()=>false,isLiveSalesPaused:()=>true,SALES_NOTICE:{it:'Guest invitation',en:'Guest invitation'},OFFERS:{},TERMS_VERSION:'2026-10-15-rc128',setInterval(){}});
  return {window,document,callbacks,anchors,button,form,select,nodes,routes,ready:()=>callbacks.DOMContentLoaded(),setAccess:a=>{access=a;window.currentUser=Object.keys(a).length?{uid:'u'}:null;},click(node){let prevented=false,stopped=false;callbacks.click({target:node,preventDefault(){prevented=true;},stopImmediatePropagation(){stopped=true;}});return {prevented,stopped};}};
 }
 for(const lang of ['it','en'])test(`${lang}: monthly and yearly Pro interest CTAs open reports for existing Pro`,()=>{const s=setup({pro:true,lang});s.ready();for(const a of s.anchors){assert.equal(a.getAttribute('href'),'/dashboard/');assert.match(a.textContent,lang==='it'?/Apri i tuoi report/:/Open your Pro reports/);const e=s.click(a);assert.equal(e.prevented,true);assert.equal(e.stopped,true);}assert.deepEqual(s.routes,['/dashboard/','/dashboard/']);assert.match(s.button.textContent,lang==='it'?/Apri i tuoi report/:/Open your Pro reports/);s.click(s.button);assert.equal(s.routes.at(-1),'/dashboard/');});

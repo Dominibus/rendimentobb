@@ -1,9 +1,10 @@
-import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis} from './subscription-offer.js?v=20261015-rc128';
+import {TERMS_VERSION,OFFERS,activeTrial,timestampMillis,hasUsedTrial} from './subscription-offer.js?v=20261016-rc140';
 import {getBillingPlanForScope,isSandboxHost} from './account-plan.js?v=20261015-rc128';
 import {isLiveSalesPaused,SALES_NOTICE} from './sales-policy.js?v=20261015-rc128';
 const t=(it,en)=>window.currentLang==='en'?en:it;
-const ownedData=()=>window.rbAccountOwner===window.currentUser?.uid?(window.rbAccountData||{}):{};
+const ownedData=()=>window.currentUser?.uid&&window.rbAccountOwner===window.currentUser.uid?(window.rbAccountData||{}):{};
 window.rbIsTrial=()=>activeTrial(ownedData(),isSandboxHost(location.hostname));
+window.rbHasUsedTrial=()=>hasUsedTrial(ownedData(),isSandboxHost(location.hostname));
 function add(parent,tag,text){const e=document.createElement(tag);e.textContent=text;parent.append(e);return e;}
 function link(parent,url,text){const a=add(parent,'a',text);a.href=url;a.target='_blank';a.rel='noopener';a.style.cssText='color:#008f67;margin-right:15px;';return a;}
 function dialog(title){
@@ -19,7 +20,7 @@ window.rbLiveSalesPaused=()=>isLiveSalesPaused(!isSandboxHost(location.hostname)
 window.rbShowSalesPause=(plan,{reason=''}={})=>{
  const inTrial=!!window.currentUser&&window.rbIsTrial();
  const activePro=!!window.currentUser&&!!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
- const report=reason==='report';
+ const report=reason==='report',usedTrial=!!window.currentUser&&window.rbHasUsedTrial();
  if(activePro){
   const d=dialog(t('Accesso Pro già attivo','Pro access already active'));
   add(d,'p',t('Hai già accesso ai report Pro, ai PDF e alla guida alla lettura. Non serve prenotarti o richiedere un nuovo accesso.','You already have access to Pro reports, PDFs and guided reading. You do not need to register interest or request access again.'));
@@ -28,14 +29,20 @@ window.rbShowSalesPause=(plan,{reason=''}={})=>{
   d.addEventListener('cancel',()=>d.remove());d.showModal();return;
  }
  const d=dialog(report?t('Report e PDF riservati a Pro','Reports and PDFs require Pro'):t('Partecipa ai test di RendimentoBB','Join RendimentoBB testing'));
- if(report||inTrial||activePro){
+ if(report||inTrial||activePro||usedTrial){
   if(report)add(d,'p',inTrial?t('La tua prova Investor è già attiva e non include i PDF. Questa funzione è riservata ai piani Pro.','Your Investor trial is already active and does not include PDFs. This feature requires a Pro plan.'):t('Questa funzione è riservata ai piani Pro. Free e Investor, anche in prova, non includono i PDF.','This feature requires a Pro plan. Free and Investor, including the trial, do not include PDFs.'));
   else if(activePro)add(d,'p',t('Hai già accesso alle funzioni Pro. Apri la dashboard per report, PDF e guida alla lettura; non occorre attivare una prova.','You already have access to Pro features. Open the dashboard for reports, PDFs and guided reading; no trial activation is needed.'));
+  else if(usedTrial&&!inTrial)add(d,'p',t('Hai già utilizzato la prova Investor. Non può essere attivata una seconda volta, anche dopo la scadenza. Puoi continuare con Free e richiedere un avviso per Pro.','You have already used the Investor trial. It cannot be activated again, including after expiry. Continue with Free and request a Pro opening notice.'));
   else add(d,'p',t('La tua prova Investor è già attiva. Puoi continuare a usare analisi, dashboard e PMS; i PDF sono riservati a Pro.','Your Investor trial is already active. You can keep using analyses, dashboard and PMS; PDFs require Pro.'));
   add(d,'p',t('In questa fase i nuovi acquisti non sono disponibili. Puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti, senza impegno o attivazioni automatiche.','New purchases are currently unavailable. Register your interest to be notified when subscriptions open, without commitment or automatic activation.'));
  }else{
   add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
   button(d,t('Scopri la prova Investor','Explore the Investor trial')).onclick=()=>{d.close();d.remove();window.rbOpenSubscription();};
+ }
+ if(report){
+  add(d,'p',t('Con Pro passi dai dati raccolti a un confronto leggibile: scegli immobile e periodo, confronta prenotazioni e ipotesi e condividi il PDF con soci o collaboratori.','With Pro, turn your records into a readable comparison: choose a property and period, compare bookings with assumptions and share a PDF with partners or collaborators.'));
+  add(d,'p',t('Esempio dimostrativo: 1.200 € di ricavi prenotati rispetto a una quota prevista di 1.500 € = −20%. Il report ti aiuta a verificare calendario, stagionalità e tariffe. Non sono dati del tuo account; ricavi prenotati e utile sono diversi.','Illustrative example: €1,200 booked revenue versus a €1,500 expected allocation = −20%. The report helps you check the calendar, seasonality and rates. These are not your account data; booked revenue differs from profit.'));
+  link(d,'/#pro-performance',t('Guarda l’esempio del report Pro','See the Pro report example'));
  }
  link(d,'/plan-interest.html'+(['investor','pro','pro_yearly'].includes(plan)?'?plan='+encodeURIComponent(plan):''),t('Avvisami all’apertura','Notify me when subscriptions open'));
  link(d,'/contact.html',t('Contatti','Contact'));
@@ -82,7 +89,7 @@ function renderSalesPause(){
   const access=window.getUserAccess?.()||{},pro=!!window.currentUser&&(access.isPro||access.isAdmin),inTrial=!!window.currentUser&&window.rbIsTrial();
   e.hidden=false;
   e.textContent=pro?t('Hai già accesso alle funzioni Pro: report integrati, PDF e guida alla lettura. I nuovi acquisti restano sospesi; puoi continuare a usare il piano attivo.','You already have access to Pro features: integrated reports, PDFs and guided reading. New purchases remain paused; you can keep using your active plan.'):
-    inTrial?t('La tua prova Investor è già attiva: analisi, dashboard e PMS sono disponibili fino alla scadenza indicata nell’account. Report integrati e PDF richiedono Pro. I nuovi acquisti sono sospesi; puoi richiedere un avviso senza impegno.','Your Investor trial is already active: analyses, dashboard and PMS remain available until your account expiry. Integrated reports and PDFs require Pro. New purchases are paused; you may request a non-binding opening notice.'):t(SALES_NOTICE.it,SALES_NOTICE.en);
+    inTrial?t('La tua prova Investor è già attiva: analisi, dashboard e PMS sono disponibili fino alla scadenza indicata nell’account. Report integrati e PDF richiedono Pro. I nuovi acquisti sono sospesi; puoi richiedere un avviso senza impegno.','Your Investor trial is already active: analyses, dashboard and PMS remain available until your account expiry. Integrated reports and PDFs require Pro. New purchases are paused; you may request a non-binding opening notice.'):window.rbHasUsedTrial()?t('Hai già utilizzato la prova Investor. Non può essere riattivata. Puoi continuare con Free e richiedere un avviso per Pro, senza impegno.','You have already used the Investor trial. It cannot be restarted. Continue with Free and request a non-binding Pro opening notice.'):t(SALES_NOTICE.it,SALES_NOTICE.en);
  }
  for(const e of document.querySelectorAll('#pricing [onclick*="triggerUpgradeFlow"]')){
   const pro=activeProAccess()&&proPricingAction(e);
@@ -122,13 +129,15 @@ window.rbOpenSubscription=()=>{
   location.assign('/login/?intent=investor-trial');return;
  }
  const d=dialog(t('Il tuo abbonamento','Your subscription'));
- if(window.rbLiveSalesPaused())add(d,'p',t(SALES_NOTICE.it,SALES_NOTICE.en));
  const data=ownedData(),sandbox=isSandboxHost(location.hostname),billing=getBillingPlanForScope(data,sandbox),prefix=sandbox?'sandboxTrial':'trial';
  const paid=['investor','pro','pro_yearly'].includes(billing);
- const inTrial=!paid&&window.rbIsTrial();
+ const inTrial=!paid&&window.rbIsTrial(),usedTrial=hasUsedTrial(data,sandbox);
+ if(window.rbAccountOwner!==window.currentUser.uid){add(d,'p',t('Attendi il caricamento del piano e riapri Abbonamento.','Wait for your plan to load, then reopen Subscription.'));button(d,t('Chiudi','Close')).onclick=()=>{d.close();d.remove();};d.showModal();return;}
+ if(window.rbLiveSalesPaused())add(d,'p',t('I nuovi acquisti sono sospesi. Puoi richiedere un avviso all’apertura, senza carta, impegno o attivazioni automatiche.','New purchases are paused. Request an opening notice without a card, commitment or automatic activation.'));
+ if(usedTrial&&!inTrial&&!paid)add(d,'p',t('Prova Investor già utilizzata: non è possibile attivarla nuovamente. Il tuo accesso è Free; i dati salvati non vengono eliminati automaticamente.','Investor trial already used: it cannot be activated again. Your access is Free; saved data is not automatically deleted.'));
  add(d,'p',inTrial?t('Investor in prova · termina il ','Investor trial · ends ')+new Date(timestampMillis(data[`${prefix}EndsAt`])).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT'):t('Piano: ','Plan: ')+(OFFERS[billing]?.name||'Free'));
  if(inTrial)add(d,'p',t('La tua prova mantiene la scadenza indicata sopra. I 30 giorni del programma tester si applicano solo alle nuove attivazioni; una prova precedente non viene prolungata o riattivata.','Your trial keeps the expiry shown above. The 30-day tester programme applies only to new activations; an earlier trial is not extended or restarted.'));
- if(billing==='free') add(d,'p',t('Prova Investor: 30 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. I PDF sono riservati ai piani Pro. La disponibilità dei nuovi acquisti è indicata qui.','Investor trial: 30 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. PDFs require a Pro plan. New purchase availability is shown here.'));
+ if(billing==='free'&&!inTrial&&!usedTrial) add(d,'p',t('Prova Investor: 30 giorni senza carta e senza addebiti, con analisi salvate, dashboard e PMS. Report PDF esclusi. Alla scadenza ritorni a Free; i dati salvati non vengono eliminati automaticamente. I PDF sono riservati ai piani Pro. La disponibilità dei nuovi acquisti è indicata qui.','Investor trial: 30 days without a card or charges, with saved analyses, dashboard and PMS. PDF reports excluded. At expiry you return to Free; saved data is not automatically deleted. PDFs require a Pro plan. New purchase availability is shown here.'));
  const billingPrefix=sandbox?'sandbox':'';
  const billingField=name=>data[billingPrefix?billingPrefix+name[0].toUpperCase()+name.slice(1):name];
  const periodEnd=Number(billingField('currentPeriodEnd'));
@@ -136,13 +145,13 @@ window.rbOpenSubscription=()=>{
  conditions(d);
  add(d,'p',t('Il recesso online prevede un riepilogo e una conferma, con ricevuta scaricabile e inviata via email. È distinto dalla disattivazione del rinnovo su Stripe.','Online withdrawal has a review and confirmation step, with a downloadable receipt sent by email. It is separate from stopping renewal on Stripe.'));
  const notice=add(d,'p','');notice.setAttribute('role','status');
- if(!paid&&!inTrial&&!data[`${prefix}StartedAt`]){
+ if(!paid&&!inTrial&&!usedTrial){
   if(window.currentUser.emailVerified!==true){
     const verify=button(d,t('Richiedi email di verifica','Request verification email'));
     verify.onclick=async()=>{verify.disabled=true;try{await window.rbSendVerificationEmail();notice.textContent=t('Email richiesta. Apri il link ricevuto, poi ricarica la pagina.','Email requested. Open the received link, then reload the page.');}catch(e){notice.textContent=t('Richiesta non disponibile: riprova più tardi o contatta il supporto.','Request unavailable: retry later or contact support.');verify.disabled=false;}};
   }
   const box=acceptance(d),start=button(d,t('Attiva 30 giorni di Investor gratis','Start 30 free days of Investor'));start.disabled=true;box.onchange=()=>start.disabled=!box.checked;
-  start.onclick=async()=>{if(!box.checked)return;start.disabled=true;try{await request('trial',{acceptedTerms:true,termsVersion:TERMS_VERSION});localStorage.removeItem('pending_plan');location.reload();}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Operazione non disponibile. Riprova o contatta il supporto.','Operation unavailable. Retry or contact support.');start.disabled=!box.checked;}};
+  start.onclick=async()=>{if(!box.checked)return;start.disabled=true;try{await request('trial',{acceptedTerms:true,termsVersion:TERMS_VERSION});localStorage.removeItem('pending_plan');location.reload();}catch(e){notice.textContent=errors[e.message]?t(...errors[e.message]):t('Operazione non disponibile. Riprova o contatta il supporto.','Operation unavailable. Retry or contact support.');start.disabled=e.message==='TRIAL_ALREADY_USED'||!box.checked;if(e.message==='TRIAL_ALREADY_USED'){box.disabled=true;box.onchange=null;}}};
  }
  const billingCustomer=data[sandbox?'sandboxStripeCustomerId':'stripeCustomerId'];
  if(paid&&!billingCustomer)add(d,'p',t('Piano assegnato direttamente: nessun rinnovo automatico gestibile su Stripe. Per informazioni contatta il supporto.','Directly assigned plan: there is no automatic renewal to manage on Stripe. Contact support for information.'));

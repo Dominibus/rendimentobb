@@ -1,6 +1,6 @@
-import './subscription-ui.js?v=20261016-rc139';
+import './subscription-ui.js?v=20261016-rc140';
 import "./investment-journey.js?v=20261008-rc60";
-import {TERMS_VERSION} from "./subscription-offer.js?v=20261015-rc128";
+import {TERMS_VERSION} from "./subscription-offer.js?v=20261016-rc140";
 // ===============================================
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
@@ -37,7 +37,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { app } from "./firebase-init.js?v=20261016-rc139";
+import { app } from "./firebase-init.js?v=20261016-rc140";
 const db = getFirestore(app);
 
 let roiChartInstance = null;
@@ -1003,6 +1003,8 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   const access = window.getUserAccess?.() || {};
   if(!access || access.canDownloadPDF || access.isPro || access.isAdmin) return;
   if(access.isInvestor&&window.rbLiveSalesPaused?.()&&window.rbShowSalesPause){window.rbShowSalesPause("pro",{reason:"report"});return;}
+
+  if(window.rbLiveSalesPaused?.()&&window.rbHasUsedTrial?.()&&window.rbShowSalesPause){window.rbShowSalesPause("pro");return;}
 
   if(access.isInvestor) type = "pro";
 
