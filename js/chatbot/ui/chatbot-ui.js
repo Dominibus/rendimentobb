@@ -304,11 +304,7 @@ HOME
 
                 <div class="rb-ai-empty-state">
 
-                    <div class="rb-empty-icon">
-
-                        🚀
-
-                    </div>
+                    <div class="rb-empty-icon"><span class="rb-brand-icon rb-brand-icon--analysis" aria-hidden="true"></span></div>
 
                     <div class="rb-empty-title">
 
@@ -372,7 +368,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">🏠</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--property" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 
@@ -390,7 +386,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">📄</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--report" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 
@@ -408,7 +404,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">📊</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--analysis" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 
@@ -426,7 +422,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">🏦</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--mortgage" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 
@@ -444,7 +440,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">🌍</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--market" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 
@@ -462,7 +458,7 @@ HOME
 
             <button class="rb-home-card">
 
-                <div class="rb-home-icon">📈</div>
+                <div class="rb-home-icon"><span class="rb-brand-icon rb-brand-icon--growth" aria-hidden="true"></span></div>
 
                 <div class="rb-home-title">
 

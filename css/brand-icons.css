@@ -1,0 +1,24 @@
+/* RendimentoBB original architectural icon family, RC146. */
+.rb-brand-icon{display:inline-block;width:1.1em;height:1.1em;flex:none;vertical-align:-.2em;background:var(--rb-brand-image) center/contain no-repeat}
+body.home-page .rb-home-benefits .rb-brand-icon{width:20px;height:20px}
+body.home-page .rb-home-tool-icon .rb-brand-icon{width:26px;height:26px}
+.rb-home-icon .rb-brand-icon,.rb-empty-icon .rb-brand-icon{width:1em;height:1em}
+@media(forced-colors:active){.rb-brand-icon{background:CanvasText;mask:var(--rb-brand-image) center/contain no-repeat}}
+.rb-brand-icon--analysis{--rb-brand-image:url("/img/icons/rendimentobb/analysis.svg?v=20261016-rc146")}
+.rb-brand-icon--assistant{--rb-brand-image:url("/img/icons/rendimentobb/assistant.svg?v=20261016-rc146")}
+.rb-brand-icon--bookings{--rb-brand-image:url("/img/icons/rendimentobb/bookings.svg?v=20261016-rc146")}
+.rb-brand-icon--cashflow{--rb-brand-image:url("/img/icons/rendimentobb/cashflow.svg?v=20261016-rc146")}
+.rb-brand-icon--compass{--rb-brand-image:url("/img/icons/rendimentobb/compass.svg?v=20261016-rc146")}
+.rb-brand-icon--costs{--rb-brand-image:url("/img/icons/rendimentobb/costs.svg?v=20261016-rc146")}
+.rb-brand-icon--dashboard{--rb-brand-image:url("/img/icons/rendimentobb/dashboard.svg?v=20261016-rc146")}
+.rb-brand-icon--growth{--rb-brand-image:url("/img/icons/rendimentobb/growth.svg?v=20261016-rc146")}
+.rb-brand-icon--guide{--rb-brand-image:url("/img/icons/rendimentobb/guide.svg?v=20261016-rc146")}
+.rb-brand-icon--market{--rb-brand-image:url("/img/icons/rendimentobb/market.svg?v=20261016-rc146")}
+.rb-brand-icon--mortgage{--rb-brand-image:url("/img/icons/rendimentobb/mortgage.svg?v=20261016-rc146")}
+.rb-brand-icon--people{--rb-brand-image:url("/img/icons/rendimentobb/people.svg?v=20261016-rc146")}
+.rb-brand-icon--portfolio{--rb-brand-image:url("/img/icons/rendimentobb/portfolio.svg?v=20261016-rc146")}
+.rb-brand-icon--pro{--rb-brand-image:url("/img/icons/rendimentobb/pro.svg?v=20261016-rc146")}
+.rb-brand-icon--property{--rb-brand-image:url("/img/icons/rendimentobb/property.svg?v=20261016-rc146")}
+.rb-brand-icon--report{--rb-brand-image:url("/img/icons/rendimentobb/report.svg?v=20261016-rc146")}
+.rb-brand-icon--risk{--rb-brand-image:url("/img/icons/rendimentobb/risk.svg?v=20261016-rc146")}
+.rb-brand-icon--works{--rb-brand-image:url("/img/icons/rendimentobb/works.svg?v=20261016-rc146")}
