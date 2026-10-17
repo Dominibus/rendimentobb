@@ -46,7 +46,8 @@ async function(message){
       (window.rbNormalizeAIQuery?.(message)?.text ?? String(message || ""))
         .trim();
 
-    window.rbPreparePortalContext?.(text);
+    const portalFinancialBoundary=window.rbBuildPortalFinancialBoundary?.(text);
+    if(!portalFinancialBoundary)window.rbPreparePortalContext?.(text);
     const privacyResponse = window.rbBuildAccountPrivacyResponse(text);
     if(privacyResponse)return {success:true,response:privacyResponse,intent:{intent:'account_privacy'}};
 
@@ -88,6 +89,8 @@ async function(message){
         }
     }
 
+
+    if(portalFinancialBoundary)return {success:true,response:portalFinancialBoundary,intent:{intent:'portal_financial_boundary'}};
 
     window.rbPDFConversationDocumentId = null;
 

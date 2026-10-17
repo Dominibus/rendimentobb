@@ -12,8 +12,8 @@
     const personal=/\b(ospite|guest|nome|name|chiamo|called|signor|mr|amico|friend)\b/i.test(original);
     if(financial && !personal) replace(/\broy\b/gi,'roi');
     replace(/\br[.]o[.]i[.]?/gi,'roi');
-    replace(/\b(cashflw|cashfolw|cashflo|cash-flow)\b/gi,'cashflow');
-    replace(/\b(occupazzione|ocupazione|occupazone)\b/gi,'occupazione');
+    replace(/\b(cashflw|cashfolw|cashflo|cashflwo|cashfow|cash-flow)\b/gi,'cashflow');
+    replace(/\b(occupazzione|ocupazione|occupazone|occupazzone)\b/gi,'occupazione');
     replace(/\b(ristruturazione|ristrutturazzione)\b/gi,'ristrutturazione');
     // Separate singular/plural forms to keep the question's grammar.
     text=text.replace(/\b(prenotazzione|prenotazzioni|prenotazoni)\b/gi,from=>{
@@ -21,6 +21,7 @@
       corrections.push({from,to});return to;
     });
     replace(/\bmutou\b/gi,'mutuo');
+    if(!personal){replace(/\boccupnacy\b/gi,'occupancy');replace(/\bmorgage\b/gi,'mortgage');replace(/\brev[ -]par\b/gi,'revpar');}
     replace(/\b(autopilott|autopilota)\b/gi,'autopilot');
     return {original,text,corrections};
   };

@@ -31,7 +31,9 @@ export function annualPeriodFactor(period){
 export function buildPropertyPerformance({snapshot,analyses=[],ownerUid,propertyId='',period,generatedAt=new Date().toISOString()}){
  const report=buildPMSOperationalReport({snapshot,ownerUid,propertyId,period,generatedAt});
  const factor=annualPeriodFactor(period),start=calendarDay(period.start),end=calendarDay(period.end);
- const snapshotTime=Date.parse(generatedAt),today=Number.isFinite(snapshotTime)?Math.floor(snapshotTime/86400000):null;
+ const snapshotTime=Date.parse(generatedAt);
+ const snapshotDay=Number.isFinite(snapshotTime)?new Date(snapshotTime).toLocaleDateString('en-CA',{timeZone:'Europe/Rome'}):null;
+ const today=snapshotDay?calendarDay(snapshotDay):null;
  const periodOpen=today===null||end>today;
  const previousPeriod={start:iso(start-report.days),end:period.start};
  const previous=buildPMSOperationalReport({snapshot,ownerUid,propertyId,period:previousPeriod,generatedAt});

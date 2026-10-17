@@ -1,9 +1,9 @@
 import './dashboard-workspace-layout.js?v=20261016-rc143';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261016-rc140';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
-import {buildReportContext} from './report-provenance.js?v=20261016-rc143';
+import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
 import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261016-rc143';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261017-rc147';
 import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
@@ -382,7 +382,7 @@ function formatPercent(value){
 
 function formatYears(value){
   const years = Number(value || 0);
-  return years + " " + t(
+  return new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-GB", {maximumFractionDigits:1}).format(years) + " " + t(
     years === 1 ? "anno" : "anni",
     years === 1 ? "year" : "years"
   );
@@ -2062,6 +2062,16 @@ Tool
 function renderPortfolioManager(portfolioAnalyses = []){
   const container = document.getElementById("portfolio-manager");
   if(!container) return;
+  renderPortfolioManager.lastSnapshot={ownerUid:window.currentUser?.uid||null,rows:portfolioAnalyses.slice()};
+  if(!renderPortfolioManager.listening && window.addEventListener){
+    renderPortfolioManager.listening=true;
+    window.addEventListener("rb_pms_data_updated",()=>{
+      const saved=renderPortfolioManager.lastSnapshot;
+      if(saved?.ownerUid && saved.ownerUid===window.currentUser?.uid && window.rbPMSData?.ownerUid===saved.ownerUid && window.rbPMSData.portalSnapshotReady===true)renderPortfolioManager(saved.rows);
+    });
+  }
+  const directory=window.currentUser?.uid && window.rbPMSData?.ownerUid===window.currentUser.uid && window.rbPMSData.portalSnapshotReady===true
+    ? (window.rbPMSData.propertyList||[]) : [];
 
   const linkedCount = portfolioAnalyses.filter(data => Boolean(data.propertyId)).length;
   const manualCount = portfolioAnalyses.length - linkedCount;
@@ -2076,6 +2086,8 @@ function renderPortfolioManager(portfolioAnalyses = []){
 
   const cards = portfolioAnalyses.map((data, index) => {
     const linked = Boolean(data.propertyId);
+    const verifiedProperty=directory.find(p=>p.id===data.propertyId && p.analysisId===data.id);
+    const propertyLabel=verifiedProperty?.name?escapeDashboardHTML(String(verifiedProperty.name)):null;
     const rawCity = String(data.city || t("Città non indicata", "City not specified"));
     const city = escapeDashboardHTML(rawCity.charAt(0).toUpperCase() + rawCity.slice(1));
     const price = financialNumber(data.price);
@@ -2092,7 +2104,7 @@ function renderPortfolioManager(portfolioAnalyses = []){
             <span class="portfolio-manager__origin portfolio-manager__origin--${linked ? "linked" : "manual"}">
               ${linked ? t("🏠 Collegato al PMS", "🏠 Linked to PMS") : t("📌 Inserimento manuale", "📌 Manual entry")}
             </span>
-            <h3>${t("Immobile", "Property")} ${index + 1} · ${city}</h3>
+            <h3>${propertyLabel || `${t("Immobile", "Property")} ${index + 1}`} · ${city}</h3>
           </div>
           <span class="portfolio-manager__status portfolio-manager__status--${complete ? "complete" : "incomplete"}">
             ${complete ? t("✓ Dati completi", "✓ Complete data") : t("⚠ Dati da completare", "⚠ Data incomplete")}

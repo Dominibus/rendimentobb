@@ -2346,192 +2346,35 @@ These are the saved canonical values. Temporary chat scenarios have not changed 
   // 📈 ROI RESPONSE
   // ===========================================
 
-else if(
-  intent.intent === "roi_analysis" &&
-  !isStrategicImprovementFollowUp
-){
-
-
-    response.type =
-      "roi";
-
-    response.confidence =
-      0.95;
-
-    if(roi >= 15){
-
-      response.signals.push(
-  "high_roi"
-);
-
-const marketROI =
-  market?.avgROI || "8-10%";
-
-response.textIT =
-
-`🚀 ROI estremamente elevato.
-
-📈 ROI reale simulato:
-${roi.toFixed(1)}%
-
-🌍 Mercato:
-${cityLabel}
-
-📊 Benchmark medio:
-${marketROI}
-
-${pickRandom(roiPositiveIT)}
-
-${roi >= 40
-? "⚠️ Un ROI oltre il 40% richiede verifica realistica di occupazione, costi e sostenibilità operativa."
-: "✅ Il rendimento appare competitivo rispetto al benchmark."
+else if(intent.intent === "roi_analysis" && !isStrategicImprovementFollowUp){
+  response.type="roi";response.confidence=1;
+  const known=value=>value!==null && value!==undefined && value!=="" && Number.isFinite(Number(value))?Number(value):null;
+  const annual=known(liveData.netAfterMortgage ?? liveData.net ?? liveData.annualCashflow ?? liveData.cashflow);
+  const equity=known(liveData.equity ?? liveData.investment);
+  const roiKnown=known(liveData.roi ?? liveData.visualROI ?? liveData.safeROI);
+  const owned=liveData.propertyMode==='owned' || liveData.assumptions?.source==='owned_property';
+  const available=roiKnown!==null && equity!==0 && liveData.roiAvailable!==false;
+  const sourceCity=liveData.realCity || liveData.marketCity || liveData.city || null;
+  const build=en=>{
+    const fmt=(v,d=1)=>v===null?'N/A':new Intl.NumberFormat(en?'en-GB':'it-IT',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+    const money=v=>v===null?'N/A':new Intl.NumberFormat(en?'en-GB':'it-IT',{style:'currency',currency:'EUR'}).format(v);
+    return [en?'Saved simulation · annual assumptions':'Simulazione disponibile · ipotesi annuali',
+      (en?'Location: ':'Località: ')+(sourceCity || (en?'Not specified':'Non indicata')),
+      (owned?(en?'Return on startup capital: ':'ROI sul capitale di avvio: '):(en?'Return on equity: ':'ROI sul capitale proprio: '))+(available?fmt(roiKnown)+'%':'N/A'),
+      available?'':(en?'A percentage return is unavailable when invested capital is zero or the required data are missing.':'Il rendimento percentuale non è disponibile con capitale zero o dati necessari mancanti.'),
+      (en?'Estimated annual cashflow after debt: ':'Cashflow annuo stimato dopo mutuo: ')+money(annual),
+      (en?'Monthly average: ':'Media mensile: ')+money(annual===null?null:annual/12),
+      (en?'Model risk index: ':'Indice rischio del modello: ')+fmt(known(liveData.risk),0)+'/100',
+      en?'These figures describe the available simulation, not verified PMS results. Confirm that the analysis and property are the ones you want to read.':'Questi valori descrivono la simulazione disponibile, non risultati PMS verificati. Conferma che analisi e immobile siano quelli che vuoi leggere.',
+      en?'Internal city references are static and do not document comparable financing or costs. They cannot establish market outperformance.':'I riferimenti interni per città sono statici e non documentano leva e costi comparabili. Non dimostrano una sovraperformance di mercato.',
+      en?'Next check: compare a separate scenario with lower revenue and complete costs. A high percentage may reflect low equity; it does not guarantee profit.':'Prossimo controllo: confronta uno scenario separato con ricavi inferiori e costi completi. Una percentuale alta può dipendere dal capitale ridotto: non garantisce un guadagno.'
+    ].filter(Boolean).join('\n\n');
+  };
+  response.textIT=build(false);response.textEN=build(true);
+  response.suggestionsIT=['Riepiloga la simulazione originale','Quali ipotesi devo verificare?'];
+  response.suggestionsEN=['Summarize the original simulation','Which assumptions should I check?'];
+  return response;
 }
-
-🏨 Occupazione:
-${occupancy}% 
-
-⚠️ Risk score:
-${risk}/100`;
-
-response.textEN =
-
-`🚀 Extremely high ROI detected.
-
-📈 Simulated real ROI:
-${roi.toFixed(1)}%
-
-🌍 Market:
-${cityLabel}
-
-📊 Average benchmark:
-${marketROI}
-
-${pickRandom(roiPositiveEN)}
-
-${roi >= 40
-? "⚠️ ROI above 40% requires realistic validation of occupancy, costs and sustainability."
-: "✅ Returns appear competitive versus benchmark."
-}
-
-🏨 Occupancy:
-${occupancy}%
-
-⚠️ Risk score:
-${risk}/100`;
-
-
-      return response;
-    }
-
-    else if(roi >= 8){
-
-      response.signals.push(
-        "medium_roi"
-      );
-
-      response.textIT =
-
-`📈 ROI potenzialmente sostenibile.
-
-📊 ROI simulato:
-${roi.toFixed(1)}%
-
-💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`;
-
-      response.textEN =
-
-`📈 ROI appears potentially sustainable.
-
-📊 Simulated ROI:
-${roi.toFixed(1)}%
-
-💡 The investment appears balanced but depends on occupancy and costs.`;
-
-    }
-
-    else{
-
-  response.signals.push(
-    "low_roi"
-  );
-
-  // =====================================
-  // 🚨 NEGATIVE ROI
-  // =====================================
-
-  if(roi <= 0){
-
-    response.signals.push(
-      "negative_roi"
-    );
-
-    response.textIT =
-
-`🚨 Investimento operativo in perdita.
-
-📉 ROI simulato:
-${roi.toFixed(1)}%
-
-⚠️ La struttura attuale non sembra sostenibile.
-
-💡 Costi operativi, occupazione o pricing potrebbero compromettere il cashflow reale.
-
-🏦 Prima di investire è consigliabile rivedere:
-• prezzo notte
-• occupazione media
-• costi fissi
-• leva finanziaria`;
-
-    response.textEN =
-
-`🚨 Investment appears operationally unprofitable.
-
-📉 Simulated ROI:
-${roi.toFixed(1)}%
-
-⚠️ The current structure may not be financially sustainable.
-
-💡 Operating costs, occupancy or pricing may compromise real cashflow.
-
-🏦 Before investing it is recommended to review:
-• nightly pricing
-• average occupancy
-• fixed costs
-• financial leverage`;
-
-  }
-
-// =====================================
-// ⚠️ LOW ROI
-// =====================================
-
-else{
-
-  response.textIT =
-
-`⚠️ ROI relativamente basso.
-
-📊 ROI simulato:
-${roi.toFixed(1)}%
-
-💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
-
-  response.textEN =
-
-`⚠️ ROI appears relatively low.
-
-📊 Simulated ROI:
-${roi.toFixed(1)}%
-
-💡 ADR, occupancy or operational cost optimization may be required.`;
-
-}
-
-    }
-
-    return response;
-
-  }
 
 // ===========================================
 // 💰 CASHFLOW RESPONSE
@@ -12868,3 +12711,19 @@ return response;
 };
 
 // Production: nessun log
+// RC147: one evidence boundary for remaining legacy investment responses.
+// A static city reference cannot justify an actual market-performance verdict.
+window.rbResponseHasUnsupportedMarketVerdict = function(response){
+  if(!response || /^(document_|portal_|subscriptions|product_limits|account_privacy)/.test(response.type||''))return false;
+  const text=[response.textIT,response.textEN].filter(Boolean).join('\n').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return /roi[^\n.]{0,45}(?:superiore|inferiore|sopra|sotto)[^\n.]{0,45}(?:benchmark|media|mercato)|marginalita[^\n.]{0,35}superiore[^\n.]{0,25}benchmark|roi[^\n.]{0,30}competitiv[^\n.]{0,35}(?:media|mercato)|roi[^\n.]{0,35}(?:above|below|higher|lower|outperform)[^\n.]{0,45}(?:benchmark|market|average)|roi[^\n.]{0,35}competitive[^\n.]{0,40}(?:average|market)|margins[^\n.]{0,30}above[^\n.]{0,25}benchmark/.test(text);
+};
+(function(){
+  const generate=window.rbGenerateResponse;
+  window.rbGenerateResponse=function(options={}){
+    const response=generate(options);
+    if(!window.rbResponseHasUnsupportedMarketVerdict(response))return response;
+    const grounded=generate({...options,intent:{intent:'roi_analysis'}});
+    return {...grounded,metadata:{...(grounded?.metadata||{}),source:'simulation_assumptions',evidencePolicy:'noncomparable_market_reference'}};
+  };
+})();

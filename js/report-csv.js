@@ -6,7 +6,8 @@ export function csvCell(value){
 }
 const round=(value,decimals)=>typeof value==='number'&&Number.isFinite(value)?Number(value.toFixed(decimals)):null;
 export function performanceCSV(report){
- const headers=['property_id','property','period_start_inclusive','period_end_exclusive','recorded_booking_revenue_eur','expected_revenue_eur','revenue_delta_percent','booked_nights','occupancy_percent','adr_eur','link_status','missing_amounts','overlap_nights'];
- const rows=report.performance.rows.map(r=>[r.id,r.name,report.period.start,report.period.end,round(r.revenue,2),round(r.expectedRevenue,2),round(r.revenueDeltaPercent,4),r.nights,round(r.occupancy,4),round(r.adr,2),r.linkState,r.missingPeriodAmounts,r.overlapNights]);
+ const headers=['property_id','property','period_start_inclusive','period_end_exclusive','recorded_booking_revenue_eur','expected_revenue_eur','revenue_delta_percent','booked_nights','occupancy_percent','adr_eur','link_status','missing_amounts','overlap_nights','revpar_eur','expected_occupancy_percent','expected_adr_eur','snapshot_at','revenue_basis','period_status'];
+ const rows=report.performance.rows.map(r=>[r.id,r.name,report.period.start,report.period.end,round(r.revenue,2),round(r.expectedRevenue,2),round(r.revenueDeltaPercent,4),r.nights,round(r.occupancy,4),round(r.adr,2),r.linkState,r.missingPeriodAmounts,r.overlapNights,round(r.revpar,2),round(r.expectedOccupancy,4),round(r.expectedADR,2),report.generatedAt||'',
+ 'booked_revenue',report.performance.includesCurrentOrFuture===true?'open_or_future':report.performance.includesCurrentOrFuture===false?'closed':'unknown']);
  return '\uFEFF'+[headers,...rows].map(row=>row.map(csvCell).join(';')).join('\r\n');
 }

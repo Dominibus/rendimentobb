@@ -89,3 +89,6 @@ body.home-page .rb-owned-home .btn{display:inline-flex;align-items:center;justif
 .rb-investment-hub .rb-hub-assistant>strong{color:#17352f}
 @media(max-width:760px){body.home-page .rb-owned-home{margin:16px 12px!important;padding:20px!important}body.home-page .rb-owned-home .btn{width:100%}}
 @media(max-width:359px){.rb-hub-links{grid-template-columns:1fr}}
+
+/* Long verified property names remain readable on narrow portfolio cards. */
+.rb-workspace-panel .portfolio-manager__item-head h3{overflow-wrap:anywhere;min-width:0}
