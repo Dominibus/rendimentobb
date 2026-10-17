@@ -1,5 +1,6 @@
 import './dashboard-workspace-layout.js?v=20261016-rc143';
-import {installBookingImporter} from './booking-import-dialog.js?v=20261017-rc148';
+import {installBookingImporter} from './booking-import-dialog.js?v=20261017-rc149';
+import {bookingImportContext} from './booking-import.js?v=20261017-rc149';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261017-rc148';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
@@ -13932,9 +13933,7 @@ installBookingImporter({
   t:(it,en)=>t(it,en),
   getContext:()=>{
     const ownerUid=window.currentUser?.uid,snapshot=window.rbPMSData||{};
-    const allowed=!!ownerUid&&auth.currentUser?.uid===ownerUid&&!isDemo()&&!!canUseFirestorePMS();
-    const ready=allowed&&snapshot.ownerUid===ownerUid&&snapshot.portalSnapshotReady===true&&!snapshot.isDemo;
-    return {ownerUid,allowed,ready,properties:ready&&Array.isArray(snapshot.propertyList)?snapshot.propertyList:[]};
+    return bookingImportContext({userUid:ownerUid,authUid:auth.currentUser?.uid,allowed:!!canUseFirestorePMS(),demo:isDemo(),snapshot});
   },
   getBookings:async(ownerUid,propertyId)=>{
     if(window.currentUser?.uid!==ownerUid||auth.currentUser?.uid!==ownerUid||!canUseFirestorePMS())failBookingOperation('unauthorized');

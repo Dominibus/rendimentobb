@@ -1,4 +1,4 @@
-import {parseBookingCSV,buildBookingImport,IMPORT_FIELDS,IMPORT_LIMITS,BOOKING_IMPORT_TEMPLATE} from './booking-import.js?v=20261017-rc148';
+import {parseBookingCSV,buildBookingImport,IMPORT_FIELDS,IMPORT_LIMITS,BOOKING_IMPORT_TEMPLATE} from './booking-import.js?v=20261017-rc149';
 
 const labels={reference:['Riferimento prenotazione','Booking reference'],guestName:['Nome ospite','Guest name'],checkin:['Check-in','Check-in'],checkout:['Check-out','Check-out'],guests:['Numero ospiti','Guest count'],totalAmount:['Totale soggiorno EUR','Stay total EUR'],status:['Stato','Status'],currency:['Valuta','Currency']};
 const states={arrival:['Confermata · check-in da registrare','Confirmed · check-in not recorded'],pending:['Richiesta in attesa','Pending request'],checkin:['Check-in registrato','Check-in recorded'],checkout:['Check-out registrato','Check-out recorded'],completed:['Soggiorno completato','Completed stay'],cancelled:['Cancellata','Cancelled']};

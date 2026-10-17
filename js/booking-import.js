@@ -3,6 +3,13 @@ import {evaluateAvailability} from './pms-availability.js';
 
 export const IMPORT_LIMITS = Object.freeze({bytes:512000, rows:50, columns:60});
 export const IMPORT_FIELDS = ['reference','guestName','checkin','checkout','guests','totalAmount','status','currency'];
+// A booking-list refresh invalidates report totals, not the owned property directory.
+// Actual ownership and availability are rechecked by the booking API on every save.
+export function bookingImportContext({userUid,authUid,allowed,demo=false,snapshot={}}={}){
+  const canImport=!!userUid&&authUid===userUid&&allowed===true&&!demo;
+  const ready=canImport&&snapshot.ownerUid===userUid&&!snapshot.isDemo&&Array.isArray(snapshot.propertyList);
+  return {ownerUid:userUid,allowed:canImport,ready,properties:ready?snapshot.propertyList:[]};
+}
 const aliases = {
   reference:['reference','bookingid','reservationid','confirmationcode','codicediconferma','numerodiprenotazione','numeroprenotazione','reservationnumber','riferimento'],
   guestName:['guestname','guest','nomeospite','ospite','nome'],
