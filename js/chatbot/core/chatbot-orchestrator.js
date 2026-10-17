@@ -54,6 +54,9 @@ async function(message){
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
+    const importGuide=window.rbBuildBookingImportGuide?.(text);
+    if(importGuide)return {success:true,response:importGuide,intent:{intent:'booking_import_guide'}};
+
     const reportGuide=window.rbBuildProReportGuide?.(text);
     if(reportGuide){
       if(reportGuide.metadata?.source==='extracted_pdf_text' && reportGuide.metadata.documentId)window.rbPDFConversationDocumentId=reportGuide.metadata.documentId;

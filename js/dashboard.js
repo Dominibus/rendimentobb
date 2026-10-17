@@ -1,5 +1,6 @@
 import './dashboard-workspace-layout.js?v=20261016-rc143';
-import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261016-rc140';
+import {installBookingImporter} from './booking-import-dialog.js?v=20261017-rc148';
+import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261017-rc148';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
 import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
@@ -10622,7 +10623,7 @@ function renderTodayBookingOperations(bookings = []){
         <div><strong>✦ Autopilot · Report Pro</strong><p>${window.t('Dalla simulazione all’andamento registrato: immobile, periodo, scostamenti e PDF IT/EN. Investor mantiene la gestione PMS; il percorso report integrato è Pro.','From simulation to recorded performance: property, period, variances and IT/EN PDFs. Investor keeps PMS management; the integrated report journey is Pro.')}</p></div>
         <div class="pms-autopilot-periods"><button type="button" onclick="if(window.rbAskProReportGuide){window.rbAskProReportGuide()}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('Spiegami il report integrato','Explain the integrated report')}</button>
         <button type="button" onclick="openPropertyPerformance()">${window.t('Scegli immobile e periodo · Pro','Choose property and period · Pro')}</button>
-        <a href="/plan-interest.html?plan=pro">${window.t('Mi interessa Pro all’apertura','I’m interested in Pro when it opens')}</a></div>
+        ${!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin)?`<a href="/plan-interest.html?plan=pro">${window.t('Mi interessa Pro all’apertura','I’m interested in Pro when it opens')}</a>`:''}</div>
       </section>
       <div class="pms-shortcuts">
         ${operationCards.map(card => `
@@ -10870,6 +10871,7 @@ color:#0f172a;
 line-height:1.2;
 ">
 <span class="pms-card-guest">${escapeDashboardHTML(b.guestName)}</span>
+${b.importReference?`<span class="rb-booking-import-provenance">${t('Importata da CSV','Imported from CSV')} · ${escapeDashboardHTML(b.importReference.source)} · ${escapeDashboardHTML(b.importReference.reference)}</span>`:''}
 </div>
 
 ${bookingProperty?.name ? `
@@ -12715,7 +12717,7 @@ try{
  const reportMonth=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
  const monthly=ownedPMSReport({snapshot:window.rbPMSData,ownerUid:pmsOwnerUid,month:reportMonth}).totals;
  Object.assign(window.rbPMSData,{revenue:monthly.revenue,occupancy:monthly.occupancy,adr:monthly.adr,revpar:monthly.revpar});
- const values={'pms-total-revenue':formatCurrency(monthly.revenue),'pms-occupancy':monthly.occupancy===null?t('N/D','N/A'):formatPercent(Math.round(monthly.occupancy)),'pms-adr':monthly.adr===null?t('N/D','N/A'):formatCurrency(monthly.adr),'pms-revpar':monthly.revpar===null?t('N/D','N/A'):formatCurrency(monthly.revpar)};
+ const values={'pms-total-revenue':formatCurrency(monthly.revenue),'pms-occupancy':monthly.occupancy===null?t('N/D','N/A'):formatPercent(monthly.occupancy),'pms-adr':monthly.adr===null?t('N/D','N/A'):formatCurrency(monthly.adr),'pms-revpar':monthly.revpar===null?t('N/D','N/A'):formatCurrency(monthly.revpar)};
  for(const [id,value] of Object.entries(values)){const el=document.getElementById(id);if(el)el.innerText=value;}
 }catch(error){dashboardError('PMS report model unavailable',error);}
 
@@ -13925,3 +13927,21 @@ function renderPMSStartGuide(){
 }
 window.addEventListener('rb_pms_data_updated',renderPMSStartGuide);
 document.addEventListener('rb_language_changed',renderPMSStartGuide);
+
+installBookingImporter({
+  t:(it,en)=>t(it,en),
+  getContext:()=>{
+    const ownerUid=window.currentUser?.uid,snapshot=window.rbPMSData||{};
+    const allowed=!!ownerUid&&auth.currentUser?.uid===ownerUid&&!isDemo()&&!!canUseFirestorePMS();
+    const ready=allowed&&snapshot.ownerUid===ownerUid&&snapshot.portalSnapshotReady===true&&!snapshot.isDemo;
+    return {ownerUid,allowed,ready,properties:ready&&Array.isArray(snapshot.propertyList)?snapshot.propertyList:[]};
+  },
+  getBookings:async(ownerUid,propertyId)=>{
+    if(window.currentUser?.uid!==ownerUid||auth.currentUser?.uid!==ownerUid||!canUseFirestorePMS())failBookingOperation('unauthorized');
+    const snapshot=await getDocsFromServer(query(collection(db,'bookings'),where('uid','==',ownerUid),where('propertyId','==',propertyId)));
+    if(window.currentUser?.uid!==ownerUid||auth.currentUser?.uid!==ownerUid)failBookingOperation('unauthorized');
+    return snapshot.docs.map(item=>({...item.data(),id:item.id}));
+  },
+  save:values=>mutatePMS('save',values),
+  refresh:refreshAfterBookingMutation
+});
