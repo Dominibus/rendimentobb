@@ -23,6 +23,14 @@ const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLo
 const error=code=>{throw Object.assign(new Error(code),{code});};
 const clean=(s,max=160)=>String(s??'').replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max);
 
+export function bookingCSVKind(headers=[]){
+  const keys=new Set(headers.map(norm));
+  return ['propertyid','periodstartinclusive','periodendexclusive','recordedbookingrevenueeur','bookednights'].every(key=>keys.has(key)) ? 'performance_summary' : 'booking_rows';
+}
+export function isExampleBooking(row){
+  return row?.reference==='DEMO-001' && row?.data?.guestName==='Example guest';
+}
+
 // Bounded CSV parser: quoted delimiters/newlines, doubled quotes and UTF-8 BOM.
 export function parseBookingCSV(input){
   if(typeof input!=='string' || new TextEncoder().encode(input).length>IMPORT_LIMITS.bytes)error('file_too_large');
@@ -52,6 +60,7 @@ export function parseBookingCSV(input){
   if(!candidate||candidate.rows.length<2)error('invalid_csv');
   const [headers,...rows]=candidate.rows;
   if(headers.some(h=>!h.trim())||new Set(headers.map(norm)).size!==headers.length)error('invalid_headers');
+  if(bookingCSVKind(headers)==='performance_summary')error('performance_summary');
   const mapping={};
   for(const field of IMPORT_FIELDS){const found=headers.map(norm).findIndex(h=>aliases[field].includes(h));mapping[field]=found>=0?found:null;}
   return {headers:headers.map(h=>h.trim()),rows,delimiter:candidate.delimiter,mapping};

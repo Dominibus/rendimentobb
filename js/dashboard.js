@@ -1,6 +1,6 @@
 import './dashboard-workspace-layout.js?v=20261016-rc143';
-import {installBookingImporter} from './booking-import-dialog.js?v=20261017-rc149';
-import {bookingImportContext} from './booking-import.js?v=20261017-rc149';
+import {installBookingImporter} from './booking-import-dialog.js?v=20261018-rc150';
+import {bookingImportContext} from './booking-import.js?v=20261018-rc150';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261017-rc148';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
