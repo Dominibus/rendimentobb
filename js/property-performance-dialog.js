@@ -1,4 +1,4 @@
-import {performanceCSV} from './report-csv.js?v=20261017-rc147';
+import {performanceCSV} from './report-csv.js?v=20261018-rc151';
 import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261017-rc147';
 import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
 // Native DOM text nodes only. Data never enters HTML or inline handlers.
@@ -77,7 +77,7 @@ export function showPropertyPerformance({snapshot,analyses,ownerUid,propertyId='
  pdf.onclick=()=>{if(!allowed()||!report)return;const result=renderPMSOperationalPDF(report,{jsPDF,lang});if(!allowed())return;result.save('RendimentoBB-Andamento-'+(report.scope==='property'?'Immobile':'Portfolio')+'-'+report.period.start+'.pdf');};
  csv.onclick=()=>{
   if(!allowed()||!report)return;
-  const blob=new Blob([performanceCSV(report)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='RendimentoBB-Andamento-'+report.period.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const blob=new Blob([performanceCSV(report,lang)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(en?'RendimentoBB-Performance-':'RendimentoBB-Andamento-')+report.period.start+(en?'-EN':'-IT')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  };
  document.body.appendChild(modal);modal.showModal();
  if(subscribeAuth)unsubscribe=subscribeAuth(onAuth);render();return modal;

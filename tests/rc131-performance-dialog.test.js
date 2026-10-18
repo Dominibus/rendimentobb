@@ -23,7 +23,7 @@ test('dialog uses safe text, switches scope/period and exports private-data-free
   get('performance-mode').value='quarter';get('performance-mode').onchange();assert.ok(modal.text.includes('2026-07-01 / 2026-09-30'));
   get('performance-mode').value='custom';get('performance-mode').onchange();assert.equal(button('Esporta CSV').disabled,true);
   get('performance-start').value='2026-09-01';get('performance-end').value='2026-09-30';get('performance-end').onchange();assert.equal(button('Esporta CSV').disabled,false);
-  button('Esporta CSV').click();const text=await blob.text();assert.match(text,/"-60"/);assert.ok(text.includes("'"+'=Casa'));assert.ok(!text.includes('PRIVATE GUEST'));assert.ok(text.includes('expected_revenue_eur'));
+  button('Esporta CSV').click();const text=await blob.text();assert.match(text,/"-60"/);assert.ok(text.includes("'"+'=Casa'));assert.ok(!text.includes('PRIVATE GUEST'));assert.ok(text.includes('Ricavi previsti EUR'));assert.ok(!text.includes('expected_revenue_eur'));
   get('performance-scope').value='a';get('performance-scope').onchange();assert.match(modal.text,/(?:1\.200|1200) EUR/);assert.ok(!modal.children.at(-1).text.includes('Villa B'));
   permit=false;blob=null;button('Esporta CSV').click();assert.equal(blob,null);d.listeners.rb_auth_ready();assert.equal(modal.removed,true);assert.equal(unsubscribed,1);assert.equal(edited,null);
  }finally{globalThis.document=old;URL.createObjectURL=oldURL;URL.revokeObjectURL=oldRevoke;}

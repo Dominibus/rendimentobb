@@ -1,5 +1,6 @@
 import {calendarDay, stayNights} from './pms-calendar.js';
 import {evaluateAvailability} from './pms-availability.js';
+import {BOOKING_CSV_HEADERS,normalizeCSVHeader,isPerformanceCSV} from './csv-locales.js?v=20261018-rc151';
 
 export const IMPORT_LIMITS = Object.freeze({bytes:512000, rows:50, columns:60});
 export const IMPORT_FIELDS = ['reference','guestName','checkin','checkout','guests','totalAmount','status','currency'];
@@ -19,16 +20,18 @@ const aliases = {
   totalAmount:['totalamount','bookingtotal','totalprice','importototale','totalestay','totalesoggiorno','totaleprezzo'],
   status:['status','bookingstatus','reservationstatus','stato'],currency:['currency','valuta']
 };
-const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const norm=normalizeCSVHeader;
+for(const headers of Object.values(BOOKING_CSV_HEADERS))headers.forEach((header,i)=>{
+  const names=aliases[IMPORT_FIELDS[i]],key=norm(header);if(!names.includes(key))names.push(key);
+});
 const error=code=>{throw Object.assign(new Error(code),{code});};
 const clean=(s,max=160)=>String(s??'').replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max);
 
 export function bookingCSVKind(headers=[]){
-  const keys=new Set(headers.map(norm));
-  return ['propertyid','periodstartinclusive','periodendexclusive','recordedbookingrevenueeur','bookednights'].every(key=>keys.has(key)) ? 'performance_summary' : 'booking_rows';
+  return isPerformanceCSV(headers) ? 'performance_summary' : 'booking_rows';
 }
 export function isExampleBooking(row){
-  return row?.reference==='DEMO-001' && row?.data?.guestName==='Example guest';
+  return row?.reference==='DEMO-001' && ['Example guest','Ospite di esempio'].includes(row?.data?.guestName);
 }
 
 // Bounded CSV parser: quoted delimiters/newlines, doubled quotes and UTF-8 BOM.
@@ -132,3 +135,7 @@ export function buildBookingImport(parsed,{mapping=parsed.mapping,propertyId,sou
 }
 
 export const BOOKING_IMPORT_TEMPLATE='reference;guestName;checkin;checkout;guests;totalAmount;status;currency\r\nDEMO-001;Example guest;2027-01-10;2027-01-12;2;300;confirmed;EUR\r\n';
+export function bookingImportTemplate(lang='en'){
+  const it=lang==='it',headers=BOOKING_CSV_HEADERS[it?'it':'en'];
+  return headers.join(';')+'\r\n'+['DEMO-001',it?'Ospite di esempio':'Example guest','2027-01-10','2027-01-12','2','300',it?'confermata':'confirmed','EUR'].join(';')+'\r\n';
+}
