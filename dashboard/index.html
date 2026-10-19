@@ -1924,7 +1924,7 @@ margin-bottom:16px;
 <link rel="stylesheet" href="/css/pms-control.css?v=20261006-rc38">
 <link rel="stylesheet" href="/css/trial-invite.css?v=20261009-rc88">
 <link rel="stylesheet" href="/css/investment-workspace.css?v=20261017-rc147">
-<link rel="stylesheet" href="/css/booking-import.css?v=20261017-rc148">
+<link rel="stylesheet" href="/css/booking-import.css?v=20261019-rc152">
 <link rel="stylesheet" href="/css/brand-icons.css?v=20261016-rc146">
 </head>
 
@@ -3726,7 +3726,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261018-rc150" defer></script>
+<script src="/js/chatbot-loader.js?v=20261019-rc152" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3737,7 +3737,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261018-rc150"></script>
+<script type="module" src="/js/header.js?v=20261019-rc152"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script src="/js/footer.js?v=20261015-rc128" defer></script>
 
@@ -3753,7 +3753,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261018-rc151"></script>
+<script type="module" src="/js/dashboard.js?v=20261019-rc152"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
@@ -4184,6 +4184,13 @@ margin-bottom:15px;
 <div>
 
 <button type="button" id="booking-import-open" class="rb-import-open" data-it="Importa prenotazioni CSV" data-en="Import bookings from CSV">Importa prenotazioni CSV</button>
+<section class="rb-booking-tools" aria-label="Ricerca ed esportazione prenotazioni" data-it-aria-label="Ricerca ed esportazione prenotazioni" data-en-aria-label="Booking search and export">
+  <label for="booking-search" data-it="Cerca per ID, riferimento o ospite" data-en="Search by ID, reference or guest">Cerca per ID, riferimento o ospite</label>
+  <div class="rb-booking-tools-row"><input id="booking-search" type="search" autocomplete="off" disabled><button type="button" id="booking-export-open" class="rb-import-open" disabled data-it="Esporta prenotazioni CSV" data-en="Export bookings CSV">Esporta prenotazioni CSV</button></div>
+  <p id="booking-export-summary" aria-live="polite"></p>
+  <p class="rb-booking-export-note" data-it="Una riga per soggiorno, con ID e importi salvati. Il CSV segue la lista filtrata. L’archivio esportato serve per consultazione e analisi; le modifiche si salvano dal dettaglio prenotazione." data-en="One row per stay, with saved IDs and amounts. CSV follows the filtered list. The exported archive is for reference and analysis; save changes from booking details.">Una riga per soggiorno, con ID e importi salvati. Il CSV segue la lista filtrata. L’archivio esportato serve per consultazione e analisi; le modifiche si salvano dal dettaglio prenotazione.</p>
+  <p id="booking-tools-feedback" role="status"></p>
+</section>
 
 <div
 style="
@@ -4245,6 +4252,7 @@ margin:0 auto 24px auto;
   <button type="button" onclick="goToBookingSection('cleaning')" data-it="Pulizie" data-en="Cleaning">Pulizie</button>
   <button type="button" onclick="goToBookingSection('issue')" data-it="Assistenza" data-en="Assistance">Assistenza</button>
 </nav>
+<section id="booking-identity-panel" class="rb-booking-identity" hidden></section>
 <p id="booking-section-message" role="status" class="pms-section-message"></p>
 
 <div

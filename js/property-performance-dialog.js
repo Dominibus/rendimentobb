@@ -1,4 +1,4 @@
-import {performanceCSV} from './report-csv.js?v=20261018-rc151';
+import {performanceCSV} from './report-csv.js?v=20261019-rc152';
 import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261017-rc147';
 import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
 // Native DOM text nodes only. Data never enters HTML or inline handlers.

@@ -1,4 +1,4 @@
-import {PERFORMANCE_CSV_HEADERS} from './csv-locales.js?v=20261018-rc151';
+import {PERFORMANCE_CSV_HEADERS} from './csv-locales.js?v=20261019-rc152';
 // Text is formula-safe; finite numbers retain their numeric meaning, including negatives.
 export function csvCell(value,lang='en'){
  let text=typeof value==='number'?(Number.isFinite(value)?String(value):''):String(value??'');

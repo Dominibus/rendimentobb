@@ -1,11 +1,13 @@
 import './dashboard-workspace-layout.js?v=20261016-rc143';
-import {installBookingImporter} from './booking-import-dialog.js?v=20261018-rc151';
-import {bookingImportContext} from './booking-import.js?v=20261018-rc151';
+import {installBookingImporter} from './booking-import-dialog.js?v=20261019-rc152';
+import {bookingImportContext} from './booking-import.js?v=20261019-rc152';
+import {bookingIdentityHTML} from './booking-export.js?v=20261019-rc152';
+import {installBookingTools} from './booking-tools.js?v=20261019-rc152';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261017-rc148';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
 import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261018-rc151';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261019-rc152';
 import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
@@ -464,6 +466,7 @@ const mutatePMS = async (...args)=>{
   return result;
 };
 function renderBookingTaskTracking(booking=window.currentSelectedBooking){
+  window.rbBookingTools?.renderIdentity(booking);
   const container=document.getElementById("booking-task-tracking");
   if(!container)return;
   container.style.display=booking?"block":"none";
@@ -519,13 +522,16 @@ async function verifyBookingAvailability(candidate, editingBookingId = null){
   if(!decision.available) failBookingOperation(decision.reason);
 }
 
+function currentBookingsScope(){
+  return window.bookingsAllPropertiesView?(window.bookingsPropertyFilter||'all'):window.currentPropertyId;
+}
 async function refreshAfterBookingMutation(){
   // A refresh error must never imply a successful write should be repeated.
   window.rbPMSMemory = null;
   try{
     await loadPMSStats();
     await loadProperties();
-    await loadBookings(window.bookingsAllPropertiesView && window.bookingsPropertyFilter === "all" ? "all" : window.currentPropertyId);
+    await loadBookings(currentBookingsScope());
   }catch(error){
     dashboardError("Booking updated but dashboard refresh failed", error);
     alert(t("Modifica salvata. Aggiorna la pagina per vedere i dati aggiornati.", "Change saved. Refresh the page to see updated data."));
@@ -5809,9 +5815,7 @@ document.addEventListener(
       typeof loadBookings ===
       "function"
     ){
-      loadBookings(
-        window.currentPropertyId
-      );
+      loadBookings(currentBookingsScope());
     }
 
     window.updateBookingTouristTax?.();
@@ -5900,22 +5904,7 @@ window.addEventListener(
   }
 );
 
-document.addEventListener(
-  "rb_language_changed",
-  ()=>{
-
-    loadProperties();
-
-    if(
-      window.currentPropertyId
-    ){
-      loadBookings(
-        window.currentPropertyId
-      );
-    }
-
-  }
-);
+// The shared language refresh above reloads the active bookings scope once.
 
 // =====================================
 // 🔒 FIRESTORE PMS ACCESS
@@ -10682,6 +10671,7 @@ window.setPMSTaskStatus = async function(bookingId,taskCode,taskStatus){
 };
 
 async function loadBookings(propertyId){
+  const bookingLoad=window.rbBookingTools?.beginLoad(propertyId);
 
   const list =
     document.getElementById(
@@ -10716,12 +10706,13 @@ async function loadBookings(propertyId){
 
   const snap =
     await getDocs(q);
-  if(window.currentUser?.uid !== bookingsOwnerUid || !canUseFirestorePMS()) return;
+  if(window.currentUser?.uid !== bookingsOwnerUid || !canUseFirestorePMS() || (bookingLoad&&!window.rbBookingTools?.isCurrentLoad(bookingLoad))) return;
 
   const bookingsData = [];
   window.currentBookingsData = bookingsData;
 
   if(snap.empty){
+    if(bookingLoad)window.rbBookingTools?.endLoad(bookingLoad,[]);
 
     renderTodayBookingOperations([]);
     renderPMSCalendar([]);
@@ -10756,10 +10747,7 @@ let sourceStats = {};
     const b =
       docItem.data();
 
-    bookingsData.push({
-  id: docItem.id,
-  ...b
-});
+    bookingsData.push({...b,id:docItem.id});
 
     const bookingProperty = showAllProperties
       ? window.bookingPropertyDirectory?.get(b.propertyId)
@@ -10810,6 +10798,7 @@ html += `
 
 <div
 class="pms-booking-card"
+data-booking-id="${escapeDashboardHTML(docItem.id)}"
 data-status="${escapeDashboardHTML(b.status)}"
 ${!isCancelled ? `
 role="button"
@@ -10872,6 +10861,7 @@ color:#0f172a;
 line-height:1.2;
 ">
 <span class="pms-card-guest">${escapeDashboardHTML(b.guestName)}</span>
+${bookingIdentityHTML(docItem.id,t)}
 ${b.importReference?`<span class="rb-booking-import-provenance">${t('Importata da CSV','Imported from CSV')} · ${escapeDashboardHTML(b.importReference.source)} · ${escapeDashboardHTML(b.importReference.reference)}</span>`:''}
 </div>
 
@@ -11866,6 +11856,7 @@ ${data.bookings} ${t("pren.","bookings")}
   renderTodayBookingOperations(bookingsData);
 
   list.innerHTML = html;
+  if(bookingLoad)window.rbBookingTools?.endLoad(bookingLoad,bookingsData);
 
   document
 .querySelectorAll(
@@ -13681,6 +13672,7 @@ container
 
 window.filterBookings =
 function(status){
+if(window.rbBookingTools){window.rbBookingTools.filter(status);return;}
 
 const cards =
 document.querySelectorAll(
@@ -13943,4 +13935,10 @@ installBookingImporter({
   },
   save:values=>mutatePMS('save',values),
   refresh:refreshAfterBookingMutation
+});
+
+window.rbBookingTools=installBookingTools({
+ t:(it,en)=>t(it,en),
+ getSelected:()=>window.currentSelectedBooking,
+ getContext:()=>({...bookingImportContext({userUid:window.currentUser?.uid,authUid:auth.currentUser?.uid,allowed:!!canUseFirestorePMS(),demo:isDemo(),snapshot:window.rbPMSData||{}}),scope:currentBookingsScope()})
 });

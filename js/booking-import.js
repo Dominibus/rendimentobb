@@ -1,6 +1,6 @@
 import {calendarDay, stayNights} from './pms-calendar.js';
 import {evaluateAvailability} from './pms-availability.js';
-import {BOOKING_CSV_HEADERS,normalizeCSVHeader,isPerformanceCSV} from './csv-locales.js?v=20261018-rc151';
+import {BOOKING_CSV_HEADERS,normalizeCSVHeader,isPerformanceCSV,isBookingArchiveCSV} from './csv-locales.js?v=20261019-rc152';
 
 export const IMPORT_LIMITS = Object.freeze({bytes:512000, rows:50, columns:60});
 export const IMPORT_FIELDS = ['reference','guestName','checkin','checkout','guests','totalAmount','status','currency'];
@@ -28,6 +28,7 @@ const error=code=>{throw Object.assign(new Error(code),{code});};
 const clean=(s,max=160)=>String(s??'').replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max);
 
 export function bookingCSVKind(headers=[]){
+  if(isBookingArchiveCSV(headers))return 'pms_booking_export';
   return isPerformanceCSV(headers) ? 'performance_summary' : 'booking_rows';
 }
 export function isExampleBooking(row){
@@ -63,7 +64,7 @@ export function parseBookingCSV(input){
   if(!candidate||candidate.rows.length<2)error('invalid_csv');
   const [headers,...rows]=candidate.rows;
   if(headers.some(h=>!h.trim())||new Set(headers.map(norm)).size!==headers.length)error('invalid_headers');
-  if(bookingCSVKind(headers)==='performance_summary')error('performance_summary');
+  const kind=bookingCSVKind(headers);if(kind!=='booking_rows')error(kind);
   const mapping={};
   for(const field of IMPORT_FIELDS){const found=headers.map(norm).findIndex(h=>aliases[field].includes(h));mapping[field]=found>=0?found:null;}
   return {headers:headers.map(h=>h.trim()),rows,delimiter:candidate.delimiter,mapping};
