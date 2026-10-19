@@ -1,3 +1,4 @@
+/* Requests retain same-origin preview access cookies; no cross-origin credentials. */
 /* Public UI: no account, analytics or persistent personal storage. */
 (function(){
  const en=document.documentElement.lang==='en';
@@ -16,7 +17,7 @@
   sending=true;submit.disabled=true;form.setAttribute('aria-busy','true');status.hidden=false;status.textContent=en?'Sending…':'Invio in corso…';status.classList.remove('error');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
   try{
-   const response=await fetch('/api/solution-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,requestId}),signal:controller.signal,credentials:'omit'}),data=await response.json();
+   const response=await fetch('/api/solution-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,requestId}),signal:controller.signal,credentials:'same-origin'}),data=await response.json();
    if(!response.ok||data.success!==true){
     const errors={RATE_LIMITED:[ 'Troppi invii. Riprova più tardi.','Too many submissions. Please try later.'],NOTICE_CHANGED:['L’informativa è cambiata. Copia il testo che vuoi conservare e ricarica la pagina.','The notice changed. Copy any text you want to keep, then reload.'],EMAIL_REQUIRED:['Inserisci un’email per il contatto o gli aggiornamenti scelti.','Enter an email for your selected contact or update preference.'],INVALID_EMAIL:['Controlla l’indirizzo email.','Check the email address.'],INVALID_REQUEST:['Controlla i campi, le opzioni e il consenso richiesto.','Check the fields, choices and required consent.'],PROCESSING_REQUIRED:['Per inviare serve il consenso specifico al trattamento della proposta.','Submission requires the specific proposal-processing consent.'],TOO_LARGE:['Il testo è troppo grande. Riduci la descrizione.','Your text is too large. Shorten the description.']};
     const pair=errors[data.error]||['La raccolta non è al momento disponibile. Il testo resta qui: riprova più tardi o usa Contatti.','Collection is temporarily unavailable. Your text remains here: try later or use Contact.'];show(pair[en?1:0],true);return;
