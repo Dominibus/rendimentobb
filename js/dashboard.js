@@ -1,9 +1,9 @@
-import './dashboard-workspace-layout.js?v=20261016-rc143';
+import './dashboard-workspace-layout.js?v=20261019-rc154';
 import {installBookingImporter} from './booking-import-dialog.js?v=20261019-rc152';
 import {bookingImportContext} from './booking-import.js?v=20261019-rc152';
 import {bookingIdentityHTML} from './booking-export.js?v=20261019-rc152';
 import {installBookingTools} from './booking-tools.js?v=20261019-rc152';
-import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261017-rc148';
+import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261019-rc154';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
 import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
 import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
@@ -10194,6 +10194,17 @@ window.sendPMSEmailVerification=()=>runPMSEmailVerification('send');
 window.checkPMSEmailVerification=()=>runPMSEmailVerification('check');
 document.addEventListener('rb_language_changed',()=>{pmsVerificationFeedback='';renderPMSEmailVerification();});
 
+// Read-only account snapshot for chatbot facts after a filtered booking view.
+window.rbRefreshPortalSnapshot=async function(){
+  const owner=window.currentUser?.uid;
+  if(!owner || auth.currentUser?.uid!==owner || !canUseFirestorePMS() || isDemo())return null;
+  await loadPMSStats({fresh:true});
+  const data=window.rbPMSData;
+  if(window.currentUser?.uid!==owner || auth.currentUser?.uid!==owner || !canUseFirestorePMS() ||
+    data?.ownerUid!==owner || data.portalSnapshotReady!==true || data.isDemo===true)return null;
+  return data;
+};
+
 window.rbRefreshPMSForAutopilot=async function(){
   const owner=window.currentUser?.uid;
   await loadPMSStats({fresh:true});
@@ -10906,7 +10917,7 @@ ${escapeDashboardHTML(
     ? window.t("Diretta", "Direct")
     : b.source === "website"
     ? window.t("Sito Web", "Website")
-    : b.source || "Direct"
+    : b.source || window.t("Diretta", "Direct")
 )}
 
 •
@@ -10914,8 +10925,8 @@ ${escapeDashboardHTML(
 ${nights}
 
 ${window.t(
-  "notti",
-  "nights"
+  nights === 1 ? "notte" : "notti",
+  nights === 1 ? "night" : "nights"
 )}
 
 •
@@ -11314,10 +11325,10 @@ ${b.source === "airbnb"
 : b.source === "vrbo"
 ? "🏡 VRBO"
 : b.source === "website"
-? "🌐 Website"
+? window.t("🌐 Sito Web", "🌐 Website")
 : b.source === "phone"
 ? window.t("☎️ Telefono", "☎️ Phone")
-: "📞 Direct"}
+: window.t("📞 Diretta", "📞 Direct")}
 
 </div>
 
@@ -11801,9 +11812,9 @@ if(channelsEl){
 
   vrbo:"🏡 VRBO",
 
-  website:"🌐 Website",
+  website:window.t("🌐 Sito Web", "🌐 Website"),
 
-  direct:"📞 Direct",
+  direct:window.t("📞 Diretta", "📞 Direct"),
 
   phone:window.t("☎️ Telefono", "☎️ Phone")
 

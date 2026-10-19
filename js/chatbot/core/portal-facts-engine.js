@@ -44,19 +44,20 @@
   // Financial follow-ups must keep the property scope, never substitute another simulation.
   window.rbBuildPortalFinancialBoundary = function(message){
     const q=normalize(message);
-    if(!/\b(?:roi|roy|cashflow|cash flow|dscr|rendimento|return)\b/.test(q) || /pdf|document|brochure|simulazion|simulation|scenario|simulator|definizion|definition|significa|meaning|what is|cos['’]e/.test(q))return null;
+    if(!/\b(?:roi|roy|cashflow|cash flow|dscr|rendimento|return|utile|profitto|profit|incassi|receipts|net income)\b/.test(q) || /pdf|document|brochure|simulazion|simulation|scenario|simulator|definizion|definition|significa|meaning|what is (?:the )?(?:roi|cashflow|cash flow|dscr|return)\s*[?.!]*$|cos['’]e/.test(q))return null;
     const data=window.rbPMSData,uid=window.currentUser?.uid,access=window.getUserAccess?.()||{};
     if(!uid || !(access.isInvestor||access.isPro||access.isAdmin))return null;
-    const owned=data?.ownerUid===uid && data.portalSnapshotReady===true && data.isDemo!==true;
+    // Retain only owned identity while filtered views invalidate account totals.
+    const owned=data?.ownerUid===uid && data.isDemo!==true;
     const names=owned?(data.propertyList||[]).filter(p=>normalize(p.name).length>=3 && q.includes(normalize(p.name))):[];
     const remembered=owned && conversationScope?.ownerUid===uid ? conversationScope : null;
     const scoped=names.length?names:remembered?(data.propertyList||[]).filter(p=>remembered.propertyIds.includes(p.id)):[];
-    const genericProperty=/immobil|struttur|propert|\bpms\b|effettiv|actual|consuntiv/.test(q);
+    const genericProperty=/immobil|struttur|propert|\bpms\b|effettiv|actual|consuntiv|\breale\b|real roi|utile netto|net profit|net income|incassi|receipts/.test(q);
     if(!scoped.length && !genericProperty)return null;
     const label=scoped.map(p=>String(p.name||'')).join(', ');
     const range=remembered && !names.length ? remembered.period : null;
     const build=en=>[
-      en?'Which financial result do you want to read?':'Quale risultato finanziario vuoi leggere?',
+      en?'Booked revenue, net profit and ROI are different measures.':'Ricavi prenotati, utile netto e ROI sono misure diverse.',
       label?((en?'PMS scope: ':'Ambito PMS: ')+label+(range?' · '+range.start+' → '+range.last:'')):'',
       en?'Bookings alone do not calculate actual ROI, cash flow or DSCR. Actual payments, complete costs and invested capital are required.':'Le sole prenotazioni non calcolano ROI, cashflow o DSCR effettivi. Servono incassi, costi completi e capitale investito.',
       en?'For the forecast, open Portfolio → Report for this analysis for the property you mean. Check its analysis ID and annual assumptions. The latest open simulation may belong to a different property.':'Per la previsione apri Portafoglio → Report di questa analisi dell’immobile che intendi. Controlla ID analisi e ipotesi annuali: l’ultima simulazione aperta può appartenere a un altro immobile.',

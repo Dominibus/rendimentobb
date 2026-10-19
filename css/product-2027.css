@@ -253,6 +253,15 @@ body.home-page section.hero.rb-home-hero .rb-home-actions .rb-home-primary:hover
 }
 
 /* Home simulator: intrinsic height, explicit initial state, unobstructed results. */
+/* Account controls and navigation must remain reachable on laptop widths. */
+@media (max-width: 1700px) {
+  .rb-header .rb-center { display: none !important; }
+  .rb-header #rb-burger { display: block !important; flex: 0 0 40px; width: 40px !important; height: 40px !important; border: 1px solid #dce6df; border-radius: 10px; color: #142b25; font-size: 22px !important; cursor: pointer; }
+}
+@media (max-width: 1050px) {
+  .rb-header #user-area { display: none !important; }
+}
+
 body.home-page .quick-roi-box { border: 1px solid #dce6df; border-radius: 20px; box-shadow: none !important; }
 body.home-page .quick-roi-box > .investment-panel { display: flex !important; flex-direction: column; align-items: stretch; align-self: start !important; min-height: 0 !important; height: auto !important; gap: 0 !important; border: 1px solid #dce6df; background: #fafbf8; box-shadow: none !important; backdrop-filter: none; }
 body.home-page .quick-roi-box .investment-metrics { min-height: 0 !important; height: auto !important; max-width: none !important; padding-bottom: 0 !important; overflow: visible !important; }

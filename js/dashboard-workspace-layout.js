@@ -33,7 +33,9 @@ export function mountInvestmentWorkspace(root = document, win = window) {
   hero.append(intro, actions);
   const nav = el('div', 'rb-workspace-tabs');
   nav.setAttribute('role', 'tablist');
-  nav.setAttribute('aria-label', 'Scenari / Portfolio');
+  nav.dataset.itAriaLabel='Scenari e portafoglio';
+  nav.dataset.enAriaLabel='Scenarios and portfolio';
+  nav.setAttribute('aria-label', win.currentLang === 'en' ? nav.dataset.enAriaLabel : nav.dataset.itAriaLabel);
   const portfolio = el('section', 'rb-workspace-panel'); portfolio.id = 'rb-workspace-portfolio';
   const scenarios = el('section', 'rb-workspace-panel'); scenarios.id = 'rb-workspace-scenarios';
   const panels = [portfolio, scenarios];

@@ -199,9 +199,9 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261019-rc153"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261019-rc154"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261019-rc153";
+  script.src = "/js/chatbot-loader.js?v=20261019-rc154";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -226,7 +226,7 @@ function initializeSharedHeader(){
         </a>
       </div>
 
-      <nav class="rb-center" aria-label="Navigazione principale">
+      <nav class="rb-center" aria-label="Navigazione principale" data-it-aria-label="Navigazione principale" data-en-aria-label="Main navigation">
   <a href="/tool/"
 data-it="Analizza"
 data-en="Analyze">
@@ -300,8 +300,8 @@ Guide
 
 <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
-<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" inert>
-  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu">×</button></div>
+<div id="rb-mobile" class="rb-mobile-menu" role="dialog" aria-modal="true" aria-label="Menu RendimentoBB" data-it-aria-label="Menu RendimentoBB" data-en-aria-label="RendimentoBB menu" inert>
+  <div class="rb-mobile-top"><img src="/img/logo-header.svg" alt="RendimentoBB" width="160" height="31"><button type="button" id="rb-mobile-close" aria-label="Chiudi menu" data-it-aria-label="Chiudi menu" data-en-aria-label="Close menu">×</button></div>
   <div id="rb-mobile-account" class="rb-mobile-account"></div>
   <nav id="rb-mobile-nav">
 

@@ -79,7 +79,7 @@ async function(message){
     const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
     const explicitLiveRequest = /simulazion|simulation|simulator|simulatore|autopilot investimento|investment autopilot|mercato|market|altra citt|another city/i.test(text);
     const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
-        /(risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|roy|adr|revpar|occupazion|occupancy|miglior|prossim|da dove|cosa fare|cosa faccio|non capisco|next step|what should i|where do i|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
+        /(utile|profit|net income|margin|incassi|receipts|risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|roy|adr|revpar|occupazion|occupancy|miglior|prossim|da dove|cosa fare|cosa faccio|non capisco|next step|what should i|where do i|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
         !explicitLiveRequest;
     const pdfRequest = explicitPDFRequest || focusedFinancialFollowup;
     const planRequest = /\b(free|investor|pro|piano|plan|abbonamento|subscription)\b/i.test(text);
@@ -97,6 +97,16 @@ async function(message){
 
     window.rbPDFConversationDocumentId = null;
 
+    // Rebuild complete account totals after a filtered view, retaining ownership checks.
+    const readPortalFacts=async()=>{
+      let response=window.rbBuildPortalResponse?.(text);
+      if(response?.metadata?.answerMode==='unavailable' && typeof window.rbRefreshPortalSnapshot==='function'){
+        try{await window.rbRefreshPortalSnapshot();}catch{/* Preserve the unavailable response. */}
+        response=window.rbBuildPortalResponse?.(text);
+      }
+      return response;
+    };
+
     const recoveryResponse=window.rbBuildRenovationRecoveryResponse?.(text);
     if(recoveryResponse){
       window.rbPDFConversationDocumentId=null;
@@ -111,7 +121,7 @@ async function(message){
 
     // Explicit operating-performance questions must not become market benchmarks while records load.
     if(/come sta andando|how is .+perform/i.test(text) && !/simulazion|simulation|\bpdf\b|document|mutuo|mortgage|\broi\b/i.test(text)){
-      const performanceResponse=window.rbBuildPortalResponse?.(text);
+      const performanceResponse=await readPortalFacts();
       if(performanceResponse)return {success:true,response:performanceResponse,intent:{intent:'portal_facts'}};
     }
 
@@ -129,7 +139,7 @@ async function(message){
       return {success:true,response:autopilotResponse,intent:{intent:'pms_autopilot_daily'}};
     }
 
-    const portalResponse = window.rbBuildPortalResponse?.(text);
+    const portalResponse = await readPortalFacts();
     if(portalResponse){
       window.rbPDFConversationDocumentId = null;
       window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"portal_facts"}});
@@ -2654,6 +2664,8 @@ const isCapitalConversation =
 
 const isPropertyPriceWhatIf =
 
+  /(?:compr|acquist|purchase|\bbuy\b|property price|house price|buying price|\bprezzo\b(?!\s*(?:notte|per notte|a notte))|costass[ei])/i.test(message) &&
+
   !isCapitalConversation &&
 
   !isCombinedWhatIf &&
@@ -2669,6 +2681,12 @@ const isPropertyPriceWhatIf =
   requestedPropertyPrice !== baselinePropertyPrice;
 
 if(isPropertyPriceWhatIf){
+
+  if(typeof window.calculateROI!=='function')return {success:true,intent:{intent:'calculation_unavailable'},response:{
+    type:'calculation_unavailable',confidence:1,actions:[],metadata:{source:'calculation_readiness'},
+    textIT:'Non posso ricalcolare questo prezzo nella schermata corrente: il motore di calcolo non è disponibile. Apri la stessa analisi in Analizza, verifica le ipotesi e modifica il prezzo lì. Non riutilizzo il ROI precedente come risultato del nuovo prezzo e non ho modificato o salvato l’analisi.',
+    textEN:'I cannot recalculate this price on the current screen: the calculation engine is unavailable. Open the same analysis in Analyze, review its assumptions and change the price there. I will not reuse the previous ROI as the result for a new price, and I have not changed or saved the analysis.'
+  }};
 
   const scenarioPropertyPrice =
     requestedPropertyPrice;
