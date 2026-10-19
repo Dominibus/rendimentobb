@@ -54,6 +54,10 @@ async function(message){
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
+    const beyondResponse=window.rbBuildBasicBeyondResponse?.(text);
+    if(beyondResponse)return {success:true,response:beyondResponse,intent:{intent:'basic_beyond_guide'}};
+
+
     const importGuide=window.rbBuildBookingImportGuide?.(text);
     if(importGuide)return {success:true,response:importGuide,intent:{intent:'booking_import_guide'}};
 

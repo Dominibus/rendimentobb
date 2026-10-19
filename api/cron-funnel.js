@@ -1,3 +1,4 @@
+import {purgeExpiredSolutionRequests} from '../lib/solution-request-service.js';
 import {purgeExpiredPlanInterests} from '../lib/plan-interest-service.js';
 import {drainSubscriptionConfirmations} from '../lib/subscription-confirmation.js';
 import {scanFunnelDocuments} from "../lib/funnel-scan.js";
@@ -29,7 +30,7 @@ function cronServices() {
       privateKey:FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
     })});
   }
-  return {db:admin.firestore(),resend:new Resend(process.env.RESEND_API_KEY)};
+  return {db:admin.firestore()};
 }
 
 function hasValidCronAuthorization(req) {
@@ -79,8 +80,18 @@ export default async function handler(req, res){
   let phase = "initialization";
   console.info("RB_CRON_START", {runId});
   try{
-    const {db,resend} = cronServices();
+    const {db} = cronServices();
     const now = startedAt;
+    // Retention runs before emails and even when new submissions are paused.
+    try{
+      const result=await purgeExpiredSolutionRequests({db,now});
+      await db.collection('_pms_jobs').doc('solution_request_cleanup').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...result,needsAttention:result.limitReached});
+    }catch{
+      console.error('Solution request cleanup failed');
+      try{await db.collection('_pms_jobs').doc('solution_request_cleanup').set({lastRunAt:admin.firestore.FieldValue.serverTimestamp(),needsAttention:true});}catch{}
+    }
+
+    const resend=new Resend(process.env.RESEND_API_KEY);
     // Recover undelivered contractual receipts before optional reminders.
     phase = "withdrawal_receipts";
     const withdrawalReceipts=await drainWithdrawalReceipts({db,resend,now});

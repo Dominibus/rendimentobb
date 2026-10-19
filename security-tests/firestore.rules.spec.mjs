@@ -339,3 +339,13 @@ for(const [label,version,days,elapsed,allowed] of [
  await assertFails(updateDoc(doc(db,'users',uid),{trialTermsVersion:version==='2026-10-15-rc128'?'forged-version':'2026-10-15-rc128'}));
  await assertFails(updateDoc(doc(db,'users',uid),{trialEndsAt:new Date(Date.now()+60*86400000)}));
 });
+
+test('Basic & Beyond requests and abuse keys deny client operations',async()=>{
+ for(const name of ['_solution_requests','_solution_request_keys','_solution_request_limits']){
+  await env.withSecurityRulesDisabled(async ctx=>setDoc(doc(ctx.firestore(),name,'private'),{email:'fiction@example.invalid'}));
+  for(const context of [env.unauthenticatedContext(),env.authenticatedContext('pro',{email_verified:true,email:'pro@example.invalid'})]){
+   const ref=doc(context.firestore(),name,'private');
+   await assertFails(getDoc(ref));await assertFails(setDoc(ref,{status:'public'}));await assertFails(deleteDoc(ref));
+  }
+ }
+});

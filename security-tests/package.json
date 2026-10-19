@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "firebase emulators:exec --only firestore --project demo-rendimentobb-security --config ../firebase.security.json \"node --test --test-concurrency=1 firestore.rules.spec.mjs\""
+    "test": "firebase emulators:exec --only firestore --project demo-rendimentobb-security --config ../firebase.security.json \"node --test --test-concurrency=1 firestore.rules.spec.mjs booking-import.spec.mjs\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.2",
