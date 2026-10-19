@@ -1035,6 +1035,7 @@ ${window.currentLang === "en" ? "Login" : "Accedi"}
 function rbSyncBeyondLinks(){
  const en=(window.currentLang||document.documentElement.lang)==='en';
  document.querySelectorAll('[data-bb-vision]').forEach(a=>a.href=en?'/en/basic-beyond/':'/basic-beyond/');
+ document.querySelectorAll('[data-bb-solutions]').forEach(a=>a.href=en?'/en/basic-beyond/#solutions':'/basic-beyond/#solutions');
  document.querySelectorAll('[data-bb-form]').forEach(a=>a.href=en?'/en/share-your-idea/':'/racconta-idea/');
 }
 if(typeof document.addEventListener==='function' && typeof document.querySelectorAll==='function'){

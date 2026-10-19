@@ -1,7 +1,7 @@
 /* Public UI: no account, analytics or persistent personal storage. */
 (function(){
  const en=document.documentElement.lang==='en';
- document.querySelectorAll('[data-bb-question]').forEach(b=>b.addEventListener('click',()=>{const r=window.rbBuildBasicBeyondResponse?.(b.dataset.bbQuestion),a=document.getElementById('bb-answer');if(r&&a){a.hidden=false;a.textContent=en?r.textEN:r.textIT;}}));
+ document.querySelectorAll('[data-bb-question]').forEach(b=>b.addEventListener('click',()=>{const r=window.rbBuildBasicBeyondResponse?.(b.dataset.bbQuestion),a=document.getElementById('bb-answer');if(r&&a){a.hidden=false;const paragraph=document.createElement('span');paragraph.textContent=(en?r.textEN:r.textIT).split(en?'\n\nExplore:':'\n\nPercorso:')[0];const links=document.createElement('span');links.className='bb-guide-links';for(const [label,url] of (en?[['Explore the demos','/en/basic-beyond/#solutions'],['Share your idea','/en/share-your-idea/']]:[['Esplora le demo','/basic-beyond/#solutions'],['Racconta la tua idea','/racconta-idea/']])){const link=document.createElement('a');link.href=url;link.textContent=label;links.append(link);}a.replaceChildren(paragraph,links);}}));
  const form=document.getElementById('bb-idea-form');if(!form)return;
  const status=document.getElementById('bb-form-status'),submit=document.getElementById('bb-submit'),email=form.elements.email,types=[...form.querySelectorAll('input[name="types"]')];
  let sending=false,previous='',requestId='';

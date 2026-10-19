@@ -130,7 +130,7 @@
   ];
 
   const scripts = [
-    "/js/basic-beyond-knowledge.js?v=20261019-rc155",
+    "/js/basic-beyond-knowledge.js?v=20261019-rc156",
     "/js/chatbot/knowledge-base.js",
 
     "/js/chatbot/knowledge/glossary.js",
