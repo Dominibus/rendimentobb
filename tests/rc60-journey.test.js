@@ -54,7 +54,7 @@ function mortgageUI(values=good){
 }
 test('actual mortgage page applies 25 years to main and every comparison, including 3.7 percent',()=>{
  const {context,get}=mortgageUI();assert.equal(context.calculate({scroll:false}),true);
- const annual=Math.round(calculateMortgage(120000,3.7,25));assert.match(get('banks').innerHTML,new RegExp('€'+annual));assert.equal(get('yearly').innerText,annual+'€');
+ const annual=Math.round(calculateMortgage(120000,3.7,25));const formatted=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(annual);assert.ok(get('banks').innerHTML.includes(formatted));assert.equal(get('yearly').innerText,formatted);
  assert.match(get('banks').innerHTML,/25 anni/);assert.doesNotMatch(get('banks').innerHTML,/€8500/);
 });
 test('actual mortgage page rejects bad data before rendering or storing a scenario',()=>{

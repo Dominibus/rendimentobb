@@ -16,7 +16,7 @@ test('report language event redraws saved results and preserves selected simulat
 test('PMS language refresh preserves monthly chart amounts and owner isolation',()=>{
  const s=read('js/dashboard.js');const start=s.indexOf('function refreshPMSLanguage(){');const end=s.indexOf('\ndocument.addEventListener',start);
  const amounts=[0,0,0,0,0,0,0,0,2000,4600,2110,0];const chart={data:{labels:[],datasets:[{data:amounts}]},update(mode){assert.equal(mode,'none');}};
- const nodes={'pms-performance-chart':{},'pms-total-revenue':{},'pms-adr':{},'pms-revpar':{},'pms-occupancy':{}};
+ const nodes={'pms-performance-chart':{attributes:{},setAttribute(k,v){this.attributes[k]=v}},'pms-total-revenue':{},'pms-adr':{},'pms-revpar':{},'pms-occupancy':{}};
  const window={currentLang:'en',currentUser:{uid:'annual'},rbPMSData:{ownerUid:'annual',revenue:4600,adr:219.05,revpar:37.10,occupancy:17}};
  const c={window,document:{getElementById:id=>nodes[id]},Chart:{getChart:()=>chart},formatCurrency:v=>new Intl.NumberFormat(window.currentLang==='en'?'en-US':'it-IT',{style:'currency',currency:'EUR'}).format(v),formatPercent:v=>v+'%',t:(it,en)=>window.currentLang==='en'?en:it};
  vm.createContext(c);vm.runInContext(s.slice(start,end),c);c.refreshPMSLanguage();assert.equal(chart.data.labels[9],'Oct');assert.match(nodes['pms-total-revenue'].innerText,/4,600/);assert.equal(chart.data.datasets[0].data,amounts);
@@ -26,5 +26,5 @@ test('PMS language refresh preserves monthly chart amounts and owner isolation',
 test('report describes saved assumptions in both languages and pages fetch the updated header',()=>{
  assert.match(read('dashboard-report/index.html'),/data-en="SAVED ASSUMPTIONS"/);
  assert.doesNotMatch(read('dashboard-report/index.html'),/data-en="LIVE DATA"/);
- for(const path of ['dashboard/index.html','dashboard-report/index.html','tool/index.html'])assert.match(read(path),/header\.js\?v=20261019-rc152/);
+ for(const path of ['dashboard/index.html','dashboard-report/index.html','tool/index.html'])assert.match(read(path),/header\.js\?v=20261019-rc153/);
 });

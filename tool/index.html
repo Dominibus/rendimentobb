@@ -17,22 +17,22 @@ Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)
 <meta name="description"
 data-it="Simula ROI, cashflow e rischio del modello per un B&B. Confronta ipotesi di investimento e, con Pro, analisi e dati PMS nel report integrato."
 data-en="Simulate ROI, cash flow and model risk for a B&B. Compare investment assumptions and, with Pro, analysis and PMS data in an integrated report."
-content="Simulate ROI, cash flow and model risk for a B&B. Compare investment assumptions and, with Pro, analysis and PMS data in an integrated report.">
+content="Simula ROI, cashflow e rischio del modello per un B&B. Confronta ipotesi di investimento e, con Pro, analisi e dati PMS nel report integrato.">
 
 <link rel="canonical" href="https://www.rendimentobb.it/tool/">  
 
 <!-- 🔥 OPEN GRAPH (SOCIAL) -->
 <meta property="og:title" content="Simulatore ROI B&B – Analisi delle ipotesi di investimento">
 <meta property="og:description" content="Scopri quanto puoi guadagnare (o perdere) prima di investire in un B&B.">
-<meta property="og:image" content="https://rendimentobb.it/img/preview.jpg">
+<meta property="og:image" content="https://www.rendimentobb.it/img/dashboard-preview.png">
 <meta property="og:type" content="website">
 
 <!-- 🔥 FAVICON -->
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=20261019-rc153">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=20261019-rc153">  
 
 <!-- 🔥 CSS -->
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v=20261019-rc153">
 
 <!-- 🔥 PERFORMANCE (preconnect) -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -1127,7 +1127,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
         <!-- CITY -->
         <div class="input-group">
 
-          <label
+          <label for="market-city"
            data-it="Mercato da analizzare"
            data-en="Market to analyze">
          </label>
@@ -1143,6 +1143,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <input  
             type="text"  
             id="custom-location"
+            aria-label="Località dell’immobile" data-it-aria-label="Località dell’immobile" data-en-aria-label="Property location"
             maxlength="80"
             placeholder="Es. Portici (NA)"
             data-it-placeholder="Es. Portici (NA)"
@@ -1174,23 +1175,23 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <p id="owned-property-help" hidden role="note" data-it="Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili. Indica spese di avvio una tantum nel capitale e spese ricorrenti nei costi mensili, evitando duplicazioni. Il mutuo residuo usa tasso e durata rimanenti; le imposte sono un’ipotesi semplificata." data-en="Estimate revenue, costs and cashflow for a property you already own. Property value is optional and does not create a new loan. With zero startup capital, return on capital and payback are not applicable. Enter one-off startup expenses as capital and recurring expenses as monthly costs, avoiding double counting. For remaining mortgage principal, use the remaining term and rate; taxes are a simplified assumption.">Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili. Indica spese di avvio una tantum nel capitale e spese ricorrenti nei costi mensili, evitando duplicazioni. Il mutuo residuo usa tasso e durata rimanenti; le imposte sono un’ipotesi semplificata.</p>
         </div>
         <div class="input-group">
-          <label id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+          <label for="price" id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
           <input type="number" id="price" min="0.01" step="any" required placeholder="150000">
         </div>
 
         <div class="input-group">
-          <label id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
+          <label for="equity" id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
           <input type="number" id="equity" min="0" step="any" required placeholder="30000">
 <p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
         </div>
 
         <div class="input-group">
-          <label data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
+          <label for="priceNight" data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
           <input type="number" id="priceNight" min="0" step="any" required placeholder="120">
         </div>
 
         <div class="input-group">
-          <label data-it="Occupazione (%)" data-en="Occupancy (%)"></label>
+          <label for="occupancy" data-it="Occupazione (%)" data-en="Occupancy (%)"></label>
 
           <input
 type="range"
@@ -1205,7 +1206,7 @@ value="70">
         </div>
 
         <div class="input-group">
-          <label data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
+          <label for="expenses" data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
           <input type="number" id="expenses" min="0" step="any" inputmode="decimal" placeholder="1200" required>
           <small
             style="display:block;margin-top:6px;color:#64748b;line-height:1.4;"
@@ -1782,7 +1783,7 @@ style="margin-top:22px;"></div>
   </div>
 
   <div class="tool-2026-tabs" role="tablist"
-    aria-label="Approfondimenti investimento">
+    aria-label="Approfondimenti investimento" data-it-aria-label="Approfondimenti investimento" data-en-aria-label="Investment insights">
     <button type="button" class="tool-2026-tab is-active"
       role="tab" aria-selected="true" aria-controls="tool-panel-market"
       data-tool-tab="market"
@@ -1919,12 +1920,12 @@ data-en="📄 Download Executive Report PDF">
 
 <link rel="stylesheet" href="/css/chatbot.css">
 
-<script src="/js/lang.js" defer></script>
+<script src="/js/lang.js?v=20261019-rc153" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261019-rc152" defer></script>
+<script src="/js/chatbot-loader.js?v=20261019-rc153" defer></script>
   
-<script type="module" src="/js/header.js?v=20261019-rc152"></script>
+<script type="module" src="/js/header.js?v=20261019-rc153"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
 <script type="module" src="/js/footer.js?v=20261015-rc128"></script>  
 

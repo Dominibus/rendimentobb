@@ -13,9 +13,9 @@ data-it="Simula rata e quota dei ricavi destinata al mutuo attraverso scenari in
 data-en="Simulate payments and the share of revenue allocated to debt with illustrative scenarios.">
   
 <link rel="apple-touch-icon" href="/img/favicon.png">
-<link rel="icon" href="/img/favicon.png" type="image/png">
-<link rel="shortcut icon" href="/img/favicon.png" type="image/png">  
-<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=20261019-rc153">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=20261019-rc153">  
+<link rel="stylesheet" href="/css/style.css?v=20261019-rc153">
 
 <style>
 
@@ -1442,10 +1442,10 @@ margin-top:25px;
 
 <link rel="stylesheet" href="/css/chatbot.css">
 
-<script src="/js/lang.js" defer></script>
+<script src="/js/lang.js?v=20261019-rc153" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261019-rc152" defer></script>
+<script src="/js/chatbot-loader.js?v=20261019-rc153" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -1456,7 +1456,7 @@ margin-top:25px;
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261019-rc152"></script>
+<script type="module" src="/js/header.js?v=20261019-rc153"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261015-rc128"></script>
 
@@ -1559,6 +1559,7 @@ return true;
 
 function lockValue(value, suffix=""){
   const locale=window.currentLang === "en" ? "en-GB" : "it-IT";
+  if(suffix==='€')return new Intl.NumberFormat(locale,{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(value));
   return (suffix === "%" ? new Intl.NumberFormat(locale,{minimumFractionDigits:1,maximumFractionDigits:1}).format(Number(value)) : value) + suffix;
 }
 
@@ -1602,7 +1603,7 @@ extra.innerHTML = `
     color:#f87171;
     font-weight:800;
   ">
-    €${loss.toFixed(0)}/${t("anno","year")}
+    ${lockValue(loss,'€')}/${t("anno","year")}
   </div>
 
   <div style="
@@ -1982,7 +1983,7 @@ i===0
   ${
     locked
     ? `🔒 ${t("Sblocca per vedere il costo dello scenario","Unlock to see scenario cost")}`
-    : `💸 ${t("Costo annuo","Yearly cost")}: <strong>€${yearly.toFixed(0)}</strong>`
+    : `💸 ${t("Costo annuo","Yearly cost")}: <strong>${lockValue(yearly,'€')}</strong>`
   }
 </div>
 

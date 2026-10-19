@@ -23,7 +23,7 @@ test('text formulas and quotes are escaped; invalid/missing numbers are not fabr
 test('chatbot describes the actual export path without claiming to export or mutate data',async()=>{
  const window={currentUser:{uid:'u1'},getUserAccess:()=>({isPro:true}),rbDocumentManager:{getLast:()=>null}};
  const c=vm.createContext({window,console,Intl,Date});for(const f of ['pro-report-guide','chatbot-orchestrator'])vm.runInContext(fs.readFileSync(new URL('../js/chatbot/core/'+f+'.js',import.meta.url),'utf8'),c);
- for(const question of ['Dove vedo ID della prenotazione?','Come esporto le prenotazioni CSV?','Where can I find the booking ID?','How do I export bookings CSV?']){const {response:r}=await window.rbProcessAIMessage(question);assert.equal(r.metadata.mode,'booking_export');assert.equal(r.actions.length,0);assert.match(r.textIT,/Copia ID/);assert.match(r.textEN,/not.*reimported/);}
+ for(const question of ['Dove vedo ID della prenotazione?','Come esporto le prenotazioni CSV?','Where can I find the booking ID?','How do I export bookings CSV?']){const {response:r}=await window.rbProcessAIMessage(question);const id=/\bID\b/i.test(question);assert.equal(r.metadata.mode,id?'booking_id':'booking_export');assert.equal(r.actions.length,0);assert.match(r.textIT,id?/Copia ID/:/Esporta prenotazioni CSV/);assert.match(r.textEN,id?/Copy ID/:/not.*reimported/);}
  assert.equal(window.rbBuildBookingImportGuide('Spiegami il PDF prenotazioni con ID'),null);
  assert.equal((await window.rbProcessAIMessage('Esporta prenotazioni di un altro account')).response.type,'account_privacy');
 });

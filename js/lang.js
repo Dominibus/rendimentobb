@@ -29,6 +29,10 @@
 
       const text = el.getAttribute("data-" + lang);
       if(!text) return;
+      if(el.tagName === 'META'){
+        el.setAttribute('content',text);
+        return;
+      }
 
       // 🔥 FIX: evita di rompere HTML interno (icone, span ecc.)
       if(el.children.length === 0){
@@ -54,6 +58,12 @@
       const ph = el.getAttribute("data-" + lang + "-placeholder");
       if(ph) el.setAttribute("placeholder", ph);
     });
+    for(const attribute of ['aria-label','title','alt']){
+      document.querySelectorAll('[data-it-'+attribute+'], [data-en-'+attribute+']').forEach(el=>{
+        const value=el.getAttribute('data-'+lang+'-'+attribute);
+        if(value)el.setAttribute(attribute,value);
+      });
+    }
 
     // ================= TITLE =================
     const titleEl = document.querySelector("title");

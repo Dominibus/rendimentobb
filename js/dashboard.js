@@ -4859,6 +4859,22 @@ document.addEventListener("rb_language_changed", () => {
 // =====================================
 // 🏠 PMS INIT
 // =====================================
+let pmsUIReady=false,pmsAccessLoadVersion=0;
+async function refreshPMSAfterAccess(){
+  if(!pmsUIReady||!window.currentPlan)return;
+  const version=++pmsAccessLoadVersion,owner=window.currentUser?.uid||null;
+  const state=document.getElementById('pms-load-state');
+  const setState=(it,en)=>{if(state){state.dataset.it=it;state.dataset.en=en;state.textContent=t(it,en);}};
+  setState('Caricamento dei dati PMS…','Loading PMS data…');
+  for(const id of ['pms-total-properties','pms-total-bookings','pms-total-revenue','pms-occupancy','pms-adr','pms-revpar']){const e=document.getElementById(id);if(e)e.textContent='—';}
+  const results=await Promise.allSettled([loadProperties(),loadPMSStats()]);
+  if(version!==pmsAccessLoadVersion||(window.currentUser?.uid||null)!==owner)return;
+  if(results.some(r=>r.status==='rejected')){
+    setState('Dati PMS non disponibili. Ricarica la pagina per riprovare. Gli indicatori mancanti non indicano valori pari a zero.','PMS data unavailable. Reload the page to retry. Missing indicators do not mean zero values.');
+    for(const id of ['pms-total-properties','pms-total-bookings','pms-total-revenue','pms-occupancy','pms-adr','pms-revpar']){const e=document.getElementById(id);if(e)e.textContent=t('N/D','N/A');}
+  }else setState('','');
+}
+document.addEventListener('rb_auth_ready',refreshPMSAfterAccess);
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -4894,9 +4910,7 @@ document.addEventListener(
 
     setTimeout(()=>{
 
-      loadProperties();
-
-      loadPMSStats();
+      // Access may resolve before or after this UI setup; readiness joins them below.
 
 // =====================================
 // ➕ BOOKING FORM OPEN
@@ -5784,6 +5798,8 @@ renderBookingTaskTracking(null);
         return window.closeBookingForm(discardConfirmed);
       };
 
+      pmsUIReady=true;
+      refreshPMSAfterAccess();
     },1500);
 
 });
@@ -6126,13 +6142,7 @@ if(canUseFirestorePMS()){
   
 }
 
-await loadProperties();
-
-if(
-  canUseFirestorePMS()
-){
-  await loadPMSStats();
-}
+// Initial PMS queries run after both authentication and booking UI readiness.
 
 // =====================================
 // 🏠 LOAD PROPERTIES
@@ -13900,6 +13910,7 @@ function refreshPMSLanguage(){
     if(element) element.innerText = value;
   }
   const canvas = document.getElementById("pms-performance-chart");
+  canvas?.setAttribute('aria-label',t('Ricavi PMS mensili','Monthly PMS revenue'));
   const chart = canvas && Chart.getChart(canvas);
   if(chart){
     chart.data.labels = window.currentLang === "en"
