@@ -17,7 +17,7 @@
  });
  for(const button of document.querySelectorAll('[data-public-question]'))button.addEventListener('click',()=>{
   const answer=document.getElementById('public-guide-answer');
-  const response=window.rbBuildBasicBeyondResponse?.(button.dataset.publicQuestion);
-  answer.textContent=response?(english?response.textEN:response.textIT).split(english?'\n\nExplore:':'\n\nPercorso:')[0]:(english?'Explore the demos or open the practical guides below.':'Esplora le demo o apri le guide pratiche qui sotto.');
+  const question=String(button.dataset.publicQuestion||'').toLowerCase();
+  answer.textContent=/demo/.test(question)?(english?'The demos use fictional data and do not access your account.':'Le demo utilizzano dati fittizi e non accedono al tuo account.'):(english?'RendimentoBB provides property investment analysis, mortgages, and B&B management tools.':'RendimentoBB offre analisi di investimenti immobiliari, mutui e strumenti per la gestione B&B.');
  });
 })();

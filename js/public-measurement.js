@@ -3,7 +3,7 @@ export const isProductionAnalyticsHost = hostname => ['rendimentobb.it','www.ren
 const campaigns={
  utm_source:['linkedin','instagram','tiktok','facebook','newsletter','partner'],
  utm_medium:['social','organic_social','email','referral'],
- utm_campaign:['tester_2026_10','host_demo','basic_beyond']
+ utm_campaign:['tester_2026_10','host_demo']
 };
 export function publicCampaignContext(search=''){
  const query=new URLSearchParams(search),out={};

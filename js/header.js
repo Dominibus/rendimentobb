@@ -271,8 +271,6 @@ data-en="Guides">
 Guide
 
 </a>
-
-  <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
 <a href="/about/" data-it="Chi siamo" data-en="About">
     Chi siamo
   </a>
@@ -350,8 +348,6 @@ Guide
     data-en="Guides">
     Guide
     </a>
-
-    <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
 <a href="/about/" 
     data-it="Chi siamo" 
     data-en="About">
@@ -765,7 +761,6 @@ class="dashboard-label">
   <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
   <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
   <a href="/academy/" data-it="Guide" data-en="Guides">Guide</a>
-  <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
 <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
   <a href="#"
   id="mobile-ai-btn"
@@ -1043,9 +1038,6 @@ ${window.currentLang === "en" ? "Login" : "Accedi"}
 // Separate language URLs for Basic & Beyond; legacy routes remain intact.
 function rbSyncBeyondLinks(){
  const en=(window.currentLang||document.documentElement.lang)==='en';
- document.querySelectorAll('[data-bb-vision]').forEach(a=>a.href=en?'/en/basic-beyond/':'/basic-beyond/');
- document.querySelectorAll('[data-bb-solutions]').forEach(a=>a.href=en?'/en/basic-beyond/#solutions':'/basic-beyond/#solutions');
- document.querySelectorAll('[data-bb-form]').forEach(a=>a.href=en?'/en/share-your-idea/':'/racconta-idea/');
 }
 if(typeof document.addEventListener==='function' && typeof document.querySelectorAll==='function'){
 document.addEventListener('rb_language_changed',rbSyncBeyondLinks);
