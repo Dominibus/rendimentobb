@@ -3,6 +3,9 @@
 export function createInvestmentAnalysisState(window, document) {
   const fields = ['property-mode','owned-loan-amount','price','equity','priceNight','occupancy','expenses','commission','tax','loanAmount','interestRate','loanYears','market-city','custom-location'];
   let snapshot = null;
+  const notify = () => {
+    if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') window.dispatchEvent(new window.CustomEvent('rb_investment_state_updated'));
+  };
   const tier = () => {
     const access = window.getUserAccess?.() || {};
     if (access.isLoading) return 'loading';
@@ -51,5 +54,5 @@ export function createInvestmentAnalysisState(window, document) {
   document.addEventListener?.('input', updateStatus);
   document.addEventListener?.('change', updateStatus);
   window.rbGetInvestmentAnalysisState = getState;
-  return {capture: signature, publish, invalidate: () => {snapshot = null;}, getState};
+  return {capture: signature, publish, invalidate: () => {snapshot = null; notify();}, getState, notify};
 }

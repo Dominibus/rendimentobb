@@ -199,7 +199,7 @@ else if(path.includes("roma")) city = "rome";
 // Shared header fallback: pages without an explicit loader load it on demand.
 function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
-  if(document.querySelector('script[src*="/js/chatbot-loader.js?v=20261019-rc154"]')) return;
+  if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
   const script = document.createElement("script");
   script.src = "/js/chatbot-loader.js?v=20261019-rc154";
   script.async = true;
@@ -216,13 +216,15 @@ function initializeSharedHeader(){
 
   container.innerHTML = `
 
+  <link rel="stylesheet" href="/css/journey-2026.css?v=20261020-rc158">
   <header class="rb-header">
 
     <div class="rb-inner">
 
       <div class="rb-left">
-        <a href="/">
+        <a href="/" class="rb158-brand">
           <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
+          <span class="rb158-brand-caption"><strong>Basic &amp; Beyond</strong><small data-it="L’essenziale e oltre." data-en="The essentials and beyond.">L’essenziale e oltre.</small></span>
         </a>
       </div>
 
@@ -263,7 +265,8 @@ Guide
 
 </a>
 
-  <a href="/about/" data-it="Chi siamo" data-en="About">
+  <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
+<a href="/about/" data-it="Chi siamo" data-en="About">
     Chi siamo
   </a>
 </nav>
@@ -341,7 +344,8 @@ Guide
     Guide
     </a>
 
-    <a href="/about/" 
+    <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
+<a href="/about/" 
     data-it="Chi siamo" 
     data-en="About">
     Chi siamo
@@ -754,7 +758,8 @@ class="dashboard-label">
   <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
   <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
   <a href="/academy/" data-it="Guide" data-en="Guides">Guide</a>
-  <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
+  <a href="/basic-beyond/" data-bb-vision>Basic &amp; Beyond</a>
+<a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
   <a href="#"
   id="mobile-ai-btn"
 class="mobile-cta"
@@ -1027,3 +1032,19 @@ ${window.currentLang === "en" ? "Login" : "Accedi"}
 }
 
 }  
+
+// Separate language URLs for Basic & Beyond; legacy routes remain intact.
+function rbSyncBeyondLinks(){
+ const en=(window.currentLang||document.documentElement.lang)==='en';
+ document.querySelectorAll('[data-bb-vision]').forEach(a=>a.href=en?'/en/basic-beyond/':'/basic-beyond/');
+ document.querySelectorAll('[data-bb-solutions]').forEach(a=>a.href=en?'/en/basic-beyond/#solutions':'/basic-beyond/#solutions');
+ document.querySelectorAll('[data-bb-form]').forEach(a=>a.href=en?'/en/share-your-idea/':'/racconta-idea/');
+}
+if(typeof document.addEventListener==='function' && typeof document.querySelectorAll==='function'){
+document.addEventListener('rb_language_changed',rbSyncBeyondLinks);
+const rbBeyondObserver=typeof MutationObserver==='function'?new MutationObserver(rbSyncBeyondLinks):null;
+const rbBeyondHeader=document.getElementById('global-header');
+if(rbBeyondHeader && rbBeyondObserver)rbBeyondObserver.observe(rbBeyondHeader,{childList:true,subtree:true});
+rbSyncBeyondLinks();
+
+}

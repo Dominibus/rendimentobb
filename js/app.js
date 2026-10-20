@@ -9,7 +9,7 @@ import {TERMS_VERSION} from "./subscription-offer.js?v=20261016-rc140";
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
 import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
-import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261009-rc91";
+import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
@@ -3533,6 +3533,7 @@ if(access.isLoading){
 
   window.pendingCalculation = true;
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
   return;
 }
@@ -3543,6 +3544,7 @@ if(!window.firebaseReady){
 
   window.pendingCalculation = true;
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
   return;
 }
@@ -3557,6 +3559,7 @@ if(!window.currentPlan){
 
   window.pendingCalculation = true;
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
   return;
 }
@@ -3660,6 +3663,7 @@ if(access.isPro || access.isAdmin){
       monthlyCostsInput.reportValidity();
       monthlyCostsInput.focus();
       window.isCalculating = false;
+  investmentAnalysisState.notify?.();
       window.__preventRecalculate = false;
       return;
     }
@@ -3670,13 +3674,15 @@ if(access.isPro || access.isAdmin){
       for(const id of ["price", "equity", "priceNight", "expenses"]){
         const field = document.getElementById(id);
         if(field?.reportValidity && !field.reportValidity()){
-          field.focus(); window.isCalculating = false; window.__preventRecalculate = false; return;
+          field.focus(); window.isCalculating = false;
+  investmentAnalysisState.notify?.(); window.__preventRecalculate = false; return;
         }
       }
       const equityField = document.getElementById("equity");
       if(propertyMode !== "owned" && getValue("equity") > getValue("price")){
         equityField?.setCustomValidity?.(t("Il capitale proprio non può superare il prezzo immobile in questo modello.", "Equity cannot exceed the property price in this model."));
-        equityField?.reportValidity?.(); window.isCalculating = false; window.__preventRecalculate = false; return;
+        equityField?.reportValidity?.(); window.isCalculating = false;
+  investmentAnalysisState.notify?.(); window.__preventRecalculate = false; return;
       }
       equityField?.setCustomValidity?.("");
     }
@@ -3714,7 +3720,8 @@ if(!isTool && equity < minEquity){
         const field = document.getElementById(id);
         if(field?.reportValidity && !field.reportValidity()){
           field.closest("details")?.setAttribute("open", "");
-          field.focus(); window.isCalculating = false; window.__preventRecalculate = false; return;
+          field.focus(); window.isCalculating = false;
+  investmentAnalysisState.notify?.(); window.__preventRecalculate = false; return;
         }
       }
     }
@@ -3787,6 +3794,7 @@ const result = calculateROI({
 ;
 
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
   return;
 
@@ -4869,6 +4877,7 @@ if(isTool && window.simulationExecuted === true){
 } finally {
 
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
 }
 };
@@ -8322,6 +8331,7 @@ window.closeRegisterPopup = function(){
 
   // 🔥 opzionale: reset stato
   window.isCalculating = false;
+  investmentAnalysisState.notify?.();
 
 
 

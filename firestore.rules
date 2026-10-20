@@ -399,6 +399,11 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    // Server/console IAM only; no browser moderation inbox.
+    match /_solution_requests/{id} { allow read, write: if false; }
+    match /_solution_request_keys/{id} { allow read, write: if false; }
+    match /_solution_request_limits/{id} { allow read, write: if false; }
+
     match /{document=**} {
       allow read, write: if false;
     }

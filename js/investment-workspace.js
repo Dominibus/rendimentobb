@@ -3,7 +3,7 @@
   const english=()=>window.currentLang==='en';
   const status=document.getElementById('rb-investment-status');
   function setStatus(it,en){if(status)status.textContent=english()?en:it;}
-  const fields=['price','equity','priceNight','expenses','occupancy'];
+  const fields=['price','equity','priceNight','expenses','occupancy','owned-loan-amount'];
   const isTool=()=>Boolean(document.getElementById('price') && document.getElementById('analyze-btn'));
   window.rbOpenInvestmentAction=function(action){
     if(action?.type!=='open_investment_section')return false;

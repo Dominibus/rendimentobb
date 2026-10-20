@@ -45,7 +45,8 @@ Avvia simulazione
 
 <!-- BRAND -->
 <div class="footer-col">
-<strong>RendimentoBB</strong>
+<strong>RendimentoBB — Basic &amp; Beyond</strong>
+<p data-it="L’essenziale e oltre." data-en="The essentials and beyond.">L’essenziale e oltre.</p>
 
 <p
 data-it="Strumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti."
