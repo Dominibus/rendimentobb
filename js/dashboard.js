@@ -2181,10 +2181,15 @@ const confirmedEquity = portfolioMetrics.equity;
 const confirmedYearlyCashflow = portfolioMetrics.cashflow;
 const confirmedROI = portfolioMetrics.weightedROI;
 const basis = portfolioBasis(portfolioAnalyses);
-const basisText = (id,value) => { const el=document.getElementById(id); if(el)el.textContent=value; };
+const basisText = (id,value,numeric=null) => {
+ const el=document.getElementById(id);if(!el)return;
+ el.textContent=value;
+ // Text keeps its sign; colour only reinforces a verified numeric result.
+ el.style.color=Number.isFinite(numeric)?(numeric<0?'#b91c1c':numeric>0?'#075b45':'#475569'):'#475569';
+};
 const basisAllowed = canViewDashboard();
-basisText('rb161-capital-roi',basisAllowed ? formatPercent(basis.withCapitalROI===null?null:basis.withCapitalROI.toFixed(1)) : '🔒');
-basisText('rb161-zero-cash',basisAllowed ? formatCurrency(basis.zeroCapitalAnnualCash===null?null:basis.zeroCapitalAnnualCash/12) : '🔒');
+basisText('rb161-capital-roi',basisAllowed ? formatPercent(basis.withCapitalROI===null?null:basis.withCapitalROI.toFixed(1)) : '🔒',basisAllowed?basis.withCapitalROI:null);
+basisText('rb161-zero-cash',basisAllowed ? formatCurrency(basis.zeroCapitalAnnualCash===null?null:basis.zeroCapitalAnnualCash/12) : '🔒',basisAllowed?basis.zeroCapitalAnnualCash:null);
 basisText('rb161-capital-coverage',basisAllowed ? t(`${basis.withCapitalCount} immobili · capitale ${formatCurrency(basis.capital)}`,`${basis.withCapitalCount} properties · capital ${formatCurrency(basis.capital)}`) : '');
 basisText('rb161-zero-coverage',basisAllowed ? t(`${basis.zeroCapitalCount} immobili · capitale iniziale zero`,`${basis.zeroCapitalCount} properties · zero initial capital`) : '');
 basisText('rb161-basis-missing',basisAllowed && basis.unknownCapitalCount ? t(`${basis.unknownCapitalCount} immobili esclusi dai due sottoinsiemi: capitale mancante o non valido.`,`${basis.unknownCapitalCount} properties excluded from both subsets: missing or invalid capital.`) : '');
