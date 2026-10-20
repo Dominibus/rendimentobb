@@ -7,9 +7,11 @@ export function journeyState({page, analysis, pms, uid, access = {}}) {
   if (access.isLoading) return {area:'pms',status:'loading',source:'none',action:'wait'};
   if (pms?.isDemo === true) return {area:'pms',status:'demo',source:'demo',action:'demo'};
   // Account data must belong to the current user AND be a completed authorized snapshot.
-  if (!uid || pms?.ownerUid !== uid || pms?.portalSnapshotReady !== true || !(access.isAdmin || access.isPro || access.isInvestor)) {
+  if (!uid || pms?.ownerUid !== uid || !(access.isAdmin || access.isPro || access.isInvestor)) {
     return {area:'pms',status:'unavailable',source:'none',action:'access'};
   }
+  // A filtered booking view invalidates aggregate totals, not account access.
+  if (pms.portalSnapshotReady !== true) return {area:'pms',status:Array.isArray(pms.propertyList)?'needs-refresh':'loading',source:'none',action:Array.isArray(pms.propertyList)?'refresh':'wait'};
   if (!Array.isArray(pms.propertyList) || !Array.isArray(pms.portalBookingList)) return {area:'pms',status:'loading',source:'none',action:'wait'};
   const properties = pms.propertyList.length;
   const bookings = pms.portalBookingList.length;

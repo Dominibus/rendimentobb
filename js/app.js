@@ -267,7 +267,7 @@ function renderUniversalKPI(data = {}){
 
 const paybackText =
   payback > 0
-    ? payback.toFixed(1) + t(" anni", " years")
+    ? new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {minimumFractionDigits:1,maximumFractionDigits:1}).format(payback) + t(" anni", " years")
     : "-";
 
   if(qrBreak) qrBreak.innerText = paybackText;

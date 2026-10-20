@@ -201,7 +201,7 @@ function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
   if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261019-rc154";
+  script.src = "/js/chatbot-loader.js?v=20261020-rc160";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -224,7 +224,7 @@ function initializeSharedHeader(){
       <div class="rb-left">
         <a href="/" class="rb158-brand">
           <img src="/img/logo-header.svg" class="rb-logo" alt="RendimentoBB" width="218" height="42" decoding="async">
-          <span class="rb158-brand-caption"><strong>Basic &amp; Beyond</strong><small data-it="L’essenziale e oltre." data-en="The essentials and beyond.">L’essenziale e oltre.</small></span>
+          <span class="rb158-brand-caption"><strong>Basic &amp; Beyond</strong><small data-it="L’essenziale &amp; oltre." data-en="The essentials &amp; beyond.">L’essenziale &amp; oltre.</small></span>
         </a>
       </div>
 

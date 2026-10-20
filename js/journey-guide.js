@@ -1,4 +1,4 @@
-import {journeyState} from './journey-state.js?v=20261020-rc158';
+import {journeyState} from './journey-state.js?v=20261020-rc160';
 
 const host = document.getElementById('rb-journey-guide');
 if (host) {
@@ -15,6 +15,7 @@ if (host) {
       loading:['Stiamo preparando il tuo pannello.','Preparing your dashboard.','Attendi il caricamento del profilo e dei dati prima di leggere le priorità.','Wait for your profile and data to load before reading priorities.'],
       demo:['Esplora la gestione con dati dimostrativi.','Explore management with demonstration data.','Questa vista usa esempi. Le priorità di Autopilot non rappresentano la tua attività reale.','This view uses examples. Autopilot priorities do not represent your real business.'],
       unavailable:['Prima verifica l’accesso al tuo PMS.','First check access to your PMS.','Non è disponibile una fotografia verificata del tuo account. Usa le sezioni del pannello per verificare accesso e caricamento.','A verified account snapshot is unavailable. Use the dashboard sections to check access and loading.'],
+      'needs-refresh':['Aggiorna il riepilogo delle priorità.','Refresh the priorities summary.','La vista prenotazioni può essere filtrata o in aggiornamento. Premi una priorità Autopilot per rileggere i dati completi; questo stato non segnala una perdita di accesso.','The booking view may be filtered or updating. Choose an Autopilot priority to reload complete data; this state does not indicate loss of access.'],
       empty:['Il primo passo è aggiungere una struttura.','Start by adding a property.','Apri la sezione immobili del pannello. Dopo aver creato la struttura potrai organizzare le prenotazioni.','Open the properties section of the dashboard. After creating a property you can organise bookings.'],
       'no-bookings':['La struttura c’è. Ora organizza le prenotazioni.','Your property is ready. Now organise bookings.','Apri prenotazioni e calendario. Autopilot potrà riassumere le priorità sui dati disponibili.','Open bookings and calendar. Autopilot can summarise priorities using the available data.'],
       ready:['Concentrati sulle prossime attività.','Focus on your next tasks.','Chiedi ad Autopilot le priorità di oggi o dei prossimi 7 giorni: aggiornerà i dati prima di rispondere.','Ask Autopilot for today’s or the next 7 days’ priorities: it will refresh the data before answering.']

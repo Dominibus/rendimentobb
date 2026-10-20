@@ -130,7 +130,7 @@
   ];
 
   const scripts = [
-    "/js/basic-beyond-knowledge.js?v=20261019-rc156",
+    "/js/basic-beyond-knowledge.js?v=20261020-rc160",
     "/js/chatbot/knowledge-base.js",
 
     "/js/chatbot/knowledge/glossary.js",
@@ -183,7 +183,8 @@
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261011-rc104",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261019-rc153",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261019-rc155",
+    "/js/chatbot/core/practical-guide.js?v=20261020-rc160",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261020-rc160",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

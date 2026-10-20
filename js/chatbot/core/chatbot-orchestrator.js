@@ -67,6 +67,9 @@ async function(message){
       return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
     }
 
+    const practicalGuide=window.rbBuildPracticalGuide?.(text);
+    if(practicalGuide)return {success:true,response:practicalGuide,intent:{intent:'practical_guide'}};
+
     const nextStepGuide=window.rbBuildNextStepGuide?.(text);
     if(nextStepGuide)return {success:true,response:nextStepGuide,intent:{intent:'guided_next_step'}};
 
@@ -5331,11 +5334,17 @@ const response = {
 
 };
     
+if(response.type === 'generic' && typeof window.rbBuildGuidedClarification === 'function'){
+  Object.assign(response,window.rbBuildGuidedClarification());
+}
+
 // =========================================
 // 🧠 RESPONSE METADATA
 // =========================================
 
 response.metadata = {
+
+  ...response.metadata,
 
   processedIntents:
     intent.intents,
