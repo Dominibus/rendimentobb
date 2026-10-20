@@ -1,3 +1,4 @@
+import {isProductionAnalyticsHost,publicCampaignContext,publicEventPayload} from './public-measurement.js?v=20261020-rc163';
 // Consent applies to optional analytics only, never authentication or billing.
 export const ANALYTICS_CONSENT_KEY = 'rb_analytics_consent_v2';
 export const ANALYTICS_CONSENT_VERSION = '2026-10-14-rc122';
@@ -61,7 +62,7 @@ export function createAnalyticsConsent({window, document, storage, clock = Date.
         storage?.removeItem('rb_analytics_consent_v1');
       } catch { /* A failed local write does not override the current choice. */ }
     }
-    const enabled = choice === 'granted' && !isPrivateAnalyticsPath(window.location?.pathname);
+    const enabled = choice === 'granted' && isProductionAnalyticsHost(window.location?.hostname) && !isPrivateAnalyticsPath(window.location?.pathname);
     window['ga-disable-' + ANALYTICS_ID] = !enabled;
     window.gtag('consent', 'update', {
       analytics_storage: enabled ? 'granted' : 'denied', ad_storage: 'denied',
@@ -81,7 +82,8 @@ export function createAnalyticsConsent({window, document, storage, clock = Date.
       allow_google_signals: false, allow_ad_personalization_signals: false,
       cookie_expires: 180 * 86400, cookie_update: false,
       page_location: (window.location?.origin || '') + (window.location?.pathname || '/'),
-      page_referrer: referrer
+      page_referrer: referrer,
+      ...publicCampaignContext(window.location?.search || '')
     });
   }
   apply(getChoice() || 'denied', false);
@@ -92,5 +94,10 @@ export function createAnalyticsConsent({window, document, storage, clock = Date.
     memoryChoice = null; memoryExpiry = 0;
     apply(getChoice() || 'denied', false);
   });
-  return {getChoice, setChoice: choice => apply(choice)};
+  function track(name,params){
+    if(getChoice()!=='granted'||!isProductionAnalyticsHost(window.location?.hostname)||isPrivateAnalyticsPath(window.location?.pathname)||window['ga-disable-'+ANALYTICS_ID]!==false||window.__rbGA4Initialized!==true)return false;
+    const payload=publicEventPayload(name,params);if(!payload)return false;
+    try{window.gtag('event',name,payload);return true;}catch{return false;}
+  }
+  return {getChoice, setChoice: choice => apply(choice),track};
 }

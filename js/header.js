@@ -1,4 +1,5 @@
-import {createAnalyticsConsent} from './analytics-consent.js?v=20261014-rc122';
+import {createAnalyticsConsent} from './analytics-consent.js?v=20261020-rc163';
+import {publicLinkEvent} from './public-measurement.js?v=20261020-rc163';
 import './subscription-ui.js?v=20261016-rc140';
 /* =====================================
 🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
@@ -11,6 +12,12 @@ let signOut;
 let consentStorage;
 try { consentStorage = window.localStorage; } catch {}
 const analyticsConsent = createAnalyticsConsent({window, document, storage: consentStorage});
+window.rbTrackPublicEvent=(name,params)=>analyticsConsent.track?.(name,params)===true;
+document.addEventListener?.('click',event=>{
+  const link=event.target?.closest?.('a[href]');if(!link)return;
+  const action=publicLinkEvent(link.getAttribute('href'),window.location?.href || window.location?.origin);
+  if(action)window.rbTrackPublicEvent(action.name,{...action.params,language:window.currentLang==='en'?'en':'it'});
+});
 function getAnalyticsConsent(){ return analyticsConsent.getChoice(); }
 function setAnalyticsConsent(value){ analyticsConsent.setChoice(value); }
 

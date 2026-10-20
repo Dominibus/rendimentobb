@@ -22,7 +22,10 @@ form.addEventListener('submit',async event=>{
   })});
   const result=await response.json();
   if(!response.ok||result.success!==true){setResult(response.status===429?'limited':'failed');return;}
-  saved=true;form.reset();form.elements.plan.value=selectedPlan;
+  saved=true;
+  // An acknowledged request is not a verified lead, subscription or purchase.
+  try{window.rbTrackPublicEvent?.('plan_interest_submitted',{plan:selectedPlan,language:window.currentLang==='en'?'en':'it'});}catch{/* Optional measurement never changes the request outcome. */}
+  form.reset();form.elements.plan.value=selectedPlan;
   for(const name of ['plan','email','notificationConsent'])form.elements[name].disabled=true;
   setResult('saved');
  }catch{setResult('failed');}
