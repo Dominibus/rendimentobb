@@ -6491,7 +6491,7 @@ ${renovation ? `
 <div style="margin-bottom:18px;padding:14px 16px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
   <div>
     <strong style="display:block;color:#6d28d9;font-size:13px;">🛠️ ${t("Ristrutturazione", "Renovation")}</strong>
-    <span style="color:#64748b;font-size:12px;">
+    <span class="rb159-renovation-meta" style="color:#475569;font-size:13px;">
       ${t("Avanzamento", "Progress")} ${Math.max(0, Number(renovation.metrics?.progressPercent || 0))}% ·
       ${t("Budget", "Budget")} ${formatCurrency(renovation.metrics?.plannedTotal || 0)}
     </span>
@@ -6786,7 +6786,7 @@ height:48px;
 padding:0;
 border-radius:12px;
 background:#fee2e2;
-color:#dc2626;
+color:#991b1b;
 "
 
 data-property-id="${escapeDashboardHTML(docItem.id)}"
@@ -7749,7 +7749,7 @@ width:50px;
 border-radius:12px;
 border:none;
 background:#fee2e2;
-color:#dc2626;
+color:#991b1b;
 font-weight:700;
 cursor:pointer;
 "
@@ -10463,7 +10463,7 @@ function renderTodayBookingOperations(bookings = []){
         (total, booking) => total + Number(booking.guests || 0), 0
       ),
       names: guestsInHouse.map(booking => booking.guestName),
-      color: "#059669",
+      color: "#075f46",
       background: "#ecfdf5"
     },
     {
@@ -10472,7 +10472,7 @@ function renderTodayBookingOperations(bookings = []){
       label: window.t("Partenze da registrare", "Departures to register"),
       count: departuresToday.length,
       names: departuresToday.map(booking => booking.guestName),
-      color: "#ea580c",
+      color: "#983500",
       background: "#fff7ed"
     }
   ];
@@ -10641,7 +10641,7 @@ function renderTodayBookingOperations(bookings = []){
           <button type="button" class="pms-operation-card" onclick="setPMSOperationFilter('${card.filter}')" aria-pressed="${window.rbOperationFilter===card.filter}" style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
             <div style="font-size:12px;font-weight:700;color:${card.color};">${card.icon} ${card.label}</div>
             <div style="font-size:24px;line-height:1;font-weight:900;color:#0f172a;margin-top:9px;">${card.count}</div>
-            <div style="font-size:11px;color:#64748b;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            <div style="font-size:12px;color:#475569;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
               ${card.names.length
                 ? escapeDashboardHTML(card.names.join(", "))
                 : window.t("Nessuna attività", "No activity")}
@@ -10741,7 +10741,7 @@ async function loadBookings(propertyId){
     list.innerHTML = `
       <div style="
       padding:10px;
-      color:#64748b;
+      color:#475569;
       ">
       ${t(
   "Nessuna prenotazione",
@@ -10899,7 +10899,7 @@ ${bookingProperty?.name ? `
 <div
 style="
 font-size:13px;
-color:#64748b;
+color:#475569;
 margin-top:6px;
 font-weight:600;
 ">
@@ -10967,7 +10967,7 @@ break;
 
 case "checkout":
 bg="#fed7aa";
-color="#c2410c";
+color="#8b2e0b";
 label="Check-Out";
 break;
 
@@ -11016,7 +11016,7 @@ border-radius:14px;
 ">
 
 <div>
-<div style="font-size:12px;color:#94a3b8;">
+<div style="font-size:12px;color:#526178;">
 Check-In
 </div>
 
@@ -11030,7 +11030,7 @@ color:#0f172a;
 
 <div style="
 font-size:18px;
-color:#94a3b8;
+color:#526178;
 ">
 →
 </div>
@@ -11038,7 +11038,7 @@ color:#94a3b8;
 <div style="text-align:right;">
 <div style="
 font-size:12px;
-color:#94a3b8;
+color:#526178;
 ">
 Check-Out
 </div>
@@ -11068,7 +11068,7 @@ padding:12px;
 border-radius:14px;
 text-align:center;
 ">
-<div style="font-size:11px;color:#94a3b8;">
+<div style="font-size:12px;color:#526178;">
 ${window.t("Ospiti", "Guests")}
 </div>
 <div style="
@@ -11088,8 +11088,8 @@ border-radius:14px;
 text-align:center;
 ">
 <div style="
-font-size:11px;
-color:#94a3b8;
+font-size:12px;
+color:#526178;
 ">
 ${window.t("Notti", "Nights")}
 </div>
@@ -11110,15 +11110,15 @@ border-radius:14px;
 text-align:center;
 ">
 <div style="
-font-size:11px;
-color:#10b981;
+font-size:12px;
+color:#076647;
 ">
 ${window.t("Ricavo", "Revenue")}
 </div>
 <div style="
 font-size:18px;
 font-weight:800;
-color:#059669;
+color:#076647;
 ">
 €${Number(
 b.totalAmount || 0
@@ -11376,7 +11376,7 @@ height:38px;
 border:none;
 border-radius:12px;
 background:#fee2e2;
-color:#dc2626;
+color:#991b1b;
 cursor:pointer;
 font-size:16px;
 ">

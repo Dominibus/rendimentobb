@@ -1,0 +1,63 @@
+/* RC159: corrections based on rendered RC158 surfaces, not a global text reset. */
+body .rb158-preview{transform:none}
+body.home-page .rb158-preview-card strong{color:#fff!important;-webkit-text-fill-color:#fff!important;font-size:16px}
+body.home-page .rb158-preview-card p{color:#e3f3e9!important;-webkit-text-fill-color:#e3f3e9!important;font-size:14px;line-height:1.7}
+body.home-page .rb158-preview-note{font-size:13px;color:#475569!important;-webkit-text-fill-color:#475569!important;line-height:1.7}
+body.home-page .rb158-preview-checks{font-size:14px;line-height:1.7}
+body.home-page .rb158-preview-badge{font-size:12px;line-height:1.6}
+body.home-page .rb158-track-step{font-size:12px}
+body.home-page .rb158-track-step b{font-size:14px}
+body.home-page .rb158-path-top>span:last-child{font-size:12px;color:#4b6460}
+body.home-page .rb158-path a{font-size:14px}
+body.home-page .rb158-path p{font-size:14px}
+body.home-page .rb158-eyebrow{font-size:12px!important}
+body.home-page .rb158-proof,body.home-page .rb158-utilities,body.home-page .rb158-existing-access{font-size:13px}
+body.home-page .rb158-ai-prompts>div>span{font-size:12px;color:#215d47}
+body.home-page .rb158-ai-prompts>small{font-size:13px;color:#435e55!important;-webkit-text-fill-color:#435e55!important;line-height:1.7}
+body .rb158-brand-caption{font-size:12px;line-height:1.4;gap:8px}
+body .rb158-brand-caption strong{font-size:12px;color:#164b44!important;-webkit-text-fill-color:#164b44!important}
+body .rb158-brand-caption small{font-size:12px;color:#475569!important;-webkit-text-fill-color:#475569!important}
+body .rbj-kicker{font-size:12px!important}
+body .rbj-copy>p:not(.rbj-kicker){font-size:14px!important}
+body .rbj-copy small,body .rbj-note{font-size:12px;line-height:1.7;color:#36574b!important;-webkit-text-fill-color:#36574b!important}
+body .rbj-actions button{font-size:14px}
+
+/* Badges retain their background and meaning, with darker foregrounds. */
+body.home-page .home-section-badge,body.academy-page .academy-label,
+body.academy-page .badge-beginner{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
+body.academy-page .card-badge,body.academy-page .strategy-badge{font-size:12px}
+body.academy-page .badge-mustread{color:#983500!important;-webkit-text-fill-color:#983500!important}
+body.academy-page .badge-checklist{color:#7e5100!important;-webkit-text-fill-color:#7e5100!important}
+body.academy-page .badge-live{color:#0b6176!important;-webkit-text-fill-color:#0b6176!important}
+body.rb-academy-guide .academy-content>p{color:#475569!important;-webkit-text-fill-color:#475569!important}
+body.rb-academy-guide .academy-links a{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
+body.rb-academy-guide .academy-links a:hover{background:#e7f3eb}
+body .opening-eyebrow--warning{color:#865100!important;-webkit-text-fill-color:#865100!important;font-size:12px}
+body .opening-formula>b{color:#4d6275!important;-webkit-text-fill-color:#4d6275!important}
+body.immobili-page .property-roi,body.immobili-page .market-link{color:#076647!important;-webkit-text-fill-color:#076647!important}
+body.immobili-page .rb159-finder-description{color:#475569!important;-webkit-text-fill-color:#475569!important}
+body .mortgage-hero-badge{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
+body .mortgage-summary-badge{color:#0b6176!important;-webkit-text-fill-color:#0b6176!important}
+
+/* Legal text and authentication stay on the existing light surfaces. */
+body.legal-page .legal-eyebrow,body.legal-page .legal-label{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
+body.legal-page .legal-updated{color:#4c5c70!important;-webkit-text-fill-color:#4c5c70!important;font-size:13px}
+body.legal-page .legal-document a,body.legal-page .legal-note a{color:#075f46!important;-webkit-text-fill-color:#075f46!important;text-underline-offset:3px}
+body.legal-page .btn-primary-legal{background:#09654c;color:#fff!important;-webkit-text-fill-color:#fff!important}
+body.rb-login-page .rb159-login-value{font-size:14px!important;color:#075f46!important;-webkit-text-fill-color:#075f46!important;line-height:1.65}
+body.rb-login-page .lang-btn.active{background:#09654c!important;border-color:#09654c!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+body.admin-leads-page .subtitle,body.report-page .rb159-report-label{color:#475569!important;-webkit-text-fill-color:#475569!important}
+
+/* Existing dashboard controls: preserve actions, improve the active label. */
+body .pms-tab.active{background:#09654c!important;color:#fff!important}
+body .pms-tab.active span{color:#fff!important;-webkit-text-fill-color:#fff!important}
+body .rb-kpi :is(#pms-total-properties,#pms-total-bookings,#pms-total-revenue,#pms-occupancy,#pms-adr,#pms-revpar){color:#076647!important;-webkit-text-fill-color:#076647!important}
+body.rb-ui .btn.btn-primary{background:#09654c!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+@media(max-width:760px){body .rb158-brand-caption small{display:none}body .rb158-brand-caption{gap:0}body .rbj-actions button{flex-grow:1}body.home-page .rb158-preview-badge{font-size:12px}body.home-page .rb158-preview-top{flex-wrap:wrap}}
+
+body #bookings-property-context{color:#475569!important;-webkit-text-fill-color:#475569!important}
+body .rb159-renovation-meta{color:#475569!important;-webkit-text-fill-color:#475569!important;font-size:13px}
+body #roi-message{font-size:13px}
+body .badge-pro{font-size:12px}
+
+body .pms-tab:not(.active) span{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
