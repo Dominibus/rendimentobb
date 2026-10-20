@@ -1,2 +1,145 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Investment Analytics — Demo | RendimentoBB</title><meta name="description" content="Explore a fictional-data simulation separate from your account."><meta name="theme-color" content="#086c53"><link rel="canonical" href="https://www.rendimentobb.it/en/demo/investment-analytics/"><link rel="alternate" hreflang="it" href="https://www.rendimentobb.it/demo/investment-analytics/"><link rel="alternate" hreflang="en" href="https://www.rendimentobb.it/en/demo/investment-analytics/"><link rel="alternate" hreflang="x-default" href="https://www.rendimentobb.it/demo/investment-analytics/"><meta property="og:type" content="website"><meta property="og:title" content="Investment Analytics — Demo"><meta property="og:description" content="Explore a fictional-data simulation separate from your account."><meta property="og:url" content="https://www.rendimentobb.it/en/demo/investment-analytics/"><meta property="og:image" content="https://www.rendimentobb.it/img/dashboard-preview.png"><meta property="og:locale" content="en_GB"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="/css/basic-beyond.css?v=20261019-rc156"><link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
-</head><body class="bb-page"><a class="bb-skip" href="#main">Skip to content</a><header class="bb-header"><div class="bb-wrap"><a class="bb-brand" href="/?lang=en">Rendimento<span>BB</span></a><nav aria-label="Navigation"><a href="/?lang=en">Property home</a><a href="/en/basic-beyond/">Basic & Beyond</a><a href="/en/basic-beyond/#solutions">Solutions and demos</a><a href="/en/share-your-idea/">Share your idea</a><a href="/demo/investment-analytics/" lang="it" hreflang="it">Italiano</a></nav></div></header><main id="main" class="bb-wrap"><section class="bb-hero bb-demo-hero"><p class="bb-kicker">Basic &amp; Beyond / Investment Analytics</p><h1>Change an assumption. Read the result.</h1><p>An example of an application that turns inputs and assumptions into understandable metrics. Try the scenario: no registration.</p><a href="/en/basic-beyond/#solutions">← All case studies</a></section><div class="bb-ribbon"><strong>DEMO · FICTIONAL DATA</strong><span>No access to your account. Interactions stay in memory and reset when the page reloads.</span></div><noscript><p class="bb-message">Enable JavaScript to explore the interactive demo.</p></noscript><section class="bb-section bb-form-layout"><form id="bb-demo-investment" class="bb-form"><h2>Example assumptions</h2><label for="demo-capital">Total capital (€)</label><input id="demo-capital" name="capital" type="number" value="170000" min="1" max="1000000000" step="0.01" required><label for="demo-rate">Nightly rate (€)</label><input id="demo-rate" name="rate" type="number" value="100" min="0" max="100000" step="0.01" required><label for="demo-occupancy">Occupancy (%)</label><input id="demo-occupancy" name="occupancy" type="number" value="65" min="0" max="100" step="0.01" required><label for="demo-costs">Operating costs on revenue (%)</label><input id="demo-costs" name="costs" type="number" value="30" min="0" max="100" step="0.01" required><p class="bb-note">Capital: total purchase and startup costs. Operating costs are included in the percentage entered; tax, additional commissions and mortgage are excluded.</p><div class="bb-actions"><button type="submit">Calculate scenario</button><button type="button" id="demo-reset">Reset example</button></div></form><div class="bb-card"><p class="bb-kicker">Simplified estimate · constant year</p><h2>From inputs to metrics</h2><dl class="bb-demo-metrics"><div class="bb-demo-metric"><dt>Estimated annual revenue</dt><dd id="demo-revenue">—</dd></div><div class="bb-demo-metric"><dt>Annual operating costs</dt><dd id="demo-operating-costs">—</dd></div><div class="bb-demo-metric"><dt>Result before tax and mortgage</dt><dd id="demo-cashflow">—</dd></div><div class="bb-demo-metric"><dt>Return on capital, before tax and mortgage</dt><dd id="demo-roi">—</dd></div></dl><p id="demo-explanation" class="bb-message" role="status" aria-live="polite"></p><p class="bb-note">Revenue = rate × 365 × occupancy. Return = annual result ÷ capital × 100. Constant assumptions; no market forecast or guaranteed return.</p></div></section><section class="bb-section"><p class="bb-kicker">The case study</p><h2>What does this example demonstrate?</h2><p>Guided inputs, consistent calculations and readable results: the same approach can help design simulators, estimating tools and dashboards for other needs.</p><p class="bb-note">This is a bounded demo. The full property product, with scenarios, mortgage and reports according to plan, remains available in Analyze.</p><div class="bb-actions"><a class="bb-btn" href="/en/share-your-idea/">I have a similar problem</a><a class="bb-btn secondary" href="/en/demo/hospitality-pms/">Explore the other demo</a></div></section><script type="module" src="/js/bb-demo.js?v=20261019-rc156"></script><section class="bb-section" aria-labelledby="demo-next-step"><h2 id="demo-next-step">Use these tools with your own data</h2><p>Investor includes saved analyses, the dashboard and PMS. Eligible accounts can try it for 30 days without a card or automatic charges. Pro adds reports and PDFs; new purchases remain paused.</p><div class="bb-actions"><a class="bb-btn" href="/plans.html#tester-programme">See the tester programme</a><a class="bb-btn secondary" href="/plan-interest.html?plan=pro">Express interest in Pro</a></div></section></main><footer class="bb-footer"><div class="bb-wrap"><p>RendimentoBB — Basic & Beyond. The property product continues; the new path grows with real needs.</p><a href="/privacy.html?lang=en#basic-beyond-privacy">Privacy</a><a href="/terms.html?lang=en">Product terms</a><a href="/contact.html?lang=en">Contact</a><a href="/en/share-your-idea/#privacy">Basic & Beyond proposal privacy notice</a></div></footer></body></html>
+<link rel="stylesheet" href="/css/public-shell-rc166.css?v=20261020-rc166">
+<script src="/js/basic-beyond-knowledge.js?v=20261020-rc160" defer></script>
+<script src="/js/public-shell.js?v=20261020-rc166" defer></script>
+</head><body class="bb-page" data-public-shell="true"><a class="bb-skip" href="#main">Skip to content</a><header class="rb-public-header"><div class="rb-public-inner"><a class="rb-public-brand" href="/?lang=en"><img src="/img/logo-header.svg" alt="RendimentoBB" width="218" height="42"><span><strong>Basic &amp; Beyond</strong><small>The essentials &amp; beyond.</small></span></a><nav class="rb-public-desktop" aria-label="Main navigation"><a href="/tool/?lang=en">Analyse</a><a href="/aprire-bnb-conviene/?lang=en">Start a B&amp;B</a><a href="/mutui/?lang=en">Mortgages</a><a href="/market/?lang=en">Market</a><a href="/immobili/?lang=en">Find properties</a><a href="/academy/?lang=en">Guides</a><a href="/en/basic-beyond/">Basic &amp; Beyond</a><a href="/about/?lang=en">About</a><a href="/en/basic-beyond/#solutions">Solutions and demos</a><a href="/en/share-your-idea/">Share an idea</a></nav><div class="rb-public-actions"><div class="rb-public-languages" role="group" aria-label="Language"><button type="button" class="rb-public-lang" data-public-language="it" data-url="/demo/investment-analytics/" aria-pressed="false" aria-label="Italiano">IT</button><button type="button" class="rb-public-lang active" data-public-language="en" data-url="/en/demo/investment-analytics/" aria-pressed="true" aria-label="English">EN</button></div><details class="rb-public-assistant"><summary>Assistant</summary><div class="rb-public-assistant-panel"><strong>How can I help?</strong><p>Guidance on the available paths and fictional demos.</p><button type="button" data-public-question="Cos’è Basic &amp; Beyond?">What is Basic &amp; Beyond?</button><button type="button" data-public-question="Come funzionano le demo?">How do the demos work?</button><p id="public-guide-answer" role="status" aria-live="polite"></p><a href="/academy/?lang=en">Guides and practical exercises</a><a href="/en/basic-beyond/#solutions">Explore both demos</a><a href="/en/share-your-idea/">Share your idea</a></div></details><a class="rb-public-live" href="/dashboard/?lang=en">📊 Live Demo</a><a class="rb-public-login" href="/login/?lang=en">Login</a><details class="rb-public-menu"><summary aria-label="Navigation menu">☰</summary><nav aria-label="All paths"><a href="/tool/?lang=en">Analyse</a><a href="/aprire-bnb-conviene/?lang=en">Start a B&amp;B</a><a href="/mutui/?lang=en">Mortgages</a><a href="/market/?lang=en">Market</a><a href="/immobili/?lang=en">Find properties</a><a href="/academy/?lang=en">Guides</a><a href="/en/basic-beyond/">Basic &amp; Beyond</a><a href="/about/?lang=en">About</a><a href="/en/basic-beyond/#solutions">Solutions and demos</a><a href="/en/share-your-idea/">Share an idea</a></nav></details></div></div></header><noscript><nav class="rb-public-noscript" aria-label="Language"><a href="/demo/investment-analytics/">Italiano</a><a href="/en/demo/investment-analytics/">English</a></nav></noscript><main id="main" class="bb-wrap"><section class="bb-hero bb-demo-hero"><p class="bb-kicker">Basic &amp; Beyond / Investment Analytics</p><h1>Change an assumption. Read the result.</h1><p>An example of an application that turns inputs and assumptions into understandable metrics. Try the scenario: no registration.</p><a href="/en/basic-beyond/#solutions">← All case studies</a></section><div class="bb-ribbon"><strong>DEMO · FICTIONAL DATA</strong><span>No access to your account. Interactions stay in memory and reset when the page reloads.</span></div><noscript><p class="bb-message">Enable JavaScript to explore the interactive demo.</p></noscript><section class="bb-section bb-form-layout"><form id="bb-demo-investment" class="bb-form"><h2>Example assumptions</h2><label for="demo-capital">Total capital (€)</label><input id="demo-capital" name="capital" type="number" value="170000" min="1" max="1000000000" step="0.01" required><label for="demo-rate">Nightly rate (€)</label><input id="demo-rate" name="rate" type="number" value="100" min="0" max="100000" step="0.01" required><label for="demo-occupancy">Occupancy (%)</label><input id="demo-occupancy" name="occupancy" type="number" value="65" min="0" max="100" step="0.01" required><label for="demo-costs">Operating costs on revenue (%)</label><input id="demo-costs" name="costs" type="number" value="30" min="0" max="100" step="0.01" required><p class="bb-note">Capital: total purchase and startup costs. Operating costs are included in the percentage entered; tax, additional commissions and mortgage are excluded.</p><div class="bb-actions"><button type="submit">Calculate scenario</button><button type="button" id="demo-reset">Reset example</button></div></form><div class="bb-card"><p class="bb-kicker">Simplified estimate · constant year</p><h2>From inputs to metrics</h2><dl class="bb-demo-metrics"><div class="bb-demo-metric"><dt>Estimated annual revenue</dt><dd id="demo-revenue">—</dd></div><div class="bb-demo-metric"><dt>Annual operating costs</dt><dd id="demo-operating-costs">—</dd></div><div class="bb-demo-metric"><dt>Result before tax and mortgage</dt><dd id="demo-cashflow">—</dd></div><div class="bb-demo-metric"><dt>Return on capital, before tax and mortgage</dt><dd id="demo-roi">—</dd></div></dl><p id="demo-explanation" class="bb-message" role="status" aria-live="polite"></p><p class="bb-note">Revenue = rate × 365 × occupancy. Return = annual result ÷ capital × 100. Constant assumptions; no market forecast or guaranteed return.</p></div></section><section class="bb-section"><p class="bb-kicker">The case study</p><h2>What does this example demonstrate?</h2><p>Guided inputs, consistent calculations and readable results: the same approach can help design simulators, estimating tools and dashboards for other needs.</p><p class="bb-note">This is a bounded demo. The full property product, with scenarios, mortgage and reports according to plan, remains available in Analyze.</p><div class="bb-actions"><a class="bb-btn" href="/en/share-your-idea/">I have a similar problem</a><a class="bb-btn secondary" href="/en/demo/hospitality-pms/">Explore the other demo</a></div></section><script type="module" src="/js/bb-demo.js?v=20261019-rc156"></script><section class="bb-section" aria-labelledby="demo-next-step"><h2 id="demo-next-step">Use these tools with your own data</h2><p>Investor includes saved analyses, the dashboard and PMS. Eligible accounts can try it for 30 days without a card or automatic charges. Pro adds reports and PDFs; new purchases remain paused.</p><div class="bb-actions"><a class="bb-btn" href="/plans.html#tester-programme">See the tester programme</a><a class="bb-btn secondary" href="/plan-interest.html?plan=pro">Express interest in Pro</a></div></section></main>
+
+<footer class="global-footer rb-public-footer">
+
+<div class="footer-container">
+
+
+<div class="footer-cta">
+
+<h3 data-it="Esplora i numeri del tuo investimento" data-en="Explore your investment numbers">Explore your investment numbers</h3>
+
+<p class="footer-value" data-it="Confronta scenari • Analizza ROI • Gestisci il tuo B&amp;B." data-en="Compare scenarios • Analyze ROI • Manage your B&amp;B.">Compare scenarios • Analyze ROI • Manage your B&amp;B.</p>
+
+<p data-it="Dai dati del tuo immobile a uno scenario di investimento." data-en="From your property inputs to an investment scenario.">From your property inputs to an investment scenario.</p>
+
+<a href="/tool/?lang=en" class="btn btn-primary" data-it="Avvia simulazione" data-en="Start simulation">Start simulation</a>
+
+</div>
+
+
+<div class="footer-grid">
+
+
+<div class="footer-col">
+<strong>RendimentoBB — Basic &amp; Beyond</strong>
+<p data-it="L’essenziale &amp; oltre." data-en="The essentials &amp; beyond.">The essentials &amp; beyond.</p>
+
+<p data-it="Strumenti per analizzare investimenti e gestire B&amp;B, con ipotesi e risultati espliciti." data-en="Tools for property analysis and B&amp;B operations, with clear assumptions and results.">Tools for property analysis and B&amp;B operations, with clear assumptions and results.</p>
+
+</div>
+
+
+<div class="footer-col">
+
+<strong data-it="Guide" data-en="Guides">Guides</strong>
+
+<a href="/aprire-bnb-conviene/?lang=en" data-it="Aprire un B&amp;B" data-en="Start a B&amp;B">Start a B&amp;B</a>
+
+<a href="/quanto-guadagna-bnb/?lang=en" data-it="Guadagni B&amp;B" data-en="B&amp;B earnings">B&amp;B earnings</a>
+
+<a href="/costi-aprire-bnb/?lang=en" data-it="Costi B&amp;B" data-en="B&amp;B costs">B&amp;B costs</a>
+
+<a href="/roi-bnb/?lang=en" data-it="ROI B&amp;B" data-en="B&amp;B ROI">B&amp;B ROI</a>
+
+</div>
+
+
+<div class="footer-col">
+
+<strong data-it="Strumenti" data-en="Tools">Tools</strong>
+
+<a href="/tool/?lang=en" data-it="Simulatore ROI" data-en="ROI Simulator">ROI Simulator</a>
+
+<a href="/dashboard/?lang=en" data-it="Dashboard" data-en="Dashboard">Dashboard</a>
+
+<a href="/mutui/?lang=en" data-it="Mutui" data-en="Mortgages">Mortgages</a>
+
+<a href="/immobili/?lang=en" data-it="Immobili" data-en="Properties">Properties</a>
+
+</div>
+
+
+<div class="footer-col">
+
+<strong data-it="Business" data-en="Business">Business</strong>
+
+<a href="/plans.html?lang=en#tester-programme" data-it="Programma tester Investor" data-en="Investor tester programme">Investor tester programme</a>
+<a href="/plan-interest.html?lang=en" data-it="Avvisami all’apertura dei piani" data-en="Notify me when plans open">Notify me when plans open</a>
+<a href="/partner/?lang=en" data-it="Proponi una collaborazione" data-en="Propose a collaboration">Propose a collaboration</a>
+
+<a href="/lavora-con-noi/?lang=en" data-it="Proponi le tue competenze" data-en="Share your skills">Share your skills</a>
+
+</div>
+
+
+<div class="footer-col">
+
+<strong data-it="Legale" data-en="Legal">Legal</strong>
+
+<a href="/plans.html?lang=en" data-it="Piani e condizioni" data-en="Plans and terms">Plans and terms</a>
+
+<a href="/privacy.html?lang=en" data-it="Privacy" data-en="Privacy">Privacy</a>
+
+<a href="/withdrawal.html?lang=en#withdrawal-form" data-it="Recedere dal contratto qui" data-en="Withdraw from the contract here">Withdraw from the contract here</a>
+<a href="/terms.html?lang=en" data-it="Termini" data-en="Terms">Terms</a>
+
+<a href="/contact.html?lang=en" data-it="Contatti" data-en="Contact">Contact</a>
+
+</div>
+
+</div>
+
+
+<div class="footer-trust">
+
+<span data-it="✔ ROI stimato e cashflow" data-en="✔ Estimated ROI and cashflow">✔ Estimated ROI and cashflow</span>
+
+<span data-it="✔ Analisi rischio avanzata" data-en="✔ Advanced risk analysis">✔ Advanced risk analysis</span>
+
+<span data-it="✔ Dashboard, analisi e PMS" data-en="✔ Dashboard, analytics and PMS">✔ Dashboard, analytics and PMS</span>
+
+</div>
+
+
+<div class="footer-extra-cta">
+
+<p data-it="Sei un professionista del settore? Scopri le possibilità di collaborazione." data-en="Work in the sector? Explore partnership opportunities.">Work in the sector? Explore partnership opportunities.</p>
+
+<a href="/partner/?lang=en" class="btn btn-secondary" data-it="Diventa partner" data-en="Become partner">Become partner</a>
+
+</div>
+
+
+<div class="footer-socials">
+
+<a href="https://www.linkedin.com/company/rendimentobb/" target="_blank" rel="noopener">
+LinkedIn
+</a>
+
+<a href="https://instagram.com/rendimentobb.it" target="_blank" rel="noopener">
+Instagram
+</a>
+
+<a href="https://www.tiktok.com/@rendimentobb.it" target="_blank" rel="noopener">
+TikTok
+</a>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<p data-it="© 2026 RendimentoBB – Tutti i diritti riservati" data-en="© 2026 RendimentoBB – All rights reserved">© 2026 RendimentoBB – All rights reserved</p>
+
+</div>
+
+</div>
+
+<div class="rb-public-proposal"><a href="/en/share-your-idea/#privacy">Basic &amp; Beyond proposal privacy notice</a></div></footer>
+
+</body></html>
