@@ -62,6 +62,8 @@ export function mountInvestmentWorkspace(root = document, win = window) {
   for (const id of ['portfolio-performance', 'portfolio-manager']) { const node = root.getElementById(id); if (node) portfolio.append(node); }
   scenarios.append(el('h3', '', 'Scegli lo scenario da analizzare', 'Choose a scenario to review'), el('p', 'rb-workspace-explainer', 'Ogni scheda indica se lo scenario è nel portafoglio e se è collegato al PMS. Apri il report dalla scheda per usare proprio quella simulazione.', 'Each card shows whether the scenario belongs to the portfolio and is linked to PMS. Open its report to use that exact simulation.'));
   for (const id of ['pagination-info', 'analysis-list']) { const node = root.getElementById(id); if (node) scenarios.append(node); }
+  const averages = root.getElementById('rb161-scenario-averages');
+  if (averages) scenarios.prepend(averages);
   const advanced = el('details', 'rb-workspace-advanced');
   advanced.append(el('summary', '', 'Approfondimenti, grafici e strumenti', 'Insights, charts and tools'));
   const grid = main.querySelector('.dashboard-grid'); if (grid) advanced.append(grid);

@@ -1,4 +1,5 @@
-import './dashboard-workspace-layout.js?v=20261019-rc154';
+import {portfolioBasis} from './portfolio-basis.js?v=20261020-rc161';
+import './dashboard-workspace-layout.js?v=20261020-rc161';
 import {installBookingImporter} from './booking-import-dialog.js?v=20261019-rc152';
 import {bookingImportContext} from './booking-import.js?v=20261019-rc152';
 import {bookingIdentityHTML} from './booking-export.js?v=20261019-rc152';
@@ -2179,6 +2180,15 @@ const confirmedCount = portfolioMetrics.count;
 const confirmedEquity = portfolioMetrics.equity;
 const confirmedYearlyCashflow = portfolioMetrics.cashflow;
 const confirmedROI = portfolioMetrics.weightedROI;
+const basis = portfolioBasis(portfolioAnalyses);
+const basisText = (id,value) => { const el=document.getElementById(id); if(el)el.textContent=value; };
+const basisAllowed = canViewDashboard();
+basisText('rb161-capital-roi',basisAllowed ? formatPercent(basis.withCapitalROI===null?null:basis.withCapitalROI.toFixed(1)) : '🔒');
+basisText('rb161-zero-cash',basisAllowed ? formatCurrency(basis.zeroCapitalAnnualCash===null?null:basis.zeroCapitalAnnualCash/12) : '🔒');
+basisText('rb161-capital-coverage',basisAllowed ? t(`${basis.withCapitalCount} immobili · capitale ${formatCurrency(basis.capital)}`,`${basis.withCapitalCount} properties · capital ${formatCurrency(basis.capital)}`) : '');
+basisText('rb161-zero-coverage',basisAllowed ? t(`${basis.zeroCapitalCount} immobili · capitale iniziale zero`,`${basis.zeroCapitalCount} properties · zero initial capital`) : '');
+basisText('rb161-basis-missing',basisAllowed && basis.unknownCapitalCount ? t(`${basis.unknownCapitalCount} immobili esclusi dai due sottoinsiemi: capitale mancante o non valido.`,`${basis.unknownCapitalCount} properties excluded from both subsets: missing or invalid capital.`) : '');
+
 const confirmedMonthlyCashflow = confirmedYearlyCashflow === null ? null : confirmedYearlyCashflow / 12;
 const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity > 0
   ? confirmedEquity / confirmedYearlyCashflow

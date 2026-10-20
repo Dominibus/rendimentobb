@@ -6509,7 +6509,7 @@ y=30;
 
 doc.setFontSize(14);
 doc.setTextColor(...dark);
-doc.text(T("Richiesta finanziamento","Loan request"),20,y);
+doc.text(loan > 0 ? T("Finanziamento nello scenario","Scenario financing") : T("Scenario senza finanziamento","Scenario without financing"),20,y);
 
 y+=12;
 
@@ -6584,7 +6584,7 @@ row(
     "Tasso ipotizzato",
     "Assumed interest rate"
   ),
-  pdfDecimal(financingRate,2) + "%"
+  loan > 0 ? pdfDecimal(financingRate,2) + "%" : "N/A"
 );
 
 row(
@@ -6592,8 +6592,7 @@ row(
     "Durata ipotizzata",
     "Assumed loan term"
   ),
-  Math.round(financingYears) +
-  T(" anni", " years")
+  loan > 0 ? Math.round(financingYears) + T(" anni", " years") : "N/A"
 );
 
 row(

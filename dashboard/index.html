@@ -1928,6 +1928,7 @@ margin-bottom:16px;
 <link rel="stylesheet" href="/css/brand-icons.css?v=20261016-rc146">
 <link rel="stylesheet" href="/css/journey-2026.css?v=20261020-rc158">
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
+<link rel="stylesheet" href="/css/clarity-rc161.css?v=20261020-rc161">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -2120,35 +2121,7 @@ z-index:9999;
 </div>
   </div>
 
-  <div class="rb-hero-right">
-
-    <div class="rb-hero-card">
-      <span data-it="ROI medio simulato" data-en="Average simulated ROI">ROI medio simulato</span>
-      <h2 id="db-roi">—</h2>
-      <div id="roi-message" style="font-size:13px;margin-top:6px;font-weight:600;color:#10b981;"></div>
-    </div>
-
-    <div class="rb-hero-card">
-      <span data-it="Cashflow mensile medio per analisi" data-en="Average monthly cash flow per analysis">Cashflow mensile medio per analisi</span>
-      <h2 id="db-profit">—</h2>
-    </div>
-
-    <div class="rb-hero-card status good" id="db-status">
-      <span data-it="Livello ROI simulato" data-en="Simulated ROI level">Livello ROI simulato</span>
-      <h2>—</h2>
-    </div>
-
-    <div class="rb-hero-card">
-  <span
-  data-it="Analisi salvate"
-  data-en="Saved analyses">
-  Analisi salvate
-  </span>
-
-  <h2 id="db-investments">0</h2>
-</div>
-
-  </div>
+<nav class="rb161-control-actions" aria-label="Azioni principali / Main actions"><button type="button" onclick="showPMSTab('dashboard')" data-it="Attività e andamento" data-en="Tasks and performance">Attività e andamento</button><button type="button" onclick="openCurrentBookings()" data-it="Gestisci prenotazioni" data-en="Manage bookings">Gestisci prenotazioni</button><button type="button" onclick="showPMSTab('roi')" data-it="Scenari e portafoglio" data-en="Scenarios and portfolio">Scenari e portafoglio</button></nav>
 
 </div>
 
@@ -2340,7 +2313,7 @@ Scenari e portafoglio
 </div>      
   
 <!-- KPI GRID -->
-<p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
+<details class="rb161-disclosure"><summary data-it="Totali simulati del patrimonio e metodo di calcolo" data-en="Simulated portfolio totals and calculation method">Totali simulati del patrimonio e metodo di calcolo</summary><p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
 <div class="rb-kpi-grid">
 
   <div class="rb-kpi">
@@ -2368,6 +2341,7 @@ Cashflow / capitale indicato
   </div>
 
 </div>
+</details>
 
 </div>  
 
@@ -2730,6 +2704,36 @@ id="pms-roi-section"
 class="pms-section"
 style="display:none;"><aside class="rb-source-note" role="note"><strong data-it="Scenari, patrimonio e risultati operativi" data-en="Scenarios, portfolio and operating results">Scenari, patrimonio e risultati operativi</strong><p data-it="Le simulazioni sono alternative, non redditi da sommare. Il patrimonio mostra ipotesi collegate agli immobili confermati. I risultati PMS derivano dalle prenotazioni registrate. I riferimenti città sono dimostrativi." data-en="Simulations are alternatives, not income to add together. Portfolio figures use assumptions linked to confirmed properties. PMS results come from recorded bookings. City references are illustrative.">Le simulazioni sono alternative, non redditi da sommare. Il patrimonio mostra ipotesi collegate agli immobili confermati. I risultati PMS derivano dalle prenotazioni registrate. I riferimenti città sono dimostrativi.</p></aside>  
 
+<details id="rb161-scenario-averages" class="rb161-disclosure"><summary data-it="Medie delle simulazioni salvate" data-en="Saved simulation averages">Medie delle simulazioni salvate</summary><p data-it="Sono scenari alternativi, inclusi eventuali test. Le loro medie non descrivono il rendimento del patrimonio o i risultati del PMS." data-en="These are alternative scenarios, including any tests. Their averages do not describe portfolio returns or PMS results.">Sono scenari alternativi, inclusi eventuali test. Le loro medie non descrivono il rendimento del patrimonio o i risultati del PMS.</p>  <div class="rb-hero-right">
+
+    <div class="rb-hero-card">
+      <span data-it="ROI medio simulato" data-en="Average simulated ROI">ROI medio simulato</span>
+      <h2 id="db-roi">—</h2>
+      <div id="roi-message" style="font-size:13px;margin-top:6px;font-weight:600;color:#10b981;"></div>
+    </div>
+
+    <div class="rb-hero-card">
+      <span data-it="Cashflow mensile medio per analisi" data-en="Average monthly cash flow per analysis">Cashflow mensile medio per analisi</span>
+      <h2 id="db-profit">—</h2>
+    </div>
+
+    <div class="rb-hero-card status good" id="db-status">
+      <span data-it="Livello ROI simulato" data-en="Simulated ROI level">Livello ROI simulato</span>
+      <h2>—</h2>
+    </div>
+
+    <div class="rb-hero-card">
+  <span
+  data-it="Analisi salvate"
+  data-en="Saved analyses">
+  Analisi salvate
+  </span>
+
+  <h2 id="db-investments">0</h2>
+</div>
+
+  </div>
+</details>
 <!-- ================= MAIN GRID ================= -->
 
 <div class="dashboard-grid">
@@ -3215,6 +3219,8 @@ box-shadow:
 
 <p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
 
+<section class="rb161-capital-basis" aria-labelledby="rb161-basis-title"><h3 id="rb161-basis-title" data-it="Capitale e cashflow: due basi distinte" data-en="Capital and cashflow: two distinct bases">Capitale e cashflow: due basi distinte</h3><div class="rb161-basis-grid"><article><h4 data-it="Immobili con capitale positivo" data-en="Properties with positive capital">Immobili con capitale positivo</h4><p data-it="Rapporto annuo del solo sottoinsieme" data-en="Annual ratio for this subset only">Rapporto annuo del solo sottoinsieme</p><strong id="rb161-capital-roi">—</strong><small id="rb161-capital-coverage">—</small></article><article><h4 data-it="Immobili con capitale zero" data-en="Properties with zero capital">Immobili con capitale zero</h4><p data-it="Cashflow mensile stimato, senza ROI" data-en="Estimated monthly cashflow, without ROI">Cashflow mensile stimato, senza ROI</p><strong id="rb161-zero-cash">—</strong><small id="rb161-zero-coverage">—</small></article></div><p data-it="Il primo rapporto usa solo cashflow e capitale degli stessi immobili con capitale positivo. Il secondo può includere case possedute o finanziate senza capitale iniziale. Nessuno dei due misura il rendimento sul valore totale delle case." data-en="The first ratio uses cashflow and capital from the same properties with positive capital only. The second can include owned or fully financed homes with no initial capital. Neither measures returns on total property value.">Il primo rapporto usa solo cashflow e capitale degli stessi immobili con capitale positivo. Il secondo può includere case possedute o finanziate senza capitale iniziale. Nessuno dei due misura il rendimento sul valore totale delle case.</p><p id="rb161-basis-missing" role="status"></p></section>
+<details class="rb161-disclosure"><summary data-it="Totali complessivi del patrimonio" data-en="Overall portfolio totals">Totali complessivi del patrimonio</summary>
 <div class="portfolio-grid">
 
 <div class="portfolio-stat">
@@ -3444,7 +3450,7 @@ Monitoraggio attivo
 
 </div>
 
-</div>
+</div></details>
 
 </div>  
   
@@ -3757,7 +3763,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261020-rc159"></script>
+<script type="module" src="/js/dashboard.js?v=20261020-rc161"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
@@ -4935,7 +4941,7 @@ border-radius:18px;
 </div>
 
 </div>
-<script type="module" src="/js/trial-invite.js?v=20261016-rc140"></script>
+<script type="module" src="/js/trial-invite.js?v=20261020-rc161"></script>
 <script type="module" src="/js/journey-guide.js?v=20261020-rc160"></script>
 </body>
 </html>
