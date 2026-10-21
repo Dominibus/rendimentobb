@@ -35,7 +35,13 @@ test('public plan information is static, bilingual, matches the offer and is lin
   assert.ok(fs.existsSync(new URL('../'+target,import.meta.url)));
  }
  const publicLink=home.indexOf('href="/plans.html"');
- assert.ok(publicLink>0&&publicLink<home.indexOf('<aside class="rb-trial-invite"'));
+ const sectionStart=home.indexOf('<section class="rb161-plan-path');
+ const sectionEnd=home.indexOf('</section>',sectionStart);
+ assert.ok(sectionStart>0&&publicLink>sectionStart&&publicLink<sectionEnd);
+ assert.doesNotMatch(home.slice(sectionStart,home.indexOf('>',sectionStart)+1),/\bhidden\b/);
+ const anchor=home.slice(home.lastIndexOf('<a ',publicLink),home.indexOf('</a>',publicLink)+4);
+ assert.match(anchor,/data-it=/);assert.match(anchor,/data-en=/);
+ assert.doesNotMatch(anchor,/\bhidden\b|data-rb-trial-invite/);
  assert.ok(read('js/footer.js').includes('href="/plans.html"'));
  // Only the contextual trial CTA is gated; plan information remains public.
  assert.doesNotMatch(page,/<(?:main|article|section)[^>]*\bhidden\b/);

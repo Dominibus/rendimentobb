@@ -67,7 +67,7 @@ test('capital recovery displays actual equity recovery and preserves sub-year re
  const fn=app.slice(app.indexOf('function renderUniversalKPI(data = {}){'),app.indexOf('// ================= ROI MESSAGE (HOME)'));
  const nodes=new Map();const context={window:{currentPlan:'pro',getUserAccess:()=>({isPro:true,canSeeFullAnalysis:true})},document:{getElementById:id=>{if(!nodes.has(id))nodes.set(id,{innerText:'',dataset:{},style:{},classList:{remove(){}}});return nodes.get(id);},querySelectorAll:()=>[]},formatCurrency:String,t:it=>it,appDebugWarn(){}};
  vm.runInNewContext(fn,context);
- context.renderUniversalKPI({net:7550,revenue:35587.5,investment:30000});assert.equal(nodes.get('break-even').innerText,'4.0 anni');
- context.renderUniversalKPI({net:60000,investment:30000});assert.equal(nodes.get('break-even').innerText,'0.5 anni');
+ context.renderUniversalKPI({net:7550,revenue:35587.5,investment:30000});assert.equal(nodes.get('break-even').innerText,'4,0 anni');
+ context.renderUniversalKPI({net:60000,investment:30000});assert.equal(nodes.get('break-even').innerText,'0,5 anni');
  context.renderUniversalKPI({net:-10,investment:30000});assert.equal(nodes.get('break-even').innerText,'-');
 });

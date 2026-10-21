@@ -30,6 +30,8 @@ test('tool has the same navigation markup before any script executes',()=>{
  const html=read('tool/index.html');assert.ok(html.includes('<div id="global-header">'+template+'</div>'));
  assert.equal((html.match(/id="global-header"/g)||[]).length,1);
  assert.equal((html.match(/id="rb-mobile"/g)||[]).length,1);
- assert.match(html,/header.js\?v=20261019-rc154/);
+ const version=html.match(/src="\/js\/header\.js\?v=(\d{8})-rc(\d+)"/);
+ assert.ok(version,'Header must retain a versioned resource URL');
+ assert.ok(Number(version[1])>20261019 || Number(version[1])===20261019&&Number(version[2])>=154);
  assert.doesNotMatch(source,/^import .*firebase/m);
 });

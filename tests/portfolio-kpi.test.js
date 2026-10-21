@@ -1,3 +1,4 @@
+import {portfolioBasis} from '../js/portfolio-basis.js';
 import {readInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -31,7 +32,7 @@ test('empty portfolio is unknown; recorded zero cashflow remains zero',()=>{
 });
 function render(rows,portfolio=rows,{paid=true,lang="it",email='test@example.invalid'}={}){
  const elements=new Map();const document={getElementById:id=>{if(!elements.has(id))elements.set(id,{style:{},querySelector:()=>null});return elements.get(id);},querySelectorAll:()=>[]};
- const c={financialNumber,summarizeInvestments,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
+ const c={financialNumber,summarizeInvestments,portfolioBasis,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
  vm.createContext(c);
  const utilities=source.slice(source.indexOf('function formatCurrency('),source.indexOf('// Calendar days'));
  const score=source.slice(source.indexOf('function calculateInvestmentScore('),source.indexOf('// ===============================\n// ROI CHART'));

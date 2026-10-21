@@ -1,3 +1,4 @@
+import vm from 'node:vm';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -49,7 +50,22 @@ test("tool language refresh reformats cached KPI values locally", () => {
 });
 
 test("break-even unit follows the selected language", () => {
-  assert.match(appSource, /payback\.toFixed\(1\) \+ t\(" anni", " years"\)/);
+  const start=appSource.indexOf('function renderUniversalKPI(data = {}){');
+  const end=appSource.indexOf('// ================= ROI MESSAGE (HOME)',start);
+  assert.ok(start>=0&&end>start);
+  for(const lang of ['it','en']){
+    const nodes=new Map();
+    const window={currentLang:lang,currentPlan:'pro',getUserAccess:()=>({isPro:true,canSeeFullAnalysis:true})};
+    const document={getElementById:id=>{if(!nodes.has(id))nodes.set(id,{innerText:'',dataset:{},style:{},classList:{remove(){}}});return nodes.get(id);},querySelectorAll:()=>[]};
+    const c={window,document,Intl,formatCurrency:String,t:(it,en)=>lang==='en'?en:it,appDebugWarn(){}};
+    vm.runInNewContext(appSource.slice(start,end),c);
+    c.renderUniversalKPI({net:60000,revenue:100000,investment:30000});
+    assert.equal(nodes.get('break-even').innerText,lang==='en'?'0.5 years':'0,5 anni');
+    c.renderUniversalKPI({net:7500,revenue:100000,investment:30000});
+    assert.equal(nodes.get('break-even').innerText,lang==='en'?'4.0 years':'4,0 anni');
+    c.renderUniversalKPI({net:-10,revenue:0,investment:30000});
+    assert.equal(nodes.get('break-even').innerText,'-');
+  }
 });
 
 test("new simulations render every executive panel before any language switch", () => {
