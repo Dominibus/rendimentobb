@@ -13,11 +13,27 @@ export function selectLeads(leads,{category='all',search='',status='all',sort='r
 }
 export function leadCSV(leads){
  const cell=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
- return '\uFEFF'+[['Email','Nome','Città','Tipo','Stato','Fonte','Priorità','Valore convenzionale','Ultima attività','Note admin'],...leads.map(l=>[l.email,l.name,l.city,leadType(l),l.status||'new',l.lastSource||l.source,l.score,l.value,leadTime(l)?new Date(leadTime(l)).toISOString():'',l.adminNotes])].map(row=>row.map(cell).join(';')).join('\r\n');
+ return '\uFEFF'+[['Email','Nome','Città','Tipo','Stato','Fonte','Priorità','Indice convenzionale (punti)','Ultima attività','Note admin'],...leads.map(l=>[l.email,l.name,l.city,leadType(l),l.status||'new',l.lastSource||l.source,l.score,l.value,leadTime(l)?new Date(leadTime(l)).toISOString():'',l.adminNotes])].map(row=>row.map(cell).join(';')).join('\r\n');
 }
 
 // Records are events: a repeated simulation is not a new person.
 export function leadCoverage(leads){
  const emails=new Set(leads.map(l=>String(l.email||'').trim().toLowerCase()).filter(Boolean));
  return {records:leads.length,uniqueEmails:emails.size,withoutEmail:leads.filter(l=>!String(l.email||'').trim()).length};
+}
+
+// Snapshot cursors are kept by the UI; merge by document ID to avoid duplicates.
+export function mergeLeadBatch(current,batch){
+ const records=new Map(current.map(record=>[record.id,record]));
+ batch.forEach(record=>records.set(record.id,record));
+ return [...records.values()];
+}
+// Only show known metadata from this record. No inference from ROI, email or status.
+export function leadEvidence(lead){
+ const fields=['processingConsent','notificationConsent','marketingConsent','consentConfirmed','unsubscribed','privacyVersion','consentVersion','consentSource','consentAt'];
+ return fields.map(key=>{
+  const value=lead[key];
+  const shown=value===true?'true':value===false?'false':value==null?'—':key==='consentAt'&&value.seconds!=null?new Date(value.seconds*1000).toISOString():typeof value==='string'||typeof value==='number'?String(value):'—';
+  return [key,shown];
+ });
 }

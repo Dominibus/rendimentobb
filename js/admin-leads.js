@@ -1,18 +1,19 @@
 import {auth,db} from './firebase-init.js?v=20261016-rc140';
 import {onAuthStateChanged,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
-import {collection,getDocs,query,orderBy,limit} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
-import {leadType,operationalLead,leadTime,selectLeads,leadCSV,leadCoverage} from './admin-lead-model.js?v=20261021-admin-candidate';
+import {collection,getDocs,query,orderBy,limit,startAfter} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+import {leadType,operationalLead,leadTime,selectLeads,leadCSV,leadCoverage,mergeLeadBatch,leadEvidence} from './admin-lead-model.js?v=20261021-rc175';
 const $=id=>document.getElementById(id);
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=value=>new Intl.NumberFormat(window.currentLang==='en'?'en-GB':'it-IT',{style:'currency',currency:'EUR',useGrouping:true}).format(Number(value)||0);
 const isAdmin=user=>!!user&&(String(user.email||'').toLowerCase()==='rendimentobb@gmail.com'||window.getUserAccess?.().isAdmin);
 const statuses={new:['Nuovo','New'],contacted:['Contattato','Contacted'],qualified:['Qualificato','Qualified'],won:['Convertito','Converted'],lost:['Non interessato','Not interested'],archived:['Archiviato','Archived']};
-let loadedAt=null;
+let loadedAt=null,cursor=null,hasMore=false,loadGeneration=0;
+const indexNumber=value=>new Intl.NumberFormat(window.currentLang==='en'?'en-GB':'it-IT',{maximumFractionDigits:2}).format(Number(value)||0);
 let leads=[],category='all',page=1,pageSize=20,loading=false,selectedId=null,refreshTimer=null;
 const selection=()=>selectLeads(leads,{category,search:$('lead-search').value,status:$('lead-status-filter').value,sort:$('lead-sort').value});
 function message(value){$('lead-feedback').textContent=value;}
-function reset(){loadedAt=null;leads=[];selectedId=null;clearInterval(refreshTimer);refreshTimer=null;$('lead-details').close();$('leadList').replaceChildren();$('lead-coverage').textContent='';$('lead-page-label').textContent='';['lead-export','lead-prev','lead-next'].forEach(id=>$(id).disabled=true);renderKPI();message(t('Accesso riservato all’amministratore.','Administrator access required.'));}
+function reset(){loadGeneration++;cursor=null;hasMore=false;loadedAt=null;leads=[];selectedId=null;clearInterval(refreshTimer);refreshTimer=null;$('lead-details').close();$('leadList').replaceChildren();$('lead-coverage').textContent='';$('lead-page-label').textContent='';['lead-export','lead-prev','lead-next','lead-more'].forEach(id=>$(id).disabled=true);renderKPI();message(t('Accesso riservato all’amministratore.','Administrator access required.'));}
 function verificationPanel(){
  if($('lead-verification'))return;
  const panel=document.createElement('div');panel.id='lead-verification';panel.className='card';
@@ -31,23 +32,27 @@ function verificationPanel(){
  catch{$('lead-verification-feedback').textContent='Aggiornamento non riuscito. Esci e accedi nuovamente.';}
  });
 }
-async function load(){
+async function load(append=false){
  if(loading||!isAdmin(auth.currentUser))return;
  if(String(auth.currentUser.email||'').toLowerCase()==='rendimentobb@gmail.com'&&!auth.currentUser.emailVerified){verificationPanel();return;}
  $('lead-verification')?.remove();
- loading=true;$('lead-refresh').disabled=true;const owner=auth.currentUser.uid;
+ loading=true;$('lead-refresh').disabled=true;$('lead-more').disabled=true;const owner=auth.currentUser.uid,generation=loadGeneration;
  try{
-  const snap=await getDocs(query(collection(db,'leads'),orderBy('createdAt','desc'),limit(150)));
-  if(auth.currentUser?.uid!==owner||!isAdmin(auth.currentUser))return;
-  leads=snap.docs.map(item=>({...item.data(),id:item.id}));loadedAt=new Date();render();
+  const constraints=[orderBy('createdAt','desc')];
+  if(append&&cursor)constraints.push(startAfter(cursor));
+  const snap=await getDocs(query(collection(db,'leads'),...constraints,limit(150)));
+  if(generation!==loadGeneration||auth.currentUser?.uid!==owner||!isAdmin(auth.currentUser))return;
+  const batch=snap.docs.map(item=>({...item.data(),id:item.id}));
+  leads=mergeLeadBatch(append?leads:[],batch);cursor=snap.docs.at(-1)||null;hasMore=snap.size===150;
+  if(!append)page=1;loadedAt=new Date();render();
 
  }catch{message(t('Impossibile caricare i lead. Premi Aggiorna per riprovare.','Unable to load leads. Select Refresh to retry.'));}
- finally{loading=false;$('lead-refresh').disabled=false;}
+ finally{loading=false;$('lead-refresh').disabled=!isAdmin(auth.currentUser);$('lead-more').disabled=!hasMore||!isAdmin(auth.currentUser);}
 }
-function loadFeedback(){if(loadedAt)message(t(`Aggiornato alle ${loadedAt.toLocaleTimeString('it-IT')} · ${leads.length} record caricati per data di creazione (massimo 150).`,`Updated at ${loadedAt.toLocaleTimeString('en-GB')} · ${leads.length} records loaded by creation date (maximum 150).`));}
+function loadFeedback(){if(loadedAt)message(t(`Aggiornato alle ${loadedAt.toLocaleTimeString('it-IT')} · ${leads.length} record caricati per data di creazione · ${hasMore?'archivio non completo: carica altri record':'fine dei record con data di creazione raggiunta'}.`,`Updated at ${loadedAt.toLocaleTimeString('en-GB')} · ${leads.length} records loaded by creation date · ${hasMore?'archive incomplete: load more records':'end of records with creation date reached'}.`));}
 function renderKPI(){
  const financial=leads.filter(l=>!operationalLead(l));const sum=financial.reduce((n,l)=>n+(Number(l.value)||0),0);
- $('totalLeads').textContent=leads.length;$('totalValue').textContent=money(sum);$('avgValue').textContent=money(financial.length?sum/financial.length:0);$('hotLeads').textContent=financial.filter(l=>['extreme','hot'].includes(l.score)).length;
+ $('totalLeads').textContent=leads.length;$('totalValue').textContent=indexNumber(sum);$('avgValue').textContent=indexNumber(financial.length?sum/financial.length:0);$('hotLeads').textContent=financial.filter(l=>['extreme','hot'].includes(l.score)).length;
  const cities=new Map();financial.forEach(l=>{const city=String(l.city||'—');cities.set(city,(cities.get(city)||0)+1);});$('topCity').textContent=[...cities].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
 }
 function render(){
@@ -56,7 +61,7 @@ function render(){
  $('leadList').innerHTML=visible.map(l=>{
   const type=leadType(l),status=l.status||'new',email=String(l.email||'');
   const badge=operationalLead(l)?type:String(l.score||'cold');
-  return `<article class="lead-row"><div class="lead-main"><button type="button" class="lead-detail-link" data-detail="${escape(l.id)}">${escape(email||t('Email assente','Missing email'))}</button><p>${escape(l.name||l.city||'—')} · ${escape(type)} · ${escape(l.lastSource||l.source||'—')}</p><p>${leadTime(l)?escape(new Date(leadTime(l)).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT')):'—'}</p></div><div class="lead-side"><span class="lead-badge">${escape(badge.toUpperCase())}</span><span class="lead-status">${escape(t(...(statuses[status]||[status,status])))}</span>${!operationalLead(l)?`<strong>${money(l.value)}</strong>`:''}<div class="lead-actions"><button type="button" data-copy="${escape(email)}" aria-label="${t('Copia email','Copy email')}">📋</button><a href="mailto:${encodeURIComponent(email)}" aria-label="${t('Contatta lead','Contact lead')}">✉</a><button type="button" data-detail="${escape(l.id)}">${t('Dettagli','Details')}</button></div></div></article>`;
+  return `<article class="lead-row"><div class="lead-main"><button type="button" class="lead-detail-link" data-detail="${escape(l.id)}">${escape(email||t('Email assente','Missing email'))}</button><p>${escape(l.name||l.city||'—')} · ${escape(type)} · ${escape(l.lastSource||l.source||'—')}</p><p>${leadTime(l)?escape(new Date(leadTime(l)).toLocaleString(window.currentLang==='en'?'en-GB':'it-IT')):'—'}</p></div><div class="lead-side"><span class="lead-badge">${escape(badge.toUpperCase())}</span><span class="lead-status">${escape(t(...(statuses[status]||[status,status])))}</span>${!operationalLead(l)?`<strong>${indexNumber(l.value)} ${t('punti','points')}</strong>`:''}<div class="lead-actions"><button type="button" data-copy="${escape(email)}" aria-label="${t('Copia email','Copy email')}">📋</button><a href="mailto:${encodeURIComponent(email)}" aria-label="${t('Contatta lead','Contact lead')}">✉</a><button type="button" data-detail="${escape(l.id)}">${t('Dettagli','Details')}</button></div></div></article>`;
  }).join('')||`<p class="lead-empty">${t('Nessun lead corrisponde ai filtri.','No leads match the filters.')}</p>`;
  $('lead-page-label').textContent=t(`Pagina ${page}/${pages} · ${filtered.length} risultati nei record caricati`,`Page ${page}/${pages} · ${filtered.length} matches in loaded records`);
  $('lead-prev').disabled=page<=1;$('lead-next').disabled=page>=pages;$('lead-export').disabled=!filtered.length;
@@ -71,6 +76,9 @@ function detail(id){
  if(leadType(lead)==='mutui')rows.push(['Banca',lead.bank],['Tasso indicato',lead.rate],['Durata in anni',lead.years],['Reddito dichiarato',lead.income],['Mutuo richiesto',lead.loan!=null?money(lead.loan):null]);
  $('lead-detail-content').innerHTML=`<dl>${rows.filter(([label])=>!operationalLead(lead)||!['ROI simulato','Prezzo','Capitale proprio','Cashflow simulato','DSCR'].includes(label)).map(([label,value])=>`<div><dt>${escape(t(label,labels[label]||label))}</dt><dd>${escape(value===null||value===undefined||value===''?'—':value)}</dd></div>`).join('')}</dl><p class="lead-source-note">${t('Importi e ROI sono dati della richiesta o simulazione. Il valore lead è un indice convenzionale interno. “Accepted” indica accettazione del servizio email, non consegna nella casella.','Amounts and ROI belong to the request or simulation. Lead value is an internal index. “Accepted” means the email service accepted the message, not inbox delivery.')}</p>`;
  $('lead-detail-content').insertAdjacentHTML('beforeend',`<p class="lead-source-note">${t('Marketing e condivisione: evidenze non verificate in questa schermata. Registrazione, ROI, stato di lavorazione ed email accettata non dimostrano autorizzazioni. Verificare la richiesta originale e le evidenze separate prima di qualsiasi azione.','Marketing and sharing: evidence has not been verified in this screen. Registration, ROI, processing status and accepted email do not establish permission. Check the original request and separate evidence before any action.')}</p>`);
+ const evidence=leadEvidence(lead);
+ const evidenceLabels={processingConsent:['Trattamento richiesto','Requested processing'],notificationConsent:['Avviso richiesto','Notification requested'],marketingConsent:['Marketing dichiarato','Recorded marketing choice'],consentConfirmed:['Conferma registrata','Recorded confirmation'],unsubscribed:['Disiscrizione registrata','Recorded unsubscribe'],privacyVersion:['Versione informativa','Privacy notice version'],consentVersion:['Versione consenso','Consent version'],consentSource:['Fonte consenso','Consent source'],consentAt:['Data consenso (UTC)','Consent time (UTC)']};
+ $('lead-detail-content').insertAdjacentHTML('beforeend',`<h3>${t('Evidenze presenti nel record','Evidence stored in this record')}</h3><dl>${evidence.map(([label,value])=>`<div><dt>${escape(t(...evidenceLabels[label]))}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl><p>${t('Metadati dichiarati, non autorizzazioni validate. Le evidenze conservate in archivi separati non sono consultate qui. Un dato assente non equivale a un rifiuto.','Recorded metadata, not validated permissions. Evidence in separate stores is not queried here. Missing data does not mean refusal.')}</p>`);
  $('lead-edit-status').value=lead.status||'new';$('lead-edit-notes').value=lead.adminNotes||'';$('lead-detail-feedback').textContent='';$('lead-details').showModal();
 }
 async function updateLead(method){
@@ -94,13 +102,13 @@ $('leadList').addEventListener('click',async event=>{
 });
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.filter;page=1;render();}));
 ['lead-search','lead-status-filter','lead-sort'].forEach(id=>$(id).addEventListener(id==='lead-search'?'input':'change',()=>{page=1;render();}));
-$('lead-prev').addEventListener('click',()=>{page--;render();});$('lead-next').addEventListener('click',()=>{page++;render();});$('lead-refresh').addEventListener('click',load);
+$('lead-prev').addEventListener('click',()=>{page--;render();});$('lead-next').addEventListener('click',()=>{page++;render();});$('lead-refresh').addEventListener('click',()=>load());$('lead-more').addEventListener('click',()=>load(true));
 $('lead-close').addEventListener('click',()=>$('lead-details').close());$('lead-save').addEventListener('click',()=>updateLead('PATCH'));$('lead-delete').addEventListener('click',()=>updateLead('DELETE'));
 $('lead-export').addEventListener('click',()=>{
  if(!isAdmin(auth.currentUser))return;
  const url=URL.createObjectURL(new Blob([leadCSV(selection())],{type:'text/csv;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='RendimentoBB-leads.csv';link.click();URL.revokeObjectURL(url);
 });
-function start(user){if(!isAdmin(user)){reset();return;}load();if(!refreshTimer)refreshTimer=setInterval(()=>{if(!document.hidden&&!$('lead-details').open)load();},60000);}
+function start(user){if(!isAdmin(user)){reset();return;}load();if(!refreshTimer)refreshTimer=setInterval(()=>{if(!document.hidden&&!$('lead-details').open&&leads.length<=150)load();},60000);}
 onAuthStateChanged(auth,user=>{if(!user)reset();else if(isAdmin(user))start(user);});
 document.addEventListener('rb_auth_ready',event=>start(event.detail?.user));
 document.addEventListener('rb_language_changed',()=>{render();if($('lead-details').open) {const id=selectedId,status=$('lead-edit-status').value,notes=$('lead-edit-notes').value;$('lead-details').close();detail(id);$('lead-edit-status').value=status;$('lead-edit-notes').value=notes;}});
