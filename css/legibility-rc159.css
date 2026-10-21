@@ -42,7 +42,7 @@ body .mortgage-summary-badge{color:#0b6176!important;-webkit-text-fill-color:#0b
 /* Legal text and authentication stay on the existing light surfaces. */
 body.legal-page .legal-eyebrow,body.legal-page .legal-label{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
 body.legal-page .legal-updated{color:#4c5c70!important;-webkit-text-fill-color:#4c5c70!important;font-size:13px}
-body.legal-page .legal-document a,body.legal-page .legal-note a{color:#075f46!important;-webkit-text-fill-color:#075f46!important;text-underline-offset:3px}
+body.legal-page .legal-document a:not(.btn-primary-legal),body.legal-page .legal-note a:not(.btn-primary-legal){color:#075f46!important;-webkit-text-fill-color:#075f46!important;text-underline-offset:3px}
 body.legal-page .btn-primary-legal{background:#09654c;color:#fff!important;-webkit-text-fill-color:#fff!important}
 body.rb-login-page .rb159-login-value{font-size:14px!important;color:#075f46!important;-webkit-text-fill-color:#075f46!important;line-height:1.65}
 body.rb-login-page .lang-btn.active{background:#09654c!important;border-color:#09654c!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
@@ -61,3 +61,36 @@ body #roi-message{font-size:13px}
 body .badge-pro{font-size:12px}
 
 body .pms-tab:not(.active) span{color:#075f46!important;-webkit-text-fill-color:#075f46!important}
+
+/* Button contrast correction: document link colors must not recolor filled CTAs. */
+body.legal-page a.btn-primary-legal,
+body.legal-page button.btn-primary-legal {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:10px 20px;
+  border-radius:999px;
+  background:#09654c!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  font-weight:800;
+  text-decoration:none;
+  line-height:1.4;
+  text-align:center;
+}
+body.legal-page .btn-primary-legal :is(span,strong,b,em) {
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+body.legal-page .btn-primary-legal:hover {background:#07513d!important}
+body.legal-page .btn-primary-legal:focus-visible {
+  outline:3px solid #123b32;
+  outline-offset:3px;
+}
+/* Shared trial invitation: white labels need a darker green fill. */
+body .rb-trial-invite a[data-rb-trial-start] {
+  background:#09654c!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
