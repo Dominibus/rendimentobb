@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
     const decoded = await admin.auth().verifyIdToken(token, true);
     const email = String(decoded.email || "").toLowerCase();
-    const isAdmin = decoded.admin === true || (decoded.email_verified === true && email === "rendimentobb@gmail.com");
+    const isAdmin = decoded.email_verified === true && email === "rendimentobb@gmail.com";
 
     if (!isAdmin) {
       return res.status(403).json({ error: "Admin access required" });

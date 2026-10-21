@@ -261,32 +261,32 @@ box-shadow:0 12px 30px rgba(15,23,42,.22);
 
 <h1 data-it="Centro gestione lead" data-en="Lead Management Center">Centro gestione lead</h1>
 <div class="subtitle"
-data-it="Priorità, valore potenziale e provenienza dei lead"
-data-en="Lead priority, potential value and acquisition source">
-Priorità, valore potenziale e provenienza dei lead
+data-it="Eventi, priorità da simulazione e provenienza"
+data-en="Events, simulation priority and acquisition source">
+Eventi, priorità da simulazione e provenienza
 </div>
 
-<p class="subtitle" data-it="Il valore potenziale è una stima interna, non un prezzo di vendita. Prima di trasferire un lead occorrono qualificazione, autorizzazione al contatto e alla condivisione, destinatario e risultato tracciati." data-en="Potential value is an internal estimate, not a sale price. Before transferring a lead, record qualification, permission to contact and share, the recipient and outcome.">Il valore potenziale è una stima interna, non un prezzo di vendita. Prima di trasferire un lead occorrono qualificazione, autorizzazione al contatto e alla condivisione, destinatario e risultato tracciati.</p>
+<p class="subtitle" data-it="Il valore potenziale è una stima interna, non un prezzo di vendita. Nessun record è automaticamente autorizzato per marketing o condivisione con terzi. Le evidenze devono essere verificate separatamente per la finalità prevista." data-en="Total internal index is an internal estimate, not a sale price. No record is automatically authorized for marketing or third-party sharing. Evidence must be checked separately for the intended purpose.">Il valore potenziale è una stima interna, non un prezzo di vendita. Nessun record è automaticamente autorizzato per marketing o condivisione con terzi. Le evidenze devono essere verificate separatamente per la finalità prevista.</p>
 <!-- KPI -->
 <div class="kpi-grid">
 
   <div class="kpi">
-    <div class="kpi-title" data-it="Lead caricati" data-en="Loaded leads">Lead caricati</div>
+    <div class="kpi-title" data-it="Eventi caricati" data-en="Loaded events">Eventi caricati</div>
     <div id="totalLeads" class="kpi-value">0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title" data-it="Valore potenziale" data-en="Potential value">Valore potenziale</div>
+    <div class="kpi-title" data-it="Indice convenzionale totale" data-en="Total internal index">Indice convenzionale totale</div>
     <div id="totalValue" class="kpi-value">€0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title" data-it="Valore medio lead" data-en="Average lead value">Valore medio lead</div>
+    <div class="kpi-title" data-it="Indice medio per simulazione" data-en="Average simulation index">Indice medio per simulazione</div>
     <div id="avgValue" class="kpi-value">€0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title" data-it="Lead prioritari" data-en="Priority leads">Lead prioritari</div>
+    <div class="kpi-title" data-it="Eventi con ROI elevato" data-en="High ROI events">Eventi con ROI elevato</div>
     <div id="hotLeads" class="kpi-value">0</div>
   </div>
 
@@ -315,6 +315,7 @@ Priorità, valore potenziale e provenienza dei lead
   </div>
 
   <p class="lead-source-note" data-it="Indicatori sugli ultimi 150 record caricati. Il valore lead è una classificazione interna, non fatturato o ricavo previsto." data-en="Metrics cover the latest 150 loaded records. Lead value is an internal classification, not turnover or forecast revenue.">Indicatori sugli ultimi 150 record caricati. Il valore lead è una classificazione interna, non fatturato o ricavo previsto.</p>
+  <p id="lead-coverage" class="lead-source-note"></p>
   <div class="lead-toolbar">
     <label for="lead-search"><span data-it="Cerca lead" data-en="Search leads">Cerca lead</span><input id="lead-search" type="search" placeholder="Email, nome, città, fonte…" data-it-placeholder="Email, nome, città, fonte…" data-en-placeholder="Email, name, city, source…"></label>
     <label for="lead-status-filter"><span data-it="Stato" data-en="Status">Stato</span><select id="lead-status-filter"><option value="all" data-it="Tutti gli stati" data-en="All statuses">Tutti gli stati</option><option value="new" data-it="Nuovo" data-en="New">Nuovo</option><option value="contacted" data-it="Contattato" data-en="Contacted">Contattato</option><option value="qualified" data-it="Qualificato" data-en="Qualified">Qualificato</option><option value="won" data-it="Convertito" data-en="Converted">Convertito</option><option value="lost" data-it="Non interessato" data-en="Not interested">Non interessato</option><option value="archived" data-it="Archiviato" data-en="Archived">Archiviato</option></select></label>
@@ -332,6 +333,6 @@ Priorità, valore potenziale e provenienza dei lead
 <dialog id="lead-details" aria-labelledby="lead-detail-title"><div class="lead-dialog-header"><h2 id="lead-detail-title"></h2><button id="lead-close" type="button" aria-label="Chiudi" data-it-aria="Chiudi" data-en-aria="Close">×</button></div><div id="lead-detail-content"></div><label for="lead-edit-status" data-it="Stato di lavorazione" data-en="Processing status">Stato di lavorazione</label><select id="lead-edit-status"><option value="new" data-it="Nuovo" data-en="New">Nuovo</option><option value="contacted" data-it="Contattato" data-en="Contacted">Contattato</option><option value="qualified" data-it="Qualificato" data-en="Qualified">Qualificato</option><option value="won" data-it="Convertito" data-en="Converted">Convertito</option><option value="lost" data-it="Non interessato" data-en="Not interested">Non interessato</option><option value="archived" data-it="Archiviato" data-en="Archived">Archiviato</option></select><label for="lead-edit-notes" data-it="Note interne" data-en="Internal notes">Note interne</label><textarea id="lead-edit-notes" maxlength="2000" rows="4"></textarea><p id="lead-detail-feedback" class="lead-feedback" role="status"></p><div class="lead-dialog-actions"><button id="lead-delete" type="button" data-it="Elimina definitivamente" data-en="Permanently delete">Elimina definitivamente</button><button id="lead-save" type="button" data-it="Salva stato e note" data-en="Save status and notes">Salva stato e note</button></div></dialog>
 <div id="global-footer"></div>
 
-<script type="module" src="/js/admin-leads.js?v=20261001-27"></script>
+<script type="module" src="/js/admin-leads.js?v=20261021-admin-candidate"></script>
 </body>
 </html>

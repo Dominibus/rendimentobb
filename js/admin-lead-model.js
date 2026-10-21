@@ -15,3 +15,9 @@ export function leadCSV(leads){
  const cell=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
  return '\uFEFF'+[['Email','Nome','Città','Tipo','Stato','Fonte','Priorità','Valore convenzionale','Ultima attività','Note admin'],...leads.map(l=>[l.email,l.name,l.city,leadType(l),l.status||'new',l.lastSource||l.source,l.score,l.value,leadTime(l)?new Date(leadTime(l)).toISOString():'',l.adminNotes])].map(row=>row.map(cell).join(';')).join('\r\n');
 }
+
+// Records are events: a repeated simulation is not a new person.
+export function leadCoverage(leads){
+ const emails=new Set(leads.map(l=>String(l.email||'').trim().toLowerCase()).filter(Boolean));
+ return {records:leads.length,uniqueEmails:emails.size,withoutEmail:leads.filter(l=>!String(l.email||'').trim()).length};
+}

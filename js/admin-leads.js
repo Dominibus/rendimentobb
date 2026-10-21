@@ -1,17 +1,18 @@
 import {auth,db} from './firebase-init.js?v=20261016-rc140';
 import {onAuthStateChanged,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import {collection,getDocs,query,orderBy,limit} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
-import {leadType,operationalLead,leadTime,selectLeads,leadCSV} from './admin-lead-model.js';
+import {leadType,operationalLead,leadTime,selectLeads,leadCSV,leadCoverage} from './admin-lead-model.js?v=20261021-admin-candidate';
 const $=id=>document.getElementById(id);
 const t=(it,en)=>window.currentLang==='en'?en:it;
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=value=>new Intl.NumberFormat(window.currentLang==='en'?'en-GB':'it-IT',{style:'currency',currency:'EUR',useGrouping:true}).format(Number(value)||0);
 const isAdmin=user=>!!user&&(String(user.email||'').toLowerCase()==='rendimentobb@gmail.com'||window.getUserAccess?.().isAdmin);
 const statuses={new:['Nuovo','New'],contacted:['Contattato','Contacted'],qualified:['Qualificato','Qualified'],won:['Convertito','Converted'],lost:['Non interessato','Not interested'],archived:['Archiviato','Archived']};
+let loadedAt=null;
 let leads=[],category='all',page=1,pageSize=20,loading=false,selectedId=null,refreshTimer=null;
 const selection=()=>selectLeads(leads,{category,search:$('lead-search').value,status:$('lead-status-filter').value,sort:$('lead-sort').value});
 function message(value){$('lead-feedback').textContent=value;}
-function reset(){leads=[];selectedId=null;clearInterval(refreshTimer);refreshTimer=null;$('lead-details').close();$('leadList').replaceChildren();renderKPI();message(t('Accesso riservato all’amministratore.','Administrator access required.'));}
+function reset(){loadedAt=null;leads=[];selectedId=null;clearInterval(refreshTimer);refreshTimer=null;$('lead-details').close();$('leadList').replaceChildren();$('lead-coverage').textContent='';$('lead-page-label').textContent='';['lead-export','lead-prev','lead-next'].forEach(id=>$(id).disabled=true);renderKPI();message(t('Accesso riservato all’amministratore.','Administrator access required.'));}
 function verificationPanel(){
  if($('lead-verification'))return;
  const panel=document.createElement('div');panel.id='lead-verification';panel.className='card';
@@ -38,18 +39,19 @@ async function load(){
  try{
   const snap=await getDocs(query(collection(db,'leads'),orderBy('createdAt','desc'),limit(150)));
   if(auth.currentUser?.uid!==owner||!isAdmin(auth.currentUser))return;
-  leads=snap.docs.map(item=>({...item.data(),id:item.id}));render();
-  message(t(`Aggiornato alle ${new Date().toLocaleTimeString('it-IT')} · ultimi ${leads.length} record caricati (massimo 150).`,`Updated at ${new Date().toLocaleTimeString('en-GB')} · latest ${leads.length} loaded records (maximum 150).`));
+  leads=snap.docs.map(item=>({...item.data(),id:item.id}));loadedAt=new Date();render();
+
  }catch{message(t('Impossibile caricare i lead. Premi Aggiorna per riprovare.','Unable to load leads. Select Refresh to retry.'));}
  finally{loading=false;$('lead-refresh').disabled=false;}
 }
+function loadFeedback(){if(loadedAt)message(t(`Aggiornato alle ${loadedAt.toLocaleTimeString('it-IT')} · ${leads.length} record caricati per data di creazione (massimo 150).`,`Updated at ${loadedAt.toLocaleTimeString('en-GB')} · ${leads.length} records loaded by creation date (maximum 150).`));}
 function renderKPI(){
  const financial=leads.filter(l=>!operationalLead(l));const sum=financial.reduce((n,l)=>n+(Number(l.value)||0),0);
  $('totalLeads').textContent=leads.length;$('totalValue').textContent=money(sum);$('avgValue').textContent=money(financial.length?sum/financial.length:0);$('hotLeads').textContent=financial.filter(l=>['extreme','hot'].includes(l.score)).length;
  const cities=new Map();financial.forEach(l=>{const city=String(l.city||'—');cities.set(city,(cities.get(city)||0)+1);});$('topCity').textContent=[...cities].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
 }
 function render(){
- renderKPI();const filtered=selection();const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
+ renderKPI();loadFeedback();const coverage=leadCoverage(leads);$('lead-coverage').textContent=t(`${coverage.records} eventi · ${coverage.uniqueEmails} email distinte · ${coverage.withoutEmail} record senza email. Email distinte non significa persone verificate. Priorità basata sul ROI dichiarato; test e simulazioni ripetute possono essere inclusi.`,`${coverage.records} events · ${coverage.uniqueEmails} distinct emails · ${coverage.withoutEmail} records without email. Distinct emails are not verified people. Priority is based on submitted ROI; tests and repeated simulations may be included.`);const filtered=selection();const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
  const visible=filtered.slice((page-1)*pageSize,page*pageSize);
  $('leadList').innerHTML=visible.map(l=>{
   const type=leadType(l),status=l.status||'new',email=String(l.email||'');
@@ -61,10 +63,14 @@ function render(){
  document.querySelectorAll('[data-filter]').forEach(button=>{const active=button.dataset.filter===category;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
 }
 function detail(id){
+ $('lead-close').setAttribute('aria-label',t('Chiudi','Close'));
  const lead=leads.find(l=>l.id===id);if(!lead)return;selectedId=id;
  $('lead-detail-title').textContent=lead.email||t('Dettaglio lead','Lead details');
- const rows=[['Nome / azienda',lead.name],['Tipo',leadType(lead)],['Città',operationalLead(lead)&&['partner','career','work','auth'].includes(String(lead.city||'').toLowerCase())?null:lead.city],['Telefono',lead.phone],['Ruolo',lead.role],['Messaggio',lead.message],['Fonte',lead.lastSource||lead.source],['Funnel',(lead.lastFunnel||lead.funnel)==='unknown'?null:(lead.lastFunnel||lead.funnel)],['Lingua',lead.lang],['ROI simulato',lead.roi!=null?`${lead.roi}%`:null],['Prezzo',lead.price!=null?money(lead.price):null],['Capitale proprio',lead.equity!=null?money(lead.equity):null],['Cashflow simulato',lead.profit!=null?money(lead.profit):null],['DSCR',lead.dscr],['Email utente',lead.emailDelivery?.user?.status],['Email admin',lead.emailDelivery?.admin?.status]];
- $('lead-detail-content').innerHTML=`<dl>${rows.filter(([label])=>!operationalLead(lead)||!['ROI simulato','Prezzo','Capitale proprio','Cashflow simulato','DSCR'].includes(label)).map(([label,value])=>`<div><dt>${escape(label)}</dt><dd>${escape(value===null||value===undefined||value===''?'—':value)}</dd></div>`).join('')}</dl><p class="lead-source-note">${t('Importi e ROI sono dati della richiesta o simulazione. Il valore lead è un indice convenzionale interno. “Accepted” indica accettazione del servizio email, non consegna nella casella.','Amounts and ROI belong to the request or simulation. Lead value is an internal index. “Accepted” means the email service accepted the message, not inbox delivery.')}</p>`;
+ const labels={'Banca':'Bank','Tasso indicato':'Submitted rate','Durata in anni':'Term in years','Reddito dichiarato':'Submitted income','Mutuo richiesto':'Requested loan','Nome / azienda':'Name / company','Tipo':'Type','Città':'City','Telefono':'Phone','Ruolo':'Role','Messaggio':'Message','Fonte':'Source','Lingua':'Language','ROI simulato':'Simulated ROI','Prezzo':'Price','Capitale proprio':'Equity','Cashflow simulato':'Simulated cashflow','Email utente':'User email','Email admin':'Admin email'};
+ const rows=[['Nome / azienda',lead.name],['Tipo',leadType(lead)],['Città',operationalLead(lead)&&['partner','career','work','auth'].includes(String(lead.city||'').toLowerCase())?null:lead.city],['Telefono',lead.phone],['Ruolo',lead.role],['Messaggio',lead.message],['Fonte',lead.lastSource||lead.source],['Funnel',(lead.lastFunnel||lead.funnel)==='unknown'?null:(lead.lastFunnel||lead.funnel)],['Lingua',lead.lang],['ROI simulato',lead.roi!=null?`${new Intl.NumberFormat(window.currentLang==='en'?'en-GB':'it-IT',{maximumFractionDigits:2}).format(lead.roi)}%`:null],['Prezzo',lead.price!=null?money(lead.price):null],['Capitale proprio',lead.equity!=null?money(lead.equity):null],['Cashflow simulato',lead.profit!=null?money(lead.profit):null],['DSCR',lead.dscr!=null?new Intl.NumberFormat(window.currentLang==='en'?'en-GB':'it-IT',{maximumFractionDigits:2}).format(lead.dscr):null],['Email utente',lead.emailDelivery?.user?.status],['Email admin',lead.emailDelivery?.admin?.status]];
+ if(leadType(lead)==='mutui')rows.push(['Banca',lead.bank],['Tasso indicato',lead.rate],['Durata in anni',lead.years],['Reddito dichiarato',lead.income],['Mutuo richiesto',lead.loan!=null?money(lead.loan):null]);
+ $('lead-detail-content').innerHTML=`<dl>${rows.filter(([label])=>!operationalLead(lead)||!['ROI simulato','Prezzo','Capitale proprio','Cashflow simulato','DSCR'].includes(label)).map(([label,value])=>`<div><dt>${escape(t(label,labels[label]||label))}</dt><dd>${escape(value===null||value===undefined||value===''?'—':value)}</dd></div>`).join('')}</dl><p class="lead-source-note">${t('Importi e ROI sono dati della richiesta o simulazione. Il valore lead è un indice convenzionale interno. “Accepted” indica accettazione del servizio email, non consegna nella casella.','Amounts and ROI belong to the request or simulation. Lead value is an internal index. “Accepted” means the email service accepted the message, not inbox delivery.')}</p>`;
+ $('lead-detail-content').insertAdjacentHTML('beforeend',`<p class="lead-source-note">${t('Marketing e condivisione: evidenze non verificate in questa schermata. Registrazione, ROI, stato di lavorazione ed email accettata non dimostrano autorizzazioni. Verificare la richiesta originale e le evidenze separate prima di qualsiasi azione.','Marketing and sharing: evidence has not been verified in this screen. Registration, ROI, processing status and accepted email do not establish permission. Check the original request and separate evidence before any action.')}</p>`);
  $('lead-edit-status').value=lead.status||'new';$('lead-edit-notes').value=lead.adminNotes||'';$('lead-detail-feedback').textContent='';$('lead-details').showModal();
 }
 async function updateLead(method){
