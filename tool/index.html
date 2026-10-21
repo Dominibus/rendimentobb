@@ -1494,7 +1494,7 @@ EXECUTIVE KPI CARDS
     <div
     id="profit-monthly"
     class="executive-stat-value">
-    €0
+    —
     </div>
 
   </div>
@@ -1515,7 +1515,7 @@ EXECUTIVE KPI CARDS
     <div
     id="profit-annual"
     class="executive-stat-value">
-    €0
+    —
     </div>
 
   </div>
@@ -1557,7 +1557,7 @@ EXECUTIVE KPI CARDS
     <div
     id="revenue-annual"
     class="executive-stat-value">
-    €0
+    —
     </div>
 
   </div>
@@ -1902,6 +1902,7 @@ data-en="Download the professional investment analysis report.">
 
 <button
 id="pdf-btn"
+disabled aria-describedby="tool-pdf-status"
 onclick="generateExecutivePDF()"
 class="btn btn-primary"
 style="padding:14px 32px;font-size:16px;margin-top:15px;"
@@ -1910,7 +1911,7 @@ data-en="📄 Download Executive Report PDF">
 
 📄 Scarica Executive Report PDF
 
-</button>
+</button><p id="tool-pdf-status" role="status" aria-live="polite" data-it="Completa i dati e avvia l’analisi per ottenere un report. Il PDF richiede Pro." data-en="Complete the inputs and run the analysis to obtain a report. PDF export requires Pro.">Completa i dati e avvia l’analisi per ottenere un report. Il PDF richiede Pro.</p>
 
 </div>
 
@@ -2079,7 +2080,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261020-rc161"></script>
+<script type="module" src="/js/app.js?v=20261021-rc171"></script>
 
 <script>
 

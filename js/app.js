@@ -11,6 +11,8 @@ import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
+import {installToolPresentation} from "./tool-presentation.js?v=20261021-rc171";
+installToolPresentation(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
@@ -5664,6 +5666,11 @@ if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
 if(!access.canDownloadPDF){ openUpgradeModal("pro"); return; }
 
+if(window.rbGetInvestmentAnalysisState && window.rbGetInvestmentAnalysisState().status !== 'current'){
+  showToast(T('Completa o ricalcola l’analisi prima di esportare il PDF.', 'Complete or recalculate the analysis before exporting the PDF.'));
+  return;
+}
+
 if(!window.lastAnalysisData){
   showToast(T("Genera prima analisi","Run analysis first"));
   return;
@@ -6454,7 +6461,7 @@ revenueScenarios.forEach(s=>{
 // AI EXECUTIVE INSIGHT
 // =====================================
 
-y -= 4;
+y -= 10;
 
 doc.setFillColor(245,248,252);
 
@@ -6462,7 +6469,7 @@ doc.roundedRect(
 30,
 y,
 150,
-42,
+32,
 6,
 6,
 "F"

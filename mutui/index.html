@@ -943,7 +943,7 @@ data-it-placeholder="Ricavi annui B&B" data-en-placeholder="Annual B&B revenue">
 
 <details style="margin:20px 0;padding:18px;border:1px solid #e2e8f0;border-radius:14px;">
 <summary data-it="Completa i dati da trasferire in Analizza" data-en="Complete the inputs to transfer to Analyze">Completa i dati da trasferire in Analizza</summary>
-<p data-it="Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte." data-en="Optional fields: enter verified values. Equity equals price minus loan; annual revenue and occupancy determine the equivalent nightly rate. Costs must not duplicate commissions and taxes.">Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte.</p>
+<p data-it="Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte." data-en="Optional fields: enter verified values. Equity equals price minus loan; annual revenue and occupancy determine the equivalent nightly rate. Costs must not duplicate commissions and taxes.">Campi facoltativi: inserisci valori verificati. Il capitale proprio sarà prezzo meno mutuo; i ricavi annui e l’occupazione determinano la tariffa notte equivalente. I costi non devono duplicare commissioni e imposte.</p><p  data-it="Limite del trasferimento: qui il capitale proprio è prezzo meno mutuo. Lavori e altre spese finanziate oltre il prezzo richiedono una struttura separata, non supportata da questo percorso. La rata del solo prestito resta calcolabile sopra." data-en="Transfer limit: equity here is price minus loan. Works or other costs financed above the price need a separate structure, which this journey does not support. You can still calculate the loan payment above.">Limite del trasferimento: qui il capitale proprio è prezzo meno mutuo. Lavori e altre spese finanziate oltre il prezzo richiedono una struttura separata, non supportata da questo percorso. La rata del solo prestito resta calcolabile sopra.</p>
 <div class="mortgage-form-grid">
 <label class="mortgage-field"><span data-it="Città o comune" data-en="City or municipality">Città o comune</span><input id="transfer-location" maxlength="80"></label>
 <label class="mortgage-field"><span data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</span><input id="transfer-propertyPrice" inputmode="decimal"></label>
@@ -2089,7 +2089,17 @@ function continueMortgage(rateOverride){
   const raw = {...scenario};
   fields.forEach(field => { raw[field] = document.getElementById('transfer-' + field)?.value || ''; });
   const checked = RBInvestmentJourney.validate(raw);
-  fields.forEach(field => document.getElementById('transfer-' + field)?.setCustomValidity(checked.errors[field] ? t('Verifica il valore. Il prezzo non può essere inferiore al mutuo; le percentuali devono essere tra 0 e 100 e l’occupazione maggiore di zero.', 'Check this value. Price cannot be lower than the loan; percentages must be between 0 and 100 and occupancy above zero.') : ''));
+  const transferMessages = {
+    propertyPrice: checked.errors.propertyPrice === 'loan_exceeds_price'
+      ? t('Questo trasferimento supporta solo l’acquisto con mutuo non superiore al prezzo: capitale proprio = prezzo meno mutuo. Il finanziamento di lavori o altre spese oltre il prezzo non è modellato qui. È un limite del simulatore, non una decisione della banca.', 'This transfer supports purchases with a loan no higher than the price: equity = price minus loan. Financing works or other costs above the price is not modelled here. This is a simulator limit, not a lending decision.')
+      : t('Inserisci un prezzo immobile positivo e valido.', 'Enter a valid positive property price.'),
+    location:t('Inserisci un comune valido, fino a 80 caratteri.', 'Enter a valid town, up to 80 characters.'),
+    occupancy:t('Inserisci un’occupazione maggiore di zero e fino al 100%.', 'Enter occupancy above zero and up to 100%.'),
+    expenses:t('Inserisci costi mensili non negativi.', 'Enter non-negative monthly costs.'),
+    commission:t('Inserisci commissioni tra 0 e 100%.', 'Enter commissions between 0 and 100%.'),
+    tax:t('Inserisci un’aliquota del modello tra 0 e 100%.', 'Enter a model tax rate between 0 and 100%.')
+  };
+  fields.forEach(field => document.getElementById('transfer-' + field)?.setCustomValidity(checked.errors[field] ? transferMessages[field] : ''));
   if(!checked.valid){
     const input = document.getElementById('transfer-' + Object.keys(checked.errors)[0]);
     input?.closest('details')?.setAttribute('open','');
