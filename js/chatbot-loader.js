@@ -183,7 +183,7 @@
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261019-rc153",
     "/js/chatbot/core/practical-guide.js?v=20261020-rc160",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261020-rc160",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261021-rc169",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

@@ -28,6 +28,11 @@ test('every page exposing the shared Assistant has a centralized loader fallback
  for(const url of await htmlFiles()){
   const html=await readFile(url,'utf8');
   if(html.includes('/js/header.js')){covered++;const tags=html.match(/<script\b[^>]*src="[^"]*chatbot-loader\.js[^\"]*"[^>]*>/g)||[];assert.ok(tags.length<=1,`${url.pathname}: duplicate explicit loader`);}
+  else if(/\/(?:en\/)?demo\/(?:investment-analytics|hospitality-pms)\/index\.html$/.test(url.pathname)){
+   // Isolated demos use the static public shell because their CSP forbids network access.
+   assert.match(html,/src="\/js\/public-shell\.js/);
+   assert.doesNotMatch(html,/src="[^"]*(?:firebase|chatbot-loader|\/js\/header\.js)/i);
+  }
   else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html')||url.pathname.endsWith('/account-action/index.html'),`Unexpected page without shared header: ${url.pathname}`);
  }
  assert.equal(covered,39);

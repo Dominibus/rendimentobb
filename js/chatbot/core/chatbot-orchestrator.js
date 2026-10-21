@@ -18,6 +18,21 @@ window.rbBuildAccountPrivacyResponse = function(message){
  return {type:'account_privacy',confidence:1,actions:[],metadata:{source:'account_boundary'},textIT:'Non posso accedere o mostrare dati di altri account. Posso aiutarti soltanto con i dati caricati e autorizzati del tuo account. Non ho consultato né modificato dati altrui.',textEN:'I cannot access or show other accounts’ data. I can help only with the loaded, authorized data from your account. I have not accessed or changed anyone else’s data.'};
 };
 
+// RC169: the brand subtitle does not advertise custom software services.
+// Resolve explicit scope requests before live account, PDF and market routes.
+window.rbBuildRealEstateScopeResponse = function(message){
+  const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const brand = /\bbasic\s*(?:&|and|e)\s*beyond\b|\bbasic\s+beyond\b|(?:due|two)\s*bb\b/.test(q);
+  const build = /\b(?:creare|crearmi|creaci|createmi|crei|create|realizzare|realizzi|realizzate|realizzarmi|sviluppare|sviluppi|sviluppate|svilupparmi|costruire|costruisci|costruite|build|develop|design)\b[^.!?\n]{0,70}\b(?:sit[oi]|sito\s+web|website|websites|software|app|apps|applicazion[ei]|applications?|gestional[ei]|automation|automazion[ei])\b/.test(q);
+  const bespoke = /(?:software|gestional[ei]|app|sit[oi]|website|applications?)\s+(?:personalizzat[oaie]|su misura|per conto terzi)|\b(?:custom|bespoke)\s+(?:software|apps?|websites?|applications?)\b/.test(q);
+  if(!brand && !build && !bespoke)return null;
+  return {
+    type:'real_estate_scope',confidence:1,actions:[],metadata:{source:'current_product_scope'},
+    textIT:'Basic & Beyond — L’essenziale & oltre è il sottotitolo del marchio RendimentoBB. Oggi la piattaforma si concentra su investimenti immobiliari, simulatore ROI, mutui, confronto degli immobili, dashboard, PMS per B&B e affitti brevi e assistenza AI sui dati disponibili.\n\nL’offerta generalista per sviluppare siti, app, software o gestionali per conto di terzi è sospesa: non è un servizio attualmente disponibile.\n\nVuoi valutare un acquisto, analizzare un immobile che possiedi oppure gestire prenotazioni e attività del tuo B&B?',
+    textEN:'Basic & Beyond — The essentials & beyond is the RendimentoBB brand subtitle. Today the platform focuses on property investments, the ROI simulator, mortgages, property comparisons, dashboards, PMS for B&Bs and short stays, and AI assistance using available data.\n\nThe general-purpose offering to develop websites, apps, software or management systems for third parties is suspended: it is not currently an available service.\n\nWould you like to assess a purchase, analyse a property you own, or manage bookings and tasks for your B&B?'
+  };
+};
+
 window.rbBuildProductLimitsResponse = function(message){
   const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagno|guadagni)\b/.test(q);
@@ -53,6 +68,9 @@ async function(message){
 
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
+
+    const scopeResponse = window.rbBuildRealEstateScopeResponse(text);
+    if(scopeResponse)return {success:true,response:scopeResponse,intent:{intent:'real_estate_scope'}};
 
 
     const importGuide=window.rbBuildBookingImportGuide?.(text);
