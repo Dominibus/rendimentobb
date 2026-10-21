@@ -115,6 +115,11 @@ async function(message){
     }
 
 
+    // Preserve explicit/focused PDF interpretation, then answer public live-rate requests
+    // before the general pipeline can classify them as incomplete quick simulations.
+    const currentRateResponse = !(activePDF && pdfRequest) && window.rbBuildCurrentMortgageRateResponse?.(text);
+    if(currentRateResponse)return {success:true,response:currentRateResponse,intent:{intent:'mortgage_rates_unavailable'}};
+
     if(portalFinancialBoundary)return {success:true,response:portalFinancialBoundary,intent:{intent:'portal_financial_boundary'}};
 
     window.rbPDFConversationDocumentId = null;

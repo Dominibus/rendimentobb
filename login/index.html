@@ -10,7 +10,7 @@
 Login – RendimentoBB
 </title>
 
-<link rel="stylesheet" href="/css/style.css?v=20261019-rc153">
+<link rel="stylesheet" href="/css/style.css?v=20261021-rc172">
 <link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=20261019-rc153">
 
 <style>
@@ -341,8 +341,10 @@ Analizza investimenti e gestisci il tuo B&B da un unico account
 <!-- 🔥 NAME (REGISTER ONLY) -->
 <input id="name" type="text" autocomplete="name" maxlength="100" aria-label="Nome"
 placeholder="Nome"
-data-it="Nome"
-data-en="Name">
+data-placeholder-it="Nome"
+data-placeholder-en="Name"
+data-it-aria-label="Nome"
+data-en-aria-label="Name">
 
 <!-- 🔥 ROLE (REGISTER ONLY) -->
 <select id="role"
@@ -359,6 +361,8 @@ style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px 
     data-en="Investor">
     Investitore
   </option>
+
+  <option value="host" data-it="Proprietario / host / gestore" data-en="Property owner / host / manager">Proprietario / host / gestore</option>
 
   <option value="agency"
     data-it="Agenzia immobiliare"
@@ -411,14 +415,10 @@ data-en="Password">
   color:#64748b;
 ">
 
-  <span id="switch-text"
-    data-it="Non hai un account?"
-    data-en="Don't have an account?">
+  <span id="switch-text">
   </span>
 
   <button type="button" id="switch-action"
-    data-it="Registrati"
-    data-en="Sign up"
     style="color:#10b981; cursor:pointer; font-weight:600; transition:0.2s;" class="rb-readable-accent">
   </button>
 
@@ -466,7 +466,7 @@ data-en="Password">
 
 <script src="/js/lang.js?v=20261019-rc153"></script>
 
-<script type="module" src="/js/auth-page.js?v=20261016-rc140"></script>
+<script type="module" src="/js/auth-page.js?v=20261021-rc172"></script>
 
 </body>
 </html>

@@ -32,7 +32,7 @@ function loadHarness(){
  let seq=0;
  const w={currentUser:{uid:'u1'},loaded:[],scope:'p1'};
  w.rbBookingTools={beginLoad:scope=>({seq:++seq,scope,ownerUid:w.currentUser.uid}),isCurrentLoad:token=>token.seq===seq&&token.scope===w.scope&&token.ownerUid===w.currentUser.uid};
- const c={window:w,document:{getElementById:()=>({})},isDemo:()=>false,canUseFirestorePMS:()=>true,collection:()=>({}),where:()=>({}),query:()=>({}),db:{},getDocs:()=>new Promise(resolve=>pending.push(resolve))};
+ const c={window:w,document:{getElementById:()=>({}),querySelectorAll:()=>[]},isDemo:()=>false,canUseFirestorePMS:()=>true,collection:()=>({}),where:()=>({}),query:()=>({}),db:{},getDocs:()=>new Promise(resolve=>pending.push(resolve))};
  vm.createContext(c);vm.runInContext(source.slice(start,end)+'window.loaded.push(propertyId);}',c);return {c,w,pending};
 }
 test('dashboard wiring discards a slower response for an earlier property selection',async()=>{

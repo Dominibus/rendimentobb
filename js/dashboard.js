@@ -10716,10 +10716,15 @@ async function loadBookings(propertyId){
 
   if(!list) return;
 
+  for(const button of document.querySelectorAll('.booking-filter')){
+    button.disabled = isDemo();
+    button.setAttribute('aria-disabled', String(isDemo()));
+    button.title = isDemo() ? t('Filtri non disponibili in questa vista demo. Prova la demo PMS interattiva.', 'Filters are unavailable in this demo view. Try the interactive PMS demo.') : '';
+  }
   if(isDemo()){
     const bookings = window.rbBuildDemoPMS().currentBookings;
     renderTodayBookingOperations([]);
-    list.innerHTML = `<p class="rb-source-note">${t("Prenotazioni dimostrative del mese corrente · sola lettura", "Illustrative bookings for the current month · read only")}</p>` + bookings.map((item,index) => `
+    list.innerHTML = `<p class="rb-source-note">${t("Prenotazioni dimostrative del mese corrente · sola lettura", "Illustrative bookings for the current month · read only")}</p><p class="rb-source-note">${t("I filtri di stato non sono disponibili in questa vista.","Status filters are unavailable in this view.")} <a href="${window.currentLang === 'en' ? '/en/demo/hospitality-pms/' : '/demo/hospitality-pms/'}">${t("Prova la demo PMS interattiva","Try the interactive PMS demo")}</a></p>` + bookings.map((item,index) => `
       <div class="analysis-card"><strong>${t("Ospite demo", "Demo guest")} ${index+1}</strong>
       <p>${item.checkin} → ${item.checkout}</p><span>${formatCurrency(item.totalAmount)} · ${item.nights} ${t("notti", "nights")}</span></div>
     `).join("");

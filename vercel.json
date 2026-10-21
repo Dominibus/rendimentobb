@@ -212,5 +212,15 @@
     "api/cron-funnel.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/send-lead-email",
+      "destination": "/api/partner-email"
+    },
+    {
+      "source": "/api/send-lead-email.js",
+      "destination": "/api/partner-email"
+    }
+  ]
 }

@@ -15276,6 +15276,10 @@ body.is-admin .locked-overlay{
   cursor:pointer;
 }
 
+html[lang="en"] .pro-blur::after{
+  content:"🔓 Unlock";
+}
+
 /* =====================================
 🔥 APP LOADING STATE (NO BLANK SCREEN)
 ===================================== */
@@ -21760,3 +21764,6 @@ color:#0f172a;
 transition:all .25s ease;
 
 }
+
+/* RC172: unavailable demo controls retain a visible disabled state. */
+.booking-filter:disabled{opacity:.55;cursor:not-allowed;}

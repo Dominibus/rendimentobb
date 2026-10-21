@@ -1534,62 +1534,29 @@ container.innerHTML = `
 }
 // ================= BREAK EVEN OCCUPANCY =================
 
-function renderBreakEvenOccupancy(
-priceNight,
-expenses,
-commission,
-tax,
-mortgage
-){
-
-const container = document.getElementById("break-even-kpi");
-if(!container) return;
-
-const yearlyExpenses = expenses * 12;
-const costBase = yearlyExpenses + mortgage;
-
-const revenuePerNight =
-priceNight * (1 - commission/100) * (1 - tax/100);
-
-if(revenuePerNight <= 0){
-
-container.innerHTML = `
-<div class="kpi-box">
-<span>${t("Occupazione break-even","Break-even occupancy")}</span>
-<strong>—</strong>
-</div>
-`;
-
-return;
-
-}
-
-const nightsNeeded = costBase / revenuePerNight;
-const occupancy = (nightsNeeded / 365) * 100;
-
-const occRounded = Math.min(100, Math.max(0, occupancy));
-
-let color = "#ef4444";
-
-if(occRounded < 60) color = "#10b981";
-else if(occRounded < 75) color = "#f59e0b";
-
-container.innerHTML = `
-
-<div class="kpi-box">
-<span>${t("Occupazione break-even","Break-even occupancy")}</span>
-<strong style="color:${color}">
-${occRounded.toFixed(1)}%
-</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Notti minime","Minimum nights")}</span>
-<strong>${Math.round(nightsNeeded)}</strong>
-</div>
-
-`;
-
+function renderBreakEvenOccupancy(priceNight, expenses, commission, tax, mortgage){
+  const container = document.getElementById("break-even-kpi");
+  if(!container) return;
+  const values = [priceNight, expenses, commission, tax, mortgage];
+  const valid = values.every(value => typeof value === 'number' && Number.isFinite(value)) &&
+    priceNight >= 0 && expenses >= 0 && mortgage >= 0 && commission >= 0 && commission <= 100 && tax >= 0 && tax <= 100;
+  const label = t("Occupazione break-even", "Break-even occupancy");
+  if(!valid){
+    container.innerHTML = `<div class="kpi-box"><span>${label}</span><strong>${t("Dati incompleti", "Incomplete inputs")}</strong></div>`;
+    return;
+  }
+  // The model taxes positive NOI, not gross receipts. Mortgage is annual debt service.
+  const retained = 1 - tax / 100;
+  const grossRequired = expenses * 12 + (mortgage === 0 ? 0 : retained > 0 ? mortgage / retained : Infinity);
+  const revenuePerNight = priceNight * (1 - commission / 100);
+  const nightsNeeded = grossRequired === 0 ? 0 : revenuePerNight > 0 ? grossRequired / revenuePerNight : Infinity;
+  const occupancy = nightsNeeded / 365 * 100;
+  const reachable = Number.isFinite(occupancy) && occupancy <= 100;
+  const value = reachable ? `${occupancy.toFixed(1)}%` : t("Non raggiungibile", "Not reachable");
+  const nights = Number.isFinite(nightsNeeded) ? Math.ceil(nightsNeeded) : '—';
+  const color = !reachable || occupancy >= 75 ? "#ef4444" : occupancy < 60 ? "#10b981" : "#f59e0b";
+  container.innerHTML = `<div class="kpi-box"><span>${label}</span><strong style="color:${color}">${value}</strong></div>
+    <div class="kpi-box"><span>${t("Notti minime teoriche", "Theoretical minimum nights")}</span><strong>${nights}</strong></div>`;
 }
 // ================= INVESTMENT SCORE =================
 

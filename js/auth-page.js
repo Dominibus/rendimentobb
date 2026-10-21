@@ -61,6 +61,7 @@ function error(code) {
 }
 window.changeLang = lang => { window.setLang?.(lang); ui(); };
 document.addEventListener('rb_language_changed', ui);
+document.addEventListener('DOMContentLoaded', ui);
 $('switch-action').onclick = () => { if (guard.busy) return; mode = mode === 'login' ? 'register' : 'login'; $('login-message').textContent = ''; ui(); };
 $('show-password').onclick = () => { $('password').type = $('password').type === 'password' ? 'text' : 'password'; ui(); };
 $('auth-form').addEventListener('submit', async event => {

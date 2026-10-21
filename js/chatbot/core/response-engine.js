@@ -1,3 +1,23 @@
+// Public current-rate questions do not require a personal simulation. There is no live bank feed.
+window.rbBuildCurrentMortgageRateResponse = function(message){
+const rbRateQuestion = String(message || '').toLowerCase();
+if(!/\b(pdf|report|documento|document)\b/.test(rbRateQuestion) &&
+   /mutu|mortgage|home loan/.test(rbRateQuestion) &&
+   /tass[oi]|\brates?\b|\btan\b|\btaeg\b|\bapr\b/.test(rbRateQuestion) &&
+   /oggi|attual|miglior|convenient|today|current|latest|best|cheapest|\bnow\b/.test(rbRateQuestion)){
+  return {
+    type:'mortgage_rates_unavailable', confidence:1,
+    textIT:'Non dispongo di quotazioni bancarie in tempo reale e non posso indicare il miglior tasso disponibile oggi, neppure per una specifica città. Apri /mutui/ e confronta preventivi aggiornati: importo, durata, TAN, TAEG e spese. La simulazione confronta le ipotesi inserite; non è un’offerta bancaria né una verifica di finanziabilità.',
+    textEN:'I do not have real-time bank quotes and cannot identify the best mortgage rate available today, including for a specific city. Open /mutui/ and compare current quotes: amount, term, nominal rate, APR and fees. The simulator compares your inputs; it is not a bank offer or a lending eligibility assessment.',
+    suggestionsIT:['Come confronto due preventivi di mutuo?'],
+    suggestionsEN:['How do I compare two mortgage quotes?'],
+    signals:[], metadata:{liveQuotes:false}, actions:[]
+  };
+}
+
+return null;
+};
+
 // =============================================== 
 // 🧠 RENDIMENTOBB – RESPONSE ENGINE 1.0
 // Silicon Valley AI Orchestrator
@@ -2103,6 +2123,9 @@ const isStrategicImprovementFollowUp =
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
 // ===========================================
+
+const currentRateResponse = !rbActivePropertyPDF && window.rbBuildCurrentMortgageRateResponse(message);
+if(currentRateResponse)return currentRateResponse;
 
 const isHomeSimulation =
 

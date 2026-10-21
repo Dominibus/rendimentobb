@@ -33,6 +33,9 @@ test('every page exposing the shared Assistant has a centralized loader fallback
    assert.match(html,/src="\/js\/public-shell\.js/);
    assert.doesNotMatch(html,/src="[^"]*(?:firebase|chatbot-loader|\/js\/header\.js)/i);
   }
+  else if(url.pathname.endsWith('/404.html')){
+   assert.match(html,/noindex,follow/);assert.doesNotMatch(html,/<script\b/i);assert.match(html,/href="\/tool\/"/);
+  }
   else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html')||url.pathname.endsWith('/account-action/index.html'),`Unexpected page without shared header: ${url.pathname}`);
  }
  assert.equal(covered,39);

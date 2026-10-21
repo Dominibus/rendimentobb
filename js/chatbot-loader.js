@@ -174,7 +174,7 @@
     "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
     "/js/chatbot/core/executive-brain-v2.js?v=20261012-rc108",
     "/js/chatbot/core/executive-response-builder.js?v=20261012-rc108",
-    "/js/chatbot/core/response-engine.js?v=20261017-rc147",
+    "/js/chatbot/core/response-engine.js?v=20261021-rc172",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261019-rc154",
@@ -183,7 +183,7 @@
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261019-rc153",
     "/js/chatbot/core/practical-guide.js?v=20261020-rc160",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261021-rc169",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261021-rc172",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

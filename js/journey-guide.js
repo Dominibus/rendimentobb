@@ -41,18 +41,21 @@ if (host) {
     let analysis;
     try {analysis = window.rbGetInvestmentAnalysisState?.();} catch {analysis = null;}
     state = journeyState({page,analysis,pms:window.rbPMSData,uid:window.currentUser?.uid,access:window.getUserAccess?.() || {isLoading:page === 'pms'}});
+    const access = window.getUserAccess?.() || {};
+    const needsTrial = page === 'analysis' && !access.isLoading && !(access.isAdmin || access.isPro || access.isInvestor);
     const copy = messages[state.area][state.status];
     host.dataset.state = state.status;
     const intro = document.createElement('div'); intro.className = 'rbj-copy';
     const kicker = document.createElement('p'); kicker.className = 'rbj-kicker'; kicker.textContent = t('Autopilot · Il tuo prossimo passo','Autopilot · Your next step');
     const title = document.createElement('h2'); title.textContent = copy[en ? 1 : 0];
     const body = document.createElement('p'); body.textContent = copy[en ? 3 : 2];
+    if(needsTrial) body.textContent = t('Il simulatore Free mostra i risultati di base. La lettura con Autopilot richiede Investor o Pro; puoi verificare l’idoneità alla prova Investor di 30 giorni, senza carta e con PDF esclusi.','The Free simulator shows basic results. Autopilot interpretation requires Investor or Pro; check eligibility for the 30-day Investor trial, with no card and PDFs excluded.');
     const source = document.createElement('small'); source.textContent = sources[state.source][en ? 1 : 0];
     intro.append(kicker,title,body,source);
     const actions = document.createElement('div'); actions.className = 'rbj-actions';
     if (page === 'analysis') {
-      actions.append(button(state.action === 'results' ? t('Spiegami i risultati','Explain the results') : state.action === 'recalculate' ? t('Vai al ricalcolo','Go to recalculate') : t('Controlla i dati con Autopilot','Check inputs with Autopilot'),state.action === 'results' ? 'results' : state.action === 'recalculate' ? 'recalculate' : 'inputs'));
-      actions.append(button(t('Quali ipotesi verificare?','Which assumptions should I check?'),'assumptions',true));
+      actions.append(button(needsTrial ? t('Scopri la prova per usare Autopilot','See the trial to use Autopilot') : state.action === 'results' ? t('Spiegami i risultati','Explain the results') : state.action === 'recalculate' ? t('Vai al ricalcolo','Go to recalculate') : t('Controlla i dati con Autopilot','Check inputs with Autopilot'),state.action === 'results' ? 'results' : state.action === 'recalculate' ? 'recalculate' : 'inputs'));
+      actions.append(button(needsTrial ? t('Autopilot: accesso richiesto','Autopilot: access required') : t('Quali ipotesi verificare?','Which assumptions should I check?'),'assumptions',true));
     } else {
       actions.append(button(t('Priorità di oggi','Today’s priorities'),'daily'),button(t('Prossimi 7 giorni','Next 7 days'),'week',true));
     }
