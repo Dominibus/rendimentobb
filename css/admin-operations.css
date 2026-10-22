@@ -1,0 +1,20 @@
+.operations-center{margin:0 0 28px;min-width:0;color:#0f172a}
+.operations-center h2{font-size:clamp(1.35rem,4vw,2rem)}
+.operations-center h3{margin:24px 0 10px;font-size:1.1rem;color:#0f172a}
+.operations-center h4{margin:0 0 10px;font-size:1rem;color:#0f172a}
+.ops-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.operations-center button{background:#087f5b;color:white;border:0;border-radius:10px;padding:12px 18px;min-height:44px;font:inherit;cursor:pointer}
+.operations-center button:disabled{background:#475569;cursor:default}
+.operations-center button:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.ops-card{border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:16px;min-width:0;overflow-wrap:anywhere}
+.ops-card p{margin:8px 0;color:#334155;font-size:.9rem}
+.ops-note{color:#475569;font-size:.9rem;line-height:1.6;overflow-wrap:anywhere}
+.ops-card .ops-state{font-weight:700;color:#334155}
+.ops-card .ops-attention,.ops-card .ops-stale{color:#92400e}
+.ops-table-wrap{max-width:100%;overflow-x:auto}
+.ops-table-wrap table{width:100%;border-collapse:collapse;font-size:.9rem;text-align:left}
+.ops-table-wrap th,.ops-table-wrap td{padding:10px;border-bottom:1px solid #cbd5e1;vertical-align:top;color:#0f172a}
+.ops-table-wrap th{background:#f1f5f9}
+@media(max-width:480px){.operations-center.card{padding:16px}.ops-heading button{width:100%}}
+

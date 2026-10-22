@@ -1,5 +1,7 @@
 import admin from "firebase-admin";
+import {readOperations} from "../lib/admin-operations.js";
 
+function getAdmin() {
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -10,12 +12,13 @@ if (!admin.apps.length) {
   });
 }
 
-const db = admin.firestore();
+return admin;
+}
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  if (!["DELETE", "PATCH"].includes(req.method)) {
-    res.setHeader("Allow", "DELETE, PATCH");
+  if (!["GET", "DELETE", "PATCH"].includes(req.method)) {
+    res.setHeader("Allow", "GET, DELETE, PATCH");
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -29,7 +32,7 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const decoded = await admin.auth().verifyIdToken(token, true);
+    const decoded = await getAdmin().auth().verifyIdToken(token, true);
     const email = String(decoded.email || "").toLowerCase();
     const isAdmin = decoded.email_verified === true && email === "rendimentobb@gmail.com";
 
@@ -37,6 +40,12 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: "Admin access required" });
     }
 
+    if(req.method === "GET") {
+      if(req.query?.view !== "operations" || Object.keys(req.query).some(key=>key!=="view")) return res.status(400).json({error:"Invalid operations view"});
+      const result=await readOperations({db:getAdmin().firestore(),environment:process.env.VERCEL_ENV});
+      return res.status(200).json(result);
+    }
+    const db=getAdmin().firestore();
     const leadId = String(req.body?.leadId || "").trim();
 
     if (!/^[A-Za-z0-9_-]{10,128}$/.test(leadId)) {
@@ -64,6 +73,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (error) {
     if(String(error?.code || "").startsWith("auth/")) return res.status(401).json({error:"Invalid authentication"});
-    return res.status(500).json({ error: "Unable to delete lead" });
+    return res.status(500).json({ error: "Admin operation unavailable" });
   }
 }

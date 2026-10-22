@@ -245,6 +245,7 @@ box-shadow:0 12px 30px rgba(15,23,42,.22);
 <link rel="stylesheet" href="/css/admin-leads.css?v=20261001-24">
 <link rel="stylesheet" href="/css/brand-icons.css?v=20261016-rc146">
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
+<link rel="stylesheet" href="/css/admin-operations.css?v=20261022-rc176">
 </head>
 
 <body class="admin-leads-page">
@@ -267,6 +268,13 @@ Eventi, priorità da simulazione e provenienza
 </div>
 
 <p class="subtitle" data-it="Il valore potenziale è una stima interna, non un prezzo di vendita. Nessun record è automaticamente autorizzato per marketing o condivisione con terzi. Le evidenze devono essere verificate separatamente per la finalità prevista." data-en="Total internal index is an internal estimate, not a sale price. No record is automatically authorized for marketing or third-party sharing. Evidence must be checked separately for the intended purpose.">Il valore potenziale è una stima interna, non un prezzo di vendita. Nessun record è automaticamente autorizzato per marketing o condivisione con terzi. Le evidenze devono essere verificate separatamente per la finalità prevista.</p>
+<section class="card operations-center" aria-labelledby="operations-title">
+<div class="ops-heading"><h2 id="operations-title" data-it="Centro operativo" data-en="Operations Center">Centro operativo</h2><button id="operations-refresh" type="button" disabled data-it="Aggiorna controlli" data-en="Refresh checks">Aggiorna controlli</button></div>
+<p data-it="Prima fase: consultazione dei dati operativi disponibili. Nessuna modifica a utenti, piani o pagamenti." data-en="First phase: read available operational records. No changes to users, plans or payments.">Prima fase: consultazione dei dati operativi disponibili. Nessuna modifica a utenti, piani o pagamenti.</p>
+<p id="operations-feedback" class="ops-note" role="status" aria-live="polite" data-it="Accesso riservato all’amministratore con email verificata." data-en="Access requires an administrator with a verified email.">Accesso riservato all’amministratore con email verificata.</p>
+<div id="operations-content"></div>
+</section>
+
 <!-- KPI -->
 <div class="kpi-grid">
 
@@ -335,5 +343,6 @@ Eventi, priorità da simulazione e provenienza
 <div id="global-footer"></div>
 
 <script type="module" src="/js/admin-leads.js?v=20261021-rc175"></script>
+<script type="module" src="/js/admin-operations.js?v=20261022-rc176"></script>
 </body>
 </html>
