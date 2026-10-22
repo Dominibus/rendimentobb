@@ -5925,11 +5925,17 @@ doc.text(
 
 doc.setFontSize(10);
 
+const pdfCityKey = String(city).trim().toLowerCase();
+const pdfCityNames = isEN
+  ? {roma:"Rome",milano:"Milan",napoli:"Naples",firenze:"Florence"}
+  : {roma:"Roma",milano:"Milano",napoli:"Napoli",firenze:"Firenze"};
+const pdfCityName = Object.hasOwn(pdfCityNames,pdfCityKey)
+  ? pdfCityNames[pdfCityKey]
+  : city.charAt(0).toUpperCase() + city.slice(1);
 doc.text(
   T("Mercato","Market") +
   " • " +
-  city.charAt(0).toUpperCase() +
-  city.slice(1),
+  pdfCityName,
   20,
   109
 );
