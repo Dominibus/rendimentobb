@@ -1929,6 +1929,7 @@ margin-bottom:16px;
 <link rel="stylesheet" href="/css/journey-2026.css?v=20261020-rc158">
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
 <link rel="stylesheet" href="/css/clarity-rc161.css?v=20261020-rc161">
+<link rel="stylesheet" href="/css/free-experience.css?v=20261022-rc179">
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -2121,6 +2122,11 @@ z-index:9999;
 </div>
   </div>
 
+<div class="rb179-demo-entry" hidden>
+<p data-it="Demo gratuita con dati fittizi: guarda i numeri e prova la gestione delle attività." data-en="Free demo with fictional data: explore the numbers and try managing tasks.">Demo gratuita con dati fittizi: guarda i numeri e prova la gestione delle attività.</p>
+<a href="/demo/hospitality-pms/" data-it="Prova calendario e pulizie →" data-en="Try the calendar and cleaning tasks →">Prova calendario e pulizie →</a>
+<a href="/demo/investment-analytics/" data-it="Prova la demo investimento →" data-en="Try the investment demo →">Prova la demo investimento →</a>
+</div>
 <nav class="rb161-control-actions" aria-label="Azioni principali / Main actions"><button type="button" onclick="showPMSTab('dashboard')" data-it="Attività e andamento" data-en="Tasks and performance">Attività e andamento</button><button type="button" onclick="openCurrentBookings()" data-it="Gestisci prenotazioni" data-en="Manage bookings">Gestisci prenotazioni</button><button type="button" onclick="showPMSTab('roi')" data-it="Scenari e portafoglio" data-en="Scenarios and portfolio">Scenari e portafoglio</button></nav>
 
 </div>
@@ -2879,6 +2885,7 @@ function updateDemoBanner(){
     !access.isLogged ||
     access.isFree;
 
+  document.body.classList.toggle('rb179-demo',Boolean(showDemoBanner));
   banner.style.display =
     showDemoBanner
       ? "block"

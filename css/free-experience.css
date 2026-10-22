@@ -1,0 +1,11 @@
+/* RC179: compact demo entrance only; paid account workspace is unchanged. */
+body.rb179-demo #rb-journey-guide,body.rb179-demo #demo-banner,body.rb179-demo #pms-quick-actions{display:none!important}
+body.rb179-demo .rb179-demo-entry[hidden]{display:block!important}
+.rb179-demo-entry{margin:12px 0;line-height:1.6}.rb179-demo-entry a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;margin:4px;border:1px solid #aacbbb;border-radius:10px;color:#075d45;background:#fff;font-weight:650;text-decoration:underline;box-sizing:border-box}
+body.rb179-demo .rb-hero{padding:20px!important;min-height:0!important;margin:12px 0!important}
+body.rb179-demo .rb-hero h1{font-size:clamp(26px,4vw,34px)!important;margin:0 0 8px!important}
+body.rb179-demo .rb-hero-badges{display:none!important}
+body.rb179-demo .rb-trial-invite{padding:12px 18px!important;margin-bottom:12px!important}
+body.rb179-demo .rb-dashboard-scope-note{font-size:12px;line-height:1.6;margin:10px 0}
+body.rb179-demo #dashboard-workspace-nav{margin-top:12px!important}
+@media(max-width:600px){body.rb179-demo .rb-hero{padding:16px!important}.rb179-demo-entry a{display:flex;margin:8px 0;width:100%}}

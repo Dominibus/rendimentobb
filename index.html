@@ -1644,7 +1644,7 @@ Scopri di più →
 <!-- 🔥 DATA + ENGINE -->
 <script src="/js/market-data.js"></script> 
 <script type="module" src="/js/roi-engine.js?v=20261012-rc106"></script>
-<script type="module" src="/js/app.js?v=20261022-rc175"></script>
+<script type="module" src="/js/app.js?v=20261022-rc179"></script>
  
 <script>
 
@@ -1995,7 +1995,7 @@ rbLog("🔥 QUICK ROI ACCESS:", {
     else if(roi < 6){
 
       elRoi.innerHTML = `
-        <span style="color:#f59e0b;font-weight:800">${roi.toFixed(1)}%</span>
+        <span style="color:#f59e0b;font-weight:800">${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)}%</span>
         <div style="font-size:11px;color:#f59e0b">${labels.weak}</div>
       `;
 
@@ -2003,7 +2003,7 @@ rbLog("🔥 QUICK ROI ACCESS:", {
     else if(roi < 12){
 
       elRoi.innerHTML = `
-        <span style="color:#f59e0b;font-weight:800">${roi.toFixed(1)}%</span>
+        <span style="color:#f59e0b;font-weight:800">${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)}%</span>
         <div style="font-size:11px;color:#64748b">${labels.average}</div>
       `;
 
@@ -2011,7 +2011,7 @@ rbLog("🔥 QUICK ROI ACCESS:", {
     else{
 
       elRoi.innerHTML = `
-        <span style="color:#10b981;font-weight:800">${roi.toFixed(1)}%</span>
+        <span style="color:#10b981;font-weight:800">${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)}%</span>
         <div style="font-size:11px;color:#10b981">${labels.good}</div>
       `;
 
@@ -2051,10 +2051,12 @@ if(shock){
   // ================= FORMAT =================
   const format = (n)=> Math.round(n).toLocaleString(lang === "en" ? "en-GB" : "it-IT");
 
-  const profitVal = format(netAnnual);
-  const monthVal  = format(netAnnual/12);
-  const breakVal  = breakEven.toFixed(1) + (lang==="en" ? " years" : " anni");
-  const revVal    = format(revenue);
+  const currency = n=>new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(n);
+  const percent = n=>new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1}).format(n);
+  const profitVal = currency(netAnnual);
+  const monthVal  = currency(netAnnual/12);
+  const breakVal  = percent(breakEven) + (lang==="en" ? " years" : " anni");
+  const revVal    = currency(revenue);
 
   // ================= DEFAULT LOCK =================
   if(elProfit) elProfit.innerText = "🔒";
@@ -2327,7 +2329,7 @@ function renderUpgradeCTA(roi){
         margin-bottom:6px;
         color:${accent};
       ">
-        ${roi.toFixed(1)}%
+        ${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1}).format(roi)}%
       </div>
 
       <div style="

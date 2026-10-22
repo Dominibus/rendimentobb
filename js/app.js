@@ -945,6 +945,9 @@ if(!window.currentUser){
 // 🔥 FUNNEL TRIGGER ENGINE (SaaS)
 // =====================================
 window.triggerFunnel = function({type = "generic", roi = 0} = {}){
+  // RC179: passive calculation/reminder events must not cover the free result.
+  if(['roi','roi_soft','reminder'].includes(type))return;
+
 
   const access = window.getUserAccess?.() || {};
 
@@ -8752,7 +8755,7 @@ document.addEventListener("rb_plan_ready", () => {
 
     window.removeEventListener("scroll", handleHomeFunnel);
 
-    openUpgradeModal("investor", 8);
+    // RC179: scrolling is not a request to open a subscription dialog.
 
   }
 
