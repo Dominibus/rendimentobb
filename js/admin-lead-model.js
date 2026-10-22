@@ -37,3 +37,7 @@ export function leadEvidence(lead){
   return [key,shown];
  });
 }
+
+// Explicit metadata only. Never infer test status from an email address or free text.
+export const declaredTest = lead => lead.isTest === true || lead.test === true || lead.sandbox === true || ['test','testing','sandbox'].includes(String(lead.environment || lead.env || '').toLowerCase());
+export const scopeLeadTests = (leads, mode='all') => leads.filter(lead => mode==='only' ? declaredTest(lead) : mode==='exclude' ? !declaredTest(lead) : true);
