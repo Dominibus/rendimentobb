@@ -1,0 +1,321 @@
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+REPORT DI FATTIBILITÀ
+
+
+
+
+Analisi di fattibilità dell'investimento
+Analisi professionale per investimenti short-rent
+
+Elaborato dal motore di analisi RendimentoBB
+
+
+
+
+Mercato • Roma
+
+
+Tariffa notte: 120,0 EUR | Occupazione: 70,0% | Costi: 400,0 EUR/mese
+
+
+
+
+28,1%
+ ROI stimato sul capitale proprio
+
+
+Riferimento interno illustrativo: 9,8%
+
+
+Basi non comparabili - nessun giudizio di performance di mercato.
+
+
+
+
+Stima su ipotesi
+
+
+
+
+      Punteggio investimento                    Esito modello           Rischio   Fonte dati
+
+
+
+      79                                        Favorevole              Basso     Ipotesi
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+Sintesi di fattibilità
+Sintesi strategica basata sui dati e sulle ipotesi inserite.
+
+
+
+
+       ROI SUL CAPITALE PROPRIO
+                                                                                                 Stima su ipotesi
+       28,1%
+                                                                                                   DATI SIMULATI
+
+                                                                                            Valutazione RendimentoBB
+
+
+Indicatori chiave dell'investimento
+
+
+  Prezzo immobile                     Ricavi annui                         Cashflow netto                ROI equity
+
+
+
+
+  150.000 €                           30.660 €                             8.445 €                       28,1%
+
+
+  Valore dell'asset                   Ricavi lordi                         Positivo                      Stima su ipotesi
+
+
+
+
+Analisi performance
+Ricavi illustrativi: -20% / base / +20%. Non sono previsioni di mercato.
+
+
+Basso (-20%)
+
+                                                                                            24.528 €
+
+
+
+Base
+
+                                                                                            30.660 €
+
+
+
+Alto (+20%)
+
+                                                                                            36.792 €
+
+
+
+
+             Indicazione strategica
+
+             Il cashflow è positivo nelle ipotesi inserite. Non verifica la redditività effettiva: confronta uno scenario
+             con ricavi inferiori e controlla tutti i costi.
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento          22/10/2026                                                  Riservato • 2
+Finanziamento nello scenario
+
+Importo richiesto                                                     120.000 €
+
+LTV                                                                       80,0%
+
+Tasso ipotizzato                                                          3,50%
+
+Durata ipotizzata                                                        20 anni
+
+Rata mutuo annua stimata                                                 8.351 €
+
+DSCR                                                                         2,55
+
+NOI                                                                    21.261 €
+
+Imposte stimate sul risultato operativo                                  4.465 €
+
+Cap Rate                                                                 14,17%
+
+Cashflow netto dopo mutuo                                                8.445 €
+
+
+
+
+    DSCR almeno 1,2 nelle ipotesi simulate
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento   22/10/2026   Riservato • 3
+Riferimento interno illustrativo
+
+
+ROI equity                                                                                                  28,1%
+
+Riferimento interno illustrativo                                                                            9,8%
+
+
+
+
+BASI NON COMPARABILI
+
+
+
+
+    La tabella interna è statica e illustrativa: non documenta una fonte esterna aggiornata né gli stessi
+    costi e la stessa leva della simulazione. Il confronto non misura una sovraperformance o
+    sottoperformance di mercato.
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento   22/10/2026                                   Riservato • 4
+Analisi rischio
+
+
+Indice rischio                                                               25/100
+
+Valutazione                                                           Rischio basso
+
+
+
+
+    Base prudenziale +10
+    ROI equity +0
+    Occupazione +5
+    Leva LTV +10
+    Copertura DSCR +0
+    Cashflow +0
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento   22/10/2026      Riservato • 5
+Cashflow
+
+Ricavi                                                                                                     30.660 €
+
+Cashflow netto                                                                                               8.445 €
+
+Mensile                                                                                                        704 €
+
+
+
+
+Come leggere gli scenari
+
+I ricavi illustrativi della sezione performance variano del -20% e +20% rispetto alla base. Il cashflow
+riportato sopra appartiene solo allo scenario base. Per confrontare altri cashflow e ROI, modifica le
+ipotesi e avvia una nuova analisi: costi, imposte e mutuo non variano in proporzione ai ricavi.
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento   22/10/2026                                       Riservato • 6
+Valutazione del modello
+
+
+
+
+      Favorevole                                         Valutazione RendimentoBB
+
+
+
+
+Elementi da valutare
+
+    • Il ROI deriva dalle ipotesi inserite; il riferimento interno non è un confronto di mercato verificato.
+
+    • Il cashflow mensile è positivo nelle ipotesi inserite, senza verifica dei risultati effettivi.
+
+    • L’indice del modello rientra nella fascia bassa; non misura tutti i rischi dell’immobile.
+
+
+
+
+Prossimi passi
+
+    • Verificare le ipotesi con dati effettivi e confrontare uno scenario più prudente prima di decidere.
+
+
+
+
+Esito del modello su ipotesi: non è una raccomandazione di acquisto né una verifica dell'immobile. Il rischio è un indice del modello, non
+una probabilità di perdita.
+
+
+
+Elaborato dal motore di analisi RendimentoBB • 2026
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento         22/10/2026                                                    Riservato • 7
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+Ipotesi effettive del report
+
+Valori acquisiti dalla simulazione che ha generato questo PDF. Confrontali con la pagina 'Ipotesi salvate' del report
+Dashboard: se sono diversi, i documenti rappresentano scenari diversi.
+
+
+
+
+ Tipo scenario                                                                                                         Acquisto / altro
+
+
+ Versione calcolo                                                                                                       roi-monthly-v1
+
+
+ Valore immobile                                                                                                           150.000 EUR
+
+
+ Capitale proprio / avvio                                                                                                   30.000 EUR
+
+
+ Tariffa per notte                                                                                                              120 EUR
+
+
+ Occupazione                                                                                                                         70%
+
+
+ Costi mensili                                                                                                                  400 EUR
+
+
+ Commissioni                                                                                                                         15%
+
+
+ Aliquota del modello                                                                                                                21%
+
+
+ Importo mutuo                                                                                                             120.000 EUR
+
+
+ Tasso annuo                                                                                                                        3,5%
+
+
+ Durata mutuo                                                                                                                    20 anni
+
+
+ Ricavi annui                                                                                                               30.660 EUR
+
+
+ NOI del modello                                                                                                            21.261 EUR
+
+
+ Cashflow netto annuo                                                                                                      8444,77 EUR
+
+
+
+
+I valori sono stime e non risultati PMS. Le aliquote appartengono al modello semplificato. I dati mancanti non sono ricostruiti da valori
+predefiniti. Per confrontare i PDF usa la stessa simulazione e gli stessi input, poi rigenera entrambi i documenti.
+
+
+
+
+RendimentoBB • Report di fattibilità dell'investimento          22/10/2026                                                     Riservato • 8
+

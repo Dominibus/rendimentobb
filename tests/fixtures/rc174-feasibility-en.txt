@@ -1,0 +1,322 @@
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+INVESTMENT FEASIBILITY REPORT
+
+
+
+
+Investment Feasibility Report
+Professional analysis for short-rent investments
+
+Prepared by the RendimentoBB analysis engine
+
+
+
+
+Market • Roma
+
+
+Nightly rate: 120.0 EUR | Occupancy: 70.0% | Costs: 400.0 EUR/month
+
+
+
+
+28.1%
+ Estimated equity ROI
+
+
+Illustrative internal reference: 9.8%
+
+
+Bases not comparable - no market performance grade.
+
+
+
+
+Model estimate
+
+
+
+
+      Investment score                        Model outcome           Risk   Data source
+
+
+
+      79                                      Favourable              Low    Assumptions
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+Feasibility Overview
+Strategic summary based on the entered data and assumptions.
+
+
+
+
+       EQUITY ROI
+                                                                                            Model estimate
+       28.1%
+                                                                                            SIMULATED DATA
+
+                                                                                       RendimentoBB Assessment
+
+
+Key Investment Metrics
+
+
+  Property Price                     Annual Revenue                    Net Cashflow                 Equity ROI
+
+
+
+
+  €150,000                           €30,660                           €8,445                       28.1%
+
+
+  Asset Value                        Gross Income                      Positive                     Model estimate
+
+
+
+
+Performance analysis
+Illustrative revenue: -20% / base / +20%. Not market forecasts.
+
+
+Low (-20%)
+
+                                                                                       €24,528
+
+
+
+Base
+
+                                                                                       €30,660
+
+
+
+High (+20%)
+
+                                                                                       €36,792
+
+
+
+
+            Strategic insight
+
+            Cashflow is positive under the entered assumptions. This does not verify actual profitability:
+            compare a lower-revenue scenario and check all costs.
+
+
+
+
+RendimentoBB • Investment Feasibility Report                  22/10/2026                                         Confidential • 2
+Scenario financing
+
+Requested loan                                                 €120,000
+
+LTV                                                                80.0%
+
+Assumed interest rate                                              3.50%
+
+Assumed loan term                                               20 years
+
+Estimated annual debt service                                     €8,351
+
+DSCR                                                                  2.55
+
+NOI                                                              €21,261
+
+Estimated income taxes on operating profit                        €4,465
+
+Cap Rate                                                         14.17%
+
+Net cashflow after mortgage                                       €8,445
+
+
+
+
+   DSCR at least 1.2 under the simulated assumptions
+
+
+
+
+RendimentoBB • Investment Feasibility Report   22/10/2026   Confidential • 3
+Illustrative internal reference
+
+
+Equity ROI                                                                                                  28.1%
+
+Illustrative internal reference                                                                              9.8%
+
+
+
+
+BASES NOT COMPARABLE
+
+
+
+
+   The internal table is static and illustrative: it documents neither an updated external source nor the
+   same costs and leverage as the simulation. It does not measure market outperformance or
+   underperformance.
+
+
+
+
+RendimentoBB • Investment Feasibility Report       22/10/2026                                       Confidential • 4
+Risk analysis
+
+
+Risk score                                                        25/100
+
+Assessment                                                       Low risk
+
+
+
+
+   Prudential base +10
+   Equity ROI +0
+   Occupancy +5
+   LTV leverage +10
+   DSCR coverage +0
+   Cashflow +0
+
+
+
+
+RendimentoBB • Investment Feasibility Report   22/10/2026   Confidential • 5
+Cashflow
+
+Revenue                                                                                                 €30,660
+
+Net cashflow                                                                                             €8,445
+
+Monthly                                                                                                     €704
+
+
+
+
+How to read the scenarios
+
+The illustrative revenue in the performance section varies by -20% and +20% from the base. The
+cashflow above belongs only to the base scenario. To compare other cashflows and ROIs, change
+the assumptions and run a new analysis: costs, taxes and debt payments do not vary in proportion
+to revenue.
+
+
+
+
+RendimentoBB • Investment Feasibility Report          22/10/2026                                   Confidential • 6
+Model assessment
+
+
+
+
+      Favourable                                      RendimentoBB Assessment
+
+
+
+
+Assessment points
+
+   • ROI derives from the entered assumptions; the internal reference is not a verified market comparison.
+
+   • Monthly cashflow is positive under the entered assumptions; actual results are not verified.
+
+   • The model index is in the low band; it does not measure all property risks.
+
+
+
+
+Recommended Next Steps
+
+   • Check assumptions against actual data and compare a more cautious scenario before deciding.
+
+
+
+
+Model outcome based on assumptions: not a purchase recommendation or a property verification. Risk is a model index, not a
+probability of loss.
+
+
+
+Prepared by the RendimentoBB analysis engine • 2026
+
+
+
+
+RendimentoBB • Investment Feasibility Report                22/10/2026                                               Confidential • 7
+RendimentoBB
+SHORT-RENT INVESTMENT INTELLIGENCE
+
+
+
+
+Actual report assumptions
+
+Values captured from the simulation that generated this PDF. Compare them with 'Saved assumptions' in the Dashboard
+report: differences indicate different scenarios.
+
+
+
+
+ Scenario type                                                                                                    Purchase / other
+
+
+ Calculation version                                                                                                roi-monthly-v1
+
+
+ Property value                                                                                                       150,000 EUR
+
+
+ Equity / startup capital                                                                                               30,000 EUR
+
+
+ Nightly rate                                                                                                              120 EUR
+
+
+ Occupancy                                                                                                                      70%
+
+
+ Monthly costs                                                                                                             400 EUR
+
+
+ Commissions                                                                                                                    15%
+
+
+ Model tax rate                                                                                                                 21%
+
+
+ Loan amount                                                                                                          120,000 EUR
+
+
+ Annual interest rate                                                                                                           3.5%
+
+
+ Loan term                                                                                                                 20 years
+
+
+ Annual revenue                                                                                                         30,660 EUR
+
+
+ Model NOI                                                                                                              21,261 EUR
+
+
+ Annual net cashflow                                                                                                  8,444.77 EUR
+
+
+
+
+These are estimates, not PMS actuals. Tax rates belong to the simplified model. Missing inputs are not reconstructed from defaults. To
+compare PDFs, use the same simulation and inputs, then regenerate both documents.
+
+
+
+
+RendimentoBB • Investment Feasibility Report                  22/10/2026                                                Confidential • 8
+

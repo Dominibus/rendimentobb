@@ -20,7 +20,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261011-rc99";
+} from "./market-engine.js?v=20261022-rc174";
 
 import {
 renderExecutiveKPI
@@ -3900,19 +3900,21 @@ const resultCity =
 if(resultCity){
 
   const cityLabels = {
-    roma: "Roma",
-    milano: "Milano",
-    napoli: "Napoli",
-    firenze: "Firenze"
+    roma: ["Roma", "Rome"],
+    milano: ["Milano", "Milan"],
+    napoli: ["Napoli", "Naples"],
+    firenze: ["Firenze", "Florence"]
   };
 
-  const cityLabel =
-    cityLabels[String(marketCity).toLowerCase()] ||
+  const cityLabel = english =>
+    cityLabels[String(marketCity).toLowerCase()]?.[english ? 1 : 0] ||
     customLocation?.trim() ||
-    t("Mercato selezionato", "Selected market");
+    (english ? "Selected market" : "Mercato selezionato");
 
   resultCity.innerText =
-    `${cityLabel} · ${t("Scenario base", "Base scenario")}`;
+    `${cityLabel(window.currentLang === "en")} · ${t("Scenario base", "Base scenario")}`;
+  resultCity.setAttribute("data-it", `${cityLabel(false)} · Scenario base`);
+  resultCity.setAttribute("data-en", `${cityLabel(true)} · Base scenario`);
 
 }
 
@@ -8843,6 +8845,11 @@ if(!window.__rbToolLanguageRefreshBound){
     }
 
     renderRevenueForecast(gross);
+    renderMarketBenchmark(city);
+    const languageAccess = window.getUserAccess?.() || {};
+    if(!languageAccess.isFree || languageAccess.isInvestor || languageAccess.isPro || languageAccess.isAdmin){
+      renderMarketComparison(gross, city);
+    }
     renderROIMarketComparison(roi, city);
     renderCashflowProjection(cashflow);
     updateROIMessage(roi);
@@ -8867,6 +8874,10 @@ if(!window.__rbToolLanguageRefreshBound){
       const cityLabel = cityLabels[city] || data.realCity || city;
       resultCity.textContent =
         `${cityLabel} · ${t("Scenario base", "Base scenario")}`;
+      // Static language passes run again after this listener. The result city
+      // belongs to the calculated snapshot, not the empty-state translation.
+      resultCity.setAttribute("data-it", `${({roma:"Roma",milano:"Milano",napoli:"Napoli",firenze:"Firenze"})[city] || data.realCity || city} · Scenario base`);
+      resultCity.setAttribute("data-en", `${({roma:"Rome",milano:"Milan",napoli:"Naples",firenze:"Florence"})[city] || data.realCity || city} · Base scenario`);
     }
   });
 }

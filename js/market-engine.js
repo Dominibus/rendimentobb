@@ -107,9 +107,13 @@ export function renderMarketBenchmark(inputCity){
 
   /* ================= USER DATA ================= */
 
-  let userRevenue = Number(window.currentRevenue);
+  // A language refresh reads the completed calculation, never stale form
+  // defaults. currentRevenue is retained only for legacy manual callers.
+  const saved = window.simulationExecuted === true ? window.lastAnalysisData : null;
+  const rawRevenue = saved?.gross ?? saved?.revenueAnnual ?? window.currentRevenue;
+  const userRevenue = Number(rawRevenue);
 
-  if(window.currentRevenue === undefined || window.currentRevenue === null || !Number.isFinite(userRevenue) || userRevenue < 0){
+  if(rawRevenue === undefined || rawRevenue === null || rawRevenue === '' || !Number.isFinite(userRevenue) || userRevenue < 0){
     const node = document.getElementById("market-comparison");
     if(node) node.textContent = window.currentLang === "en" ? "Run a simulation to compare your revenue." : "Completa una simulazione per confrontare i ricavi.";
     return;
@@ -223,7 +227,7 @@ if(!window.__marketSimulationListener){
 
   document.addEventListener("rb_simulation_updated", (e) => {
 
-    if(e?.detail?.revenue){
+    if(e?.detail?.revenue !== undefined && e.detail.revenue !== null){
       window.currentRevenue = e.detail.revenue;
     }
 

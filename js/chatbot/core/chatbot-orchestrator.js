@@ -47,6 +47,53 @@ window.rbBuildProductLimitsResponse = function(message){
   };
 };
 
+// RC174: definitions are independent of cached account/scenario values. Match
+// the question's purpose before statistical routes, preserving PDF priority.
+window.rbBuildMetricEducationResponse = function(message){
+  const q=String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const meaning=/\b(?:definizione|definition|significa|significano|meaning|spiega|spiegami|spieghi|explain)\b|\bcos['’]?e\b|(?:che )?cosa (?:sono|e|vuol dire|vuole dire)|what (?:is|are)|what does.*(?:mean|stand for)|come.*calcol|how.*calculat|non capisco/.test(q);
+  if(!meaning && !/^\s*kpis?\s*[?!.]*\s*$/.test(q))return null;
+  if(/\b(?:pdf|documento|document|brochure|file|mio|mia|miei|mie|my|actual|effettiv[oaie]|reale)\b/.test(q) || /\d/.test(q))return null;
+  const entries=[
+    ['kpi',/\bkpis?\b|key performance indicators?|indicatori (?:chiave|di prestazione)/,
+      'KPI: sono indicatori chiave, cioè numeri che aiutano a capire come va un’attività. Nel PMS trovi ricavi prenotati, occupazione, ADR e RevPAR. Per interpretarli controlla sempre periodo, immobili inclusi e completezza dei dati. Un KPI isolato non dimostra un utile.',
+      'KPIs are key performance indicators: numbers that help you understand how an activity is performing. The PMS shows booked revenue, occupancy, ADR and RevPAR. Always check the period, included properties and data completeness. A single KPI does not establish profit.'],
+    ['cashflow',/\bcash\s?flow\b|flusso (?:di )?cassa/,
+      'Cashflow: è il flusso di cassa. Nel simulatore è il ricavo annuo meno commissioni, costi operativi, imposte del modello e rate del mutuo. Se resta positivo, il modello stima un avanzo; se è negativo, stima un fabbisogno. Le prenotazioni PMS da sole non dimostrano incassi o cashflow effettivo.',
+      'Cashflow is cash flow. In the simulator it is annual revenue minus commissions, operating costs, model taxes and loan payments. A positive result is an estimated surplus; a negative result is an estimated funding need. PMS bookings alone do not establish actual receipts or cashflow.'],
+    ['roi',/\broi\b|return on (?:equity|investment)/,
+      'ROI equity: cashflow annuo stimato ÷ capitale proprio × 100. Con capitale proprio zero è N/A, non 0% o infinito. Il rendimento sull’immobile usa una base diversa: controlla sempre il denominatore.',
+      'Equity ROI: estimated annual cashflow ÷ invested equity × 100. With zero equity it is N/A, not 0% or infinity. Property return uses a different base: always check the denominator.'],
+    ['adr',/\badr\b|average daily rate|tariffa media/,
+      'ADR: tariffa media per notte prenotata. Nel PMS è ricavo attribuito al periodo ÷ notti prenotate. Esempio illustrativo: 600 € su 4 notti = 150 € per notte. Non è un utile netto.',
+      'ADR is the average rate per booked night. In the PMS it is revenue allocated to the period ÷ booked nights. Illustrative example: €600 over 4 nights = €150 per night. It is not net profit.'],
+    ['revpar',/\brevpar\b|revenue per available/,
+      'RevPAR: ricavo per notte disponibile. Nel PMS è ricavo del periodo ÷ notti disponibili. Esempio illustrativo: 600 € su 10 notti disponibili = 60 €. Il modello assume una unità disponibile al giorno per immobile, senza sottrarre chiusure non registrate.',
+      'RevPAR is revenue per available night: period revenue ÷ available nights. Illustrative example: €600 over 10 available nights = €60. The PMS model assumes one available unit per property per day, without deducting unrecorded closures.'],
+    ['occupancy',/occupazion|occupancy/,
+      'Occupazione: quota di notti occupate rispetto a quelle disponibili. Esempio illustrativo: 6 notti occupate su 10 disponibili = 60%. Nel PMS il dato dipende dal calendario registrato e dalla disponibilità ipotizzata.',
+      'Occupancy is occupied nights divided by available nights. Illustrative example: 6 occupied nights out of 10 available = 60%. PMS occupancy depends on the recorded calendar and assumed availability.'],
+    ['dscr',/\bdscr\b|debt service coverage/,
+      'DSCR: misura la copertura delle rate annue tramite il NOI del modello, prima delle imposte sul reddito. Formula: NOI ÷ servizio annuo del debito. Sotto 1 il NOI non copre le rate. Senza debito il rapporto non è applicabile; non certifica l’approvazione bancaria.',
+      'DSCR measures annual debt-payment coverage using model NOI before income tax: NOI ÷ annual debt service. Below 1, NOI does not cover debt payments. With no debt, the ratio is not applicable; it does not certify lender approval.'],
+    ['ltv',/\bltv\b|loan.to.value/,
+      'LTV: rapporto tra mutuo e valore/prezzo dell’immobile usato nel modello. Formula: mutuo ÷ valore × 100. Un LTV maggiore indica più leva finanziaria; non è una conferma che la banca concederà quel mutuo.',
+      'LTV is loan-to-value: loan ÷ the property value/price used in the model × 100. Higher LTV means greater leverage; it does not confirm that a lender will grant that loan.'],
+    ['payback',/break[ -]?even|recupero (?:dell[’']?|del )?equity|equity payback/,
+      'Recupero equity: anni teorici per recuperare il capitale proprio con cashflow annuo positivo e costante: capitale ÷ cashflow. Non è una previsione garantita. Con capitale zero o cashflow non positivo il tempo di recupero non è applicabile. Il pareggio di occupazione è invece la soglia di notti necessaria a coprire i costi del modello.',
+      'Equity payback is the theoretical time to recover equity at constant positive annual cashflow: equity ÷ cashflow. It is not a guaranteed forecast. With zero equity or non-positive cashflow, payback is not applicable. Break-even occupancy instead measures the nights needed to cover model costs.'],
+    ['noi',/\bil noi\b|net operating income|margine operativo|^(?:che )?cos['’]?e (?:il )?noi[?.!]*$|\b(?:what is|explain|definition of|meaning of) (?:the )?noi\b/,
+      'NOI: ricavi meno commissioni e costi operativi del modello, prima delle imposte sul reddito e delle rate del mutuo. Non coincide con il cashflow dopo mutuo.',
+      'NOI is revenue minus model commissions and operating costs, before income tax and loan payments. It differs from after-loan cashflow.']
+  ].filter(([,pattern])=>pattern.test(q));
+  // Keep the detailed existing ROI/zero-equity explanation for ROI-only requests.
+  if(!entries.length || (entries.length===1 && entries[0][0]==='roi'))return null;
+  return {type:'education',confidence:1,actions:[],
+    textIT:entries.map(e=>e[2]).join('\n\n')+'\n\nQuesti esempi spiegano il metodo e non sono dati del tuo account. Vuoi una spiegazione di base o leggere un indicatore della tua analisi o del PMS?',
+    textEN:entries.map(e=>e[3]).join('\n\n')+'\n\nThese examples explain the method and are not your account data. Would you like a basic explanation or help reading a metric in your analysis or PMS?',
+    metadata:{source:'calculation_method',terms:entries.map(e=>e[0])}};
+};
+
 window.rbProcessAIMessage =
 async function(message){
 
@@ -120,7 +167,26 @@ async function(message){
     const currentRateResponse = !(activePDF && pdfRequest) && window.rbBuildCurrentMortgageRateResponse?.(text);
     if(currentRateResponse)return {success:true,response:currentRateResponse,intent:{intent:'mortgage_rates_unavailable'}};
 
+    const metricEducation = !pdfRequest && !planRequest && window.rbBuildMetricEducationResponse(text);
+    if(metricEducation)return {success:true,response:metricEducation,intent:{intent:'education'}};
+
     if(portalFinancialBoundary)return {success:true,response:portalFinancialBoundary,intent:{intent:'portal_financial_boundary'}};
+
+    // Educational questions do not require a completed simulation. Keep
+    // explicit/current PDF requests above this route so document evidence wins.
+    const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery);
+    const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
+    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b|\bnullo\b)|(?:\bzero\b|\b0\b|\bnullo\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity|no own capital/.test(educationalQuery);
+    if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
+      return {success:true,intent:{intent:'education'},response:{
+        type:'education',confidence:1,
+        textIT:'Il ROI sul capitale proprio confronta il cashflow annuo stimato, dopo i costi, le imposte e le rate previste dal modello, con il capitale proprio investito: cashflow annuo ÷ capitale proprio × 100.\n\nSe il capitale proprio è zero, il denominatore è zero: il ROI equity e il recupero dell’equity sono N/A, non 0% e non un rendimento infinito. Questa componente è esclusa da rischio e punteggio; restano cashflow, leva, copertura del debito e occupazione. Valuta anche il rendimento sull’immobile, specificando la sua base di calcolo.\n\nÈ una spiegazione del metodo, non una valutazione del tuo investimento. Un finanziamento al 100% non implica approvazione bancaria: verifica anche costi accessori, riserva di liquidità e condizioni effettive.',
+        textEN:'Return on equity compares estimated annual cash flow, after the costs, taxes and loan payments included in the model, with invested equity: annual cash flow ÷ equity × 100.\n\nWith zero equity, the denominator is zero: equity ROI and equity payback are N/A, rather than 0% or an infinite return. This component is excluded from risk and scoring; cash flow, leverage, debt coverage and occupancy still apply. Also assess the property return, stating its calculation basis.\n\nThis explains the method; it does not assess your investment. Full financing does not imply bank approval: check purchase costs, cash reserves and actual financing terms.',
+        suggestionsIT:['Controlla i dati','Leggi la mia analisi'],suggestionsEN:['Review the simulator inputs','Read my analysis'],actions:[],signals:['roi_method_explained'],metadata:{source:'calculation_method'}
+      }};
+    }
+
 
     window.rbPDFConversationDocumentId = null;
 
@@ -171,21 +237,6 @@ async function(message){
       window.rbPDFConversationDocumentId = null;
       window.rbRememberMessage?.({role:"user",message:text,intent:{intent:"portal_facts"}});
       return {success:true,response:portalResponse,intent:{intent:"portal_facts"}};
-    }
-
-    // Educational questions do not require a completed simulation. Keep
-    // explicit/current PDF requests above this route so document evidence wins.
-    const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery);
-    const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
-    const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b|\bnullo\b)|(?:\bzero\b|\b0\b|\bnullo\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity|no own capital/.test(educationalQuery);
-    if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
-      return {success:true,intent:{intent:'education'},response:{
-        type:'education',confidence:1,
-        textIT:'Il ROI sul capitale proprio confronta il cashflow annuo stimato, dopo i costi, le imposte e le rate previste dal modello, con il capitale proprio investito: cashflow annuo ÷ capitale proprio × 100.\n\nSe il capitale proprio è zero, il denominatore è zero: il ROI equity e il recupero dell’equity sono N/A, non 0% e non un rendimento infinito. Questa componente è esclusa da rischio e punteggio; restano cashflow, leva, copertura del debito e occupazione. Valuta anche il rendimento sull’immobile, specificando la sua base di calcolo.\n\nÈ una spiegazione del metodo, non una valutazione del tuo investimento. Un finanziamento al 100% non implica approvazione bancaria: verifica anche costi accessori, riserva di liquidità e condizioni effettive.',
-        textEN:'Return on equity compares estimated annual cash flow, after the costs, taxes and loan payments included in the model, with invested equity: annual cash flow ÷ equity × 100.\n\nWith zero equity, the denominator is zero: equity ROI and equity payback are N/A, rather than 0% or an infinite return. This component is excluded from risk and scoring; cash flow, leverage, debt coverage and occupancy still apply. Also assess the property return, stating its calculation basis.\n\nThis explains the method; it does not assess your investment. Full financing does not imply bank approval: check purchase costs, cash reserves and actual financing terms.',
-        suggestionsIT:['Controlla i dati','Leggi la mia analisi'],suggestionsEN:['Review the simulator inputs','Read my analysis'],actions:[],signals:['roi_method_explained'],metadata:{source:'calculation_method'}
-      }};
     }
 
     // =========================================

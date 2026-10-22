@@ -444,7 +444,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         let cashflow =
 
-            extractAmount(/(?:CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE))[^0-9\-]{0,30}(-?[\d.,]+)/i) ??
+            extractAmount(/(?:CASHFLOW NETTO DOPO MUTUO|NET CASH\s*FLOW AFTER (?:LOAN|MORTGAGE))[^0-9\-]{0,30}(-?[\d.,]+)/i) ??
             parseAmount(feasibilityKPI?.[3]) ??
             annualProfit ??
 
@@ -457,9 +457,10 @@ window.rbParseExecutivePDF = async function(documentObject){
         // ADR must be an adjacent, explicitly labelled amount. Do not scan
         // narrative text for the next number: it can be a footer date.
         function extractADR(){
-            const label = "\\b(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)\\b";
+            const label = "\\b(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA|TARIFFA NOTTE|TARIFFA PER NOTTE|NIGHTLY RATE)\\b";
             const amount = "([0-9]+(?:[.,][0-9]+)*)(?![0-9.,])";
             const patterns = [
+                new RegExp(label + "\\s*[:=]?\\s*" + amount + "\\s*EUR\\b", "ig"),
                 // Exported PMS table: ADR RevPAR 155 € 28 €.
                 new RegExp(label + "\\s+RevPAR\\s+" + amount + "\\s*€", "ig"),
                 new RegExp(label + "\\s*(?:[:=]\\s*)?€\\s*" + amount + "(?!\\s*[/:%–—-])", "ig"),
@@ -479,13 +480,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const adr = extractADR();
 
+        // RC174: only an outcome label may qualify ambiguous words such as
+        // "Da valutare". Narrative headings must never become verdicts.
+        const outcomeValues = '(NO[\\s_-]?BUY|Non consigliato|Not recommended|BUY|ACQUISTA|WAIT|ATTENDI|AVOID|EVITA|Operazione istituzionale|Institutional-grade opportunity|Investimento consigliato|Investment recommended|Da valutare|To be reviewed|Da verificare|To be verified|Critico|Critical|Favorevole|Favourable|Favorable)\\b';
         const extractedVerdict =
-
-    extractText(
-
-        /(?:(?:EXECUTIVE RECOMMENDATION|RACCOMANDAZIONE FINALE|RECOMMENDATION|VERDETTO AI|VERDETTO|AI VERDICT|VERDICT|ESITO)\s*[:\-]?\s*)?(BUY|ACQUISTA|WAIT|ATTENDI|NO[\s_-]?BUY|AVOID|EVITA|Operazione istituzionale|Institutional-grade opportunity|Investimento consigliato|Investment recommended|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
-
-    );
+            extractText(new RegExp('(?:VALUTAZIONE DEL MODELLO|MODEL ASSESSMENT)\\s*[:\\-]?\\s*' + outcomeValues, 'i')) ??
+            extractText(new RegExp('\\b(?:EXECUTIVE RECOMMENDATION|RACCOMANDAZIONE FINALE|RECOMMENDATION|VERDETTO AI|VERDETTO|AI VERDICT|VERDICT|ESITO(?: DEL MODELLO)?|MODEL OUTCOME)\\s*[:\\-]?\\s*' + outcomeValues, 'i')) ??
+            extractText(/\b(Non consigliato|Not recommended|Operazione istituzionale|Institutional-grade opportunity|Investimento consigliato|Investment recommended)\b/i);
 
         const normalizedVerdict =
             String(extractedVerdict || "")
@@ -493,11 +494,11 @@ window.rbParseExecutivePDF = async function(documentObject){
                 .trim();
 
         const verdict =
-            /^(buy|acquista|operazione istituzionale|institutional-grade opportunity|investimento consigliato|investment recommended)$/.test(normalizedVerdict)
+            /^(buy|acquista|operazione istituzionale|institutional-grade opportunity|investimento consigliato|investment recommended|favorevole|favourable|favorable)$/.test(normalizedVerdict)
                 ? "BUY"
-                : /^(wait|attendi|da valutare|to be reviewed)$/.test(normalizedVerdict)
+                : /^(wait|attendi|da valutare|to be reviewed|da verificare|to be verified)$/.test(normalizedVerdict)
                     ? "WAIT"
-                    : /^(no[\s_-]?buy|avoid|evita|non consigliato|not recommended)$/.test(normalizedVerdict)
+                    : /^(no[\s_-]?buy|avoid|evita|non consigliato|not recommended|critico|critical)$/.test(normalizedVerdict)
                         ? "AVOID"
                         : null;
 
@@ -729,10 +730,10 @@ window.rbParseExecutivePDF = async function(documentObject){
             verdict:
                 verdict,
 
-            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY|FORECAST EQUITY ROI/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
-            cashflowBasis: /CASHFLOW NETTO DOPO MUTUO|NET CASH FLOW AFTER (?:LOAN|MORTGAGE)/i.test(text) ? "after_mortgage" : "unknown",
+            roiBasis: /ROI (?:SUL CAPITALE PROPRIO|ON EQUITY|EQUITY)|RETURN ON EQUITY|(?:FORECAST |ESTIMATED )?EQUITY ROI/i.test(text) ? "equity" : /ROI (?:IMMOBILE|SUL VALORE|ON PROPERTY)/i.test(text) ? "property" : "unknown",
+            cashflowBasis: /CASHFLOW NETTO DOPO MUTUO|NET CASH\s*FLOW AFTER (?:LOAN|MORTGAGE)/i.test(text) ? "after_mortgage" : "unknown",
             financingRate: extractPercentage(/(?:TASSO IPOTIZZATO|ASSUMED INTEREST RATE)[^0-9]{0,30}([\d.,]+)\s*%/i),
-            debtService: extractAmount(/(?:RATA MUTUO ANNUA STIMATA|ESTIMATED ANNUAL LOAN PAYMENTS)[^0-9]{0,30}([\d.,]+)/i),
+            debtService: extractAmount(/(?:RATA MUTUO ANNUA STIMATA|ESTIMATED ANNUAL (?:LOAN PAYMENTS?|DEBT SERVICE))[^0-9]{0,30}([\d.,]+)/i),
             propertyFacts
 
         };
