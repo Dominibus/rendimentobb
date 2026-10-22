@@ -985,29 +985,7 @@ if(SpeechRecognition){
 
 }
 
-  // ===========================================
-  // 🔥 AUTO OPEN TOOL PAGE
-  // ===========================================
-
-  const isToolPage =
-
-    window.location.pathname
-      .includes("/tool");
-
-  const isMobile =
-
-    window.innerWidth <= 768;
-
-  if(
-    isToolPage &&
-    !isMobile
-  ){
-
-    windowEl.classList.add(
-      "open"
-    );
-
-  }
+  // RC180: open only on an explicit assistant/Autopilot request.
 
   // ===========================================
   // 🔄 TOGGLE

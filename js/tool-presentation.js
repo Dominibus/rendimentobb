@@ -5,6 +5,8 @@ export function installToolPresentation(window,document){
   const state=window.rbGetInvestmentAnalysisState?.()?.status || 'missing';
   const button=document.getElementById('pdf-btn'),status=document.getElementById('tool-pdf-status');
   const access=window.getUserAccess?.()||{};
+  const next=document.getElementById('rb-result-next');
+  if(next)next.hidden=state!=='current'||access.isLoading===true||!!(access.isInvestor||access.isPro||access.isAdmin);
   if(state==='missing'||state==='unavailable'){
    for(const id of ['profit-monthly','profit-annual','revenue-annual']){
     const element=document.getElementById(id);if(element)element.textContent='—';

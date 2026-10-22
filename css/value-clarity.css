@@ -1,0 +1,22 @@
+/* RC180: read-only explanations; native disclosures work on touch and keyboard. */
+.rb180-value{padding-top:28px;padding-bottom:40px;color:#163b32}
+.rb180-value h2{font-size:clamp(23px,3vw,32px);line-height:1.25;letter-spacing:-.025em}
+.rb180-value p,.rb180-help dd,.rb180-result-next p{line-height:1.7;color:#425a54}
+.rb180-example{padding:22px;border-left:4px solid #087b59;border-radius:12px;background:#f0faf5;margin-top:20px}
+.rb180-help{margin:16px 0;padding:0 18px;border:1px solid #bdd8cd;border-radius:12px;background:#fff;color:#163b32;text-align:left;min-width:0;box-sizing:border-box}
+.rb180-help summary{padding:14px 0;min-height:44px;box-sizing:border-box;cursor:pointer;font-weight:700;line-height:1.5}
+.rb180-help dl{margin:0 0 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rb180-help dt{font-weight:750;color:#163b32}.rb180-help dd{margin:6px 0 0;font-size:14px}
+.rb180-result-next{padding:20px;border:1px solid #bdd8cd;background:#f0faf5;border-radius:14px;margin:20px 0;text-align:left}
+.rb180-result-next[hidden]{display:none!important}
+.rb180-result-next a,.rb180-example a{display:inline-flex;align-items:center;min-height:44px;color:#075d45;text-decoration:underline;font-weight:700;line-height:1.5}
+.rb180-help summary:focus-visible,.rb180-result-next a:focus-visible,.rb180-example a:focus-visible{outline:3px solid #087b59;outline-offset:4px;border-radius:4px}
+@media(max-width:600px){.rb180-help dl{grid-template-columns:1fr}.rb180-example,.rb180-result-next{padding:16px}.rb180-value{padding-top:12px;padding-bottom:24px}}
+
+/* Plan labels describe access while new purchases remain paused. */
+.pro-blur::after{content:"Investor / Pro"}
+html[lang="en"] .pro-blur::after{content:"Investor / Pro"}
+
+.rb180-demo-metrics{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(min-width:401px) and (max-width:999px){.rb180-demo-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.rb180-demo-metrics>div:last-child{grid-column:1/-1}}
+@media(max-width:400px){.rb180-demo-metrics{grid-template-columns:1fr}}

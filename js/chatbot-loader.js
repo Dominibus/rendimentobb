@@ -189,7 +189,7 @@
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261016-rc146",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261022-rc180",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];

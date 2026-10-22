@@ -28,6 +28,7 @@ if(calendar){
  function render(){
   const metrics=exampleMetrics(bookings);
   put('demo-revenue',money(metrics.revenue));put('demo-occupancy',decimal(metrics.occupancy)+'%');put('demo-adr',money(metrics.adr));put('demo-tasks',String(metrics.tasks));
+  const revpar=document.getElementById('demo-revpar');if(revpar)revpar.textContent=money(metrics.revpar);
   calendar.replaceChildren();
   // October 1, 2026 is Thursday. Monday-first calendar, including placeholders.
   for(let i=0;i<3;i++){const blank=document.createElement('span');blank.setAttribute('aria-hidden','true');calendar.append(blank);}

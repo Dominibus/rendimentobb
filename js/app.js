@@ -11,7 +11,7 @@ import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
-import {installToolPresentation} from "./tool-presentation.js?v=20261021-rc171";
+import {installToolPresentation} from "./tool-presentation.js?v=20261022-rc180";
 installToolPresentation(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
@@ -2259,22 +2259,22 @@ const container = document.getElementById("smart-investment-alert");
 
 if(!container) return;
 
-const title = t("🔥 Investimento promettente","🔥 Promising investment");
+const title = t("Approfondisci questo scenario","Explore this scenario");
 
 const discover = t(
 "Scopri l'analisi completa",
 "Discover the full analysis"
 );
 
-const risk = t("rischio reale","real risk");
-const benchmark = t("benchmark mercato","market benchmark");
+const risk = t("indice di rischio del modello","model risk index");
+const benchmark = t("riferimenti illustrativi","illustrative references");
 const occupancy = t("simulazione occupazione","occupancy simulation");
 const mortgage = t("comparatore mutui","mortgage comparator");
 const report = t("report professionale","professional report");
 
 const unlock = t(
-"🔓 Sblocca analisi completa – 19€/mese",
-"🔓 Unlock full analysis – €19/month"
+"Scopri Investor e le condizioni della prova",
+"Explore Investor and trial terms"
 );
 
 const roiText = t("ROI stimato","Estimated ROI");
@@ -2334,8 +2334,8 @@ ${unlock}
 
 <div style="margin-top:8px;font-size:12px;color:#64748b;">
 ${t(
-"💰 Scopri quanto puoi guadagnare (o perdere davvero)",
-"💰 See how much you can really earn (or lose)"
+"Confronta stime basate sulle tue ipotesi",
+"Compare estimates based on your assumptions"
 )}
 </div>
 

@@ -777,6 +777,7 @@ SAFE
 <link rel="stylesheet" href="/css/brand-icons.css?v=20261016-rc146">
 <link rel="stylesheet" href="/css/journey-2026.css?v=20261020-rc158">
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
+<link rel="stylesheet" href="/css/value-clarity.css?v=20261022-rc180">
 </head>
 
 <body class="tool-page">
@@ -1168,6 +1169,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <p id="mortgage-transfer-note"></p>
           <button id="mortgage-transfer-clear" type="button" class="btn btn-secondary" data-it="Scollega lo scenario" data-en="Unlink scenario">Scollega lo scenario</button>
         </section>
+<details class="rb180-help"><summary><span data-it="Prima di iniziare: i numeri in parole semplici" data-en="Before you start: the numbers in plain language">Prima di iniziare: i numeri in parole semplici</span></summary><dl><div><dt>Cashflow</dt><dd data-it="Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità." data-en="What remains after modeled expenses, including tax and loan payments when set. The monthly average is the annual result divided by 12; it does not describe seasonality.">Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità.</dd></div><div><dt>ROI</dt><dd data-it="Rapporto tra risultato annuo e capitale di riferimento. Distingui ROI sul capitale proprio e ROI sul prezzo o valore dell’immobile. Se il denominatore è zero, il rapporto non è applicabile." data-en="Annual result divided by the relevant capital. Distinguish return on equity from return on the property price or value. A zero denominator makes the ratio inapplicable.">Rapporto tra risultato annuo e capitale di riferimento. Distingui ROI sul capitale proprio e ROI sul prezzo o valore dell’immobile. Se il denominatore è zero, il rapporto non è applicabile.</dd></div><div><dt>DSCR</dt><dd data-it="Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile." data-en="Compares operating income before debt with loan payments over the same period. Below 1, operating income does not cover payments; above 1 is still no guarantee or lending approval. Not applicable without debt.">Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile.</dd></div><div><dt>Occupazione / Occupancy</dt><dd data-it="Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi." data-en="Percentage of nights you expect to sell. Rates and city references are editable examples: verify your own assumptions.">Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi.</dd></div></dl></details>
         <!-- INPUTS -->
         <div class="input-group rb-property-mode">
           <label for="property-mode" data-it="Cosa vuoi analizzare?" data-en="What would you like to analyze?">Cosa vuoi analizzare?</label>
@@ -1398,6 +1400,7 @@ margin-right:auto;
 </div>
 </section>  
 
+<aside id="rb-result-next" class="rb180-result-next" hidden><strong data-it="Vuoi ritrovare questa analisi e confrontarne un’altra?" data-en="Want to retrieve this analysis and compare another?">Vuoi ritrovare questa analisi e confrontarne un’altra?</strong><p data-it="Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free." data-en="Free shows results in this session. Investor saves analyses in the dashboard and includes PMS management. Check eligibility for 30 free days: no card, charges or automatic renewal; PDFs excluded. You return to Free afterwards.">Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free.</p><p data-it="Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio." data-en="After activating Investor, recalculate the scenario to save it. The Free result is not automatically transferred to your archive.">Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio.</p><a href="/plans.html#tester-programme"><span data-it="Salva e confronta con Investor: scopri la prova →" data-en="Save and compare with Investor: explore the trial →">Salva e confronta con Investor: scopri la prova →</span></a></aside>
 <!-- ================= RESULTS (UNICO BLOCCO) ================= -->
 
 <div id="results" class="results-card simulator-results" style="margin-top:40px;">
@@ -1927,7 +1930,7 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js?v=20261019-rc153" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261022-rc174" defer></script>
+<script src="/js/chatbot-loader.js?v=20261022-rc180" defer></script>
   
 <script type="module" src="/js/header.js?v=20261022-rc174"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
@@ -2080,7 +2083,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261022-rc179"></script>
+<script type="module" src="/js/app.js?v=20261022-rc180"></script>
 
 <script>
 
