@@ -80,12 +80,14 @@ body.immobili-page .property-card{
     0 2px 6px rgba(2,6,23,0.04);
 
   text-align:center;
-  cursor:pointer;
+  cursor:default;
 
   transition:all .3s cubic-bezier(.4,0,.2,1);
 }
 
-body.immobili-page .property-card:hover{
+body.immobili-page .property-card[data-city]{ cursor:pointer; }
+body.immobili-page .property-card[data-city]:focus-visible{ outline:3px solid #059669; outline-offset:4px; }
+body.immobili-page .property-card[data-city]:hover{
   transform:translateY(-8px) scale(1.02);
 
   box-shadow:
@@ -773,7 +775,7 @@ Confronta città, budget e metrature con parametri omogenei
 <div class="property-grid">
 
   <!-- ================= NAPOLI ================= -->
-  <div class="property-card highlight" data-city="napoli" onclick="handleCityClick(this)">
+  <div class="property-card highlight" data-city="napoli" role="link" tabindex="0" onclick="handleCityClick(this)" onkeydown="if(event.key === 'Enter'){handleCityClick(this)}">
 
     <div class="card-badge green" data-it="ESEMPIO" data-en="EXAMPLE">ESEMPIO</div>
 
@@ -846,7 +848,7 @@ Dati: scenario dimostrativo
   </div>
 
   <!-- ================= ROMA ================= -->
-  <div class="property-card" data-city="roma" onclick="handleCityClick(this)">
+  <div class="property-card" data-city="roma" role="link" tabindex="0" onclick="handleCityClick(this)" onkeydown="if(event.key === 'Enter'){handleCityClick(this)}">
 
     <div class="card-badge blue" data-it="ESEMPIO" data-en="EXAMPLE">ESEMPIO</div>
 
@@ -913,7 +915,7 @@ Dati: scenario dimostrativo
   </div>
 
   <!-- ================= FIRENZE ================= -->
-  <div class="property-card" data-city="firenze" onclick="handleCityClick(this)">
+  <div class="property-card" data-city="firenze" role="link" tabindex="0" onclick="handleCityClick(this)" onkeydown="if(event.key === 'Enter'){handleCityClick(this)}">
 
     <div class="card-badge purple" data-it="ESEMPIO" data-en="EXAMPLE">ESEMPIO</div>
 
@@ -980,7 +982,7 @@ Dati: scenario dimostrativo
   </div>
 
   <!-- ================= MILANO ================= -->
-  <div class="property-card" data-city="milano" onclick="handleCityClick(this)">
+  <div class="property-card" data-city="milano" role="link" tabindex="0" onclick="handleCityClick(this)" onkeydown="if(event.key === 'Enter'){handleCityClick(this)}">
 
     <div class="card-badge red"
          data-it="ESEMPIO"
@@ -1768,7 +1770,7 @@ window.searchProperties = async function(){
       values.textContent = new Intl.NumberFormat(en ? "en-US" : "it-IT", {style:"currency", currency:"EUR"}).format(scenario.price) + " · " + scenario.sqm + " m² · " + (en ? "Example ROI " : "ROI di esempio ") + scenario.roi + "%";
       const caveat = document.createElement("p"); caveat.textContent = en ? "Verify revenue, costs and local demand. Risk cannot be calculated from these examples." : "Verifica ricavi, costi e domanda locale. Il rischio non è calcolabile da questi esempi.";
       const button = document.createElement("button"); button.type = "button"; button.className = "btn btn-primary"; button.textContent = en ? "Analyze scenario" : "Analizza scenario";
-      button.addEventListener("click", () => openInvestment(scenario.price, scenario.city, scenario.roi));
+      button.addEventListener("click", () => openInvestment(scenario.price, scenario.city, scenario.sqm));
       card.append(badge, title, cityLine, values, caveat, button); grid.append(card);
     }
     container.append(grid);
@@ -1779,71 +1781,20 @@ window.searchProperties = async function(){
 
 // ================= OPEN INVESTMENT =================
 
-window.openInvestment = function(
-  price,
-  city,
-  roi
-){
-
-  const user =
-    window.currentUser || null;
-
-  const plan =
-    window.currentPlan || "free";
-
-  // 💾 salva dati immobile
-
-  localStorage.setItem(
-    "property_price",
-    price || 0
-  );
-
-  localStorage.setItem(
-    "property_city",
-    city || ""
-  );
-
-  localStorage.setItem(
-    "property_roi",
-    roi || 0
-  );
-
-  // =====================
-  // 👻 NON LOGGATO
-  // =====================
-
-  if(!user){
-
-    localStorage.setItem(
-      "lead_source",
-      "immobili"
-    );
-
-    showLoginModal();
-
-    return;
-  }
-
-  // =====================
-  // 🧪 FREE USER
-  // =====================
-
-  if(plan === "free"){
-
-    showUpgradeModal();
-
-    return;
-  }
-
-  // =====================
-  // 💰 INVESTOR / PRO
-  // =====================
-
-  window.location.href =
-    "/tool/?auto=1";
-
+// Exploring the free simulator does not require an account. Saving stays gated in the tool.
+window.openInvestment = function(price, city, sqm){
+  if(!Number.isFinite(Number(price)) || Number(price) <= 0 || !String(city || "").trim()) return;
+  localStorage.setItem("property_price", String(price));
+  localStorage.setItem("property_city", String(city));
+  if(Number.isFinite(Number(sqm)) && Number(sqm) > 0) localStorage.setItem("property_sqm", String(sqm));
+  else localStorage.removeItem("property_sqm");
+  // Illustrative ROI is not a calculated result; discard unrelated listing context.
+  localStorage.removeItem("property_roi");
+  localStorage.removeItem("property_link");
+  sessionStorage.removeItem("from_property_page");
+  window.location.href = "/tool/?auto=1";
 };
-  
+
 // ================= LEAD IMMOBILI =================
 
 window.sendLeadImmobili = async function(){
@@ -1945,44 +1896,9 @@ ${
   // ================= CITY CLICK (LEAD + LOGIN FLOW) =================
 
 window.handleCityClick = function(el){
-
   const city = el.dataset.city;
-  const user = window.currentUser || null;
-  const plan = window.currentPlan || "free";
-
-  // 🎯 salva sempre città
-  localStorage.setItem("selected_city", city);
-
-  // =====================
-  // 👻 NON LOGGATO
-  // =====================
-  if(!user){
-
-    // 🔥 salva funnel
-    localStorage.setItem("lead_source", "immobili_city");
-    localStorage.setItem("post_login_redirect", "/immobili/" + city + "/");
-
-    localStorage.setItem("lead_source", "immobili");
-    showLoginModal();
-    return;
-  }
-
-  // =====================
-  // 🧪 FREE USER
-  // =====================
-  if(plan === "free"){
-
-window.location.href =
-"/immobili/" + city + "/";
-
-return;
-
-}
-
-  // =====================
-  // 💰 INVESTOR / PRO
-  // =====================
-  window.location.href = "/immobili/" + city;
+  if(!["napoli", "roma", "firenze", "milano"].includes(city)) return;
+  window.location.href = "/immobili/" + city + "/";
 };
 
  // ================= LOGIN MODAL FUNCTIONS =================
