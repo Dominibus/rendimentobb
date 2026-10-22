@@ -10445,6 +10445,15 @@ function renderTodayBookingOperations(bookings = []){
   const container = document.getElementById("booking-today-operations");
   if(!container) return;
 
+  // RC181: the read-only demo has no verified operational task snapshot.
+  // Do not turn an empty input list into an all-clear for fictional bookings.
+  if(typeof isDemo === 'function' && isDemo()){
+    window.rbChecklistBookings=[];
+    const demoURL=window.currentLang === 'en' ? '/en/demo/hospitality-pms/' : '/demo/hospitality-pms/';
+    container.innerHTML=`<div class="rb-source-note"><strong>${window.t('Anteprima prenotazioni · dati dimostrativi','Booking preview · demonstration data')}</strong><p>${window.t('Le priorità operative non sono calcolate in questa anteprima. Gli esempi qui sotto mostrano soggiorni e importi; non attestano che non ci siano attività da seguire.','Operational priorities are not calculated in this preview. The examples below show stays and amounts; they do not establish that no tasks need attention.')}</p><a href="${demoURL}">${window.t('Prova calendario e pulizie nella demo interattiva →','Try the calendar and cleaning tasks in the interactive demo →')}</a></div>`;
+    return;
+  }
+
   window.rbChecklistBookings=bookings;
   const today=checklistDay();
   const filter=window.rbChecklistFilter || 'daily';

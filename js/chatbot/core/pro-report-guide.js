@@ -43,6 +43,16 @@
   };
   window.rbBuildProReportGuide=function(message){
     const q=norm(message),doc=window.rbDocumentManager?.getLast?.();
+    // RC181: the report page does not expose a verified selected-analysis
+    // snapshot to this guide. Do not replace it with old conversation values.
+    const currentReport=/report (?:corrente|attuale|aperto)|(?:questo|mio) report|(?:current|this|my|open) report|sto leggendo.*report|report.*sto leggendo/.test(q);
+    const reportPage=String(window.location?.pathname||'').startsWith('/dashboard-report');
+    const definition=/definizione|definition|cosa significa|what is|what are|cos['’]?e/.test(q);
+    const readReport=reportPage&&!definition&&/report|simulazion|analisi|roi|cashflow|cash flow|dscr|rendimento|yield|return|rischio|risk|mensil|monthly/.test(q);
+    if(!doc&&(currentReport||readReport))return reply('current_report_needs_pdf',
+      'Per leggere i valori esatti del report aperto, scarica il PDF dalla pagina e allegalo qui. In questa conversazione non ho una fotografia verificata della simulazione selezionata nel report: non uso i valori di una chat precedente o di un’altra pagina al suo posto. Posso intanto spiegare il significato di ROI e cashflow; dopo il caricamento del PDF posso riferirmi ai dati estratti dal documento.',
+      'To read the exact values of the open report, download its PDF from the page and attach it here. This conversation has no verified snapshot of the simulation selected in the report: I will not substitute values from an earlier chat or another page. I can explain ROI and cashflow now; after you upload the PDF I can use the data extracted from that document.');
+
     if(!/\bpro\b/.test(q)&&/prova|trial/.test(q)&&/ancora|altra|nuov|riattiv|riprov|scad|again|another|restart|retry|expir|second/.test(q)&&!/\b(?:pdf|report)\b/.test(q)){
       const pro=!!window.currentUser&&!!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
       const active=window.rbIsTrial?.()===true,used=window.rbHasUsedTrial?.()===true;
