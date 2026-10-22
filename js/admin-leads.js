@@ -59,6 +59,7 @@ function renderKPI(){
  const cities=new Map();financial.forEach(l=>{const city=String(l.city||'—');cities.set(city,(cities.get(city)||0)+1);});$('topCity').textContent=[...cities].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
 }
 function render(){
+ if(!isAdmin(auth.currentUser)){reset();return;}
  renderKPI();loadFeedback();const coverage=leadCoverage(scoped());$('lead-coverage').textContent=t(`${coverage.records} eventi · ${coverage.uniqueEmails} email distinte · ${coverage.withoutEmail} record senza email. Email distinte non significa persone verificate. Priorità basata sul ROI dichiarato; test e simulazioni ripetute possono essere inclusi.`,`${coverage.records} events · ${coverage.uniqueEmails} distinct emails · ${coverage.withoutEmail} records without email. Distinct emails are not verified people. Priority is based on submitted ROI; tests and repeated simulations may be included.`);const filtered=selection();const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
  const visible=filtered.slice((page-1)*pageSize,page*pageSize);
  $('leadList').innerHTML=visible.map(l=>{

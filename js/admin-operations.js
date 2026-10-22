@@ -1,6 +1,6 @@
 import {auth} from './firebase-init.js?v=20261016-rc140';
 import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
-import {renderOperations} from './admin-operations-view.js?v=20261022-rc176';
+import {renderOperations} from './admin-operations-view.js?v=20261022-rc178';
 const root=document.getElementById('operations-content');
 const feedback=document.getElementById('operations-feedback');
 const refresh=document.getElementById('operations-refresh');

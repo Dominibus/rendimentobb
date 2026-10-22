@@ -1,3 +1,4 @@
+import {notifyAdminOperations} from '../lib/admin-operations-alerts.js';
 import {purgeExpiredSolutionRequests} from '../lib/solution-request-service.js';
 import {purgeExpiredPlanInterests} from '../lib/plan-interest-service.js';
 import {drainSubscriptionConfirmations} from '../lib/subscription-confirmation.js';
@@ -287,6 +288,10 @@ ${lang==="en"?"Stop analysis reminders":"Interrompi i promemoria"}: ${unsubscrib
     funnelStats.hasMore=scan.hasMore;
     funnelStats.pages=scan.pages;
     await scanRef.set({cursor:scan.cursor,lastRunAt:admin.firestore.FieldValue.serverTimestamp(),...funnelStats,success:funnelStats.errors===0,needsAttention:funnelStats.errors>0 || funnelStats.manualReview>0 || funnelStats.budgetExhausted || scan.hasMore});
+    if(process.env.ADMIN_OPS_ALERTS_ENABLED==='true'){
+      try{await notifyAdminOperations({db,resend,now:Date.now()});}
+      catch{console.error('Admin operations digest unavailable');}
+    }
     console.info("RB_CRON_COMPLETE", {runId,durationMs:Date.now()-startedAt,success:!pmsError && funnelStats.errors===0,withdrawalReceipts,funnel:funnelStats,pms:{sent:pmsNotifications?.sent || 0,queued:pmsReminders?.queued || 0,error:pmsError}});
     return res.status(pmsError || funnelStats.errors>0?503:200).json({success:!pmsError && funnelStats.errors===0,withdrawalReceipts,funnel:funnelStats,pmsNotifications:pmsNotifications || null,pmsReminders:pmsReminders || null,...(pmsError?{error:"pms_recovery_failed"}:{})});
 
