@@ -1,0 +1,44 @@
+RENDIMENTOBB RC193 — VERIFICHE ESEGUITE IL 23/10/2026
+
+Baseline archivio RC192 fornito dall'utente:
+npm test: 1712 test, 1712 superati, zero falliti/skipped.
+Il primo avvio senza collegamento alle dipendenze locali non era un esito valido;
+dopo la predisposizione delle dipendenze la baseline completa è passata.
+
+Versione finale RC193:
+npm test (node --test): 1764 test, 1764 superati, zero falliti/skipped.
+52 test nuovi: 38 motore commerciale, 14 UI/integrità/chatbot.
+La prima regressione ha segnalato aspettative vecchie su cache, numero di URL
+e whitelist delle pagine isolate: aggiornate ai nuovi percorsi/versioni;
+nessun controllo finanziario o di permessi rimosso o attenuato.
+
+Timezone calendario:
+TZ=Europe/Rome node --test tests/rc193-commercial-engine.test.js
+38/38 superati. Motore con date UTC: contratti, giorni reali e bisestili.
+
+Regressione ETL territoriale RC192:
+python3 -m unittest discover -s tests -p territorial_etl_test.py
+9/9 superati, zero errori.
+
+Controlli aggiuntivi eseguiti:
+- Sintassi JS del nuovo modulo UI verificata con node --check.
+- Pagine IT/EN: ID unici e 32 riferimenti locali per pagina risolti.
+- Sitemap XML valida; 39 URL esistenti, pagine ritirate ancora escluse.
+- File protetti confrontati SHA-256 contro baseline; API e moduli esistenti
+  B&B, mutuo, app/dashboard/PMS, schemi, regole e configurazione invariati.
+- Per HTML diversi dai due hub tool/immobili e dalle nuove pagine,
+  confronto contro archivio originale: sole variazioni delle query cache.
+- UI: eseguito il modulo reale con DOM simulato in IT/EN; creazione,
+  modifica/eliminazione contratti, rate IVA obbligatorie, collisioni,
+  modello misto, chiusure, impostazioni non applicate, fasce e scenari.
+- Chatbot: commerciale IT/EN, disponibilità PDF, isolamento account,
+  priorità garanzie e documenti, nessuna lettura della simulazione commerciale.
+- Nessun fetch/storage browser/Firestore nel nuovo motore o nella nuova UI.
+
+NON ESEGUITI:
+Collaudo visuale RC193 su browser/iPhone, VoiceOver, tastiera virtuale,
+test autenticati Investor/Pro, prove con utenti reali, verifica legale/fiscale
+del contratto da 305 euro, conferma di interesse o disponibilità a pagare.
+Non sono presentati come test superati.
+
+Limiti/funzioni rimandate e modello delle formule nei documenti allegati.

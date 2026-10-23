@@ -22,8 +22,8 @@ test('retired files are absent and no rewrite or redirect masks removal',()=>{
  for(const p of [...retired,'js/basic-beyond-public.js','js/basic-beyond-knowledge.js'])assert.equal(existsSync(new URL(p,root)),false,p);
  const c=JSON.parse(read('vercel.json'));assert.equal(c.routes,undefined);for(const rule of [...(c.redirects||[]),...(c.rewrites||[])]){assert.ok(!/basic-beyond|racconta-idea|share-your-idea/.test(rule.source));assert.ok(!/basic-beyond|racconta-idea|share-your-idea/.test(rule.destination));}
 });
-test('37 sitemap URLs map to existing files and exclude retired pages',()=>{
- const locs=[...read('sitemap.xml').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);assert.equal(locs.length,37);
+test('39 sitemap URLs map to existing files and exclude retired pages',()=>{
+ const locs=[...read('sitemap.xml').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);assert.equal(locs.length,39);
  for(const loc of locs){const p=new URL(loc).pathname;assert.doesNotMatch(p,/basic-beyond|racconta-idea|share-your-idea/);assert.ok(existsSync(new URL(p==='/'?'index.html':p.slice(1)+(p.endsWith('/')?'index.html':''),root)),loc);}
 });
 test('remaining HTML has no links to retired pages or scripts',()=>{
@@ -36,7 +36,7 @@ test('historical privacy notice preserves both languages, retention and rights',
 test('demos, real-estate modules and sales pause remain available',()=>{
  for(const p of ['demo/investment-analytics/','demo/hospitality-pms/','en/demo/investment-analytics/','en/demo/hospitality-pms/']){const s=read(p+'index.html');assert.match(s,/rel="canonical"/);assert.match(s,/\/js\/public-shell.js/);}
  for(const p of ['js/mortgage-quotes.js','js/property-comparison.js','js/portfolio-basis.js','lib/solution-request-service.js'])assert.ok(existsSync(new URL(p,root)),p);
- assert.match(read('js/sales-policy.js'),/LIVE_SALES_PAUSED\s*=\s*true/);assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261023-rc191/);
+ assert.match(read('js/sales-policy.js'),/LIVE_SALES_PAUSED\s*=\s*true/);assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261023-rc193/);
 });
 test('API remains 410 without reading submitted data',()=>{
  for(const method of ['GET','POST','PUT','OPTIONS']){const headers={};let status,body;

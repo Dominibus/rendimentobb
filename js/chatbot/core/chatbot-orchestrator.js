@@ -115,6 +115,17 @@ window.rbBuildMetricEducationResponse = function(message){
     metadata:{source:'calculation_method',terms:entries.map(e=>e[0])}};
 };
 
+// RC193: separate commercial scope from tourism revenue and cached account values.
+// Contextual commercial analysis is not available in this public MVP.
+window.rbBuildCommercialPropertyResponse = function(message){
+ const q=String(message||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ if(/\b(?:mio|my)\s+pms\b/.test(q)||/\b(?:pdf|documento|document|file|brochure|report)\b/.test(q)&&/leggi|analizza|nel pdf|dal pdf|read|analy[sz]e|this pdf|my pdf/.test(q))return null;
+ if(!/immobil\w* commercial\w*|local\w* commercial\w*|locazion\w* commercial\w*|(?:pdf|report)\s+commercial\w*|commercial\s+(?:propert|rent|lease|pdf|report)|\buffici\b|\boffices?\b|studi[o]?\s+(?:medic\w*|profession\w*|condivis\w*|sanitar\w*|dentistic\w*)|shared\s+(?:professional\s+)?(?:rooms?|spaces?)|polistud\w*|professional\s+(?:studios?|rooms?)|stanze.{0,35}professionist|\b305\b.*(?:mezza giornata|half.day)|(?:mezza giornata|half.day).*\b305\b/.test(q))return null;
+ return {type:'commercial_property_scope',confidence:1,actions:[],metadata:{source:'commercial_mvp_scope',route:'/immobili-commerciali/',readsSimulation:false},
+ textIT:'Per uffici, locali e studi professionali usa il nuovo modulo “Analisi immobili commerciali”: /immobili-commerciali/ . Il ricavo dipende da canoni e fasce contrattuali, non da ADR, RevPAR o occupazione turistica.\n\n305 € al mese per una fascia settimanale e 305 € per ogni utilizzo sono tariffe diverse: scegli l’unità esplicitamente. I mesi parziali usano i giorni di contratto; il prezzo per utilizzo usa il calendario effettivo, escluse le chiusure. Ricavi attesi = ricavi contrattuali × quota attesa. Margine = ricavi senza IVA meno costi; cashflow del modello = margine meno rate, prima delle imposte sul reddito. Valore già posseduto e nuovo capitale sono distinti.\n\nL’IVA va configurata, senza aliquote automatiche; se resta da verificare, i risultati netti sono N/A. Le cifre della demo sono fittizie, non benchmark di mercato. Analizziamo l’immobile, non i ricavi medici: niente pazienti o dati sanitari. Contratti, fiscalità e idoneità richiedono verifiche con professionisti competenti.\n\nQuesto MVP pubblico lavora solo nella pagina: nessun salvataggio account, PDF commerciale o Autopilot operativo. Non posso leggere i valori della tua simulazione commerciale né confermare incassi. Salvataggi, report e assistenza contestuale sono sviluppi successivi; la prova Investor resta di 30 giorni e non include PDF.',
+ textEN:'For offices, commercial units and professional rooms use the new “Commercial property analysis” module: /en/immobili-commerciali/ . Revenue comes from contracts and reserved slots, not tourist ADR, RevPAR or occupancy.\n\n€305 monthly for a weekly slot and €305 for each use are different tariffs: choose the basis explicitly. Partial months use contract days; per-use pricing uses actual calendar slots, excluding closures. Expected revenue = contractual revenue × expected share. Margin = revenue excluding VAT minus costs; model cashflow = margin minus debt payments, before income tax. Already-owned asset value and new capital are distinct.\n\nVAT must be configured without an automatic rate; unverified VAT makes net results N/A. Demo figures are fictional, not market benchmarks. We analyse the property, not medical revenue: no patients or health data. Contracts, taxes and suitability require qualified professional checks.\n\nThis public MVP works within its page: no account saving, commercial PDFs or operational Autopilot. I cannot read your commercial simulation values or verify receipts. Saving, reporting and contextual assistance are future work; Investor remains a 30-day trial without PDFs.'};
+};
+
 window.rbProcessAIMessage =
 async function(message){
 
@@ -154,6 +165,11 @@ async function(message){
         textEN:riskMeaning?'The model risk index is not a probability of loss: 40/100 does not mean a 40% chance of losing money. It summarises some factors from available assumptions and does not measure every risk. It does not guarantee an outcome or verify the property.':'I cannot guarantee mortgage approval. Payments, LTV and DSCR are calculations based on inputs, not a lending decision. Approval requires the lender’s assessment, documentation and actual terms; I will not infer it from old simulations.'}};
     }
 
+    const focusedEvidencePDF = window.rbDocumentManager?.getLast?.();
+    const preserveEvidencePDF = focusedEvidencePDF?.id && window.rbPDFConversationDocumentId === focusedEvidencePDF.id && !/mercato|market|altra citt|another city/i.test(text);
+    const commercialScope = !preserveEvidencePDF && window.rbBuildCommercialPropertyResponse(text);
+    if(commercialScope)return {success:true,response:commercialScope,intent:{intent:'commercial_property_scope'}};
+
     const importGuide=window.rbBuildBookingImportGuide?.(text);
     if(importGuide)return {success:true,response:importGuide,intent:{intent:'booking_import_guide'}};
 
@@ -164,8 +180,6 @@ async function(message){
     }
 
     // Source questions must be answered before generic external-data fallbacks.
-    const focusedEvidencePDF = window.rbDocumentManager?.getLast?.();
-    const preserveEvidencePDF = focusedEvidencePDF?.id && window.rbPDFConversationDocumentId === focusedEvidencePDF.id && !/mercato|market|altra citt|another city/i.test(text);
     const marketEvidence=!preserveEvidencePDF && !/\b(?:free|investor|pro|piano|plan|trial|subscription)\b/i.test(text) && !/\b(?:pdf|documento|document|file|brochure)\b/i.test(text) && window.rbBuildMarketEvidenceResponse?.(text);
     if(marketEvidence)return {success:true,response:marketEvidence,intent:{intent:"market_provenance"}};
 
