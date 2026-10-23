@@ -152,7 +152,7 @@
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js?v=20261015-rc137",
 
-    "/js/chatbot/core/query-normalizer.js?v=20261017-rc147",
+    "/js/chatbot/core/query-normalizer.js?v=20261023-rc184",
     "/js/chatbot/core/semantic-router.js?v=20261009-rc76",
     "/js/chatbot/core/entity-engine.js?v=20261011-rc99",
     "/js/chatbot/core/intent-engine.js?v=20261011-rc99",
@@ -183,7 +183,7 @@
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261022-rc181",
     "/js/chatbot/core/practical-guide.js?v=20261020-rc160",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261022-rc174",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261023-rc184",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

@@ -109,12 +109,12 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261022-rc180':name==='chatbot-loader'&&['tool/index.html','dashboard/index.html'].includes(file)?'20261022-rc181':'20261022-rc174',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261022-rc180':name==='chatbot-loader'?'20261023-rc184':'20261022-rc174',file+' '+name);
     }
   }
-  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261022-rc174/);
+  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261023-rc184/);
   assert.match(read('js/app.js'),/market-engine\.js\?v=20261022-rc174/);
-  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v=20261022-rc174'));
+  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261023-rc184':'20261022-rc174')));
 });
 test('new English result city survives a delayed static translation pass',()=>{
   const source=read('js/app.js'),start=source.indexOf('const resultCity =\n  document.getElementById("tool-result-city")');

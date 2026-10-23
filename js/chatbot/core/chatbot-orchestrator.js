@@ -35,8 +35,8 @@ window.rbBuildRealEstateScopeResponse = function(message){
 
 window.rbBuildProductLimitsResponse = function(message){
   const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagno|guadagni)\b/.test(q);
-  const guarantee = /garanti|guarante|assicurat|assured|certo|certain|sicuro|sure|promett|promise/.test(q);
+  const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagn\w*|earn\w*)\b/.test(q);
+  const guarantee = /garanti|guarante|assicurat|assured|certo|certain|sicuro|sicuramente|sure|promett|promise/.test(q);
   const external = /alloggiati|airbnb|booking\.com|\bota\b|schedin|questura|police|istat/.test(q);
   const action = /sincron|sync|invi|send|sent|trasmess|transmi|automat|automatic|gia fatto|already|integrat|collegat|connect/.test(q);
   if(!(financial && guarantee) && !(external && action)) return null;
@@ -51,10 +51,16 @@ window.rbBuildProductLimitsResponse = function(message){
 // the question's purpose before statistical routes, preserving PDF priority.
 window.rbBuildMetricEducationResponse = function(message){
   const q=String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const meaning=/\b(?:definizione|definition|significa|significano|meaning|spiega|spiegami|spieghi|explain)\b|\bcos['’]?e\b|(?:che )?cosa (?:sono|e|vuol dire|vuole dire)|what (?:is|are)|what does.*(?:mean|stand for)|come.*calcol|how.*calculat|non capisco/.test(q);
-  if(!meaning && !/^\s*kpis?\s*[?!.]*\s*$/.test(q))return null;
+  const meaning=/\b(?:definizione|definition|significa|significano|meaning|spiega|spiegami|spieghi|explain|differenza|differenze|difference|differences)\b|\bcos['’]?e\b|(?:che )?cosa (?:sono|e|vuol dire|vuole dire)|what (?:is|are)|what does.*(?:mean|stand for)|come.*calcol|how.*calculat|non capisco/.test(q);
+  if(!meaning && !/^\s*(?:kpis?|adr|revpar|dscr|ltv|cashflow)\s*[?!.]*\s*$/.test(q))return null;
   if(/\b(?:pdf|documento|document|brochure|file|mio|mia|miei|mie|my|actual|effettiv[oaie]|reale)\b/.test(q) || /\d/.test(q))return null;
   const entries=[
+    ['revenue',/\bricav\w*\b|\brevenues?\b/,
+      'Ricavi: importi lordi dello scenario, prima di commissioni, costi, imposte e mutuo. Nel simulatore: tariffa notte × 365 × occupazione / 100. Nel PMS sono importi delle prenotazioni attribuiti al periodo, non incassi verificati né utile. Per arrivare al cashflow del modello vanno sottratte le uscite previste.',
+      'Revenue is the gross scenario amount before fees, costs, tax and loan payments. In the simulator: nightly rate × 365 × occupancy / 100. PMS revenue is booking amounts allocated to the period, not verified receipts or profit. Model outflows must be deducted to obtain model cashflow.'],
+    ['equity',/capitale proprio|\bequity\b/,
+      'Capitale proprio: denaro investito direttamente. Nell’acquisto, il modello ricava il mutuo da prezzo meno capitale proprio; le spese accessorie richiedono una verifica separata. Per un immobile già posseduto il capitale di avvio non rappresenta il valore totale della casa. Non confondere ROI sul capitale e rendimento sul valore dell’immobile.',
+      'Equity is money invested directly. For a purchase, the model derives the loan from price minus equity; transaction costs require a separate check. For an owned property, startup capital is not the full property value. Return on equity and return on property value use different denominators.'],
     ['kpi',/\bkpis?\b|key performance indicators?|indicatori (?:chiave|di prestazione)/,
       'KPI: sono indicatori chiave, cioè numeri che aiutano a capire come va un’attività. Nel PMS trovi ricavi prenotati, occupazione, ADR e RevPAR. Per interpretarli controlla sempre periodo, immobili inclusi e completezza dei dati. Un KPI isolato non dimostra un utile.',
       'KPIs are key performance indicators: numbers that help you understand how an activity is performing. The PMS shows booked revenue, occupancy, ADR and RevPAR. Always check the period, included properties and data completeness. A single KPI does not establish profit.'],
@@ -82,12 +88,12 @@ window.rbBuildMetricEducationResponse = function(message){
     ['payback',/break[ -]?even|recupero (?:dell[’']?|del )?equity|equity payback/,
       'Recupero equity: anni teorici per recuperare il capitale proprio con cashflow annuo positivo e costante: capitale ÷ cashflow. Non è una previsione garantita. Con capitale zero o cashflow non positivo il tempo di recupero non è applicabile. Il pareggio di occupazione è invece la soglia di notti necessaria a coprire i costi del modello.',
       'Equity payback is the theoretical time to recover equity at constant positive annual cashflow: equity ÷ cashflow. It is not a guaranteed forecast. With zero equity or non-positive cashflow, payback is not applicable. Break-even occupancy instead measures the nights needed to cover model costs.'],
-    ['noi',/\bil noi\b|net operating income|margine operativo|^(?:che )?cos['’]?e (?:il )?noi[?.!]*$|\b(?:what is|explain|definition of|meaning of) (?:the )?noi\b/,
+    ['noi',/\bil noi\b|net operating income|margine operativo|^(?:(?:che )?cos['’]?e|cosa (?:significa|vuol dire|vuole dire)|spiegami) (?:il )?noi[?.!]*$|\b(?:what is|explain|definition of|meaning of) (?:the )?noi\b/,
       'NOI: ricavi meno commissioni e costi operativi del modello, prima delle imposte sul reddito e delle rate del mutuo. Non coincide con il cashflow dopo mutuo.',
       'NOI is revenue minus model commissions and operating costs, before income tax and loan payments. It differs from after-loan cashflow.']
   ].filter(([,pattern])=>pattern.test(q));
   // Keep the detailed existing ROI/zero-equity explanation for ROI-only requests.
-  if(!entries.length || (entries.length===1 && entries[0][0]==='roi'))return null;
+  if(!entries.length || (entries.some(e=>e[0]==='roi') && entries.every(e=>['roi','equity'].includes(e[0]))))return null;
   return {type:'education',confidence:1,actions:[],
     textIT:entries.map(e=>e[2]).join('\n\n')+'\n\nQuesti esempi spiegano il metodo e non sono dati del tuo account. Vuoi una spiegazione di base o leggere un indicatore della tua analisi o del PMS?',
     textEN:entries.map(e=>e[3]).join('\n\n')+'\n\nThese examples explain the method and are not your account data. Would you like a basic explanation or help reading a metric in your analysis or PMS?',
