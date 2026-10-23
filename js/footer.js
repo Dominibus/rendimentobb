@@ -266,6 +266,7 @@ data-en="© 2026 RendimentoBB – All rights reserved">
 `;
 
 document.body.insertAdjacentHTML("beforeend", footer);
+compactFooterNavigation(document.querySelector('.global-footer'));
 
 /* 🔥 TRADUZIONE IMMEDIATA */
 if(typeof applyStaticTranslations === "function"){
@@ -278,5 +279,27 @@ if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
 });
+
+// Keep every original link and translation node; collapse secondary groups on phones.
+function compactFooterNavigation(footer){
+  if(!footer || footer.dataset.compactReady==='true')return;
+  footer.dataset.compactReady='true';
+  const columns=Array.from(footer.querySelectorAll('.footer-grid > .footer-col'));
+  const groups=[];
+  for(const index of [1,2,3]){
+    const column=columns[index];if(!column)continue;
+    const heading=column.querySelector('strong');if(!heading)continue;
+    const details=document.createElement('details');details.className='footer-col rb-mobile-footer-group';
+    const summary=document.createElement('summary');summary.appendChild(heading);
+    details.appendChild(summary);
+    const links=document.createElement('div');links.className='rb-footer-group-links';
+    while(column.firstChild)links.appendChild(column.firstChild);
+    details.appendChild(links);column.replaceWith(details);groups.push(details);
+  }
+  columns[4]?.classList.add('rb-footer-legal');
+  const mobile=window.matchMedia('(max-width:760px)');
+  const sync=()=>groups.forEach(group=>{group.open=!mobile.matches;group.querySelector('summary').tabIndex=mobile.matches?0:-1;});
+  sync();mobile.addEventListener('change',sync);
+}
 
 });

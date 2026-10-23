@@ -224,7 +224,7 @@ function initializeSharedHeader(){
   container.innerHTML = `
 
   <link rel="stylesheet" href="/css/journey-2026.css?v=20261020-rc158">
-  <link rel="stylesheet" href="/css/mobile-app-rc186.css?v=20261023-rc186">
+  <link rel="stylesheet" href="/css/mobile-app-rc186.css?v=20261023-rc187">
   <header class="rb-header">
 
     <div class="rb-inner">
