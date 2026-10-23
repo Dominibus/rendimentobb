@@ -11,7 +11,7 @@ import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
-import {installToolPresentation} from "./tool-presentation.js?v=20261022-rc180";
+import {installToolPresentation} from "./tool-presentation.js?v=20261023-rc189";
 installToolPresentation(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);

@@ -49,9 +49,14 @@ window.rbBuildProductLimitsResponse = function(message){
 
 // RC174: definitions are independent of cached account/scenario values. Match
 // the question's purpose before statistical routes, preserving PDF priority.
+// RC189: informal requests for basic meaning still need educational routing.
+// Personal/numeric/PDF exclusions below remain authoritative.
+function rbAsksPlainMetricMeaning(q){
+  return /\b(?:che|cosa) (?:vuol|vuole) dire|\bnon (?:ho|abbiamo) capito\b|\bnon (?:mi|ci) e chiaro\b|\bi (?:do not|don['’]?t|did not|didn['’]?t) understand\b/.test(q);
+}
 window.rbBuildMetricEducationResponse = function(message){
   const q=String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const meaning=/\b(?:definizione|definition|significa|significano|meaning|spiega|spiegami|spieghi|explain|differenza|differenze|difference|differences)\b|\bcos['’]?e\b|(?:che )?cosa (?:sono|e|vuol dire|vuole dire)|what (?:is|are)|what does.*(?:mean|stand for)|come.*calcol|how.*calculat|non capisco/.test(q);
+  const meaning=/\b(?:definizione|definition|significa|significano|meaning|spiega|spiegami|spieghi|explain|differenza|differenze|difference|differences)\b|\bcos['’]?e\b|(?:che )?cosa (?:sono|e|vuol dire|vuole dire)|what (?:is|are)|what does.*(?:mean|stand for)|come.*calcol|how.*calculat|non capisco/.test(q) || rbAsksPlainMetricMeaning(q);
   if(!meaning && !/^\s*(?:kpis?|adr|revpar|dscr|ltv|cashflow)\s*[?!.]*\s*$/.test(q))return null;
   if(/\b(?:pdf|documento|document|brochure|file|mio|mia|miei|mie|my|actual|effettiv[oaie]|reale)\b/.test(q) || /\d/.test(q))return null;
   const entries=[
@@ -191,7 +196,7 @@ async function(message){
     // Educational questions do not require a completed simulation. Keep
     // explicit/current PDF requests above this route so document evidence wins.
     const educationalQuery = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery);
+    const asksROIMeaning = /\b(definizione|definition|significa|meaning|spiega|spiegami|spieghi|explain)\b|che cos['’]?e|che cosa e|cosa (?:vuol|vuole) dire|what is|what does.*(?:mean|stand for)|how.*(?:calculat|work)|come.*calcol/.test(educationalQuery) || (rbAsksPlainMetricMeaning(educationalQuery) && !/\b(?:mio|mia|miei|mie|my|actual|effettiv[oaie]|reale)\b/.test(educationalQuery) && !/\d/.test(educationalQuery));
     const mentionsROI = /\broi\b|return on (equity|investment)|rendimento.*capitale/.test(educationalQuery);
     const mentionsZeroEquity = /(?:capitale(?: proprio)?|equity)[^.!?\n]{0,40}(?:\bzero\b|\b0\b|\bnullo\b)|(?:\bzero\b|\b0\b|\bnullo\b)[^.!?\n]{0,40}(?:capitale(?: proprio)?|equity)|senza capitale proprio|no equity|no own capital/.test(educationalQuery);
     if(mentionsROI && (asksROIMeaning || mentionsZeroEquity) && !pdfRequest && !planRequest){
