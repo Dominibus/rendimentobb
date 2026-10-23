@@ -305,7 +305,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractPercentage(
 
-                /(?:SCORE|PUNTEGGIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+                /(?<!RISCHIO )\bPUNTEGGIO\s*[:=]?\s*(-?[\d]+(?:[.,]\d+)?)/i
 
             );
 

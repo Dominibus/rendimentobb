@@ -8,6 +8,12 @@
   window.rbBuildPracticalGuide = function(message){
     const q=normalize(message);
     if (/\b(pdf|brochure|documento|document|file allegato|uploaded file)\b/.test(q)) return null;
+    if(/prenot|booking|reservation/.test(q)&&/annull|cancell|cancel/.test(q)&&/come|how|puoi|can you|annulla|cancel/.test(q))return reply('cancel_booking',
+      'Per annullare un soggiorno: apri Dashboard → Prenotazioni, identifica immobile e date e premi Annulla sulla prenotazione corretta. Verifica la richiesta di conferma prima di procedere. Il soggiorno rimane nello storico ma viene escluso dai risultati PMS; non equivale a un rimborso o alla cancellazione su Airbnb/Booking.com. Non ho annullato né modificato prenotazioni.',
+      'To cancel a stay: open Dashboard → Bookings, identify the property and dates, and select Cancel on the correct booking. Review the confirmation before proceeding. The stay remains in history but is excluded from PMS performance; this does not issue a refund or cancel it on Airbnb/Booking.com. I have not cancelled or changed any booking.');
+    if(/non ho capito|non capisco|i (?:do not|don.t) understand/.test(q)&&/prima|controll|spieg|first|check|explain/.test(q))return reply('clarify_next_step',
+      'Ti guido un passo alla volta. Ti riferisci alle priorità PMS, alle ipotesi di una simulazione oppure a un PDF? Per il PMS indica immobile e periodo; per la simulazione apri il risultato da leggere; per il PDF allega il documento. Non scelgo una vecchia analisi al posto tuo.',
+      'Let’s take this one step at a time. Do you mean PMS priorities, simulation assumptions, or a PDF? For PMS, specify property and period; for a simulation, open the result; for a PDF, attach the document. I will not choose an old analysis for you.');
     const pms=/\bpms\b|prenot|booking|reservation|calendario|calendar|camere|rooms?|alloggio|property/.test(q);
     const shared=/condivis|shared|collegat.*disponibil|linked.*availab|casa intera|intero appartamento|whole (?:home|house)|entire (?:home|house)|multi.?room/.test(q);
     if(pms && shared && /disponibil|availab|blocc|blocch|overbooking|dopp|double|camere|rooms?/.test(q)){

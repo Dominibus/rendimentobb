@@ -77,6 +77,7 @@
     const performanceRequest=conversationalFollowup||/come sta andando|how is .+ perform/.test(query)||/andamento|perform|occupazion|occupancy|\badr\b|revpar|come (?:va|sta andando)/.test(query)&&(referencesOwnedName||/\bmio\b|\bmiei\b|\bmia\b|\bmie\b|\bmy\b|portafoglio|portfolio|pms|struttura|immobile/.test(query));
     const ledgerRequest=performanceRequest||/consuntiv|rendicont|quanto.*(incassat|guadagnat)|ricavi.*(mese|anno|prenot|pms)|incassi.*(mese|anno)|revenue.*(month|year|booking)|operating summary/.test(query);
     const bookingsRequest=/prenotazion|bookings|reservations/.test(query) && /prossim|arriv|riepilog|elenc|quante|settimana|oggi|domani|mese|next|upcoming|list|how many|today|tomorrow|month|week/.test(query) && !/tariff|prezz|pulizi|document|segnal|ospit.*proble|cancell|modific|crea|salva|delete|edit/.test(query);
+    const totalBookings=bookingsRequest&&/in totale|complessiv|tutte le prenotazioni|in total|all bookings|all reservations/.test(query)&&!/oggi|domani|today|tomorrow|mese|month|settimana|week|anno|year|\d{4}-\d{2}-\d{2}|prossim|upcoming|next/.test(query);
     const overviewRequest=/riepilog.*(portale|pms|gestione)|stato.*(portale|pms)|portal summary/.test(query);
     if(!valueRequest&&!costRequest&&!ledgerRequest&&!bookingsRequest&&!overviewRequest)return null;
     const access=window.getUserAccess?.() || {};
@@ -102,6 +103,12 @@
     if(performanceRequest&&!propertyMatches.length&&!cityMatches.length&&!/tutt[oi]|portfolio|portafoglio|\bpms\b/.test(query))return respond("Quale immobile vuoi analizzare? Indica il nome salvato oppure tutto il portfolio.","Which property should I analyze? Use its saved name or the whole portfolio.","unknown_property");
     const ids=new Set(selected.map(p=>p.id));
     const bookings=(Array.isArray(data.portalBookingList)?data.portalBookingList:Array.isArray(data.bookingList)?data.bookingList:[]).filter(b=>(!propertyMatches.length&&!cityMatches.length)||ids.has(b.propertyId));
+    if(totalBookings){
+      const cancelled=bookings.filter(b=>normalize(b.status)==='cancelled').length;
+      const pending=bookings.filter(b=>normalize(b.status)==='pending').length;
+      return respond(`Prenotazioni totali registrate: ${bookings.length}. Ambito: ${selected.map(p=>p.name).join(', ')||'tutti gli immobili caricati'}. Tutte le date e tutti gli stati, inclusi ${cancelled} annullamenti e ${pending} richieste pending. Non è il conteggio dei prossimi 30 giorni né delle sole prenotazioni che contribuiscono ai KPI.`,
+        `Total registered bookings: ${bookings.length}. Scope: ${selected.map(p=>p.name).join(', ')||'all loaded properties'}. All dates and statuses, including ${cancelled} cancelled and ${pending} pending requests. This is not the next-30-days count or only bookings contributing to KPIs.`, 'total_bookings',{ownerUid:data.ownerUid,propertyIds:[...ids]});
+    }
     const renovations=(Array.isArray(data.renovationList)?data.renovationList:[]).filter(r=>(!propertyMatches.length&&!cityMatches.length)||ids.has(r.propertyId));
     const dateQuery=propertyMatches.reduce((text,p)=>text.replace(normalize(p.name),""),query);
     const range=inherit&&!hasExplicitPeriod ? {...conversationScope.period} : period(dateQuery,now,(bookingsRequest||costRequest)&&!ledgerRequest&&!overviewRequest);

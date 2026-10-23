@@ -43,6 +43,14 @@
   };
   window.rbBuildProReportGuide=function(message){
     const q=norm(message),doc=window.rbDocumentManager?.getLast?.();
+    if(doc&&/\bpdf\b|documento|document/.test(q)&&/what (?:if|happens if)|cosa (?:succede|cambia) se|e se |se (?:l[’']?)?occupazione|drops? to|scende (?:a|al)/.test(q))return reply('pdf_scenario_change',
+      'Stai chiedendo uno scenario diverso da quello riportato nel PDF. Non ho ricalcolato ROI, cashflow o DSCR: il valore estratto descrive soltanto l’ipotesi originale. Per confrontare la variazione, riporta nel simulatore tutte le ipotesi del documento, cambia il dato richiesto e avvia una nuova analisi. Se mancano costi, commissioni o mutuo, non li ricostruisco dal solo risultato.',
+      'You are asking for a different scenario from the one in the PDF. I have not recalculated ROI, cashflow or DSCR: the extracted value describes only the original assumptions. To compare the change, enter all document assumptions in the simulator, change the requested input and run a new analysis. Missing costs, fees or financing cannot be reconstructed from the result alone.');
+    const pdfRead=/\bpdf\b/.test(q)&&/leggi|leggimi|analizz|interpreta|dimmi|quanto|qual|read|analy[sz]|interpret|what|which|tell/.test(q);
+    const pdfCapability=/posso|come (?:caric|alleg|scaric)|can i|how (?:do|can) i|include|investor|\bpro\b|free|trial|prova/.test(q);
+    if(!doc&&pdfRead&&!pdfCapability)return reply('missing_pdf',
+      'Non ho un PDF allegato da leggere in questa conversazione. Usa Allega file e carica un PDF con testo, poi chiedimi gli indicatori. Non sostituisco il documento con valori di vecchie simulazioni o del PMS.',
+      'There is no attached PDF to read in this conversation. Use Attach file to upload a text PDF, then ask about its metrics. I will not substitute old simulation or PMS values for the document.');
     // RC181: the report page does not expose a verified selected-analysis
     // snapshot to this guide. Do not replace it with old conversation values.
     const currentReport=/report (?:corrente|attuale|aperto)|(?:questo|mio) report|(?:current|this|my|open) report|sto leggendo.*report|report.*sto leggendo/.test(q);

@@ -37,7 +37,7 @@ window.rbBuildProductLimitsResponse = function(message){
   const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagn\w*|earn\w*)\b/.test(q);
   const guarantee = /garanti|guarante|assicurat|assured|certo|certain|sicuro|sicuramente|sure|promett|promise/.test(q);
-  const external = /alloggiati|airbnb|booking\.com|\bota\b|schedin|questura|police|istat/.test(q);
+  const external = /alloggiati|airbnb|booking\.com|\bota\b|schedin|questura|police|istat|authorities|autorita/.test(q);
   const action = /sincron|sync|invi|send|sent|trasmess|transmi|automat|automatic|gia fatto|already|integrat|collegat|connect/.test(q);
   if(!(financial && guarantee) && !(external && action)) return null;
   return {
@@ -125,6 +125,16 @@ async function(message){
     const scopeResponse = window.rbBuildRealEstateScopeResponse(text);
     if(scopeResponse)return {success:true,response:scopeResponse,intent:{intent:'real_estate_scope'}};
 
+
+    // Explain model limits before reading remembered financial values.
+    const safetyQuery=text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if(!/\bpdf\b|document|brochure/.test(safetyQuery)){
+      const riskMeaning=/rischio|risk/.test(safetyQuery)&&/probabil|percentuale.*perd|possibilita.*perd/.test(safetyQuery);
+      const bankGuarantee=/mutuo|mortgage|banca|bank|finanziament|loan/.test(safetyQuery)&&/garanti|guarante|sicuro|sicuramente|certain|assicurat/.test(safetyQuery);
+      if(riskMeaning||bankGuarantee)return {success:true,intent:{intent:'model_limits'},response:{type:'model_limits',confidence:1,actions:[],metadata:{source:'calculation_method'},
+        textIT:riskMeaning?'L’indice rischio del modello non è una probabilità di perdita: 40/100 non significa il 40% di possibilità di perdere denaro. Riassume alcuni fattori delle ipotesi disponibili e non misura tutti i rischi. Non garantisce un risultato né verifica l’immobile.':'Non posso garantire l’approvazione di un mutuo. Rata, LTV e DSCR sono calcoli sulle ipotesi inserite, non una delibera bancaria. Servono una valutazione della banca, documenti e condizioni effettive; non deduco l’esito da vecchie simulazioni.',
+        textEN:riskMeaning?'The model risk index is not a probability of loss: 40/100 does not mean a 40% chance of losing money. It summarises some factors from available assumptions and does not measure every risk. It does not guarantee an outcome or verify the property.':'I cannot guarantee mortgage approval. Payments, LTV and DSCR are calculations based on inputs, not a lending decision. Approval requires the lender’s assessment, documentation and actual terms; I will not infer it from old simulations.'}};
+    }
 
     const importGuide=window.rbBuildBookingImportGuide?.(text);
     if(importGuide)return {success:true,response:importGuide,intent:{intent:'booking_import_guide'}};
