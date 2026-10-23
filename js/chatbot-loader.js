@@ -126,7 +126,7 @@
   // =============================================
 
   const cssFiles = [
-    "/css/chatbot.css?v=20261001-22"
+    "/css/chatbot.css?v=20261023-rc190"
   ];
 
   const scripts = [
@@ -189,7 +189,8 @@
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261022-rc180",
+    "/js/chatbot/ui/free-home-snapshot.js?v=20261023-rc190",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261023-rc190",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];

@@ -6,7 +6,7 @@ const source=await readFile(new URL('../js/chatbot/ui/chatbot-ui.js',import.meta
 const translation=source.slice(source.indexOf('  const t = (it,en)=>'),source.indexOf('// 🔐 EXECUTIVE SNAPSHOT ACCESS'));
 const refresh=source.slice(source.indexOf('  function refreshChatbotLanguage(){'),source.indexOf('  debugLog("Chatbot UI ready");'));
 function setup(lang='it',recognition={}){
- const node=()=>({textContent:'old',attrs:{},setAttribute(k,v){this.attrs[k]=v;}});
+ const node=()=>({textContent:'old',attrs:{},closest(){return null;},setAttribute(k,v){this.attrs[k]=v;}});
  const groups={'.rb-home-title':Array.from({length:6},node),'.rb-home-desc':Array.from({length:6},node),'.rb-ai-metric-label':Array.from({length:4},node),'.rb-ai-status':[{childNodes:[{nodeType:1,icon:'preserved'},{nodeType:3,textContent:'Pronto'}]}]};
  const single=Object.fromEntries(['.rb-chat-subtitle','.rb-ai-home-subtitle','.rb-empty-title','.rb-empty-text','.rb-home-actions-title','.rb-home-actions-context','#rb-chat-attach','#rb-chat-voice','#rb-chat-new','#rb-chat-close','#rb-chat-send'].map(k=>[k,node()]));
  const input={...node(),value:'unsent draft'};let snapshot=0,quick=0;const listeners={};

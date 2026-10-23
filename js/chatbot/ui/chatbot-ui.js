@@ -201,7 +201,7 @@ HOME
                 ${t("Assistente per analisi e gestione", "Analysis and management assistant")}
             </div>
 
-            ${
+            ${window.rbBuildFreeChatHomeHTML?.() ?? (
                 window.rbChatMemory?.lastCity
                 ?
 
@@ -322,7 +322,7 @@ HOME
 
                 `
 
-            }
+            )}
 
         </div>
 
@@ -749,7 +749,26 @@ initChatWindowDrag();
 // 🔄 REFRESH EXECUTIVE SNAPSHOT
 // ===========================================
 
+function refreshFreeHomeActions(){
+    const title=document.querySelector('.rb-home-actions-title');
+    const context=document.querySelector('.rb-home-actions-context');
+    if(title)title.textContent=t('Chiedi una spiegazione','Ask for an explanation');
+    if(context)context.textContent=t('Definizioni senza account · lettura assistita con Investor o Pro','Definitions without an account · assisted reading with Investor or Pro');
+}
+
 function refreshHomeSnapshot(){
+    const freeHTML=window.rbBuildFreeChatHomeHTML?.();
+    const header=document.querySelector('.rb-ai-home .rb-ai-home-header');
+    if(freeHTML!=null){
+        const card=header?.querySelector('.rb-ai-snapshot, .rb-ai-empty-state');
+        if(card)card.outerHTML=freeHTML;
+        refreshFreeHomeActions();
+        return;
+    }
+    // When access changes, rebuild the paid layout through its existing renderer.
+    const previousFree=header?.querySelector('[data-rb-free-home]');
+    if(previousFree)previousFree.outerHTML=`<div class="rb-ai-empty-state"><div class="rb-empty-title">${t("Partiamo dai tuoi dati","Start with your data")}</div><div class="rb-empty-text">${t("Apri una simulazione o allega un PDF con testo. Ti aiuto a leggere i dati disponibili.","Open a simulation or attach a text PDF. I can help interpret the available data.")}</div></div>`;
+
 
         const context =
         typeof window.rbGetConversationContext === "function"
@@ -944,6 +963,9 @@ metrics[3].textContent =
 // ===========================================
 // 📊 AUTO REFRESH AFTER NEW ANALYSIS
 // ===========================================
+
+for(const name of ['rb_investment_state_updated','rb_plan_ready'])window.addEventListener(name,refreshHomeSnapshot);
+document.addEventListener('rb_auth_ready',refreshHomeSnapshot);
 
 document.addEventListener(
     "rb:executive_report_created",
@@ -2112,12 +2134,14 @@ document.addEventListener("rb:document_ready", event => {
     wrapper.querySelectorAll(".rb-home-title").forEach((el,i)=>{if(titles[i]) el.textContent=t(...titles[i]);});
     wrapper.querySelectorAll(".rb-home-desc").forEach((el,i)=>{if(descriptions[i]) el.textContent=t(...descriptions[i]);});
     const metricLabels = [["📍 Mercato","📍 Market"],["📈 ROI immobile","📈 Property ROI"],["💰 Cashflow","💰 Cash flow"],["⚠️ Rischio","⚠️ Risk"]];
-    wrapper.querySelectorAll(".rb-ai-metric-label").forEach((el,i)=>{if(metricLabels[i]) el.textContent=t(...metricLabels[i]);});
+    wrapper.querySelectorAll(".rb-ai-metric-label").forEach((el,i)=>{if(!el.closest("[data-rb-free-home]") && metricLabels[i]) el.textContent=t(...metricLabels[i]);});
+    if(window.rbBuildFreeChatHomeHTML?.()==null){
     const city = window.lastAnalysisData?.realCity || window.lastAnalysisData?.marketCity || window.rbChatMemory?.lastCity;
     const actionTitle=wrapper.querySelector(".rb-home-actions-title");
     if(actionTitle) actionTitle.textContent=city?t("Continua l’analisi","Continue the analysis"):t("Come posso aiutarti?","How can I help?");
     const actionContext=wrapper.querySelector(".rb-home-actions-context");
     if(actionContext) actionContext.textContent=city?t("Contesto attivo: ","Active context: ")+String(city).toUpperCase():t("Scegli da dove iniziare","Choose where to start");
+    }else{refreshFreeHomeActions();}
     for(const [id,it,en] of [["rb-chat-attach","Allega file","Attach file"],["rb-chat-voice","Parla","Speak"],["rb-chat-new","Nuova chat","New chat"],["rb-chat-close","Minimizza","Minimize"]]){
       const el=wrapper.querySelector("#"+id);
       if(el){el.setAttribute("title",t(it,en));el.setAttribute("aria-label",t(it,en));}
