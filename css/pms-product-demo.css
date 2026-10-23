@@ -1,0 +1,39 @@
+/* Public in-memory PMS walkthrough. Production booking colours and native controls. */
+.rb188-demo{--arrival:#1d4ed8;--stay:#087453;--departure:#9a420a}
+.rb188-demo .bb-hero{padding-bottom:24px}
+.rb188-demo .bb-ribbon{display:grid;gap:6px}
+.rb188-demo .rb188-metrics{grid-template-columns:repeat(5,minmax(0,1fr))}
+.rb188-demo .bb-demo-metric{padding:16px}
+.rb188-demo .bb-demo-metric dd{font-size:clamp(22px,2.3vw,32px)}
+.rb188-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start;margin:28px 0}
+.rb188-layout>.bb-card{min-width:0;margin:0}
+.rb188-demo .bb-calendar{margin:12px 0 24px}
+.rb188-demo .bb-day{aspect-ratio:auto;min-height:44px;border:0;font:inherit;font-weight:700}
+.rb188-demo button.bb-day{cursor:pointer;color:#fff}
+.rb188-demo .arrival{background:var(--arrival);color:#fff}
+.rb188-demo .stay{background:var(--stay);color:#fff}
+.rb188-demo .departure{background:var(--departure);color:#fff}
+.rb188-legend{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.rb188-legend span{padding:5px 10px;border-radius:6px;background:#edf2ef;font-size:14px}
+.rb188-legend .arrival{background:var(--arrival)}
+.rb188-legend .stay{background:var(--stay)}
+.rb188-legend .departure{background:var(--departure)}
+.rb188-bookings,.rb188-task-list{display:grid;gap:10px}
+.rb188-demo .rb188-booking,.rb188-demo .rb188-task{display:grid;gap:5px;width:100%;padding:14px 16px;border:1px solid #c5d9cf;border-radius:10px;background:#fff;color:#173a2d!important;text-align:left;font:inherit;cursor:pointer;min-height:44px;overflow-wrap:anywhere}
+.rb188-demo .rb188-booking[aria-pressed=true]{background:#e7f5ed;border:2px solid #087453}
+.rb188-demo .rb188-booking span,.rb188-demo .rb188-task span,.rb188-demo .rb188-task small{font-size:14px}
+.rb188-demo label{display:grid;gap:8px;font-weight:650;min-width:0}
+.rb188-demo input,.rb188-demo select{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #93b2a3;border-radius:8px;background:#fff;color:#173a2d;font:inherit}
+.rb188-editor{scroll-margin-top:100px}
+.rb188-demo fieldset{border:1px solid #c5d9cf;padding:18px;border-radius:10px;margin:20px 0}
+.rb188-demo legend{padding:0 8px;font-weight:700}
+.rb188-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rb188-editor details{border:1px solid #c5d9cf;border-radius:10px;padding:0 18px;margin:14px 0}
+.rb188-editor summary{min-height:48px;padding:14px 0;box-sizing:border-box;font-weight:750;cursor:pointer}
+.rb188-editor details[open]{padding-bottom:18px}
+.rb188-result,.rb188-guidance{padding:14px 16px;background:#edf5ef;border-radius:8px;line-height:1.6;overflow-wrap:anywhere}
+.rb188-demo #demo-pms-status{min-height:1.6em;font-weight:650;line-height:1.6}
+.rb188-demo :is(button,input,select,summary):focus-visible{outline:3px solid #193c97;outline-offset:3px}
+@media(max-width:850px){.rb188-demo .rb188-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.rb188-layout{grid-template-columns:1fr}.rb188-demo .bb-demo-metric:last-child{grid-column:1/-1}}
+@media(max-width:540px){.rb188-fields{grid-template-columns:1fr}.rb188-demo .bb-day{min-height:44px;font-size:14px}.rb188-demo .bb-calendar,.rb188-demo .bb-weekdays{gap:3px}.rb188-layout>.bb-card,.rb188-editor{padding:16px}.rb188-demo fieldset,.rb188-editor details{padding-left:12px;padding-right:12px}.rb188-demo .bb-actions{align-items:stretch}.rb188-demo .bb-actions .bb-btn{max-width:100%;white-space:normal;text-align:center}.rb188-demo .bb-demo-metric{padding:12px}}
+@media(prefers-reduced-motion:reduce){.rb188-demo{scroll-behavior:auto}}
