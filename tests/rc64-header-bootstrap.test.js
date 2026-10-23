@@ -11,7 +11,7 @@ test('header renders before authentication resolves and survives an unavailable 
  const container={dataset:{},innerHTML:''};const account={innerHTML:''};let warnings=0;
  const document={readyState:'complete',getElementById:id=>id==='global-header'?container:id==='user-area'?account:null,addEventListener(){}};
  const window={applyCityBackground(){},addEventListener(){}};
- vm.runInNewContext(bootstrap,{window,document,console:{warn(){warnings++;}},initHeaderInteractions(){},renderUser(){},Promise});
+ vm.runInNewContext(bootstrap,{window,document,console:{warn(){warnings++;}},initHeaderInteractions(){},initializeMobileTabs(){},renderUser(){},Promise});
  assert.match(container.innerHTML,/<header class="rb-header">/);
  assert.match(container.innerHTML,/href="\/mutui\/"/);
  await new Promise(resolve=>setImmediate(resolve));
@@ -22,7 +22,7 @@ test('repeated initialization does not duplicate the header or account binding',
  const container={dataset:{},innerHTML:''};let renders=0;
  const document={readyState:'loading',getElementById:()=>container,addEventListener(){}};
  const window={applyCityBackground(){renders++;},addEventListener(){}};
- const c={window,document,console:{warn(){}},initHeaderInteractions(){},renderUser(){},Promise};vm.createContext(c);vm.runInContext(bootstrap,c);
+ const c={window,document,console:{warn(){}},initHeaderInteractions(){},initializeMobileTabs(){},renderUser(){},Promise};vm.createContext(c);vm.runInContext(bootstrap,c);
  c.initializeSharedHeader();c.initializeSharedHeader();assert.equal(renders,1);
 });
 test('tool has the same navigation markup before any script executes',()=>{

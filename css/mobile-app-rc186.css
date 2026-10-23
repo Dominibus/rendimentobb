@@ -1,0 +1,48 @@
+/* Shared touch layout. Desktop keeps its existing layout. */
+.rb-mobile-tabs { display:none; }
+@media (max-width:760px) {
+  body.rb-mobile-app { padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px)); }
+  html:has(body.rb-mobile-app) { scroll-padding-top:88px; scroll-padding-bottom:100px; }
+  .rb-mobile-tabs {
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;
+    position:fixed;inset:auto 0 0;z-index:1100;box-sizing:border-box;
+    padding:8px max(10px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left));
+    background:#fff;border-top:1px solid #d4e3db;box-shadow:0 -4px 20px #173b280a;
+    font-family:Inter,system-ui,-apple-system,sans-serif;
+  }
+  .rb-mobile-tabs :is(a,button) {
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    min-width:0;min-height:52px;margin:0;padding:6px 2px;box-sizing:border-box;
+    border:0;border-radius:12px;background:transparent;color:#475f57;
+    text-decoration:none;font:650 11px/1.3 Inter,system-ui,sans-serif;cursor:pointer;
+    -webkit-tap-highlight-color:#dceee3;
+  }
+  .rb-mobile-tabs [aria-current="page"] {color:#075e45;background:#eaf5ee;}
+  .rb-mobile-tabs svg {width:22px;height:22px;flex-shrink:0;}
+  .rb-mobile-tabs :is(a,button):focus-visible {outline:3px solid #087b59;outline-offset:-3px;}
+  body.rb-mobile-app #rb-chatbot-button {display:none!important;}
+  body.rb-mobile-app .rb-consent-settings {bottom:calc(82px + env(safe-area-inset-bottom, 0px));}
+  /* Full-screen dialogs and chat take priority over the tab bar. */
+  body.rb-mobile-app:has(#rb-chatbot-window.open) .rb-mobile-tabs,
+  body.rb-mobile-app:has(#rb-mobile.open) .rb-mobile-tabs,
+  body.rb-mobile-app.rb-ui-modal-open .rb-mobile-tabs {visibility:hidden;pointer-events:none;}
+  body.rb-mobile-app:has(#rb-chatbot-window.open) .rb-consent-settings {visibility:hidden;}
+  body.rb-mobile-app :is(input[type="text"],input[type="email"],input[type="url"],input[type="number"],input[type="search"],input[type="password"],select,textarea) {font-size:16px;min-height:44px;}
+  body.rb-mobile-app :is(.btn,.btn-primary,.btn-outline,.btn-dashboard,.pms-tab) {min-height:44px;box-sizing:border-box;}
+  body.home-page .rb158-shell {width:calc(100% - 36px);}
+  body.home-page .rb158-hero {padding:36px 0 32px;}
+  body.home-page .rb158-hero-grid {grid-template-columns:minmax(0,1fr);gap:28px;}
+  body.home-page .rb158-hero-copy {min-width:0;}
+  body.home-page .rb158-hero h1 {font-size:clamp(36px,10.5vw,46px);line-height:1.1;letter-spacing:-.04em;margin-bottom:22px;overflow-wrap:normal;word-break:normal;}
+  body.home-page .rb158-lead {font-size:20px;line-height:1.45;}
+  body.home-page .rb158-description {font-size:16px;line-height:1.65;}
+  body.home-page .rb158-actions {display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:24px;}
+  body.home-page .rb158-actions .rb158-button {width:100%;min-height:50px;font-size:16px;padding:14px 16px;white-space:normal;text-align:center;}
+  body.home-page .rb158-preview {width:100%;max-width:none;padding:22px;border-radius:20px;box-shadow:0 8px 24px #163d2810;}
+  body.home-page .rb158-path-grid {grid-template-columns:minmax(0,1fr);gap:12px;}
+  body.home-page .rb158-path {padding:22px;}
+  body.home-page .rb158-path-top {margin-bottom:14px;}
+  body.home-page .rb158-path h3 {font-size:21px;}
+  body.home-page .rb158-path p {font-size:16px;line-height:1.6;margin-bottom:12px;}
+}
+@media (prefers-reduced-motion:reduce) {.rb-mobile-tabs * {transition:none!important;}}
