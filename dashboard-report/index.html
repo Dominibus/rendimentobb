@@ -13,7 +13,7 @@
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>
 
 <script src="/js/lang.js?v=20261019-rc153"></script>
-<script src="/js/market-data.js?v=20261001-22"></script>
+<script src="/js/market-data.js?v=20261023-rc191"></script>
 <script src="/js/account-report-cache.js"></script>
 <script type="module" src="/js/firebase-init.js?v=20261016-rc140"></script>
 
@@ -2766,7 +2766,7 @@ doc.text(
     doc.text(doc.splitTextToSize(
       ownedProperty
         ? t("Nessun benchmark percentuale viene applicato a questo scenario. Il cashflow è una stima basata sugli input, non una misura di rendimento del patrimonio immobiliare.", "No percentage benchmark applies to this scenario. Cashflow is an input-based estimate, not a return on the property's market value.")
-        : t("Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Fonte esterna e data di rilevazione non documentate. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.", "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. External source and observation date are undocumented. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."),
+        : t("Fonte: tabella interna RendimentoBB. Dato statico illustrativo, non quotazione corrente. Zona, tipologia, capienza, fonte esterna, campione e periodo non documentati. Stagionalità locale non modellata. ROI equity e riferimento possono avere costi e leva diversi: il divario non misura una sovraperformance verificata.", "Source: internal RendimentoBB table. Static illustrative figure, not a current market quote. District, property type, capacity, external source, sample and period undocumented. Local seasonality is not modelled. Equity ROI and reference may use different costs and leverage: the gap is not verified outperformance."),
       170),20,153);
     addFooter();
 
@@ -3281,7 +3281,7 @@ function init(){
 
 // ================= START =================
 const reportAllowed=()=>window.currentUser?.uid===reportOwnerUid && Boolean(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin);
-const integrationReady=import('/js/dashboard-report-integration.js?v=20261017-rc147').then(({mountReportIntegration})=>{
+const integrationReady=import('/js/dashboard-report-integration.js?v=20261023-rc191').then(({mountReportIntegration})=>{
   if(!reportAllowed())return null;
   reportIntegration=mountReportIntegration({context:dashboardReportContext.reporting,ownerUid:reportOwnerUid,analysisId:canonicalSimulation.id,allowed:reportAllowed,onChoicesChanged:populateSimulations});
   reportIntegration.render(lang);populateSimulations();return reportIntegration;
@@ -3407,7 +3407,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261023-rc190" defer></script>
+<script src="/js/chatbot-loader.js?v=20261023-rc191" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3418,7 +3418,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261023-rc190"></script>
+<script type="module" src="/js/header.js?v=20261023-rc191"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261023-rc187"></script>
 </body>

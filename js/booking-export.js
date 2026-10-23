@@ -1,5 +1,5 @@
-import {BOOKING_EXPORT_HEADERS} from './csv-locales.js?v=20261019-rc152';
-import {csvCell} from './report-csv.js?v=20261019-rc152';
+import {BOOKING_EXPORT_HEADERS} from './csv-locales.js?v=20261023-rc191';
+import {csvCell} from './report-csv.js?v=20261023-rc191';
 import {stayNights} from './pms-calendar.js';
 
 const id=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(value);

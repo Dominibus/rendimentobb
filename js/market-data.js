@@ -393,8 +393,11 @@ window.getMarketBenchmark = function(city){
     city: data.city,
     avgNightPrice: data.price,
     occupancyRate: data.occupancy,
-    estimatedRevenue: data.annualRevenue
+    estimatedRevenue: data.price * 365 * data.occupancy
   };
 };
 
 ;
+
+// These tables contain internal assumptions, without external survey provenance.
+window.RB_MARKET_DATA_META=Object.freeze({classification:"C",derivedRevenueClassification:"B",externalSource:null,observationPeriod:null,neighbourhood:null,propertyType:null,capacity:null,seasonality:null,verifiedMarketData:false});

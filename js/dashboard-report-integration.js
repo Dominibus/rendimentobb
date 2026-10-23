@@ -1,5 +1,5 @@
-import {reportCatalogue,provenanceLabel,integratedReport,reportPeriod} from './report-provenance.js?v=20261017-rc147';
-import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
+import {reportCatalogue,provenanceLabel,integratedReport,reportPeriod} from './report-provenance.js?v=20261023-rc191';
+import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261023-rc191';
 
 export function mountReportIntegration({context,ownerUid,analysisId,allowed,onChoicesChanged}){
  const catalogue=reportCatalogue(context,ownerUid),entry=catalogue.find(e=>e.id===analysisId);

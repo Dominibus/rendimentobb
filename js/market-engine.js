@@ -1,4 +1,4 @@
-import "./market-data.js";
+import "./market-data.js?v=20261023-rc191";
 
 /* ================= FORMATTERS ================= */
 
@@ -103,7 +103,7 @@ export function renderMarketBenchmark(inputCity){
 
   if(priceEl) priceEl.innerText = formatCurrency(data.price);
   if(occEl) occEl.innerText = formatPercent(data.occupancy);
-  if(revenueEl) revenueEl.innerText = formatCurrency(data.annualRevenue);
+  if(revenueEl) revenueEl.innerText = formatCurrency(data.price * 365 * data.occupancy);
 
   /* ================= USER DATA ================= */
 
@@ -121,7 +121,7 @@ export function renderMarketBenchmark(inputCity){
 
   /* ================= CALCOLO ================= */
 
-  const marketRevenue = Number(data.annualRevenue);
+  const marketRevenue = data.price * 365 * data.occupancy;
 
   const diff = userRevenue - marketRevenue;
 

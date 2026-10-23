@@ -1,6 +1,6 @@
-import {performanceCSV} from './report-csv.js?v=20261019-rc152';
-import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261017-rc147';
-import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
+import {performanceCSV} from './report-csv.js?v=20261023-rc191';
+import {buildPropertyPerformance,reportPeriod,performanceNotice} from './property-performance.js?v=20261023-rc191';
+import {renderPMSOperationalPDF} from './pms-operational-report.js?v=20261023-rc191';
 // Native DOM text nodes only. Data never enters HTML or inline handlers.
 export function showPropertyPerformance({snapshot,analyses,ownerUid,propertyId='',allowed,lang='it',jsPDF,onEdit,subscribeAuth}){
  if(!allowed())throw Error('REPORT_ACCESS_CHANGED');

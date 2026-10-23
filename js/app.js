@@ -1,3 +1,4 @@
+import "./data-provenance.js?v=20261023-rc191";
 import './subscription-ui.js?v=20261016-rc140';
 import "./investment-journey.js?v=20261008-rc60";
 import {TERMS_VERSION} from "./subscription-offer.js?v=20261016-rc140";
@@ -20,7 +21,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261022-rc174";
+} from "./market-engine.js?v=20261023-rc191";
 
 import {
 renderExecutiveKPI
@@ -1366,7 +1367,8 @@ function renderMarketComparison(userRevenue, cityKey){
   if(!container) return;
 
   const city = String(cityKey || "").trim().toLowerCase();
-  const marketAvg = Number(window.RB_MARKET_DATA?.[city]?.annualRevenue);
+  const reference = window.RB_MARKET_DATA?.[city];
+  const marketAvg = reference ? reference.price * 365 * reference.occupancy : NaN;
   if(!Number.isFinite(marketAvg) || marketAvg <= 0){
     container.innerHTML = `<div class="kpi-box">${t("Benchmark locale non disponibile", "Local benchmark unavailable")}</div>`;
     return;
@@ -1380,18 +1382,13 @@ function renderMarketComparison(userRevenue, cityKey){
   ? (diff / marketAvg) * 100
   : 0;
 
-// 🔥 evita 0.0% fake (UX SaaS)
-if(Math.abs(diffPerc) < 0.1 && diff !== 0){
-  diffPerc = diff > 0 ? 0.1 : -0.1;
-}
-
 diffPerc = diffPerc.toFixed(1);
 
   const isPositive = diff >= 0;
 
-  const diffColor = isPositive ? "#10b981" : "#ef4444";
-  const bgColor   = isPositive ? "#ecfdf5" : "#fef2f2";
-  const borderCol = isPositive ? "#10b981" : "#ef4444";
+  const diffColor = "#475569";
+  const bgColor = "#f8fafc";
+  const borderCol = "#cbd5e1";
 
   // 🔥 RESET IMPORTANTE (evita residui layout vecchi)
   container.innerHTML = "";
@@ -1411,7 +1408,7 @@ const kpi1 = `
 const kpi2 = `
   <div class="kpi-box">
     <div class="kpi-label">
-      ${t("🏙 Riferimento indicativo","🏙 Indicative benchmark")}
+      ${t("🏙 Ricavi calcolati dalle ipotesi interne","🏙 Revenue calculated from internal assumptions")}
     </div>
     <div class="kpi-value">
       ${formatCurrency(marketAvg)}
@@ -1445,7 +1442,7 @@ const kpi3 = `
 `;
 
   // 🔥 INSERT DIRETTO (NO WRAPPER → FIX DEFINITIVO)
-  container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3);
+  container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3 + `<p class="rb-source-note">${(window.rbDataProvenance?.notice(window.currentLang) || t("Ipotesi interne: fonte, periodo, zona e tipologia non documentati.","Internal assumptions: source, period, district and property type undocumented."))} ${t("Ricavi del riferimento = tariffa × 365 × occupazione, senza costi o stagionalità.","Reference revenue = rate × 365 × occupancy, without costs or seasonality.")}</p>`);
 
 }
 // ================= ROI VS MARKET =================
@@ -5987,7 +5984,7 @@ doc.setFontSize(9);
 doc.setTextColor(203,213,225);
 doc.text(isOwnedProperty && equity <= 0 ? T("ROI non applicabile: valuta il cashflow previsto.","ROI not applicable: assess projected cashflow.") : T("Riferimento interno illustrativo: ","Illustrative internal reference: ") + (coverHasReference ? pct(coverReference) : T("non disponibile","unavailable")),20,180);
 doc.setFontSize(8);
-doc.text(T("Basi non comparabili - nessun giudizio di performance di mercato.","Bases not comparable - no market performance grade."),20,191,{maxWidth:170});
+doc.text(T("Basi non comparabili. Fonte, periodo e tipologia non documentati; dettagli nella sezione riferimenti.","Bases not comparable. Source, period and type undocumented; see reference section."),20,191,{maxWidth:170});
 
 // ================= RATING =================
 
@@ -6681,14 +6678,15 @@ y += 14;
 doc.setFontSize(11);doc.setTextColor(...gray);
 doc.text(T("BASI NON COMPARABILI","BASES NOT COMPARABLE"),20,y);
 y += 10;
-doc.setFillColor(248,250,252);doc.roundedRect(20,y,170,50,5,5,"F");
+doc.setFillColor(248,250,252);doc.roundedRect(20,y,170,70,5,5,"F");
 doc.setFontSize(10);doc.setTextColor(...dark);
 const referenceNote = isOwnedProperty && equity > 0
   ? T("Il ROI di avvio usa solo il capitale inserito per avvio, arredo e lavori: esclude il valore della casa. Non è confrontabile con un ROI di acquisto o con il rendimento dell’intero patrimonio immobiliare.","Startup ROI uses only the entered startup, furnishing and renovation capital: it excludes the house value. It is not comparable with purchase ROI or return on the entire property asset.")
   : equity <= 0
   ? (isOwnedProperty ? T("Immobile già posseduto: ROI sul capitale di avvio non applicabile. Valuta ricavi, costi e cashflow; il rischio considera solo i fattori disponibili.","Already owned property: return on startup capital is not applicable. Assess revenue, costs and cashflow; risk covers only available factors.") : T("Il ROI equity non è applicabile con capitale proprio zero. Valuta cashflow, servizio del debito e costi accessori. Il riferimento interno non misura la performance dello scenario.","Equity ROI is not applicable with zero equity. Assess cash flow, debt service and transaction costs. The internal reference does not measure this scenario's performance."))
   : T("La tabella interna è statica e illustrativa: non documenta una fonte esterna aggiornata né gli stessi costi e la stessa leva della simulazione. Il confronto non misura una sovraperformance o sottoperformance di mercato.","The internal table is static and illustrative: it documents neither an updated external source nor the same costs and leverage as the simulation. It does not measure market outperformance or underperformance.");
-doc.text(doc.splitTextToSize(referenceNote,155),25,y+12);
+doc.setFontSize(9);
+doc.text(doc.splitTextToSize(referenceNote + " " + (window.rbDataProvenance?.notice(window.currentLang) || T("Zona, tipologia, capienza, fonte e periodo non documentati.","District, property type, capacity, source and period undocumented.")),155),25,y+12);
 footer();
 
 // ===================================================

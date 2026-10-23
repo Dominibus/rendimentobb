@@ -1,0 +1,345 @@
+{
+  "mainCommit": "709009cc1e7f28b1403d8e20e39fe602c02598e9",
+  "category": "C",
+  "externalSource": null,
+  "observationPeriod": null,
+  "neighbourhood": null,
+  "propertyType": null,
+  "capacity": null,
+  "seasonality": "not_modelled",
+  "rows": [
+    {
+      "key": "milano",
+      "city": "Milano",
+      "adr": 150,
+      "occupancy": 0.72,
+      "storedRevenue": 39400,
+      "calculatedRevenue": 39420,
+      "roi": 8.9
+    },
+    {
+      "key": "torino",
+      "city": "Torino",
+      "adr": 105,
+      "occupancy": 0.66,
+      "storedRevenue": 25300,
+      "calculatedRevenue": 25294.5,
+      "roi": 7.8
+    },
+    {
+      "key": "verona",
+      "city": "Verona",
+      "adr": 128,
+      "occupancy": 0.72,
+      "storedRevenue": 33700,
+      "calculatedRevenue": 33638.4,
+      "roi": 9.2
+    },
+    {
+      "key": "trento",
+      "city": "Trento",
+      "adr": 115,
+      "occupancy": 0.68,
+      "storedRevenue": 28500,
+      "calculatedRevenue": 28543,
+      "roi": 8.4
+    },
+    {
+      "key": "trieste",
+      "city": "Trieste",
+      "adr": 118,
+      "occupancy": 0.69,
+      "storedRevenue": 29700,
+      "calculatedRevenue": 29718.3,
+      "roi": 8.6
+    },
+    {
+      "key": "genova",
+      "city": "Genova",
+      "adr": 105,
+      "occupancy": 0.67,
+      "storedRevenue": 25700,
+      "calculatedRevenue": 25677.75,
+      "roi": 8.1
+    },
+    {
+      "key": "roma",
+      "city": "Roma",
+      "adr": 145,
+      "occupancy": 0.76,
+      "storedRevenue": 40200,
+      "calculatedRevenue": 40223,
+      "roi": 9.8
+    },
+    {
+      "key": "firenze",
+      "city": "Firenze",
+      "adr": 135,
+      "occupancy": 0.74,
+      "storedRevenue": 36500,
+      "calculatedRevenue": 36463.5,
+      "roi": 11.1
+    },
+    {
+      "key": "pisa",
+      "city": "Pisa",
+      "adr": 115,
+      "occupancy": 0.72,
+      "storedRevenue": 30100,
+      "calculatedRevenue": 30222,
+      "roi": 9.5
+    },
+    {
+      "key": "bologna",
+      "city": "Bologna",
+      "adr": 125,
+      "occupancy": 0.7,
+      "storedRevenue": 31900,
+      "calculatedRevenue": 31937.5,
+      "roi": 9
+    },
+    {
+      "key": "napoli",
+      "city": "Napoli",
+      "adr": 110,
+      "occupancy": 0.71,
+      "storedRevenue": 28500,
+      "calculatedRevenue": 28506.5,
+      "roi": 10.2
+    },
+    {
+      "key": "bari",
+      "city": "Bari",
+      "adr": 95,
+      "occupancy": 0.68,
+      "storedRevenue": 23600,
+      "calculatedRevenue": 23579,
+      "roi": 9.3
+    },
+    {
+      "key": "lecce",
+      "city": "Lecce",
+      "adr": 110,
+      "occupancy": 0.69,
+      "storedRevenue": 27700,
+      "calculatedRevenue": 27703.5,
+      "roi": 10
+    },
+    {
+      "key": "matera",
+      "city": "Matera",
+      "adr": 120,
+      "occupancy": 0.7,
+      "storedRevenue": 30600,
+      "calculatedRevenue": 30660,
+      "roi": 10.4
+    },
+    {
+      "key": "palermo",
+      "city": "Palermo",
+      "adr": 98,
+      "occupancy": 0.7,
+      "storedRevenue": 25000,
+      "calculatedRevenue": 25039,
+      "roi": 9.7
+    },
+    {
+      "key": "catania",
+      "city": "Catania",
+      "adr": 92,
+      "occupancy": 0.69,
+      "storedRevenue": 23100,
+      "calculatedRevenue": 23170.2,
+      "roi": 9.4
+    },
+    {
+      "key": "taormina",
+      "city": "Taormina",
+      "adr": 185,
+      "occupancy": 0.73,
+      "storedRevenue": 49200,
+      "calculatedRevenue": 49293.25,
+      "roi": 12.3
+    },
+    {
+      "key": "venezia",
+      "city": "Venezia",
+      "adr": 165,
+      "occupancy": 0.75,
+      "storedRevenue": 45200,
+      "calculatedRevenue": 45168.75,
+      "roi": 10.5
+    },
+    {
+      "key": "sorrento",
+      "city": "Sorrento",
+      "adr": 170,
+      "occupancy": 0.74,
+      "storedRevenue": 45900,
+      "calculatedRevenue": 45917,
+      "roi": 11.8
+    },
+    {
+      "key": "como",
+      "city": "Como",
+      "adr": 180,
+      "occupancy": 0.71,
+      "storedRevenue": 46600,
+      "calculatedRevenue": 46647,
+      "roi": 11.2
+    },
+    {
+      "key": "olbia",
+      "city": "Olbia",
+      "adr": 145,
+      "occupancy": 0.73,
+      "storedRevenue": 38600,
+      "calculatedRevenue": 38635.25,
+      "roi": 11.4
+    },
+    {
+      "key": "ercolano",
+      "city": "Ercolano",
+      "adr": 95,
+      "occupancy": 0.67,
+      "storedRevenue": 23500,
+      "calculatedRevenue": 23232.25,
+      "roi": 9.1
+    },
+    {
+      "key": "portici",
+      "city": "Portici",
+      "adr": 98,
+      "occupancy": 0.68,
+      "storedRevenue": 24200,
+      "calculatedRevenue": 24323.6,
+      "roi": 9.4
+    },
+    {
+      "key": "salerno",
+      "city": "Salerno",
+      "adr": 115,
+      "occupancy": 0.71,
+      "storedRevenue": 30200,
+      "calculatedRevenue": 29802.25,
+      "roi": 10.1
+    },
+    {
+      "key": "rimini",
+      "city": "Rimini",
+      "adr": 130,
+      "occupancy": 0.74,
+      "storedRevenue": 35200,
+      "calculatedRevenue": 35113,
+      "roi": 10.8
+    },
+    {
+      "key": "tropea",
+      "city": "Tropea",
+      "adr": 145,
+      "occupancy": 0.76,
+      "storedRevenue": 39800,
+      "calculatedRevenue": 40223,
+      "roi": 11.6
+    },
+    {
+      "key": "gallipoli",
+      "city": "Gallipoli",
+      "adr": 150,
+      "occupancy": 0.75,
+      "storedRevenue": 41200,
+      "calculatedRevenue": 41062.5,
+      "roi": 11.8
+    },
+    {
+      "key": "sassari",
+      "city": "Sassari",
+      "adr": 105,
+      "occupancy": 0.68,
+      "storedRevenue": 25900,
+      "calculatedRevenue": 26061,
+      "roi": 9.2
+    },
+    {
+      "key": "volla",
+      "city": "Volla",
+      "adr": 92,
+      "occupancy": 0.65,
+      "storedRevenue": 22100,
+      "calculatedRevenue": 21827,
+      "roi": 8.8
+    },
+    {
+      "key": "pavia",
+      "city": "Pavia",
+      "adr": 108,
+      "occupancy": 0.67,
+      "storedRevenue": 26300,
+      "calculatedRevenue": 26411.4,
+      "roi": 8.9
+    },
+    {
+      "key": "bergamo",
+      "city": "Bergamo",
+      "adr": 120,
+      "occupancy": 0.7,
+      "storedRevenue": 31100,
+      "calculatedRevenue": 30660,
+      "roi": 9.5
+    },
+    {
+      "key": "amalfi",
+      "city": "Amalfi",
+      "adr": 195,
+      "occupancy": 0.77,
+      "storedRevenue": 53800,
+      "calculatedRevenue": 54804.75,
+      "roi": 12.7
+    },
+    {
+      "key": "positano",
+      "city": "Positano",
+      "adr": 230,
+      "occupancy": 0.76,
+      "storedRevenue": 64500,
+      "calculatedRevenue": 63802,
+      "roi": 13.4
+    },
+    {
+      "key": "cagliari",
+      "city": "Cagliari",
+      "adr": 125,
+      "occupancy": 0.72,
+      "storedRevenue": 32800,
+      "calculatedRevenue": 32850,
+      "roi": 10.3
+    },
+    {
+      "key": "alghero",
+      "city": "Alghero",
+      "adr": 138,
+      "occupancy": 0.74,
+      "storedRevenue": 36900,
+      "calculatedRevenue": 37273.8,
+      "roi": 11.1
+    },
+    {
+      "key": "siracusa",
+      "city": "Siracusa",
+      "adr": 118,
+      "occupancy": 0.71,
+      "storedRevenue": 30500,
+      "calculatedRevenue": 30579.7,
+      "roi": 10
+    },
+    {
+      "key": "ragusa",
+      "city": "Ragusa",
+      "adr": 108,
+      "occupancy": 0.69,
+      "storedRevenue": 27400,
+      "calculatedRevenue": 27199.8,
+      "roi": 9.4
+    }
+  ]
+}

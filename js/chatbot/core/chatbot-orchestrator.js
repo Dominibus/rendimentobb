@@ -33,6 +33,16 @@ window.rbBuildRealEstateScopeResponse = function(message){
   };
 };
 
+// Public product examples are not a paid, verified listing feed.
+window.rbBuildListingEvidenceResponse = function(message){
+ const q=String(message||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ if(/\b(?:pdf|documento|document|file|brochure|mio|mia|miei|mie|my|nostro|nostra|our)\b|prenotaz|booking/.test(q))return null;
+ if(!/annunc|listing|catalog|immobili|properties/.test(q) || !/verificat|verified|reali|real |disponib|available|aggiornat|up.to.date|acquistare|purchase/.test(q))return null;
+ return {type:'listing_evidence',confidence:1,actions:[],metadata:{source:'current_product_scope',classification:'E',verifiedListings:false},
+ textIT:'Gli immobili mostrati dal prodotto sono scenari dimostrativi, non annunci verificati o offerte di acquisto aggiornate. Pro aggiunge report e PDF: non sblocca un catalogo di annunci reali. I collegamenti ai portali aprono siti esterni, senza sincronizzazione o importazione attiva. Puoi confrontare due immobili inserendo i dati degli annunci trovati da te; prezzo, disponibilità, caratteristiche e data vanno verificati con la fonte e il referente dell’annuncio.',
+ textEN:'Properties shown by the product are demonstration scenarios, not verified listings or current purchase offers. Pro adds reports and PDFs; it does not unlock a real listing catalogue. Portal links open external sites without active synchronisation or imports. You can compare two properties using listing details you enter; verify price, availability, features and date with the source and listing contact.'};
+};
+
 window.rbBuildProductLimitsResponse = function(message){
   const q = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const financial = /\b(roi|roy|cashflow|cash flow|rendimento|return|returns|ricavi|revenue|profit|profitto|guadagn\w*|earn\w*)\b/.test(q);
@@ -127,6 +137,9 @@ async function(message){
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
+    const listingEvidence = window.rbBuildListingEvidenceResponse(text);
+    if(listingEvidence)return {success:true,response:listingEvidence,intent:{intent:'listing_evidence'}};
+
     const scopeResponse = window.rbBuildRealEstateScopeResponse(text);
     if(scopeResponse)return {success:true,response:scopeResponse,intent:{intent:'real_estate_scope'}};
 
@@ -149,6 +162,12 @@ async function(message){
       if(reportGuide.metadata?.source==='extracted_pdf_text' && reportGuide.metadata.documentId)window.rbPDFConversationDocumentId=reportGuide.metadata.documentId;
       return {success:true,response:reportGuide,intent:{intent:'pro_report_guide'}};
     }
+
+    // Source questions must be answered before generic external-data fallbacks.
+    const focusedEvidencePDF = window.rbDocumentManager?.getLast?.();
+    const preserveEvidencePDF = focusedEvidencePDF?.id && window.rbPDFConversationDocumentId === focusedEvidencePDF.id && !/mercato|market|altra citt|another city/i.test(text);
+    const marketEvidence=!preserveEvidencePDF && !/\b(?:free|investor|pro|piano|plan|trial|subscription)\b/i.test(text) && !/\b(?:pdf|documento|document|file|brochure)\b/i.test(text) && window.rbBuildMarketEvidenceResponse?.(text);
+    if(marketEvidence)return {success:true,response:marketEvidence,intent:{intent:"market_provenance"}};
 
     const practicalGuide=window.rbBuildPracticalGuide?.(text);
     if(practicalGuide)return {success:true,response:practicalGuide,intent:{intent:'practical_guide'}};

@@ -1,4 +1,4 @@
-import {bookingExportCSV,selectBookingRows,bookingIdentityHTML} from './booking-export.js?v=20261019-rc152';
+import {bookingExportCSV,selectBookingRows,bookingIdentityHTML} from './booking-export.js?v=20261023-rc191';
 
 // Read-only tools over an account-bound list. No booking write API is called here.
 export function installBookingTools({getContext,getSelected,t,download=downloadCSV,copy=text=>navigator.clipboard.writeText(text)}){

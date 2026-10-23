@@ -27,7 +27,7 @@ test('standard financed scenario preview reads the real engine result, without m
  const result=calculateROI({price:150000,equity:30000,loanAmount:120000,priceNight:150,occupancy:70,expenses:800,commission:15,tax:21,interestRate:3.5,loanYears:20});const before=structuredClone(result);const h=harness();h.render(result);assert.equal(h.elements['roi-live'].textContent,'6,5%');assert.ok(h.elements['profit-live'].textContent.includes('9.799,82'));assert.ok(h.elements['cashflow-month-preview'].textContent.includes('816,65'));assert.deepEqual(result,before);assert.ok(result.roi>32);
 });
 test('Free benchmark placeholders are readable and never fabricate market data',async()=>{
- const source=(await readFile(new URL('../js/market-engine.js',import.meta.url),'utf8')).replace('import "./market-data.js";','').replace('export function renderMarketBenchmark','function renderMarketBenchmark');
+ const source=(await readFile(new URL('../js/market-engine.js',import.meta.url),'utf8')).replace(/^import .*;\n/gm,'').replace('export function renderMarketBenchmark','function renderMarketBenchmark');
  const elements=Object.fromEntries(['benchmark-price','benchmark-occupancy','benchmark-revenue','market-comparison'].map(id=>[id,{textContent:'old'}]));
  const c={window:{getUserAccess:()=>({isFree:true}),currentLang:'it'},document:{getElementById:id=>elements[id],addEventListener(){}},setTimeout(){throw new Error('Free should return before market rendering');}};
  vm.createContext(c);vm.runInContext(source,c);c.renderMarketBenchmark('unknown');

@@ -1,15 +1,16 @@
+import "./data-provenance.js?v=20261023-rc191";
 import {portfolioBasis} from './portfolio-basis.js?v=20261020-rc161';
 import './dashboard-workspace-layout.js?v=20261020-rc161';
-import {installBookingImporter} from './booking-import-dialog.js?v=20261019-rc152';
-import {bookingImportContext} from './booking-import.js?v=20261019-rc152';
-import {bookingIdentityHTML} from './booking-export.js?v=20261019-rc152';
-import {installBookingTools} from './booking-tools.js?v=20261019-rc152';
+import {installBookingImporter} from './booking-import-dialog.js?v=20261023-rc191';
+import {bookingImportContext} from './booking-import.js?v=20261023-rc191';
+import {bookingIdentityHTML} from './booking-export.js?v=20261023-rc191';
+import {installBookingTools} from './booking-tools.js?v=20261023-rc191';
 import {pmsStartGuideHTML} from './pms-start-guide.js?v=20261019-rc154';
 import {managePMSChartLayout} from './pms-chart-layout.js?v=20261015-rc138';
-import {buildReportContext} from './report-provenance.js?v=20261017-rc147';
-import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261016-rc143';
-import {showPropertyPerformance} from './property-performance-dialog.js?v=20261019-rc152';
-import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261016-rc143';
+import {buildReportContext} from './report-provenance.js?v=20261023-rc191';
+import {ownedPMSReport,pmsReviewHTML,demoPMSReviewHTML} from './pms-review.js?v=20261023-rc191';
+import {showPropertyPerformance} from './property-performance-dialog.js?v=20261023-rc191';
+import {canExportPMSReport,buildPMSOperationalReport,renderPMSOperationalPDF} from './pms-operational-report.js?v=20261023-rc191';
 import {propertyFinancialGuidanceHTML} from './property-financial-guidance.js?v=20261012-rc110';
 import {saveLinkedProperty,saveUnlinkedProperty} from './property-analysis-link.js?v=20261012-rc106';
 import { readInvestmentAssumptions, investmentAssumptionsHTML, requiredAnnualRevenue } from "./investment-assumptions.js?v=20261009-rc91";
@@ -2368,38 +2369,10 @@ let icon = "🟢";
 
 if(avgROI === null){
 insight = t("ROI non disponibile o non applicabile: controlla il capitale e le ipotesi delle analisi salvate.", "ROI is unavailable or not applicable: check capital and saved analysis assumptions.");
+}else{
+insight = t("Il ROI degli scenari deriva dalle ipotesi salvate. Il riferimento interno ha costi e leva non documentati: non consente di giudicare la performance. Verifica ricavi, costi, capitale e finanziamento di ogni immobile.", "Scenario ROI derives from saved assumptions. The internal reference has undocumented costs and leverage: it cannot assess performance. Review revenue, costs, capital and financing for each property.");
+}
 color = "#64748b"; icon = "⚪";
-}
-else if(avgROI >= marketROI + 5){
-
-insight = t(
-"Gli scenari salvati mostrano un rendimento stimato elevato. Verifica costi, finanziamento e ipotesi prudenti prima di decidere.",
-"Saved scenarios show a high estimated return. Check costs, financing and conservative assumptions before deciding."
-);
-
-}
-else if(avgROI >= marketROI){
-
-color = "#3b82f6";
-icon = "🔵";
-
-insight = t(
-"Il ROI medio degli scenari supera il riferimento illustrativo. Non dimostra un rendimento superiore al mercato: verifica base di calcolo e ipotesi di ogni immobile.",
-"Average scenario ROI exceeds the illustrative reference. This does not demonstrate market outperformance: verify the calculation basis and each property’s assumptions."
-);
-
-}
-else{
-
-color = "#f59e0b";
-icon = "🟠";
-
-insight = t(
-"Il ROI medio degli scenari è sotto il riferimento illustrativo. Verifica ricavi, costi e finanziamento senza trattarlo come una quotazione di mercato.",
-"Average scenario ROI is below the illustrative reference. Review revenue, costs and financing without treating the reference as a market valuation."
-);
-
-}
 
 aiInsight.innerHTML = `
 
@@ -2514,7 +2487,7 @@ ${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenar
 font-size:34px;
 font-weight:900;
 letter-spacing:-0.5px;
-color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+color:#64748b;
 ">
 ${formatPercent(avgROIRounded)} ${avgROI === null ? "" : trend}
 </div>
@@ -2578,7 +2551,7 @@ const userRoiEl = document.getElementById("user-roi-benchmark");
 
 if(userRoiEl){
   userRoiEl.textContent = formatPercent(avgROIRounded);
-  userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
+  userRoiEl.style.color = "#64748b";
 }
 
 if(performanceEl){
@@ -2586,7 +2559,7 @@ if(performanceEl){
     ? t("Sopra il riferimento dimostrativo","Above the illustrative reference")
     : t("Sotto il riferimento dimostrativo","Below the illustrative reference");
 
-  performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
+  performanceEl.style.color = "#64748b";
 }
 
 // ================= FINAL BLOCK =================
@@ -2619,7 +2592,7 @@ ${t("ROI equity medio degli scenari","Average scenario equity ROI")} · ${scenar
 
 <strong style="
 font-size:22px;
-color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+color:#64748b;
 ">
 ${formatPercent(avgROIRounded)}
 </strong>
@@ -2628,18 +2601,18 @@ ${formatPercent(avgROIRounded)}
 margin-top:8px;
 font-size:13px;
 font-weight:600;
-color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+color:#64748b;
 ">
 
 🔥 ${
 avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
-? `+${(avgROI - marketROI).toFixed(1)}% ${t(
-"rispetto al riferimento dimostrativo",
-"above the illustrative reference"
+? `+${(avgROI - marketROI).toFixed(1)} ${t("punti percentuali", "percentage points")} ${t(
+"rispetto all’ipotesi interna; basi non comparabili",
+"relative to the internal assumption; bases not comparable"
 )}`
-: `-${(marketROI - avgROI).toFixed(1)}% ${t(
-"sotto il riferimento dimostrativo",
-"below the illustrative reference"
+: `-${(marketROI - avgROI).toFixed(1)} ${t("punti percentuali", "percentage points")} ${t(
+"rispetto all’ipotesi interna; basi non comparabili",
+"relative to the internal assumption; bases not comparable"
 )}`
 }
 
@@ -3063,8 +3036,8 @@ container.innerHTML = `
 
 <p style="margin-top:10px;color:#475569;font-size:14px">
 ${t(
-"Esempio aritmetico sui ricavi: non risolve il ROI o la rata del tuo scenario.",
-"Arithmetic revenue example: it does not solve your scenario ROI or mortgage payment."
+"Esempio aritmetico sui ricavi: non risolve il ROI o la rata del tuo scenario. Parte da occupazione 65%, tariffa 120 EUR e obiettivo illustrativo 8,4%; le variazioni dipendono da soglie interne, non dalla domanda locale.",
+"Arithmetic revenue example: it does not solve your scenario ROI or mortgage payment. Starts from 65% occupancy, EUR120 rate and an illustrative 8.4% target; adjustments follow internal thresholds, not local demand."
 )}
 </p>
 
@@ -4265,8 +4238,8 @@ function renderROIMarketComparison(rows = []){
   const reference = 8.4; // Existing illustrative value, not a verified market feed.
   const diff = metrics.weightedROI === null ? null : metrics.weightedROI - reference;
   container.innerHTML = `<h3>📊 ${t("Patrimonio e riferimento dimostrativo", "Portfolio and illustrative reference")}</h3>
-    <div style="margin-top:14px;font-size:28px;font-weight:700;color:${diff === null ? "#64748b" : diff >= 0 ? "#10b981" : "#ef4444"};">${diff === null ? "--" : `${diff >= 0 ? "+" : ""}${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", {maximumFractionDigits:1}).format(diff)} ${t("punti percentuali", "percentage points")}`}</div>
-    <p style="margin-top:6px;color:#64748b;font-size:14px">${diff === null ? t("Conferma gli immobili e completa ROI ed equity per rendere disponibile il confronto.", "Confirm properties and complete ROI and equity to enable the comparison.") : t("Scarto aritmetico tra ROI equity ponderato del patrimonio e riferimento di esempio 8,4%. Non è un benchmark nazionale verificato: prima di usarlo per decidere, verifica che la base di calcolo sia confrontabile.", "Arithmetic difference between portfolio equity-weighted ROI and the 8.4% sample reference. This is not a verified national benchmark: check that the calculation bases are comparable before using it for a decision.")}</p>`;
+    <div style="margin-top:14px;font-size:28px;font-weight:700;color:#64748b;">${diff === null ? "--" : `${diff >= 0 ? "+" : ""}${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", {maximumFractionDigits:1}).format(diff)} ${t("punti percentuali", "percentage points")}`}</div>
+    <p style="margin-top:6px;color:#64748b;font-size:14px">${diff === null ? t("Conferma gli immobili e completa ROI ed equity per rendere disponibile il confronto.", "Confirm properties and complete ROI and equity to enable the comparison.") : t("Scarto aritmetico tra ROI equity ponderato del patrimonio e riferimento di esempio 8,4%. Fonte, periodo, zona, tipologia e capienza non documentati; costi e leva del riferimento ignoti. Le basi non sono comparabili: lo scarto non valuta la performance.", "Arithmetic difference between portfolio equity-weighted ROI and the 8.4% sample reference. Reference source, period, district, type and capacity undocumented; reference costs and leverage unknown. Bases are not comparable: this gap does not assess performance.")}</p>`;
 }
 function lockInvestorPreview(){
 
@@ -4977,7 +4950,7 @@ const getPricingMarket = cityValue => {
     firenze: "florence",
     florence: "florence"
   };
-  return window.marketData?.[aliases[city] || city] || window.marketData?.italy || null;
+  return Object.hasOwn(window.marketData || {}, aliases[city] || city) ? window.marketData[aliases[city] || city] : null;
 };
 
 window.getBookingStayMetrics = () => {
@@ -5048,7 +5021,7 @@ window.updateBookingPricingSuggestion = function(){
   const deltaPercent = comparisonTotal ? Math.round((delta / comparisonTotal) * 100) : 0;
 
   const reasons = [];
-  if(marketADR) reasons.push(t(`Benchmark città ${formatCurrency(marketADR)}`, `City benchmark ${formatCurrency(marketADR)}`));
+  if(marketADR) reasons.push(t(`Ipotesi tabella pricing PMS ${formatCurrency(marketADR)}`, `PMS pricing table assumption ${formatCurrency(marketADR)}`));
   const seasonLabels = {
     high: t("Alta stagione", "High season"),
     medium: t("Media stagione", "Mid season"),
@@ -5084,10 +5057,10 @@ window.updateBookingPricingSuggestion = function(){
     impactEl.textContent = `${delta >= 0 ? "+" : ""}${formatCurrency(delta)} · ${deltaPercent >= 0 ? "+" : ""}${deltaPercent}%`;
     impactEl.dataset.positive = String(delta >= 0);
   }
-  if(reasonsEl) reasonsEl.textContent = reasons.join(" · ");
+  if(reasonsEl) reasonsEl.textContent = reasons.join(" · ") + " — " + t("Regola interna: base immobile/soggiorno (altrimenti 120 EUR); se esiste un riferimento pricing PMS, peso 70% base e 30% tabella. Alta giugno-settembre ×1,15; media marzo-maggio e ottobre ×1,07; altri mesi ×0,92. Weekend fino a +12%; durata, anticipo e limiti 75–145% della base. Nessuna previsione della domanda. Fonte, periodo, zona, tipologia e capienza del riferimento non documentati.", "Internal rule: property/stay base (otherwise EUR120); if a PMS pricing reference exists, 70% base and 30% table. High June–September ×1.15; medium March–May and October ×1.07; other months ×0.92. Weekend up to +12%; length, lead time and bounds 75–145% of base. No demand prediction. Reference source, period, district, type and capacity undocumented.");
   if(seasonResult){
     seasonResult.textContent = seasonMode === "auto"
-      ? t(`Rilevata: ${seasonLabels[seasonLevel]}`, `Detected: ${seasonLabels[seasonLevel]}`)
+      ? t(`Regola dei mesi: ${seasonLabels[seasonLevel]}`, `Month rule: ${seasonLabels[seasonLevel]}`)
       : t("Impostazione manuale", "Manual setting");
   }
   if(statusEl){
@@ -8532,8 +8505,8 @@ color:#64748b;
 ">
 
 ${window.t(
-"Analisi strategica della prenotazione in tempo reale",
-"Real-time strategic booking analysis"
+"Lettura della prenotazione e regole interne di supporto",
+"Booking review and internal support rules"
 )}
 
 </div>

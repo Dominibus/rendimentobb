@@ -78,7 +78,7 @@ test('market language event reads the completed snapshot and accepts zero',()=>{
   const h=marketHarness();
   for(const lang of ['it','en','it']){
     h.w.currentLang=lang;h.w.RB_LANG.current=lang;h.events.rb_language_changed();
-    assert.match(h.get('market-comparison').innerHTML,/-23.7%/);
+    assert.match(h.get('market-comparison').innerHTML,/-23.8%/);
     assert.doesNotMatch(h.get('market-comparison').textContent,/Run a simulation/);
   }
   h.w.lastAnalysisData.gross=0;h.events.rb_language_changed();assert.match(h.get('market-comparison').innerHTML,/-100.0%/);
@@ -109,12 +109,12 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261023-rc189':'20261023-rc190',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],'20261023-rc191',file+' '+name);
     }
   }
-  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261023-rc190/);
-  assert.match(read('js/app.js'),/market-engine\.js\?v=20261022-rc174/);
-  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261023-rc189':'20261023-rc185')));
+  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261023-rc191/);
+  assert.match(read('js/app.js'),/market-engine\.js\?v=20261023-rc191/);
+  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261023-rc191':'20261023-rc185')));
 });
 test('new English result city survives a delayed static translation pass',()=>{
   const source=read('js/app.js'),start=source.indexOf('const resultCity =\n  document.getElementById("tool-result-city")');

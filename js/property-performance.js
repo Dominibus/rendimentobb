@@ -1,5 +1,5 @@
 import {calendarDay} from './pms-calendar.js';
-import {buildPMSOperationalReport} from './pms-operational-report.js?v=20261016-rc143';
+import {buildPMSOperationalReport} from './pms-operational-report.js?v=20261023-rc191';
 import {readInvestmentAssumptions} from './investment-assumptions.js?v=20261009-rc91';
 const number=v=>['number','string'].includes(typeof v)&&String(v).trim()!==''&&Number.isFinite(Number(v))?Number(v):null;
 const nonnegative=v=>{const n=number(v);return n!==null&&n>=0?n:null;};

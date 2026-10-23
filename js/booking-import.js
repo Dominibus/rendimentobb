@@ -1,6 +1,6 @@
 import {calendarDay, stayNights} from './pms-calendar.js';
 import {evaluateAvailability} from './pms-availability.js';
-import {BOOKING_CSV_HEADERS,normalizeCSVHeader,isPerformanceCSV,isBookingArchiveCSV} from './csv-locales.js?v=20261019-rc152';
+import {BOOKING_CSV_HEADERS,normalizeCSVHeader,isPerformanceCSV,isBookingArchiveCSV} from './csv-locales.js?v=20261023-rc191';
 
 export const IMPORT_LIMITS = Object.freeze({bytes:512000, rows:50, columns:60});
 export const IMPORT_FIELDS = ['reference','guestName','checkin','checkout','guests','totalAmount','status','currency'];

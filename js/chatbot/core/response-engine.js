@@ -12744,7 +12744,15 @@ window.rbResponseHasUnsupportedMarketVerdict = function(response){
 (function(){
   const generate=window.rbGenerateResponse;
   window.rbGenerateResponse=function(options={}){
+    const marketIntent=/^(market_analysis|market_comparison|city_comparison|best_city)$/.test(options.intent?.intent||'');
+    const explicitPDF=/\b(?:pdf|documento|document|file|brochure)\b/i.test(options.message||'')||options.documentKnowledge?.activeDocument;
+    const evidence=!explicitPDF && marketIntent && window.rbBuildMarketEvidenceResponse?.(options.message||'',{force:true});
+    if(evidence)return evidence;
     const response=generate(options);
+    if(/^document_/.test(response?.type||'') && /benchmark|font[ei]|source|reference|riferiment/i.test(options.message||'')){
+      response.textIT+='\n\nUn valore riportato nel documento non è una fonte di mercato verificata. Se fonte, periodo, zona, tipologia e metodo non sono identificati, il riferimento resta non verificabile; le etichette dei vecchi report non attestano una rilevazione.';
+      response.textEN+='\n\nA value in the document is not a verified market source. If source, period, district, property type and method are not identified, the reference remains unverifiable; older report labels do not establish a survey.';
+    }
     if(!window.rbResponseHasUnsupportedMarketVerdict(response))return response;
     const grounded=generate({...options,intent:{intent:'roi_analysis'}});
     return {...grounded,metadata:{...(grounded?.metadata||{}),source:'simulation_assumptions',evidencePolicy:'noncomparable_market_reference'}};

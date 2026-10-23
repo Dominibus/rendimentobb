@@ -130,6 +130,9 @@
   ];
 
   const scripts = [
+    "/js/market-data.js?v=20261023-rc191",
+    "/js/data-provenance.js?v=20261023-rc191",
+    "/js/chatbot/core/market-evidence.js?v=20261023-rc191",
     "/js/chatbot/knowledge-base.js",
 
     "/js/chatbot/knowledge/glossary.js",
@@ -174,7 +177,7 @@
     "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
     "/js/chatbot/core/executive-brain-v2.js?v=20261012-rc108",
     "/js/chatbot/core/executive-response-builder.js?v=20261012-rc108",
-    "/js/chatbot/core/response-engine.js?v=20261021-rc172",
+    "/js/chatbot/core/response-engine.js?v=20261023-rc191",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
     "/js/chatbot/core/portal-facts-engine.js?v=20261023-rc185",
@@ -183,7 +186,7 @@
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261023-rc185",
     "/js/chatbot/core/practical-guide.js?v=20261023-rc185",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261023-rc189",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261023-rc191",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",

@@ -1,4 +1,4 @@
-import {buildPMSOperationalReport} from './pms-operational-report.js?v=20261016-rc143';
+import {buildPMSOperationalReport} from './pms-operational-report.js?v=20261023-rc191';
 export function ownedPMSReport({snapshot,ownerUid,month,period,propertyIds}){
  if(!ownerUid||snapshot?.ownerUid!==ownerUid||snapshot?.isDemo||snapshot?.portalSnapshotReady!==true)throw Error('PMS_REPORT_UNAVAILABLE');
  let scoped=snapshot;
