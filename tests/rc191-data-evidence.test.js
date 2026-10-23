@@ -58,9 +58,9 @@ test('RC191 CSV append-only localized method columns and unchanged legacy schema
  assert.doesNotMatch(performanceCSV(report),/closures|chiusure/);
 });
 test('RC191 market evidence dependencies load before the response engine',()=>{
- const loader=read('js/chatbot-loader.js');assert.ok(loader.indexOf('market-data.js?v=20261023-rc191')<loader.indexOf('market-evidence.js?v=20261023-rc191'));
- assert.ok(loader.indexOf('market-evidence.js?v=20261023-rc191')<loader.indexOf('core/response-engine.js'));
- assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc191/);
+ const loader=read('js/chatbot-loader.js');assert.ok(loader.indexOf('market-data.js?v=20261023-rc191')<loader.indexOf('market-evidence.js?v=20261023-rc192'));
+ assert.ok(loader.indexOf('market-evidence.js?v=20261023-rc192')<loader.indexOf('core/response-engine.js'));
+ assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc192/);
 });
 globalThis.window={};
 const {calculateROI}=await import('../js/roi-engine.js');

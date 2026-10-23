@@ -37,9 +37,10 @@ export function demoPrice(booking,season='auto'){
 export function updateDemoBooking(booking,values){
  for(const key of ['documentsReceived','taxableGuests','totalAmount'])if(values[key]===null||values[key]===undefined||String(values[key]).trim()==='')throw new RangeError('invalid_booking_values');
  const received=Number(values.documentsReceived),taxable=Number(values.taxableGuests),amount=Number(values.totalAmount);
- if(!Number.isInteger(received)||received<0||received>booking.guests||!Number.isFinite(amount)||amount<0||amount>1000000)throw new RangeError('invalid_booking_values');
+ if(!Number.isInteger(received)||received<0||received>booking.guests||!Number.isFinite(amount)||amount<=0||amount>1000000)throw new RangeError('invalid_booking_values');
  const enums={status:['arrival','checkin','checkout','completed','cancelled'],authorityStatus:['pending','submitted','not_required'],taxStatus:['pending','paid','exempt'],cleaningStatus:['pending','scheduled','completed'],issueStatus:['open','in_progress','resolved']};
  for(const [key,allowed]of Object.entries(enums))if(!allowed.includes(values[key]))throw new RangeError('invalid_'+key);
+ if(values.authorityStatus==='submitted'&&received<booking.guests)throw new RangeError('authority_requires_documents');
  const taxAmount=demoTax(booking,taxable);
  if(values.taxStatus==='exempt'&&taxable!==0)throw new RangeError('exemption_requires_zero');
  return {...booking,status:values.status,totalAmount:amount,guestRegistration:{documentsReceived:received,authorityStatus:values.authorityStatus,completed:received===booking.guests&&['submitted','not_required'].includes(values.authorityStatus)},touristTax:{...booking.touristTax,amount:taxAmount,taxableGuests:taxable,status:values.taxStatus},cleaning:{...booking.cleaning,status:values.cleaningStatus,completed:values.cleaningStatus==='completed'},guestIssue:{...booking.guestIssue,status:values.issueStatus,resolved:values.issueStatus==='resolved'}};

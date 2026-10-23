@@ -132,7 +132,7 @@
   const scripts = [
     "/js/market-data.js?v=20261023-rc191",
     "/js/data-provenance.js?v=20261023-rc191",
-    "/js/chatbot/core/market-evidence.js?v=20261023-rc191",
+    "/js/chatbot/core/market-evidence.js?v=20261023-rc192",
     "/js/chatbot/knowledge-base.js",
 
     "/js/chatbot/knowledge/glossary.js",

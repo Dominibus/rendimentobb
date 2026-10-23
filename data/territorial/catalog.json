@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "methodVersion": "quoted-nightly-subtotal-v1",
+  "minimumSample": 10,
+  "provider": "Inside Airbnb",
+  "homepage": "https://insideairbnb.com/get-the-data/",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "methodUrl": "https://insideairbnb.com/data-assumptions/",
+  "measure": "advertised_base_nightly_rate",
+  "currency": "EUR",
+  "columns": [
+    "zone",
+    "propertyType",
+    "roomType",
+    "capacity",
+    "stayMonth",
+    "stayLength",
+    "n",
+    "p25",
+    "median",
+    "p75",
+    "observationStart",
+    "observationEnd",
+    "stayStart",
+    "stayEnd"
+  ],
+  "cities": [
+    {
+      "key": "napoli",
+      "name": "Napoli",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/campania/naples/2026-09-19/data/listings.csv.gz",
+      "sha256": "45691ab1b3fed1e67ba9a5c26914f05c3d355ad50f79eefd930bb5b2938db089",
+      "sourceRows": 11737,
+      "eligibleRows": 9753,
+      "excluded": {
+        "currency": 941,
+        "dates_or_duration": 10,
+        "not_available_or_monthly": 1033
+      },
+      "segments": 2972,
+      "publishedSegments": 197,
+      "observationStart": "2026-09-20",
+      "observationEnd": "2026-09-29"
+    },
+    {
+      "key": "roma",
+      "name": "Roma",
+      "snapshot": "2026-09-17",
+      "url": "https://data.insideairbnb.com/italy/lazio/rome/2026-09-17/data/listings.csv.gz",
+      "sha256": "536221ac427fab13b493644edfa51f8e4045e4e4d2283e741262e16263ec9d27",
+      "sourceRows": 37451,
+      "eligibleRows": 31763,
+      "excluded": {
+        "currency": 3784,
+        "date_window": 2,
+        "dates_or_duration": 9,
+        "not_available_or_monthly": 1893
+      },
+      "segments": 4721,
+      "publishedSegments": 535,
+      "observationStart": "2026-09-19",
+      "observationEnd": "2026-09-22"
+    },
+    {
+      "key": "milano",
+      "name": "Milano",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz",
+      "sha256": "23f51e357f0a779522ca4bdb5fb6fc1f7f98aa93c2711200085c813721368bd3",
+      "sourceRows": 25338,
+      "eligibleRows": 19035,
+      "excluded": {
+        "currency": 3417,
+        "not_available_or_monthly": 2886
+      },
+      "segments": 5664,
+      "publishedSegments": 387,
+      "observationStart": "2026-09-20",
+      "observationEnd": "2026-09-21"
+    },
+    {
+      "key": "firenze",
+      "name": "Firenze",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/toscana/florence/2026-09-19/data/listings.csv.gz",
+      "sha256": "a3392ba7e26760536ee6c399f15c550625276cecd618483ae07af16a93c3f0a1",
+      "sourceRows": 13571,
+      "eligibleRows": 11498,
+      "excluded": {
+        "currency": 1395,
+        "not_available_or_monthly": 678
+      },
+      "segments": 1687,
+      "publishedSegments": 178,
+      "observationStart": "2026-09-20",
+      "observationEnd": "2026-09-21"
+    }
+  ]
+}

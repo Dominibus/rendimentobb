@@ -1,4 +1,4 @@
-import {createDemoBookings,demoDayState,demoMetrics,demoTasks,demoTax,demoPrice,updateDemoBooking} from './pms-product-demo-model.js?v=20261023-rc188';
+import {createDemoBookings,demoDayState,demoMetrics,demoTasks,demoTax,demoPrice,updateDemoBooking} from './pms-product-demo-model.js?v=20261023-rc192';
 
 const en=document.documentElement.lang==='en';
 const t=(it,english)=>en?english:it;
@@ -92,7 +92,7 @@ $('demo-booking-form').addEventListener('submit',event=>{
   const updated=updateDemoBooking(selected(),values);bookings=bookings.map(b=>b.id===selectedId?updated:b);render();
   $('demo-stay-summary').textContent=`${date(updated.checkin)} → ${date(updated.checkout)} · ${updated.guests} ${t('ospiti','guests')} · ${labels[updated.status]}`;
   notify(t('Salvato nella demo. Calendario, KPI e attività aggiornati. Nessun dato inviato o salvato sul tuo account.','Saved in the demo. Calendar, KPIs and tasks updated. No data sent or saved to your account.'));
- }catch(error){notify(error.message==='exemption_requires_zero'?t('Per esenzione indica zero ospiti tassabili. Nessuna modifica salvata.','Exemption requires zero taxable guests. No changes saved.'):t('Controlla importi e numero di documenti/ospiti. Nessuna modifica salvata.','Check amounts and document/guest counts. No changes saved.'));}
+ }catch(error){notify(error.message==='authority_requires_documents'?t('Prima di indicare la comunicazione completata, registra tutti i documenti ricevuti. Nessun invio viene effettuato dalla demo. Nessuna modifica salvata.','Before marking reporting complete, record all received documents. The demo sends nothing to authorities. No changes saved.'):error.message==='exemption_requires_zero'?t('Per esenzione indica zero ospiti tassabili. Nessuna modifica salvata.','Exemption requires zero taxable guests. No changes saved.'):t('Controlla importi e numero di documenti/ospiti. Nessuna modifica salvata.','Check amounts and document/guest counts. No changes saved.'));}
 });
 $('demo-reset').addEventListener('click',()=>{bookings=createDemoBookings();selectedId='demo-2';$('demo-task-filter').value='all';populate();render();notify(t('Esempi ripristinati. Tutte le modifiche demo sono state azzerate.','Examples restored. All demo changes have been reset.'));});
 populate();render();

@@ -61,7 +61,7 @@ test('RC190: investment demo offers the full simulator and owned-property route 
  }
 });
 test('RC190: loader orders the Free presentation before UI with fresh versions',()=>{
- const loader=read('js/chatbot-loader.js');assert.ok(loader.indexOf('free-home-snapshot.js?v=20261023-rc190')<loader.indexOf('chatbot-ui.js?v=20261023-rc190'));assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc191/);
+ const loader=read('js/chatbot-loader.js');assert.ok(loader.indexOf('free-home-snapshot.js?v=20261023-rc190')<loader.indexOf('chatbot-ui.js?v=20261023-rc190'));assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc192/);
 });
 test('RC190: switching to paid with no current analysis restores useful empty guidance',()=>{
  const ui=read('js/chatbot/ui/chatbot-ui.js'),start=ui.indexOf('function refreshFreeHomeActions(){'),end=ui.indexOf('// 📊 AUTO REFRESH AFTER NEW ANALYSIS',start);

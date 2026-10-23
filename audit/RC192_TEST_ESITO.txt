@@ -1,0 +1,25 @@
+RC192 — TEST E VERIFICHE
+Data: 2026-10-23
+
+Comando: npm test (node --test)
+ℹ tests 1712
+ℹ suites 0
+ℹ pass 1712
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5203.993541
+
+Comando: python -m unittest discover -s tests -p territorial_etl_test.py
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.002s
+
+OK
+
+Ricalcolo indipendente dal file fonte Napoli: n151, P25 EUR75, mediana EUR92, P75 EUR114.12.
+Validati quattro dataset: 88097 righe esaminate, 72049 ammesse, 1297 segmenti con n>=10.
+Controlli sintattici JavaScript superati.
+Browser: versione RC191 pubblicata osservata; demo IT/EN, documenti e cancellazione provati e ripristinati.
+Nuova patch: test automatici/dati/DOM eseguiti; anteprima browser locale non raggiungibile. Nessun collaudo iPhone o account Pro autenticato dichiarato.
