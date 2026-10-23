@@ -1,6 +1,7 @@
+import {commercialFixture as demo}from'./fixtures/commercial-scenario.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {calculateCommercial as calc,createCommercialDemo as demo,createCommercialModel as blank,commercialSensitivity as sensitivity} from '../js/commercial-property-engine.js';
+import {calculateCommercial as calc,createCommercialModel as blank,commercialSensitivity as sensitivity} from '../js/commercial-property-engine.js';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-7,`${a} != ${b}`);
 const noVAT=m=>{m.assignments.forEach(a=>a.vat={status:'no_vat',rate:null});return m;};
 test('RC193 305 monthly reserves one weekly half-day: exactly 12 fees, not 48/52',()=>{

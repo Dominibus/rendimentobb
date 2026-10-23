@@ -718,7 +718,9 @@ window.rbAnalyzeUploadedPDF = async function(file){
         const known = operational?["properties","stays","revenue","nights","occupancy","adr","revpar"].filter(key=>operational[key]!==null):["propertyPrice","roi","equity","mortgage","cashflow","gross","risk","occupancy"].filter(key => analysis[key] !== null && analysis[key] !== undefined);
         window.rbPDFConversationDocumentId = doc.id;
         const response = window.rbBuildPDFResponse("Riassumi questo PDF", doc);
-        window.addMessage?.("bot", `PDF letto: ${doc.pageCount || 0} ${window.currentLang === "en" ? "pages" : "pagine"}.\n${window.currentLang === "en" ? response.textEN : response.textIT}`);
+        const pdfReadPageCount=doc.pageCount||0;
+        const pdfReadPageUnit=window.currentLang==='en'?(pdfReadPageCount===1?'page':'pages'):(pdfReadPageCount===1?'pagina':'pagine');
+        window.addMessage?.("bot", `${window.currentLang === "en" ? "PDF read" : "PDF letto"}: ${pdfReadPageCount} ${pdfReadPageUnit}.\n${window.currentLang === "en" ? response.textEN : response.textIT}`);
         doc.dataQuality = {
             recognizedFields:known,
             missingFields:operational?["revenue","nights","occupancy","adr","revpar"].filter(key=>operational[key]===null):["propertyPrice","equity","gross","cashflow"].filter(key => analysis[key] === null || analysis[key] === undefined),

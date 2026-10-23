@@ -10,14 +10,14 @@ Schema `commercial-property-v1`. Motore puro: `js/commercial-property-engine.js`
   "year": 2027,
   "property": {
     "ownership": "owned",
-    "value": 180000,
+    "value": 240000,
     "acquisitionCosts": 0,
-    "works": 10000,
+    "works": 18000,
     "otherCapital": 0,
     "newLoan": {"amount": 0, "rate": 0, "years": 20},
     "existingLoan": {"amount": 0, "annualService": 0}
   },
-  "costs": {"fixedAnnual": 2400, "variablePct": 0},
+  "costs": {"fixedAnnual": 4800, "variablePct": 0},
   "openDays": [1, 2, 3, 4, 5],
   "slots": [
     {"id": "AM", "start": "09:00", "end": "13:00"},
@@ -26,16 +26,16 @@ Schema `commercial-property-v1`. Motore puro: `js/commercial-property-engine.js`
   "rooms": [{"id": "R1"}, {"id": "R2"}],
   "assignments": [{
     "id": "A1", "roomId": "R1", "code": "P01",
-    "mode": "weekly_monthly", "weekdays": [1], "slotIds": ["AM"],
+    "mode": "weekly_monthly", "weekdays": [2, 4], "slotIds": ["AM"],
     "start": "2027-01-01", "end": "2027-12-31",
-    "amount": 305, "vat": {"status": "unknown", "rate": null},
+    "amount": 600, "vat": {"status": "unknown", "rate": null},
     "expectedPct": 100
   }],
   "closures": []
 }
 ```
 
-Esempio di schema con valori fittizi, non valutazione dell’immobile del potenziale cliente. Nessuna fonte territoriale commerciale utilizzata. Il caso 305 è una prova di unità tariffaria, non un benchmark.
+Esempio di schema con valori fittizi, non valutazione dell’immobile del potenziale cliente. Nessuna fonte territoriale commerciale utilizzata. Gli scenari pubblici sono inventati per mostrare le diverse unità tariffarie, senza riprendere un caso di un cliente.
 
 ## Tipi e limiti
 
@@ -68,10 +68,11 @@ Per VAT taxable: imponibile = corrispettivo / (1 + rate/100), quota IVA = corris
 
 Esempio **puramente aritmetico**, con aliquota 22% inserita volontariamente e non suggerita come regime applicabile:
 
-| Scenario 2027: lunedì AM, nessuna chiusura | IVA inclusa | Senza IVA |
+| Scenario fittizio 2027, nessuna chiusura | Eventuale IVA inclusa | Senza IVA con aliquota 22% scelta per la sola prova |
 |---|---:|---:|
-| 305 €/mese per fascia settimanale, 12 mesi | 3.660 € | 3.000 € |
-| 305 €/singolo utilizzo, 52 lunedì | 15.860 € | 13.000 € |
+| Intera stanza: 1.200 €/mese, 12 mesi | 14.400 € | 11.803,28 € |
+| Pacchetto martedì/giovedì AM: 600 €/mese, 12 mesi | 7.200 € | 5.901,64 € |
+| Fasce martedì/giovedì AM: 75 €/utilizzo, 104 fasce | 7.800 € | 6.393,44 € |
 
 ## Finanza e indicatori
 

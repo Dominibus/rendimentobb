@@ -1037,6 +1037,7 @@ closeBtn.onclick = ()=>{
 
 newChatBtn.onclick = ()=>{
     window.rbClearPortalContext?.();
+    window.rbCommercialConversationActive=false;
 
     // =======================================
     // 🧹 CLEAR SAVED CONVERSATION
@@ -1106,7 +1107,9 @@ newChatBtn.onclick = ()=>{
     const pdfFocus = active && window.rbPDFConversationDocumentId === active.id;
     const labels = pdfFocus
       ? [t("ROI del PDF","PDF ROI"),t("Cashflow del PDF","PDF cash flow"),t("Rischio del PDF","PDF risk"),t("Interpreta PDF","Interpret PDF")]
-      : ["ROI","Cashflow",t("Rischio","Risk"),t("Conviene?","Worth it?")];
+      : window.rbCommercialConversationActive
+        ? [t('ROI immobile commerciale','Commercial property ROI'),t('Cashflow commerciale','Commercial property cashflow'),t('PDF commerciale','Commercial PDF'),t('Verificare canoni commerciali','Verify commercial rents')]
+        : ["ROI","Cashflow",t("Rischio","Risk"),t("Conviene?","Worth it?")];
     document.querySelectorAll("#rb-quick-actions .rb-quick-btn").forEach((button,index)=>{
       button.textContent=labels[index] || "";
     });
@@ -1403,6 +1406,16 @@ function showThinking(){
     items
       .slice(0, 5)
       .forEach(action => {
+
+        // Fixed internal route only: no arbitrary URL provided by a response.
+        if(action?.type==='open_commercial_planner'){
+          const link=document.createElement('a');
+          link.className='rb-quick-btn';
+          link.href=language==='en'?'/en/immobili-commerciali/':'/immobili-commerciali/';
+          link.textContent=language==='en'?'Open commercial property analysis':'Apri l’analisi commerciale';
+          container.appendChild(link);
+          return;
+        }
 
         if(
           ![
@@ -2090,6 +2103,7 @@ ${file.fileName}
 
 document.addEventListener("rb:document_ready", event => {
     if(event.detail?.status !== "ready") return;
+    window.rbCommercialConversationActive=false;
     refreshQuickActions();
     const operational=window.rbReadPMSDocument?.(event.detail);
     addSuggestions(operational?.kind!=='integrated'&&operational

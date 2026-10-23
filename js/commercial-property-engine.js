@@ -140,8 +140,10 @@ export function createCommercialModel(year=2027){
 }
 
 export function createCommercialDemo(mode='weekly_monthly'){
- const m=createCommercialModel(2027);m.property.value=180000;m.property.works=10000;m.costs.fixedAnnual=2400;
+ // Entirely fictional public scenarios; separate from numerical regression fixtures.
+ const m=createCommercialModel(2027);m.property.value=240000;m.property.works=18000;m.costs.fixedAnnual=4800;
  m.rooms.push({id:'R2'});
- m.assignments=[{id:'A1',roomId:'R1',code:'P01',mode,weekdays:[1],slotIds:['AM'],start:'2027-01-01',end:'2027-12-31',amount:305,vat:{status:'unknown',rate:null},expectedPct:100}];
+ const amount=mode==='per_use'?75:mode==='room_monthly'?1200:600;
+ m.assignments=[{id:'A1',roomId:'R1',code:'P01',mode,weekdays:[2,4],slotIds:['AM'],start:'2027-01-01',end:'2027-12-31',amount,vat:{status:'unknown',rate:null},expectedPct:100}];
  return m;
 }

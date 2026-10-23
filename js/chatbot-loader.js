@@ -166,7 +166,7 @@
 
     "/js/vendor/pdfjs/pdf.min.mjs",
 
-    "/js/chatbot/document-engine.js?v=20261016-rc141",
+    "/js/chatbot/document-engine.js?v=20261023-rc194",
     "/js/chatbot/pdf-extraction-engine.js?v=20261011-rc99",
     "/js/chatbot/core/pms-document-evidence.js?v=20261016-rc141",
     "/js/chatbot/pdf-parser-engine.js?v=20261023-rc185",
@@ -186,14 +186,14 @@
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261023-rc185",
     "/js/chatbot/core/practical-guide.js?v=20261023-rc185",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261023-rc193",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261023-rc194",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
     "/js/chatbot/ui/free-home-snapshot.js?v=20261023-rc190",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261023-rc190",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261023-rc194",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];

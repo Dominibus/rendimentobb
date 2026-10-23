@@ -26,13 +26,13 @@ function fixture(english){
 for(const en of [false,true])test('RC193 actual planner UI: demo, VAT edit, collision, mixed room, closure, dirty settings and sensitivity '+(en?'EN':'IT'),()=>{
  const {root,app,field,form,click}=fixture(en);
  assert.equal(app.getModel().assignments.length,0);assert.equal(field('mode').value,'');
- click(en?/€305 · each use/:/305 € · ogni utilizzo/);assert.equal(app.getResult().contractualGross,15860);assert.equal(app.getResult().expectedNet,null);
- click(en?/^Edit A1$/:/^Modifica A1$/);field('vat').value='taxable';field('vat').fire('change');assert.equal(field('vatRate').required,true);field('vatRate').value='22';form('contract').fire('submit');assert.equal(app.getResult().expectedNet,13000);
+ click(en?/Pay-per-use slots/:/Fasce a consumo/);assert.equal(app.getResult().contractualGross,7800);assert.equal(app.getResult().expectedNet,null);
+ click(en?/^Edit A1$/:/^Modifica A1$/);field('vat').value='taxable';field('vat').fire('change');assert.equal(field('vatRate').required,true);field('vatRate').value='22';form('contract').fire('submit');assert.equal(app.getResult().expectedNet,7800/1.22);
  // New assignment on R1 collides and leaves the last valid model intact.
  field('mode').value='room_monthly';field('amount').value='500';form('contract').fire('submit');assert.equal(app.getModel().assignments.length,1);assert.match(root.find(n=>n.id==='cm-status').textContent,/stessa stanza|same room/);
  // Same contract on R2 is valid (simple mixed mode).
- field('contractRoom').value='R2';field('vat').value='no_vat';field('vat').fire('change');form('contract').fire('submit');assert.equal(app.getModel().assignments.length,2);assert.equal(app.getResult().contractualGross,21860);
- field('closureRoom').value='R1';field('closureStart').value='2027-01-04';field('closureEnd').value='2027-01-04';form('closure').fire('submit');assert.equal(app.getResult().assignments[0].units,51);assert.match(root.textContent,en?/Closed · P01/:/Chiuso · P01/);
+ field('contractRoom').value='R2';field('vat').value='no_vat';field('vat').fire('change');form('contract').fire('submit');assert.equal(app.getModel().assignments.length,2);assert.equal(app.getResult().contractualGross,13800);
+ field('closureRoom').value='R1';field('closureStart').value='2027-01-05';field('closureEnd').value='2027-01-05';form('closure').fire('submit');assert.equal(app.getResult().assignments[0].units,103);assert.match(root.textContent,en?/Closed · P01/:/Chiuso · P01/);
  // Removing an allocated room is refused without deleting its contract.
  field('roomCount').value='1';form('setup').fire('input');assert.equal(app.getResult(),null);form('setup').fire('submit');assert.equal(app.getModel().rooms.length,2);assert.match(root.find(n=>n.id==='cm-status').textContent,/stanza utilizzata|allocated room/);
  field('roomCount').value='2';form('setup').fire('submit');assert.ok(app.getResult());
@@ -53,10 +53,10 @@ test('RC193 no tariff is assumed in UI; calendar, custom slots and expected shar
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('RC193 public pages: IT/EN, truthful limits, no trackers/account writes, paths and versioned engine',()=>{
  for(const lang of ['','en/']){
-  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261023-rc193/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.doesNotMatch(page,/firebase|chatbot-loader|js\/header.js|application\/ld\+json/);
+  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261023-rc194/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.doesNotMatch(page,/firebase|chatbot-loader|js\/header.js|application\/ld\+json/);
  }
  for(const f of ['js/commercial-property-engine.js','js/commercial-property-ui.js'])assert.doesNotMatch(read(f),/\b(?:fetch|localStorage|sessionStorage|indexedDB|sendBeacon|addDoc|setDoc)\s*[.(]|document\.cookie/);
- assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261023-rc193/);
+ assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261023-rc194/);
  for(const f of ['immobili/index.html','tool/index.html','sitemap.xml'])assert.match(read(f),/\/immobili-commerciali\//);
 });
 
@@ -70,7 +70,7 @@ test('RC193 chatbot preserves privacy, guarantees, focused documents and ordinar
  w.rbDocumentManager={getLast:()=>({id:'doc'})};w.rbPDFConversationDocumentId='doc';w.rbGenerateResponse=()=>({type:'document_grounded',textIT:'Document context'});const r=await w.rbProcessAIMessage('Ricavi studio medico');assert.notEqual(r.intent?.intent,'commercial_property_scope');
 });
 test('RC193 parent cache references updated without changing unrelated engines',()=>{
- assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261023-rc193/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc193/);
+ assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261023-rc194/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261023-rc194/);
  function walk(dir){return readdirSync(dir).flatMap(n=>{const p=dir+'/'+n;return n==='node_modules'?[]:statSync(p).isDirectory()?walk(p):p.endsWith('.html')?[p]:[];});}
  for(const p of walk(new URL('..',import.meta.url).pathname)){const s=readFileSync(p,'utf8');assert.doesNotMatch(s,/\/(?:js\/header|js\/chatbot-loader)\.js\?v=20261023-rc192/,p);}
 });

@@ -1,4 +1,4 @@
-import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261023-rc193';
+import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261023-rc194';
 
 export function mountCommercial(root,{english=false}={}){
  const t=(it,en)=>english?en:it,locale=english?'en-GB':'it-IT';
@@ -32,10 +32,10 @@ export function mountCommercial(root,{english=false}={}){
   const labels={'property.value':t('Valore/prezzo','Value/price'),'property.acquisitionCosts':t('Spese acquisto','Acquisition costs'),'property.works':t('Lavori','Works'),'property.otherCapital':t('Altre spese iniziali','Other upfront outlay'),'newLoan.amount':t('Nuovo prestito','New borrowing'),'newLoan.rate':t('Tasso prestito','Loan rate'),'newLoan.years':t('Durata prestito','Loan term'),'existingLoan.amount':t('Debito residuo','Residual debt'),'existingLoan.annualService':t('Rate esistenti','Existing debt payments'),'costs.fixedAnnual':t('Costi fissi','Fixed costs'),'costs.variablePct':t('Costi variabili','Variable costs'),'assignment.amount':t('Importo contratto','Contract amount'),'assignment.expectedPct':t('Quota attesa','Expected share'),'assignment.vat.rate':t('Aliquota IVA','VAT rate')};
   const detail=e.code==='collision'?e.field:labels[e.field];announce((errors[e.code]||t('Controlla i dati inseriti.','Review the entered data.'))+(detail?' · '+detail:''),true);
  }
- const intro=section(t('Prova il caso dei 305 €','Try the €305 example'));
- note(intro,'Due interpretazioni, due scenari. Sono dati fittizi: 2 stanze, un lunedì mattina assegnato, anno 2027. Il prezzo non è un benchmark e il trattamento IVA resta da verificare.','Two interpretations, two scenarios. Fictional inputs: 2 rooms, one reserved Monday morning, year 2027. The price is not a benchmark and VAT treatment remains unverified.');
+ const intro=section(t('Scegli uno scenario dimostrativo','Choose a demonstration scenario'));
+ note(intro,'Uno spazio professionale immaginario con due stanze, anno 2027. Prova un canone stanza, un pacchetto mensile di fasce oppure un prezzo per utilizzo. Tutti gli importi sono fittizi e modificabili: non descrivono clienti reali né prezzi di mercato. Il trattamento IVA resta da verificare.','An imaginary professional space with two rooms, year 2027. Try a room rent, a monthly slot package or per-use pricing. All amounts are fictional and editable: they describe neither real customers nor market prices. VAT treatment remains unverified.');
  const demoActions=el('div',undefined,'cm-actions');
- add(demoActions,button(t('305 €/mese · fascia settimanale','€305/month · weekly slot'),()=>replaceModel(createCommercialDemo('weekly_monthly'),'demo')),button(t('305 € · ogni utilizzo','€305 · each use'),()=>replaceModel(createCommercialDemo('per_use'),'demo')),button(t('Nuova simulazione vuota','New blank simulation'),()=>{if(window.confirm(t('Azzerare i dati di questa pagina?','Clear this page’s inputs?')))replaceModel(createCommercialModel(),'user');}));intro.append(demoActions);
+ add(demoActions,button(t('Stanza a canone mensile','Room with monthly rent'),()=>replaceModel(createCommercialDemo('room_monthly'),'demo')),button(t('Fasce con canone mensile','Slots with a monthly fee'),()=>replaceModel(createCommercialDemo('weekly_monthly'),'demo')),button(t('Fasce a consumo','Pay-per-use slots'),()=>replaceModel(createCommercialDemo('per_use'),'demo')),button(t('Nuova simulazione vuota','New blank simulation'),()=>{if(window.confirm(t('Azzerare i dati di questa pagina?','Clear this page’s inputs?')))replaceModel(createCommercialModel(),'user');}));intro.append(demoActions);
  const setup=section(t('1 · Immobile, costi e disponibilità','1 · Property, costs and availability'));
  const setupForm=el('form');setupForm.dataset.form='setup';const grid=el('div',undefined,'cm-fields');setupForm.append(grid);
  const f={};

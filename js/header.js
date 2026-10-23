@@ -208,7 +208,7 @@ function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
   if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261023-rc193";
+  script.src = "/js/chatbot-loader.js?v=20261023-rc194";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();
@@ -286,6 +286,7 @@ Guide
 
         <button
         id="rb-header-ai-btn"
+        aria-label="Assistente" data-it-aria-label="Assistente" data-en-aria-label="Assistant"
         class="rb-header-ai-btn">
           <span
           class="rb-assistant-label-desktop"
@@ -355,6 +356,7 @@ Guide
     Chi siamo
     </a>
 
+<a href="/immobili-commerciali/" data-it="Locali e studi · MVP pubblico" data-en="Commercial units and rooms · public MVP">Locali e studi · MVP pubblico</a>
   </nav>
 
     <div class="rb-mobile-lang">
