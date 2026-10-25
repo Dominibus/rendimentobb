@@ -53,7 +53,7 @@ test('RC193 no tariff is assumed in UI; calendar, custom slots and expected shar
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('RC193 public pages: IT/EN, truthful limits, no trackers/account writes, paths and versioned engine',()=>{
  for(const lang of ['','en/']){
-  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261025-rc196/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.doesNotMatch(page,/firebase|chatbot-loader|js\/header.js|application\/ld\+json/);
+  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261025-rc197/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.doesNotMatch(page,/firebase|chatbot-loader|js\/header.js|application\/ld\+json/);
  }
  for(const f of ['js/commercial-property-engine.js','js/commercial-property-ui.js'])assert.doesNotMatch(read(f),/\b(?:fetch|localStorage|sessionStorage|indexedDB|sendBeacon|addDoc|setDoc)\s*[.(]|document\.cookie/);
  assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261025-rc196/);
@@ -70,7 +70,7 @@ test('RC193 chatbot preserves privacy, guarantees, focused documents and ordinar
  w.rbDocumentManager={getLast:()=>({id:'doc'})};w.rbPDFConversationDocumentId='doc';w.rbGenerateResponse=()=>({type:'document_grounded',textIT:'Document context'});const r=await w.rbProcessAIMessage('Ricavi studio medico');assert.notEqual(r.intent?.intent,'commercial_property_scope');
 });
 test('RC193 parent cache references updated without changing unrelated engines',()=>{
- assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261025-rc196/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261025-rc196/);
+ assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261025-rc197/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261025-rc197/);
  function walk(dir){return readdirSync(dir).flatMap(n=>{const p=dir+'/'+n;return n==='node_modules'?[]:statSync(p).isDirectory()?walk(p):p.endsWith('.html')?[p]:[];});}
  for(const p of walk(new URL('..',import.meta.url).pathname)){const s=readFileSync(p,'utf8');assert.doesNotMatch(s,/\/(?:js\/header|js\/chatbot-loader)\.js\?v=20261023-rc192/,p);}
 });
@@ -87,3 +87,9 @@ for(const en of [false,true])test('RC195 mixed scenario updates monthly activity
  field('fixedAnnual').value='5100';form('setup').fire('input');assert.doesNotMatch(operations.textContent,/P01/);assert.equal(app.getResult(),null);
  form('setup').fire('submit');assert.match(operations.textContent,/P01/);assert.equal(app.getResult().contractualGross,19800);
 });
+
+for(const q of ['Posso gestire stanze di uno studio con affitti mensili e fasce a consumo? Il calndario commerciale usa pazienti o solo codici?','Vorrei affittare le stanze del mio studio a fasce','Can I manage rooms of a studio with monthly rents and pay-per-use slots?'])test('RC197 studio room questions bypass cached tourist estimates: '+q,async()=>{
+ const w=chat();w.rbGenerateResponse=()=>({type:'partial_snapshot',textIT:'B&B snapshot'});
+ const result=await w.rbProcessAIMessage(q);assert.equal(result.intent.intent,'commercial_property_scope');assert.match(result.response.textIT,/codici generici/);assert.equal(result.response.metadata.readsSimulation,false);assert.ok(result.response.actions.some(a=>a.type==='open_commercial_workspace'));
+});
+test('RC197 ordinary study phrasing does not imply commercial room management',()=>{const w=chat();for(const q of ['Studio il mercato B&B di Pisa','Vorrei studiare il ROI della mia casa','I study the local B&B market'])assert.equal(w.rbBuildCommercialPropertyResponse(q),null);});

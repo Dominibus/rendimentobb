@@ -55,3 +55,12 @@ test('RC196 cloud save refuses un-applied contract drafts rather than reporting 
  const {root,app,field,click}=setup();await app.setOwner('demo');await click(/^Scenari$/);const before=app.getWorkspace();await click(/^Modifica A1$/);field('amount').value='999';await root.find(n=>n.dataset.form==='contract').fire('input');
  const save=root.find(n=>n.tag==='button'&&/^Salva scenario applicato/.test(n.textContent));await save.parent.parent.fire('submit');assert.deepEqual(app.getWorkspace(),before);assert.match(root.textContent,/prima di salvare/);
 });
+test('RC197 first workspace load opens Today; the editor preserves fictional provenance and does not claim the PMS is unavailable',async()=>{
+ const {root,app,click}=setup();await app.setOwner('demo');assert.equal(app.getView(),'overview');assert.match(root.textContent,/Canoni contrattuali/);
+ await click(/^Scenari$/);assert.match(root.textContent,/DATI DIMOSTRATIVI/);assert.match(root.textContent,/Scenario caricato nell’editor/);assert.doesNotMatch(root.textContent,/Non è ancora il PMS commerciale|Simulazione vuota pronta/);
+ const planning=root.find(n=>n.id==='cm-operations');assert.equal(planning.hidden,true);
+});
+test('RC197 changing month preserves the calendar room instead of silently returning to R1',async()=>{
+ const {root,app,field,click}=setup();await app.setOwner('demo');await click(/^Calendario$/);field('room').value='R2';await field('room').fire('change');assert.match(root.textContent,/P02/);
+ field('period').value='3';await field('period').fire('change');assert.equal(field('room').value,'R2');assert.match(root.textContent,/2027-03/);assert.match(root.textContent,/P02/);assert.doesNotMatch(root.textContent,/Riservato · P01/);
+});

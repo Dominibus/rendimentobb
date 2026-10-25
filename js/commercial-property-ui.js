@@ -2,7 +2,7 @@ import {stageCommercialTransfer} from './commercial-transfer.js?v=20261025-rc196
 import {createCommercialActivityPlan} from './commercial-activity-plan.js?v=20261025-rc196';
 import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261025-rc196';
 
-export function mountCommercial(root,{english=false,onTransfer=null}={}){
+export function mountCommercial(root,{english=false,onTransfer=null,embedded=false}={}){
  const t=(it,en)=>english?en:it,locale=english?'en-GB':'it-IT';
  const money=n=>n===null?'N/A':new Intl.NumberFormat(locale,{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n);
  const decimal=n=>n===null?'N/A':new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(n);
@@ -41,7 +41,7 @@ export function mountCommercial(root,{english=false,onTransfer=null}={}){
  const guide=section(t('Costruisci il tuo scenario','Build your own scenario'));
  note(guide,'Puoi combinare tariffe diverse nello stesso immobile: canone mensile su una stanza, pacchetti mensili e utilizzi su altre stanze o fasce libere. Le sovrapposizioni vengono rifiutate. Non c’è una combinazione ideale automatica: scegli tu prezzi, date e disponibilità.','Combine different rates in one property: monthly rent on one room, monthly packages and individual uses on other rooms or free slots. Overlaps are rejected. There is no automatic ideal mix: you choose rates, dates and availability.');
  note(guide,'Per un utilizzo occasionale scegli “Per singolo utilizzo”, la stessa data di inizio e fine e il giorno e la fascia corrispondenti. Per cambiare tariffa durante l’anno usa contratti con periodi consecutivi. Per il canone di un intero locale usa una sola stanza: non rappresenta il fatturato dell’attività.','For a one-off use choose “Per individual use”, the same start and end date and the matching weekday and slot. To change a rate during the year use contracts with consecutive periods. For the rent of an entire unit use one room: this does not represent business turnover.');
- const plannerLink=el('a',t('Vai alla pianificazione attività ↓','Go to activity planning ↓'));plannerLink.href='#cm-operations';guide.append(plannerLink);
+ const plannerLink=el('a',t('Vai alla pianificazione attività ↓','Go to activity planning ↓'));plannerLink.href='#cm-operations';if(!embedded)guide.append(plannerLink);
  if(onTransfer)guide.append(button(t('Porta lo scenario nel PMS dedicato','Take this scenario to the dedicated PMS'),()=>{if(dirty||contractDirty||closureDirty){announce(t('Applica prima impostazioni, contratti o chiusure in bozza.','Apply settings first.'),true);return;}try{onTransfer(structuredClone(model));}catch{announce(t('Trasferimento non disponibile. Apri il PMS e ricrea lo scenario oppure riprova.','Transfer unavailable. Open the PMS and rebuild the scenario, or retry.'),true);}}));
  const setup=section(t('1 · Immobile, costi e disponibilità','1 · Property, costs and availability'));
  const setupForm=el('form');setupForm.dataset.form='setup';const grid=el('div',undefined,'cm-fields');setupForm.append(grid);
@@ -87,6 +87,7 @@ export function mountCommercial(root,{english=false,onTransfer=null}={}){
  const monthNames=Array.from({length:12},(_,i)=>[String(i+1),new Intl.DateTimeFormat(locale,{month:'long',timeZone:'UTC'}).format(new Date(Date.UTC(2027,i,1)))]);
  let activityMonth='1';
  function renderOperations(){
+  if(embedded){operations.hidden=true;return;}
   operations.replaceChildren(el('h2',t('5 · Locali e studi · pianificazione attività','5 · Commercial spaces · activity planning')));
   if(dirty){note(operations,'Applica le impostazioni per aggiornare la pianificazione.','Apply settings to update activity planning.');return;}
   note(operations,'ANTEPRIMA DI PIANIFICAZIONE · stessi contratti della simulazione, solo in memoria. Non è ancora il PMS commerciale: nessun salvataggio, incasso registrato, fattura o scadenza di pagamento.','PLANNING PREVIEW · same contracts as the simulation, in memory only. Not yet a commercial PMS: no saving, recorded receipts, invoices or payment due dates.');
@@ -119,7 +120,7 @@ export function mountCommercial(root,{english=false,onTransfer=null}={}){
  }
  function replaceModel(next,source){
   if(model.assignments.length&&source==='demo'&&!window.confirm(t('Sostituire lo scenario con l’esempio fittizio?','Replace your scenario with the fictional example?')))return;
-  model=next;origin=source;dirty=false;contractDirty=false;closureDirty=false;syncSetup();render();announce(source==='demo'?t('Esempio fittizio caricato. Scegli il trattamento IVA per calcolare i risultati netti.','Fictional example loaded. Select VAT treatment to calculate net results.'):t('Simulazione vuota pronta.','Blank simulation ready.'));if(source==='demo')outputs.scrollIntoView?.({block:'start'});
+  model=next;origin=source;dirty=false;contractDirty=false;closureDirty=false;syncSetup();render();announce(source==='demo'?t('Esempio fittizio caricato. Scegli il trattamento IVA per calcolare i risultati netti.','Fictional example loaded. Select VAT treatment to calculate net results.'):source==='user'?t('Simulazione vuota pronta.','Blank simulation ready.'):t('Scenario caricato nell’editor.','Scenario loaded in the editor.'));if(source==='demo')outputs.scrollIntoView?.({block:'start'});
  }
  function commit(next){if(dirty){announce(t('Applica prima le impostazioni.','Apply settings first.'),true);return false;}try{calculateCommercial(next);model=next;render();announce(t('Scenario aggiornato.','Scenario updated.'));return true;}catch(e){showError(e);return false;}}
  const numeric=input=>input.value.trim()===''?NaN:Number(input.value);
@@ -139,7 +140,7 @@ export function mountCommercial(root,{english=false,onTransfer=null}={}){
  closureForm.addEventListener('submit',event=>{event.preventDefault();if(!closureForm.reportValidity())return;const next=structuredClone(model);next.closures.push({roomId:closureRoom.value,start:closureStart.value,end:closureEnd.value});if(commit(next))closureDirty=false;});
  function render(){
   result=calculateCommercial(model);contractList.replaceChildren();closureList.replaceChildren();outputs.replaceChildren(el('h2',t('4 · Risultati dello scenario applicato','4 · Applied scenario results')));
-  note(outputs,origin==='demo'?'DATI DIMOSTRATIVI modificabili · nessuna fonte di mercato.':'INPUT UTENTE · valori non verificati dal sito.',origin==='demo'?'EDITABLE FICTIONAL INPUTS · no market source.':'USER INPUTS · not verified by the site.');
+  note(outputs,(origin==='demo'||origin==='demo_account')?'DATI DIMOSTRATIVI modificabili · nessuna fonte di mercato.':'INPUT UTENTE · valori non verificati dal sito.',(origin==='demo'||origin==='demo_account')?'EDITABLE FICTIONAL INPUTS · no market source.':'USER INPUTS · not verified by the site.');
   note(outputs,'Anno '+model.year+' · risultati matematici e ipotesi, non incassi o rendimenti garantiti. N/A: IVA non definita o denominatore nullo; il pareggio può superare il 100%.','Year '+model.year+' · calculated results and assumptions, not receipts or guaranteed returns. N/A: VAT undefined or zero denominator; break-even may exceed 100%.');
   if(!model.assignments.length)note(outputs,'Aggiungi almeno un contratto per costruire uno scenario di ricavo.','Add at least one contract to build a revenue scenario.');
   if(result.expectedNet===null){const warning=el('p',t('IVA da verificare: per ottenere margine e rendimenti, modifica il trattamento nei contratti. ','VAT unverified: to obtain margin and returns, edit VAT treatment in the contracts. '),'cm-badge');const link=el('a',t('Vai ai contratti','Go to contracts'));link.href='#cm-contracts';warning.append(link);outputs.append(warning);}
