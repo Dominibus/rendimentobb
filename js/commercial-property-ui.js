@@ -1,6 +1,8 @@
-import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261023-rc194';
+import {stageCommercialTransfer} from './commercial-transfer.js?v=20261025-rc196';
+import {createCommercialActivityPlan} from './commercial-activity-plan.js?v=20261025-rc196';
+import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261025-rc196';
 
-export function mountCommercial(root,{english=false}={}){
+export function mountCommercial(root,{english=false,onTransfer=null}={}){
  const t=(it,en)=>english?en:it,locale=english?'en-GB':'it-IT';
  const money=n=>n===null?'N/A':new Intl.NumberFormat(locale,{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n);
  const decimal=n=>n===null?'N/A':new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(n);
@@ -25,7 +27,7 @@ export function mountCommercial(root,{english=false}={}){
  }
  function note(parent,it,en){parent.append(el('p',t(it,en),'cm-note'));}
  function table(parent,headers,rows){const outer=el('div',undefined,'cm-table-scroll'),tab=el('table'),head=el('thead'),tr=el('tr');headers.forEach(h=>{const th=el('th',h);th.scope='col';tr.append(th);});head.append(tr);const body=el('tbody');for(const row of rows){const r=el('tr');for(const v of row){const cell=el('td');if(typeof v==='object'&&v!==null)cell.append(v);else cell.textContent=String(v);r.append(cell);}body.append(r);}add(tab,head,body);outer.tabIndex=0;outer.setAttribute('role','region');outer.setAttribute('aria-label',headers.join(' · '));outer.append(tab);parent.append(outer);}
- let model=createCommercialModel(),editingId=null,result=null,dirty=false,origin='user';
+ let model=createCommercialModel(),editingId=null,result=null,dirty=false,contractDirty=false,closureDirty=false,origin='user';
  const status=el('p',undefined,'cm-status');status.id='cm-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  function announce(message,isError=false){status.textContent=message;status.className='cm-status'+(isError?' cm-error':'');}
  function showError(e){
@@ -35,7 +37,12 @@ export function mountCommercial(root,{english=false}={}){
  const intro=section(t('Scegli uno scenario dimostrativo','Choose a demonstration scenario'));
  note(intro,'Uno spazio professionale immaginario con due stanze, anno 2027. Prova un canone stanza, un pacchetto mensile di fasce oppure un prezzo per utilizzo. Tutti gli importi sono fittizi e modificabili: non descrivono clienti reali né prezzi di mercato. Il trattamento IVA resta da verificare.','An imaginary professional space with two rooms, year 2027. Try a room rent, a monthly slot package or per-use pricing. All amounts are fictional and editable: they describe neither real customers nor market prices. VAT treatment remains unverified.');
  const demoActions=el('div',undefined,'cm-actions');
- add(demoActions,button(t('Stanza a canone mensile','Room with monthly rent'),()=>replaceModel(createCommercialDemo('room_monthly'),'demo')),button(t('Fasce con canone mensile','Slots with a monthly fee'),()=>replaceModel(createCommercialDemo('weekly_monthly'),'demo')),button(t('Fasce a consumo','Pay-per-use slots'),()=>replaceModel(createCommercialDemo('per_use'),'demo')),button(t('Nuova simulazione vuota','New blank simulation'),()=>{if(window.confirm(t('Azzerare i dati di questa pagina?','Clear this page’s inputs?')))replaceModel(createCommercialModel(),'user');}));intro.append(demoActions);
+ add(demoActions,button(t('Stanza a canone mensile','Room with monthly rent'),()=>replaceModel(createCommercialDemo('room_monthly'),'demo')),button(t('Fasce con canone mensile','Slots with a monthly fee'),()=>replaceModel(createCommercialDemo('weekly_monthly'),'demo')),button(t('Fasce a consumo','Pay-per-use slots'),()=>replaceModel(createCommercialDemo('per_use'),'demo')),button(t('Scenario misto modificabile','Editable mixed scenario'),()=>replaceModel(createCommercialDemo('mixed'),'demo')),button(t('Nuova simulazione vuota','New blank simulation'),()=>{if(window.confirm(t('Azzerare i dati di questa pagina?','Clear this page’s inputs?')))replaceModel(createCommercialModel(),'user');}));intro.append(demoActions);
+ const guide=section(t('Costruisci il tuo scenario','Build your own scenario'));
+ note(guide,'Puoi combinare tariffe diverse nello stesso immobile: canone mensile su una stanza, pacchetti mensili e utilizzi su altre stanze o fasce libere. Le sovrapposizioni vengono rifiutate. Non c’è una combinazione ideale automatica: scegli tu prezzi, date e disponibilità.','Combine different rates in one property: monthly rent on one room, monthly packages and individual uses on other rooms or free slots. Overlaps are rejected. There is no automatic ideal mix: you choose rates, dates and availability.');
+ note(guide,'Per un utilizzo occasionale scegli “Per singolo utilizzo”, la stessa data di inizio e fine e il giorno e la fascia corrispondenti. Per cambiare tariffa durante l’anno usa contratti con periodi consecutivi. Per il canone di un intero locale usa una sola stanza: non rappresenta il fatturato dell’attività.','For a one-off use choose “Per individual use”, the same start and end date and the matching weekday and slot. To change a rate during the year use contracts with consecutive periods. For the rent of an entire unit use one room: this does not represent business turnover.');
+ const plannerLink=el('a',t('Vai alla pianificazione attività ↓','Go to activity planning ↓'));plannerLink.href='#cm-operations';guide.append(plannerLink);
+ if(onTransfer)guide.append(button(t('Porta lo scenario nel PMS dedicato','Take this scenario to the dedicated PMS'),()=>{if(dirty||contractDirty||closureDirty){announce(t('Applica prima impostazioni, contratti o chiusure in bozza.','Apply settings first.'),true);return;}try{onTransfer(structuredClone(model));}catch{announce(t('Trasferimento non disponibile. Apri il PMS e ricrea lo scenario oppure riprova.','Transfer unavailable. Open the PMS and rebuild the scenario, or retry.'),true);}}));
  const setup=section(t('1 · Immobile, costi e disponibilità','1 · Property, costs and availability'));
  const setupForm=el('form');setupForm.dataset.form='setup';const grid=el('div',undefined,'cm-fields');setupForm.append(grid);
  const f={};
@@ -56,7 +63,7 @@ export function mountCommercial(root,{english=false}={}){
  const contracts=section(t('2 · Contratti e fasce ricorrenti','2 · Contracts and recurring slots'));
  contracts.id='cm-contracts';
  note(contracts,'Usa solo codici generici (es. P01). Nessun nome di paziente, dato sanitario o documento. I risultati riflettono solo le impostazioni applicate e i contratti aggiunti; i campi in modifica sono bozze.','Use generic codes only (e.g. P01). No patient names, health data or documents. Results reflect only applied settings and added contracts; edited form fields are drafts.');
- const contractForm=el('form');contractForm.dataset.form='contract';const cg=el('div',undefined,'cm-fields');contractForm.append(cg);const c={};
+ const contractForm=el('form');contractForm.dataset.form='contract';contractForm.addEventListener('input',()=>{contractDirty=true;});contractForm.addEventListener('change',()=>{contractDirty=true;});const cg=el('div',undefined,'cm-fields');contractForm.append(cg);const c={};
  c.room=field(cg,t('Stanza','Room'),'contractRoom',{options:[['R1','R1']]});c.code=field(cg,t('Codice professionista / conduttore','Professional / tenant code'),'code',{type:'text',value:'P01'});c.code.maxLength=32;c.code.pattern='[-A-Za-z0-9_]{1,32}';
  c.mode=field(cg,t('Unità tariffaria · scelta obbligatoria','Tariff basis · explicit choice required'),'mode',{value:'',options:[['',t('Scegli come si paga','Choose the billing basis')],...Object.entries(modes)]});
  c.amount=field(cg,t('Importo (€), eventuale IVA inclusa','Amount (€), including VAT if applicable'),'amount',{max:1e7});
@@ -71,24 +78,48 @@ export function mountCommercial(root,{english=false}={}){
  note(contractForm,'La quota attesa è un’ipotesi aggregata di mancato utilizzo/locazione o realizzo, non una previsione di incassi verificati. Il modello non certifica fatture, pagamenti o utili netti.','The expected share is an aggregate non-use/vacancy or realisation assumption, not a forecast of verified receipts. The model does not certify invoices, payments or net profits.');
  const saveContract=el('button',t('Aggiungi contratto e calcola','Add contract and calculate'));saveContract.type='submit';contractForm.append(saveContract);contractForm.append(button(t('Annulla modifica contratto','Cancel contract edit'),()=>resetContract()));contracts.append(contractForm);const contractList=el('div');contracts.append(contractList);
  const closures=section(t('3 · Chiusure e indisponibilità','3 · Closures and unavailability'));
- const closureForm=el('form',undefined,'cm-fields');closureForm.dataset.form='closure';const closureRoom=field(closureForm,t('Stanza interessata','Affected room'),'closureRoom',{options:[['*',t('Tutte','All')]]});const closureStart=field(closureForm,t('Dal (incluso)','From (inclusive)'),'closureStart',{type:'date'});const closureEnd=field(closureForm,t('Al (incluso)','To (inclusive)'),'closureEnd',{type:'date'});const closeButton=el('button',t('Aggiungi chiusura','Add closure'));closeButton.type='submit';closureForm.append(closeButton);closures.append(closureForm);const closureList=el('div');closures.append(closureList);
+ const closureForm=el('form',undefined,'cm-fields');closureForm.dataset.form='closure';closureForm.addEventListener('input',()=>{closureDirty=true;});closureForm.addEventListener('change',()=>{closureDirty=true;});const closureRoom=field(closureForm,t('Stanza interessata','Affected room'),'closureRoom',{options:[['*',t('Tutte','All')]]});const closureStart=field(closureForm,t('Dal (incluso)','From (inclusive)'),'closureStart',{type:'date'});const closureEnd=field(closureForm,t('Al (incluso)','To (inclusive)'),'closureEnd',{type:'date'});const closeButton=el('button',t('Aggiungi chiusura','Add closure'));closeButton.type='submit';closureForm.append(closeButton);closures.append(closureForm);const closureList=el('div');closures.append(closureList);
  root.append(status);
  const outputs=section(t('4 · Risultati dello scenario applicato','4 · Applied scenario results'));
  outputs.id='cm-results';
- function markDirty(){dirty=true;result=null;outputs.replaceChildren(el('h2',t('Impostazioni da applicare','Settings not applied')),el('p',t('Premi “Applica impostazioni e calcola” per aggiornare i risultati.','Press “Apply settings and calculate” to update results.')));announce(t('Impostazioni modificate: applicale prima di gestire contratti e chiusure.','Settings changed: apply them before editing contracts and closures.'));}
+ const operations=section(t('5 · Locali e studi · pianificazione attività','5 · Commercial spaces · activity planning'));
+ operations.id='cm-operations';
+ const monthNames=Array.from({length:12},(_,i)=>[String(i+1),new Intl.DateTimeFormat(locale,{month:'long',timeZone:'UTC'}).format(new Date(Date.UTC(2027,i,1)))]);
+ let activityMonth='1';
+ function renderOperations(){
+  operations.replaceChildren(el('h2',t('5 · Locali e studi · pianificazione attività','5 · Commercial spaces · activity planning')));
+  if(dirty){note(operations,'Applica le impostazioni per aggiornare la pianificazione.','Apply settings to update activity planning.');return;}
+  note(operations,'ANTEPRIMA DI PIANIFICAZIONE · stessi contratti della simulazione, solo in memoria. Non è ancora il PMS commerciale: nessun salvataggio, incasso registrato, fattura o scadenza di pagamento.','PLANNING PREVIEW · same contracts as the simulation, in memory only. Not yet a commercial PMS: no saving, recorded receipts, invoices or payment due dates.');
+  const plan=createCommercialActivityPlan(model);
+  table(operations,[t('Mese','Month'),t('Contrattuali IVA inclusa','Contractual incl. VAT'),t('Attesi IVA inclusa','Expected incl. VAT'),t('Attesi senza IVA','Expected excl. VAT'),t('Fasce libere','Free slots')],plan.months.map(m=>[monthNames[m.month-1][1],money(m.contractualGross),money(m.expectedGross),money(m.expectedNet),m.free]));
+  const select=field(operations,t('Mese attività','Activity month'),'activityMonth',{value:activityMonth,options:monthNames});
+  const detail=el('div');operations.append(detail);
+  function showMonth(){activityMonth=select.value;const m=plan.months[Number(activityMonth)-1];detail.replaceChildren();
+   note(detail,'Corrispettivi per competenza, non incassi: il mensile è ripartito per giorni di contratto; il consumo conta le fasce non chiuse. IVA sconosciuta: N/A nel mese interessato. Non sono appuntamenti o dati sanitari.','Consideration by accrual period, not receipts: monthly fees are prorated by contract days; per-use fees count slots excluding closures. Unknown VAT: N/A in the affected month. No appointments or health data.');
+   if(!m.contracts.length)note(detail,'Nessun contratto nel mese selezionato.','No contracts in the selected month.');
+   else table(detail,[t('Contratto / codice','Contract / code'),t('Stanza','Room'),t('Tariffa','Tariff'),t('Unità fatturabili','Billing units'),t('Contrattuali IVA inclusa','Contractual incl. VAT'),t('Attesi senza IVA','Expected excl. VAT')],m.contracts.map(a=>[a.id+' / '+a.code,a.roomId,modes[a.mode],decimal(a.units),money(a.contractualGross),money(a.expectedNet)]));
+   const dates=[...m.starts.map(a=>t('Inizio','Start')+': '+a.start+' · '+a.id+' / '+a.code),...m.ends.map(a=>t('Termine','End')+': '+a.end+' · '+a.id+' / '+a.code)].sort();
+   detail.append(el('h3',t('Date contrattuali del mese','Contract dates this month')));
+   if(dates.length){const list=el('ul');dates.forEach(d=>list.append(el('li',d)));detail.append(list);}else note(detail,'Nessun inizio o termine contrattuale nel mese.','No contract starts or ends this month.');
+   const edit=el('a',t('Modifica i contratti dello scenario ↑','Edit scenario contracts ↑'));edit.href='#cm-contracts';detail.append(edit);
+  }
+  select.addEventListener('change',showMonth);showMonth();
+ }
+
+ function markDirty(){dirty=true;result=null;renderOperations();outputs.replaceChildren(el('h2',t('Impostazioni da applicare','Settings not applied')),el('p',t('Premi “Applica impostazioni e calcola” per aggiornare i risultati.','Press “Apply settings and calculate” to update results.')));announce(t('Impostazioni modificate: applicale prima di gestire contratti e chiusure.','Settings changed: apply them before editing contracts and closures.'));}
  setupForm.addEventListener('input',markDirty);setupForm.addEventListener('change',markDirty);
  function options(input,rows,selected){input.replaceChildren();for(const [v,label]of rows){const o=el('option',label);o.value=v;input.append(o);}input.value=selected??rows[0]?.[0]??'';}
  function syncSelectors(){
   options(c.room,model.rooms.map(r=>[r.id,r.id]));options(closureRoom,[['*',t('Tutte le stanze','All rooms')],...model.rooms.map(r=>[r.id,r.id])]);contractSlots.replaceChildren();slotChecks=checks(contractSlots,t('Fasce riservate','Reserved slots'),'contractSlots',model.slots.map(s=>[s.id,`${s.id} · ${s.start}–${s.end}`]),[model.slots[0].id]);
  }
- function resetContract(){editingId=null;c.code.value='P'+String(model.assignments.length+1).padStart(2,'0');c.mode.value='';c.amount.value='';c.vat.value='unknown';c.rate.value='';c.start.value=`${model.year}-01-01`;c.end.value=`${model.year}-12-31`;c.expected.value='100';contractDays.set([model.openDays[0]]);slotChecks?.set([model.slots[0].id]);saveContract.textContent=t('Aggiungi contratto e calcola','Add contract and calculate');tariffVisibility();}
+ function resetContract(){contractDirty=false;editingId=null;c.code.value='P'+String(model.assignments.length+1).padStart(2,'0');c.mode.value='';c.amount.value='';c.vat.value='unknown';c.rate.value='';c.start.value=`${model.year}-01-01`;c.end.value=`${model.year}-12-31`;c.expected.value='100';contractDays.set([model.openDays[0]]);slotChecks?.set([model.slots[0].id]);saveContract.textContent=t('Aggiungi contratto e calcola','Add contract and calculate');tariffVisibility();}
  function syncSetup(){
   const p=model.property;for(const [key,value]of Object.entries({year:model.year,ownership:p.ownership,value:p.value,acquisitionCosts:p.acquisitionCosts,works:p.works,otherCapital:p.otherCapital,newAmount:p.newLoan.amount,newRate:p.newLoan.rate,newYears:p.newLoan.years,oldAmount:p.existingLoan.amount,oldService:p.existingLoan.annualService,fixedAnnual:model.costs.fixedAnnual,variablePct:model.costs.variablePct,roomCount:model.rooms.length}))f[key].value=String(value);
   opening.set(model.openDays);slotInputs(model.slots);syncSelectors();resetContract();
  }
  function replaceModel(next,source){
   if(model.assignments.length&&source==='demo'&&!window.confirm(t('Sostituire lo scenario con l’esempio fittizio?','Replace your scenario with the fictional example?')))return;
-  model=next;origin=source;dirty=false;syncSetup();render();announce(source==='demo'?t('Esempio fittizio caricato. Scegli il trattamento IVA per calcolare i risultati netti.','Fictional example loaded. Select VAT treatment to calculate net results.'):t('Simulazione vuota pronta.','Blank simulation ready.'));if(source==='demo')outputs.scrollIntoView?.({block:'start'});
+  model=next;origin=source;dirty=false;contractDirty=false;closureDirty=false;syncSetup();render();announce(source==='demo'?t('Esempio fittizio caricato. Scegli il trattamento IVA per calcolare i risultati netti.','Fictional example loaded. Select VAT treatment to calculate net results.'):t('Simulazione vuota pronta.','Blank simulation ready.'));if(source==='demo')outputs.scrollIntoView?.({block:'start'});
  }
  function commit(next){if(dirty){announce(t('Applica prima le impostazioni.','Apply settings first.'),true);return false;}try{calculateCommercial(next);model=next;render();announce(t('Scenario aggiornato.','Scenario updated.'));return true;}catch(e){showError(e);return false;}}
  const numeric=input=>input.value.trim()===''?NaN:Number(input.value);
@@ -105,7 +136,7 @@ export function mountCommercial(root,{english=false}={}){
   const assignment={id,roomId:c.room.value,code:c.code.value.trim(),mode:c.mode.value,amount:numeric(c.amount),vat:{status:c.vat.value,rate:c.vat.value==='taxable'?numeric(c.rate):null},start:c.start.value,end:c.end.value,expectedPct:numeric(c.expected),weekdays:contractDays.values().map(Number),slotIds:slotChecks.values()};
   next.assignments=next.assignments.filter(a=>a.id!==id);next.assignments.push(assignment);if(commit(next))resetContract();
  });
- closureForm.addEventListener('submit',event=>{event.preventDefault();if(!closureForm.reportValidity())return;const next=structuredClone(model);next.closures.push({roomId:closureRoom.value,start:closureStart.value,end:closureEnd.value});commit(next);});
+ closureForm.addEventListener('submit',event=>{event.preventDefault();if(!closureForm.reportValidity())return;const next=structuredClone(model);next.closures.push({roomId:closureRoom.value,start:closureStart.value,end:closureEnd.value});if(commit(next))closureDirty=false;});
  function render(){
   result=calculateCommercial(model);contractList.replaceChildren();closureList.replaceChildren();outputs.replaceChildren(el('h2',t('4 · Risultati dello scenario applicato','4 · Applied scenario results')));
   note(outputs,origin==='demo'?'DATI DIMOSTRATIVI modificabili · nessuna fonte di mercato.':'INPUT UTENTE · valori non verificati dal sito.',origin==='demo'?'EDITABLE FICTIONAL INPUTS · no market source.':'USER INPUTS · not verified by the site.');
@@ -145,10 +176,10 @@ export function mountCommercial(root,{english=false}={}){
   note(calendar,'Mostra solo giorni di apertura. Date fuori dall’anno selezionato e conflitti fuori da tale anno non sono valutati. Chiuso non significa contratto sospeso.','Only opening days are shown. Dates and conflicts outside the selected year are not evaluated. Closed does not mean a suspended contract.');
   const month=field(calendar,t('Mese da visualizzare','Month to display'),'calendarMonth',{value:'1',options:Array.from({length:12},(_,i)=>[String(i+1),new Intl.DateTimeFormat(locale,{month:'long',timeZone:'UTC'}).format(new Date(Date.UTC(model.year,i,1)))])});const room=field(calendar,t('Stanza da visualizzare','Room to display'),'calendarRoom',{value:model.rooms[0].id,options:model.rooms.map(r=>[r.id,r.id])});const calendarRows=el('div');calendar.append(calendarRows);
   function showCalendar(){calendarRows.replaceChildren();const mm=String(month.value).padStart(2,'0');const rows=result.calendar.filter(r=>r.date.slice(5,7)===mm&&r.roomId===room.value);table(calendarRows,[t('Data','Date'),t('Stanza','Room'),t('Fascia','Slot'),t('Stato / codice','Status / code')],rows.map(r=>{const slot=model.slots.find(s=>s.id===r.slotId);return [r.date,r.roomId,`${r.slotId} ${slot.start}–${slot.end}`,r.closed?t('Chiuso','Closed')+(r.code?' · '+r.code:''):r.code?`${t('Riservato','Reserved')} · ${r.code}`:t('Libero','Free')];}));}
-  month.addEventListener('change',showCalendar);room.addEventListener('change',showCalendar);showCalendar();outputs.append(calendar);
+  month.addEventListener('change',showCalendar);room.addEventListener('change',showCalendar);showCalendar();outputs.append(calendar);renderOperations();
  }
  syncSetup();render();
- return {getModel:()=>structuredClone(model),getResult:()=>result,replaceModel};
+ return {getModel:()=>structuredClone(model),getResult:()=>result,hasUnappliedChanges:()=>dirty||contractDirty||closureDirty,replaceModel};
 }
 
-if(typeof document!=='undefined')for(const root of document.querySelectorAll('[data-commercial-app]'))mountCommercial(root,{english:document.documentElement.lang==='en'});
+if(typeof document!=='undefined')for(const root of document.querySelectorAll('[data-commercial-app]'))mountCommercial(root,{english:document.documentElement.lang==='en',onTransfer:model=>{stageCommercialTransfer(model,window.sessionStorage);window.location.assign(document.documentElement.lang==='en'?'/en/gestione-commerciale/':'/gestione-commerciale/');}});

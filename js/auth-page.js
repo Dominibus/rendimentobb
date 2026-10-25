@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, setPersistence, browserSessionPersistence,
   browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
-import { safeAuthDestination, createAuthActionGuard } from './auth-safety.js?v=20261012-rc106';
+import { safeAuthDestination, createAuthActionGuard } from './auth-safety.js?v=20261025-rc196';
 
 const auth = getAuth(app), db = getFirestore(app), guard = createAuthActionGuard();
 const $ = id => document.getElementById(id);

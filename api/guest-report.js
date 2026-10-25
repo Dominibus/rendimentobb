@@ -1,3 +1,4 @@
+import {createCommercialWorkspaceHandler} from '../lib/commercial-workspace-service.js';
 import {Resend} from "resend";
 import {sendUrgentHostNotification} from "../lib/pms-urgent-email.js";
 import {createHostBookingHandler} from "../lib/pms-booking-service.js";
@@ -62,6 +63,7 @@ export default async function handler(req, res){
   }
 
   const body = req.body || {};
+  if(body.action === "commercial_workspace") return createCommercialWorkspaceHandler({getFirestore,verifyToken:token=>admin.auth().verifyIdToken(token,true)})(req,res);
   if(body.action === "host_booking") return hostBookingHandler(req, res);
   const bookingId = cleanText(body.bookingId, 128);
   const token = cleanText(body.token, 256);

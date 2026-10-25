@@ -49,9 +49,9 @@ Avvia simulazione
 <p data-it="L’essenziale &amp; oltre." data-en="The essentials &amp; beyond.">L’essenziale &amp; oltre.</p>
 
 <p
-data-it="Strumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti."
+data-it="Strumenti per analizzare investimenti e gestire B&B, locali e studi, con ipotesi e risultati espliciti."
 data-en="Tools for property analysis and B&B operations, with clear assumptions and results.">
-Strumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti.
+Strumenti per analizzare investimenti e gestire B&B, locali e studi, con ipotesi e risultati espliciti.
 </p>
 
 </div>
@@ -124,6 +124,7 @@ data-en="Properties">
 Immobili
 </a>
 <a href="/immobili-commerciali/" data-it="Locali e studi · MVP pubblico" data-en="Commercial units and rooms · public MVP">Locali e studi · MVP pubblico</a>
+<a href="/gestione-commerciale/" data-it="Gestione locali e studi" data-en="Commercial workspace">Gestione locali e studi</a>
 
 
 </div>

@@ -6,3 +6,6 @@
 @media(max-width:800px){.cm-fields,.cm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.cm-card{padding:20px}.cm-slot{grid-template-columns:1fr 1fr}.cm-slot button{grid-column:1/-1}}
 @media(max-width:520px){.cm-page main{padding:20px 14px 36px}.cm-page .cm-hero{padding-top:18px}.cm-page h1{font-size:2.25rem}.cm-fields,.cm-metrics{grid-template-columns:1fr}.cm-card{padding:18px 15px;border-radius:14px}.cm-actions{flex-direction:column}.cm-actions button,.cm-actions a{width:100%}.cm-metrics dd{font-size:1.55rem}}
 @media(prefers-reduced-motion:reduce){.cm-page *{scroll-behavior:auto!important}}
+
+/* RC195: keep the calendar readable without extending the entire mobile page. */
+.cm-page #cm-operations{scroll-margin-top:150px}.cm-page #cm-results .cm-table-scroll:last-child{max-height:480px}.cm-page #cm-results .cm-table-scroll:last-child thead{position:sticky;top:0;z-index:1}

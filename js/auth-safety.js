@@ -7,7 +7,7 @@ export function safeAuthDestination(redirect, city, origin) {
   try {
     const url = new URL(redirect, origin);
     if (url.origin !== origin || url.username || url.password || !['http:', 'https:'].includes(url.protocol)) return '/dashboard/';
-    if (!/^\/(?:$|(?:dashboard|tool|immobili|market|academy|roi-bnb|mutui)(?:\/|$))/.test(url.pathname)) return '/dashboard/';
+    if (!/^\/(?:$|(?:(?:en\/)?gestione-commerciale|dashboard|tool|immobili|market|academy|roi-bnb|mutui)(?:\/|$))/.test(url.pathname)) return '/dashboard/';
     return `${url.pathname}${url.search}${url.hash}`;
   } catch { return '/dashboard/'; }
 }

@@ -28,7 +28,7 @@ test('every page exposing the shared Assistant has a centralized loader fallback
  for(const url of await htmlFiles()){
   const html=await readFile(url,'utf8');
   if(html.includes('/js/header.js')){covered++;const tags=html.match(/<script\b[^>]*src="[^"]*chatbot-loader\.js[^\"]*"[^>]*>/g)||[];assert.ok(tags.length<=1,`${url.pathname}: duplicate explicit loader`);}
-  else if(/\/(?:en\/)?(?:demo\/(?:investment-analytics|hospitality-pms)|immobili-commerciali)\/index\.html$/.test(url.pathname)){
+  else if(/\/(?:en\/)?(?:demo\/(?:investment-analytics|hospitality-pms)|immobili-commerciali|gestione-commerciale)\/index\.html$/.test(url.pathname)){
    // Isolated public tools use the static shell without account/chatbot loading.
    assert.match(html,/src="\/js\/public-shell\.js/);
    assert.doesNotMatch(html,/src="[^"]*(?:firebase|chatbot-loader|\/js\/header\.js)/i);

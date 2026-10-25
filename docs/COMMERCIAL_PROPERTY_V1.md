@@ -1,3 +1,5 @@
+> RC196: questo documento descrive il motore e il simulatore pubblico in memoria. Il PMS dedicato ora salva scenari e gestione in un archivio separato; vedere RC196_RESPONSO_SEI_PROFILI.md e le istruzioni RC196. I limiti di assenza salvataggi delle sezioni precedenti si riferiscono al simulatore pubblico, non al nuovo PMS.
+
 # Modello commerciale v1 — RC193
 
 ## Contratto e isolamento

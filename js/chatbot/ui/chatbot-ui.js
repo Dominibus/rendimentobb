@@ -1408,6 +1408,12 @@ function showThinking(){
       .forEach(action => {
 
         // Fixed internal route only: no arbitrary URL provided by a response.
+        if(action?.type==='open_commercial_workspace'){
+          const link=document.createElement('a');link.className='rb-quick-btn';
+          link.href=language==='en'?'/en/gestione-commerciale/':'/gestione-commerciale/';
+          link.textContent=language==='en'?'Open commercial workspace':'Apri il PMS locali e studi';
+          container.appendChild(link);return;
+        }
         if(action?.type==='open_commercial_planner'){
           const link=document.createElement('a');
           link.className='rb-quick-btn';
