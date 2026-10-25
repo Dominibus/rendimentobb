@@ -2,6 +2,8 @@ import test from 'node:test';import assert from 'node:assert/strict';import {rea
 test('RC192 actual UI renders real aggregates, changes exact filters and language without external calls',async()=>{
  class Element{
   constructor(tag=''){this.tag=tag;this.children=[];this.dataset={};this.attributes={};this.listeners={};this.classList={add:()=>{}};this.value='';this.textContent='';}
+  before(){}
+  removeAttribute(name){delete this.attributes[name];}
   append(...nodes){this.children.push(...nodes);}
   replaceChildren(...nodes){this.children=nodes;}
   addEventListener(name,fn){this.listeners[name]=fn;}

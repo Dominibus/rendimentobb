@@ -780,6 +780,7 @@ SAFE
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
 <link rel="stylesheet" href="/css/value-clarity.css?v=20261022-rc180">
 <link rel="stylesheet" href="/css/territorial-benchmarks.css?v=20261023-rc192">
+<link rel="stylesheet" href="/css/municipality-picker.css?v=20261025-rc198">
 </head>
 
 <body class="tool-page">
@@ -1138,18 +1139,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
         <!-- CITY -->
         <div class="input-group">
 
-          <label for="market-city"
-           data-it="Mercato da analizzare"
-           data-en="Market to analyze">
-         </label>
 
-          <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
-            <option value="" data-it="Seleziona città" data-en="Select city">Seleziona città</option>
-            <option value="milano" data-it="Milano" data-en="Milan">Milano</option>
-            <option value="roma" data-it="Roma" data-en="Rome">Roma</option>
-            <option value="napoli" data-it="Napoli" data-en="Naples">Napoli</option>
-            <option value="firenze" data-it="Firenze" data-en="Florence">Firenze</option>
-          </select>
 
           <input  
             type="text"  
@@ -1162,10 +1152,24 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
             style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid #e2e8f0;"
           />
 
+          <details class="rb-municipality-tool-label"><summary data-it="Quattro esempi illustrativi (facoltativi)" data-en="Four illustrative examples (optional)">Quattro esempi illustrativi (facoltativi)</summary>
+          <label for="market-city"
+           data-it="Esempi illustrativi (facoltativi)"
+           data-en="Illustrative examples (optional)">
+         </label>
+
+          <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
+            <option value="" data-it="Nessun esempio selezionato" data-en="No example selected">Nessun esempio selezionato</option>
+            <option value="milano" data-it="Milano" data-en="Milan">Milano</option>
+            <option value="roma" data-it="Roma" data-en="Rome">Roma</option>
+            <option value="napoli" data-it="Napoli" data-en="Naples">Napoli</option>
+            <option value="firenze" data-it="Firenze" data-en="Florence">Firenze</option>
+          </select>
+          </details>
           <div id="location-helper" role="status"
           style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="I riferimenti di esempio della città vengono caricati automaticamente. Verifica tariffa e occupazione del tuo immobile."
-          data-en="Illustrative city references are loaded automatically. Verify your property’s nightly rate and occupancy.">
+          data-it="Cerca il comune del tuo immobile. Gli esempi illustrativi non sono dati di mercato verificati."
+          data-en="Find your property’s municipality. Illustrative examples are not verified market data.">
          </div>
 
         </div>
@@ -2378,6 +2382,7 @@ setTimeout(()=>{
 <script src="/js/investment-workspace.js?v=20261006-rc43"></script>
 <script type="module" src="/js/trial-invite.js?v=20261020-rc161"></script>
 <script type="module" src="/js/journey-guide.js?v=20261021-rc172"></script>
-<script type="module" src="/js/territorial-benchmark-ui.js?v=20261023-rc192"></script>
+<script type="module" src="/js/territorial-benchmark-ui.js?v=20261025-rc198"></script>
+<script type="module" src="/js/municipality-tool-bootstrap.js?v=20261025-rc198"></script>
 </body>
 </html>

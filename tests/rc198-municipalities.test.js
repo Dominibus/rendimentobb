@@ -1,0 +1,47 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync}from'node:fs';
+import {parseMunicipalities,searchMunicipalities,municipalityCoverage,municipalityLocation,municipalityToolURL}from'../js/municipalities.js';
+const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');const data=JSON.parse(read('data/geography/municipalities-it.json'));const rows=parseMunicipalities(data);
+test('RC198 complete ISTAT register has unique current identities including the new merger and Sardinia',()=>{
+ assert.equal(rows.length,7894);assert.equal(new Set(rows.map(r=>r.istat)).size,7894);assert.equal(new Set(rows.map(r=>r.region)).size,20);
+ assert.ok(rows.some(r=>r.istat==='024129'&&r.name==='Castegnero Nanto'));assert.ok(!rows.some(r=>['Castegnero','Nanto'].includes(r.name)));assert.ok(rows.some(r=>r.istat==='118006'&&r.name==='Cagliari'));
+ assert.equal(data.referenceDate,'2026-02-21');assert.match(data.sourceURL,/^https:\/\/www.istat.it\//);
+});
+for(const [query,name,prov]of [['Pisa','Pisa','PI'],['Volla','Volla','NA'],['aglie','Agliè','TO'],['Bozen','Bolzano','BZ'],['Castro BG','Castro','BG'],['Castro LE','Castro','LE'],['Rome','Roma','RM'],['050026','Pisa','PI']])test('RC198 municipality search: '+query,()=>{const found=searchMunicipalities(rows,query);assert.ok(found.some(r=>r.name===name&&r.province===prov));assert.ok(found.length<=8);});
+test('RC198 invalid, long and empty queries cannot become arbitrary municipality identities',()=>{assert.deepEqual(searchMunicipalities(rows,'x'),[]);assert.deepEqual(searchMunicipalities(rows,'<script>alert(1)</script>'),[]);const altered=structuredClone(data);altered.municipalities[1]=altered.municipalities[0];assert.throws(()=>parseMunicipalities(altered));});
+test('RC198 coverage is exact municipality identity, never province, region or nearest city',()=>{
+ for(const [name,key]of [['Roma','roma'],['Napoli','napoli'],['Milano','milano'],['Firenze','firenze']])assert.equal(municipalityCoverage(rows.find(r=>r.name===name)),key);
+ for(const name of ['Pisa','Volla','Portici','Fiumicino','Cagliari'])assert.equal(municipalityCoverage(rows.find(r=>r.name===name)),null);
+ const pisa=rows.find(r=>r.name==='Pisa');assert.equal(municipalityLocation(pisa),'Pisa (PI)');assert.equal(municipalityToolURL(pisa),'/tool/?municipality=050026');
+});
+class E{
+ constructor(tag=''){this.tag=tag;this.children=[];this.dataset={};this.attrs={};this.listeners={};this.classList={add:()=>{}};this.value='';this.textContent='';this.hidden=false;}
+ append(...xs){xs.forEach(x=>{x.parent=this;this.children.push(x);});}before(x){this.siblingBefore=x;}replaceChildren(...xs){this.children=[];this.textContent='';this.append(...xs);}setAttribute(k,v){this.attrs[k]=v;}removeAttribute(k){delete this.attrs[k];}addEventListener(n,f){(this.listeners[n]??=[]).push(f);}async fire(n,event={}){for(const f of this.listeners[n]||[])await f(event);}contains(x){return x===this||this.children.some(c=>c.contains?.(x));}text(){return this.textContent+this.children.map(c=>c.text?.()||c.textContent||'').join(' ');}find(fn){if(fn(this))return this;for(const c of this.children){const r=c.find?.(fn);if(r)return r;}}querySelector(){return null;}
+}
+const tick=async()=>{await new Promise(setImmediate);await new Promise(setImmediate);};
+test('RC198 actual picker supports accents, province disambiguation, keyboard selection and safe text rendering',async()=>{
+ const {mountMunicipalityPicker}=await import('../js/municipality-picker.js');const events={};globalThis.document={createElement:t=>new E(t),createTextNode:text=>({textContent:text}),addEventListener:(n,f)=>events[n]=f};globalThis.window={currentLang:'it'};
+ const host=new E();let selected=null;const picker=mountMunicipalityPicker(host,{load:async()=>rows,onSelect:r=>selected=r});picker.input.value='Pisa';await picker.input.fire('input');await tick();assert.equal(picker.input.attrs['aria-expanded'],'true');let prevented=false;await picker.input.fire('keydown',{key:'ArrowDown',preventDefault:()=>prevented=true});assert.ok(prevented);assert.ok(picker.input.attrs['aria-activedescendant']);await picker.input.fire('keydown',{key:'Enter',preventDefault:()=>{}});assert.equal(selected.istat,'050026');assert.equal(picker.input.attrs['aria-expanded'],'false');assert.match(picker.input.value,/Pisa \(PI\).*Toscana/);
+ picker.input.value='Castro LE';await picker.input.fire('input');await tick();const result=host.find(n=>n.attrs?.role==='option');assert.match(result.textContent,/Castro \(LE\)/);await result.fire('click');assert.equal(selected.province,'LE');
+ picker.input.value='<img src=x onerror=1>';await picker.input.fire('input');await tick();assert.match(host.text(),/Nessun comune trovato/);assert.equal(picker.getSelection(),null);delete globalThis.document;delete globalThis.window;
+});
+test('RC198 selecting unsupported Pisa removes previous Napoli aggregates and links the exact municipality to the tool',async()=>{
+ const root=new E('section');root.dataset.city='napoli';const calls=[],events={};globalThis.window={currentLang:'it',location:{search:'',href:'https://www.rendimentobb.it/market/'},history:{replaceState:(_a,_b,url)=>calls.push(['history',url])}};
+ globalThis.document={querySelectorAll:()=>[root],getElementById:()=>null,createElement:t=>new E(t),createTextNode:text=>({textContent:text}),addEventListener:(n,f)=>events[n]=f};
+ globalThis.fetch=async url=>{calls.push(['fetch',url]);return{ok:true,json:async()=>url.includes('municipalities-it')?data:JSON.parse(read('data/territorial/'+(url.includes('roma.json')?'roma':'napoli')+'.json'))};};
+ await import('../js/territorial-benchmark-ui.js?rc198-flow');await tick();assert.match(root.text(),/Mediana del prezzo/);
+ const input=root.siblingBefore.find(n=>n.tag==='input');input.value='Pisa';await input.fire('input');await tick();const option=root.siblingBefore.find(n=>n.attrs?.role==='option');await option.fire('click');await tick();assert.match(root.text(),/Pisa \(PI\)/);assert.match(root.text(),/Dati territoriali non disponibili/);assert.doesNotMatch(root.text(),/Mediana del prezzo|Inside Airbnb/);assert.equal(root.find(n=>n.tag==='a').href,'/tool/?municipality=050026');assert.ok(!calls.some(c=>c[0]==='fetch'&&c[1].includes('pisa.json')));
+ input.value='Roma';await input.fire('input');await tick();await root.siblingBefore.find(n=>n.attrs?.role==='option').fire('click');await tick();assert.match(root.text(),/Mediana del prezzo/);assert.ok(calls.some(c=>c[0]==='fetch'&&c[1].includes('roma.json')));
+ window.currentLang='en';events.rb_language_changed();assert.match(root.text(),/DOCUMENTED SOURCE/);delete globalThis.window;delete globalThis.document;delete globalThis.fetch;
+});
+test('RC198 tool selection updates existing calculation location, exact identity and URL without fabricating financial inputs',async()=>{
+ const {applyMunicipalityToTool}=await import('../js/municipality-tool.js');const pisa=rows.find(r=>r.name==='Pisa');const values=new Map(),events=[];const input={value:'',dataset:{},dispatchEvent:e=>events.push(e.type)};const select={value:'roma'};
+ globalThis.document={getElementById:id=>id==='custom-location'?input:id==='market-city'?select:null,dispatchEvent:e=>events.push([e.type,e.detail?.istat])};let targetURL;globalThis.window={location:{href:'https://www.rendimentobb.it/tool/?propertyMode=owned&municipality=058091'},sessionStorage:{setItem:(k,v)=>values.set(k,v)},localStorage:{setItem:(k,v)=>values.set(k,v)},history:{replaceState:(_a,_b,u)=>targetURL=u}};
+ applyMunicipalityToTool(pisa);assert.equal(input.value,'Pisa (PI)');assert.equal(input.dataset.municipality,'050026');assert.equal(window.currentCity,'pisa');assert.equal(select.value,'');assert.equal(values.get('tool_city'),'pisa');assert.ok(events.includes('input'));assert.ok(events.some(e=>Array.isArray(e)&&e[0]==='rb_municipality_changed'&&e[1]==='050026'));assert.equal(targetURL,'/tool/?propertyMode=owned&municipality=050026');delete globalThis.window;delete globalThis.document;
+});
+test('RC198 the tool bootstraps the official municipality from a Market deep link and keeps the owned-property mode',async()=>{
+ const input=new E('input');input.id='custom-location';input.value='';input.dispatchEvent=e=>{input.fire(e.type,e);};const select=new E('select');select.value='roma';const events={};let url;
+ globalThis.window={currentLang:'it',location:{search:'?propertyMode=owned&municipality=050026',href:'https://www.rendimentobb.it/tool/?propertyMode=owned&municipality=050026'},history:{replaceState:(_a,_b,u)=>url=u},sessionStorage:{setItem:()=>{}},localStorage:{setItem:()=>{}}};
+ globalThis.document={getElementById:id=>id==='custom-location'?input:id==='market-city'?select:null,createElement:t=>new E(t),createTextNode:text=>({textContent:text}),addEventListener:(n,f)=>(events[n]??=[]).push(f),dispatchEvent:e=>{for(const f of events[e.type]||[])f(e);}};globalThis.fetch=async()=>({ok:true,json:async()=>data});
+ await import('../js/municipality-tool-bootstrap.js?rc198-url-test');await tick();assert.equal(input.value,'Pisa (PI)');assert.equal(input.dataset.municipality,'050026');assert.equal(window.currentCity,'pisa');assert.equal(select.value,'');assert.equal(url,'/tool/?propertyMode=owned&municipality=050026');
+ input.value='Pisa modificata';await input.fire('input');await tick();assert.equal(input.dataset.municipality,undefined);assert.equal(url,'/tool/?propertyMode=owned');delete globalThis.window;delete globalThis.document;delete globalThis.fetch;
+});
