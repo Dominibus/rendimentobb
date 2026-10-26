@@ -1,5 +1,5 @@
 import {loadMunicipalities,municipalityLocation} from './municipalities.js?v=20261025-rc198';
-import {mountMunicipalityPicker} from './municipality-picker.js?v=20261025-rc198';
+import {mountMunicipalityPicker} from './municipality-picker.js?v=20261026-rc199';
 import {applyMunicipalityToTool,setMunicipalityURL} from './municipality-tool.js?v=20261025-rc198';
 const input=document.getElementById('custom-location');
 if(input){

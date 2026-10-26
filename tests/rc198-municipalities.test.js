@@ -45,3 +45,13 @@ test('RC198 the tool bootstraps the official municipality from a Market deep lin
  await import('../js/municipality-tool-bootstrap.js?rc198-url-test');await tick();assert.equal(input.value,'Pisa (PI)');assert.equal(input.dataset.municipality,'050026');assert.equal(window.currentCity,'pisa');assert.equal(select.value,'');assert.equal(url,'/tool/?propertyMode=owned&municipality=050026');
  input.value='Pisa modificata';await input.fire('input');await tick();assert.equal(input.dataset.municipality,undefined);assert.equal(url,'/tool/?propertyMode=owned');delete globalThis.window;delete globalThis.document;delete globalThis.fetch;
 });
+test('RC199 regional shortcut cancels a pending municipality search and keeps IT/EN selection',async()=>{
+ const {mountMunicipalityPicker}=await import('../js/municipality-picker.js');const events={};let release;
+ globalThis.document={createElement:t=>new E(t),createTextNode:text=>({textContent:text}),addEventListener:(n,f)=>events[n]=f};globalThis.window={currentLang:'it'};
+ const host=new E();let selected;const picker=mountMunicipalityPicker(host,{load:()=>new Promise(resolve=>release=resolve),onSelect:r=>selected=r});
+ picker.input.value='Roma';picker.input.fire('input');await tick();
+ const capital=host.find(n=>n.tag==='select');capital.value='001272';await capital.fire('change');assert.equal(selected.name,'Torino');assert.match(picker.input.value,/Torino/);
+ release(rows);await tick();assert.equal(picker.input.attrs['aria-expanded'],'false');assert.equal(picker.getSelection().istat,'001272');
+ window.currentLang='en';events.rb_language_changed();assert.equal(capital.value,'001272');assert.ok(host.text().includes('regional capital'));
+ delete globalThis.window;delete globalThis.document;
+});

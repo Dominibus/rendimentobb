@@ -1,3 +1,4 @@
+import {illustrativeCityReference,referenceCity} from './city-reference.js?v=20261026-rc199';
 import "./data-provenance.js?v=20261023-rc191";
 import {portfolioBasis} from './portfolio-basis.js?v=20261020-rc161';
 import './dashboard-workspace-layout.js?v=20261020-rc161';
@@ -1225,6 +1226,7 @@ dashboardDebug(
   citySelect.addEventListener("change",(e)=>{
     const newCity = e.target.value;
     updateMarketHero(newCity);
+    if(lastStatsArguments)renderStats(...lastStatsArguments);
     dashboardDebug("Dashboard market changed");
   });
 }
@@ -2169,7 +2171,9 @@ function renderPortfolioManager(portfolioAnalyses = []){
 
 // ================= STATS =================
 
+let lastStatsArguments=null;
 function renderStats(count,totalROI,totalCapital,totalCashflow,portfolioAnalyses = []){
+lastStatsArguments=Array.from(arguments);
 
 // ================= SAFE CALC =================
 const scenarioMetrics = summarizeInvestments(window.dashboardSimulations || []);
@@ -2206,13 +2210,9 @@ const confirmedBreakEven = confirmedYearlyCashflow > 0 && confirmedEquity > 0
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
-const cityMarket =
-window.marketData?.[selectedCity] ||
-window.marketData?.["italy"] ||
-{ roi:8, occupancy:60, adr:120 };
-
-const marketROI = cityMarket.roi;
-const trend = avgROI >= marketROI ? "↑" : "↓";
+const cityMarket=illustrativeCityReference(window.marketData,selectedCity);
+const marketROI=cityMarket?.roi??null;
+const trend=marketROI===null?'':avgROI>=marketROI?'↑':'↓';
 
 // ================= CALCOLI =================
 const monthlyProfit = avgCashflow === null ? null : avgCashflow / 12;
@@ -2555,7 +2555,7 @@ if(userRoiEl){
 }
 
 if(performanceEl){
-  performanceEl.textContent = avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
+  performanceEl.textContent = avgROI === null || marketROI === null ? t("Riferimento non disponibile", "Reference unavailable") : avgROI >= marketROI
     ? t("Sopra il riferimento dimostrativo","Above the illustrative reference")
     : t("Sotto il riferimento dimostrativo","Below the illustrative reference");
 
@@ -2605,7 +2605,7 @@ color:#64748b;
 ">
 
 🔥 ${
-avgROI === null ? t("Dati non disponibili", "Data unavailable") : avgROI >= marketROI
+avgROI === null || marketROI === null ? t("Riferimento non disponibile", "Reference unavailable") : avgROI >= marketROI
 ? `+${(avgROI - marketROI).toFixed(1)} ${t("punti percentuali", "percentage points")} ${t(
 "rispetto all’ipotesi interna; basi non comparabili",
 "relative to the internal assumption; bases not comparable"
@@ -3510,7 +3510,7 @@ window.goToUpgrade = function(){
 
 function updateMarketHero(city){
 
-city = safeCity(city);
+city = referenceCity(safeCity(city));
 
 const hero = document.getElementById("market-hero-bg");
 const title = document.getElementById("market-hero-title");
@@ -3542,10 +3542,11 @@ firenze:["Scenario illustrativo su Firenze", "Verifica prezzi e domanda nella zo
 
 /* ================= MARKET STATS ================= */
 
-const market = window.marketData[city] || window.marketData["italy"];
+const market = illustrativeCityReference(window.marketData,city);
 
 const stats = document.querySelector(".market-hero-stats");
 
+if(stats&&!market)stats.textContent=t("Dati territoriali non disponibili per la città selezionata", "Territorial data unavailable for the selected city");
 if(stats && market){
 
 stats.innerHTML = `
@@ -3578,35 +3579,15 @@ ${t("Prezzo medio notte","Average nightly rate")}
 `;
 }
 
-/* ================= RANDOM SMART ================= */
-
-if(!images[city]){
-const keys = Object.keys(images);
-city = keys[Math.floor(Math.random()*keys.length)];
-}
-
-if(city === "italy"){
-const keys = Object.keys(images);
-city = keys[Math.floor(Math.random()*keys.length)];
-}
-
-/* ================= IMMAGINE SAFE ================= */
-
-const image = images[city] || images["napoli"];
-hero.style.backgroundImage = `url('${image}')`;
-
-/* ================= TITOLO SAFE ================= */
-
-const cityName = names[city] || "Italia";
-title.innerText = t(
-  "Investire in un B&B a " + cityName,
-  "Investing in a B&B in " + cityName
-);
+const image=images[city];hero.style.backgroundImage=image?`url('${image}')`:'none';
+const chosen=document.getElementById('city-select');const cityName=names[city]||chosen?.selectedOptions?.[0]?.textContent||city;
+if(title)title.innerText=t('Scenari per ','Scenarios for ')+cityName;
 
 /* ================= DESCRIZIONE RANDOM ================= */
 
 const subtitle = hero.querySelector("div div:nth-child(2)");
 
+if(subtitle && !HERO_CONTENT[city]) subtitle.innerText=t("Costruisci lo scenario con i dati del tuo immobile; nessun benchmark locale disponibile.","Build a scenario using your property inputs; no local benchmark available.");
 if(subtitle && HERO_CONTENT[city]){
 
 const randomText =

@@ -1,3 +1,4 @@
+import {territorialCity} from '../js/territorial-benchmarks.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -91,10 +92,10 @@ test('unknown localities never become Rome or another city by geographic guess',
  for(const city of ['Roma','napoli','Milano (MI)','firenze'])assert.ok(context.mapLocationToCity(city));
 });
 test('unknown benchmark is explicitly unavailable and zero revenue is compared as zero',()=>{
- const source=readFileSync(new URL('../js/market-engine.js',import.meta.url),'utf8').replace(/^import .*;\n/,'').replace('export function','function');
+ const source=readFileSync(new URL('../js/market-engine.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replace('export function','function');
  const nodes=new Map();const get=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id)};
- const context=vm.createContext({window:{currentCity:'roma',currentLang:'it',getUserAccess:()=>({isPro:true}),RB_MARKET_DATA:{roma:{price:130,occupancy:.7,annualRevenue:33000},napoli:{price:105,occupancy:.72,annualRevenue:27000}}},document:{getElementById:get,addEventListener(){}}});vm.runInContext(source,context);
- get('custom-location').value='Volla';context.renderMarketBenchmark('roma');assert.equal(get('benchmark-price').textContent,'—');assert.match(get('market-comparison').textContent,/Nessun benchmark/);
+ const context=vm.createContext({territorialCity,window:{currentCity:'roma',currentLang:'it',getUserAccess:()=>({isPro:true}),RB_MARKET_DATA:{roma:{price:130,occupancy:.7,annualRevenue:33000},napoli:{price:105,occupancy:.72,annualRevenue:27000}}},document:{getElementById:get,addEventListener(){}}});vm.runInContext(source,context);
+ get('custom-location').value='Volla';context.renderMarketBenchmark('roma');assert.equal(get('benchmark-price').textContent,'—');assert.match(get('market-comparison').textContent,/Nessun riferimento locale/);
  get('custom-location').value='';context.window.currentRevenue=0;context.renderMarketBenchmark('roma');assert.match(get('market-comparison').innerHTML,/-100.0%/);
 });
 

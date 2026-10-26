@@ -1,3 +1,4 @@
+import {illustrativeCityReference} from '../js/city-reference.js';
 import {portfolioBasis} from '../js/portfolio-basis.js';
 import {readInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
@@ -32,7 +33,7 @@ test('empty portfolio is unknown; recorded zero cashflow remains zero',()=>{
 });
 function render(rows,portfolio=rows,{paid=true,lang="it",email='test@example.invalid'}={}){
  const elements=new Map();const document={getElementById:id=>{if(!elements.has(id))elements.set(id,{style:{},querySelector:()=>null});return elements.get(id);},querySelectorAll:()=>[]};
- const c={financialNumber,summarizeInvestments,portfolioBasis,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
+ const c={illustrativeCityReference,financialNumber,summarizeInvestments,portfolioBasis,document,window:{dashboardSimulations:rows,currentLang:lang,currentPlan:'pro',currentUser:{email}},Intl,setTimeout:()=>{},t:(it,en)=>lang === "en" ? en : it,canViewDashboard:()=>paid,isPro:()=>paid,isInvestor:()=>false,updateDynamicTexts:()=>{}};
  vm.createContext(c);
  const utilities=source.slice(source.indexOf('function formatCurrency('),source.indexOf('// Calendar days'));
  const score=source.slice(source.indexOf('function calculateInvestmentScore('),source.indexOf('// ===============================\n// ROI CHART'));
@@ -68,7 +69,7 @@ test('Free gating remains locked and English formatting stays coherent',()=>{
  const en=render(rows,rows,{lang:'en'});assert.match(en.get('dashboard-kpi').innerHTML,/Average scenario equity ROI/);assert.equal(en.get('kpi-roi').innerText,'0%');assert.match(en.get('dashboard-kpi').innerHTML,/0\/100/);
 });
 test('portfolio cards flag missing values rather than showing measured zeros',()=>{
- const elements={innerHTML:''};const c={financialNumber,summarizeInvestments,document:{getElementById:()=>elements},window:{currentLang:'it'},t:(it)=>it,escapeDashboardHTML:String,Intl};vm.createContext(c);
+ const elements={innerHTML:''};const c={illustrativeCityReference,financialNumber,summarizeInvestments,document:{getElementById:()=>elements},window:{currentLang:'it'},t:(it)=>it,escapeDashboardHTML:String,Intl};vm.createContext(c);
  const utilities=source.slice(source.indexOf('function formatCurrency('),source.indexOf('// Calendar days'));
  const manager=source.slice(source.indexOf('function renderPortfolioManager('),source.indexOf('// ================= STATS ================='));
  vm.runInContext(utilities+manager,c);c.renderPortfolioManager([{price:150000,equity:30000}]);assert.match(elements.innerHTML,/Dati da completare/);assert.match(elements.innerHTML,/ROI<\/span><strong>--/);assert.match(elements.innerHTML,/ROI 0\/1/);assert.doesNotMatch(elements.innerHTML,/null|NaN/);

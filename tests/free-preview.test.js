@@ -1,3 +1,4 @@
+import {territorialCity} from '../js/territorial-benchmarks.js';
 import {buildInvestmentAssumptions} from '../js/investment-assumptions.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -29,10 +30,10 @@ test('standard financed scenario preview reads the real engine result, without m
 test('Free benchmark placeholders are readable and never fabricate market data',async()=>{
  const source=(await readFile(new URL('../js/market-engine.js',import.meta.url),'utf8')).replace(/^import .*;\n/gm,'').replace('export function renderMarketBenchmark','function renderMarketBenchmark');
  const elements=Object.fromEntries(['benchmark-price','benchmark-occupancy','benchmark-revenue','market-comparison'].map(id=>[id,{textContent:'old'}]));
- const c={window:{getUserAccess:()=>({isFree:true}),currentLang:'it'},document:{getElementById:id=>elements[id],addEventListener(){}},setTimeout(){throw new Error('Free should return before market rendering');}};
+ const c={territorialCity,window:{getUserAccess:()=>({isFree:true}),currentLang:'it'},document:{getElementById:id=>elements[id],addEventListener(){}},setTimeout(){throw new Error('Free should return before market rendering');}};
  vm.createContext(c);vm.runInContext(source,c);c.renderMarketBenchmark('unknown');
- for(const id of ['benchmark-price','benchmark-occupancy','benchmark-revenue'])assert.equal(elements[id].textContent,'Investor / Pro');
- assert.ok(elements['market-comparison'].textContent.includes('indicativi'));c.window.currentLang='en';c.renderMarketBenchmark('roma');assert.ok(elements['market-comparison'].textContent.includes('available'));
+ for(const id of ['benchmark-price','benchmark-occupancy','benchmark-revenue'])assert.equal(elements[id].textContent,'—');
+ assert.ok(elements['market-comparison'].textContent.includes('mancanti'));c.window.RB_MARKET_DATA={roma:{}};c.window.currentLang='en';c.renderMarketBenchmark('roma');assert.ok(elements['market-comparison'].textContent.includes('illustrative'));
 });
 test('actual calculation UI sequence restores Free preview after legacy post-analysis locking',async()=>{
  const source=await readFile(new URL('../js/app.js',import.meta.url),'utf8');

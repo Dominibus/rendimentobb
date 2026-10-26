@@ -1,3 +1,4 @@
+import {territorialCity} from './territorial-benchmarks.js?v=20261023-rc192';
 import "./market-data.js?v=20261023-rc191";
 
 /* ================= FORMATTERS ================= */
@@ -57,39 +58,17 @@ function getSafeCity(inputCity){
 
 export function renderMarketBenchmark(inputCity){
 
-  const access = window.getUserAccess?.() || {};
-  if(access.isFree && !access.isInvestor && !access.isPro && !access.isAdmin){
-    for(const id of ["benchmark-price", "benchmark-occupancy", "benchmark-revenue"]){
-      const el = document.getElementById(id);
-      if(el) el.textContent = "Investor / Pro";
-    }
-    const comparison = document.getElementById("market-comparison");
-    if(comparison) comparison.textContent = window.currentLang === "en"
-      ? "Indicative benchmark comparison available with Investor or Pro"
-      : "Confronto con benchmark indicativi disponibile con Investor o Pro";
-    return;
-  }
-
   const city = getSafeCity(inputCity);
-
-  
-
-  /* ================= DATA CHECK ================= */
-
-  if(!window.RB_MARKET_DATA){
-    (void 0);
+  const data = territorialCity(city)&&Object.hasOwn(window.RB_MARKET_DATA||{},city)?window.RB_MARKET_DATA[city]:null;
+  if(!data){
+    for(const id of ["benchmark-price","benchmark-occupancy","benchmark-revenue"]){const node=document.getElementById(id);if(node)node.textContent='—';}
+    const comparison=document.getElementById('market-comparison');if(comparison)comparison.textContent=window.currentLang==='en'?'No documented local reference is available for this municipality. A subscription does not create missing territorial data. Simulate using your own inputs.':'Nessun riferimento locale documentato disponibile per questo comune. Un abbonamento non rende disponibili dati territoriali mancanti. Simula con le tue ipotesi.';
     return;
   }
-
-  const data = Object.hasOwn(window.RB_MARKET_DATA, city) ? window.RB_MARKET_DATA[city] : null;
-  if(!data){
-    for(const id of ["benchmark-price", "benchmark-occupancy", "benchmark-revenue"]){
-      const node = document.getElementById(id); if(node) node.textContent = "—";
-    }
-    const comparison = document.getElementById("market-comparison");
-    if(comparison) comparison.textContent = window.currentLang === "en"
-      ? "No local benchmark is available for this location. Use your own data for the simulation."
-      : "Nessun benchmark locale disponibile per questa località. Simula con i tuoi dati.";
+  const access=window.getUserAccess?.()||{};
+  if(access.isFree&&!access.isInvestor&&!access.isPro&&!access.isAdmin){
+    for(const id of ["benchmark-price","benchmark-occupancy","benchmark-revenue"]){const node=document.getElementById(id);if(node)node.textContent='Investor / Pro';}
+    const comparison=document.getElementById('market-comparison');if(comparison)comparison.textContent=window.currentLang==='en'?'Investor / Pro includes comparison with internal illustrative assumptions, not verified market averages.':'Investor / Pro include il confronto con ipotesi interne illustrative, non con medie di mercato verificate.';
     return;
   }
 

@@ -1,3 +1,4 @@
+import {territorialCity} from '../js/territorial-benchmarks.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -45,7 +46,7 @@ test('current PDF remains authoritative for focused definitions',async()=>{
   assert.equal((await w.rbProcessAIMessage('Spiegami il cashflow')).response.type,'document_grounded');
 });
 async function parse(text){
-  const c=vm.createContext({window:{},console});vm.runInContext(read('js/chatbot/pdf-parser-engine.js'),c);
+  const c=vm.createContext({territorialCity,window:{},console});vm.runInContext(read('js/chatbot/pdf-parser-engine.js'),c);
   const doc={extractedText:text};await c.window.rbParseExecutivePDF(doc);return doc.analysis;
 }
 for(const lang of ['it','en'])test('actual exported PDF retains financial evidence and assessment: '+lang,async()=>{
@@ -70,8 +71,8 @@ function marketHarness(){
   const nodes=new Map(),events={};
   const get=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',innerText:'',innerHTML:''});return nodes.get(id);};
   const w={currentLang:'it',RB_LANG:{current:'it'},currentCity:'roma',getUserAccess:()=>({isPro:true}),simulationExecuted:true,lastAnalysisData:{gross:30660},RB_MARKET_DATA:{roma:{annualRevenue:40200,occupancy:.76,price:145}}};
-  const c=vm.createContext({window:w,document:{getElementById:get,addEventListener:(name,fn)=>events[name]=fn}});
-  vm.runInContext(read('js/market-engine.js').replace(/^import .*;\n/,'').replace('export function','function'),c);
+  const c=vm.createContext({territorialCity,window:w,document:{getElementById:get,addEventListener:(name,fn)=>events[name]=fn}});
+  vm.runInContext(read('js/market-engine.js').replace(/^import .*;\n/gm,'').replace('export function','function'),c);
   return {w,c,get,events};
 }
 test('market language event reads the completed snapshot and accepts zero',()=>{
@@ -86,7 +87,7 @@ test('market language event reads the completed snapshot and accepts zero',()=>{
 });
 test('market language event never reveals paid references to Free',()=>{
   const h=marketHarness();h.w.getUserAccess=()=>({isFree:true});h.events.rb_language_changed();
-  assert.match(h.get('market-comparison').textContent,/disponibile con Investor/);
+  assert.match(h.get('market-comparison').textContent,/Investor \/ Pro/);
   assert.equal(h.get('benchmark-price').textContent,'Investor / Pro');
 });
 test('tool language listener keeps the snapshot, city and paid comparison without writes',()=>{
@@ -109,11 +110,11 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261023-rc191':'20261025-rc197',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261026-rc199':'20261025-rc197',file+' '+name);
     }
   }
   assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261025-rc197/);
-  assert.match(read('js/app.js'),/market-engine\.js\?v=20261023-rc191/);
+  assert.match(read('js/app.js'),/market-engine\.js\?v=20261026-rc199/);
   for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261025-rc197':'20261023-rc185')));
 });
 test('new English result city survives a delayed static translation pass',()=>{

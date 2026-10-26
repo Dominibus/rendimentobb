@@ -21,7 +21,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261023-rc191";
+} from "./market-engine.js?v=20261026-rc199";
 
 import {
 renderExecutiveKPI
@@ -4735,14 +4735,6 @@ runPostAnalysis(result,{
     // ================= MARKET =================
     if(access.isFree){
       renderMarketBenchmark(window.currentCity);
-
-      const marketComparison = document.getElementById("market-comparison");
-      if(marketComparison){
-        marketComparison.innerHTML = `<div class="kpi-box">${t(
-          "Confronto disponibile con Investor o Pro",
-          "Comparison available with Investor or Pro"
-        )}</div>`;
-      }
 
       document.querySelectorAll(`
         #revenue-forecast,

@@ -1,12 +1,13 @@
+import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
 import {loadMunicipalities,municipalityCoverage,municipalityToolURL,municipalityLabel} from './municipalities.js?v=20261025-rc198';
-import {mountMunicipalityPicker} from './municipality-picker.js?v=20261025-rc198';
+import {mountMunicipalityPicker} from './municipality-picker.js?v=20261026-rc199';
 import {applyMunicipalityToTool,setMunicipalityURL} from './municipality-tool.js?v=20261025-rc198';
 import {loadTerritorialCity,SEGMENT_FIELDS,exactTerritorialSegment,territorialSummary,territorialCity,territorialCSV} from './territorial-benchmarks.js?v=20261023-rc192';
 const roots=document.querySelectorAll('[data-territorial-benchmarks]');
 for(const root of roots)install(root);
 function install(root){
  const mainCity=document.getElementById?.('market-city');
- let data=null,city=territorialCity(mainCity?.value)||territorialCity(root.dataset.city)||'napoli',selection={},generation=0,municipality=null;
+ let data=null,city=mainCity?null:territorialCity(root.dataset.city),selection={},generation=0,municipality=null;
  const search=document.createElement('section');search.className='rb-municipality-search';root.before(search);
  const picker=mountMunicipalityPicker(search,{onSelect:selectMunicipality,onEdit:()=>{municipality=null;city=null;generation++;data=null;setMunicipalityURL(null);renderUnavailable();}});
  function selectMunicipality(row){if(/^\/market\/[^/]+\/?$/.test(window.location?.pathname||'')&&municipalityCoverage(row)!==territorialCity(root.dataset.city)){window.location.assign('/market/?municipality='+encodeURIComponent(row.istat));return;}municipality=row;city=municipalityCoverage(row);picker.setSelection(row);if(mainCity){applyMunicipalityToTool(row);return;}setMunicipalityURL(row);load();}
@@ -87,5 +88,5 @@ function install(root){
   city=null;renderUnavailable();loadMunicipalities().then(rows=>{const row=rows.find(r=>r.istat===requested);if(row)selectMunicipality(row);}).catch(()=>{});
  }else if(mainCity&&requested){city=null;renderUnavailable();}
  else if(customInput?.value?.trim()){city=territorialCity(customInput.value.trim().replace(/\s*\([a-z]{2}\)$/i,''));load();}
- else load();
+ else {const row=REGIONAL_CAPITALS.find(r=>municipalityCoverage(r)===city);if(row){municipality=row;picker.setSelection(row);}load();}
 }
