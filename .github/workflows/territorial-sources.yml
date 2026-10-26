@@ -1,0 +1,47 @@
+name: Controllo mensile fonti territoriali
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 7 5 * *'
+permissions:
+  contents: read
+concurrency:
+  group: territorial-source-review
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test delle fonti e delle aggregazioni
+        run: |
+          python3 -m unittest discover -s tests -p '*territorial*.py'
+          python3 -m unittest discover -s tests -p 'rc203_reference_links.py'
+      - name: Prepara aggiornamento da revisionare
+        run: python3 scripts/refresh-territorial-references.py --output-dir /tmp/rb-source-review
+      - name: Controlla collegamenti editoriali esistenti
+        if: always()
+        run: python3 scripts/check-reference-links.py --output /tmp/rb-source-review/reference-links.json
+      - name: Riepilogo
+        if: always()
+        run: |
+          if [ -f /tmp/rb-source-review/report.json ]; then
+            echo '## Esito controllo fonti (nessuna pubblicazione)' >> "$GITHUB_STEP_SUMMARY"
+            cat /tmp/rb-source-review/report.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: territorial-source-review
+          path: /tmp/rb-source-review/
+          retention-days: 14
+          if-no-files-found: warn
