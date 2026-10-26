@@ -24,7 +24,7 @@ export function territorialSummary(data,row,now=Date.now()){
 const pending=new Map();
 export async function loadTerritorialCity(value,{fetcher=globalThis.fetch}={}){
  const city=territorialCity(value);if(!city)throw Error('CITY_NOT_COVERED');
- if(!pending.has(city))pending.set(city,(async()=>{const res=await fetcher('/data/territorial/'+city+'.json?v=20261023-rc192',{credentials:'omit'});if(!res.ok)throw Error('TERRITORIAL_FETCH_FAILED');return validateTerritorialData(await res.json(),city);})().catch(error=>{pending.delete(city);throw error;}));
+ if(!pending.has(city))pending.set(city,(async()=>{const res=await fetcher('/data/territorial/'+city+'.json?v=20261023-rc192',{credentials:'omit',cache:'no-cache'});if(!res.ok)throw Error('TERRITORIAL_FETCH_FAILED');return validateTerritorialData(await res.json(),city);})().catch(error=>{pending.delete(city);throw error;}));
  return pending.get(city);
 }
 export function territorialCSV(data,row,lang='it'){
