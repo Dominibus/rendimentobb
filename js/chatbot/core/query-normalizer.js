@@ -14,7 +14,10 @@
     replace(/\br[.]o[.]i[.]?/gi,'roi');
     replace(/\b(cashflw|cashfolw|cashflo|cashflou|cashflwo|cashfow|cash-flow|cashflusso)\b/gi,'cashflow');
     replace(/\bcapitale\s+propio\b/gi,'capitale proprio');
-    replace(/\b(prenotazone|prenotazzone)\b/gi,'prenotazione');
+    replace(/\b(prenotazone|prenotazzone|prenottazione)\b/gi,'prenotazione');
+    replace(/\bprenottazioni\b/gi,'prenotazioni');
+    replace(/\b(calndario|calendrio|calenadrio)\b/gi,'calendario');
+    replace(/\b(calender|calandar)\b/gi,'calendar');
     replace(/\b(occupazzione|ocupazione|occupazone|occupazzone)\b/gi,'occupazione');
     replace(/\b(ristruturazione|ristrutturazzione)\b/gi,'ristrutturazione');
     // Separate singular/plural forms to keep the question's grammar.

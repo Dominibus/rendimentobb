@@ -24,6 +24,12 @@
 
     const lang = window.RB_LANG.current;
 
+    // The commercial pages have separate IT/EN URLs; keep existing links in the chosen language.
+    document.querySelectorAll('a[href]').forEach(el=>{
+      const match=/^(?:\/en)?\/(immobili-commerciali|gestione-commerciale)\/?([?#].*)?$/.exec(el.getAttribute('href')||'');
+      if(match)el.setAttribute('href',(lang==='en'?'/en':'')+'/'+match[1]+'/'+(match[2]||''));
+    });
+
     // ================= TEXT =================
     document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 

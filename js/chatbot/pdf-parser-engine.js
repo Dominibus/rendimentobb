@@ -289,7 +289,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     );
 
-        const investmentScore =
+        let investmentScore =
 
             extractPercentage(
 
@@ -611,6 +611,20 @@ window.rbParseExecutivePDF = async function(documentObject){
             propertyFacts.surfaceSqm = sqft === null ? null : Math.round(sqft * 0.09290304 * 100) / 100;
         }
 
+        // RC200: some PDF text extractors return the card headings before all their values.
+        // Read the complete labelled row instead of binding its first number to the last heading.
+        const ownIntegrated=/RendimentoBB/i.test(text)&&/REPORT INVESTIMENTO E GESTIONE|INVESTMENT\s*&\s*OPERATIONS REPORT/i.test(text);
+        const integratedMoneyRow=ownIntegrated&&text.match(/(?:PREZZO|PURCHASE PRICE|PROPERTY VALUE)\s+(?:CAPITALE PROPRIO|CAPITALE DI AVVIO|EQUITY|STARTUP CAPITAL)\s+(?:CASHFLOW NETTO STIMATO ANNUO|ESTIMATED ANNUAL NET CASHFLOW)\s+(N\/A|-?[\d.,]+\s*(?:EUR|€))\s+(N\/A|-?[\d.,]+\s*(?:EUR|€))\s+(N\/A|-?[\d.,]+\s*(?:EUR|€))/i);
+        if(integratedMoneyRow){
+            const money=value=>/N\/A/i.test(value)?null:parseAmount(value.replace(/EUR|€/gi,''));
+            propertyPrice=money(integratedMoneyRow[1]);equity=money(integratedMoneyRow[2]);
+            cashflow=money(integratedMoneyRow[3]);annualProfit=cashflow;
+        }
+        const integratedScore=ownIntegrated&&text.match(/(?:PUNTEGGIO|SCORE)\s+BREAK[ -]?EVEN\s+(?:CASHFLOW NETTO STIMATO MENSILE|ESTIMATED MONTHLY NET CASHFLOW)\s+(N\/A|\d+(?:[.,]\d+)?\s*\/\s*100)/i);
+        if(integratedScore)investmentScore=/N\/A/i.test(integratedScore[1])?null:parsePercentage(integratedScore[1].split('/')[0]);
+        const integratedDebtRow=ownIntegrated&&text.match(/(?:MUTUO|LOAN)\s+LTV\s+DSCR\s+(?:N\/A|[\d.,]+\s*(?:EUR|€))\s+(?:N\/A|[\d.,]+\s*%)\s+(N\/A|N\/D|\d+(?:[.,]\d+)?)/i);
+        const integratedDSCR=integratedDebtRow?(/N\/A|N\/D/i.test(integratedDebtRow[1])?null:parsePercentage(integratedDebtRow[1])):undefined;
+
         // RC123: our own report appendix is explicit evidence, unlike broad
         // regex matches that can cross an N/A field and pick up another KPI.
         const appendixHeadings = [...text.matchAll(/(?:Ipotesi effettive del report|Actual report assumptions|Ipotesi salvate della simulazione|Saved simulation assumptions)/gi)];
@@ -703,7 +717,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             investmentScore:
                 investmentScore,
-            dscr: extractPercentage(/DSCR\s*[:]?\s*(\d+(?:[.,]\d+)?)/i) ?? parsePercentage(text.match(/MUTUO\s+LTV\s+DSCR\s+[\d.,]+\s*€\s+[\d.,]+\s*%\s*(\d+(?:[.,]\d+)?)/i)?.[1]),
+            dscr: integratedDSCR !== undefined ? integratedDSCR : extractPercentage(/DSCR\s*[:]?\s*(\d+(?:[.,]\d+)?)/i) ?? parsePercentage(text.match(/MUTUO\s+LTV\s+DSCR\s+[\d.,]+\s*€\s+[\d.,]+\s*%\s*(\d+(?:[.,]\d+)?)/i)?.[1]),
             benchmarkROI: extractPercentage(/(?:ROI EQUITY DI MERCATO|MARKET EQUITY ROI|BENCHMARK LOCALE|LOCAL BENCHMARK)\s*[:]?\s*([\d.,]+)\s*%/i),
 
             propertyPrice:

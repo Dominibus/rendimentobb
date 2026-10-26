@@ -208,7 +208,7 @@ function ensureSharedChatbot(){
   if(window.__rbChatbotLoaded || window.rbChatbotReady) return;
   if(document.querySelector('script[src*="/js/chatbot-loader.js"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/chatbot-loader.js?v=20261025-rc197";
+  script.src = "/js/chatbot-loader.js?v=20261026-rc200";
   script.async = true;
   // A failed download must not prevent a later retry.
   script.onerror = ()=>script.remove();

@@ -95,3 +95,12 @@ test("dynamic score renderer uses the canonical language state", () => {
   assert.match(toolHTML, /window\.currentLang === "en"/);
   assert.doesNotMatch(toolHTML, /localStorage\.getItem\("lang"\)/);
 });
+test('RC200 commercial destinations follow IT/EN and retain the demo query',()=>{
+ const paths=['/gestione-commerciale/?demo=1','/immobili-commerciali/#sources','/en/gestione-commerciale/','https://external.example/gestione-commerciale/'];
+ const links=paths.map(href=>({href,getAttribute(k){return k==='href'?this.href:null;},setAttribute(k,v){if(k==='href')this.href=v;}}));
+ const w={RB_LANG:{current:'en'}};const c=vm.createContext({window:w,document:{querySelectorAll:s=>s==='a[href]'?links:[],querySelector:()=>null},setTimeout:()=>{}});
+ const start=langSource.indexOf('  function applyTranslations()'),end=langSource.indexOf('// ===============================\n  // UPDATE UI',start);
+ vm.runInContext(langSource.slice(start,end)+';applyTranslations();',c);
+ assert.equal(links[0].href,'/en/gestione-commerciale/?demo=1');assert.equal(links[1].href,'/en/immobili-commerciali/#sources');assert.equal(links[2].href,'/en/gestione-commerciale/');assert.equal(links[3].href,paths[3]);
+ w.RB_LANG.current='it';vm.runInContext('applyTranslations()',c);assert.equal(links[0].href,'/gestione-commerciale/?demo=1');assert.equal(links[2].href,'/gestione-commerciale/');
+});

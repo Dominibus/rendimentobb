@@ -88,5 +88,5 @@ function install(root){
   city=null;renderUnavailable();loadMunicipalities().then(rows=>{const row=rows.find(r=>r.istat===requested);if(row)selectMunicipality(row);}).catch(()=>{});
  }else if(mainCity&&requested){city=null;renderUnavailable();}
  else if(customInput?.value?.trim()){city=territorialCity(customInput.value.trim().replace(/\s*\([a-z]{2}\)$/i,''));load();}
- else {const row=REGIONAL_CAPITALS.find(r=>municipalityCoverage(r)===city);if(row){municipality=row;picker.setSelection(row);}load();}
+ else {const row=city?REGIONAL_CAPITALS.find(r=>municipalityCoverage(r)===city):null;if(row){municipality=row;picker.setSelection(row);}load();}
 }

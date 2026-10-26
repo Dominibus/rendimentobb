@@ -12284,7 +12284,7 @@ setText(
 
 setText(
   "pms-avgstay",
-  avgStay.toFixed(1)
+  new Intl.NumberFormat(window.currentLang === "en" ? "en-GB" : "it-IT", {minimumFractionDigits:1,maximumFractionDigits:1}).format(avgStay)
 );
 
 setText(

@@ -55,3 +55,11 @@ test('RC199 regional shortcut cancels a pending municipality search and keeps IT
  window.currentLang='en';events.rb_language_changed();assert.equal(capital.value,'001272');assert.ok(host.text().includes('regional capital'));
  delete globalThis.window;delete globalThis.document;
 });
+test('RC200 opening Market without a municipality never preselects an unsupported capital',async()=>{
+ const root=new E('section');const events={},calls=[];globalThis.window={currentLang:'it',location:{search:'',pathname:'/market/',href:'https://www.rendimentobb.it/market/'},history:{replaceState:()=>{}}};
+ globalThis.document={querySelectorAll:()=>[root],getElementById:()=>null,createElement:t=>new E(t),createTextNode:text=>({textContent:text}),addEventListener:(n,f)=>events[n]=f};globalThis.fetch=async url=>{calls.push(url);return {ok:true,json:async()=>data};};
+ await import('../js/territorial-benchmark-ui.js?rc200-empty-market');await tick();
+ assert.match(root.text(),/Scegli il comune/);assert.doesNotMatch(root.text(),/Ancona|Dati territoriali non disponibili/);
+ const picker=root.siblingBefore;assert.equal(picker.find(n=>n.tag==='input').value,'');assert.equal(calls.length,0);
+ delete globalThis.window;delete globalThis.document;delete globalThis.fetch;
+});
