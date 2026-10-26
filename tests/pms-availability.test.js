@@ -66,7 +66,8 @@ function runtime(rows=[],current={...occupied,uid:'u1',status:'pending'}){
       await ctx.updateDoc({id:values.bookingId},{status:operation === 'cancel' ? 'cancelled' : values.nextStatus});
       return {bookingId:values.bookingId};
     },evaluateAvailability,canAdvanceBooking,isKnownBookingStatus,createBookingOperationGuard,
-    db:{},window:{currentUser:{uid:'u1'},currentPropertyId:'p1',currentBookingsData:[],currentSelectedBooking:null},
+    db:{},window:{currentUser:{uid:'u1',getIdToken:async()=> 'test-token'},currentPropertyId:'p1',currentBookingsData:[],currentSelectedBooking:null},
+    auth:{currentUser:{uid:'u1'}},isDemo:()=>false,canUseFirestorePMS:()=>true,
     t:(it,en)=>ctx.lang==='en'?en:it,alert:m=>notices.push(m),confirm:()=>true,dashboardError:()=>{},
     doc:(db,type,id)=>({type,id}),collection:(db,type)=>({type}),where:(key,op,value)=>({key,value}),query:(ref,...filters)=>({ref,filters}),
     getDocFromServer:async ref=>{reads.push(ref);return {id:ref.id,exists:()=>true,data:()=>ref.type==='properties'?{uid:'u1'}:current};},
@@ -75,6 +76,7 @@ function runtime(rows=[],current={...occupied,uid:'u1',status:'pending'}){
     loadPMSStats:async()=>refreshes.push('stats'),loadProperties:async()=>refreshes.push('properties'),loadBookings:async scope=>refreshes.push(scope),
     document:{getElementById:()=>null}};
   vm.createContext(ctx);
+  vm.runInContext(source.slice(source.indexOf('function pmsWriteRestriction()'),source.indexOf('// =====================================\n// 🏠 SAVE PROPERTY',source.indexOf('function pmsWriteRestriction()'))),ctx);
   vm.runInContext(source.slice(source.indexOf('const runBookingOperation ='),source.indexOf('// ================= INVESTMENT SCORE')),ctx);
   vm.runInContext(source.slice(source.indexOf('window.cancelBooking ='),source.indexOf('// =====================================\n// 🗑 DELETE BOOKING')),ctx);
   return {ctx,notices,writes,reads,refreshes};

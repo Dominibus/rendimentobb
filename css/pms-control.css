@@ -166,3 +166,19 @@ body.dashboard-page #toggle-booking-form {background:#087f5b !important;color:wh
 
 /* Keep the assistant visible above the bookings dialog without closing its filters. */
 body.dashboard-page #rb-chatbot-window.open {z-index:1000001 !important;}
+
+/* RC202: preview restrictions are visible before any attempted write. */
+#booking-demo-notice[hidden]{display:none!important}
+#booking-demo-notice{flex:1 0 100%;box-sizing:border-box;min-width:0;line-height:1.6}
+#booking-demo-notice a{display:inline-flex;align-items:center;min-height:44px;margin-right:16px;font-weight:700;overflow-wrap:anywhere}
+#bookings-modal div:has(> #booking-demo-notice){flex-wrap:wrap;gap:12px}
+#toggle-booking-form:disabled{opacity:.65;cursor:not-allowed}
+#booking-pricing-impact{white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+@media(max-width:600px){
+  body.dashboard-page #booking-form-container{max-width:100%!important;width:100%!important;scroll-padding-top:156px;-webkit-overflow-scrolling:touch}
+  body.dashboard-page #booking-form-container .pms-detail-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px!important}
+  body.dashboard-page #booking-form-container .pms-detail-actions button{min-width:0;padding:10px!important;font-size:14px!important}
+  body.dashboard-page #booking-form-container .booking-pricing-metrics{grid-template-columns:minmax(0,1fr)!important}
+  body.dashboard-page #bookings-modal{overscroll-behavior:contain}
+  body.dashboard-page #booking-form-container :is(input,select,textarea){max-width:100%;min-width:0;box-sizing:border-box}
+}

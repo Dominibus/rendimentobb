@@ -10,3 +10,12 @@
 /* Align the B&B/commercial choice with the dashboard rather than the viewport edge. */
 #rb195-workspace.rb197-workflow-switch,.container.rb197-workflow-note{width:min(1280px,calc(100% - 40px));max-width:1280px;box-sizing:border-box;margin-inline:auto}#rb195-workspace.rb197-workflow-switch{padding:12px 0!important;gap:10px!important}#rb195-workspace.rb197-workflow-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border:1px solid #bad4c5;border-radius:10px;background:#eef7f1;color:#15533d;text-decoration:none;font-weight:650;box-sizing:border-box}#rb195-workspace.rb197-workflow-switch a[aria-current=page]{background:#12634d;border-color:#12634d;color:#fff}.rb197-workflow-note p{margin:8px 0;line-height:1.6}.rb197-workflow-note>a{display:inline-flex;align-items:center;min-height:44px;font-weight:650}.rb197-workflow-switch a:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
 @media(max-width:600px){#rb195-workspace.rb197-workflow-switch,.container.rb197-workflow-note{width:calc(100% - 28px)}#rb195-workspace.rb197-workflow-switch a{flex:1;min-width:140px}}
+
+/* RC202: the inner shell already supplies the mobile gutter. */
+@media(max-width:600px){
+  body.home-page .rb158-hero{padding-inline:0!important}
+  body.home-page .rb158-hero h1{font-size:clamp(2.2rem,8.4vw,3rem)!important;line-height:1.16!important;letter-spacing:-.025em!important;overflow-wrap:break-word}
+  body.home-page .rb158-hero h1>span+span{margin-top:.12em}
+  body.home-page .rb158-hero .rb158-actions{display:grid;grid-template-columns:minmax(0,1fr)}
+  body.home-page .rb158-hero .rb158-actions a{box-sizing:border-box;width:100%;white-space:normal;text-align:center}
+}

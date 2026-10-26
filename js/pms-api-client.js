@@ -3,7 +3,7 @@ export function createPMSApiClient({getUser, fetchImpl = globalThis.fetch, crypt
   let pending = null;
   return async function(operation, values = {}){
     const user = getUser();
-    if(!user) { const error = new Error('unauthorized'); error.code='booking/unauthorized'; throw error; }
+    if(!user || typeof user.getIdToken !== 'function') { const error = new Error('unauthorized'); error.code='booking/unauthorized'; throw error; }
     const body = {action:'host_booking',operation,...values};
     const bytes = new TextEncoder().encode(JSON.stringify(body));
     const digest = await cryptoImpl.subtle.digest('SHA-256',bytes);

@@ -3791,7 +3791,7 @@ const subscriptionWords = [
 
 if(
   subscriptionWords.some(word =>
-    text.includes(word)
+    word === "pro" ? /\bpro\b/.test(text) : text.includes(word)
   )
 ){
 
@@ -4249,9 +4249,15 @@ const explicitImprovementRequest = has(
 // 🧠 FOLLOW-UP DETECTION
 // ===========================================
 
+// Inherit a topic only for an explicit continuation. Unrecognized input
+// must reach the clarification fallback, even after a valid conversation.
+const explicitContinuation = /^(?:e poi|poi|e quindi|quindi|continua|prosegui|approfondisci|puoi approfondire|dimmi di piu|dimmi di più|spiega meglio|puoi spiegare meglio|and then|then|continue|go on|tell me more|explain more|can you explain more)[\s.!?…]*$/i.test(text);
+
 if(
 
   !explicitImprovementRequest &&
+
+  explicitContinuation &&
 
   result.intent === "generic" &&
 

@@ -430,6 +430,12 @@ if(mentionsGuestIssues && (hasOpenGuestIssues || /ospit|guest|soggiorn|stay/.tes
   };
 }
 
+// Stop unrecognized requests before legacy contextual builders can turn
+// remembered cities or financial values into an unrelated answer.
+if(detectedIntent.intent === "generic" && typeof window.rbBuildGuidedClarification === "function"){
+  return {success:true,intent:detectedIntent,response:window.rbBuildGuidedClarification()};
+}
+
 if(window.RB_DEBUG === true){
 
   (void 0)

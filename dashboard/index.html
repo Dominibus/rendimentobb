@@ -3123,15 +3123,7 @@ setTimeout(
       }
     );
 
-    bookingToggle.addEventListener(
-      "keydown",
-      event=>{
-        if(event.key === "Enter" || event.key === " "){
-          event.preventDefault();
-          bookingToggle.click();
-        }
-      }
-    );
+    // Native button provides Enter/Space and disabled semantics.
 
   }
 
@@ -4229,12 +4221,17 @@ align-items:center;
 width:100%;
 ">
 
-<h3
+<aside id="booking-demo-notice" class="rb-source-note" hidden>
+<strong data-it="Anteprima PMS · nessun salvataggio account" data-en="PMS preview · no account saving">Anteprima PMS · nessun salvataggio account</strong>
+<p data-it="Questa vista mostra dati fittizi di sola lettura. Non inserire dati personali reali. Nella Live Demo puoi modificare gli esempi temporaneamente, senza salvare nell’account o inviare messaggi. Investor e Pro includono la gestione persistente; i PDF richiedono Pro." data-en="This view shows read-only fictional data. Do not enter real personal information. In the Live Demo you can temporarily edit examples without account saving or sending messages. Investor and Pro include persistent management; PDFs require Pro.">Questa vista mostra dati fittizi di sola lettura. Non inserire dati personali reali. Nella Live Demo puoi modificare gli esempi temporaneamente, senza salvare nell’account o inviare messaggi. Investor e Pro includono la gestione persistente; i PDF richiedono Pro.</p>
+<a id="booking-demo-link" href="/demo/hospitality-pms/" data-it="Apri la Live Demo PMS →" data-en="Open the PMS Live Demo →">Apri la Live Demo PMS →</a>
+<a href="/plans.html#tester-programme" data-it="Verifica piani e condizioni della prova →" data-en="Review plans and trial terms →">Verifica piani e condizioni della prova →</a>
+</aside>
+<button type="button"
 id="toggle-booking-form"
+aria-controls="booking-form-container"
 data-it="➕ Nuova Prenotazione"
 data-en="➕ New Booking"
-role="button"
-tabindex="0"
 aria-expanded="false"
 style="
 margin:0;
@@ -4243,7 +4240,7 @@ font-weight:700;
 cursor:pointer;
 ">
 ➕ Nuova Prenotazione
-</h3>
+</button>
 
 
 </div>
@@ -4478,6 +4475,10 @@ gap:12px;
 <input
 id="booking-guests"
 type="number"
+min="1"
+step="1"
+inputmode="numeric"
+required
 placeholder="Ospiti"
 data-it-placeholder="Ospiti"
 data-en-placeholder="Guests"
@@ -4492,6 +4493,10 @@ font-size:15px;
 <input
 id="booking-total"
 type="number"
+min="0.01"
+step="0.01"
+inputmode="decimal"
+required
 placeholder="Totale soggiorno €"
 data-it-placeholder="Totale soggiorno €"
 data-en-placeholder="Stay total €"
@@ -4528,11 +4533,11 @@ font-size:15px;
 
   <div class="booking-pricing-metrics">
     <div>
-      <span data-it="Tariffa base" data-en="Base rate">Tariffa base</span>
+      <span data-it="Tariffa base / notte" data-en="Base rate / night">Tariffa base / notte</span>
       <strong id="booking-pricing-base">€0</strong>
     </div>
     <div class="booking-pricing-highlight">
-      <span data-it="Tariffa suggerita" data-en="Suggested rate">Tariffa suggerita</span>
+      <span data-it="Tariffa suggerita / notte" data-en="Suggested rate / night">Tariffa suggerita / notte</span>
       <strong id="booking-pricing-suggested">€0</strong>
     </div>
     <div>

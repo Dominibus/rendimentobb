@@ -452,6 +452,8 @@ const runBookingOperation = createBookingOperationGuard();
 const rawMutatePMS = createPMSApiClient({getUser:()=>window.currentUser,storage:(()=>{try{return window.sessionStorage;}catch{return null;}})()});
 
 const mutatePMS = async (...args)=>{
+  const restriction=pmsWriteRestriction();
+  if(restriction) failBookingOperation(restriction);
   const result=await rawMutatePMS(args[0],{...args[1],notificationLang:window.RB_LANG?.current==="en"?"en":"it"});
   if(result.taskEmailEventIds?.length && window.rbNotificationPreferences?.pmsTaskEmail===true){
     try{
@@ -478,6 +480,7 @@ function renderBookingTaskTracking(booking=window.currentSelectedBooking){
 
 function bookingOperationError(error){
   const messages = {
+    "booking/demo_readonly": ["Modalità dimostrativa: questa anteprima non salva prenotazioni nell’account. Apri la Live Demo PMS per provare modifiche temporanee con dati fittizi. La gestione persistente richiede Investor o Pro; i PDF sono Pro.", "Demonstration mode: this preview does not save account bookings. Open the PMS Live Demo to try temporary changes with fictional data. Persistent management requires Investor or Pro; PDFs require Pro."],
     "booking/server_unavailable": ["Servizio PMS temporaneamente non disponibile. Riprova con gli stessi dati; se il problema persiste contatta il supporto.", "PMS service temporarily unavailable. Retry with the same data; contact support if the problem persists."],
     "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
     "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
@@ -5035,7 +5038,11 @@ window.updateBookingPricingSuggestion = function(){
   if(baseEl) baseEl.textContent = formatCurrency(baseADR);
   if(suggestedEl) suggestedEl.textContent = formatCurrency(suggestedADR);
   if(impactEl){
-    impactEl.textContent = `${delta >= 0 ? "+" : ""}${formatCurrency(delta)} · ${deltaPercent >= 0 ? "+" : ""}${deltaPercent}%`;
+    const nightlyDelta=suggestedADR-baseADR;
+    impactEl.textContent = t(
+      `${nightlyDelta >= 0 ? "+" : ""}${formatCurrency(nightlyDelta)}/notte · ${delta >= 0 ? "+" : ""}${formatCurrency(delta)} su ${metrics.nights} notti (${deltaPercent >= 0 ? "+" : ""}${deltaPercent}%)`,
+      `${nightlyDelta >= 0 ? "+" : ""}${formatCurrency(nightlyDelta)}/night · ${delta >= 0 ? "+" : ""}${formatCurrency(delta)} over ${metrics.nights} nights (${deltaPercent >= 0 ? "+" : ""}${deltaPercent}%)`
+    );
     impactEl.dataset.positive = String(delta >= 0);
   }
   if(reasonsEl) reasonsEl.textContent = reasons.join(" · ") + " — " + t("Regola interna: base immobile/soggiorno (altrimenti 120 EUR); se esiste un riferimento pricing PMS, peso 70% base e 30% tabella. Alta giugno-settembre ×1,15; media marzo-maggio e ottobre ×1,07; altri mesi ×0,92. Weekend fino a +12%; durata, anticipo e limiti 75–145% della base. Nessuna previsione della domanda. Fonte, periodo, zona, tipologia e capienza del riferimento non documentati.", "Internal rule: property/stay base (otherwise EUR120); if a PMS pricing reference exists, 70% base and 30% table. High June–September ×1.15; medium March–May and October ×1.07; other months ×0.92. Weekend up to +12%; length, lead time and bounds 75–145% of base. No demand prediction. Reference source, period, district, type and capacity undocumented.");
@@ -5182,7 +5189,10 @@ window.updateBookingGuestRegistration = function(){
   if(!receivedField || !authorityField || !summary || !progress) return;
 
   let documentsReceived = Math.max(0, Math.floor(Number(receivedField.value || 0)));
-  if(totalGuests > 0 && documentsReceived > totalGuests){
+  if(!Number.isFinite(documentsReceived)) documentsReceived=0;
+  receivedField.max=String(totalGuests);
+  receivedField.disabled=totalGuests===0;
+  if(documentsReceived > totalGuests){
     documentsReceived = totalGuests;
     receivedField.value = String(totalGuests);
   }
@@ -5196,7 +5206,10 @@ window.updateBookingGuestRegistration = function(){
     : window.t("Da completare", "To complete");
   summary.style.background = complete ? "#dcfce7" : "#fef3c7";
   summary.style.color = complete ? "#166534" : "#92400e";
-  progress.textContent = window.t(
+  progress.textContent = totalGuests===0 ? window.t(
+    "Indica prima il numero di ospiti. Nessun documento previsto finché il numero non è definito.",
+    "Enter the guest count first. No document count is expected until it is defined."
+  ) : window.t(
     `${documentsReceived} di ${totalGuests} documenti ricevuti${reportingComplete ? " · comunicazione completata" : " · comunicazione da completare"}`,
     `${documentsReceived} of ${totalGuests} documents received${reportingComplete ? " · reporting completed" : " · reporting to complete"}`
   );
@@ -5371,6 +5384,7 @@ window.updateGuestIssuePortalStatus = function(guestPortal = {}){
 };
 
 window.createGuestIssuePortalLink = async function(){
+  if(!requirePMSWriteAccess()) return;
   const booking = window.currentSelectedBooking;
   if(!window.pmsEditingBooking || !booking?.id){
     alert(window.t(
@@ -5438,6 +5452,7 @@ function getGuestPortalShareMessage(portalLink){
 }
 
 window.shareGuestIssuePortalWhatsApp = function(){
+  if(!requirePMSWriteAccess()) return;
   const portalLink = document.getElementById("booking-guest-portal-copy")?.dataset.portalLink || "";
   if(!portalLink) return;
   const savedPhone = String(
@@ -5460,6 +5475,7 @@ window.shareGuestIssuePortalWhatsApp = function(){
 };
 
 window.shareGuestIssuePortalEmail = function(){
+  if(!requirePMSWriteAccess()) return;
   const portalLink = document.getElementById("booking-guest-portal-copy")?.dataset.portalLink || "";
   if(!portalLink) return;
   const email = String(
@@ -5551,6 +5567,7 @@ window.printGuestIssuePortalQR = function(){
 };
 
 window.revokeGuestIssuePortalLink = async function(){
+  if(!requirePMSWriteAccess()) return;
   const booking = window.currentSelectedBooking;
   if(!window.pmsEditingBooking || !booking?.id) return;
   const confirmed = window.confirm(window.t(
@@ -5582,6 +5599,7 @@ window.revokeGuestIssuePortalLink = async function(){
 };
 
 window.openBookingModal = async function(){
+    if(!requirePMSWriteAccess()) return false;
     if(window.closeBookingForm?.() === false) return false;
     const viewVersion = (window.rbBookingViewVersion || 0) + 1;
     window.rbBookingViewVersion = viewVersion;
@@ -5906,6 +5924,33 @@ function canUseFirestorePMS(){
     access.isAdmin
   );
 
+}
+
+// A display-only demo identity is not a Firebase-authenticated account.
+function pmsWriteRestriction(){
+  if(isDemo() || window.isDemoData === true) return "demo_readonly";
+  const user=window.currentUser;
+  if(!user || typeof user.getIdToken !== "function" || auth.currentUser?.uid !== user.uid) return "unauthorized";
+  return canUseFirestorePMS() ? null : "plan_required";
+}
+
+function requirePMSWriteAccess(){
+  const restriction=pmsWriteRestriction();
+  if(!restriction) return true;
+  bookingOperationError({code:`booking/${restriction}`});
+  return false;
+}
+
+function renderBookingWriteAccess(){
+  const restricted=!!pmsWriteRestriction();
+  const note=document.getElementById("booking-demo-notice");
+  if(note) note.hidden=!restricted;
+  for(const id of ["toggle-booking-form","booking-save-button","booking-import-open"]){
+    const button=document.getElementById(id);
+    if(button){button.disabled=restricted;if(restricted)button.setAttribute("aria-describedby","booking-demo-notice");else button.removeAttribute("aria-describedby");}
+  }
+  const demoLink=document.getElementById("booking-demo-link");
+  if(demoLink)demoLink.href=window.currentLang === "en" ? "/en/demo/hospitality-pms/" : "/demo/hospitality-pms/";
 }
 
 // =====================================
@@ -6814,10 +6859,21 @@ window.closeBookingsModal = function(){
   if(modal){
     modal.style.display = "none";
   }
-
-
-
+  if(window.rbBookingsReturnFocus?.isConnected) window.rbBookingsReturnFocus.focus();
 };
+
+// Close only the top PMS surface; existing dirty-form checks still apply.
+document.addEventListener("keydown", event => {
+  if(event.key !== "Escape" || event.defaultPrevented) return;
+  if(document.activeElement?.closest?.("#rb-chatbot-window.open")) return;
+  const form=document.getElementById("booking-form-container");
+  const modal=document.getElementById("bookings-modal");
+  if(form && form.style.display !== "none" && form.getClientRects().length){
+    event.preventDefault();window.closeBookingForm?.();
+  }else if(modal && modal.style.display !== "none" && modal.getClientRects().length){
+    event.preventDefault();window.closeBookingsModal();
+  }
+});
 
 // =====================================
 // ✏️ OPEN BOOKING FROM SAVED LIST
@@ -9258,6 +9314,7 @@ ${window.t("Dati registrati", "Recorded data")}
 
 window.openBookings = async function(propertyId, bookingId = null, viewAllProperties = false){
   if(window.closeBookingForm?.() === false) return false;
+  window.rbBookingsReturnFocus=document.activeElement;
 
   window.bookingsAllPropertiesView = viewAllProperties === true;
   window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
@@ -9288,6 +9345,7 @@ window.openBookings = async function(propertyId, bookingId = null, viewAllProper
   window.updateBookingsPropertyContext();
 
   // Evidenzia la tab Prenotazioni
+  renderBookingWriteAccess();
   document
     .querySelectorAll(".pms-tab")
     .forEach(tab=>tab.classList.remove("active"));
@@ -9745,16 +9803,7 @@ function updateBookingTotal(){
 // =====================================
 
 async function performSaveBooking(){
-
-  if(!window.currentUser){
-
-  alert(
-    "Utente non autenticato"
-  );
-
-  return;
-
-}
+  if(!requirePMSWriteAccess()) return;
 
   const selectedPropertyId = document.getElementById("booking-property")?.value || window.currentPropertyId;
   const returnToAllProperties =

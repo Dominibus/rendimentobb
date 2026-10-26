@@ -269,7 +269,9 @@
       add("roi_analysis", 6, 81, "finance");
     }
 
-    if(found("market") || entities.city){
+    // An extracted city may come from the previous simulation. It is not
+    // evidence that the current message asks about the market.
+    if(found("market") || (entities.city && phraseMatches(analysis.text, String(entities.city)))){
       add("market_analysis", 5, 76, "market");
     }
 
