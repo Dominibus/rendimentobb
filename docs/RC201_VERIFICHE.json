@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-26",
+  "sourceCommit": "28ad7f879c8774970ec35bf5af84ec9cd6d5c444",
+  "sourceBlobsVerified": 690,
+  "baselineNode": {
+    "pass": 1887,
+    "fail": 0
+  },
+  "finalNode": {
+    "pass": 1912,
+    "fail": 0,
+    "newTests": 25
+  },
+  "localFirestoreEmulator": {
+    "project": "demo-rendimentobb-security",
+    "pass": 56,
+    "fail": 0,
+    "productionCredentialsUsed": false
+  },
+  "pythonTerritorial": {
+    "pass": 9,
+    "fail": 0
+  },
+  "structural": {
+    "pages": 51,
+    "sharedTheme": 40,
+    "sharedHeader": 39,
+    "apiEndpoints": 12,
+    "javascriptFiles": 426,
+    "inlineScripts": 27,
+    "issues": 0
+  },
+  "npmAuditMainProductionLock": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "notCompleted": [
+    "new Investor account and trial browser roundtrip",
+    "production record writes/imports",
+    "real iPhone",
+    "Core Web Vitals field measurements",
+    "postdeploy browser PDF upload",
+    "cloud IAM/deployed rules verification",
+    "backup restore",
+    "email delivery",
+    "payment transactions"
+  ]
+}

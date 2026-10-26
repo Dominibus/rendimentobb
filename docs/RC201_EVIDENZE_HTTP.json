@@ -1,0 +1,351 @@
+{
+  "data": "2026-10-26",
+  "scope": "GET public pages, redirects followed; not Googlebot inspection or availability monitoring",
+  "sitemap": [
+    {
+      "requested": "https://www.rendimentobb.it/about/",
+      "final": "https://www.rendimentobb.it/about/",
+      "status": 200,
+      "bytes": 22069,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/academy/errori/",
+      "final": "https://www.rendimentobb.it/academy/errori/",
+      "status": 200,
+      "bytes": 20842,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/academy/",
+      "final": "https://www.rendimentobb.it/academy/",
+      "status": 200,
+      "bytes": 32092,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/academy/mutuo/",
+      "final": "https://www.rendimentobb.it/academy/mutuo/",
+      "status": 200,
+      "bytes": 24647,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/academy/roi/",
+      "final": "https://www.rendimentobb.it/academy/roi/",
+      "status": 200,
+      "bytes": 24228,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/academy/strategia/",
+      "final": "https://www.rendimentobb.it/academy/strategia/",
+      "status": 200,
+      "bytes": 20217,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/aprire-bnb-conviene/",
+      "final": "https://www.rendimentobb.it/aprire-bnb-conviene/",
+      "status": 200,
+      "bytes": 26733,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/contact.html",
+      "final": "https://www.rendimentobb.it/contact.html",
+      "status": 200,
+      "bytes": 6848,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/costi-aprire-bnb/",
+      "final": "https://www.rendimentobb.it/costi-aprire-bnb/",
+      "status": 200,
+      "bytes": 12012,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/firenze/",
+      "final": "https://www.rendimentobb.it/immobili/firenze/",
+      "status": 200,
+      "bytes": 13951,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/",
+      "final": "https://www.rendimentobb.it/immobili/",
+      "status": 200,
+      "bytes": 70583,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/milano/",
+      "final": "https://www.rendimentobb.it/immobili/milano/",
+      "status": 200,
+      "bytes": 15799,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/napoli/",
+      "final": "https://www.rendimentobb.it/immobili/napoli/",
+      "status": 200,
+      "bytes": 14035,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/roma/",
+      "final": "https://www.rendimentobb.it/immobili/roma/",
+      "status": 200,
+      "bytes": 16051,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/",
+      "final": "https://www.rendimentobb.it/",
+      "status": 200,
+      "bytes": 115899,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/lavora-con-noi/",
+      "final": "https://www.rendimentobb.it/lavora-con-noi/",
+      "status": 200,
+      "bytes": 10615,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/firenze/",
+      "final": "https://www.rendimentobb.it/market/firenze/",
+      "status": 200,
+      "bytes": 10851,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/",
+      "final": "https://www.rendimentobb.it/market/",
+      "status": 200,
+      "bytes": 11349,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/milano/",
+      "final": "https://www.rendimentobb.it/market/milano/",
+      "status": 200,
+      "bytes": 10774,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/napoli/",
+      "final": "https://www.rendimentobb.it/market/napoli/",
+      "status": 200,
+      "bytes": 10713,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/roma/",
+      "final": "https://www.rendimentobb.it/market/roma/",
+      "status": 200,
+      "bytes": 10922,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/mutui/",
+      "final": "https://www.rendimentobb.it/mutui/",
+      "status": 200,
+      "bytes": 65525,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/partner/",
+      "final": "https://www.rendimentobb.it/partner/",
+      "status": 200,
+      "bytes": 10897,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/privacy.html",
+      "final": "https://www.rendimentobb.it/privacy.html",
+      "status": 200,
+      "bytes": 43995,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/quanto-guadagna-bnb/",
+      "final": "https://www.rendimentobb.it/quanto-guadagna-bnb/",
+      "status": 200,
+      "bytes": 11628,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi-bnb/firenze/",
+      "final": "https://www.rendimentobb.it/roi-bnb/firenze/",
+      "status": 200,
+      "bytes": 18398,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi-bnb/",
+      "final": "https://www.rendimentobb.it/roi-bnb/",
+      "status": 200,
+      "bytes": 40138,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi-bnb/milano/",
+      "final": "https://www.rendimentobb.it/roi-bnb/milano/",
+      "status": 200,
+      "bytes": 17490,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi-bnb/napoli/",
+      "final": "https://www.rendimentobb.it/roi-bnb/napoli/",
+      "status": 200,
+      "bytes": 17485,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi-bnb/roma/",
+      "final": "https://www.rendimentobb.it/roi-bnb/roma/",
+      "status": 200,
+      "bytes": 16972,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/terms.html",
+      "final": "https://www.rendimentobb.it/terms.html",
+      "status": 200,
+      "bytes": 28930,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/tool/",
+      "final": "https://www.rendimentobb.it/tool/",
+      "status": 200,
+      "bytes": 77345,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/demo/investment-analytics/",
+      "final": "https://www.rendimentobb.it/demo/investment-analytics/",
+      "status": 200,
+      "bytes": 12854,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/demo/hospitality-pms/",
+      "final": "https://www.rendimentobb.it/demo/hospitality-pms/",
+      "status": 200,
+      "bytes": 17333,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/en/demo/investment-analytics/",
+      "final": "https://www.rendimentobb.it/en/demo/investment-analytics/",
+      "status": 200,
+      "bytes": 12977,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/en/demo/hospitality-pms/",
+      "final": "https://www.rendimentobb.it/en/demo/hospitality-pms/",
+      "status": 200,
+      "bytes": 17184,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/plans.html",
+      "final": "https://www.rendimentobb.it/plans.html",
+      "status": 200,
+      "bytes": 17979,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili-commerciali/",
+      "final": "https://www.rendimentobb.it/immobili-commerciali/",
+      "status": 200,
+      "bytes": 11767,
+      "noindex": false
+    },
+    {
+      "requested": "https://www.rendimentobb.it/en/immobili-commerciali/",
+      "final": "https://www.rendimentobb.it/en/immobili-commerciali/",
+      "status": 200,
+      "bytes": 11491,
+      "noindex": false
+    }
+  ],
+  "samples": [
+    {
+      "requested": "https://www.rendimentobb.it/",
+      "final": "https://www.rendimentobb.it/",
+      "status": 200,
+      "bytes": 115899,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-security-policy": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+        "content-type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "requested": "https://www.rendimentobb.it/market/",
+      "final": "https://www.rendimentobb.it/market/",
+      "status": 200,
+      "bytes": 11349,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-security-policy": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+        "content-type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "requested": "https://www.rendimentobb.it/immobili/roma/",
+      "final": "https://www.rendimentobb.it/immobili/roma/",
+      "status": 200,
+      "bytes": 16051,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-security-policy": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+        "content-type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "requested": "https://www.rendimentobb.it/roi",
+      "final": "https://www.rendimentobb.it/roi-bnb/",
+      "status": 200,
+      "bytes": 40138,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-security-policy": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+        "content-type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "requested": "https://www.rendimentobb.it/basic-beyond/",
+      "final": "https://www.rendimentobb.it/basic-beyond/",
+      "status": 404
+    },
+    {
+      "requested": "https://www.rendimentobb.it/en/basic-beyond/",
+      "final": "https://www.rendimentobb.it/en/basic-beyond/",
+      "status": 404
+    },
+    {
+      "requested": "https://www.rendimentobb.it/404-audit-rc201",
+      "final": "https://www.rendimentobb.it/404-audit-rc201",
+      "status": 404
+    },
+    {
+      "requested": "https://rendimentobb.com/",
+      "final": "https://www.rendimentobb.com/",
+      "status": 200,
+      "bytes": 115899,
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-security-policy": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+        "content-type": "text/html; charset=utf-8"
+      }
+    }
+  ]
+}

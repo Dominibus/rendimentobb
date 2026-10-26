@@ -1,0 +1,3382 @@
+{
+  "pages": [
+    {
+      "file": "404.html",
+      "url": "https://www.rendimentobb.it/404.html",
+      "sitemap": false,
+      "title": "Pagina non trovata | RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex,follow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Pagina non trovata / Page not found"
+        ]
+      ],
+      "staticLinks": 5,
+      "scripts": 0,
+      "bytes": 1060,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "about/index.html",
+      "url": "https://www.rendimentobb.it/about/",
+      "sitemap": true,
+      "title": "Chi siamo – RendimentoBB",
+      "description": "Scopri chi c'è dietro RendimentoBB e perché è lo strumento per analizzare investimenti B&B.",
+      "canonical": [
+        "https://www.rendimentobb.it/about/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "RendimentoBB, dall’analisi alla gestione"
+        ],
+        [
+          "h2",
+          "Diventa uno dei primi tester"
+        ],
+        [
+          "h2",
+          "Il problema"
+        ],
+        [
+          "h2",
+          "La soluzione"
+        ],
+        [
+          "h2",
+          "L'ecosistema RendimentoBB"
+        ],
+        [
+          "h2",
+          "Perché siamo diversi"
+        ],
+        [
+          "h2",
+          "Chi siamo davvero"
+        ],
+        [
+          "h2",
+          "Per chi è RendimentoBB"
+        ],
+        [
+          "h2",
+          "Stai per prendere una decisione da migliaia di euro"
+        ]
+      ],
+      "staticLinks": 5,
+      "scripts": 9,
+      "bytes": 22069,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "academy/errori/index.html",
+      "url": "https://www.rendimentobb.it/academy/errori/",
+      "sitemap": true,
+      "title": "Errori negli investimenti B&B: cosa verificare | RendimentoBB",
+      "description": "Scopri gli errori più comuni negli investimenti B&B e come ridurli attraverso un'analisi completa.",
+      "canonical": [
+        "https://www.rendimentobb.it/academy/errori/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Errori B&B: i 6 sbagli che compromettono il tuo investimento"
+        ],
+        [
+          "h2",
+          "Gli errori che compromettono davvero un investimento"
+        ],
+        [
+          "h3",
+          "❌ ROI falso"
+        ],
+        [
+          "h3",
+          "❌ Prezzo sbagliato"
+        ],
+        [
+          "h3",
+          "❌ Mutuo fuori controllo"
+        ],
+        [
+          "h3",
+          "❌ Occupazione irreale"
+        ],
+        [
+          "h3",
+          "❌ Nessuna simulazione"
+        ],
+        [
+          "h3",
+          "❌ Città sbagliata"
+        ],
+        [
+          "h2",
+          "Scopri se stai commettendo uno di questi errori"
+        ],
+        [
+          "h2",
+          "Continua ad approfondire"
+        ],
+        [
+          "h2",
+          "Checklist prima di usare un risultato"
+        ],
+        [
+          "h3",
+          "Fonti da verificare per i tuoi input"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 24,
+      "scripts": 4,
+      "bytes": 20842,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guide B&B",
+              "item": "https://www.rendimentobb.it/academy/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Errori da evitare",
+              "item": "https://www.rendimentobb.it/academy/errori/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "academy/index.html",
+      "url": "https://www.rendimentobb.it/academy/",
+      "sitemap": true,
+      "title": "Guide B&B: ROI, costi, mutui e gestione | RendimentoBB",
+      "description": "Guide pratiche B&B con esercizi su ROI, costi, mutuo e PMS. Prova le demo senza account e scopri come verificare fonti e ipotesi del tuo progetto.",
+      "canonical": [
+        "https://www.rendimentobb.it/academy/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Academy B&B: investi con metodo, non con tentativi"
+        ],
+        [
+          "h2",
+          "Tutte le guide per investire in un B&B"
+        ],
+        [
+          "h3",
+          "Strategia B&B"
+        ],
+        [
+          "h3",
+          "ROI B&B"
+        ],
+        [
+          "h3",
+          "Mutuo B&B"
+        ],
+        [
+          "h3",
+          "⚠️ Errori da evitare"
+        ],
+        [
+          "h3",
+          "Costi B&B"
+        ],
+        [
+          "h3",
+          "Analisi città"
+        ],
+        [
+          "h3",
+          "Hai finito di studiare? Ora analizza un investimento reale."
+        ],
+        [
+          "h2",
+          "Prova, confronta, capisci: tre esercizi guidati"
+        ],
+        [
+          "h2",
+          "Dove trovare i dati e come usarli"
+        ],
+        [
+          "h3",
+          "Mutuo: parti dal preventivo personale"
+        ],
+        [
+          "h3",
+          "Immobile: confronta zona e caratteristiche"
+        ],
+        [
+          "h3",
+          "Domanda turistica: verifica il periodo"
+        ],
+        [
+          "h3",
+          "Aprire: verifica gli adempimenti applicabili"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 29,
+      "scripts": 10,
+      "bytes": 32092,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guide B&B",
+              "item": "https://www.rendimentobb.it/academy/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "academy/mutuo/index.html",
+      "url": "https://www.rendimentobb.it/academy/mutuo/",
+      "sitemap": true,
+      "title": "Mutuo per B&B: rata, DSCR e sostenibilità | RendimentoBB",
+      "description": "Scopri quando un mutuo per B&B è sostenibile, i rischi nascosti e come evitare perdite mensili.",
+      "canonical": [
+        "https://www.rendimentobb.it/academy/mutuo/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Mutuo B&B: come finanziare un investimento profittevole"
+        ],
+        [
+          "h2",
+          "Quando un mutuo B&B diventa rischioso"
+        ],
+        [
+          "h3",
+          "Cash Flow"
+        ],
+        [
+          "h3",
+          "Tassi di interesse"
+        ],
+        [
+          "h3",
+          "Occupazione reale"
+        ],
+        [
+          "h3",
+          "⚠️ Analisi del rischio"
+        ],
+        [
+          "h2",
+          "Scopri se il tuo investimento con mutuo è davvero sostenibile"
+        ],
+        [
+          "h2",
+          "Continua ad approfondire"
+        ],
+        [
+          "h2",
+          "Quali dati servono prima di scegliere il mutuo?"
+        ],
+        [
+          "h3",
+          "Fonti da verificare per i tuoi input"
+        ],
+        [
+          "h2",
+          "Dal documento al confronto"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 26,
+      "scripts": 4,
+      "bytes": 24647,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guide B&B",
+              "item": "https://www.rendimentobb.it/academy/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Guida al mutuo",
+              "item": "https://www.rendimentobb.it/academy/mutuo/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "academy/roi/index.html",
+      "url": "https://www.rendimentobb.it/academy/roi/",
+      "sitemap": true,
+      "title": "Calcolo ROI B&B: capitale proprio, immobile e cashflow | RendimentoBB",
+      "description": "Scopri come calcolare il ROI stimato di un B&B, evitare errori e capire se un investimento è davvero profittevole.",
+      "canonical": [
+        "https://www.rendimentobb.it/academy/roi/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B: come leggere il rendimento stimato?"
+        ],
+        [
+          "h2",
+          "Come calcolare il ROI corretto di un B&B"
+        ],
+        [
+          "h3",
+          "Ricavi reali"
+        ],
+        [
+          "h3",
+          "Costi nascosti"
+        ],
+        [
+          "h3",
+          "Mutuo e leva finanziaria"
+        ],
+        [
+          "h3",
+          "⚠️ Analisi del rischio"
+        ],
+        [
+          "h2",
+          "Verifica le ipotesi del tuo investimento"
+        ],
+        [
+          "h2",
+          "Continua ad approfondire"
+        ],
+        [
+          "h2",
+          "Leggere i risultati del simulatore"
+        ],
+        [
+          "h2",
+          "Esempio verificabile: ROI e Cap Rate"
+        ],
+        [
+          "h3",
+          "Fonti da verificare per i tuoi input"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 26,
+      "scripts": 4,
+      "bytes": 24228,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guide B&B",
+              "item": "https://www.rendimentobb.it/academy/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Calcolo ROI",
+              "item": "https://www.rendimentobb.it/academy/roi/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "academy/strategia/index.html",
+      "url": "https://www.rendimentobb.it/academy/strategia/",
+      "sitemap": true,
+      "title": "Strategia B&B: scenari prudenti, ricavi e costi | RendimentoBB",
+      "description": "Scopri le strategie per aumentare il rendimento di un B&B: pricing, ROI, costi e scelta città. Guida completa per investire meglio.",
+      "canonical": [
+        "https://www.rendimentobb.it/academy/strategia/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Strategia B&B: trasformare dati in profitto"
+        ],
+        [
+          "h2",
+          "Le strategie che fanno davvero la differenza"
+        ],
+        [
+          "h3",
+          "Pricing dinamico"
+        ],
+        [
+          "h3",
+          "Analisi ROI avanzata"
+        ],
+        [
+          "h3",
+          "Scelta della città"
+        ],
+        [
+          "h3",
+          "Ottimizzazione dei costi"
+        ],
+        [
+          "h2",
+          "Verifica le ipotesi del tuo investimento"
+        ],
+        [
+          "h2",
+          "Continua ad approfondire"
+        ],
+        [
+          "h2",
+          "Misura una modifica alla volta"
+        ],
+        [
+          "h3",
+          "Fonti da verificare per i tuoi input"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 24,
+      "scripts": 4,
+      "bytes": 20217,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guide B&B",
+              "item": "https://www.rendimentobb.it/academy/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Strategia B&B",
+              "item": "https://www.rendimentobb.it/academy/strategia/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "account-action/index.html",
+      "url": "https://www.rendimentobb.it/account-action/",
+      "sitemap": false,
+      "title": "Conferma email | RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Verifica della tua email"
+        ]
+      ],
+      "staticLinks": 3,
+      "scripts": 1,
+      "bytes": 1298,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "aprire-bnb-conviene/index.html",
+      "url": "https://www.rendimentobb.it/aprire-bnb-conviene/",
+      "sitemap": true,
+      "title": "Aprire un B&B conviene? Costi, scenari e checklist | RendimentoBB",
+      "description": "Scopri se aprire un B&B conviene valutando domanda, costi, cashflow, ROI e rischi prima di investire.",
+      "canonical": [
+        "https://www.rendimentobb.it/aprire-bnb-conviene/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Aprire un B&B conviene davvero?"
+        ],
+        [
+          "h2",
+          "Quattro verifiche, una decisione più consapevole."
+        ],
+        [
+          "h2",
+          "Dall'idea alla decisione in quattro passaggi."
+        ],
+        [
+          "h3",
+          "Valuta il mercato"
+        ],
+        [
+          "h3",
+          "Ricostruisci i costi"
+        ],
+        [
+          "h3",
+          "Simula il rendimento"
+        ],
+        [
+          "h3",
+          "Verifica la tenuta"
+        ],
+        [
+          "h2",
+          "Quando l'operazione può funzionare"
+        ],
+        [
+          "h2",
+          "Quando è meglio non investire"
+        ],
+        [
+          "h2",
+          "I costi che devono entrare nella simulazione."
+        ],
+        [
+          "h2",
+          "Tre scorciatoie che alterano il risultato."
+        ],
+        [
+          "h3",
+          "Sovrastimare l'occupazione"
+        ],
+        [
+          "h3",
+          "Dimenticare i costi ricorrenti"
+        ],
+        [
+          "h3",
+          "Decidere senza scenario prudente"
+        ],
+        [
+          "h2",
+          "Scopri se il tuo progetto B&B è sostenibile."
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ],
+        [
+          "h2",
+          "Checklist prima di aprire un B&B"
+        ],
+        [
+          "h2",
+          "Prova prima di registrarti"
+        ]
+      ],
+      "staticLinks": 16,
+      "scripts": 7,
+      "bytes": 26733,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Aprire un B&B",
+              "item": "https://www.rendimentobb.it/aprire-bnb-conviene/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "contact.html",
+      "url": "https://www.rendimentobb.it/contact.html",
+      "sitemap": true,
+      "title": "Contatti – RendimentoBB",
+      "description": "Contatta RendimentoBB per assistenza, account, pagamenti e privacy.",
+      "canonical": [
+        "https://www.rendimentobb.it/contact.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Come possiamo aiutarti?"
+        ],
+        [
+          "h2",
+          "Assistenza"
+        ],
+        [
+          "h2",
+          "Account e pagamenti"
+        ],
+        [
+          "h2",
+          "Privacy"
+        ],
+        [
+          "h2",
+          "Partecipa ai test di RendimentoBB"
+        ]
+      ],
+      "staticLinks": 7,
+      "scripts": 4,
+      "bytes": 6848,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "costi-aprire-bnb/index.html",
+      "url": "https://www.rendimentobb.it/costi-aprire-bnb/",
+      "sitemap": true,
+      "title": "Costi per aprire un B&B: budget e spese da stimare | RendimentoBB",
+      "description": "Prepara il budget per aprire un B&B: acquisto, lavori, arredi e gestione. Distingui costi iniziali, commissioni e mutuo; prova il calcolatore gratuito.",
+      "canonical": [
+        "https://www.rendimentobb.it/costi-aprire-bnb/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Quanto costa aprire un B&B nel 2026?"
+        ],
+        [
+          "h2",
+          "Costi da stimare per il tuo progetto"
+        ],
+        [
+          "h2",
+          "Investimento iniziale"
+        ],
+        [
+          "h2",
+          "Costi stimati"
+        ],
+        [
+          "h2",
+          "Costi operativi"
+        ],
+        [
+          "h2",
+          "Scopri se il tuo investimento è profittevole"
+        ],
+        [
+          "h2",
+          "Un budget utilizzabile, senza doppio conteggio"
+        ],
+        [
+          "h2",
+          "Prova prima di registrarti"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 6,
+      "bytes": 12012,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "dashboard/index.html",
+      "url": "https://www.rendimentobb.it/dashboard/",
+      "sitemap": false,
+      "title": "Dashboard Analisi – RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h2",
+          "🔒 Stai per prendere una decisione senza dati reali"
+        ],
+        [
+          "h1",
+          "Il tuo centro di controllo"
+        ],
+        [
+          "h2",
+          "🧪 Dashboard Demo RendimentoBB"
+        ],
+        [
+          "h3",
+          "⚡ Azioni rapide"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "Proprietà"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "—"
+        ],
+        [
+          "h3",
+          "0"
+        ],
+        [
+          "h3",
+          "0"
+        ],
+        [
+          "h3",
+          "0"
+        ],
+        [
+          "h2",
+          "Performance operativa PMS"
+        ],
+        [
+          "h3",
+          "Ricavi PMS per mese"
+        ],
+        [
+          "h2",
+          "—"
+        ],
+        [
+          "h2",
+          "—"
+        ],
+        [
+          "h2",
+          "—"
+        ],
+        [
+          "h2",
+          "0"
+        ],
+        [
+          "h2",
+          "Investment Intelligence"
+        ],
+        [
+          "h3",
+          "Andamento ROI"
+        ],
+        [
+          "h3",
+          "Profitto stimato per scenario"
+        ],
+        [
+          "h2",
+          "Ipotesi del patrimonio"
+        ],
+        [
+          "h3",
+          "Capitale e cashflow: due basi distinte"
+        ],
+        [
+          "h3",
+          "Riferimenti di esempio"
+        ],
+        [
+          "h3",
+          "Market Intelligence"
+        ],
+        [
+          "h3",
+          "🏙️ Distribuzione investimenti per città"
+        ],
+        [
+          "h3",
+          "Livello strategico"
+        ],
+        [
+          "h3",
+          "Archivio delle simulazioni"
+        ],
+        [
+          "h2",
+          "Nuova proprietà"
+        ],
+        [
+          "h2",
+          "Piano di ristrutturazione"
+        ],
+        [
+          "h2",
+          "Prenotazioni"
+        ],
+        [
+          "h3",
+          "➕ Nuova Prenotazione"
+        ],
+        [
+          "h3",
+          "✨ Nuova Prenotazione"
+        ],
+        [
+          "h3",
+          "Prenotazioni salvate"
+        ],
+        [
+          "h3",
+          "🗓️ Occupazione Calendario"
+        ]
+      ],
+      "staticLinks": 6,
+      "scripts": 20,
+      "bytes": 124990,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "dashboard-leads/index.html",
+      "url": "https://www.rendimentobb.it/dashboard-leads/",
+      "sitemap": false,
+      "title": "Centro di controllo Admin – RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Centro di controllo Admin"
+        ],
+        [
+          "h2",
+          "Centro operativo"
+        ],
+        [
+          "h2",
+          "Lead recenti"
+        ],
+        [
+          "h2",
+          ""
+        ]
+      ],
+      "staticLinks": 0,
+      "scripts": 6,
+      "bytes": 13738,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "dashboard-report/index.html",
+      "url": "https://www.rendimentobb.it/dashboard-report/",
+      "sitemap": false,
+      "title": "Report investimento B&B",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Analisi investimento"
+        ],
+        [
+          "h2",
+          ""
+        ],
+        [
+          "h2",
+          "🔒 Report PRO"
+        ],
+        [
+          "h2",
+          "Gestione operativa PMS"
+        ],
+        [
+          "h2",
+          "🔒 Report professionale bloccato"
+        ]
+      ],
+      "staticLinks": 2,
+      "scripts": 14,
+      "bytes": 80665,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "demo/hospitality-pms/index.html",
+      "url": "https://www.rendimentobb.it/demo/hospitality-pms/",
+      "sitemap": true,
+      "title": "Hospitality PMS — Demo | RendimentoBB",
+      "description": "Esplora calendario e attività con dati fittizi, separati dal tuo account.",
+      "canonical": [
+        "https://www.rendimentobb.it/demo/hospitality-pms/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "Il PMS, dal calendario alla scheda ospite."
+        ],
+        [
+          "h2",
+          "Residenza Esempio · ottobre 2026"
+        ],
+        [
+          "h2",
+          "Calendario prenotazioni"
+        ],
+        [
+          "h3",
+          "Prenotazioni"
+        ],
+        [
+          "h2",
+          "Centro attività"
+        ],
+        [
+          "h2",
+          ""
+        ],
+        [
+          "h2",
+          "Che cosa rappresenta questa demo"
+        ],
+        [
+          "h3",
+          "Esplora i numeri del tuo investimento"
+        ]
+      ],
+      "staticLinks": 50,
+      "scripts": 2,
+      "bytes": 17333,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "demo/investment-analytics/index.html",
+      "url": "https://www.rendimentobb.it/demo/investment-analytics/",
+      "sitemap": true,
+      "title": "Investment Analytics — Demo | RendimentoBB",
+      "description": "Esplora una simulazione con dati fittizi, separata dal tuo account.",
+      "canonical": [
+        "https://www.rendimentobb.it/demo/investment-analytics/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/investment-analytics/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "Cambia un’ipotesi. Leggi il risultato."
+        ],
+        [
+          "h2",
+          "Le ipotesi di esempio"
+        ],
+        [
+          "h2",
+          "Dai dati agli indicatori"
+        ],
+        [
+          "h2",
+          "Vuoi includere mutuo e imposte?"
+        ],
+        [
+          "h2",
+          "Usa questi strumenti con i tuoi dati"
+        ],
+        [
+          "h3",
+          "Esplora i numeri del tuo investimento"
+        ]
+      ],
+      "staticLinks": 52,
+      "scripts": 2,
+      "bytes": 12854,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "en/demo/hospitality-pms/index.html",
+      "url": "https://www.rendimentobb.it/en/demo/hospitality-pms/",
+      "sitemap": true,
+      "title": "Hospitality PMS — Demo | RendimentoBB",
+      "description": "Explore a calendar and tasks with fictional data, separate from your account.",
+      "canonical": [
+        "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+      ],
+      "robots": [],
+      "lang": "en",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "The PMS, from calendar to booking details."
+        ],
+        [
+          "h2",
+          "Example Residence · October 2026"
+        ],
+        [
+          "h2",
+          "Booking calendar"
+        ],
+        [
+          "h3",
+          "Bookings"
+        ],
+        [
+          "h2",
+          "Task centre"
+        ],
+        [
+          "h2",
+          ""
+        ],
+        [
+          "h2",
+          "What this demo represents"
+        ],
+        [
+          "h3",
+          "Explore your investment numbers"
+        ]
+      ],
+      "staticLinks": 50,
+      "scripts": 2,
+      "bytes": 17184,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "en/demo/investment-analytics/index.html",
+      "url": "https://www.rendimentobb.it/en/demo/investment-analytics/",
+      "sitemap": true,
+      "title": "Investment Analytics — Demo | RendimentoBB",
+      "description": "Explore a fictional-data simulation separate from your account.",
+      "canonical": [
+        "https://www.rendimentobb.it/en/demo/investment-analytics/"
+      ],
+      "robots": [],
+      "lang": "en",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/investment-analytics/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "Change an assumption. Read the result."
+        ],
+        [
+          "h2",
+          "Example assumptions"
+        ],
+        [
+          "h2",
+          "From inputs to metrics"
+        ],
+        [
+          "h2",
+          "Want to include mortgage and tax?"
+        ],
+        [
+          "h2",
+          "Use these tools with your own data"
+        ],
+        [
+          "h3",
+          "Explore your investment numbers"
+        ]
+      ],
+      "staticLinks": 52,
+      "scripts": 2,
+      "bytes": 12977,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "en/gestione-commerciale/index.html",
+      "url": "https://www.rendimentobb.it/en/gestione-commerciale/",
+      "sitemap": false,
+      "title": "Manage commercial spaces, from contracts to receipts · RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "lang": "en",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Manage commercial spaces, from contracts to receipts"
+        ],
+        [
+          "h2",
+          "Clear data, informed decisions"
+        ]
+      ],
+      "staticLinks": 28,
+      "scripts": 2,
+      "bytes": 4652,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "en/immobili-commerciali/index.html",
+      "url": "https://www.rendimentobb.it/en/immobili-commerciali/",
+      "sitemap": true,
+      "title": "Commercial property and shared professional spaces | RendimentoBB",
+      "description": "Model monthly rent or recurring slots, costs and financing for offices, commercial units and professional rooms. A dedicated model with explicit assumptions.",
+      "canonical": [
+        "https://www.rendimentobb.it/en/immobili-commerciali/"
+      ],
+      "robots": [],
+      "lang": "en",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/immobili-commerciali/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "What could a commercial property or shared professional space earn?"
+        ],
+        [
+          "h2",
+          "From simulation to management"
+        ],
+        [
+          "h2",
+          "Do the numbers have real evidence?"
+        ],
+        [
+          "h2",
+          "How this connects to the other tools"
+        ],
+        [
+          "h2",
+          "Formulas, inputs and limits"
+        ],
+        [
+          "h2",
+          "Want to explore the account tools too?"
+        ]
+      ],
+      "staticLinks": 36,
+      "scripts": 2,
+      "bytes": 11491,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "gestione-commerciale/index.html",
+      "url": "https://www.rendimentobb.it/gestione-commerciale/",
+      "sitemap": false,
+      "title": "Gestisci locali e studi, dai contratti agli incassi · RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Gestisci locali e studi, dai contratti agli incassi"
+        ],
+        [
+          "h2",
+          "Dati chiari, decisioni consapevoli"
+        ]
+      ],
+      "staticLinks": 28,
+      "scripts": 2,
+      "bytes": 4610,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "guest-report/index.html",
+      "url": "https://www.rendimentobb.it/guest-report/",
+      "sitemap": false,
+      "title": "Segnala un problema · RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex,nofollow,noarchive"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "🛎️ Segnala un problema"
+        ]
+      ],
+      "staticLinks": 0,
+      "scripts": 1,
+      "bytes": 6914,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "immobili/firenze/index.html",
+      "url": "https://www.rendimentobb.it/immobili/firenze/",
+      "sitemap": true,
+      "title": "Scenari B&B Firenze | RendimentoBB",
+      "description": "Scenari illustrativi B&B a Firenze. Confronta le ipotesi nel simulatore; non sono annunci o statistiche di mercato.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/firenze/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Valuta un investimento a Firenze"
+        ],
+        [
+          "h2",
+          "Scenari dimostrativi · Firenze"
+        ],
+        [
+          "h2",
+          "Scenari illustrativi per un B&B a Firenze"
+        ],
+        [
+          "h2",
+          "Vuoi analizzare un immobile reale?"
+        ]
+      ],
+      "staticLinks": 6,
+      "scripts": 6,
+      "bytes": 14548,
+      "images": 4,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "immobili/index.html",
+      "url": "https://www.rendimentobb.it/immobili/",
+      "sitemap": true,
+      "title": "Confronto immobili per B&B: prezzo e costi | RendimentoBB",
+      "description": "Confronta due immobili per B&B: prezzo al m², spese iniziali e budget sui dati che inserisci. Consulta le fonti e prepara la tua analisi di rendimento.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/"
+      ],
+      "robots": [
+        "index, follow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h3",
+          "🔒 Contenuto Premium"
+        ],
+        [
+          "h1",
+          "Confronta immobili per il tuo B&B, partendo dai dati"
+        ],
+        [
+          "h2",
+          "Due immobili reali. Un confronto leggibile."
+        ],
+        [
+          "h3",
+          "1 · Trova gli annunci"
+        ],
+        [
+          "h3",
+          "2 · Controlla il contesto"
+        ],
+        [
+          "h3",
+          "3 · Costruisci lo scenario"
+        ],
+        [
+          "h3",
+          "Domande sul confronto immobili"
+        ],
+        [
+          "h2",
+          "Come RendimentoBB valuta un investimento"
+        ],
+        [
+          "h3",
+          "Analisi ROI"
+        ],
+        [
+          "h3",
+          "Mercato locale"
+        ],
+        [
+          "h3",
+          "Sintesi investimento"
+        ],
+        [
+          "h3",
+          "Scenario Napoli"
+        ],
+        [
+          "h3",
+          "Scenario Roma"
+        ],
+        [
+          "h3",
+          "Scenario Firenze"
+        ],
+        [
+          "h3",
+          "Scenario Milano"
+        ],
+        [
+          "h2",
+          "Ricevi aggiornamenti sugli scenari immobiliari"
+        ],
+        [
+          "h2",
+          "Simulatore di scenari immobiliari"
+        ],
+        [
+          "h3",
+          "Analizza un immobile reale"
+        ],
+        [
+          "h2",
+          "Dove conviene aprire un B&B in Italia?"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ]
+      ],
+      "staticLinks": 19,
+      "scripts": 13,
+      "bytes": 71102,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Scenari immobiliari",
+              "item": "https://www.rendimentobb.it/immobili/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "immobili/milano/index.html",
+      "url": "https://www.rendimentobb.it/immobili/milano/",
+      "sitemap": true,
+      "title": "Scenari B&B Milano | RendimentoBB",
+      "description": "Scenari illustrativi B&B a Milano. Confronta le ipotesi nel simulatore; non sono annunci o statistiche di mercato.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/milano/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Valuta un investimento a Milano"
+        ],
+        [
+          "h2",
+          "Scenari dimostrativi · Milano"
+        ],
+        [
+          "h2",
+          "Scenari illustrativi per un B&B a Milano"
+        ],
+        [
+          "h2",
+          "Vuoi analizzare un immobile reale?"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Milano?"
+        ]
+      ],
+      "staticLinks": 6,
+      "scripts": 6,
+      "bytes": 16337,
+      "images": 4,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "immobili/napoli/index.html",
+      "url": "https://www.rendimentobb.it/immobili/napoli/",
+      "sitemap": true,
+      "title": "Scenari B&B Napoli | RendimentoBB",
+      "description": "Scenari illustrativi B&B a Napoli. Confronta le ipotesi nel simulatore; non sono annunci o statistiche di mercato.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/napoli/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Valuta un investimento a Napoli"
+        ],
+        [
+          "h2",
+          "Scenari dimostrativi · Napoli"
+        ],
+        [
+          "h2",
+          "Scenari illustrativi per un B&B a Napoli"
+        ],
+        [
+          "h2",
+          "Vuoi analizzare un immobile reale?"
+        ]
+      ],
+      "staticLinks": 6,
+      "scripts": 6,
+      "bytes": 14519,
+      "images": 4,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "immobili/roma/index.html",
+      "url": "https://www.rendimentobb.it/immobili/roma/",
+      "sitemap": true,
+      "title": "Scenari B&B Roma | RendimentoBB",
+      "description": "Scenari illustrativi B&B a Roma. Confronta le ipotesi nel simulatore; non sono annunci o statistiche di mercato.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/roma/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Valuta un investimento a Roma"
+        ],
+        [
+          "h2",
+          "Scenari dimostrativi · Roma"
+        ],
+        [
+          "h2",
+          "Scenari illustrativi per un B&B a Roma"
+        ],
+        [
+          "h2",
+          "Analizza un immobile reale"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Roma?"
+        ]
+      ],
+      "staticLinks": 6,
+      "scripts": 5,
+      "bytes": 16935,
+      "images": 4,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "immobili-commerciali/index.html",
+      "url": "https://www.rendimentobb.it/immobili-commerciali/",
+      "sitemap": true,
+      "title": "Analisi immobili commerciali e studi professionali | RendimentoBB",
+      "description": "Simula canoni mensili o fasce ricorrenti, costi e finanziamento di uffici, locali e studi. Un modello dedicato, con ipotesi esplicite.",
+      "canonical": [
+        "https://www.rendimentobb.it/immobili-commerciali/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/immobili-commerciali/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "Quanto può rendere un immobile commerciale o suddiviso in studi?"
+        ],
+        [
+          "h2",
+          "Dalla simulazione alla gestione"
+        ],
+        [
+          "h2",
+          "I numeri hanno un riscontro reale?"
+        ],
+        [
+          "h2",
+          "Come si collega agli altri strumenti"
+        ],
+        [
+          "h2",
+          "Formule, dati e limiti"
+        ],
+        [
+          "h2",
+          "Vuoi esplorare anche gli strumenti del tuo account?"
+        ]
+      ],
+      "staticLinks": 36,
+      "scripts": 2,
+      "bytes": 11767,
+      "images": 1,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "index.html",
+      "url": "https://www.rendimentobb.it/",
+      "sitemap": true,
+      "title": "RendimentoBB | Simulatore ROI immobili e gestione B&B",
+      "description": "Simula ROI, cashflow e mutuo di un immobile, anche già posseduto. Gestisci B&B, locali e studi con calendari, movimenti e Autopilot. Demo senza account.",
+      "canonical": [
+        "https://www.rendimentobb.it/"
+      ],
+      "robots": [
+        "index, follow"
+      ],
+      "lang": "it",
+      "alternates": [
+        [
+          "it",
+          "https://www.rendimentobb.it/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/?lang=en"
+        ]
+      ],
+      "headings": [
+        [
+          "h1",
+          "Analizza il tuo immobile.Gestisci B&B, locali e studi.Capisci i numeri."
+        ],
+        [
+          "h2",
+          "Dal dato alla prossima scelta."
+        ],
+        [
+          "h3",
+          "Un immobile. Un mix da costruire."
+        ],
+        [
+          "h2",
+          "Il tuo obiettivo, il tuo percorso."
+        ],
+        [
+          "h3",
+          "Ho già una casa"
+        ],
+        [
+          "h3",
+          "Voglio acquistare"
+        ],
+        [
+          "h3",
+          "Gestisco un B&B"
+        ],
+        [
+          "h3",
+          "Voglio orientarmi"
+        ],
+        [
+          "h3",
+          "Ho un locale commerciale"
+        ],
+        [
+          "h3",
+          "Condivido studi professionali"
+        ],
+        [
+          "h2",
+          "Dal primo calcolo a due scenari da confrontare"
+        ],
+        [
+          "h2",
+          "Non solo numeri. Capisci cosa farne."
+        ],
+        [
+          "h2",
+          "Dalla demo ai tuoi dati: prova Investor per 30 giorni."
+        ],
+        [
+          "h3",
+          "Guarda come funziona"
+        ],
+        [
+          "h3",
+          "Lavora sulle tue ipotesi"
+        ],
+        [
+          "h3",
+          "Porta i dati in un report chiaro"
+        ],
+        [
+          "h2",
+          "Analizza, scopri e scegli in un unico spazio."
+        ],
+        [
+          "h2",
+          "Dall’analisi dell’immobile alla gestione, tutto in un’unica piattaforma"
+        ],
+        [
+          "h3",
+          "RendimentoBB in 20 secondi"
+        ],
+        [
+          "h3",
+          "Demo della piattaforma"
+        ],
+        [
+          "h2",
+          "Analizza un investimento come farebbe un professionista."
+        ],
+        [
+          "h3",
+          "Dai numeri al tuo investimento."
+        ],
+        [
+          "h3",
+          "Analizza un immobile reale"
+        ],
+        [
+          "h3",
+          "Questi sono i numeri che determinano se un investimento genera davvero profitto."
+        ],
+        [
+          "h3",
+          "Esempio di report di investimento"
+        ],
+        [
+          "h2",
+          "Il tuo immobile sta andando come avevi previsto?"
+        ],
+        [
+          "h3",
+          "Un percorso, dal progetto ai dati registrati"
+        ],
+        [
+          "h3",
+          "Da un numero a una verifica concreta"
+        ],
+        [
+          "h2",
+          "Scegli il piano per sbloccare analisi complete e gestione professionale"
+        ],
+        [
+          "h2",
+          "Perché analizzare un immobile con RendimentoBB"
+        ],
+        [
+          "h3",
+          "Scegli il piano che accompagna la crescita del tuo business"
+        ],
+        [
+          "h3",
+          "Diventa tester di RendimentoBB: 30 giorni di Investor gratis"
+        ],
+        [
+          "h3",
+          "Investor"
+        ],
+        [
+          "h3",
+          "Pro"
+        ],
+        [
+          "h3",
+          "Pro Annuale"
+        ],
+        [
+          "h2",
+          "Calcolo ROI B&B in Italia: guida completa"
+        ],
+        [
+          "h3",
+          "Come si calcola il ROI di un B&B"
+        ],
+        [
+          "h3",
+          "Quanto rende un B&B nel 2026"
+        ],
+        [
+          "h2",
+          "Dove investire nel 2026?"
+        ],
+        [
+          "h2",
+          "Domande frequenti sugli investimenti B&B"
+        ],
+        [
+          "h3",
+          "Quanto può rendere un investimento B&B?"
+        ],
+        [
+          "h3",
+          "Quanto rischio c'è realmente?"
+        ],
+        [
+          "h3",
+          "Come capire se un immobile è profittevole?"
+        ],
+        [
+          "h3",
+          "Quanto capitale serve per iniziare?"
+        ],
+        [
+          "h2",
+          "Impara a trovare investimenti profittevoli"
+        ],
+        [
+          "h3",
+          "Strategia B&B"
+        ],
+        [
+          "h3",
+          "ROI B&B"
+        ],
+        [
+          "h3",
+          "Costi B&B"
+        ],
+        [
+          "h2",
+          ""
+        ]
+      ],
+      "staticLinks": 34,
+      "scripts": 14,
+      "bytes": 115899,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "RendimentoBB",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "Simulatore professionale di rendimento per investimenti B&B e affitti brevi"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "RendimentoBB",
+          "url": "https://rendimentobb.it",
+          "logo": "https://rendimentobb.it/img/favicon.png"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "RendimentoBB",
+          "url": "https://www.rendimentobb.it/"
+        }
+      ]
+    },
+    {
+      "file": "lavora-con-noi/index.html",
+      "url": "https://www.rendimentobb.it/lavora-con-noi/",
+      "sitemap": true,
+      "title": "Proponi le tue competenze – RendimentoBB",
+      "description": "Presenta le tue competenze a RendimentoBB e proponi come contribuire agli strumenti per analisi immobiliari e gestione B&B.",
+      "canonical": [
+        "https://www.rendimentobb.it/lavora-con-noi/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Proponi le tue competenze"
+        ],
+        [
+          "h2",
+          "Contribuisci al confronto sul progetto"
+        ],
+        [
+          "h2",
+          "Presenta il tuo profilo"
+        ],
+        [
+          "h2",
+          "Un primo confronto, senza impegni"
+        ]
+      ],
+      "staticLinks": 2,
+      "scripts": 4,
+      "bytes": 10615,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "login/index.html",
+      "url": "https://www.rendimentobb.it/login/",
+      "sitemap": false,
+      "title": "Login – RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Accesso"
+        ]
+      ],
+      "staticLinks": 4,
+      "scripts": 2,
+      "bytes": 10786,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "market/firenze/index.html",
+      "url": "https://www.rendimentobb.it/market/firenze/",
+      "sitemap": true,
+      "title": "ROI B&B Firenze: costi, ipotesi e simulazione | RendimentoBB",
+      "description": "Valuta un B&B a Firenze: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+      "canonical": [
+        "https://www.rendimentobb.it/market/firenze/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B a Firenze: parti dai dati del tuo immobile"
+        ],
+        [
+          "h2",
+          "Tre verifiche prima di simulare a Firenze"
+        ],
+        [
+          "h2",
+          "Come confrontare gli indirizzi"
+        ],
+        [
+          "h2",
+          "Dal confronto al tuo scenario"
+        ],
+        [
+          "h2",
+          "Altre guide città"
+        ]
+      ],
+      "staticLinks": 10,
+      "scripts": 5,
+      "bytes": 10851,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "ROI B&B Firenze: costi, ipotesi e simulazione | RendimentoBB",
+          "description": "Valuta un B&B a Firenze: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+          "author": {
+            "@type": "Organization",
+            "name": "RendimentoBB"
+          },
+          "dateModified": "2026-10-21",
+          "mainEntityOfPage": "https://www.rendimentobb.it/market/firenze/"
+        }
+      ]
+    },
+    {
+      "file": "market/index.html",
+      "url": "https://www.rendimentobb.it/market/",
+      "sitemap": true,
+      "title": "Dove aprire un B&B: confronta città, costi e ipotesi | RendimentoBB",
+      "description": "Confronta città e immobili per un B&B con un metodo verificabile: prezzo, costi, ricavi ipotizzati e mutuo. Guide Roma, Napoli, Milano e Firenze, senza classifiche di ROI.",
+      "canonical": [
+        "https://www.rendimentobb.it/market/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Dove aprire un B&B? Confronta prima le ipotesi."
+        ],
+        [
+          "h2",
+          "Roma"
+        ],
+        [
+          "h2",
+          "Napoli"
+        ],
+        [
+          "h2",
+          "Milano"
+        ],
+        [
+          "h2",
+          "Firenze"
+        ],
+        [
+          "h2",
+          "Gli stessi dati, per un confronto utile"
+        ],
+        [
+          "h2",
+          "Dal confronto al tuo scenario"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 10,
+      "bytes": 11349,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "Dove aprire un B&B: confronta città, costi e ipotesi | RendimentoBB",
+          "description": "Confronta città e immobili per un B&B con un metodo verificabile: prezzo, costi, ricavi ipotizzati e mutuo. Guide Roma, Napoli, Milano e Firenze, senza classifiche di ROI.",
+          "author": {
+            "@type": "Organization",
+            "name": "RendimentoBB"
+          },
+          "dateModified": "2026-10-21",
+          "mainEntityOfPage": "https://www.rendimentobb.it/market/"
+        }
+      ]
+    },
+    {
+      "file": "market/milano/index.html",
+      "url": "https://www.rendimentobb.it/market/milano/",
+      "sitemap": true,
+      "title": "ROI B&B Milano: costi, ipotesi e simulazione | RendimentoBB",
+      "description": "Valuta un B&B a Milano: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+      "canonical": [
+        "https://www.rendimentobb.it/market/milano/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B a Milano: parti dai dati del tuo immobile"
+        ],
+        [
+          "h2",
+          "Tre verifiche prima di simulare a Milano"
+        ],
+        [
+          "h2",
+          "Come confrontare gli indirizzi"
+        ],
+        [
+          "h2",
+          "Dal confronto al tuo scenario"
+        ],
+        [
+          "h2",
+          "Altre guide città"
+        ]
+      ],
+      "staticLinks": 10,
+      "scripts": 5,
+      "bytes": 10774,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "ROI B&B Milano: costi, ipotesi e simulazione | RendimentoBB",
+          "description": "Valuta un B&B a Milano: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+          "author": {
+            "@type": "Organization",
+            "name": "RendimentoBB"
+          },
+          "dateModified": "2026-10-21",
+          "mainEntityOfPage": "https://www.rendimentobb.it/market/milano/"
+        }
+      ]
+    },
+    {
+      "file": "market/napoli/index.html",
+      "url": "https://www.rendimentobb.it/market/napoli/",
+      "sitemap": true,
+      "title": "ROI B&B Napoli: costi, ipotesi e simulazione | RendimentoBB",
+      "description": "Valuta un B&B a Napoli: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+      "canonical": [
+        "https://www.rendimentobb.it/market/napoli/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B a Napoli: parti dai dati del tuo immobile"
+        ],
+        [
+          "h2",
+          "Tre verifiche prima di simulare a Napoli"
+        ],
+        [
+          "h2",
+          "Come confrontare gli indirizzi"
+        ],
+        [
+          "h2",
+          "Dal confronto al tuo scenario"
+        ],
+        [
+          "h2",
+          "Altre guide città"
+        ]
+      ],
+      "staticLinks": 10,
+      "scripts": 5,
+      "bytes": 10713,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "ROI B&B Napoli: costi, ipotesi e simulazione | RendimentoBB",
+          "description": "Valuta un B&B a Napoli: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+          "author": {
+            "@type": "Organization",
+            "name": "RendimentoBB"
+          },
+          "dateModified": "2026-10-21",
+          "mainEntityOfPage": "https://www.rendimentobb.it/market/napoli/"
+        }
+      ]
+    },
+    {
+      "file": "market/roma/index.html",
+      "url": "https://www.rendimentobb.it/market/roma/",
+      "sitemap": true,
+      "title": "ROI B&B Roma: costi, ipotesi e simulazione | RendimentoBB",
+      "description": "Valuta un B&B a Roma: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+      "canonical": [
+        "https://www.rendimentobb.it/market/roma/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B a Roma: parti dai dati del tuo immobile"
+        ],
+        [
+          "h2",
+          "Tre verifiche prima di simulare a Roma"
+        ],
+        [
+          "h2",
+          "Come confrontare gli indirizzi"
+        ],
+        [
+          "h2",
+          "Dal confronto al tuo scenario"
+        ],
+        [
+          "h2",
+          "Altre guide città"
+        ]
+      ],
+      "staticLinks": 10,
+      "scripts": 5,
+      "bytes": 10922,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "ROI B&B Roma: costi, ipotesi e simulazione | RendimentoBB",
+          "description": "Valuta un B&B a Roma: dati da raccogliere, costi da verificare e scenari da confrontare. Nessuna classifica di quartieri o promessa di rendimento.",
+          "author": {
+            "@type": "Organization",
+            "name": "RendimentoBB"
+          },
+          "dateModified": "2026-10-21",
+          "mainEntityOfPage": "https://www.rendimentobb.it/market/roma/"
+        }
+      ]
+    },
+    {
+      "file": "mutui/index.html",
+      "url": "https://www.rendimentobb.it/mutui/",
+      "sitemap": true,
+      "title": "Simulatore mutuo B&B: rata e confronto scenari | RendimentoBB",
+      "description": "Simula rata e quota dei ricavi destinata al mutuo attraverso scenari indicativi.",
+      "canonical": [
+        "https://www.rendimentobb.it/mutui/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Valuta l'impatto del mutuo sul rendimento del tuo investimento"
+        ],
+        [
+          "h2",
+          "Analizza il tuo mutuo come un investitore professionale"
+        ],
+        [
+          "h2",
+          "Confronta scenari di finanziamento indicativi"
+        ],
+        [
+          "h2",
+          "Richiedi un approfondimento sul tuo scenario"
+        ],
+        [
+          "h2",
+          "Tassi mutuo: leggi fonte, periodo e tipo di dato"
+        ],
+        [
+          "h2",
+          "Confronta due preventivi sui tuoi numeri"
+        ],
+        [
+          "h2",
+          "TAN, TAEG e condizioni: cosa confrontare"
+        ],
+        [
+          "h2",
+          "Il prossimo passo per il tuo progetto"
+        ],
+        [
+          "h3",
+          "Valuta il tuo immobile"
+        ],
+        [
+          "h3",
+          "Verifica costi e mutuo"
+        ],
+        [
+          "h3",
+          "Dalla gestione al report Pro"
+        ],
+        [
+          "h3",
+          "🔒 Sblocca il confronto completo"
+        ]
+      ],
+      "staticLinks": 14,
+      "scripts": 11,
+      "bytes": 65525,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.rendimentobb.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Simulatore mutuo",
+              "item": "https://www.rendimentobb.it/mutui/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "partner/index.html",
+      "url": "https://www.rendimentobb.it/partner/",
+      "sitemap": true,
+      "title": "Partnership – RendimentoBB",
+      "description": "Proponi una collaborazione a RendimentoBB: competenze e servizi per chi analizza investimenti e gestisce B&B. Invia la tua proposta.",
+      "canonical": [
+        "https://www.rendimentobb.it/partner/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Collabora con RendimentoBB"
+        ],
+        [
+          "h2",
+          "Perché collaborare con noi"
+        ],
+        [
+          "h2",
+          "Proponi una collaborazione"
+        ],
+        [
+          "h2",
+          "Un primo confronto, senza impegni"
+        ]
+      ],
+      "staticLinks": 2,
+      "scripts": 4,
+      "bytes": 10897,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "plan-interest.html",
+      "url": "https://www.rendimentobb.it/plan-interest.html",
+      "sitemap": false,
+      "title": "Avviso apertura abbonamenti – RendimentoBB",
+      "description": "Richiedi un avviso all’apertura degli abbonamenti RendimentoBB. Nessun pagamento o ordine vincolante.",
+      "canonical": [
+        "https://www.rendimentobb.it/plan-interest.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Ti avvisiamo all’apertura"
+        ],
+        [
+          "h2",
+          "Quale piano ti interessa?"
+        ]
+      ],
+      "staticLinks": 3,
+      "scripts": 5,
+      "bytes": 8001,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "plans.html",
+      "url": "https://www.rendimentobb.it/plans.html",
+      "sitemap": true,
+      "title": "Piani e condizioni – RendimentoBB",
+      "description": "Prezzi, prova Investor di 30 giorni e documenti contrattuali RendimentoBB, consultabili senza registrazione.",
+      "canonical": [
+        "https://www.rendimentobb.it/plans.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Piani, prova e condizioni"
+        ],
+        [
+          "h2",
+          "Locali e studi: simulatore e gestione dedicata"
+        ],
+        [
+          "h2",
+          "Pro: dal progetto all’andamento dell’immobile"
+        ],
+        [
+          "h2",
+          "Dalla prima stima all’andamento del tuo immobile"
+        ],
+        [
+          "h2",
+          "Prova Investor: 30 giorni gratis"
+        ],
+        [
+          "h2",
+          "Piani a pagamento"
+        ],
+        [
+          "h3",
+          "Investor"
+        ],
+        [
+          "h3",
+          "Pro"
+        ],
+        [
+          "h3",
+          "Pro Annuale"
+        ],
+        [
+          "h2",
+          "Rinnovo e recesso"
+        ],
+        [
+          "h2",
+          "Documentazione applicabile"
+        ]
+      ],
+      "staticLinks": 12,
+      "scripts": 4,
+      "bytes": 17979,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "privacy.html",
+      "url": "https://www.rendimentobb.it/privacy.html",
+      "sitemap": true,
+      "title": "Privacy Policy – RendimentoBB",
+      "description": "Informativa sul trattamento dei dati personali degli utenti di RendimentoBB.",
+      "canonical": [
+        "https://www.rendimentobb.it/privacy.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Privacy Policy"
+        ],
+        [
+          "h2",
+          "1. Titolare del trattamento"
+        ],
+        [
+          "h2",
+          "2. Dati trattati"
+        ],
+        [
+          "h2",
+          "Archivio CSV delle prenotazioni"
+        ],
+        [
+          "h2",
+          "Report e lettura dei PDF"
+        ],
+        [
+          "h2",
+          "Dati inseriti nel PMS"
+        ],
+        [
+          "h2",
+          "3. Finalità e basi giuridiche"
+        ],
+        [
+          "h2",
+          "4. Fornitori e destinatari"
+        ],
+        [
+          "h2",
+          "5. Trasferimenti internazionali"
+        ],
+        [
+          "h2",
+          "Dichiarazioni di recesso"
+        ],
+        [
+          "h2",
+          "6. Conservazione"
+        ],
+        [
+          "h2",
+          "7. Cookie e archiviazione locale"
+        ],
+        [
+          "h2",
+          "8. Diritti"
+        ],
+        [
+          "h2",
+          "9. Conferimento e aggiornamenti"
+        ],
+        [
+          "h2",
+          "Prova Investor"
+        ],
+        [
+          "h2",
+          "Proposte di collaborazione e competenze"
+        ],
+        [
+          "h2",
+          "Programma tester Investor"
+        ],
+        [
+          "h2",
+          "Lista d’interesse per la apertura degli abbonamenti"
+        ],
+        [
+          "h2",
+          "Proposte Basic & Beyond: raccolta sospesa"
+        ]
+      ],
+      "staticLinks": 3,
+      "scripts": 4,
+      "bytes": 43995,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "pro-success/index.html",
+      "url": "https://www.rendimentobb.it/pro-success/",
+      "sitemap": false,
+      "title": "Pagamento completato – RendimentoBB",
+      "description": "",
+      "canonical": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Pagamento completato"
+        ]
+      ],
+      "staticLinks": 2,
+      "scripts": 4,
+      "bytes": 4711,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "quanto-guadagna-bnb/index.html",
+      "url": "https://www.rendimentobb.it/quanto-guadagna-bnb/",
+      "sitemap": true,
+      "title": "Quanto guadagna un B&B? Ricavi, costi e cashflow | RendimentoBB",
+      "description": "Calcola ricavi e cashflow potenziali di un B&B con esempi e ipotesi esplicite. Distingui fatturato e utile, verifica i costi e prova il simulatore.",
+      "canonical": [
+        "https://www.rendimentobb.it/quanto-guadagna-bnb/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Quanto guadagna un B&B nel 2026?"
+        ],
+        [
+          "h2",
+          "Esempio aritmetico dei ricavi di un B&B"
+        ],
+        [
+          "h2",
+          "Ipotesi da verificare per città"
+        ],
+        [
+          "h2",
+          "Costi di gestione di un B&B"
+        ],
+        [
+          "h2",
+          "ROI di un B&B"
+        ],
+        [
+          "h2",
+          "Scopri se il tuo investimento è profittevole"
+        ],
+        [
+          "h2",
+          "Dal ricavo al cashflow: i dati che servono"
+        ],
+        [
+          "h2",
+          "Prova prima di registrarti"
+        ]
+      ],
+      "staticLinks": 15,
+      "scripts": 5,
+      "bytes": 11628,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "roi-bnb/firenze/index.html",
+      "url": "https://www.rendimentobb.it/roi-bnb/firenze/",
+      "sitemap": true,
+      "title": "ROI B&B Firenze – Scenari e analisi investimento",
+      "description": "Valuta un investimento B&B a Firenze con scenari indicativi di ROI, occupazione, ADR, cash flow e rischio.",
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/firenze/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B Firenze: valuta il tuo scenario di investimento"
+        ],
+        [
+          "h2",
+          "Come valutare il mercato B&B di Firenze"
+        ],
+        [
+          "h2",
+          "Dati necessari per il tuo immobile a Firenze"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Firenze?"
+        ],
+        [
+          "h2",
+          "Zone di Firenze da confrontare"
+        ],
+        [
+          "h2",
+          "Stima la redditività del tuo immobile prima di acquistare"
+        ],
+        [
+          "h3",
+          "Altri mercati B&B"
+        ],
+        [
+          "h3",
+          "🔓 Sblocca l’analisi completa"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 4,
+      "bytes": 18398,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "roi-bnb/index.html",
+      "url": "https://www.rendimentobb.it/roi-bnb/",
+      "sitemap": true,
+      "title": "Calcolo ROI B&B: formula, esempio e simulatore | RendimentoBB",
+      "description": "Calcola il ROI di un B&B con un esempio verificabile. Distingui ricavi, cashflow e capitale proprio, prova la demo e confronta uno scenario prudente.",
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B: valuta la redditività del tuo investimento"
+        ],
+        [
+          "h2",
+          "ROI B&B: quanto guadagna davvero un investimento?"
+        ],
+        [
+          "h3",
+          "Il ROI stimato deve includere tutte le principali voci di costo."
+        ],
+        [
+          "h2",
+          "Calcolo ROI B&B: un esempio da verificare"
+        ],
+        [
+          "h2",
+          "Come confrontare immobili in città diverse"
+        ],
+        [
+          "h2",
+          "Perché il ROI da solo non basta"
+        ],
+        [
+          "h3",
+          "Un ROI elevato può nascondere una perdita."
+        ],
+        [
+          "h3",
+          "Analizza l'intero investimento."
+        ],
+        [
+          "h2",
+          "Stima la redditività prima di acquistare un immobile"
+        ],
+        [
+          "h2",
+          "Continua ad approfondire"
+        ],
+        [
+          "h2",
+          "Le risposte prima di leggere una percentuale"
+        ]
+      ],
+      "staticLinks": 20,
+      "scripts": 6,
+      "bytes": 40138,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "roi-bnb/milano/index.html",
+      "url": "https://www.rendimentobb.it/roi-bnb/milano/",
+      "sitemap": true,
+      "title": "ROI B&B Milano – Scenari, occupazione e analisi investimento",
+      "description": "Valuta un investimento B&B a Milano confrontando scenari indicativi di ROI, occupazione, ADR e break-even.",
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/milano/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B Milano: valuta il tuo scenario di investimento"
+        ],
+        [
+          "h2",
+          "Come valutare il mercato B&B di Milano"
+        ],
+        [
+          "h2",
+          "Dati necessari per il tuo immobile a Milano"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Milano?"
+        ],
+        [
+          "h2",
+          "Zone di Milano da confrontare"
+        ],
+        [
+          "h2",
+          "Stima la redditività del tuo immobile prima di acquistare"
+        ],
+        [
+          "h3",
+          "Altri mercati B&B"
+        ],
+        [
+          "h3",
+          "🔓 Sblocca l’analisi completa"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 4,
+      "bytes": 17490,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "roi-bnb/napoli/index.html",
+      "url": "https://www.rendimentobb.it/roi-bnb/napoli/",
+      "sitemap": true,
+      "title": "ROI B&B Napoli – Scenari e analisi investimento",
+      "description": "Valuta un investimento B&B a Napoli con scenari indicativi di ROI, occupazione, ADR, cash flow e rischio.",
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/napoli/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B Napoli: valuta il tuo scenario di investimento"
+        ],
+        [
+          "h2",
+          "Come valutare il mercato B&B di Napoli"
+        ],
+        [
+          "h2",
+          "Dati necessari per il tuo immobile a Napoli"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Napoli?"
+        ],
+        [
+          "h2",
+          "Zone di Napoli da confrontare"
+        ],
+        [
+          "h2",
+          "Stima la redditività del tuo immobile prima di acquistare"
+        ],
+        [
+          "h3",
+          "Altri mercati B&B"
+        ],
+        [
+          "h3",
+          "🔓 Sblocca l’analisi completa"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 4,
+      "bytes": 17485,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "roi-bnb/roma/index.html",
+      "url": "https://www.rendimentobb.it/roi-bnb/roma/",
+      "sitemap": true,
+      "title": "ROI B&B Roma – Scenari, occupazione e analisi investimento",
+      "description": "Valuta un investimento B&B a Roma confrontando scenari indicativi di ROI, occupazione, ADR e break-even.",
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/roma/"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "ROI B&B Roma: valuta il tuo scenario di investimento"
+        ],
+        [
+          "h2",
+          "Come valutare il mercato B&B di Roma"
+        ],
+        [
+          "h2",
+          "Dati necessari per il tuo immobile a Roma"
+        ],
+        [
+          "h2",
+          "Conviene investire in un B&B a Roma?"
+        ],
+        [
+          "h2",
+          "Zone di Roma da confrontare"
+        ],
+        [
+          "h2",
+          "Stima la redditività del tuo immobile prima di acquistare"
+        ],
+        [
+          "h3",
+          "Altri mercati B&B"
+        ],
+        [
+          "h3",
+          "🔓 Sblocca l’analisi completa"
+        ]
+      ],
+      "staticLinks": 8,
+      "scripts": 4,
+      "bytes": 16972,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "terms.html",
+      "url": "https://www.rendimentobb.it/terms.html",
+      "sitemap": true,
+      "title": "Termini di servizio – RendimentoBB",
+      "description": "Termini di accesso e utilizzo dei servizi RendimentoBB.",
+      "canonical": [
+        "https://www.rendimentobb.it/terms.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Termini di servizio"
+        ],
+        [
+          "h2",
+          "Guida alle funzionalità attuali dei piani"
+        ],
+        [
+          "h2",
+          "Prima di acquistare: riepilogo dei piani"
+        ],
+        [
+          "h3",
+          "Programma tester Investor — 30 giorni per le nuove attivazioni"
+        ],
+        [
+          "h2",
+          "Disattivazione del rinnovo e richieste di recesso"
+        ],
+        [
+          "h2",
+          "1. Gestore e contatti"
+        ],
+        [
+          "h2",
+          "2. Servizio e risultati"
+        ],
+        [
+          "h2",
+          "Limiti dei modelli e dei dati"
+        ],
+        [
+          "h2",
+          "Ruolo del PMS"
+        ],
+        [
+          "h2",
+          "3. Account"
+        ],
+        [
+          "h2",
+          "4. Piani, rinnovo e pagamenti"
+        ],
+        [
+          "h2",
+          "5. Cancellazione e consumatori"
+        ],
+        [
+          "h2",
+          "6. Uso consentito"
+        ],
+        [
+          "h2",
+          "7. Disponibilità e responsabilità"
+        ],
+        [
+          "h2",
+          "8. Modifiche e legge applicabile"
+        ],
+        [
+          "h2",
+          "RendimentoBB — Basic & Beyond"
+        ]
+      ],
+      "staticLinks": 5,
+      "scripts": 4,
+      "bytes": 28930,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    },
+    {
+      "file": "tool/index.html",
+      "url": "https://www.rendimentobb.it/tool/",
+      "sitemap": true,
+      "title": "Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)",
+      "description": "Simula ROI, cashflow e rischio del modello per un B&B. Confronta ipotesi di investimento e, con Pro, analisi e dati PMS nel report integrato.",
+      "canonical": [
+        "https://www.rendimentobb.it/tool/"
+      ],
+      "robots": [
+        "index, follow"
+      ],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          "🚀 Sblocca analisi completa"
+        ],
+        [
+          "h1",
+          "Analizza un investimento B&B"
+        ],
+        [
+          "h2",
+          "Il tuo investimento, passo dopo passo"
+        ],
+        [
+          "h3",
+          "Simula il tuo investimento B&B"
+        ],
+        [
+          "h3",
+          "Executive Investment Report"
+        ],
+        [
+          "h2",
+          "Executive Investment Report"
+        ],
+        [
+          "h2",
+          "Approfondimento investimento"
+        ],
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          ""
+        ],
+        [
+          "h3",
+          ""
+        ]
+      ],
+      "staticLinks": 25,
+      "scripts": 17,
+      "bytes": 77589,
+      "images": 2,
+      "missingAlt": 0,
+      "jsonld": [
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "RendimentoBB ROI Simulator",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "29",
+            "priceCurrency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "file": "withdrawal.html",
+      "url": "https://www.rendimentobb.it/withdrawal.html",
+      "sitemap": false,
+      "title": "Recesso e abbonamenti – RendimentoBB",
+      "description": "Termini di accesso e utilizzo dei servizi RendimentoBB.",
+      "canonical": [
+        "https://www.rendimentobb.it/withdrawal.html"
+      ],
+      "robots": [],
+      "lang": "it",
+      "alternates": [],
+      "headings": [
+        [
+          "h1",
+          "Recesso e abbonamenti"
+        ],
+        [
+          "h2",
+          "Recesso, rinnovo e prova: tre operazioni distinte"
+        ],
+        [
+          "h2",
+          "Come esercitare il recesso online"
+        ],
+        [
+          "h2",
+          "Modello facoltativo di richiesta di recesso"
+        ],
+        [
+          "h2",
+          "Recedere dal contratto qui"
+        ],
+        [
+          "h3",
+          "Controlla i dati prima di confermare"
+        ]
+      ],
+      "staticLinks": 3,
+      "scripts": 5,
+      "bytes": 11710,
+      "images": 0,
+      "missingAlt": 0,
+      "jsonld": []
+    }
+  ],
+  "sitemapCount": 39,
+  "issues": [],
+  "duplicateTitles": {
+    "Hospitality PMS — Demo | RendimentoBB": [
+      "demo/hospitality-pms/index.html",
+      "en/demo/hospitality-pms/index.html"
+    ],
+    "Investment Analytics — Demo | RendimentoBB": [
+      "demo/investment-analytics/index.html",
+      "en/demo/investment-analytics/index.html"
+    ]
+  },
+  "duplicateDescriptions": {
+    "": [
+      "404.html",
+      "account-action/index.html",
+      "dashboard/index.html",
+      "dashboard-leads/index.html",
+      "dashboard-report/index.html",
+      "en/gestione-commerciale/index.html",
+      "gestione-commerciale/index.html",
+      "guest-report/index.html",
+      "login/index.html",
+      "pro-success/index.html"
+    ],
+    "Termini di accesso e utilizzo dei servizi RendimentoBB.": [
+      "terms.html",
+      "withdrawal.html"
+    ]
+  }
+}

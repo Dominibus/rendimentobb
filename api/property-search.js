@@ -1510,28 +1510,6 @@ export default async function handler(req, res) {
   // 🤖 AI SCORE
   // =====================================
 
-  const calculateScore = (property) => {
-
-    let score = 0;
-
-    score += property.roi * 5;
-
-    score +=
-      Math.max(
-        0,
-        100 - property.price / 5000
-      );
-
-    score +=
-      Math.min(
-        property.sqm,
-        100
-      ) / 2;
-
-    return Math.round(score);
-
-  };
-
   // =====================================
   // 🔍 FILTER
   // =====================================
@@ -1551,42 +1529,13 @@ export default async function handler(req, res) {
   // 🤖 AI ENRICHMENT
   // =====================================
 
-  results =
-    results.map(p => ({
-
-      ...p,
-
-      score:
-        calculateScore(p),
-
-      aiReason:
-
-        p.roi >= 18
-
-          ? "Highest ROI"
-
-        : p.price <= budget * 0.9
-
-          ? "Best value"
-
-        : "Balanced investment"
-
-    }));
-
   // =====================================
   // 🎯 SORTING
   // =====================================
 
-  if(goal === "roi"){
-
-    results.sort(
-      (a,b)=>
-        b.roi - a.roi
-    );
-
-  }
-
-  else if(goal === "cashflow"){
+  // Legacy goal names remain accepted; default order is the example order.
+  // Price and area do not establish cashflow, ROI or investment safety.
+  if(goal === "cashflow"){
 
     results.sort(
       (a,b)=>
@@ -1617,8 +1566,11 @@ export default async function handler(req, res) {
 
   // These are indicative scenarios generated from an internal static dataset,
   // not live listings or data supplied by third-party property portals.
-  results = results.map(({ portal, url, ...property }, index) => ({
+  results = results.map(({ portal, url, roi, ...property }, index) => ({
     ...property,
+    roi: null,
+    score: null,
+    aiReason: "Financial inputs incomplete; calculate in the simulator",
     portal: `Scenario ${index + 1}`,
     url: ""
   }));
