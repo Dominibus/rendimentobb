@@ -8,7 +8,7 @@ import {TERMS_VERSION} from "./subscription-offer.js?v=20261016-rc140";
 // ===============================================
 // ================= FIRESTORE ================
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
-import { calculateROI } from "./roi-engine.js?v=20261012-rc106";
+import { calculateROI } from "./roi-engine.js?v=20261027-rc211";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
@@ -16,12 +16,13 @@ import {installToolPresentation} from "./tool-presentation.js?v=20261023-rc189";
 installToolPresentation(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
+import {financialReview,financialScenarios,financialReviewHTML,financialScenariosHTML} from "./financial-review.js?v=20261027-rc211";
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
-import { renderFreeSimulationPreview } from "./free-preview.js?v=20261009-rc91";
+import { renderFreeSimulationPreview } from "./free-preview.js?v=20261027-rc211";
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261026-rc199";
+} from "./market-engine.js?v=20261027-rc211";
 
 import {
 renderExecutiveKPI
@@ -520,7 +521,7 @@ async function saveAnalysis(data){
   window.currentCity ||
   sessionStorage.getItem("tool_city") ||
   localStorage.getItem("selected_city") ||
-  "roma";
+  "";
 
 const safeRealCity =
   data.realCity ||
@@ -1494,44 +1495,33 @@ container.innerHTML = buildRevenueScenarios(baseRevenue, t).map(scenario => `
 
 // ================= OCCUPANCY SENSITIVITY =================
 
+let currentFinancialAssumptions = null;
 function renderOccupancySensitivity(baseResult, inputs){
-
-const container = document.getElementById("occupancy-sensitivity");
-if(!container) return;
-
-if(!baseResult || !inputs || typeof calculateROI !== "function"){
-  container.innerHTML = "";
-  return;
+ const container=document.getElementById("occupancy-sensitivity");
+ if(!container)return;
+ const access=window.getUserAccess?.()||{};
+ const assumptions=inputs && baseResult
+   ?buildInvestmentAssumptions(baseResult,inputs,inputs.propertyMode==="owned"?"owned_property":"simulator")
+   :currentFinancialAssumptions;
+ if(inputs && baseResult)currentFinancialAssumptions=assumptions;
+ if(access.isLoading || (!access.isInvestor&&!access.isPro&&!access.isAdmin) || investmentAnalysisState.getState().status!=="current"){container.innerHTML="";return;}
+ container.innerHTML=financialScenariosHTML(assumptions,window.currentLang);
 }
-
-const baseOccupancy = Math.max(0, Math.min(100, Number(inputs.occupancy) || 0));
-const lowerOccupancy = Math.max(0, baseOccupancy - 10);
-const higherOccupancy = Math.min(100, baseOccupancy + 10);
-const lower = calculateROI({...inputs, occupancy: lowerOccupancy});
-const higher = calculateROI({...inputs, occupancy: higherOccupancy});
-const formatROI = value => `${Number(value || 0).toFixed(1)}%`;
-const sensitivityValue = result => result.roiAvailable === false ? formatCurrency(result.netAfterMortgage) : formatROI(result.roi);
-
-container.innerHTML = `
-
-<div class="kpi-box">
-  <div class="kpi-label">${lowerOccupancy}% ${t("occupazione", "occupancy")}</div>
-  <div class="kpi-value">${sensitivityValue(lower)}</div>
-</div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${t("Base", "Base")} · ${baseOccupancy}%</div>
-  <div class="kpi-value">${sensitivityValue(baseResult)}</div>
-</div>
-
-<div class="kpi-box">
-  <div class="kpi-label">${higherOccupancy}% ${t("occupazione", "occupancy")}</div>
-  <div class="kpi-value">${sensitivityValue(higher)}</div>
-</div>
-
-`;
-
+function renderFinancialReview(){
+ const node=document.getElementById("financial-model-review");if(!node)return;
+ const access=window.getUserAccess?.()||{};
+ node.innerHTML=!access.isLoading && (access.isInvestor||access.isPro||access.isAdmin) && investmentAnalysisState.getState().status==="current"
+   ?financialReviewHTML(currentFinancialAssumptions,window.currentLang):"";
 }
+document.addEventListener("rb_auth_ready",renderFinancialReview);
+window.addEventListener("rb_plan_ready",renderFinancialReview);
+document.addEventListener("rb_auth_ready",()=>renderOccupancySensitivity());
+window.addEventListener("rb_plan_ready",()=>renderOccupancySensitivity());
+window.addEventListener("rb_investment_state_updated",()=>{renderFinancialReview();renderOccupancySensitivity();});
+for(const event of ["input","change"])document.addEventListener(event,()=>{
+ if(investmentAnalysisState.getState().status!=="current"){renderFinancialReview();renderOccupancySensitivity();}
+});
+
 // ================= BREAK EVEN OCCUPANCY =================
 
 function renderBreakEvenOccupancy(priceNight, expenses, commission, tax, mortgage){
@@ -2741,7 +2731,7 @@ if(window.RB_DEBUG === true){
 
     const market =
       window.currentCity ||
-      "roma";
+      "";
 
     const realCityInput =
 
@@ -2839,7 +2829,7 @@ const canonicalSaveScoreData =
         city:
           realCityInput ||
           market ||
-          "roma"
+          ""
 
       })
 
@@ -2918,7 +2908,7 @@ marketCity: market,
     realCity:
       realCityInput ||
       market ||
-      "roma"
+      ""
   }).then(saved => {
     // A failed/blocked write must not suppress an immediate manual retry.
     if(saved){
@@ -2958,7 +2948,7 @@ marketCity: market,
 
   market ||
 
-  "roma",
+  "",
 
 // =====================================
 // 📈 ROI
@@ -3908,8 +3898,8 @@ if(resultCity){
 
   const cityLabel = english =>
     cityLabels[String(marketCity).toLowerCase()]?.[english ? 1 : 0] ||
-    customLocation?.trim() ||
-    (english ? "Selected market" : "Mercato selezionato");
+    customLocation?.trim() || marketCity ||
+    (english ? "Location not specified" : "Località non indicata");
 
   resultCity.innerText =
     `${cityLabel(window.currentLang === "en")} · ${t("Scenario base", "Base scenario")}`;
@@ -4004,7 +3994,7 @@ const executiveScoreData =
         occupancy: Number(occupancy ?? 0),
         mortgagePercent: Number(price > 0 ? (calculatedLoan / price) * 100 : 0),
         cashflow: Number(net ?? 0),
-        city: marketCity || "roma"
+        city: marketCity || ""
       })
     : null;
 
@@ -4187,13 +4177,13 @@ price:
   marketCity:
     marketCity ||
     window.currentCity ||
-    "Roma",
+    "",
 
   city:
     selectedCity ||
     marketCity ||
     window.currentCity ||
-    "Roma",
+    "",
 
   timestamp:
     Date.now()
@@ -4226,7 +4216,7 @@ renderInvestmentRanking(
 
 renderROIMarketComparison(
   Number(window.lastAnalysisData.roi ?? 0),
-  String(window.lastAnalysisData.marketCity ?? window.lastAnalysisData.city ?? "roma").toLowerCase()
+  String(window.lastAnalysisData.marketCity ?? window.lastAnalysisData.city ?? "").toLowerCase()
 );
 
 // =====================================
@@ -4254,7 +4244,7 @@ const memoryCity = (
 
   document.getElementById("market-city")?.value ||
 
-  "roma"
+  ""
 
 )
 .toLowerCase()
@@ -4516,13 +4506,13 @@ if(!window.rbChatMemory.investmentHistory){
 const newSnapshot = {
 
   city:
-    window.currentCity || "roma",
+    window.currentCity || "",
 
 marketCity:
-    window.currentCity || "roma",
+    window.currentCity || "",
 
 realCity:
-    window.currentCity || "roma",
+    window.currentCity || "",
 
   roi:
   Number(
@@ -4790,7 +4780,7 @@ runPostAnalysis(result,{
   // =====================================
 
   renderMarketBenchmark?.(
-    window.currentCity || "roma"
+    window.currentCity || ""
   );
 
   renderMarketComparison?.(
@@ -4804,16 +4794,18 @@ runPostAnalysis(result,{
     propertyMode, price, equity, priceNight, occupancy, expenses, expensesUnit,
     commission, tax, loanAmount, interestRate, loanYears
   });
+  renderFinancialReview();
 
 }else{
 
-      renderMarketBenchmark?.(window.currentCity || "roma");
+      renderMarketBenchmark?.(window.currentCity || "");
       renderMarketComparison?.(gross, window.currentCity);
       renderRevenueForecast?.(gross);
       renderOccupancySensitivity?.(result, {
         propertyMode, price, equity, priceNight, occupancy, expenses, expensesUnit,
         commission, tax, loanAmount, interestRate, loanYears
       });
+  renderFinancialReview();
 
     }
 
@@ -5735,17 +5727,7 @@ const monthly = Math.round(
   )
 );
 
-const realCityInput =
-  document.getElementById("custom-location")?.value?.trim();
-
-const city =
-  realCityInput ||
-  d.realCity ||
-  window.currentCity ||
-  d.marketCity ||
-  sessionStorage.getItem("tool_city") ||
-  localStorage.getItem("selected_city") ||
-  "roma";
+const city = String(d.realCity || d.marketCity || d.city || "");
 
 // ================= FORMAT =================
 const eur = v => {
@@ -5923,7 +5905,7 @@ const pdfCityNames = isEN
   : {roma:"Roma",milano:"Milano",napoli:"Napoli",firenze:"Firenze"};
 const pdfCityName = Object.hasOwn(pdfCityNames,pdfCityKey)
   ? pdfCityNames[pdfCityKey]
-  : city.charAt(0).toUpperCase() + city.slice(1);
+  : city ? city.charAt(0).toUpperCase() + city.slice(1) : T("Località non indicata", "Location not specified");
 doc.text(
   T("Mercato","Market") +
   " • " +
@@ -6762,8 +6744,14 @@ doc.text(T("Cashflow","Cashflow"),20,y);
 
 y+=12;
 
+const reviewed = financialReview(d.assumptions);
+if(reviewed){
+ row(T("NOI prima di mutuo e imposte","NOI before financing and tax"),eur(reviewed.result.noi));
+ row(T("Cashflow prima delle imposte del modello","Cashflow before model tax"),eur(reviewed.cashflowBeforeModelTax));
+ row(T("Imposte del modello","Model tax"),eur(reviewed.result.taxCost));
+}
 row(T("Ricavi","Revenue"), eur(revenue));
-row(T("Cashflow netto","Net cashflow"), eur(profit));
+row(T("Cashflow dopo fiscalita simulata e rate","Cashflow after model tax and payments"),eur(profit));
 row(T("Mensile","Monthly"), eur(monthly));
 
 y += 18;
@@ -6784,6 +6772,19 @@ const scenarioExplanation = doc.splitTextToSize(T(
 doc.setFontSize(9);
 doc.setTextColor(...gray);
 doc.text(scenarioExplanation, 20, y);
+y += scenarioExplanation.length * 5 + 8;
+const recalculatedScenarios = financialScenarios(d.assumptions);
+if(recalculatedScenarios.length){
+ doc.setFontSize(8);
+ for(const scenario of recalculatedScenarios){
+  const r=scenario.result;
+  const label=({prudent:T("Prudente","Conservative"),base:T("Base","Base"),favourable:T("Favorevole","Favourable")})[scenario.key];
+  doc.text(`${label}: ${pdfDecimal(r.occupancy,1)}% / ${eur(r.priceNight)} - CF ${eur(r.netAfterMortgage)} - DSCR ${r.annualDebtService>0?pdfDecimal(r.dscr,2):"N/A"}`,20,y,{maxWidth:170});y+=9;
+ }
+ const note=doc.splitTextToSize(T("Sensibilita: occupazione +/-10 punti (0-100%), tariffa +/-10%. Costi fissi e mutuo invariati; commissioni, costi percentuali e imposte ricalcolati. Non sono previsioni di mercato.","Sensitivity: occupancy +/-10 points (0-100%), rate +/-10%. Fixed costs and debt unchanged; commissions, percentage costs and model tax recalculated. Not market forecasts."),170);
+ doc.text(note,20,y,{maxWidth:170});
+}
+
 
 
 footer();
@@ -7976,7 +7977,7 @@ if(!selectedCity){
     sessionStorage.getItem("tool_city") ||
     localStorage.getItem("selected_city") ||
     window.currentCity ||
-    "roma";
+    "";
 }
 
 // ================= LOCK HARD (CRITICO) =================
@@ -8806,7 +8807,7 @@ if(!window.__rbToolLanguageRefreshBound){
       data.marketCity ??
       data.city ??
       window.currentCity ??
-      "roma"
+      ""
     ).toLowerCase();
 
     const score = Number(
@@ -8843,6 +8844,8 @@ if(!window.__rbToolLanguageRefreshBound){
         : formatCurrency(gross);
     }
 
+    renderFinancialReview();
+    renderOccupancySensitivity();
     renderRevenueForecast(gross);
     renderMarketBenchmark(city);
     const languageAccess = window.getUserAccess?.() || {};
@@ -8870,13 +8873,13 @@ if(!window.__rbToolLanguageRefreshBound){
         napoli: t("Napoli", "Naples"),
         firenze: t("Firenze", "Florence")
       };
-      const cityLabel = cityLabels[city] || data.realCity || city;
+      const cityLabel = cityLabels[city] || data.realCity || city || t("Località non indicata","Location not specified");
       resultCity.textContent =
         `${cityLabel} · ${t("Scenario base", "Base scenario")}`;
       // Static language passes run again after this listener. The result city
       // belongs to the calculated snapshot, not the empty-state translation.
-      resultCity.setAttribute("data-it", `${({roma:"Roma",milano:"Milano",napoli:"Napoli",firenze:"Firenze"})[city] || data.realCity || city} · Scenario base`);
-      resultCity.setAttribute("data-en", `${({roma:"Rome",milano:"Milan",napoli:"Naples",firenze:"Florence"})[city] || data.realCity || city} · Base scenario`);
+      resultCity.setAttribute("data-it", `${({roma:"Roma",milano:"Milano",napoli:"Napoli",firenze:"Firenze"})[city] || data.realCity || city || "Località non indicata"} · Scenario base`);
+      resultCity.setAttribute("data-en", `${({roma:"Rome",milano:"Milan",napoli:"Naples",firenze:"Florence"})[city] || data.realCity || city || "Location not specified"} · Base scenario`);
     }
   });
 }

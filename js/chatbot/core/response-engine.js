@@ -1045,7 +1045,7 @@ allowMarketContext
 
     window.currentCity ||
 
-    "roma"
+    ""
 
   )
 
@@ -1887,12 +1887,12 @@ const occupancyOptimizationCityRaw =
 
   window.currentCity ||
 
-  "roma";
+  "";
 
 const occupancyOptimizationCity =
 
   String(
-    occupancyOptimizationCityRaw || "roma"
+    occupancyOptimizationCityRaw || ""
   )
   .toLowerCase()
   .trim();
@@ -2340,7 +2340,7 @@ Questi sono i dati canonici salvati. Gli scenari temporanei richiesti in chat no
 • Mutuo: ${formatMoneyIT(baselineLoan)} (${baselineMortgagePercent.toFixed(0)}%)
 • Occupazione: ${baselineOccupancy.toFixed(0)}%
 • ROI sul capitale: ${baselineROI.toFixed(2)}%
-• ROI sull’immobile: ${baselineRealROI.toFixed(2)}%
+• Cashflow / valore immobile: ${baselineRealROI.toFixed(2)}%
 • Cashflow annuo: ${formatMoneyIT(baselineCashflow)}
 • Rischio: ${baselineRisk.toFixed(0)}/100
 • Investment Score: ${baselineScore.toFixed(0)}/100`;
@@ -2356,7 +2356,7 @@ These are the saved canonical values. Temporary chat scenarios have not changed 
 • Mortgage: ${formatMoneyEN(baselineLoan)} (${baselineMortgagePercent.toFixed(0)}%)
 • Occupancy: ${baselineOccupancy.toFixed(0)}%
 • Equity ROI: ${baselineROI.toFixed(2)}%
-• Property ROI: ${baselineRealROI.toFixed(2)}%
+• Cashflow / property value: ${baselineRealROI.toFixed(2)}%
 • Annual cashflow: ${formatMoneyEN(baselineCashflow)}
 • Risk: ${baselineRisk.toFixed(0)}/100
 • Investment Score: ${baselineScore.toFixed(0)}/100`;
@@ -2954,7 +2954,7 @@ Mutuo: ${originalMortgagePercent}% → ${requestedMortgagePercent}%
 Equity: ${fmtEUR_IT(originalEquity)} → ${fmtEUR_IT(newEquity)}
 Finanziamento: ${fmtEUR_IT(originalLoanAmount)} → ${fmtEUR_IT(newLoanAmount)}
 ROI equity: ${fmtPct(originalROI)} → ${fmtPct(newROI)}
-ROI immobile: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
+Cashflow / valore immobile: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
 Cashflow: ${fmtEUR_IT(originalCashflow)} → ${fmtEUR_IT(newCashflow)}
 Investment Score: ${originalScore} → ${newScore}
 
@@ -2980,7 +2980,7 @@ Mortgage: ${originalMortgagePercent}% → ${requestedMortgagePercent}%
 Equity: ${fmtEUR_EN(originalEquity)} → ${fmtEUR_EN(newEquity)}
 Loan: ${fmtEUR_EN(originalLoanAmount)} → ${fmtEUR_EN(newLoanAmount)}
 Equity ROI: ${fmtPct(originalROI)} → ${fmtPct(newROI)}
-Property ROI: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
+Cashflow / property value: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
 Cashflow: ${fmtEUR_EN(originalCashflow)} → ${fmtEUR_EN(newCashflow)}
 Investment Score: ${originalScore} → ${newScore}
 
@@ -6500,7 +6500,7 @@ ${verdictReasonIT}
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
 })}%
-• ROI sull’immobile: ${executiveROI.toLocaleString("it-IT", {
+• Cashflow / valore immobile: ${executiveROI.toLocaleString("it-IT", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
 })}%
@@ -6523,7 +6523,7 @@ ${verdictReasonEN}
 
 • AI Score: ${Math.round(canonicalScore)}/100
 • Equity ROI: ${roi.toFixed(2)}%
-• Property ROI: ${executiveROI.toFixed(2)}%
+• Cashflow / property value: ${executiveROI.toFixed(2)}%
 • Annual cashflow: ${formatSummaryEUREN(summaryNet)}
 • Occupancy: ${occupancy}%
 • ADR: ${formatSummaryEUREN(summaryADR)}
@@ -6623,7 +6623,7 @@ WAIT non significa che l’investimento sia negativo. Significa che i risultati 
 
 • Investment Score: ${Math.round(canonicalScore)}/100
 • ROI sul capitale: ${roi.toFixed(2)}%
-• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• Cashflow / valore immobile: ${executiveROI.toFixed(2)}%
 • Cashflow annuo: ${formatEURIT(followUpNet)}
 • Occupazione: ${occupancy}%
 • Rischio: ${risk}/100
@@ -6651,7 +6651,7 @@ WAIT does not mean the investment is unattractive. It means the results are prom
 
 • Investment Score: ${Math.round(canonicalScore)}/100
 • Equity ROI: ${roi.toFixed(2)}%
-• Property ROI: ${executiveROI.toFixed(2)}%
+• Cashflow / property value: ${executiveROI.toFixed(2)}%
 • Annual cashflow: ${formatEUREN(followUpNet)}
 • Occupancy: ${occupancy}%
 • Risk: ${risk}/100
@@ -7055,10 +7055,10 @@ else if(
   else if(executiveROI < 8){
 
     primaryWeaknessIT =
-      `Il punto debole principale è il ROI sull’immobile, pari al ${executiveROI.toFixed(2)}%. Il rendimento del capitale è interessante, ma la redditività dell’asset deve essere rafforzata.`;
+      `Il punto debole principale è il Cashflow / valore immobile, pari al ${executiveROI.toFixed(2)}%. Il rendimento del capitale è interessante, ma la redditività dell’asset deve essere rafforzata.`;
 
     primaryWeaknessEN =
-      `The main weakness is property ROI at ${executiveROI.toFixed(2)}%. Equity returns are attractive, but the underlying asset profitability should be strengthened.`;
+      `The main weakness is cashflow / property value at ${executiveROI.toFixed(2)}%. Equity returns are attractive, but the underlying asset profitability should be strengthened.`;
 
   }
 
@@ -7146,7 +7146,7 @@ ${primaryWeaknessIT}
 • Investment Score: ${Math.round(canonicalScore)}/100
 • Verdetto: ${canonicalVerdict}
 • ROI sul capitale: ${roi.toFixed(2)}%
-• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• Cashflow / valore immobile: ${executiveROI.toFixed(2)}%
 • Cashflow annuo: ${strategicFormatEURIT(strategicNet)}
 • Occupazione: ${occupancy}%
 • ADR: ${strategicFormatEURIT(strategicADR)}
@@ -7178,7 +7178,7 @@ ${primaryWeaknessEN}
 • Investment Score: ${Math.round(canonicalScore)}/100
 • Verdict: ${canonicalVerdict}
 • Equity ROI: ${roi.toFixed(2)}%
-• Property ROI: ${executiveROI.toFixed(2)}%
+• Cashflow / property value: ${executiveROI.toFixed(2)}%
 • Annual cashflow: ${strategicFormatEUREN(strategicNet)}
 • Occupancy: ${occupancy}%
 • ADR: ${strategicFormatEUREN(strategicADR)}
@@ -7464,7 +7464,7 @@ ${isOccupancyScenario ? "Occupazione" : "Prezzo medio per notte"}: ${valueIT(ori
 📊 Impatto economico
 
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
-• ROI sull’immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow / valore immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Variazione cashflow: ${cashflowDelta >= 0 ? "+" : ""}${formatEURIT(cashflowDelta)}
 • Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -7486,7 +7486,7 @@ ${isOccupancyScenario ? "Occupancy" : "Average nightly rate"}: ${valueEN(origina
 📊 Financial impact
 
 • Equity ROI: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
-• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Cashflow / property value: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Cashflow change: ${cashflowDelta >= 0 ? "+" : ""}${formatEUREN(cashflowDelta)}
 • Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -7761,7 +7761,7 @@ ${directionMismatchIT}
 📊 Impatto economico
 
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
-• ROI sull’immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow / valore immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Variazione cashflow: ${cashflowDelta >= 0 ? "+" : ""}${formatEURIT(cashflowDelta)}
 • Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -7783,7 +7783,7 @@ ${directionMismatchEN}
 📊 Economic impact
 
 • Equity ROI: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
-• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Cashflow / property value: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Cashflow change: ${cashflowDelta >= 0 ? "+" : ""}${formatEUREN(cashflowDelta)}
 • Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -7979,7 +7979,7 @@ LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePerce
 
 ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
 
-ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+Cashflow / valore immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
 
 Cashflow annuo: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
 
@@ -8010,7 +8010,7 @@ LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePerce
 
 Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
 
-Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+Cashflow / property value: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
 
 Annual cashflow: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
 
@@ -8228,7 +8228,7 @@ Capitale proprio: ${formatEUR_IT(originalEquity)} → ${formatEUR_IT(scenarioEqu
 
 ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
 
-ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+Cashflow / valore immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
 
 Cashflow annuo: ${formatEUR_IT(originalCashflow)} → ${formatEUR_IT(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR_IT(cashflowDelta)})
 
@@ -8238,7 +8238,7 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 Con un mutuo di ${formatEUR_IT(scenarioLoan)}, l'LTV scende al ${formatPct(scenarioMortgagePercent)} e il capitale proprio richiesto diventa ${formatEUR_IT(scenarioEquity)}.
 
-Il nuovo scenario genera un ROI equity del ${formatPct(scenarioROI)}, un ROI immobile del ${formatPct(scenarioRealROI)} e un cashflow annuo di ${formatEUR_IT(scenarioCashflow)}.
+Il nuovo scenario genera un ROI equity del ${formatPct(scenarioROI)}, un Cashflow / valore immobile del ${formatPct(scenarioRealROI)} e un cashflow annuo di ${formatEUR_IT(scenarioCashflow)}.
 
 Il verdetto è ${verdict}.`;
 
@@ -8259,7 +8259,7 @@ Equity: ${formatEUR_EN(originalEquity)} → ${formatEUR_EN(scenarioEquity)} (${e
 
 Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
 
-Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+Cashflow / property value: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
 
 Annual cashflow: ${formatEUR_EN(originalCashflow)} → ${formatEUR_EN(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR_EN(cashflowDelta)})
 
@@ -8269,7 +8269,7 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 With a ${formatEUR_EN(scenarioLoan)} mortgage, LTV falls to ${formatPct(scenarioMortgagePercent)} and the required equity becomes ${formatEUR_EN(scenarioEquity)}.
 
-The new scenario generates an equity ROI of ${formatPct(scenarioROI)}, a property ROI of ${formatPct(scenarioRealROI)} and annual cashflow of ${formatEUR_EN(scenarioCashflow)}.
+The new scenario generates an equity ROI of ${formatPct(scenarioROI)}, a cashflow / property value of ${formatPct(scenarioRealROI)} and annual cashflow of ${formatEUR_EN(scenarioCashflow)}.
 
 The verdict is ${verdict}.`;
 
@@ -8571,7 +8571,7 @@ Mutuo: ${formatEUR_IT(originalLoan)} → ${formatEUR_IT(scenarioLoan)}
 📊 Impatto economico
 
 ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
-ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+Cashflow / valore immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
 Cashflow annuo: ${formatEUR_IT(originalCashflow)} → ${formatEUR_IT(scenarioCashflow)}
 Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
@@ -8598,13 +8598,13 @@ Loan: ${formatEUR_EN(originalLoan)} → ${formatEUR_EN(scenarioLoan)}
 📊 Financial Impact
 
 Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
-Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+Cashflow / property value: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
 Annual cashflow: ${formatEUR_EN(originalCashflow)} → ${formatEUR_EN(scenarioCashflow)}
 Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🧠 AI Assessment
 
-The combined effect of the changes brings equity ROI to ${formatPct(scenarioROI)}, property ROI to ${formatPct(scenarioRealROI)} and annual cashflow to ${formatEUR_EN(scenarioCashflow)}.
+The combined effect of the changes brings equity ROI to ${formatPct(scenarioROI)}, cashflow / property value to ${formatPct(scenarioRealROI)} and annual cashflow to ${formatEUR_EN(scenarioCashflow)}.
 
 The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with a ${verdict} verdict.`;
 
@@ -9334,7 +9334,7 @@ const executiveReasoningMemory = {
   lastCity:
     city ||
     memory.lastCity ||
-    "roma"
+    ""
 
 };  
 

@@ -17,7 +17,7 @@
   if(current){
    const currency=value=>new Intl.NumberFormat(en?'en-GB':'it-IT',{style:'currency',currency:'EUR'}).format(value);
    const roi=metrics.roiAvailable===false?'N/A':new Intl.NumberFormat(en?'en-GB':'it-IT',{maximumFractionDigits:1}).format(metrics.roi)+'%';
-   const entries=[[t('Località','Location'),state.city||t('Non indicata','Not entered')],[t('ROI immobile','Property ROI'),roi],[t('Cashflow annuo stimato','Estimated annual cashflow'),currency(metrics.annualCashflow)],[t('Cashflow mensile stimato','Estimated monthly cashflow'),currency(metrics.monthlyCashflow)]];
+   const entries=[[t('Località','Location'),state.city||t('Non indicata','Not entered')],[t('Cashflow / valore immobile','Cashflow / property value'),roi],[t('Cashflow annuo stimato','Estimated annual cashflow'),currency(metrics.annualCashflow)],[t('Cashflow mensile stimato','Estimated monthly cashflow'),currency(metrics.monthlyCashflow)]];
    body=`<div class="rb-ai-snapshot-title">${t('Risultati base · simulazione corrente','Base results · current simulation')}</div><div class="rb-ai-snapshot-grid">${entries.map(([label,value])=>`<div class="rb-ai-metric"><span class="rb-ai-metric-label">${escape(label)}</span><strong>${escape(value)}</strong></div>`).join('')}</div><p>${t('Stime delle ipotesi inserite, già mostrate nel simulatore.','Estimates from your inputs, already shown in the simulator.')}${metrics.roiAvailable===false?' '+t('ROI N/A: manca il valore dell’immobile, non è un rendimento zero.','ROI N/A: the property value is missing; this is not a zero return.'):''}</p>`;
   }else{
    const waiting=access.isLoading||state.status==='pending';

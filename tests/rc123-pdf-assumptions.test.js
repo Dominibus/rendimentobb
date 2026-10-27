@@ -1,3 +1,4 @@
+import {financialReview,financialScenarios} from '../js/financial-review.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -11,7 +12,7 @@ async function render(lang,assumptions){
  let page=1,saved=false;const calls=[];
  const doc=new Proxy({getNumberOfPages:()=>page,addPage:()=>page++,text:(v,x,y)=>calls.push({text:String(v),page,y}),splitTextToSize:v=>[v],save:()=>{saved=true;}},{get:(o,k)=>o[k]||(()=>{})});
  const window={currentLang:lang,getUserAccess:()=>({isPro:true,canDownloadPDF:true}),jspdf:{jsPDF:function(){return doc;}},RB_MARKET_DATA:{},lastAnalysisData:{assumptions,propertyMode:'owned',price:0,equity:0,loan:0,annualProfit:18151.2375,revenueAnnual:38325,netOperatingIncome:22976.25,roi:0,risk:15,investmentScore:78,city:'roma',priceNight:999,occupancy:99,expenses:9999}};
- const ctx={window,sessionStorage:{getItem:()=>null},localStorage:{getItem:()=>null},document:{getElementById:()=>null},buildPDFScenarioCommentary,buildRevenueScenarios,calculateMortgage:()=>0,showToast:()=>assert.fail('unexpected toast'),openUpgradeModal:()=>assert.fail('unexpected upgrade')};
+ const ctx={window,sessionStorage:{getItem:()=>null},localStorage:{getItem:()=>null},document:{getElementById:()=>null},financialReview,financialScenarios,buildPDFScenarioCommentary,buildRevenueScenarios,calculateMortgage:()=>0,showToast:()=>assert.fail('unexpected toast'),openUpgradeModal:()=>assert.fail('unexpected upgrade')};
  vm.runInNewContext(code,ctx);await window.generateExecutivePDF();
  return {calls,page,saved,last:calls.filter(x=>x.page===8).map(x=>x.text).join('\n')};
 }

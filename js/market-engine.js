@@ -51,7 +51,7 @@ function getSafeCity(inputCity){
   }
 
   // 👉 fallback estremo
-  return "roma";
+  return "";
 }
 
 /* ================= CORE RENDER ================= */

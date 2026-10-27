@@ -1,3 +1,4 @@
+import {financialReview,financialScenarios} from '../js/financial-review.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -9,9 +10,9 @@ test('main ROI label follows paid/free access and updates translation attributes
  for(const access of [{isFree:true},{isInvestor:true},{isPro:true},{isAdmin:true}])for(const lang of ['it','en']){
   const label={dataset:{}};const document={getElementById:id=>id==='roi-main-basis'?label:null};
   renderFreeSimulationPreview({},{access,document,lang});
-  const paid=!access.isFree;assert.equal(label.textContent,lang==='en'?(paid?'Return on equity':'Property ROI'):(paid?'ROI sul capitale proprio':'ROI immobile'));
-  assert.equal(label.dataset.it,paid?'ROI sul capitale proprio':'ROI immobile');
-  updateSimulationROILabel({access:{isFree:true},document,lang});assert.equal(label.dataset.it,'ROI immobile');
+  const paid=!access.isFree;assert.equal(label.textContent,lang==='en'?(paid?'Return on equity':'Cashflow / property value'):(paid?'ROI sul capitale proprio':'Cashflow / valore immobile'));
+  assert.equal(label.dataset.it,paid?'ROI sul capitale proprio':'Cashflow / valore immobile');
+  updateSimulationROILabel({access:{isFree:true},document,lang});assert.equal(label.dataset.it,'Cashflow / valore immobile');
  }
 });
 test('PDF commentary prioritizes losses and distinguishes zero from positive cashflow',()=>{
@@ -40,7 +41,7 @@ test('complete PDF generator preserves eight pages including actual report assum
   const doc=new Proxy({getNumberOfPages:()=>pages,addPage(){pages++;},text(value,x,y){texts.push({value:String(value),y,page:pages});},splitTextToSize:value=>[value],save:name=>filename=name},{get(target,key){return target[key]||(()=>{});}});
   const window={currentLang:'it',getUserAccess:()=>({isPro:true,canDownloadPDF:true}),jspdf:{jsPDF:function(){return doc;}},
    RB_MARKET_DATA:{roma:{roi:9.8}},lastAnalysisData:{assumptions:{loanYears:25,interestRate:3.5},roi:net/300,realROI:net/1500,annualProfit:net,revenueAnnual:27375,price:150000,equity:30000,loan:120000,annualDebtService:8351,mortgageYearly:8351,netOperatingIncome:13669,noi:13669,dscr:1.64,risk:58,investmentScore:41,verdict:'WAIT',city:'roma',occupancy:50}};
-  const c={window,sessionStorage:{getItem:()=> 'roma'},document:{getElementById:()=>null},buildPDFScenarioCommentary,
+  const c={window,sessionStorage:{getItem:()=> 'roma'},document:{getElementById:()=>null},financialReview,financialScenarios,buildPDFScenarioCommentary,
    buildRevenueScenarios,
    calculateMortgage:()=>8351,showToast(){throw Error('Unexpected toast');},openUpgradeModal(){throw Error('Unexpected upgrade');}};
   vm.runInNewContext(code,c);await window.generateExecutivePDF();

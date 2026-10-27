@@ -61,7 +61,7 @@
           const decimal=value=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(value);
           const time=new Date(analysis.calculatedAt).toLocaleString(locale);
           lines.push((en?'Current simulator analysis':'Analisi corrente del simulatore')+(analysis.city?' · '+analysis.city:'')+' · '+time);
-          lines.push((metrics.roiBasis==='equity'?(metrics.propertyMode==='owned' ? (en?'Return on startup capital: ':'ROI sul capitale di avvio: ') : (en?'Return on equity: ':'ROI sul capitale proprio: ')):(en?'Property ROI: ':'ROI immobile: '))+(metrics.roiAvailable===false || (metrics.roiBasis==='equity' && metrics.equity===0) ? 'N/A' : percent(metrics.roi)));
+          lines.push((metrics.roiBasis==='equity'?(metrics.propertyMode==='owned' ? (en?'Return on startup capital: ':'ROI sul capitale di avvio: ') : (en?'Return on equity: ':'ROI sul capitale proprio: ')):(en?'Cashflow / property value: ':'Cashflow / valore immobile: '))+(metrics.roiAvailable===false || (metrics.roiBasis==='equity' && metrics.equity===0) ? 'N/A' : percent(metrics.roi)));
           if(metrics.roiBasis==='equity' && metrics.equity===0)lines.push(en?'Invested equity is zero: equity ROI cannot be calculated. Review cash flow, leverage and debt coverage.':'Il capitale proprio è zero: il ROI equity non è calcolabile. Verifica cashflow, leva e copertura delle rate.');
           lines.push((en?'Simulated annual cashflow after debt: ':'Cashflow annuo simulato dopo mutuo: ')+currency(metrics.annualCashflow),
             (en?'Monthly average: ':'Media mensile: ')+currency(metrics.monthlyCashflow));
@@ -91,7 +91,7 @@
         }
       }else if(mode==='assumptions'){
         lines.push(en?'Check before deciding:':'Da verificare prima di decidere:',
-          en?'1. Nightly rate and occupancy: use comparable properties and seasonality. Benchmarks are indicative.':'1. Tariffa e occupazione: confronta immobili simili e stagionalità. I benchmark di mercato sono indicativi.',
+          en?'1. Nightly rate and occupancy: use comparable properties and seasonality. Distinguish documented published quotes, assumptions and illustrations: these are not booked ADR or actual occupancy.':'1. Tariffa e occupazione: confronta immobili simili e stagionalità. Distingui quote pubblicate documentate, ipotesi e dati illustrativi: non sono ADR incassato o occupazione reale.',
           en?'2. Included costs, financing and taxes: Avoid counting costs twice.':'2. Costi inclusi, finanziamento e imposte: evita di conteggiare due volte una spesa.',
           en?'3. Run a separate simulation with lower occupancy or rate, keeping costs unchanged. Verify the property and local requirements.':'3. Esegui una simulazione separata con occupazione o tariffa più bassa, a parità di costi. Verifica immobile e requisiti locali.');
       }else if(!isTool || mode==='guide'){
@@ -104,6 +104,7 @@
       }else{
         lines.push(checks.length?(en?'Review the reported fields before running the analysis.':'Rivedi i campi segnalati prima di avviare l’analisi.'):(en?'Run or update the analysis with the current inputs, then review results and assumptions.':'Avvia o aggiorna l’analisi con i dati attuali, poi rivedi risultati e ipotesi.'));
       }
+      lines.push(en?'This is a preliminary reading of explicit assumptions, not a professional opinion. Verify the applicable tax treatment, property compliance and comparables with qualified professionals before deciding.':'Questa è una lettura preliminare di ipotesi esplicite, non un parere professionale. Prima di decidere, verifica fiscalità applicabile, conformità dell’immobile e comparabili con i professionisti competenti.');
       lines.push(en?'Shortcuts open sections. You choose when to change inputs and run calculations; estimates are not guaranteed returns.':'Le scorciatoie aprono le sezioni. Decidi tu quando modificare i dati e avviare i calcoli; le stime non sono rendimenti garantiti.');
       return lines.join('\n\n');
     };

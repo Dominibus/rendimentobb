@@ -677,7 +677,7 @@ ${Math.round(score)}/100
 
 📈 Perché
 • ROI sul capitale: ${formatPct(roi)}
-• ROI sull'immobile: ${formatPct(realROI)}
+• Cashflow / valore immobile: ${formatPct(realROI)}
 • Cashflow annuo: ${formatEUR(cashflow)}
 • Rischio: ${Math.round(risk)}/100
 • Occupazione prevista: ${formatPct(occupancy)}
@@ -701,7 +701,7 @@ ${Math.round(score)}/100
 
 📈 Why
 • Return on equity: ${formatPctEN(roi)}
-• Property ROI: ${formatPctEN(realROI)}
+• Cashflow / property value: ${formatPctEN(realROI)}
 • Annual cashflow: ${formatEUR(cashflow)}
 • Risk: ${Math.round(risk)}/100
 • Projected occupancy: ${formatPctEN(occupancy)}
@@ -899,7 +899,7 @@ Mantengo invariato l'LTV al ${mortgagePercent.toLocaleString("it-IT", {maximumFr
 
 📈 Impatto
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
-• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow / valore immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
 
@@ -924,7 +924,7 @@ I keep the LTV unchanged at ${mortgagePercent.toLocaleString("en-US", {maximumFr
 
 📈 Impact
 • Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
-• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Cashflow / property value: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
 
@@ -1166,7 +1166,7 @@ Mantengo invariati prezzo, struttura finanziaria, ADR e costi per isolare l'effe
 
 📈 Impatto economico
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
-• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow / valore immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
@@ -1197,7 +1197,7 @@ I keep purchase price, financing structure, ADR and costs unchanged to isolate t
 
 📈 Economic impact
 • Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
-• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Cashflow / property value: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
@@ -1431,7 +1431,7 @@ Mantengo invariati prezzo dell'immobile, struttura finanziaria, occupazione e co
 
 📈 Impatto economico
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
-• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow / valore immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
@@ -1442,7 +1442,7 @@ Mantengo invariati prezzo dell'immobile, struttura finanziaria, occupazione e co
 🧠 Valutazione AI
 
 ${improvesScenario
-    ? `L'aumento dell'ADR di ${formatEURIT(Math.abs(adrDelta))} incrementa il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))}, il ROI sull'immobile di ${formatPctIT(Math.abs(realROIDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti` : riskDelta < 0 ? `Il rischio diminuisce di ${Math.abs(Math.round(riskDelta))} punti` : `Il rischio resta invariato a ${Math.round(scenarioRisk)}/100`} e ${scoreDelta > 0 ? `il punteggio complessivo aumenta di ${Math.abs(Math.round(scoreDelta))} punti` : scoreDelta < 0 ? `il punteggio complessivo scende di ${Math.abs(Math.round(scoreDelta))} punti` : `il punteggio complessivo resta invariato a ${Math.round(scenarioScore)}/100`}.`
+    ? `L'aumento dell'ADR di ${formatEURIT(Math.abs(adrDelta))} incrementa il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))}, il Cashflow / valore immobile di ${formatPctIT(Math.abs(realROIDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti` : riskDelta < 0 ? `Il rischio diminuisce di ${Math.abs(Math.round(riskDelta))} punti` : `Il rischio resta invariato a ${Math.round(scenarioRisk)}/100`} e ${scoreDelta > 0 ? `il punteggio complessivo aumenta di ${Math.abs(Math.round(scoreDelta))} punti` : scoreDelta < 0 ? `il punteggio complessivo scende di ${Math.abs(Math.round(scoreDelta))} punti` : `il punteggio complessivo resta invariato a ${Math.round(scenarioScore)}/100`}.`
     : worsensScenario
         ? `La riduzione dell'ADR di ${formatEURIT(Math.abs(adrDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti` : riskDelta < 0 ? `Il rischio diminuisce di ${Math.abs(Math.round(riskDelta))} punti` : `Il rischio resta invariato a ${Math.round(scenarioRisk)}/100`} e ${scoreDelta < 0 ? `il punteggio complessivo scende di ${Math.abs(Math.round(scoreDelta))} punti` : scoreDelta > 0 ? `il punteggio complessivo aumenta di ${Math.abs(Math.round(scoreDelta))} punti` : `il punteggio complessivo resta invariato a ${Math.round(scenarioScore)}/100`}.`
         : `Il nuovo ADR modifica rendimento e cashflow dell'operazione mantenendo invariati gli altri parametri dello scenario.`}`
@@ -1460,7 +1460,7 @@ I keep purchase price, financing structure, occupancy and costs unchanged to iso
 
 📈 Economic impact
 • Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
-• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Cashflow / property value: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
 • Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
@@ -1471,7 +1471,7 @@ I keep purchase price, financing structure, occupancy and costs unchanged to iso
 🧠 AI Assessment
 
 ${improvesScenario
-    ? `The ${formatEUREN(Math.abs(adrDelta))} ADR increase raises return on equity by ${formatPctEN(Math.abs(roiDelta))}, property ROI by ${formatPctEN(Math.abs(realROIDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Risk increases by ${Math.abs(Math.round(riskDelta))} points` : riskDelta < 0 ? `Risk decreases by ${Math.abs(Math.round(riskDelta))} points` : `Risk remains unchanged at ${Math.round(scenarioRisk)}/100`} and ${scoreDelta > 0 ? `the overall score increases by ${Math.abs(Math.round(scoreDelta))} points` : scoreDelta < 0 ? `the overall score decreases by ${Math.abs(Math.round(scoreDelta))} points` : `the overall score remains unchanged at ${Math.round(scenarioScore)}/100`}.`
+    ? `The ${formatEUREN(Math.abs(adrDelta))} ADR increase raises return on equity by ${formatPctEN(Math.abs(roiDelta))}, cashflow / property value by ${formatPctEN(Math.abs(realROIDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Risk increases by ${Math.abs(Math.round(riskDelta))} points` : riskDelta < 0 ? `Risk decreases by ${Math.abs(Math.round(riskDelta))} points` : `Risk remains unchanged at ${Math.round(scenarioRisk)}/100`} and ${scoreDelta > 0 ? `the overall score increases by ${Math.abs(Math.round(scoreDelta))} points` : scoreDelta < 0 ? `the overall score decreases by ${Math.abs(Math.round(scoreDelta))} points` : `the overall score remains unchanged at ${Math.round(scenarioScore)}/100`}.`
     : worsensScenario
         ? `The ${formatEUREN(Math.abs(adrDelta))} ADR reduction lowers return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Risk increases by ${Math.abs(Math.round(riskDelta))} points` : riskDelta < 0 ? `Risk decreases by ${Math.abs(Math.round(riskDelta))} points` : `Risk remains unchanged at ${Math.round(scenarioRisk)}/100`} and ${scoreDelta < 0 ? `the overall score decreases by ${Math.abs(Math.round(scoreDelta))} points` : scoreDelta > 0 ? `the overall score increases by ${Math.abs(Math.round(scoreDelta))} points` : `the overall score remains unchanged at ${Math.round(scenarioScore)}/100`}.`
         : `The new ADR changes the investment's returns and cashflow while keeping the other scenario assumptions unchanged.`}`

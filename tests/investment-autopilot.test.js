@@ -38,7 +38,7 @@ test('each Italian and English shortcut resolves to the investment guide',()=>{
 });
 test('assumption guidance distinguishes benchmark estimates and explicit reruns',()=>{
  const w=setup(valid);const r=w.rbBuildInvestmentAutopilotResponse(w.rbInvestmentAutopilotQuestions.assumptions[1]);
- assert.match(r.textEN,/indicative/);assert.match(r.textEN,/separate simulation/);assert.match(r.textEN,/Avoid counting costs twice/);
+ assert.match(r.textEN,/documented published quotes/);assert.match(r.textEN,/separate simulation/);assert.match(r.textEN,/Avoid counting costs twice/);
 });
 test('home and tool retain calculation anchors and include cache-versioned workspace resources',()=>{
  for(const file of ['index.html','tool/index.html']){const html=readFileSync(new URL('../'+file,import.meta.url),'utf8');if(file==='tool/index.html')assert.equal((html.match(/class="rb-investment-hub"/g)||[]).length,1);
@@ -58,7 +58,7 @@ test('PMS routing excludes every investment shortcut, including the Home start q
  assert.equal(w.rbIsPMSAutopilotQuestion('Da dove inizio nel PMS?'),true);
 });
 test('Home assumptions shortcut answers the assumptions question rather than repeating onboarding',()=>{
- const w=setup({},false);const r=w.rbBuildInvestmentAutopilotResponse(w.rbInvestmentAutopilotQuestions.assumptions[0]);assert.match(r.textIT,/benchmark di mercato/);assert.doesNotMatch(r.textIT,/Apri il simulatore/);
+ const w=setup({},false);const r=w.rbBuildInvestmentAutopilotResponse(w.rbInvestmentAutopilotQuestions.assumptions[0]);assert.match(r.textIT,/quote pubblicate documentate/);assert.doesNotMatch(r.textIT,/Apri il simulatore/);
 });
 test('orchestrator handles the Home investment question before consulting PMS booking data',async()=>{
  const w=setup({},false);let pmsCalls=0;w.rbBuildPMSAutopilotResponse=async()=>{pmsCalls++;return {type:'incorrect_pms_response'};};

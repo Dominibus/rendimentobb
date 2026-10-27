@@ -3,8 +3,8 @@ export function updateSimulationROILabel({access, document, lang='it'}={}){
   const label=document?.getElementById('roi-main-basis');
   if(!label)return;
   const paid=Boolean(access?.isInvestor || access?.isPro || access?.isAdmin);
-  const it=paid?'ROI sul capitale proprio':'ROI immobile';
-  const en=paid?'Return on equity':'Property ROI';
+  const it=paid?'ROI sul capitale proprio':'Cashflow / valore immobile';
+  const en=paid?'Return on equity':'Cashflow / property value';
   label.dataset.it=it;label.dataset.en=en;label.textContent=lang==='en'?en:it;
 }
 
@@ -62,9 +62,9 @@ export function renderFreeSimulationPreview(data, {access, document, lang='it'}=
   if(monthly) monthly.textContent=currency(cashflow===null?null:cashflow/12);
   const risk=document.getElementById('risk-preview');
   if(risk) risk.textContent='Investor / Pro';
-  // A property ROI must not be compared visually with an equity ROI benchmark.
+  // A cashflow / property value must not be compared visually with an equity ROI benchmark.
   const badge=document.getElementById('roi-badge');
-  if(badge){badge.textContent=!hasPropertyValue ? (lang==='en'?'Property ROI not applicable · no property value entered':'ROI immobile non applicabile · valore immobile non indicato') : owned ? (lang==='en'?'Property ROI · simulated cashflow / stated property value':'ROI immobile · cashflow simulato / valore immobile indicato') : (lang==='en'?'Property ROI · simulated cashflow / purchase price':'ROI immobile · cashflow simulato / prezzo d’acquisto');badge.className='';}
+  if(badge){badge.textContent=!hasPropertyValue ? (lang==='en'?'Cashflow / property value not applicable · no property value entered':'Cashflow / valore immobile non applicabile · valore immobile non indicato') : owned ? (lang==='en'?'Cashflow / property value · simulated cashflow / stated property value':'Cashflow / valore immobile · cashflow simulato / valore immobile indicato') : (lang==='en'?'Cashflow / property value · simulated cashflow / purchase price':'Cashflow / valore immobile · cashflow simulato / prezzo d’acquisto');badge.className='';}
   const verdict=document.getElementById('roi-verdict');
   if(verdict) verdict.textContent=cashflow===null
     ? (lang==='en'?'Complete the inputs to calculate your scenario.':'Completa i dati per calcolare il tuo scenario.')

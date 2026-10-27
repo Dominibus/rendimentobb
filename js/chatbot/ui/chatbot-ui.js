@@ -232,7 +232,7 @@ HOME
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📈 ${window.currentLang === "en" ? "Property ROI" : "ROI immobile"}
+                                📈 ${window.currentLang === "en" ? "Return on equity" : "ROI sul capitale proprio"}
                             </span>
 
                             <strong>
@@ -859,7 +859,7 @@ const risk =
                         <div class="rb-ai-metric">
 
                             <span class="rb-ai-metric-label">
-                                📈 ${window.currentLang === "en" ? "Property ROI" : "ROI immobile"}
+                                📈 ${window.currentLang === "en" ? "Return on equity" : "ROI sul capitale proprio"}
                             </span>
 
                             <strong>--</strong>
@@ -2153,7 +2153,7 @@ document.addEventListener("rb:document_ready", event => {
     ];
     wrapper.querySelectorAll(".rb-home-title").forEach((el,i)=>{if(titles[i]) el.textContent=t(...titles[i]);});
     wrapper.querySelectorAll(".rb-home-desc").forEach((el,i)=>{if(descriptions[i]) el.textContent=t(...descriptions[i]);});
-    const metricLabels = [["📍 Mercato","📍 Market"],["📈 ROI immobile","📈 Property ROI"],["💰 Cashflow","💰 Cash flow"],["⚠️ Rischio","⚠️ Risk"]];
+    const metricLabels = [["📍 Mercato","📍 Market"],["📈 ROI sul capitale proprio","📈 Return on equity"],["💰 Cashflow","💰 Cash flow"],["⚠️ Rischio","⚠️ Risk"]];
     wrapper.querySelectorAll(".rb-ai-metric-label").forEach((el,i)=>{if(!el.closest("[data-rb-free-home]") && metricLabels[i]) el.textContent=t(...metricLabels[i]);});
     if(window.rbBuildFreeChatHomeHTML?.()==null){
     const city = window.lastAnalysisData?.realCity || window.lastAnalysisData?.marketCity || window.rbChatMemory?.lastCity;

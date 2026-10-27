@@ -97,7 +97,7 @@ test('tool language listener keeps the snapshot, city and paid comparison withou
   const get=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',attrs:{},setAttribute(k,v){this.attrs[k]=v;}});return nodes.get(id);};
   const w={currentLang:'en',lastAnalysisData:data,simulationExecuted:true,getUserAccess:()=>({isPro:true})};
   const c={window:w,document:{addEventListener:(_,fn)=>refresh=fn,getElementById:get},formatCurrency:String,t:(it,en)=>w.currentLang==='en'?en:it,getInvestmentBadge:()=>'',getInvestmentBadgeClass:()=>''};
-  for(const name of ['renderInvestmentScore','renderRiskMeter','renderInvestmentVerdict','renderInvestmentRanking','renderUniversalKPI','renderRevenueForecast','renderMarketBenchmark','renderMarketComparison','renderROIMarketComparison','renderCashflowProjection','updateROIMessage','renderFreeSimulationPreview','renderPropertyModeResults'])c[name]=(...args)=>calls.push([name,...args]);
+  for(const name of ['renderInvestmentScore','renderRiskMeter','renderInvestmentVerdict','renderInvestmentRanking','renderUniversalKPI','renderFinancialReview','renderOccupancySensitivity','renderRevenueForecast','renderMarketBenchmark','renderMarketComparison','renderROIMarketComparison','renderCashflowProjection','updateROIMessage','renderFreeSimulationPreview','renderPropertyModeResults'])c[name]=(...args)=>calls.push([name,...args]);
   w.calculate=()=>assert.fail('language must not calculate');w.saveAnalysis=()=>assert.fail('language must not save');
   vm.runInNewContext(source.slice(start,end),c);refresh();
   assert.deepEqual(calls.find(r=>r[0]==='renderMarketComparison'),['renderMarketComparison',30660,'roma']);
@@ -110,12 +110,12 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name==='app'?'20261026-rc199':'20261026-rc200',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],'20261027-rc211',file+' '+name);
     }
   }
-  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261026-rc200/);
-  assert.match(read('js/app.js'),/market-engine\.js\?v=20261026-rc199/);
-  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261026-rc200':'20261026-rc200')));
+  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261027-rc211/);
+  assert.match(read('js/app.js'),/market-engine\.js\?v=20261027-rc211/);
+  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261027-rc211':'20261026-rc200')));
 });
 test('new English result city survives a delayed static translation pass',()=>{
   const source=read('js/app.js'),start=source.indexOf('const resultCity =\n  document.getElementById("tool-result-city")');

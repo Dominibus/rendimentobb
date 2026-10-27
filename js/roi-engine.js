@@ -241,4 +241,4 @@ function calculateROI(input = {}){
 export { calculateROI };
 
 // ================= GLOBAL FIX (CRITICO) =================
-window.calculateROI = calculateROI;
+if(typeof window !== 'undefined') window.calculateROI = calculateROI;

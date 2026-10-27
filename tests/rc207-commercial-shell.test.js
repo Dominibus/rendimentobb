@@ -6,7 +6,7 @@ import {answerCommercialAutopilot} from '../js/commercial-autopilot.js';
 import {createCommercialWorkspaceDemo} from '../js/commercial-workspace-model.js';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 for(const p of ['immobili-commerciali/index.html','en/immobili-commerciali/index.html','gestione-commerciale/index.html','en/gestione-commerciale/index.html'])test('RC207 common account header and footer on '+p,()=>{
- const html=read(p);assert.equal((html.match(/id="global-header"/g)||[]).length,1);assert.match(html,/src="\/js\/header.js\?v=20261027-rc207"/);assert.match(html,/src="\/js\/footer.js\?v=20261025-rc196"/);assert.match(html,/src="\/js\/lang.js/);assert.doesNotMatch(html,/rb-public-header|class="cm-footer"|src="\/js\/public-shell.js/);if(p.includes('immobili-commerciali')){assert.match(html,/hreflang="en"/);assert.match(html,/commercial-input-help/);}else assert.match(html,/noindex,nofollow/);
+ const html=read(p);assert.equal((html.match(/id="global-header"/g)||[]).length,1);assert.match(html,/src="\/js\/header.js\?v=20261027-rc211"/);assert.match(html,/src="\/js\/footer.js\?v=20261025-rc196"/);assert.match(html,/src="\/js\/lang.js/);assert.doesNotMatch(html,/rb-public-header|class="cm-footer"|src="\/js\/public-shell.js/);if(p.includes('immobili-commerciali')){assert.match(html,/hreflang="en"/);assert.match(html,/commercial-input-help/);}else assert.match(html,/noindex,nofollow/);
 });
 function shell({english=false,planner=false,approve=true,autopilot=false}={}){
  const events={},routes=[],storage=[],help={open:false,scrollIntoView(){},querySelector:()=>({focus(){}})},button={textContent:'Autopilot',click(){button.clicked=true;}};

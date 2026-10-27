@@ -1402,7 +1402,7 @@ roi:
 
     rememberedAnalysis.city ||
 
-    "roma"
+    ""
 
 };
 
@@ -1769,7 +1769,7 @@ if(window.RB_DEBUG === true){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -2142,7 +2142,7 @@ if(isEquityWhatIf){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -2394,7 +2394,7 @@ const calculatedMortgageBaselineScore =
             window.lastAnalysisData?.city ??
             window.lastAnalysisData?.marketCity ??
             analysisData.city ??
-            "roma"
+            ""
         })?.score ??
         0
       );
@@ -2664,7 +2664,7 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
         Number(analysisData.cashflow || 0),
 
       city:
-        analysisData.city || "roma"
+        analysisData.city || ""
 
     });
 
@@ -3047,7 +3047,7 @@ if(window.RB_DEBUG === true){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -3483,7 +3483,7 @@ if(window.RB_DEBUG === true){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -3896,7 +3896,7 @@ if(isADRWhatIf){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -4234,7 +4234,7 @@ if(isMonthlyCostsWhatIf){
               ),
 
             city:
-              analysisData.city || "roma"
+              analysisData.city || ""
 
           });
 
@@ -4426,7 +4426,7 @@ if(
         ),
 
       city:
-        analysisData.city || "roma",
+        analysisData.city || "",
 
       canonicalScore:
         Number(
@@ -4635,7 +4635,7 @@ const advisor =
 
         entities.city ||
 
-        "roma",
+        "",
 
     canonicalScore:
   Number.isFinite(Number(canonicalAnalysis?.investmentScore))
@@ -5292,7 +5292,7 @@ if(
 
     entities?.city ||
 
-    "roma";
+    "";
 
   const currentCityLabel =
 

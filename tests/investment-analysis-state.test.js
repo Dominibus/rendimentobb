@@ -32,7 +32,7 @@ test('Investor sees its analysis with the same permitted indicators',()=>{
 });
 test('Free exposes property ROI and its visible cashflow, never premium metrics',()=>{
  const s=setup(false);s.result.roi=99999;s.result.risk=77777;s.result.dscr=88888;s.publish();const a=s.answer();
- assert.match(a.textIT,/ROI immobile: 7,0%/);assert.match(a.textIT,/14\.046,40/);assert.doesNotMatch(a.textIT,/99999|77777|88888|DSCR|Indice rischio|Ricavi annui simulati|Capitale proprio usato/);
+ assert.match(a.textIT,/Cashflow \/ valore immobile: 7,0%/);assert.match(a.textIT,/14\.046,40/);assert.doesNotMatch(a.textIT,/99999|77777|88888|DSCR|Indice rischio|Ricavi annui simulati|Capitale proprio usato/);
  assert.equal(Object.hasOwn(s.state.getState().metrics,'risk'),false);
 });
 test('every financial field and location change makes results stale without leaking old metrics',()=>{

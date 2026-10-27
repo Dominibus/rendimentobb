@@ -1,3 +1,4 @@
+import {financialReview,financialScenarios} from '../js/financial-review.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -41,7 +42,7 @@ for(const [lang,city,expected] of [['it','firenze','Mercato • Firenze'],['en',
   const data={city,realCity:city,marketCity:city,assumptions:{loanYears:20,interestRate:3.5},roi:28.6,roiAvailable:true,price:150000,equity:30000,loan:120000,annualProfit:8587.74,revenueAnnual:36463.5,risk:25,investmentScore:79,verdict:'BUY',occupancy:74};
   const before=JSON.stringify(data);
   const window={currentLang:lang,lastAnalysisData:data,getUserAccess:()=>({isPro:true,canDownloadPDF:true}),RB_MARKET_DATA:{firenze:{roi:11.1}},jspdf:{jsPDF:function(...args){doc=new jsPDF(...args);const original=doc.text;doc.text=function(value,...rest){text.push(value);return original.call(this,value,...rest);};doc.save=()=>{};return doc;}}};
-  vm.runInNewContext(code,{window,document:{getElementById:()=>null},sessionStorage:{getItem:()=>city},localStorage:{getItem:()=>null},buildPDFScenarioCommentary,buildRevenueScenarios,calculateMortgage:()=>8351.42,showToast:()=>assert.fail('unexpected toast'),openUpgradeModal:()=>assert.fail('unexpected upgrade')});
+  vm.runInNewContext(code,{window,document:{getElementById:()=>null},sessionStorage:{getItem:()=>city},localStorage:{getItem:()=>null},financialReview,financialScenarios,buildPDFScenarioCommentary,buildRevenueScenarios,calculateMortgage:()=>8351.42,showToast:()=>assert.fail('unexpected toast'),openUpgradeModal:()=>assert.fail('unexpected upgrade')});
   await window.generateExecutivePDF();
   assert.ok(text.includes(expected));assert.equal(doc.getNumberOfPages(),8);assert.equal(JSON.stringify(data),before);
 });

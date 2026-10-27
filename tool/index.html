@@ -1172,8 +1172,8 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           </details>
           <div id="location-helper" role="status"
           style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="Cerca il comune del tuo immobile. Gli esempi illustrativi non sono dati di mercato verificati."
-          data-en="Find your property’s municipality. Illustrative examples are not verified market data.">
+          data-it="La località è facoltativa e modificabile; se assente non viene attribuita una città. Cerca il comune del tuo immobile. Gli esempi illustrativi non sono dati di mercato verificati."
+          data-en="Location is optional and editable; no city is assigned when omitted. Find your property’s municipality. Illustrative examples are not verified market data.">
          </div>
 
         </div>
@@ -1185,7 +1185,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
           <button id="mortgage-transfer-clear" type="button" class="btn btn-secondary" data-it="Scollega lo scenario" data-en="Unlink scenario">Scollega lo scenario</button>
         </section>
 <p id="property-scenario-status" role="status" hidden style="padding:14px;border:1px solid #cbd5e1;border-radius:12px;color:#123b32;background:#f0fdfa"></p>
-<details class="rb180-help"><summary><span data-it="Prima di iniziare: i numeri in parole semplici" data-en="Before you start: the numbers in plain language">Prima di iniziare: i numeri in parole semplici</span></summary><dl><div><dt>Cashflow</dt><dd data-it="Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità." data-en="What remains after modeled expenses, including tax and loan payments when set. The monthly average is the annual result divided by 12; it does not describe seasonality.">Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità.</dd></div><div><dt>ROI</dt><dd data-it="Rapporto tra risultato annuo e capitale di riferimento. Distingui ROI sul capitale proprio e ROI sul prezzo o valore dell’immobile. Se il denominatore è zero, il rapporto non è applicabile." data-en="Annual result divided by the relevant capital. Distinguish return on equity from return on the property price or value. A zero denominator makes the ratio inapplicable.">Rapporto tra risultato annuo e capitale di riferimento. Distingui ROI sul capitale proprio e ROI sul prezzo o valore dell’immobile. Se il denominatore è zero, il rapporto non è applicabile.</dd></div><div><dt>DSCR</dt><dd data-it="Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile." data-en="Compares operating income before debt with loan payments over the same period. Below 1, operating income does not cover payments; above 1 is still no guarantee or lending approval. Not applicable without debt.">Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile.</dd></div><div><dt data-it="Occupazione" data-en="Occupancy">Occupazione</dt><dd data-it="Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi." data-en="Percentage of nights you expect to sell. Rates and city references are editable examples: verify your own assumptions.">Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi.</dd></div></dl></details>
+<details class="rb180-help"><summary><span data-it="Prima di iniziare: i numeri in parole semplici" data-en="Before you start: the numbers in plain language">Prima di iniziare: i numeri in parole semplici</span></summary><dl><div><dt>Cashflow</dt><dd data-it="Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità." data-en="What remains after modeled expenses, including tax and loan payments when set. The monthly average is the annual result divided by 12; it does not describe seasonality.">Quanto resta dopo le spese considerate dal modello, incluse imposte e rate se impostate. La media mensile è il risultato annuo diviso 12: non descrive la stagionalità.</dd></div><div><dt>ROI</dt><dd data-it="Rapporto tra risultato annuo e capitale di riferimento. Distingui cashflow / capitale proprio, cashflow / valore e rendimento operativo NOI / valore prima di mutuo e imposte del modello. Se il denominatore è zero, il rapporto non è applicabile." data-en="Annual result divided by the relevant capital. Distinguish cashflow / equity, cashflow / value and operating yield NOI / value before financing and model tax. A zero denominator makes the ratio inapplicable.">Rapporto tra risultato annuo e capitale di riferimento. Distingui cashflow / capitale proprio, cashflow / valore e rendimento operativo NOI / valore prima di mutuo e imposte del modello. Se il denominatore è zero, il rapporto non è applicabile.</dd></div><div><dt>DSCR</dt><dd data-it="Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile." data-en="Compares operating income before debt with loan payments over the same period. Below 1, operating income does not cover payments; above 1 is still no guarantee or lending approval. Not applicable without debt.">Confronta il risultato operativo prima del debito con le rate dello stesso periodo. Sotto 1 le rate non sono coperte dal risultato operativo; sopra 1 non è comunque una garanzia o un’approvazione bancaria. Senza debito non è applicabile.</dd></div><div><dt data-it="Occupazione" data-en="Occupancy">Occupazione</dt><dd data-it="Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi." data-en="Percentage of nights you expect to sell. Rates and city references are editable examples: verify your own assumptions.">Percentuale di notti che ipotizzi di vendere. Le tariffe e i riferimenti per città sono esempi modificabili: verifica le tue ipotesi.</dd></div></dl></details>
         <!-- INPUTS -->
         <div class="input-group rb-property-mode">
           <label for="property-mode" data-it="Cosa vuoi analizzare?" data-en="What would you like to analyze?">Cosa vuoi analizzare?</label>
@@ -1203,7 +1203,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
         <div class="input-group">
           <label for="equity" id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
           <input type="number" id="equity" min="0" step="any" required placeholder="30000">
-<p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and property ROI. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e ROI immobile. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
+<p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and cashflow / property value. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
         </div>
 
         <div class="input-group">
@@ -1231,9 +1231,9 @@ value="70">
           <input type="number" id="expenses" min="0" step="any" inputmode="decimal" placeholder="1200" required>
           <small
             style="display:block;margin-top:6px;color:#64748b;line-height:1.4;"
-            data-it="Importo totale stimato al mese. Il valore è sempre espresso in euro, mai in percentuale."
-            data-en="Estimated total per month. This value is always expressed in euros, never as a percentage.">
-            Importo totale stimato al mese. Il valore è sempre espresso in euro, mai in percentuale.
+            data-it="Importo sempre espresso in euro, mai in percentuale. Totale mensile: includi pulizie, manutenzione, utenze e assicurazione. Non duplicare commissioni, imposte o rate. Costi iniziali e straordinari non sono inclusi automaticamente."
+            data-en="This value is always expressed in euros, never as a percentage. Monthly total: include cleaning, maintenance, utilities and insurance. Do not duplicate commissions, tax or payments. Upfront and extraordinary costs are not automatically included.">
+            Importo sempre espresso in euro, mai in percentuale. Totale mensile: includi pulizie, manutenzione, utenze e assicurazione. Non duplicare commissioni, imposte o rate. Costi iniziali e straordinari non sono inclusi automaticamente.
           </small>
         </div>
 
@@ -1298,10 +1298,10 @@ value="70">
       <div class="roi-value" style="position:relative;">
 
         <div id="roi-main-basis"
-          data-it="ROI immobile"
-          data-en="Property ROI"
+          data-it="Cashflow / valore immobile"
+          data-en="Cashflow / property value"
           style="font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#64748b;">
-          ROI immobile
+          Cashflow / valore immobile
         </div>
 
         <span
@@ -1359,8 +1359,8 @@ margin-top:12px;
           text-align:center;
         "
         class="free-only tool-2026-free-notice"
-        data-it="Risultato simulato con costi, imposte e mutuo se impostato. ROI immobile = cashflow annuo / prezzo o valore indicato; senza questo importo non è applicabile. Non è un incasso garantito."
-        data-en="Simulated result including costs, taxes and financing when set. Property ROI = annual cashflow / stated price or value; without that value it is not applicable. This is not guaranteed income.">
+        data-it="Risultato simulato con costi, imposte e mutuo se impostato. Cashflow / valore immobile = cashflow annuo / prezzo o valore indicato; senza questo importo non è applicabile. Non è un incasso garantito."
+        data-en="Simulated result including costs, taxes and financing when set. Cashflow / property value = annual cashflow / stated price or value; without that value it is not applicable. This is not guaranteed income.">
         </div>
 
       </div>
@@ -1374,7 +1374,7 @@ margin-top:12px;
         </div>
 
         <div class="metric">
-          <span data-it="ROI immobile stimato" data-en="Estimated property ROI"></span>
+          <span data-it="Cashflow / valore immobile stimato" data-en="Estimated cashflow / property value"></span>
           <strong id="roi-preview-live">—</strong>
         </div>
 
@@ -1416,6 +1416,7 @@ margin-right:auto;
 </div>
 </section>  
 
+<div id="financial-model-review" style="margin:16px 0;line-height:1.6"></div>
 <aside id="rb-result-next" class="rb180-result-next" hidden><strong data-it="Vuoi ritrovare questa analisi e confrontarne un’altra?" data-en="Want to retrieve this analysis and compare another?">Vuoi ritrovare questa analisi e confrontarne un’altra?</strong><p data-it="Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free." data-en="Free shows results in this session. Investor saves analyses in the dashboard and includes PMS management. Check eligibility for 30 free days: no card, charges or automatic renewal; PDFs excluded. You return to Free afterwards.">Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free.</p><p data-it="Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio." data-en="After activating Investor, recalculate the scenario to save it. The Free result is not automatically transferred to your archive.">Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio.</p><a href="/plans.html#tester-programme"><span data-it="Salva e confronta con Investor: scopri la prova →" data-en="Save and compare with Investor: explore the trial →">Salva e confronta con Investor: scopri la prova →</span></a></aside>
 <!-- ================= RESULTS (UNICO BLOCCO) ================= -->
 
@@ -1652,7 +1653,7 @@ Confronta gli scenari e organizza i tuoi immobili nello stesso portale.
 <div id="investment-metrics" class="investment-metrics">
 
  <div class="metric-card">
-  <span data-it="ROI immobile stimato" data-en="Estimated property ROI">ROI</span>
+  <span data-it="Cashflow / valore immobile stimato" data-en="Estimated cashflow / property value">ROI</span>
 
   <strong id="roi-card-live">—</strong>
 </div>
@@ -1886,8 +1887,9 @@ style="margin-top:22px;"></div>
 
 <!-- OCCUPANCY -->
 <div class="results-card investor-teaser">
-  <h3 data-it="Simulazione occupazione" data-en="Occupancy simulation"></h3>
-  <div id="occupancy-sensitivity" class="kpi-grid"></div>
+  <h3 data-it="Scenari ricalcolati: prudente, base, favorevole" data-en="Recalculated conservative, base and favourable scenarios"></h3>
+  <p data-it="Sensibilità, non previsioni: occupazione −10 / +10 punti percentuali (limite 0–100%), tariffa −10% / +10%. Costi fissi e mutuo invariati; commissioni, costi percentuali, imposte e indicatori ricalcolati. Nessun capitale aggiuntivo presunto." data-en="Sensitivity, not forecasts: occupancy −10 / +10 percentage points (0–100% limit), rate −10% / +10%. Fixed costs and debt stay unchanged; commissions, percentage costs, model tax and metrics are recalculated. No additional capital is assumed.">Sensibilità, non previsioni: occupazione −10 / +10 punti percentuali (limite 0–100%), tariffa −10% / +10%. Costi fissi e mutuo invariati; commissioni, costi percentuali, imposte e indicatori ricalcolati. Nessun capitale aggiuntivo presunto.</p>
+<div id="occupancy-sensitivity" class="kpi-grid"></div>
 </div>
 
 <!-- CHART -->
@@ -1947,9 +1949,9 @@ data-en="📄 Download Executive Report PDF">
 <script src="/js/lang.js?v=20261026-rc200" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261026-rc200" defer></script>
+<script src="/js/chatbot-loader.js?v=20261027-rc211" defer></script>
   
-<script type="module" src="/js/header.js?v=20261026-rc200"></script>
+<script type="module" src="/js/header.js?v=20261027-rc211"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>  
 <script type="module" src="/js/footer.js?v=20261025-rc196"></script>  
 
@@ -2100,7 +2102,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261026-rc199"></script>
+<script type="module" src="/js/app.js?v=20261027-rc211"></script>
 
 <script>
 
