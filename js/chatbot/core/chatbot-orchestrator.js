@@ -236,6 +236,16 @@ async function(message){
     const activePDF = window.rbDocumentManager?.getLast?.();
     const explicitPDFRequest = /(pdf|document|file|brochure|riassumilo|interpretalo|leggilo|confrontalo|summarize it|read it)/i.test(text);
     const explicitLiveRequest = /simulazion|simulation|simulator|simulatore|autopilot investimento|investment autopilot|mercato|market|altra citt|another city/i.test(text);
+    // A short yield question after a PDF must not silently select an older simulation.
+    const yieldFollowup = safetyQuery.replace(/’/g,"'").replace(/[?!.\s]+$/g,'').trim();
+    const ambiguousYield = /^(?:(?:e|quindi|allora|ma)\s+)*(?:quanto (?:rende|guadagno|si guadagna)|qual(?:e| e)? (?:il )?rendimento)$/.test(yieldFollowup)
+      || /^(?:(?:and|so|then)\s+)*(?:what(?: is|'s) (?:the )?(?:return|yield)|how much (?:(?:does|will) it (?:earn|yield)|(?:do|will|would) i (?:earn|make)))$/.test(yieldFollowup);
+    if(activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id && ambiguousYield && !explicitPDFRequest && !explicitLiveRequest){
+      return {success:true,intent:{intent:'clarification'},response:{type:'clarification',confidence:0,actions:[],metadata:{source:'pdf_scope_clarification',documentId:activePDF.id},
+        textIT:'Ti riferisci al PDF appena caricato oppure alla simulazione precedente? Indica «ROI del PDF» o «Riepiloga la simulazione originale». Sono analisi distinte: prima di citare un rendimento devo sapere quale vuoi leggere.',
+        textEN:'Do you mean the PDF just uploaded or the previous simulation? Choose “PDF ROI” or “Summarize the original simulation”. These are separate analyses: I need to know which one you mean before quoting a return.',
+        suggestionsIT:['ROI del PDF','Riepiloga la simulazione originale'],suggestionsEN:['PDF ROI','Summarize the original simulation']}};
+    }
     const focusedFinancialFollowup = activePDF?.id && window.rbPDFConversationDocumentId === activePDF.id &&
         /(utile|profit|net income|margin|incassi|receipts|risultat|results|ristruttur|renovat|recuper|recover|costi|costs|indicatori|indicators|metriche|metrics|punteggio|score|dscr|benchmark|riconosciut|recognized|roi|roy|adr|revpar|occupazion|occupancy|miglior|prossim|da dove|cosa fare|cosa faccio|non capisco|next step|what should i|where do i|cashflow|cash flow|rischio|risk|ricavi|revenue|mutuo|mortgage|capitale|equity|manc|missing|convien|worth|sostenib|interpret)/i.test(text) &&
         !explicitLiveRequest;
