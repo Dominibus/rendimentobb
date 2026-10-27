@@ -1,5 +1,5 @@
 import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
-import {loadMunicipalities,searchMunicipalities,municipalityLabel,MUNICIPALITY_SOURCE} from './municipalities.js?v=20261025-rc198';
+import {loadMunicipalities,searchMunicipalities,municipalityLabel,municipalityCoverage,MUNICIPALITY_SOURCE} from './municipalities.js?v=20261025-rc198';
 let sequence=0;
 export function mountMunicipalityPicker(parent,{input=null,selected=null,onSelect=()=>{},onEdit=()=>{},label=null,load=loadMunicipalities,language=()=>window.currentLang||'it',display=municipalityLabel}={}){
  const t=(it,en)=>language()==='en'?en:it;
@@ -15,6 +15,7 @@ export function mountMunicipalityPicker(parent,{input=null,selected=null,onSelec
  const status=add('p');status.setAttribute('role','status');status.className='rb-municipality-status';
  const source=add('p');source.className='rb-municipality-source';
  function refreshLanguage(){
+  for(const option of Array.from(capital.children).slice(1)){const row=REGIONAL_CAPITALS.find(r=>r.istat===option.value);if(row)option.textContent=municipalityLabel(row)+(municipalityCoverage(row)?t(' · confronto disponibile',' · comparison available'):t(' · ipotesi proprie',' · your own assumptions'));}
   capitalLabel.textContent=t('Oppure scegli un capoluogo di regione','Or choose a regional capital');blank.textContent=t('Scegli tra i 20 capoluoghi','Choose from the 20 regional capitals');
   title.textContent=typeof label==='function'?label():label||t('Cerca il tuo comune italiano','Find your Italian municipality');
   input.placeholder=t('Es. Pisa, Cagliari o nome + provincia','e.g. Pisa, Cagliari or name + province');help.textContent=t('Scrivi almeno 2 caratteri e scegli un risultato.','Type at least 2 characters and select a result.');

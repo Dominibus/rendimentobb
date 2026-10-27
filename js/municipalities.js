@@ -1,6 +1,7 @@
+import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261027-rc205';
 // ISTAT administrative identity is independent of the availability of market evidence.
 export const MUNICIPALITY_SOURCE='https://www.istat.it/classificazione/codici-dei-comuni-delle-province-e-delle-regioni/';
-export const COVERED_MUNICIPALITIES={'058091':'roma','063049':'napoli','015146':'milano','048017':'firenze'};
+export const COVERED_MUNICIPALITIES=Object.freeze(Object.fromEntries(TERRITORIAL_COVERAGE.map(row=>[row.istat,row.key])));
 export const normalizeMunicipalityText=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('it').replace(/[^a-z0-9]+/g,' ').trim();
 export const municipalityLabel=row=>`${row.name} (${row.province}) · ${row.region}`;
 export const municipalityLocation=row=>`${row.name} (${row.province})`;

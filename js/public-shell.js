@@ -2,6 +2,12 @@
  'use strict';
  const english=document.documentElement.lang==='en';
  try{localStorage.setItem('rb_lang',english?'en':'it');}catch{}
+ // RC205: keep the already available commercial pathway discoverable in both shells.
+ for(const nav of document.querySelectorAll('.rb-public-desktop,.rb-public-menu nav')){
+  if(!nav.querySelector('a[href*="/immobili-commerciali/"]')){
+   const a=document.createElement('a');a.href=english?'/en/immobili-commerciali/':'/immobili-commerciali/';a.textContent=english?'Commercial spaces':'Locali e studi';const about=nav.querySelector('a[href^="/about/"]');nav.insertBefore(a,about);
+  }
+ }
  const menus=[...document.querySelectorAll('.rb-public-header details')];
  for(const menu of menus)menu.addEventListener('toggle',()=>{if(menu.open)for(const other of menus)if(other!==menu)other.open=false;});
  document.addEventListener('keydown',event=>{if(event.key==='Escape')for(const menu of menus)if(menu.open){menu.open=false;menu.querySelector('summary')?.focus();}});

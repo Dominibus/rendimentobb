@@ -1,13 +1,75 @@
 {
- "schemaVersion":1,
- "provider":"Inside Airbnb",
- "homepage":"https://insideairbnb.com/get-the-data/",
- "license":"https://creativecommons.org/licenses/by/4.0/",
- "method":"https://insideairbnb.com/data-assumptions/",
- "cities":[
- {"key":"napoli","name":"Napoli","snapshot":"2026-09-19","url":"https://data.insideairbnb.com/italy/campania/naples/2026-09-19/data/listings.csv.gz","sha256":"45691ab1b3fed1e67ba9a5c26914f05c3d355ad50f79eefd930bb5b2938db089"},
- {"key":"roma","name":"Roma","snapshot":"2026-09-17","url":"https://data.insideairbnb.com/italy/lazio/rome/2026-09-17/data/listings.csv.gz","sha256":"536221ac427fab13b493644edfa51f8e4045e4e4d2283e741262e16263ec9d27"},
- {"key":"milano","name":"Milano","snapshot":"2026-09-19","url":"https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz","sha256":"23f51e357f0a779522ca4bdb5fb6fc1f7f98aa93c2711200085c813721368bd3"},
- {"key":"firenze","name":"Firenze","snapshot":"2026-09-19","url":"https://data.insideairbnb.com/italy/toscana/florence/2026-09-19/data/listings.csv.gz","sha256":"a3392ba7e26760536ee6c399f15c550625276cecd618483ae07af16a93c3f0a1"}
- ]
+  "schemaVersion": 1,
+  "provider": "Inside Airbnb",
+  "homepage": "https://insideairbnb.com/get-the-data/",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "method": "https://insideairbnb.com/data-assumptions/",
+  "cities": [
+    {
+      "key": "napoli",
+      "name": "Napoli",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/campania/naples/2026-09-19/data/listings.csv.gz",
+      "sha256": "45691ab1b3fed1e67ba9a5c26914f05c3d355ad50f79eefd930bb5b2938db089"
+    },
+    {
+      "key": "roma",
+      "name": "Roma",
+      "snapshot": "2026-09-17",
+      "url": "https://data.insideairbnb.com/italy/lazio/rome/2026-09-17/data/listings.csv.gz",
+      "sha256": "536221ac427fab13b493644edfa51f8e4045e4e4d2283e741262e16263ec9d27"
+    },
+    {
+      "key": "milano",
+      "name": "Milano",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz",
+      "sha256": "23f51e357f0a779522ca4bdb5fb6fc1f7f98aa93c2711200085c813721368bd3"
+    },
+    {
+      "key": "firenze",
+      "name": "Firenze",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/toscana/florence/2026-09-19/data/listings.csv.gz",
+      "sha256": "a3392ba7e26760536ee6c399f15c550625276cecd618483ae07af16a93c3f0a1"
+    },
+    {
+      "key": "bologna",
+      "name": "Bologna",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/emilia-romagna/bologna/2026-09-19/data/listings.csv.gz",
+      "sha256": "c82c5ee13b8780b9e0c0ffeebd04288ff6f5b68ca53eac3640535ff522f57f8f"
+    },
+    {
+      "key": "venezia",
+      "name": "Venezia",
+      "snapshot": "2026-09-16",
+      "url": "https://data.insideairbnb.com/italy/veneto/venice/2026-09-16/data/listings.csv.gz",
+      "sha256": "dd14efeb23677a87e13f479802cd581b5e16191762a73e6b1373e263f79bf982"
+    },
+    {
+      "key": "bari",
+      "name": "Bari",
+      "snapshot": "2026-09-25",
+      "url": "https://data.insideairbnb.com/italy/puglia/puglia/2026-09-25/data/listings.csv.gz",
+      "sha256": "989eb5ad9438eb9705305c37c246c9e360d73c22bbdd7620a56663d80e9a970f",
+      "geographyFilter": {
+        "field": "neighbourhood_cleansed",
+        "equals": "Bari",
+        "kind": "source_municipality"
+      }
+    },
+    {
+      "key": "palermo",
+      "name": "Palermo",
+      "snapshot": "2026-09-25",
+      "url": "https://data.insideairbnb.com/italy/sicilia/sicily/2026-09-25/data/listings.csv.gz",
+      "sha256": "b85f0a1565a513b9aa8f464b2fb3f341d5afd291e52d9c9d74432aa3857e7e1a",
+      "geographyFilter": {
+        "field": "neighbourhood_cleansed",
+        "equals": "Palermo",
+        "kind": "source_municipality"
+      }
+    }
+  ]
 }

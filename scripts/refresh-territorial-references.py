@@ -4,7 +4,7 @@ import argparse,copy,hashlib,importlib.util,json,re,subprocess,tempfile
 from datetime import date,datetime,timezone
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit,quote
 from urllib.request import Request,urlopen
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -30,7 +30,7 @@ def latest_snapshot(html,current,today):
  if not found:raise ValueError('No compatible snapshot listed for '+current['key'])
  return max(found)
 def download(url,limit):
- with urlopen(Request(url,headers={'User-Agent':'RendimentoBB-source-maintenance/RC203'}),timeout=45) as response:
+ with urlopen(Request(quote(url,safe=':/%'),headers={'User-Agent':'RendimentoBB-source-maintenance/RC203'}),timeout=45) as response:
   # Reject unexpected redirects instead of consuming untrusted provider data.
   if urlsplit(response.url).netloc!=urlsplit(url).netloc:raise ValueError('Unexpected redirect host')
   raw=response.read(limit+1)

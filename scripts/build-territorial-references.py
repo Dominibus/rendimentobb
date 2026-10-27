@@ -9,6 +9,7 @@ from datetime import date
 from decimal import Decimal,InvalidOperation
 from pathlib import Path
 from urllib.request import urlopen
+from urllib.parse import quote
 
 MIN_SAMPLE=10
 METHOD='quoted-nightly-subtotal-v1'
@@ -63,6 +64,19 @@ def aggregate(rows):
    min(r['checkin'] for r in records) if public else None,max(r['checkout'] for r in records) if public else None])
  return {'sourceRows':total,'eligibleRows':len(observations),'excluded':dict(sorted(excluded.items())),'segments':len(groups),'publishedSegments':sum(r[6] is not None for r in result),'observationStart':min((r['observed'] for r in observations),default=None),'observationEnd':max((r['observed'] for r in observations),default=None),'rows':result}
 
+def aggregate_city(rows,city):
+ selection=city.get('geographyFilter')
+ if selection is None:return aggregate(rows)
+ if selection!={'field':'neighbourhood_cleansed','equals':city['name'],'kind':'source_municipality'}:raise ValueError('Invalid municipality filter')
+ total=0
+ def selected():
+  nonlocal total
+  for row in rows:
+   total+=1
+   if row.get(selection['field'])==selection['equals']:yield row
+ result=aggregate(selected());result['regionalSourceRows']=total
+ return result
+
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--config',type=Path,default=Path(__file__).with_name('territorial-sources.json'));parser.add_argument('--cache-dir',type=Path,required=True);parser.add_argument('--output-dir',type=Path,default=Path('data/territorial'));parser.add_argument('--download',action='store_true');args=parser.parse_args()
  config=json.loads(args.config.read_text());args.cache_dir.mkdir(parents=True,exist_ok=True);args.output_dir.mkdir(parents=True,exist_ok=True)
@@ -71,10 +85,10 @@ def main():
   path=args.cache_dir/(city['key']+'-listings.csv.gz')
   if not path.exists():
    if not args.download:raise SystemExit('Missing cached file '+str(path)+'; use --download only for the selected snapshots.')
-   path.write_bytes(urlopen(city['url'],timeout=60).read())
+   path.write_bytes(urlopen(quote(city['url'],safe=':/%'),timeout=60).read())
   actual=hashlib.sha256(path.read_bytes()).hexdigest()
   if actual!=city['sha256']:raise SystemExit('Source checksum mismatch for '+city['key'])
-  with gzip.open(path,'rt',encoding='utf-8-sig',newline='') as handle:derived=aggregate(csv.DictReader(handle))
+  with gzip.open(path,'rt',encoding='utf-8-sig',newline='') as handle:derived=aggregate_city(csv.DictReader(handle),city)
   info={**city,**{k:v for k,v in derived.items() if k!='rows'}}
   catalog['cities'].append(info)
   output={'schemaVersion':1,'methodVersion':METHOD,'minimumSample':MIN_SAMPLE,'city':info,'rows':derived['rows']}

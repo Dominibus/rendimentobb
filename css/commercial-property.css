@@ -9,3 +9,7 @@
 
 /* RC195: keep the calendar readable without extending the entire mobile page. */
 .cm-page #cm-operations{scroll-margin-top:150px}.cm-page #cm-results .cm-table-scroll:last-child{max-height:480px}.cm-page #cm-results .cm-table-scroll:last-child thead{position:sticky;top:0;z-index:1}
+
+/* RC205: clearer entry to existing analysis and operational workspaces. */
+.cm-page .cm-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.cm-page .cm-entry-grid article{min-width:0}.cm-page .cm-entry-grid h3{margin-top:0}.cm-page .cm-entry-grid a{overflow-wrap:anywhere}.cm-page .cm-entry-grid article+article{border-left:1px solid #cfddd5;padding-left:24px}
+@media(max-width:700px){.cm-page .cm-entry-grid{grid-template-columns:1fr;gap:20px}.cm-page .cm-entry-grid article+article{border-left:0;border-top:1px solid #cfddd5;padding:20px 0 0}}

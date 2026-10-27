@@ -95,6 +95,87 @@
       "publishedSegments": 178,
       "observationStart": "2026-09-20",
       "observationEnd": "2026-09-21"
+    },
+    {
+      "key": "bologna",
+      "name": "Bologna",
+      "snapshot": "2026-09-19",
+      "url": "https://data.insideairbnb.com/italy/emilia-romagna/bologna/2026-09-19/data/listings.csv.gz",
+      "sha256": "c82c5ee13b8780b9e0c0ffeebd04288ff6f5b68ca53eac3640535ff522f57f8f",
+      "sourceRows": 5094,
+      "eligibleRows": 4225,
+      "excluded": {
+        "currency": 481,
+        "not_available_or_monthly": 388
+      },
+      "segments": 1038,
+      "publishedSegments": 108,
+      "observationStart": "2026-09-19",
+      "observationEnd": "2026-09-20"
+    },
+    {
+      "key": "venezia",
+      "name": "Venezia",
+      "snapshot": "2026-09-16",
+      "url": "https://data.insideairbnb.com/italy/veneto/venice/2026-09-16/data/listings.csv.gz",
+      "sha256": "dd14efeb23677a87e13f479802cd581b5e16191762a73e6b1373e263f79bf982",
+      "sourceRows": 8844,
+      "eligibleRows": 7940,
+      "excluded": {
+        "currency": 678,
+        "not_available_or_monthly": 226
+      },
+      "segments": 2441,
+      "publishedSegments": 159,
+      "observationStart": "2026-09-17",
+      "observationEnd": "2026-09-17"
+    },
+    {
+      "key": "bari",
+      "name": "Bari",
+      "snapshot": "2026-09-25",
+      "url": "https://data.insideairbnb.com/italy/puglia/puglia/2026-09-25/data/listings.csv.gz",
+      "sha256": "989eb5ad9438eb9705305c37c246c9e360d73c22bbdd7620a56663d80e9a970f",
+      "geographyFilter": {
+        "field": "neighbourhood_cleansed",
+        "equals": "Bari",
+        "kind": "source_municipality"
+      },
+      "sourceRows": 3972,
+      "eligibleRows": 3458,
+      "excluded": {
+        "currency": 343,
+        "not_available_or_monthly": 171
+      },
+      "segments": 489,
+      "publishedSegments": 67,
+      "observationStart": "2026-09-28",
+      "observationEnd": "2026-09-30",
+      "regionalSourceRows": 48389
+    },
+    {
+      "key": "palermo",
+      "name": "Palermo",
+      "snapshot": "2026-09-25",
+      "url": "https://data.insideairbnb.com/italy/sicilia/sicily/2026-09-25/data/listings.csv.gz",
+      "sha256": "b85f0a1565a513b9aa8f464b2fb3f341d5afd291e52d9c9d74432aa3857e7e1a",
+      "geographyFilter": {
+        "field": "neighbourhood_cleansed",
+        "equals": "Palermo",
+        "kind": "source_municipality"
+      },
+      "sourceRows": 7809,
+      "eligibleRows": 6662,
+      "excluded": {
+        "currency": 602,
+        "dates_or_duration": 3,
+        "not_available_or_monthly": 542
+      },
+      "segments": 859,
+      "publishedSegments": 119,
+      "observationStart": "2026-09-26",
+      "observationEnd": "2026-09-28",
+      "regionalSourceRows": 56783
     }
   ]
 }

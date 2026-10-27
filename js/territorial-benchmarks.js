@@ -1,11 +1,13 @@
+import {territorialDefinition} from './territorial-coverage.js?v=20261027-rc205';
 // Public source-derived asking prices. Never a substitute for booked ADR, occupancy or ROI.
 export const TERRITORIAL_METHOD='quoted-nightly-subtotal-v1';
 export const SEGMENT_FIELDS=['zone','propertyType','roomType','capacity','stayMonth','stayLength'];
-const aliases={naples:'napoli',rome:'roma',milan:'milano',florence:'firenze'};
-export function territorialCity(value){const key=String(value||'').trim().toLowerCase();return ['napoli','roma','milano','firenze'].includes(key)?key:Object.hasOwn(aliases,key)?aliases[key]:null;}
+export function territorialCity(value){return territorialDefinition(value)?.key||null;}
 const validDate=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&Number.isFinite(Date.parse(v+'T00:00:00Z'))&&new Date(v+'T00:00:00Z').toISOString().slice(0,10)===v;
 export function validateTerritorialData(data,city){
  if(data?.schemaVersion!==1||data.methodVersion!==TERRITORIAL_METHOD||data.minimumSample!==10||data.city?.key!==city||!Array.isArray(data.rows)||!data.rows.length||data.rows.length>30000)throw Error('INVALID_TERRITORIAL_DATA');
+ const definition=territorialDefinition(city);if(!definition)throw Error('CITY_NOT_COVERED');
+ if(definition.municipalityFilter){const f=data.city.geographyFilter;if(f?.field!=='neighbourhood_cleansed'||f?.kind!=='source_municipality'||f?.equals!==definition.municipalityFilter||data.rows.some(row=>row[0]!==f.equals))throw Error('INVALID_MUNICIPALITY_SCOPE');}
  if(!/^https:\/\/data\.insideairbnb\.com\/italy\//.test(data.city.url||'')||!validDate(data.city.snapshot)||!validDate(data.city.observationStart)||!validDate(data.city.observationEnd)||!Number.isSafeInteger(data.city.eligibleRows))throw Error('INVALID_TERRITORIAL_SOURCE');
  for(const row of data.rows){
   if(!Array.isArray(row)||row.length!==14||![0,1,2,4,5].every(i=>typeof row[i]==='string'&&row[i].length>0&&row[i].length<=180)||!Number.isSafeInteger(row[3])||row[3]<1||row[3]>100||!/^\d{4}-\d{2}$/.test(row[4])||!['1','2-3','4-7','8-27'].includes(row[5]))throw Error('INVALID_TERRITORIAL_SEGMENT');

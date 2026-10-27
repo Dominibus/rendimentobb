@@ -272,6 +272,7 @@ data-en="Guides">
 Guide
 
 </a>
+<a href="/immobili-commerciali/" data-it="Locali e studi" data-en="Commercial spaces">Locali e studi</a>
 <a href="/about/" data-it="Chi siamo" data-en="About">
     Chi siamo
   </a>
@@ -350,14 +351,17 @@ Guide
     data-en="Guides">
     Guide
     </a>
+<a href="/immobili-commerciali/" data-it="Locali e studi" data-en="Commercial spaces">Locali e studi</a>
+<a href="/gestione-commerciale/" data-it="PMS locali e studi" data-en="Commercial PMS">PMS locali e studi</a>
+
 <a href="/about/" 
     data-it="Chi siamo" 
     data-en="About">
     Chi siamo
     </a>
 
-<a href="/immobili-commerciali/" data-it="Locali e studi · MVP pubblico" data-en="Commercial units and rooms · public MVP">Locali e studi · MVP pubblico</a>
-<a href="/gestione-commerciale/" data-it="Gestione locali e studi" data-en="Commercial workspace">Gestione locali e studi</a>
+
+
   </nav>
 
     <div class="rb-mobile-lang">
@@ -766,6 +770,8 @@ class="dashboard-label">
   <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
   <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
   <a href="/academy/" data-it="Guide" data-en="Guides">Guide</a>
+<a href="/immobili-commerciali/" data-it="Locali e studi" data-en="Commercial spaces">Locali e studi</a>
+<a href="/gestione-commerciale/" data-it="PMS locali e studi" data-en="Commercial PMS">PMS locali e studi</a>
 <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
   <a href="#"
   id="mobile-ai-btn"
@@ -951,6 +957,8 @@ document.getElementById("logout").onclick = async ()=>{
     data-en="Guides">
     Guide
   </a>
+<a href="/immobili-commerciali/" data-it="Locali e studi" data-en="Commercial spaces">Locali e studi</a>
+<a href="/gestione-commerciale/" data-it="PMS locali e studi" data-en="Commercial PMS">PMS locali e studi</a>
 
   <a
     href="/about/"
