@@ -1,0 +1,965 @@
+{
+  "pages": [
+    {
+      "file": "404.html",
+      "bytes": 1060,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex,follow"
+      ],
+      "scripts": 0,
+      "stylesheets": 1,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "contact.html",
+      "bytes": 6848,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/contact.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 4,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "index.html",
+      "bytes": 114140,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/?lang=en"
+        ]
+      ],
+      "robots": [
+        "index, follow"
+      ],
+      "scripts": 22,
+      "stylesheets": 17,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "plan-interest.html",
+      "bytes": 8001,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/plan-interest.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "plans.html",
+      "bytes": 17980,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/plans.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 4,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "privacy.html",
+      "bytes": 43995,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/privacy.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 4,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "terms.html",
+      "bytes": 28930,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/terms.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 4,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "withdrawal.html",
+      "bytes": 11710,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/withdrawal.html"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "about/index.html",
+      "bytes": 22069,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/about/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 9,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "academy/index.html",
+      "bytes": 32291,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/academy/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 11,
+      "stylesheets": 10,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "account-action/index.html",
+      "bytes": 1298,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "scripts": 1,
+      "stylesheets": 3,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "aprire-bnb-conviene/index.html",
+      "bytes": 26733,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/aprire-bnb-conviene/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 8,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "costi-aprire-bnb/index.html",
+      "bytes": 12012,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/costi-aprire-bnb/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "dashboard/index.html",
+      "bytes": 127486,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "scripts": 22,
+      "stylesheets": 17,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "dashboard-leads/index.html",
+      "bytes": 13738,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "scripts": 6,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "dashboard-report/index.html",
+      "bytes": 81459,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "scripts": 15,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "gestione-commerciale/index.html",
+      "bytes": 8642,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "scripts": 5,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "guest-report/index.html",
+      "bytes": 6914,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex,nofollow,noarchive"
+      ],
+      "scripts": 1,
+      "stylesheets": 2,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili/index.html",
+      "bytes": 71102,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/"
+      ],
+      "hreflang": [],
+      "robots": [
+        "index, follow"
+      ],
+      "scripts": 16,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili-commerciali/index.html",
+      "bytes": 18809,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili-commerciali/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/immobili-commerciali/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 8,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "lavora-con-noi/index.html",
+      "bytes": 10615,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/lavora-con-noi/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "login/index.html",
+      "bytes": 10786,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "scripts": 2,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "market/index.html",
+      "bytes": 11349,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/market/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 12,
+      "stylesheets": 10,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "mutui/index.html",
+      "bytes": 65525,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/mutui/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 13,
+      "stylesheets": 10,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "partner/index.html",
+      "bytes": 10897,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/partner/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "pro-success/index.html",
+      "bytes": 4711,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "scripts": 5,
+      "stylesheets": 4,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "quanto-guadagna-bnb/index.html",
+      "bytes": 11628,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/quanto-guadagna-bnb/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "roi-bnb/index.html",
+      "bytes": 40138,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 7,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "tool/index.html",
+      "bytes": 79415,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/tool/"
+      ],
+      "hreflang": [],
+      "robots": [
+        "index, follow"
+      ],
+      "scripts": 20,
+      "stylesheets": 15,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "academy/errori/index.html",
+      "bytes": 20842,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/academy/errori/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "academy/mutuo/index.html",
+      "bytes": 24647,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/academy/mutuo/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "academy/roi/index.html",
+      "bytes": 24228,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/academy/roi/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "academy/strategia/index.html",
+      "bytes": 20217,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/academy/strategia/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "demo/hospitality-pms/index.html",
+      "bytes": 17333,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/demo/hospitality-pms/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 2,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "demo/investment-analytics/index.html",
+      "bytes": 12854,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/demo/investment-analytics/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/investment-analytics/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 2,
+      "stylesheets": 3,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "en/gestione-commerciale/index.html",
+      "bytes": 8571,
+      "lang": "en",
+      "h1": 1,
+      "title": 1,
+      "description": 0,
+      "canonical": [],
+      "hreflang": [],
+      "robots": [
+        "noindex,nofollow"
+      ],
+      "scripts": 5,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "en/immobili-commerciali/index.html",
+      "bytes": 18142,
+      "lang": "en",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/en/immobili-commerciali/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/immobili-commerciali/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/immobili-commerciali/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 8,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "en/demo/hospitality-pms/index.html",
+      "bytes": 17184,
+      "lang": "en",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/hospitality-pms/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/hospitality-pms/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 2,
+      "stylesheets": 5,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "en/demo/investment-analytics/index.html",
+      "bytes": 12977,
+      "lang": "en",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/en/demo/investment-analytics/"
+      ],
+      "hreflang": [
+        [
+          "it",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ],
+        [
+          "en",
+          "https://www.rendimentobb.it/en/demo/investment-analytics/"
+        ],
+        [
+          "x-default",
+          "https://www.rendimentobb.it/demo/investment-analytics/"
+        ]
+      ],
+      "robots": [],
+      "scripts": 2,
+      "stylesheets": 3,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili/firenze/index.html",
+      "bytes": 14548,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/firenze/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili/milano/index.html",
+      "bytes": 16337,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/milano/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili/napoli/index.html",
+      "bytes": 14519,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/napoli/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "immobili/roma/index.html",
+      "bytes": 16935,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/immobili/roma/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 5,
+      "stylesheets": 6,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "market/firenze/index.html",
+      "bytes": 10851,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/market/firenze/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "market/milano/index.html",
+      "bytes": 10774,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/market/milano/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "market/napoli/index.html",
+      "bytes": 10713,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/market/napoli/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "market/roma/index.html",
+      "bytes": 10922,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/market/roma/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 9,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "roi-bnb/firenze/index.html",
+      "bytes": 18398,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/firenze/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "roi-bnb/milano/index.html",
+      "bytes": 17490,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/milano/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "roi-bnb/napoli/index.html",
+      "bytes": 17485,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/napoli/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    },
+    {
+      "file": "roi-bnb/roma/index.html",
+      "bytes": 16972,
+      "lang": "it",
+      "h1": 1,
+      "title": 1,
+      "description": 1,
+      "canonical": [
+        "https://www.rendimentobb.it/roi-bnb/roma/"
+      ],
+      "hreflang": [],
+      "robots": [],
+      "scripts": 6,
+      "stylesheets": 7,
+      "duplicate_ids": {},
+      "images_missing_alt": []
+    }
+  ],
+  "broken_local_references": []
+}

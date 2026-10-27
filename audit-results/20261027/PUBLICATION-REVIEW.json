@@ -1,0 +1,12 @@
+{
+  "reviewed_at_utc": "2026-10-27T21:45:13.324016+00:00",
+  "secret_pattern_hits": 0,
+  "personal_email_hits": 0,
+  "remaining_email_categories": [
+    "public-company-support-contact-in-existing-page-or-patch",
+    "synthetic-address"
+  ],
+  "scope": "Audit files only; existing repository history is outside this publication. Screenshots were generated locally with external network blocked and synthetic demo data, without authenticated accounts.",
+  "source_changes_committed": false,
+  "patch_applied_to_remote_source": false
+}

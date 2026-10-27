@@ -1,0 +1,938 @@
+[
+  {
+    "width": 390,
+    "url": "/",
+    "title": "RendimentoBB | Property ROI calculator and B&B management",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Analyse your property.Manage B&Bs and commercial spaces.Understand the numbers."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/tool/",
+    "title": "B&B ROI Calculator – See how much you can earn (or lose)",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Analyze a B&B investment"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/demo/hospitality-pms/",
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Il PMS, dal calendario alla scheda ospite."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  },
+  {
+    "width": 390,
+    "url": "/en/demo/hospitality-pms/",
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "The PMS, from calendar to booking details."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  },
+  {
+    "width": 390,
+    "url": "/immobili-commerciali/",
+    "title": "Analisi immobili commerciali e studi professionali | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Locali, studi e poliambulatori: analisi e gestione degli spazi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/en/immobili-commerciali/",
+    "title": "Commercial property and shared professional spaces | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Commercial units, professional rooms and clinic premises"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/gestione-commerciale/?demo=1",
+    "title": "Gestisci locali e studi, dai contratti agli incassi · RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Gestisci locali e studi, dai contratti agli incassi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/en/gestione-commerciale/?demo=1",
+    "title": "Manage commercial spaces, from contracts to receipts · RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Manage commercial spaces, from contracts to receipts"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/login/",
+    "title": "Login – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Accesso"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/plans.html?lang=en",
+    "title": "Plans and terms – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Plans, trial and terms"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/",
+    "title": "RendimentoBB | Property ROI calculator and B&B management",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Analyse your property.Manage B&Bs and commercial spaces.Understand the numbers."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/tool/",
+    "title": "B&B ROI Calculator – See how much you can earn (or lose)",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Analyze a B&B investment"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/demo/hospitality-pms/",
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Il PMS, dal calendario alla scheda ospite."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  },
+  {
+    "width": 1365,
+    "url": "/en/demo/hospitality-pms/",
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "The PMS, from calendar to booking details."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  },
+  {
+    "width": 1365,
+    "url": "/immobili-commerciali/",
+    "title": "Analisi immobili commerciali e studi professionali | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Locali, studi e poliambulatori: analisi e gestione degli spazi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/en/immobili-commerciali/",
+    "title": "Commercial property and shared professional spaces | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Commercial units, professional rooms and clinic premises"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/gestione-commerciale/?demo=1",
+    "title": "Gestisci locali e studi, dai contratti agli incassi · RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Gestisci locali e studi, dai contratti agli incassi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/en/gestione-commerciale/?demo=1",
+    "title": "Manage commercial spaces, from contracts to receipts · RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Manage commercial spaces, from contracts to receipts"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/login/",
+    "title": "Login – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Accesso"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/plans.html?lang=en",
+    "title": "Plans and terms – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Plans, trial and terms"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  }
+]

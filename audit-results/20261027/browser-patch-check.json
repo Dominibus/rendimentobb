@@ -1,0 +1,65 @@
+{
+  "checks": "EN→IT→EN; exact original IT; EN paused sales/30-day trial; no document overflow; policy files unchanged",
+  "results": [
+    {
+      "width": 390,
+      "steps": [
+        {
+          "lang": "en",
+          "text": "Take part in testing with the 30-day Investor trial, if eligible. New paid plans cannot be purchased at this stage; you can register your interest to receive a notification when subscriptions open.",
+          "viewport": 390,
+          "scrollWidth": 390
+        },
+        {
+          "lang": "it",
+          "text": "Partecipa ai test con la prova Investor di 30 giorni, se idoneo. I nuovi piani a pagamento non sono acquistabili in questa fase; puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti.",
+          "viewport": 390,
+          "scrollWidth": 390
+        },
+        {
+          "lang": "en",
+          "text": "Take part in testing with the 30-day Investor trial, if eligible. New paid plans cannot be purchased at this stage; you can register your interest to receive a notification when subscriptions open.",
+          "viewport": 390,
+          "scrollWidth": 390
+        }
+      ],
+      "policyUnchanged": true,
+      "blocked": [
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+      ],
+      "pass": true
+    },
+    {
+      "width": 1365,
+      "steps": [
+        {
+          "lang": "en",
+          "text": "Take part in testing with the 30-day Investor trial, if eligible. New paid plans cannot be purchased at this stage; you can register your interest to receive a notification when subscriptions open.",
+          "viewport": 1365,
+          "scrollWidth": 1365
+        },
+        {
+          "lang": "it",
+          "text": "Partecipa ai test con la prova Investor di 30 giorni, se idoneo. I nuovi piani a pagamento non sono acquistabili in questa fase; puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti.",
+          "viewport": 1365,
+          "scrollWidth": 1365
+        },
+        {
+          "lang": "en",
+          "text": "Take part in testing with the 30-day Investor trial, if eligible. New paid plans cannot be purchased at this stage; you can register your interest to receive a notification when subscriptions open.",
+          "viewport": 1365,
+          "scrollWidth": 1365
+        }
+      ],
+      "policyUnchanged": true,
+      "blocked": [
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+      ],
+      "pass": true
+    }
+  ]
+}

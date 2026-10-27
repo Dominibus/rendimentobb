@@ -1,0 +1,152 @@
+[
+  {
+    "id": "PMS-01",
+    "severity": "P1",
+    "problem": "Duplicazione prenotazione pending dopo risposta persa e altra operazione",
+    "baseline_location": "js/pms-api-client.js:3,11-15,34-35",
+    "evidence": "Emulatore:2 A salvate con ID distinti",
+    "proposed_solution": "Mappa idempotenza uid/firma; rimozione condizionale",
+    "status": "Proposta: struttura dati client",
+    "report": "pms-assistant.md"
+  },
+  {
+    "id": "FIN-01",
+    "severity": "P2",
+    "problem": "Totali commerciali annuali N/A per contratto fuori anno",
+    "baseline_location": "js/commercial-property-engine.js:102-110",
+    "evidence": "Annuale null, somma mensile3000",
+    "proposed_solution": "Contributo zero fuori competenza,unknown rilevante N/A",
+    "status": "Proposta: semantica finanziaria",
+    "report": "financial.md"
+  },
+  {
+    "id": "FIN-02",
+    "severity": "P2",
+    "problem": "Input ROI invalidi silenziati",
+    "baseline_location": "js/roi-engine.js:12-19,73-80,179-180",
+    "evidence": "Durata0→debito0;Infinity→identità falsa",
+    "proposed_solution": "Validazione esplicita finita ed errore strutturato",
+    "status": "Proposta: contratto motore",
+    "report": "financial.md"
+  },
+  {
+    "id": "PMS-02",
+    "severity": "P2",
+    "problem": "Cashflow mancante mostrato zero",
+    "baseline_location": "js/dashboard.js:2931-2938",
+    "evidence": "Assente/invalido e zero stessa barra",
+    "proposed_solution": "Null N/D,label cashflow",
+    "status": "Proposta: UI finanziaria",
+    "report": "pms-assistant.md"
+  },
+  {
+    "id": "PMS-03",
+    "severity": "P2",
+    "problem": "Query proprietà e storico seriali senza paginazione",
+    "baseline_location": "js/dashboard.js:6248-6311",
+    "evidence": "N+1 statico,non benchmark",
+    "proposed_solution": "Periodo,paginazione,riuso snapshot",
+    "status": "Proposta",
+    "report": "pms-assistant.md"
+  },
+  {
+    "id": "OPS-01",
+    "severity": "P2",
+    "problem": "Promemoria al massimo20 account/die",
+    "baseline_location": "lib/pms-reminders.js:5-15,48-50",
+    "evidence": "21 account:20 oggi,1 domani",
+    "proposed_solution": "Drenare pagine entro budget,SLA/backlog",
+    "status": "Proposta scheduling",
+    "report": "security.md"
+  },
+  {
+    "id": "OPS-02",
+    "severity": "P2",
+    "problem": "Oltre200 bookings storiche saltano account reminder",
+    "baseline_location": "lib/pms-reminders.js:21-22",
+    "evidence": "Query limit201 poi continue",
+    "proposed_solution": "Finestra stati/date,paginazione",
+    "status": "Proposta",
+    "report": "security.md"
+  },
+  {
+    "id": "SEC-01",
+    "severity": "P2",
+    "problem": "PDF Pro con barriera solo client",
+    "baseline_location": "js/app.js:5611-5633",
+    "evidence": "Accesso Pro falsificabile,nessun cross-account provato",
+    "proposed_solution": "Contratto esplicito o artefatto premium autorizzato server",
+    "status": "Proposta architetturale",
+    "report": "security.md"
+  },
+  {
+    "id": "SEC-02",
+    "severity": "P2",
+    "problem": "CSP script senza restrizione globale",
+    "baseline_location": "vercel.json",
+    "evidence": "No default-src/script-src;nessuna XSS provata",
+    "proposed_solution": "Policy graduale su sorgenti inventariate",
+    "status": "Proposta",
+    "report": "security.md"
+  },
+  {
+    "id": "DEP-01",
+    "severity": "P2",
+    "problem": "Advisory qs transitivo produzione",
+    "baseline_location": "package-lock.json",
+    "evidence": "1moderate,0high/critical;exploit app non provato",
+    "proposed_solution": "Update mirato,test Stripe,no force",
+    "status": "Proposta dipendenze",
+    "report": "security.md"
+  },
+  {
+    "id": "DEP-02",
+    "severity": "P2",
+    "problem": "Advisory toolchain security-tests",
+    "baseline_location": "security-tests/package-lock.json",
+    "evidence": "17pacchetti,9moderate+8high;dev-only",
+    "proposed_solution": "Update CLI dedicato,compatibilità/test emulatore",
+    "status": "Proposta dipendenze",
+    "report": "security.md"
+  },
+  {
+    "id": "TEST-01",
+    "severity": "P2",
+    "problem": "11 fallimenti aspettative cache obsolete",
+    "baseline_location": "8file tests elencati in tests-rc211-rc212.md",
+    "evidence": "Main11fail,precedente209/209pass",
+    "proposed_solution": "Pin solo header/loader/orchestratorRC212",
+    "status": "Patch conservativa",
+    "report": "tests-rc211-rc212.md"
+  },
+  {
+    "id": "UX-01",
+    "severity": "P2",
+    "problem": "Avviso piani IT nella pagina EN",
+    "baseline_location": "plans.html:5",
+    "evidence": "Browser390/1365 lang=en,testoIT",
+    "proposed_solution": "Attributi data-it/data-en,stessa policy",
+    "status": "Patch conservativa",
+    "report": "ux-seo-architecture.md"
+  },
+  {
+    "id": "ARCH-01",
+    "severity": "P2",
+    "problem": "Gate PR Node/rules assente dal repo",
+    "baseline_location": ".github/workflows/territorial-sources.yml:2-5,26-29",
+    "evidence": "Solo workflow mensile/manualePython;check esterni ignoti",
+    "proposed_solution": "Proposta workflow PR Node24/Python/emulatore",
+    "status": "Proposta CI",
+    "report": "ux-seo-architecture.md"
+  },
+  {
+    "id": "AVAIL-01",
+    "severity": "P2",
+    "problem": "Bootstrap simulatore accoppiato a SDK CDN",
+    "baseline_location": "js/app.js:37-45",
+    "evidence": "Outage controllato CDN impedisce init",
+    "proposed_solution": "Calcolo puro separato da account lazy-import",
+    "status": "Proposta architetturale",
+    "report": "ux-seo-architecture.md"
+  }
+]

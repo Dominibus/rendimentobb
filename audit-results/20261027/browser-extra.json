@@ -1,0 +1,1536 @@
+[
+  {
+    "width": 390,
+    "url": "/plans.html?lang=en",
+    "salesNotice": "Partecipa ai test con la prova Investor di 30 giorni, se idoneo. I nuovi piani a pagamento non sono acquistabili in questa fase; puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti.",
+    "bodyStart": "Sign in or create a free account, verify your email and confirm the trial in Subscription. Registration alone does not activate the trial.\n\nPaid plans\nInvestor\n\n€19 / month\n\nSaved analyses, dashboard and PMS management. PDF reports excluded.\n\nPro\n\n€29 / month\n\nInvestor features plus PDF and dashboard reports.\n\nPro Yearly\n\n€199 / year\n\nThe same Pro features, with one annual payment.\n\nPro Annual: €199 charged each year. The €16.58 monthly equivalent is not a monthly instalment. Paid subscriptions renew automatically; the free trial does not. Before paying, check the plan, total and billing frequency at checkout. If they differ, do not proceed and contact support.\n\nRenewal and withdrawal\n\nStopping renewal through the Stripe portal, when available for the subscription, is distinct from withdrawal. Contact support@rendimentobb.com for assistance. The online withdrawal page is accessible without login and provides review, confirmation and a receipt. See the Withdrawal page for the full process.\n\nApplicable documentation\n\nThis is an information summary of the published plans. The linked Terms and Conditions are those offered during activation and subscription: version 2026-10-15-rc128, updated October 15, 2026. This summary does not replace the contract documents. Simulations are estimates based on entered assumptions, not guaranteed results. Automatic synchronisation with OTA platforms is not included.\n\nRead the Terms and Conditions\nContact support\nLa tua privacy, la tua scelta\n\nUsiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. Privacy e cookie\n\nRifiuta analytics\nAccetta analytics\nPreferenze cookie\nHome\nAnalizza\nDashboard\nAssistente\nExplore your investment numbers\n\nCompare scenarios • Analyze ROI • Manage your B&B.\n\nStart simulation\nRendimentoBB — Basic & Beyond\n\nThe essentials & beyond.\n\nTools for property analysis and B&B operations, with clear assumptions and results.\n\nGuides\nTools\nBusiness\nLegal\nPlans and terms\nPrivacy\nWithdraw from the contract here\nTerms\nContact\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – All rights reserved",
+    "inputs": [],
+    "title": "Plans and terms – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Plans, trial and terms"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/immobili-commerciali/",
+    "bodyStart": "i non diventano prenotazioni turistiche.\n\nIl modulo analizza canoni e corrispettivi dell’immobile, non vendite, fatturato o utile di un negozio e non prestazioni mediche.\n\nFormule, dati e limiti\n\nInput utente, dati fittizi degli esempi, ipotesi configurabili e risultati calcolati sono distinti. Non utilizziamo benchmark commerciali esterni né tariffe medie inventate.\n\nPer confrontare questo scenario con un B&B, allinea anno, capitale, costi e base fiscale. Qui il cashflow è prima delle imposte sul reddito; il simulatore B&B considera le imposte impostate. Non confrontare direttamente rendimenti con basi diverse.\n\nCome leggere i risultati\nVerifiche con professionisti competenti\n\nPerimetro MVP: un immobile, un anno civile, massimo 30 stanze, 12 fasce al giorno, 120 contratti e 100 chiusure per stanza o intero immobile. Collisioni verificate solo nell’anno selezionato. Le chiusure coprono giorni interi; non gestiamo appuntamenti, sub-fasce o pazienti.\n\nIl PMS dedicato salva scenari e contratti confermati e distingue movimenti e previsioni. PDF commerciali e portafoglio aggregato restano da sviluppare. Il PMS B&B resta un percorso distinto.\n\nVuoi esplorare anche gli strumenti del tuo account?\n\nLa prova Investor dura 30 giorni per account idonei, senza carta e senza PDF. Questo modulo pubblico non salva analisi commerciali nell’account. Nuovi acquisti a pagamento sospesi.\n\nScopri la prova Investor\nRaccontaci il tuo caso d’uso\nLa tua privacy, la tua scelta\n\nUsiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. Privacy e cookie\n\nRifiuta analytics\nAccetta analytics\nHome\nAnalizza\nDashboard\nAssistente\nEsplora i numeri del tuo investimento\n\nConfronta scenari • Analizza ROI • Gestisci il tuo B&B.\n\nAvvia simulazione\nRendimentoBB — Basic & Beyond\n\nL’essenziale & oltre.\n\nStrumenti per analizzare investimenti e gestire B&B, locali e studi, con ipotesi e risultati espliciti.\n\nGuide\nStrumenti\nBusiness\nLegale\nPiani e condizioni\nPrivacy\nRecedere dal contratto qui\nTermini\nContatti\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – Tutti i diritti riservati",
+    "inputs": [
+      {
+        "id": "cm-field-1",
+        "labels": 1,
+        "aria": "Anno civile analizzato"
+      },
+      {
+        "id": "cm-field-2",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-3",
+        "labels": 1,
+        "aria": "Valore posseduto / prezzo di acquisto (€)"
+      },
+      {
+        "id": "cm-field-4",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-5",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-6",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-7",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-8",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-9",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-10",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-11",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-12",
+        "labels": 1,
+        "aria": "Costi operativi fissi annui (€)"
+      },
+      {
+        "id": "cm-field-13",
+        "labels": 1,
+        "aria": "Costi variabili (% ricavo senza IVA)"
+      },
+      {
+        "id": "cm-field-14",
+        "labels": 1,
+        "aria": "Numero stanze (1–30)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-27",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-28",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-29",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-30",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-15",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-16",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-17",
+        "labels": 1,
+        "aria": "Unità tariffaria · scelta obbligatoria"
+      },
+      {
+        "id": "cm-field-18",
+        "labels": 1,
+        "aria": "Importo (€), eventuale IVA inclusa"
+      },
+      {
+        "id": "cm-field-19",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-20",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-21",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-22",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-23",
+        "labels": 1,
+        "aria": "Quota del ricavo contrattuale attesa (%)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-24",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-25",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-26",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-31",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-32",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-33",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-34",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-35",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Analisi immobili commerciali e studi professionali | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Locali, studi e poliambulatori: analisi e gestione degli spazi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/en/immobili-commerciali/",
+    "bodyStart": " and operations with Autopilot using its data; aggregated portfolio and commercial PDFs remain unavailable.\nB&B PMS and its reports: separate. Professional slots do not become tourist bookings.\n\nThe module analyses property rent and consideration, not shop sales, turnover or business profit, nor medical services.\n\nFormulas, inputs and limits\n\nUser inputs, fictional examples, configurable assumptions and calculated results are distinguished. No external commercial benchmarks or invented average rents are used.\n\nTo compare this scenario with a B&B, align year, capital, costs and tax basis. Cashflow here is before income tax; the B&B simulator includes configured taxes. Do not directly compare returns calculated on different bases.\n\nHow to read the results\nChecks with qualified professionals\n\nMVP scope: one property, one calendar year, up to 30 rooms, 12 daily slots, 120 contracts and 100 room/property closures. Conflicts are checked only within the selected year. Closures cover whole days; no appointments, sub-slots or patients are managed.\n\nThe dedicated PMS saves scenarios and confirmed contracts and separates movements from forecasts. Commercial PDFs and aggregated portfolio remain future work. The B&B PMS remains separate.\n\nWant to explore the account tools too?\n\nEligible accounts can try Investor for 30 days, without a card or PDFs. This public module does not save commercial analyses to the account. New paid purchases remain suspended.\n\nExplore the Investor trial\nTell us your use case\nYour privacy, your choice\n\nWe use essential storage to operate the site. With your permission, Google Analytics helps us understand aggregated usage. Advertising storage remains disabled. Privacy and cookies\n\nReject analytics\nAccept analytics\nHome\nAnalyze\nDashboard\nAssistant\nExplore your investment numbers\n\nCompare scenarios • Analyze ROI • Manage your B&B.\n\nStart simulation\nRendimentoBB — Basic & Beyond\n\nThe essentials & beyond.\n\nTools for property analysis and B&B operations, with clear assumptions and results.\n\nGuides\nTools\nBusiness\nLegal\nPlans and terms\nPrivacy\nWithdraw from the contract here\nTerms\nContact\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – All rights reserved",
+    "inputs": [
+      {
+        "id": "cm-field-1",
+        "labels": 1,
+        "aria": "Calendar year"
+      },
+      {
+        "id": "cm-field-2",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-3",
+        "labels": 1,
+        "aria": "Owned asset value / purchase price (€)"
+      },
+      {
+        "id": "cm-field-4",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-5",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-6",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-7",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-8",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-9",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-10",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-11",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-12",
+        "labels": 1,
+        "aria": "Annual fixed operating costs (€)"
+      },
+      {
+        "id": "cm-field-13",
+        "labels": 1,
+        "aria": "Variable costs (% revenue excluding VAT)"
+      },
+      {
+        "id": "cm-field-14",
+        "labels": 1,
+        "aria": "Number of rooms (1–30)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-27",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-28",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-29",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-30",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-15",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-16",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-17",
+        "labels": 1,
+        "aria": "Tariff basis · explicit choice required"
+      },
+      {
+        "id": "cm-field-18",
+        "labels": 1,
+        "aria": "Amount (€), including VAT if applicable"
+      },
+      {
+        "id": "cm-field-19",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-20",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-21",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-22",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-23",
+        "labels": 1,
+        "aria": "Expected share of contractual revenue (%)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-24",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-25",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-26",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-31",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-32",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-33",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-34",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-35",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Commercial property and shared professional spaces | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Commercial units, professional rooms and clinic premises"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 390,
+    "url": "/demo/hospitality-pms/",
+    "bodyStart": "AZIONE · DEMO\n\nOspite demo 2\n\n10 ott → 14 ott · 2 ospiti · In arrivo\n\nPercorso consigliato: documenti → tassa → pulizie → segnalazioni. Premi Salva modifiche demo per aggiornare la checklist; il cambio stagione mostra solo un suggerimento fino a quando lo applichi e salvi.\n\nSoggiorno e importo\nStato soggiorno\nIn arrivo\nCheck-in\nCheck-out\nCompletato\nAnnullato\nTotale alloggio (€), tassa esclusa\nDocumenti e comunicazione autorità\n\nVerifica operativa: numero di documenti ricevuti, non validazione automatica dell’identità. Non caricare documenti reali nella demo.\n\nDocumenti ricevuti\nComunicazione autorità\nDa gestire\nCompletata (demo)\nNon richiesta (demo)\n\nLo stato è dichiarato dall’host. Nessun invio ad Alloggiati Web o ISTAT; nel prodotto reale devi verificare la ricevuta sul portale competente.\n\nTassa di soggiorno\nPulizie e turnover\nSegnalazioni ospite\nSuggerimento tariffa · stagionalità\nSalva modifiche demo\nRipristina tutti gli esempi\n\nChe cosa rappresenta questa demo\n\nInvestor e Pro includono gestione di immobili e prenotazioni, calendario e checklist operative. Pro aggiunge report integrati e PDF IT/EN. Questa demo riproduce un percorso di lavoro con dati fittizi, non ogni schermata o integrazione. Non importa prenotazioni e non accede all’account.\n\nScopri la prova Investor di 30 giorni\nApri il pannello\nSegnala interesse per Pro\n\nProva per account idonei, senza carta o addebiti automatici; PDF esclusi. Nuovi acquisti a pagamento ancora sospesi.\n\nEsplora i numeri del tuo investimento\n\nConfronta scenari • Analizza ROI • Gestisci il tuo B&B.\n\nAvvia simulazione\nRendimentoBB — Basic & Beyond\n\nL’essenziale & oltre.\n\nStrumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti.\n\nGuide\nAprire un B&B\nGuadagni B&B\nCosti B&B\nROI B&B\nStrumenti\nSimulatore ROI\nDashboard\nMutui\nImmobili\nBusiness\nProgramma tester Investor\nAvvisami all’apertura dei piani\nProponi una collaborazione\nProponi le tue competenze\nLegale\nPiani e condizioni\nPrivacy\nRecedere dal contratto qui\nTermini\nContatti\n✔ ROI stimato e cashflow\n✔ Analisi rischio avanzata\n✔ Dashboard, analisi e PMS\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – Tutti i diritti riservati\n\nInformativa privacy",
+    "inputs": [
+      {
+        "id": "demo-task-filter",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-booking-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-total",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-documents-received",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-authority",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-taxable",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-tax-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-cleaning-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-issue-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-season",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 390,
+    "viewport": 390,
+    "h1": [
+      "Il PMS, dal calendario alla scheda ospite."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  },
+  {
+    "width": 1365,
+    "url": "/plans.html?lang=en",
+    "salesNotice": "Partecipa ai test con la prova Investor di 30 giorni, se idoneo. I nuovi piani a pagamento non sono acquistabili in questa fase; puoi lasciare il tuo interesse per ricevere un avviso all’apertura degli abbonamenti.",
+    "bodyStart": "ashboard reports.\n\nPro Yearly\n\n€199 / year\n\nThe same Pro features, with one annual payment.\n\nPro Annual: €199 charged each year. The €16.58 monthly equivalent is not a monthly instalment. Paid subscriptions renew automatically; the free trial does not. Before paying, check the plan, total and billing frequency at checkout. If they differ, do not proceed and contact support.\n\nRenewal and withdrawal\n\nStopping renewal through the Stripe portal, when available for the subscription, is distinct from withdrawal. Contact support@rendimentobb.com for assistance. The online withdrawal page is accessible without login and provides review, confirmation and a receipt. See the Withdrawal page for the full process.\n\nApplicable documentation\n\nThis is an information summary of the published plans. The linked Terms and Conditions are those offered during activation and subscription: version 2026-10-15-rc128, updated October 15, 2026. This summary does not replace the contract documents. Simulations are estimates based on entered assumptions, not guaranteed results. Automatic synchronisation with OTA platforms is not included.\n\nRead the Terms and Conditions\nContact support\nLa tua privacy, la tua scelta\n\nUsiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. Privacy e cookie\n\nRifiuta analytics\nAccetta analytics\nPreferenze cookie\nExplore your investment numbers\n\nCompare scenarios • Analyze ROI • Manage your B&B.\n\nStart simulation\nRendimentoBB — Basic & Beyond\n\nThe essentials & beyond.\n\nTools for property analysis and B&B operations, with clear assumptions and results.\n\nGuides\nStart a B&B\nB&B earnings\nB&B costs\nB&B ROI\nTools\nROI Simulator\nDashboard\nMortgages\nProperties\nCommercial units and rooms · public MVP\nCommercial workspace\nBusiness\nInvestor tester programme\nNotify me when plans open\nPropose a collaboration\nShare your skills\nLegal\nPlans and terms\nPrivacy\nWithdraw from the contract here\nTerms\nContact\n✔ Estimated ROI and cashflow\n✔ Advanced risk analysis\n✔ Dashboard, analytics and PMS\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – All rights reserved",
+    "inputs": [],
+    "title": "Plans and terms – RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Plans, trial and terms"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/immobili-commerciali/",
+    "bodyStart": ". Non utilizziamo benchmark commerciali esterni né tariffe medie inventate.\n\nPer confrontare questo scenario con un B&B, allinea anno, capitale, costi e base fiscale. Qui il cashflow è prima delle imposte sul reddito; il simulatore B&B considera le imposte impostate. Non confrontare direttamente rendimenti con basi diverse.\n\nCome leggere i risultati\nVerifiche con professionisti competenti\n\nPerimetro MVP: un immobile, un anno civile, massimo 30 stanze, 12 fasce al giorno, 120 contratti e 100 chiusure per stanza o intero immobile. Collisioni verificate solo nell’anno selezionato. Le chiusure coprono giorni interi; non gestiamo appuntamenti, sub-fasce o pazienti.\n\nIl PMS dedicato salva scenari e contratti confermati e distingue movimenti e previsioni. PDF commerciali e portafoglio aggregato restano da sviluppare. Il PMS B&B resta un percorso distinto.\n\nVuoi esplorare anche gli strumenti del tuo account?\n\nLa prova Investor dura 30 giorni per account idonei, senza carta e senza PDF. Questo modulo pubblico non salva analisi commerciali nell’account. Nuovi acquisti a pagamento sospesi.\n\nScopri la prova Investor\nRaccontaci il tuo caso d’uso\nLa tua privacy, la tua scelta\n\nUsiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. Privacy e cookie\n\nRifiuta analytics\nAccetta analytics\nEsplora i numeri del tuo investimento\n\nConfronta scenari • Analizza ROI • Gestisci il tuo B&B.\n\nAvvia simulazione\nRendimentoBB — Basic & Beyond\n\nL’essenziale & oltre.\n\nStrumenti per analizzare investimenti e gestire B&B, locali e studi, con ipotesi e risultati espliciti.\n\nGuide\nAprire un B&B\nGuadagni B&B\nCosti B&B\nROI B&B\nStrumenti\nSimulatore ROI\nDashboard\nMutui\nImmobili\nLocali e studi · MVP pubblico\nGestione locali e studi\nBusiness\nProgramma tester Investor\nAvvisami all’apertura dei piani\nProponi una collaborazione\nProponi le tue competenze\nLegale\nPiani e condizioni\nPrivacy\nRecedere dal contratto qui\nTermini\nContatti\n✔ ROI stimato e cashflow\n✔ Analisi rischio avanzata\n✔ Dashboard, analisi e PMS\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – Tutti i diritti riservati",
+    "inputs": [
+      {
+        "id": "cm-field-1",
+        "labels": 1,
+        "aria": "Anno civile analizzato"
+      },
+      {
+        "id": "cm-field-2",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-3",
+        "labels": 1,
+        "aria": "Valore posseduto / prezzo di acquisto (€)"
+      },
+      {
+        "id": "cm-field-4",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-5",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-6",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-7",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-8",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-9",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-10",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-11",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-12",
+        "labels": 1,
+        "aria": "Costi operativi fissi annui (€)"
+      },
+      {
+        "id": "cm-field-13",
+        "labels": 1,
+        "aria": "Costi variabili (% ricavo senza IVA)"
+      },
+      {
+        "id": "cm-field-14",
+        "labels": 1,
+        "aria": "Numero stanze (1–30)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-27",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-28",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-29",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-30",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-15",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-16",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-17",
+        "labels": 1,
+        "aria": "Unità tariffaria · scelta obbligatoria"
+      },
+      {
+        "id": "cm-field-18",
+        "labels": 1,
+        "aria": "Importo (€), eventuale IVA inclusa"
+      },
+      {
+        "id": "cm-field-19",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-20",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-21",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-22",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-23",
+        "labels": 1,
+        "aria": "Quota del ricavo contrattuale attesa (%)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-24",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-25",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-26",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-31",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-32",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-33",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-34",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-35",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Analisi immobili commerciali e studi professionali | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Locali, studi e poliambulatori: analisi e gestione degli spazi"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/en/immobili-commerciali/",
+    "bodyStart": "r medical services.\n\nFormulas, inputs and limits\n\nUser inputs, fictional examples, configurable assumptions and calculated results are distinguished. No external commercial benchmarks or invented average rents are used.\n\nTo compare this scenario with a B&B, align year, capital, costs and tax basis. Cashflow here is before income tax; the B&B simulator includes configured taxes. Do not directly compare returns calculated on different bases.\n\nHow to read the results\nChecks with qualified professionals\n\nMVP scope: one property, one calendar year, up to 30 rooms, 12 daily slots, 120 contracts and 100 room/property closures. Conflicts are checked only within the selected year. Closures cover whole days; no appointments, sub-slots or patients are managed.\n\nThe dedicated PMS saves scenarios and confirmed contracts and separates movements from forecasts. Commercial PDFs and aggregated portfolio remain future work. The B&B PMS remains separate.\n\nWant to explore the account tools too?\n\nEligible accounts can try Investor for 30 days, without a card or PDFs. This public module does not save commercial analyses to the account. New paid purchases remain suspended.\n\nExplore the Investor trial\nTell us your use case\nYour privacy, your choice\n\nWe use essential storage to operate the site. With your permission, Google Analytics helps us understand aggregated usage. Advertising storage remains disabled. Privacy and cookies\n\nReject analytics\nAccept analytics\nExplore your investment numbers\n\nCompare scenarios • Analyze ROI • Manage your B&B.\n\nStart simulation\nRendimentoBB — Basic & Beyond\n\nThe essentials & beyond.\n\nTools for property analysis and B&B operations, with clear assumptions and results.\n\nGuides\nStart a B&B\nB&B earnings\nB&B costs\nB&B ROI\nTools\nROI Simulator\nDashboard\nMortgages\nProperties\nCommercial units and rooms · public MVP\nCommercial workspace\nBusiness\nInvestor tester programme\nNotify me when plans open\nPropose a collaboration\nShare your skills\nLegal\nPlans and terms\nPrivacy\nWithdraw from the contract here\nTerms\nContact\n✔ Estimated ROI and cashflow\n✔ Advanced risk analysis\n✔ Dashboard, analytics and PMS\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – All rights reserved",
+    "inputs": [
+      {
+        "id": "cm-field-1",
+        "labels": 1,
+        "aria": "Calendar year"
+      },
+      {
+        "id": "cm-field-2",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-3",
+        "labels": 1,
+        "aria": "Owned asset value / purchase price (€)"
+      },
+      {
+        "id": "cm-field-4",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-5",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-6",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-7",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-8",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-9",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-10",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-11",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-12",
+        "labels": 1,
+        "aria": "Annual fixed operating costs (€)"
+      },
+      {
+        "id": "cm-field-13",
+        "labels": 1,
+        "aria": "Variable costs (% revenue excluding VAT)"
+      },
+      {
+        "id": "cm-field-14",
+        "labels": 1,
+        "aria": "Number of rooms (1–30)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-27",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-28",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-29",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-30",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-15",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-16",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-17",
+        "labels": 1,
+        "aria": "Tariff basis · explicit choice required"
+      },
+      {
+        "id": "cm-field-18",
+        "labels": 1,
+        "aria": "Amount (€), including VAT if applicable"
+      },
+      {
+        "id": "cm-field-19",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-20",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-21",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-22",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-23",
+        "labels": 1,
+        "aria": "Expected share of contractual revenue (%)"
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-24",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-25",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-26",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-31",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-32",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-33",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-34",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "cm-field-35",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Commercial property and shared professional spaces | RendimentoBB",
+    "lang": "en",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Commercial units, professional rooms and clinic premises"
+    ],
+    "unnamedButtons": 0,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "rb-mobile-top"
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "rb-mobile-close",
+        "cls": ""
+      },
+      {
+        "tag": "DIV",
+        "id": "rb-mobile-account",
+        "cls": "rb-mobile-account"
+      },
+      {
+        "tag": "NAV",
+        "id": "rb-mobile-nav",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "cls": ""
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js",
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    ]
+  },
+  {
+    "width": 1365,
+    "url": "/demo/hospitality-pms/",
+    "bodyStart": "AZIONE · DEMO\n\nOspite demo 2\n\n10 ott → 14 ott · 2 ospiti · In arrivo\n\nPercorso consigliato: documenti → tassa → pulizie → segnalazioni. Premi Salva modifiche demo per aggiornare la checklist; il cambio stagione mostra solo un suggerimento fino a quando lo applichi e salvi.\n\nSoggiorno e importo\nStato soggiorno\nIn arrivo\nCheck-in\nCheck-out\nCompletato\nAnnullato\nTotale alloggio (€), tassa esclusa\nDocumenti e comunicazione autorità\n\nVerifica operativa: numero di documenti ricevuti, non validazione automatica dell’identità. Non caricare documenti reali nella demo.\n\nDocumenti ricevuti\nComunicazione autorità\nDa gestire\nCompletata (demo)\nNon richiesta (demo)\n\nLo stato è dichiarato dall’host. Nessun invio ad Alloggiati Web o ISTAT; nel prodotto reale devi verificare la ricevuta sul portale competente.\n\nTassa di soggiorno\nPulizie e turnover\nSegnalazioni ospite\nSuggerimento tariffa · stagionalità\nSalva modifiche demo\nRipristina tutti gli esempi\n\nChe cosa rappresenta questa demo\n\nInvestor e Pro includono gestione di immobili e prenotazioni, calendario e checklist operative. Pro aggiunge report integrati e PDF IT/EN. Questa demo riproduce un percorso di lavoro con dati fittizi, non ogni schermata o integrazione. Non importa prenotazioni e non accede all’account.\n\nScopri la prova Investor di 30 giorni\nApri il pannello\nSegnala interesse per Pro\n\nProva per account idonei, senza carta o addebiti automatici; PDF esclusi. Nuovi acquisti a pagamento ancora sospesi.\n\nEsplora i numeri del tuo investimento\n\nConfronta scenari • Analizza ROI • Gestisci il tuo B&B.\n\nAvvia simulazione\nRendimentoBB — Basic & Beyond\n\nL’essenziale & oltre.\n\nStrumenti per analizzare investimenti e gestire B&B, con ipotesi e risultati espliciti.\n\nGuide\nAprire un B&B\nGuadagni B&B\nCosti B&B\nROI B&B\nStrumenti\nSimulatore ROI\nDashboard\nMutui\nImmobili\nBusiness\nProgramma tester Investor\nAvvisami all’apertura dei piani\nProponi una collaborazione\nProponi le tue competenze\nLegale\nPiani e condizioni\nPrivacy\nRecedere dal contratto qui\nTermini\nContatti\n✔ ROI stimato e cashflow\n✔ Analisi rischio avanzata\n✔ Dashboard, analisi e PMS\nLinkedIn\nInstagram\nTikTok\n\n© 2026 RendimentoBB – Tutti i diritti riservati\n\nInformativa privacy",
+    "inputs": [
+      {
+        "id": "demo-task-filter",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-booking-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-total",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-documents-received",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-authority",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-taxable",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-tax-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-cleaning-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-issue-status",
+        "labels": 1,
+        "aria": null
+      },
+      {
+        "id": "demo-season",
+        "labels": 1,
+        "aria": null
+      }
+    ],
+    "title": "Hospitality PMS — Demo | RendimentoBB",
+    "lang": "it",
+    "scrollWidth": 1365,
+    "viewport": 1365,
+    "h1": [
+      "Il PMS, dal calendario alla scheda ospite."
+    ],
+    "unnamedButtons": 0,
+    "overflow": [],
+    "errors": [],
+    "blocked": []
+  }
+]

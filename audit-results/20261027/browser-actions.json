@@ -1,0 +1,66 @@
+[
+  {
+    "width": 390,
+    "english": false,
+    "type": "PMS",
+    "before": "1170,00 €",
+    "after": "1689,00 €",
+    "reset": "1170,00 €",
+    "status": "Salvato nella demo. Calendario, KPI e attività aggiornati. Nessun dato inviato o salvato sul tuo account."
+  },
+  {
+    "width": 390,
+    "english": false,
+    "type": "commercial",
+    "tail": "0–13:00\tRiservato · P01\n2027-01-21\tR1\tPM 14:00–18:00\tLibero\n2027-01-22\tR1\tAM 09:00–13:00\tLibero\n2027-01-22\tR1\tPM 14:00–18:00\tLibero\n2027-01-25\tR1\tAM 09:00–13:00\tLibero\n2027-01-25\tR1\tPM 14:00–18:00\tLibero\n2027-01-26\tR1\tAM 09:00–13:00\tRiservato · P01\n2027-01-26\tR1\tPM 14:00–18:00\tLibero\n2027-01-27\tR1\tAM 09:00–13:00\tLibero\n2027-01-27\tR1\tPM 14:00–18:00\tLibero\n2027-01-28\tR1\tAM 09:00–13:00\tRiservato · P01\n2027-01-28\tR1\tPM 14:00–18:00\tLibero\n2027-01-29\tR1\tAM 09:00–13:00\tLibero\n2027-01-29\tR1\tPM 14:00–18:00\tLibero\n5 · Locali e studi · pianificazione attività\n\nANTEPRIMA DI PIANIFICAZIONE · stessi contratti della simulazione, solo in memoria. Non è ancora il PMS commerciale: nessun salvataggio, incasso registrato, fattura o scadenza di pagamento.\n\nMese\tContrattuali IVA inclusa\tAttesi IVA inclusa\tAttesi senza IVA\tFasce libere\ngennaio\t600,00 €\t600,00 €\tN/A\t76\nfebbraio\t600,00 €\t600,00 €\tN/A\t72\nmarzo\t600,00 €\t600,00 €\tN/A\t83\naprile\t600,00 €\t600,00 €\tN/A\t79\nmaggio\t600,00 €\t600,00 €\tN/A\t76\ngiugno\t600,00 €\t600,00 €\tN/A\t79\nluglio\t600,00 €\t600,00 €\tN/A\t79\nagosto\t600,00 €\t600,00 €\tN/A\t79\nsettembre\t600,00 €\t600,00 €\tN/A\t79\nottobre\t600,00 €\t600,00 €\tN/A\t76\nnovembre\t600,00 €\t600,00 €\tN/A\t79\ndicembre\t600,00 €\t600,00 €\tN/A\t83\nMese attività\ngennaio\nfebbraio\nmarzo\naprile\nmaggio\ngiugno\nluglio\nagosto\nsettembre\nottobre\nnovembre\ndicembre\n\nCorrispettivi per competenza, non incassi: il mensile è ripartito per giorni di contratto; il consumo conta le fasce non chiuse. IVA sconosciuta: N/A nel mese interessato. Non sono appuntamenti o dati sanitari.\n\nContratto / codice\tStanza\tTariffa\tUnità fatturabili\tContrattuali IVA inclusa\tAttesi senza IVA\nA1 / P01\tR1\tCanone mensile · fasce settimanali riservate\t1\t600,00 €\tN/A\nDate contrattuali del mese\nInizio: 2027-01-01 · A1 / P01\nModifica i contratti dello scenario ↑",
+    "scrollWidth": 390
+  },
+  {
+    "width": 390,
+    "english": true,
+    "type": "PMS",
+    "before": "€1,170.00",
+    "after": "€1,689.00",
+    "reset": "€1,170.00",
+    "status": "Saved in the demo. Calendar, KPIs and tasks updated. No data sent or saved to your account."
+  },
+  {
+    "width": 390,
+    "english": true,
+    "type": "commercial",
+    "tail": "0\tReserved · P01\n2027-01-19\tR1\tPM 14:00–18:00\tFree\n2027-01-20\tR1\tAM 09:00–13:00\tFree\n2027-01-20\tR1\tPM 14:00–18:00\tFree\n2027-01-21\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-21\tR1\tPM 14:00–18:00\tFree\n2027-01-22\tR1\tAM 09:00–13:00\tFree\n2027-01-22\tR1\tPM 14:00–18:00\tFree\n2027-01-25\tR1\tAM 09:00–13:00\tFree\n2027-01-25\tR1\tPM 14:00–18:00\tFree\n2027-01-26\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-26\tR1\tPM 14:00–18:00\tFree\n2027-01-27\tR1\tAM 09:00–13:00\tFree\n2027-01-27\tR1\tPM 14:00–18:00\tFree\n2027-01-28\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-28\tR1\tPM 14:00–18:00\tFree\n2027-01-29\tR1\tAM 09:00–13:00\tFree\n2027-01-29\tR1\tPM 14:00–18:00\tFree\n5 · Commercial spaces · activity planning\n\nPLANNING PREVIEW · same contracts as the simulation, in memory only. Not yet a commercial PMS: no saving, recorded receipts, invoices or payment due dates.\n\nMonth\tContractual incl. VAT\tExpected incl. VAT\tExpected excl. VAT\tFree slots\nJanuary\t€600.00\t€600.00\tN/A\t76\nFebruary\t€600.00\t€600.00\tN/A\t72\nMarch\t€600.00\t€600.00\tN/A\t83\nApril\t€600.00\t€600.00\tN/A\t79\nMay\t€600.00\t€600.00\tN/A\t76\nJune\t€600.00\t€600.00\tN/A\t79\nJuly\t€600.00\t€600.00\tN/A\t79\nAugust\t€600.00\t€600.00\tN/A\t79\nSeptember\t€600.00\t€600.00\tN/A\t79\nOctober\t€600.00\t€600.00\tN/A\t76\nNovember\t€600.00\t€600.00\tN/A\t79\nDecember\t€600.00\t€600.00\tN/A\t83\nActivity month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember\n\nConsideration by accrual period, not receipts: monthly fees are prorated by contract days; per-use fees count slots excluding closures. Unknown VAT: N/A in the affected month. No appointments or health data.\n\nContract / code\tRoom\tTariff\tBilling units\tContractual incl. VAT\tExpected excl. VAT\nA1 / P01\tR1\tMonthly fee · reserved weekly slots\t1\t€600.00\tN/A\nContract dates this month\nStart: 2027-01-01 · A1 / P01\nEdit scenario contracts ↑",
+    "scrollWidth": 390
+  },
+  {
+    "width": 1365,
+    "english": false,
+    "type": "PMS",
+    "before": "1170,00 €",
+    "after": "1689,00 €",
+    "reset": "1170,00 €",
+    "status": "Salvato nella demo. Calendario, KPI e attività aggiornati. Nessun dato inviato o salvato sul tuo account."
+  },
+  {
+    "width": 1365,
+    "english": false,
+    "type": "commercial",
+    "tail": "0–13:00\tRiservato · P01\n2027-01-21\tR1\tPM 14:00–18:00\tLibero\n2027-01-22\tR1\tAM 09:00–13:00\tLibero\n2027-01-22\tR1\tPM 14:00–18:00\tLibero\n2027-01-25\tR1\tAM 09:00–13:00\tLibero\n2027-01-25\tR1\tPM 14:00–18:00\tLibero\n2027-01-26\tR1\tAM 09:00–13:00\tRiservato · P01\n2027-01-26\tR1\tPM 14:00–18:00\tLibero\n2027-01-27\tR1\tAM 09:00–13:00\tLibero\n2027-01-27\tR1\tPM 14:00–18:00\tLibero\n2027-01-28\tR1\tAM 09:00–13:00\tRiservato · P01\n2027-01-28\tR1\tPM 14:00–18:00\tLibero\n2027-01-29\tR1\tAM 09:00–13:00\tLibero\n2027-01-29\tR1\tPM 14:00–18:00\tLibero\n5 · Locali e studi · pianificazione attività\n\nANTEPRIMA DI PIANIFICAZIONE · stessi contratti della simulazione, solo in memoria. Non è ancora il PMS commerciale: nessun salvataggio, incasso registrato, fattura o scadenza di pagamento.\n\nMese\tContrattuali IVA inclusa\tAttesi IVA inclusa\tAttesi senza IVA\tFasce libere\ngennaio\t600,00 €\t600,00 €\tN/A\t76\nfebbraio\t600,00 €\t600,00 €\tN/A\t72\nmarzo\t600,00 €\t600,00 €\tN/A\t83\naprile\t600,00 €\t600,00 €\tN/A\t79\nmaggio\t600,00 €\t600,00 €\tN/A\t76\ngiugno\t600,00 €\t600,00 €\tN/A\t79\nluglio\t600,00 €\t600,00 €\tN/A\t79\nagosto\t600,00 €\t600,00 €\tN/A\t79\nsettembre\t600,00 €\t600,00 €\tN/A\t79\nottobre\t600,00 €\t600,00 €\tN/A\t76\nnovembre\t600,00 €\t600,00 €\tN/A\t79\ndicembre\t600,00 €\t600,00 €\tN/A\t83\nMese attività\ngennaio\nfebbraio\nmarzo\naprile\nmaggio\ngiugno\nluglio\nagosto\nsettembre\nottobre\nnovembre\ndicembre\n\nCorrispettivi per competenza, non incassi: il mensile è ripartito per giorni di contratto; il consumo conta le fasce non chiuse. IVA sconosciuta: N/A nel mese interessato. Non sono appuntamenti o dati sanitari.\n\nContratto / codice\tStanza\tTariffa\tUnità fatturabili\tContrattuali IVA inclusa\tAttesi senza IVA\nA1 / P01\tR1\tCanone mensile · fasce settimanali riservate\t1\t600,00 €\tN/A\nDate contrattuali del mese\nInizio: 2027-01-01 · A1 / P01\nModifica i contratti dello scenario ↑",
+    "scrollWidth": 1365
+  },
+  {
+    "width": 1365,
+    "english": true,
+    "type": "PMS",
+    "before": "€1,170.00",
+    "after": "€1,689.00",
+    "reset": "€1,170.00",
+    "status": "Saved in the demo. Calendar, KPIs and tasks updated. No data sent or saved to your account."
+  },
+  {
+    "width": 1365,
+    "english": true,
+    "type": "commercial",
+    "tail": "0\tReserved · P01\n2027-01-19\tR1\tPM 14:00–18:00\tFree\n2027-01-20\tR1\tAM 09:00–13:00\tFree\n2027-01-20\tR1\tPM 14:00–18:00\tFree\n2027-01-21\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-21\tR1\tPM 14:00–18:00\tFree\n2027-01-22\tR1\tAM 09:00–13:00\tFree\n2027-01-22\tR1\tPM 14:00–18:00\tFree\n2027-01-25\tR1\tAM 09:00–13:00\tFree\n2027-01-25\tR1\tPM 14:00–18:00\tFree\n2027-01-26\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-26\tR1\tPM 14:00–18:00\tFree\n2027-01-27\tR1\tAM 09:00–13:00\tFree\n2027-01-27\tR1\tPM 14:00–18:00\tFree\n2027-01-28\tR1\tAM 09:00–13:00\tReserved · P01\n2027-01-28\tR1\tPM 14:00–18:00\tFree\n2027-01-29\tR1\tAM 09:00–13:00\tFree\n2027-01-29\tR1\tPM 14:00–18:00\tFree\n5 · Commercial spaces · activity planning\n\nPLANNING PREVIEW · same contracts as the simulation, in memory only. Not yet a commercial PMS: no saving, recorded receipts, invoices or payment due dates.\n\nMonth\tContractual incl. VAT\tExpected incl. VAT\tExpected excl. VAT\tFree slots\nJanuary\t€600.00\t€600.00\tN/A\t76\nFebruary\t€600.00\t€600.00\tN/A\t72\nMarch\t€600.00\t€600.00\tN/A\t83\nApril\t€600.00\t€600.00\tN/A\t79\nMay\t€600.00\t€600.00\tN/A\t76\nJune\t€600.00\t€600.00\tN/A\t79\nJuly\t€600.00\t€600.00\tN/A\t79\nAugust\t€600.00\t€600.00\tN/A\t79\nSeptember\t€600.00\t€600.00\tN/A\t79\nOctober\t€600.00\t€600.00\tN/A\t76\nNovember\t€600.00\t€600.00\tN/A\t79\nDecember\t€600.00\t€600.00\tN/A\t83\nActivity month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember\n\nConsideration by accrual period, not receipts: monthly fees are prorated by contract days; per-use fees count slots excluding closures. Unknown VAT: N/A in the affected month. No appointments or health data.\n\nContract / code\tRoom\tTariff\tBilling units\tContractual incl. VAT\tExpected excl. VAT\nA1 / P01\tR1\tMonthly fee · reserved weekly slots\t1\t€600.00\tN/A\nContract dates this month\nStart: 2027-01-01 · A1 / P01\nEdit scenario contracts ↑",
+    "scrollWidth": 1365
+  }
+]

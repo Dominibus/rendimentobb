@@ -1,0 +1,79 @@
+[
+  {
+    "location": "tests/rc169-real-estate-focus.test.js:36:1",
+    "test": "demos, real-estate modules and sales pause remain available (2.931596ms)",
+    "expected": "/chatbot-orchestrator.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc174-audit-corrections.test.js:108:1",
+    "test": "entry points and nested modules invalidate cached versions of changed assets (2.807938ms)",
+    "expected": "'20261027-rc211',",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc189-linkedin-journeys.test.js:55:1",
+    "test": "RC189: changed modules and loader entry points have matching cache versions (1.976424ms)",
+    "expected": "/chatbot-loader.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc190-free-value.test.js:63:1",
+    "test": "RC190: loader orders the Free presentation before UI with fresh versions (5.164567ms)",
+    "expected": "/chatbot-loader.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc191-data-evidence.test.js:60:1",
+    "test": "RC191 market evidence dependencies load before the response engine (2.03225ms)",
+    "expected": "/chatbot-loader.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc193-commercial-ui.test.js:72:1",
+    "test": "RC193 parent cache references updated without changing unrelated engines (8.313342ms)",
+    "expected": "/chatbot-orchestrator.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc194-six-profile-journeys.test.js:28:1",
+    "test": "RC194 cache chain uses current shared assets and unchanged commercial engine (3.672886ms)",
+    "expected": "/chatbot-orchestrator.js\\?v=20261027-rc211/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc207-commercial-shell.test.js:8:160",
+    "test": "RC207 common account header and footer on immobili-commerciali/index.html (5.373064ms)",
+    "expected": "/src=\"\\/js\\/header.js\\?v=20261027-rc211\"/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc207-commercial-shell.test.js:8:160",
+    "test": "RC207 common account header and footer on en/immobili-commerciali/index.html (5.871092ms)",
+    "expected": "/src=\"\\/js\\/header.js\\?v=20261027-rc211\"/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc207-commercial-shell.test.js:8:160",
+    "test": "RC207 common account header and footer on gestione-commerciale/index.html (0.894069ms)",
+    "expected": "/src=\"\\/js\\/header.js\\?v=20261027-rc211\"/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  },
+  {
+    "location": "tests/rc207-commercial-shell.test.js:8:160",
+    "test": "RC207 common account header and footer on en/gestione-commerciale/index.html (0.854895ms)",
+    "expected": "/src=\"\\/js\\/header.js\\?v=20261027-rc211\"/,",
+    "cause": "RC211 expected for asset bumped to RC212 in 6cece488; unaffected app/UI assets retain RC211",
+    "severity": "P2 test maintenance"
+  }
+]

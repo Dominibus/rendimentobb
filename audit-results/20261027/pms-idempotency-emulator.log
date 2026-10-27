@@ -1,0 +1,22 @@
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-rendimentobb-security", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node /workspace/audit-rendimentobb/pms-idempotency-emulator.mjs
+{
+  "probe": "A committed with lost response; B succeeded; A retried",
+  "emulator": "127.0.0.1:8089",
+  "project": "demo-rendimentobb-security",
+  "totalSavedBookings": 3,
+  "syntheticABookings": 2,
+  "requestIdChanged": true,
+  "distinctBookingIds": true,
+  "allPending": true,
+  "defectConfirmed": true
+}
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

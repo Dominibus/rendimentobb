@@ -1,0 +1,14 @@
+{
+  "audit_started_utc": "2026-10-27T20:49:05.309856+00:00",
+  "sha": "6cece488a4ff36b068498c29eb3a27ab6931c04a",
+  "commit_date": "2026-10-27T21:24:47+01:00",
+  "branch": "work",
+  "status": "",
+  "remote_main_sha": "6cece488a4ff36b068498c29eb3a27ab6931c04a",
+  "versions": {
+    "node": "v24.19.0",
+    "npm": "11.9.0",
+    "python": "Python 3.12.14",
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18\nOpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)"
+  }
+}

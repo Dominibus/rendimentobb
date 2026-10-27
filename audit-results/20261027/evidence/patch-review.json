@@ -1,0 +1,61 @@
+{
+  "plans.html": {
+    "onlyTranslationAttributesAdded": true
+  },
+  "tests/rc169-real-estate-focus.test.js": {
+    "testCallsBefore": 13,
+    "testCallsAfter": 13,
+    "assertCallsBefore": 32,
+    "assertCallsAfter": 32,
+    "newSkip": false
+  },
+  "tests/rc174-audit-corrections.test.js": {
+    "testCallsBefore": 12,
+    "testCallsAfter": 12,
+    "assertCallsBefore": 45,
+    "assertCallsAfter": 45,
+    "newSkip": false
+  },
+  "tests/rc189-linkedin-journeys.test.js": {
+    "testCallsBefore": 6,
+    "testCallsAfter": 6,
+    "assertCallsBefore": 29,
+    "assertCallsAfter": 29,
+    "newSkip": false
+  },
+  "tests/rc190-free-value.test.js": {
+    "testCallsBefore": 13,
+    "testCallsAfter": 13,
+    "assertCallsBefore": 45,
+    "assertCallsAfter": 45,
+    "newSkip": false
+  },
+  "tests/rc191-data-evidence.test.js": {
+    "testCallsBefore": 10,
+    "testCallsAfter": 10,
+    "assertCallsBefore": 53,
+    "assertCallsAfter": 53,
+    "newSkip": false
+  },
+  "tests/rc193-commercial-ui.test.js": {
+    "testCallsBefore": 10,
+    "testCallsAfter": 10,
+    "assertCallsBefore": 70,
+    "assertCallsAfter": 70,
+    "newSkip": false
+  },
+  "tests/rc194-six-profile-journeys.test.js": {
+    "testCallsBefore": 21,
+    "testCallsAfter": 21,
+    "assertCallsBefore": 77,
+    "assertCallsAfter": 77,
+    "newSkip": false
+  },
+  "tests/rc207-commercial-shell.test.js": {
+    "testCallsBefore": 8,
+    "testCallsAfter": 8,
+    "assertCallsBefore": 28,
+    "assertCallsAfter": 28,
+    "newSkip": false
+  }
+}

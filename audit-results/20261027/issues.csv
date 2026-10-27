@@ -1,0 +1,16 @@
+id,severity,problem,baseline_location,evidence,proposed_solution,status,report
+PMS-01,P1,Duplicazione prenotazione pending dopo risposta persa e altra operazione,"js/pms-api-client.js:3,11-15,34-35",Emulatore:2 A salvate con ID distinti,Mappa idempotenza uid/firma; rimozione condizionale,Proposta: struttura dati client,pms-assistant.md
+FIN-01,P2,Totali commerciali annuali N/A per contratto fuori anno,js/commercial-property-engine.js:102-110,"Annuale null, somma mensile3000","Contributo zero fuori competenza,unknown rilevante N/A",Proposta: semantica finanziaria,financial.md
+FIN-02,P2,Input ROI invalidi silenziati,"js/roi-engine.js:12-19,73-80,179-180",Durata0→debito0;Infinity→identità falsa,Validazione esplicita finita ed errore strutturato,Proposta: contratto motore,financial.md
+PMS-02,P2,Cashflow mancante mostrato zero,js/dashboard.js:2931-2938,Assente/invalido e zero stessa barra,"Null N/D,label cashflow",Proposta: UI finanziaria,pms-assistant.md
+PMS-03,P2,Query proprietà e storico seriali senza paginazione,js/dashboard.js:6248-6311,"N+1 statico,non benchmark","Periodo,paginazione,riuso snapshot",Proposta,pms-assistant.md
+OPS-01,P2,Promemoria al massimo20 account/die,"lib/pms-reminders.js:5-15,48-50","21 account:20 oggi,1 domani","Drenare pagine entro budget,SLA/backlog",Proposta scheduling,security.md
+OPS-02,P2,Oltre200 bookings storiche saltano account reminder,lib/pms-reminders.js:21-22,Query limit201 poi continue,"Finestra stati/date,paginazione",Proposta,security.md
+SEC-01,P2,PDF Pro con barriera solo client,js/app.js:5611-5633,"Accesso Pro falsificabile,nessun cross-account provato",Contratto esplicito o artefatto premium autorizzato server,Proposta architetturale,security.md
+SEC-02,P2,CSP script senza restrizione globale,vercel.json,No default-src/script-src;nessuna XSS provata,Policy graduale su sorgenti inventariate,Proposta,security.md
+DEP-01,P2,Advisory qs transitivo produzione,package-lock.json,"1moderate,0high/critical;exploit app non provato","Update mirato,test Stripe,no force",Proposta dipendenze,security.md
+DEP-02,P2,Advisory toolchain security-tests,security-tests/package-lock.json,"17pacchetti,9moderate+8high;dev-only","Update CLI dedicato,compatibilità/test emulatore",Proposta dipendenze,security.md
+TEST-01,P2,11 fallimenti aspettative cache obsolete,8file tests elencati in tests-rc211-rc212.md,"Main11fail,precedente209/209pass",Pin solo header/loader/orchestratorRC212,Patch conservativa,tests-rc211-rc212.md
+UX-01,P2,Avviso piani IT nella pagina EN,plans.html:5,"Browser390/1365 lang=en,testoIT","Attributi data-it/data-en,stessa policy",Patch conservativa,ux-seo-architecture.md
+ARCH-01,P2,Gate PR Node/rules assente dal repo,".github/workflows/territorial-sources.yml:2-5,26-29",Solo workflow mensile/manualePython;check esterni ignoti,Proposta workflow PR Node24/Python/emulatore,Proposta CI,ux-seo-architecture.md
+AVAIL-01,P2,Bootstrap simulatore accoppiato a SDK CDN,js/app.js:37-45,Outage controllato CDN impedisce init,Calcolo puro separato da account lazy-import,Proposta architetturale,ux-seo-architecture.md

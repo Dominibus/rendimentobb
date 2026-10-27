@@ -1,0 +1,18 @@
+{
+  "reminderScans": [
+    {
+      "day": 0,
+      "checked": 20,
+      "hasMore": true,
+      "cursor": "synthetic-19"
+    },
+    {
+      "day": 1,
+      "checked": 1,
+      "hasMore": false,
+      "cursor": ""
+    }
+  ],
+  "clientSuppliedProAccepted": true,
+  "reportModelWithoutPlan": true
+}
