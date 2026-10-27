@@ -62,7 +62,7 @@ window.rbBuildProductLimitsResponse = function(message){
 // RC189: informal requests for basic meaning still need educational routing.
 // Personal/numeric/PDF exclusions below remain authoritative.
 function rbAsksPlainMetricMeaning(q){
-  return /\b(?:che|cosa) (?:vuol|vuole) dire|\bnon (?:ho|abbiamo) capito\b|\bnon (?:mi|ci) e chiaro\b|\bi (?:do not|don['’]?t|did not|didn['’]?t) understand\b/.test(q);
+  return /\bcos\s+e\b|\b(?:che|cosa) (?:vuol|vuole) dire|\bnon (?:ho|abbiamo) capito\b|\bnon (?:mi|ci) e chiaro\b|\bi (?:do not|don['’]?t|did not|didn['’]?t) understand\b/.test(q);
 }
 window.rbBuildMetricEducationResponse = function(message){
   const q=String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');

@@ -943,11 +943,12 @@ margin-top:4px;
 
   <div
     class="hero-mini-label"
-    data-it="ROI IMMOBILE"
-    data-en="PROPERTY ROI"
+    data-it="RENDIMENTO OPERATIVO"
+    data-en="OPERATING YIELD"
   >
-    ROI IMMOBILE
+    RENDIMENTO OPERATIVO
   </div>
+  <p style="font-size:12px;line-height:1.4" data-it="NOI / valore, prima di mutuo e imposte del modello" data-en="NOI / value, before financing and model tax">NOI / valore, prima di mutuo e imposte del modello</p>
 
   <div
     class="hero-mini-value"
@@ -1253,9 +1254,18 @@ const roi =
 
 function reportPropertyYield(source,price,equity){
   const m=getFinancingMetrics(source,price,equity);
-  const saved=source.realROI??source.capRate;
+  const saved=source.capRate;
   if(saved!==null&&saved!==undefined&&saved!==''&&Number.isFinite(Number(saved))&&!(Number(saved)===0&&source.reportFieldsVersion!==1&&m.netOperatingIncome===null))return Number(saved);
   return price>0&&m.netOperatingIncome!==null?m.netOperatingIncome/price*100:null;
+}
+// Separate legacy CF/value from NOI/value: never substitute one for the other.
+function reportCashflowYield(source,price){
+  const number=v=>v===null||v===undefined||typeof v==='boolean'||String(v).trim()===''||!Number.isFinite(Number(v))?null:Number(v);
+  if(!(price>0))return null;
+  const cashflow=number(source.net??source.cashflow??source.annualProfit);
+  if(cashflow!==null)return cashflow/price*100;
+  const saved=number(source.realROI);
+  return saved===0&&source.reportFieldsVersion!==1?null:saved;
 }
 const realROI = reportPropertyYield(canonicalSimulation,price,equity);
 
@@ -1706,7 +1716,7 @@ ${euro(annualProfit)}
 </div>
 
 <div class="kpi">
-<span>${lang==="en"?"Break-even":"Pareggio"}</span>
+<span>${lang==="en"?"Equity payback":"Recupero equity"}</span>
 <strong style="font-size:22px">
 ${equity === 0 ? "N/A" : annualProfit > 0 ? `${new Intl.NumberFormat(lang === "en" ? "en-GB" : "it-IT",{minimumFractionDigits:1,maximumFractionDigits:1,useGrouping:false}).format(breakEven)} ${lang==="en"?"years":"anni"}` : (lang==="en"?"Not reached":"Non raggiunto")}
 </strong>
@@ -3121,7 +3131,9 @@ doc.text(
           price,
 
         realROI:
-          capRate,
+          reportCashflowYield(fallback,price),
+
+        capRate: capRate,
 
         risk:
           risk,
@@ -3407,7 +3419,7 @@ data-en="✔ Professional PDF report">
  <link rel="stylesheet" href="/css/chatbot.css">
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20261027-rc211" defer></script>
+<script src="/js/chatbot-loader.js?v=20261027-rc212" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3418,7 +3430,7 @@ data-en="✔ Professional PDF report">
 <script src="/js/ai-engine.js?v=20261011-rc99" defer></script>
 
 <!-- 🔥 UI -->
-<script type="module" src="/js/header.js?v=20261027-rc211"></script>
+<script type="module" src="/js/header.js?v=20261027-rc212"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script>
 <script type="module" src="/js/footer.js?v=20261025-rc196"></script>
 </body>
