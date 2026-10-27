@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+const root=new URL('../',import.meta.url);
+const read=p=>readFileSync(new URL(p,root),'utf8');
+function context(){const window={getUserAccess:()=>({isFree:true,isLogged:false}),currentPlan:'free',lastAnalysisData:{cashflow:987654321}};const c=vm.createContext({window,console,document:{getElementById:()=>null}});vm.runInContext(read('js/chatbot/core/query-normalizer.js'),c);vm.runInContext(read('js/chatbot/core/chatbot-orchestrator.js'),c);return {w:window,c};}
+for(const q of ['che cose il casflow?','Che cos’è il casflow?','what is casflow?','Explain casflow'])test('RC206 Free gets a definition for '+q,async()=>{
+ const {w}=context();w.rbGenerateResponse=()=>assert.fail('An educational question must not reach private analysis');const result=await w.rbProcessAIMessage(q);assert.equal(result.intent.intent,'education');assert.equal(result.response.type,'education');assert.match(result.response.textIT,/flusso di cassa/);assert.match(result.response.textEN,/cash flow/);assert.doesNotMatch(result.response.textIT,/987654321/);assert.equal(result.response.actions.length,0);
+});
+test('RC206 targeted correction preserves amounts, source wording and personal names',()=>{const {w}=context();const r=w.rbNormalizeAIQuery('Spiegami il casflow di 1234,50 euro');assert.equal(r.original,'Spiegami il casflow di 1234,50 euro');assert.equal(r.text,'Spiegami il cashflow di 1234,50 euro');assert.equal(r.corrections.length,1);for(const q of ['Mi chiamo Casflow','Il nome ospite è Casflow','Guest name Casflow'])assert.equal(w.rbNormalizeAIQuery(q).text,q);});
+test('RC206 correcting a term does not turn personal, numeric or document questions into generic education',()=>{const {w}=context();for(const q of ['Spiegami il mio casflow','Che cos’è il casflow di 1234 euro?','Explain my casflow','Spiegami il casflow del PDF'])assert.equal(w.rbBuildMetricEducationResponse(w.rbNormalizeAIQuery(q).text),null);});
+test('RC206 Academy describes the actual market series and its missing metrics in both languages',()=>{const html=read('academy/index.html');assert.match(html,/data-it="Confronta prezzi base pubblicati per notte nei comuni coperti, con fonte e periodo\. Occupazione reale e ROI territoriale non sono disponibili\."/);assert.match(html,/data-en="Compare advertised base nightly prices in covered municipalities, with source and period\. Actual occupancy and territorial ROI are unavailable\."/);assert.doesNotMatch(html,/Confronta ROI, occupazione, ADR e rendimento|Compare ROI, occupancy, ADR and profitability/);});

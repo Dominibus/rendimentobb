@@ -13,6 +13,8 @@
     if(financial && !personal) replace(/\broy\b/gi,'roi');
     replace(/\br[.]o[.]i[.]?/gi,'roi');
     replace(/\b(cashflw|cashfolw|cashflo|cashflou|cashflwo|cashfow|cash-flow|cashflusso)\b/gi,'cashflow');
+    // RC206: observed mobile-style typo; keep personal names untouched.
+    if(!personal) replace(/\bcasflow\b/gi,'cashflow');
     replace(/\bcapitale\s+propio\b/gi,'capitale proprio');
     replace(/\b(prenotazone|prenotazzone|prenottazione)\b/gi,'prenotazione');
     replace(/\bprenottazioni\b/gi,'prenotazioni');

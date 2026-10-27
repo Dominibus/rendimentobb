@@ -12,3 +12,11 @@ Registro di continuità del progetto. Non contiene nomi di clienti, credenziali 
 | REQ-STUDI | Esigenza di gestire stanze a canone mensile o fasce ricorrenti professionali, anche in spazi di poliambulatorio. | Ambito immobiliare: stanze, contratti, calendario, movimenti e attività. Nessun paziente, prestazione sanitaria o fatturato clinico. Non pubblicare dettagli economici o dati del caso personale come demo. |
 
 Vincoli: nessuna pubblicazione automatica della patch; nuovi acquisti sospesi; nessuna nuova funzione, regime fiscale deciso dal software o dato di mercato inventato. Cloud, trial e verifiche iPhone residue mantengono lo stato dell'audit RC204 finché non arrivano evidenze nuove.
+
+## Verifica pubblica successiva a RC205 — 27/10/2026
+
+- Main `3925978dace1294c816bebe166eeeff4988a0890`: 702 blob coerenti con la candidata RC205; 19 asset/pagine pubblici modificati con HTTP 200 e byte attesi.
+- Bari, Bologna, Venezia e Palermo provate dal selettore; Trento non eredita dati sostitutivi. Demo commerciale calendario e Autopilot coerenti; domanda con refusi sugli incassi riconosciuta.
+- BUG-20261027-CHAT: Free, dopo calcolo, domanda `che cose il casflow?` riceveva il blocco analisi invece della definizione. Riprodotto nel browser pubblico; `casflow` mancava nelle correzioni lessicali. RC206 aggiunge solo questa correzione, escludendo i contesti con nomi personali. Permessi e formule invariati. Correzione testata localmente, non ancora pubblicata.
+- Restano da verificare login Investor, salvataggi reali, PDF con utenza Pro e iPhone/Safari reale; nessun accesso cloud eseguito.
+- BUG-20261027-ACADEMY: la scheda Analisi città prometteva confronti di ROI, occupazione e ADR, assenti nella serie documentata. RC206 allinea testo IT/EN alla misura effettiva: prezzi base pubblicati per notte, fonte e periodo. Nessun nuovo dato o formula.
