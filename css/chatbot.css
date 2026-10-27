@@ -89,7 +89,9 @@ Silicon Valley SaaS UI
   bottom:110px;
 
   width:440px;
-  height:min(700px, calc(100vh - 40px));
+  /* Leave room for bottom:110px and a 24px top margin on short viewports. */
+  height:min(700px, calc(100vh - 134px));
+  height:min(700px, calc(100dvh - 134px));
 
   max-width:95vw;
 
