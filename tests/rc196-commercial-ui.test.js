@@ -64,3 +64,6 @@ test('RC197 changing month preserves the calendar room instead of silently retur
  const {root,app,field,click}=setup();await app.setOwner('demo');await click(/^Calendario$/);field('room').value='R2';await field('room').fire('change');assert.match(root.textContent,/P02/);
  field('period').value='3';await field('period').fire('change');assert.equal(field('room').value,'R2');assert.match(root.textContent,/2027-03/);assert.match(root.textContent,/P02/);assert.doesNotMatch(root.textContent,/Riservato · P01/);
 });
+for(const english of [false,true])test('RC207 visible input guide, descriptions and compilation shortcut '+english,async()=>{
+ const {root,app,field,click}=setup({english});await app.setOwner('demo');assert.ok(root.find(n=>n.id==='commercial-input-help'));await click(english?/^Scenarios$/:/^Scenari$/);assert.match(field('fixedAnnual').attributes['aria-describedby'],/help$/);assert.equal(field('fixedAnnual').attributes['aria-label'],english?'Annual fixed operating costs (€)':'Costi operativi fissi annui (€)');await click(/^Autopilot$/);await click(english?/^How do I fill in the PMS\?$/:/^Come compilo il PMS\?$/);assert.match(root.textContent,english?/Input guide/:/Guida alla compilazione/);assert.equal(app.isDirty(),false);
+});

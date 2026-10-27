@@ -7,3 +7,6 @@
 .cw-page .cw-content>.cm-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.cw-page .cw-content .cm-status:not(:empty){position:static;box-shadow:none}
 @media(max-width:1000px){.cw-page .cw-content>.cm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.cw-page .cw-content>.cm-metrics{grid-template-columns:1fr}}
+
+/* RC207: the shared mobile Dashboard bar owns the fixed bottom area. */
+@media(max-width:760px){.cw-page .cw-tabs{position:static;inset:auto;border-radius:14px;grid-template-columns:repeat(3,minmax(0,1fr));box-shadow:none;margin:16px 0;padding:6px;gap:6px}.cw-page .cw-tabs button{min-height:44px;font-size:.8rem;padding:10px 6px}}

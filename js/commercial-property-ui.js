@@ -1,3 +1,4 @@
+import {COMMERCIAL_FIELD_HELP} from './commercial-guidance.js?v=20261027-rc207';
 import {stageCommercialTransfer} from './commercial-transfer.js?v=20261025-rc196';
 import {createCommercialActivityPlan} from './commercial-activity-plan.js?v=20261025-rc196';
 import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261025-rc196';
@@ -18,7 +19,7 @@ export function mountCommercial(root,{english=false,onTransfer=null,embedded=fal
   const wrap=el('label',label),input=el(options?'select':'input');input.id='cm-field-'+(++serial);input.dataset.field=key;
   if(options)for(const [v,title]of options){const o=el('option',title);o.value=v;input.append(o);}
   else{input.type=type;if(type==='number'){input.min=String(min);input.max=String(max);input.step=step;}}
-  input.value=String(value);input.required=required;wrap.htmlFor=input.id;wrap.append(input);parent.append(wrap);return input;
+  input.value=String(value);input.required=required;wrap.htmlFor=input.id;wrap.append(input);const hint=COMMERCIAL_FIELD_HELP[key];if(hint){input.setAttribute('aria-label',label);const help=el('small',hint[english?1:0],'cm-field-help');help.id=input.id+'-help';input.setAttribute('aria-describedby',help.id);wrap.append(help);}parent.append(wrap);return input;
  }
  function checks(parent,title,key,options,selected=[]){
   const box=el('fieldset');box.dataset.group=key;box.append(el('legend',title));const inputs=[];

@@ -51,9 +51,9 @@ test('RC193 no tariff is assumed in UI; calendar, custom slots and expected shar
 });
 
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-test('RC193 public pages: IT/EN, truthful limits, no trackers/account writes, paths and versioned engine',()=>{
+test('RC193 public pages: IT/EN, truthful limits, shared account shell without planner account writes, paths and versioned engine',()=>{
  for(const lang of ['','en/']){
-  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261025-rc197/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.doesNotMatch(page,/firebase|chatbot-loader|js\/header.js|application\/ld\+json/);
+  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261027-rc207/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.match(page,/id="global-header"/);assert.match(page,/js\/header.js/);assert.doesNotMatch(page,/application\/ld\+json/);
  }
  for(const f of ['js/commercial-property-engine.js','js/commercial-property-ui.js'])assert.doesNotMatch(read(f),/\b(?:fetch|localStorage|sessionStorage|indexedDB|sendBeacon|addDoc|setDoc)\s*[.(]|document\.cookie/);
  assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261025-rc196/);

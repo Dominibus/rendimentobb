@@ -44,6 +44,6 @@ test('RC195 empty model has twelve zero months and no fabricated cash receipts',
 test('RC195 public paths and modules preserve commercial/account boundary',()=>{
  const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
  for(const f of ['js/commercial-activity-plan.js','js/commercial-property-ui.js'])assert.doesNotMatch(read(f),/\b(fetch|localStorage|sessionStorage|addDoc|setDoc)\s*[.(]/);
- for(const lang of ['','en/']){const html=read(lang+'immobili-commerciali/index.html');assert.match(html,/href="#cm-operations"/);assert.match(html,/commercial-property-ui.js\?v=20261025-rc197/);}
+ for(const lang of ['','en/']){const html=read(lang+'immobili-commerciali/index.html');assert.match(html,/href="#cm-operations"/);assert.match(html,/commercial-property-ui.js\?v=20261027-rc207/);}
  assert.match(read('dashboard/index.html'),/Attività · locali e studi/);assert.match(read('dashboard/index.html'),/href="\/gestione-commerciale\/"/);
 });

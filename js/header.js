@@ -1070,7 +1070,7 @@ function initializeMobileTabs(){
   const items=[
     {href:'/',it:'Home',en:'Home',svg:'<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>'},
     {href:'/tool/',it:'Analizza',en:'Analyze',svg:'<path d="M4 20h16M6 16v-4m6 4V8m6 8V4"/>'},
-    {href:'/dashboard/',it:'Pannello',en:'Dashboard',svg:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'}
+    {href:'/dashboard/',it:'Dashboard',en:'Dashboard',svg:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'}
   ];
   const path=window.location.pathname.replace(/\/+$/,'')||'/';
   for(const item of items){
