@@ -1,3 +1,4 @@
+import {mountOMIContext} from './omi-context-ui.js?v=20261028-rc218';
 import {mountTourismContext} from './tourism-context-ui.js?v=20261028-rc217';
 import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261028-rc216';
 import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
@@ -11,8 +12,9 @@ function install(root){
  const mainCity=document.getElementById?.('market-city');
  let data=null,city=mainCity?null:territorialCity(root.dataset.city),selection={},generation=0,municipality=null;
  const search=document.createElement('section');search.className='rb-municipality-search';root.before(search);
+ const omiPanel=document.createElement('section');omiPanel.className='rb-omi-context';root.before(omiPanel);const omi=mountOMIContext(omiPanel);
  const tourismPanel=document.createElement('section');root.before(tourismPanel);const tourism=mountTourismContext(tourismPanel);
- const picker=mountMunicipalityPicker(search,{onSelect:selectMunicipality,onEdit:()=>{municipality=null;city=null;generation++;data=null;setMunicipalityURL(null);tourism.select(null);renderUnavailable();}});
+ const picker=mountMunicipalityPicker(search,{onSelect:selectMunicipality,onEdit:()=>{municipality=null;city=null;generation++;data=null;setMunicipalityURL(null);tourism.select(null);omi.select(null);renderUnavailable();}});
  function selectMunicipality(row){if(/^\/market\/[^/]+\/?$/.test(window.location?.pathname||'')&&municipalityCoverage(row)!==territorialCity(root.dataset.city)){window.location.assign('/market/?municipality='+encodeURIComponent(row.istat));return;}municipality=row;city=municipalityCoverage(row);picker.setSelection(row);if(mainCity){applyMunicipalityToTool(row);return;}setMunicipalityURL(row);load();}
  const t=(it,en)=>window.currentLang==='en'?en:it;
  const add=(parent,tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;parent.append(node);return node;};
@@ -26,7 +28,7 @@ function install(root){
   select.value=value;select.addEventListener('change',()=>change(select.value));return select;
  }
  async function load(){
-  const tourismIdentity=municipality?.istat||REGIONAL_CAPITALS.find(r=>r.key===city)?.istat;void tourism.select(tourismIdentity);
+  const tourismIdentity=municipality?.istat||REGIONAL_CAPITALS.find(r=>r.key===city)?.istat;void tourism.select(tourismIdentity);void omi.select(tourismIdentity);
   const run=++generation;data=null;selection={};if(!city){root.setAttribute('aria-busy','false');renderUnavailable();return;}root.setAttribute('aria-busy','true');root.replaceChildren();add(root,'p',t('Carico il confronto documentato…','Loading the documented comparison…'));
   try{const result=await loadTerritorialCity(city);if(run!==generation)return;data=result;const best=data.rows.filter(r=>r[6]!==null).sort((a,b)=>b[6]-a[6])[0]||data.rows[0];selection=Object.fromEntries(SEGMENT_FIELDS.map((field,i)=>[field,String(best[i])]));render();}
   catch{if(run!==generation)return;root.replaceChildren();add(root,'h2',t('Confronto temporaneamente non disponibile','Comparison temporarily unavailable'));add(root,'p',t('Nessun numero viene sostituito con un’ipotesi interna. Riprova il caricamento.','No figures are substituted with an internal assumption. Retry loading.'));const retry=add(root,'button',t('Riprova','Retry'));retry.type='button';retry.onclick=load;}
@@ -89,7 +91,7 @@ function install(root){
  customInput?.addEventListener('input',updateCustom);
  document.addEventListener('rb_municipality_edit',updateCustom);
  document.addEventListener('rb_municipality_changed',event=>{municipality=event.detail;city=municipalityCoverage(municipality);picker.setSelection(municipality);load();});
- document.addEventListener('rb_language_changed',()=>{render();tourism.render();});
+ document.addEventListener('rb_language_changed',()=>{render();tourism.render();omi.render();});
  const requested=new URLSearchParams(window.location?.search||'').get('municipality');
  if(!mainCity&&/^\d{6}$/.test(requested||'')){
   city=null;renderUnavailable();loadMunicipalities().then(rows=>{const row=rows.find(r=>r.istat===requested);if(row)selectMunicipality(row);}).catch(()=>{});
