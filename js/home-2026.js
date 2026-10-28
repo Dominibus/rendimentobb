@@ -50,6 +50,11 @@
 
     });
 
+    if(panelName === "simulator" && shouldScroll){
+      const quick = document.getElementById("rb-quick-calculation");
+      if(quick) quick.open = true;
+    }
+
     if(shouldScroll){
 
       document
@@ -304,6 +309,8 @@
         );
 
       if(simulatorTrigger){
+        const quick = document.getElementById("rb-quick-calculation");
+        if(quick) quick.open = true;
 
         openHomePanel(
           "simulator",
@@ -342,6 +349,10 @@
           tab.addEventListener(
             "click",
             () => {
+              if(tab.dataset.rbPanelTarget === "simulator"){
+                const quick = document.getElementById("rb-quick-calculation");
+                if(quick) quick.open = true;
+              }
 
               openHomePanel(
                 tab.dataset.rbPanelTarget,

@@ -1,0 +1,36 @@
+/* Shared progressive disclosure. No account, calculation or entitlement overrides. */
+.rb-flow-disclosure{box-sizing:border-box;max-width:1200px;margin:18px auto;border:1px solid #cfdfd8;border-radius:18px;background:#fff;color:#143c32;min-width:0}
+.rb-flow-disclosure>summary{padding:18px 22px;min-height:48px;box-sizing:border-box;font-size:1rem;font-weight:700;line-height:1.5;cursor:pointer;overflow-wrap:anywhere}
+.rb-flow-disclosure[open]>summary{border-bottom:1px solid #e1e9e5}
+.rb-flow-content{padding:16px;min-width:0}
+.rb-flow-content>.rb158-shell,.rb-flow-content>.container,.rb-flow-content>.rb-flow-disclosure{width:100%;margin:12px auto;box-sizing:border-box}
+.rb-flow-content>.rb158-autopilot,.rb-flow-content>.rb180-value,.rb-flow-content>.rb161-plan-path{padding:20px}
+.rb-flow-content>.rbj-guide,.rb-flow-content>.rb-tool-guidance{margin:0 auto 12px}
+.rb-flow-nav{display:flex;flex-wrap:wrap;gap:8px;max-width:1200px;margin:16px auto}
+.rb-flow-nav a{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1px solid #bfd8cc;border-radius:999px;color:#075d46;background:#fff;text-decoration:none;font-weight:700;box-sizing:border-box}
+.rb-flow-nav a:hover{background:#edf8f2}
+.rb-flow-disclosure>summary:focus-visible,.rb-flow-nav a:focus-visible{outline:3px solid #087e61;outline-offset:4px}
+.rb-flow-note{max-width:1200px;margin:12px auto;color:#50685f;font-size:.9rem;line-height:1.6}
+#rb-analysis-inputs,#rb-simulation-summary,#rb-analysis-insights,#rb-quick-calculation{scroll-margin-top:120px}
+.tool-hero{padding-top:24px!important}
+.rb-hero .rb-flow-disclosure{width:100%;margin:8px 0}
+.rb-hero:has(>.rb-flow-disclosure){flex-wrap:wrap}
+@media(max-width:700px){
+ .rb-flow-disclosure{margin:12px 12px;border-radius:14px}
+ .rb-flow-disclosure>summary{padding:16px;font-size:1rem}
+ .rb-flow-content{padding:12px}
+ .rb-flow-content .rb-flow-disclosure{margin:10px 0}
+ .rb-flow-nav,.rb-flow-note{margin:12px 16px}
+ .rb-flow-nav a{padding:8px 12px;font-size:.9rem}
+ .rb-flow-content>.rb158-autopilot,.rb-flow-content>.rb180-value,.rb-flow-content>.rb161-plan-path{padding:12px}
+ #rb-analysis-inputs,#rb-simulation-summary,#rb-analysis-insights,#rb-quick-calculation{scroll-margin-top:110px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+/* Eligibility remains authoritative on the existing invite; no empty disclosure. */
+.rb-flow-disclosure:has(>.rb-flow-content>[data-rb-trial-invite][hidden]){display:none}
+.rb-flow-disclosure[hidden]{display:none!important}
+.rb-flow-disclosure:has(>.rb-flow-content>#purchase-equity-help[hidden]){display:none}
+body.tool-page .tool-hero{padding-top:24px!important}
+/* Form hints stay compact inside field groups. */
+.input-group>.rb-flow-disclosure{margin:8px 0;max-width:100%}
+.input-group>.rb-flow-disclosure>summary{padding:10px 12px;font-size:.85rem}

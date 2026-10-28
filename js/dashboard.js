@@ -10660,18 +10660,6 @@ function renderTodayBookingOperations(bookings = []){
         </span>
         <span class="pms-future-count">${window.t(`Attività future: ${allTasks.filter(task=>task.group==='upcoming').length}`, `Future tasks: ${allTasks.filter(task=>task.group==='upcoming').length}`)}</span>
       </div>
-      <section class="pms-autopilot-access" aria-label="${window.t('PMS Autopilot','PMS Autopilot')}">
-        <div><strong>✦ PMS Autopilot</strong><p>${window.t('Considera tutte le strutture caricate, anche quando la lista è filtrata per un immobile. Le scorciatoie aprono la prenotazione indicata.','Includes all loaded properties, even when the list is filtered to one property. Shortcuts open the named booking.')}</p></div>
-        <div class="pms-autopilot-periods">
-          ${[['daily',window.t('Oggi · Priorità','Today · Priorities')],['tomorrow',window.t('Domani · Arrivi','Tomorrow · Arrivals')],['week',window.t('Prossimi 7 giorni','Next 7 days')]].map(([mode,label])=>`<button type="button" data-autopilot-period="${mode}" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot(this.dataset.autopilotPeriod)}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${label}</button>`).join('')}
-        </div>
-      </section>
-      <section class="pms-autopilot-access" aria-label="Autopilot Report Pro">
-        <div><strong>✦ Autopilot · Report Pro</strong><p>${window.t('Dalla simulazione all’andamento registrato: immobile, periodo, scostamenti e PDF IT/EN. Investor mantiene la gestione PMS; il percorso report integrato è Pro.','From simulation to recorded performance: property, period, variances and IT/EN PDFs. Investor keeps PMS management; the integrated report journey is Pro.')}</p></div>
-        <div class="pms-autopilot-periods"><button type="button" onclick="if(window.rbAskProReportGuide){window.rbAskProReportGuide()}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('Spiegami il report integrato','Explain the integrated report')}</button>
-        <button type="button" onclick="openPropertyPerformance()">${window.t('Scegli immobile e periodo · Pro','Choose property and period · Pro')}</button>
-        ${!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin)?`<a href="/plan-interest.html?plan=pro">${window.t('Mi interessa Pro all’apertura','I’m interested in Pro when it opens')}</a>`:''}</div>
-      </section>
       <div class="pms-shortcuts">
         ${operationCards.map(card => `
           <button type="button" class="pms-operation-card" onclick="setPMSOperationFilter('${card.filter}')" aria-pressed="${window.rbOperationFilter===card.filter}" style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
@@ -10705,6 +10693,19 @@ function renderTodayBookingOperations(bookings = []){
       <p style="font-size:12px;color:#64748b;">${window.t('Le attività scompaiono quando aggiorni i dati che le risolvono. La presa in carico indica chi sta intervenendo, non il completamento.','Tasks disappear when you update the underlying booking details. Taking charge does not complete a task.')}</p>
       ${priorityTasksHtml}
       ${reminderHtml}
+      <details class="rb-flow-disclosure"><summary>${window.t("Assistenza Autopilot e report Pro","Autopilot assistance and Pro reports")}</summary><div class="rb-flow-content">      <section class="pms-autopilot-access" aria-label="${window.t('PMS Autopilot','PMS Autopilot')}">
+        <div><strong>✦ PMS Autopilot</strong><p>${window.t('Considera tutte le strutture caricate, anche quando la lista è filtrata per un immobile. Le scorciatoie aprono la prenotazione indicata.','Includes all loaded properties, even when the list is filtered to one property. Shortcuts open the named booking.')}</p></div>
+        <div class="pms-autopilot-periods">
+          ${[['daily',window.t('Oggi · Priorità','Today · Priorities')],['tomorrow',window.t('Domani · Arrivi','Tomorrow · Arrivals')],['week',window.t('Prossimi 7 giorni','Next 7 days')]].map(([mode,label])=>`<button type="button" data-autopilot-period="${mode}" onclick="if(window.rbAskPMSAutopilot){window.rbAskPMSAutopilot(this.dataset.autopilotPeriod)}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${label}</button>`).join('')}
+        </div>
+      </section>
+      <section class="pms-autopilot-access" aria-label="Autopilot Report Pro">
+        <div><strong>✦ Autopilot · Report Pro</strong><p>${window.t('Dalla simulazione all’andamento registrato: immobile, periodo, scostamenti e PDF IT/EN. Investor mantiene la gestione PMS; il percorso report integrato è Pro.','From simulation to recorded performance: property, period, variances and IT/EN PDFs. Investor keeps PMS management; the integrated report journey is Pro.')}</p></div>
+        <div class="pms-autopilot-periods"><button type="button" onclick="if(window.rbAskProReportGuide){window.rbAskProReportGuide()}else{alert(window.t('L’assistente si sta caricando. Riprova tra poco.','The assistant is loading. Please retry shortly.'))}">${window.t('Spiegami il report integrato','Explain the integrated report')}</button>
+        <button type="button" onclick="openPropertyPerformance()">${window.t('Scegli immobile e periodo · Pro','Choose property and period · Pro')}</button>
+        ${!(window.getUserAccess?.()?.isPro||window.getUserAccess?.()?.isAdmin)?`<a href="/plan-interest.html?plan=pro">${window.t('Mi interessa Pro all’apertura','I’m interested in Pro when it opens')}</a>`:''}</div>
+      </section>
+</div></details>
     </div>
   `;
 }

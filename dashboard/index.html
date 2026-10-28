@@ -1933,6 +1933,8 @@ margin-bottom:16px;
 <link rel="stylesheet" href="/css/value-clarity.css?v=20261022-rc180">
 <link rel="stylesheet" href="/css/experience-rc197.css?v=20261025-rc197">
 <link rel="stylesheet" href="/css/municipality-picker.css?v=20261028-rc219">
+<link rel="stylesheet" href="/css/page-flow.css?v=20261028-rc220">
+<script type="module" src="/js/page-flow.js?v=20261028-rc220"></script>
 </head>
 
 <body class="dashboard-bg dashboard-page">
@@ -2072,15 +2074,11 @@ z-index:9999;
 
 
 <main>
-<aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
-<div><strong data-it="Prova Investor gratis per 30 giorni" data-en="Try Investor free for 30 days">Prova Investor gratis per 30 giorni</strong>
-<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
-<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
-<a href="/login/?intent=investor-trial" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
 
-<nav id="rb195-workspace" class="rb197-workflow-switch" aria-label="Scegli percorso / Choose workspace" style="display:flex;flex-wrap:wrap;gap:12px;padding:16px"><a href="/dashboard/" aria-current="page" data-it="B&amp;B · gestione prenotazioni" data-en="B&amp;B · booking management">B&amp;B · gestione prenotazioni</a><a href="/gestione-commerciale/" data-it="Attività · locali e studi" data-en="Business · commercial spaces">Attività · locali e studi</a></nav><aside class="container rb197-workflow-note" style="margin:20px auto;padding:16px;border:1px solid #cbded1;border-radius:12px;background:#f1f8f4;color:#164a38"><strong data-it="Vuoi analizzare un locale o uno studio?" data-en="Want to analyse a commercial unit or professional room?">Vuoi analizzare un locale o uno studio?</strong><p data-it="Il PMS commerciale ha un archivio dedicato per scenari, contratti, stanze, movimenti e Autopilot. I suoi dati non compaiono nei KPI, nel portafoglio o nei PDF di questa dashboard B&B." data-en="The commercial PMS has a dedicated archive for scenarios, contracts, rooms, movements and Autopilot. Its data does not appear in this B&B dashboard’s KPIs, portfolio or PDFs.">Il PMS commerciale ha un archivio dedicato per scenari, contratti, stanze, movimenti e Autopilot. I suoi dati non compaiono nei KPI, nel portafoglio o nei PDF di questa dashboard B&B.</p><a href="/immobili-commerciali/" data-it="Apri l’analisi commerciale" data-en="Open commercial property analysis">Apri l’analisi commerciale</a></aside><div class="dashboard-container">
+
+<nav id="rb195-workspace" class="rb197-workflow-switch" aria-label="Scegli percorso / Choose workspace" style="display:flex;flex-wrap:wrap;gap:12px;padding:16px"><a href="/dashboard/" aria-current="page" data-it="B&amp;B · gestione prenotazioni" data-en="B&amp;B · booking management">B&amp;B · gestione prenotazioni</a><a href="/gestione-commerciale/" data-it="Attività · locali e studi" data-en="Business · commercial spaces">Attività · locali e studi</a></nav><div class="dashboard-container">
 <div class="dashboard-main">
-<section id="rb-journey-guide" class="rbj-guide" data-journey="pms" aria-label="Autopilot"></section>  
+
 
 <!-- HERO -->
 <div class="rb-dashboard">
@@ -2130,7 +2128,11 @@ z-index:9999;
 <a href="/demo/hospitality-pms/" data-rb158-demo="pms" data-it="Prova calendario e gestione ospiti →" data-en="Try the calendar and guest operations →">Prova calendario e gestione ospiti →</a>
 <a href="/demo/investment-analytics/" data-rb158-demo="investment" data-it="Prova la demo investimento →" data-en="Try the investment demo →">Prova la demo investimento →</a>
 </div>
-<nav class="rb161-control-actions" aria-label="Azioni principali / Main actions"><button type="button" onclick="showPMSTab('dashboard')" data-it="Attività e andamento" data-en="Tasks and performance">Attività e andamento</button><button type="button" onclick="openCurrentBookings()" data-it="Gestisci prenotazioni" data-en="Manage bookings">Gestisci prenotazioni</button><button type="button" onclick="showPMSTab('roi')" data-it="Scenari e portafoglio" data-en="Scenarios and portfolio">Scenari e portafoglio</button></nav>
+<nav class="rb161-control-actions" aria-label="Azioni principali / Main actions"><button type="button" onclick="showPMSTab('dashboard')" data-it="Attività e andamento" data-en="Tasks and performance">Attività e andamento</button><button type="button" onclick="openCurrentBookings()" data-it="Gestisci prenotazioni" data-en="Manage bookings">Gestisci prenotazioni</button><button type="button" onclick="showPMSTab('roi')" data-it="Scenari e portafoglio" data-en="Scenarios and portfolio">Scenari e portafoglio</button></nav><details class="rb-flow-disclosure"><summary  data-it="Guida e Autopilot" data-en="Guidance and Autopilot">Guida e Autopilot</summary><div class="rb-flow-content"><section id="rb-journey-guide" class="rbj-guide" data-journey="pms" aria-label="Autopilot"></section></div></details><details class="rb-flow-disclosure"><summary  data-it="Locali e studi · gestione dedicata" data-en="Commercial spaces · dedicated workspace">Locali e studi · gestione dedicata</summary><div class="rb-flow-content"><aside class="container rb197-workflow-note" style="margin:20px auto;padding:16px;border:1px solid #cbded1;border-radius:12px;background:#f1f8f4;color:#164a38"><strong data-it="Vuoi analizzare un locale o uno studio?" data-en="Want to analyse a commercial unit or professional room?">Vuoi analizzare un locale o uno studio?</strong><p data-it="Il PMS commerciale ha un archivio dedicato per scenari, contratti, stanze, movimenti e Autopilot. I suoi dati non compaiono nei KPI, nel portafoglio o nei PDF di questa dashboard B&B." data-en="The commercial PMS has a dedicated archive for scenarios, contracts, rooms, movements and Autopilot. Its data does not appear in this B&B dashboard’s KPIs, portfolio or PDFs.">Il PMS commerciale ha un archivio dedicato per scenari, contratti, stanze, movimenti e Autopilot. I suoi dati non compaiono nei KPI, nel portafoglio o nei PDF di questa dashboard B&B.</p><a href="/immobili-commerciali/" data-it="Apri l’analisi commerciale" data-en="Open commercial property analysis">Apri l’analisi commerciale</a></aside></div></details><details class="rb-flow-disclosure"><summary  data-it="Accesso e prova Investor" data-en="Access and Investor trial">Accesso e prova Investor</summary><div class="rb-flow-content"><aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
+<div><strong data-it="Prova Investor gratis per 30 giorni" data-en="Try Investor free for 30 days">Prova Investor gratis per 30 giorni</strong>
+<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
+<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
+<a href="/login/?intent=investor-trial" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside></div></details>
 
 </div>
 
@@ -2138,7 +2140,7 @@ z-index:9999;
 🧪 DEMO DASHBOARD BANNER
 ===================================== -->
 
-<p class="rb-dashboard-scope-note" data-it="Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi." data-en="Analyses: saved scenarios. Portfolio: combined assumptions linked to confirmed investments. PMS: booking revenue before costs. These measures describe different scopes.">Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi.</p>
+<details class="rb-flow-disclosure"><summary  data-it="Scenari, portafoglio e PMS: come leggere i dati" data-en="Scenarios, portfolio and PMS: how to read the data">Scenari, portafoglio e PMS: come leggere i dati</summary><div class="rb-flow-content"><p class="rb-dashboard-scope-note" data-it="Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi." data-en="Analyses: saved scenarios. Portfolio: combined assumptions linked to confirmed investments. PMS: booking revenue before costs. These measures describe different scopes.">Analisi: scenari salvati. Portafoglio: totale delle ipotesi collegate agli investimenti confermati. PMS: ricavi dalle prenotazioni, prima dei costi. Queste misure descrivono ambiti diversi.</p></div></details>
 <div
 id="demo-banner"
 style="
@@ -2323,7 +2325,7 @@ Scenari e portafoglio
   
 <!-- KPI GRID -->
 <details class="rb161-disclosure"><summary data-it="Totali simulati del patrimonio e metodo di calcolo" data-en="Simulated portfolio totals and calculation method">Totali simulati del patrimonio e metodo di calcolo</summary><p class="portfolio-capital-basis-note" style="margin:12px 0;padding:12px;border-radius:12px;background:#f0fdfa;color:#334155;font-size:13px;line-height:1.6" data-it="Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile." data-en="Annual ratio = total estimated cash flow / entered capital × 100. Includes cash flow from already owned properties even with zero startup capital; the value of these houses is excluded from capital. It is not a return on total property value or an average of individual ROIs. Simple recovery = entered capital / estimated annual cash flow, held constant; not applicable with zero capital.">Rapporto annuo = cashflow totale stimato / capitale indicato × 100. Include il cashflow degli immobili già posseduti anche con capitale di avvio zero; il valore di queste case è escluso dal capitale. Non è il rendimento sul valore totale degli immobili né una media dei loro ROI. Recupero semplice = capitale indicato / cashflow annuo stimato, mantenuto costante; con capitale zero non è applicabile.</p>
-<div class="rb-kpi-grid">
+<p class="rb-flow-note" data-it="Ricavi prenotati · prima dei costi, diversi dagli incassi." data-en="Booked revenue · before costs, different from receipts.">Ricavi prenotati · prima dei costi, diversi dagli incassi.</p><div class="rb-kpi-grid">
 
   <div class="rb-kpi">
     <span
@@ -3767,7 +3769,7 @@ Sintesi delle ipotesi salvate e del rischio del modello
 <!-- 🔥 DASHBOARD -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/js/vendor/jspdf-4.2.1.umd.min.js"></script>
-<script type="module" src="/js/dashboard.js?v=20261028-rc213"></script>
+<script type="module" src="/js/dashboard.js?v=20261028-rc220"></script>
 
 <!-- 🔥 CHART -->
 <script src="/js/vendor/chart-4.5.1.umd.min.js"></script>

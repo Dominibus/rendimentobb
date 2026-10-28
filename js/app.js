@@ -3420,7 +3420,7 @@ if(locationInput){
     sessionStorage.setItem("tool_city", window.currentCity);
     if(helper) helper.textContent = !value ? t("Scegli una città o inserisci la tua località.", "Choose a city or enter your location.")
       : mapped ? t("Riferimenti illustrativi per la città selezionata: verifica le ipotesi.", "Illustrative references for the selected city: verify assumptions.")
-      : t("Nessun benchmark locale disponibile. La simulazione usa soltanto i dati che inserisci.", "No local benchmark is available. The simulation uses only your own inputs.");
+      : t("Nessun riferimento interno per tariffa e occupazione. La simulazione usa i tuoi dati; verifica separatamente OMI, ISTAT e prezzi pubblicati negli approfondimenti.", "No internal rate or occupancy reference. The simulation uses your inputs; check OMI, ISTAT and advertised prices separately in the insights.");
     renderMarketBenchmark(window.currentCity);
     if(mapped) { window.__BG_LOCK__ = false; applyCityBackground(mapped); }
   });

@@ -781,6 +781,8 @@ SAFE
 <link rel="stylesheet" href="/css/value-clarity.css?v=20261022-rc180">
 <link rel="stylesheet" href="/css/territorial-benchmarks.css?v=20261028-rc218">
 <link rel="stylesheet" href="/css/municipality-picker.css?v=20261028-rc219">
+<link rel="stylesheet" href="/css/page-flow.css?v=20261028-rc220">
+<script type="module" src="/js/page-flow.js?v=20261028-rc220"></script>
 </head>
 
 <body class="tool-page">
@@ -1045,49 +1047,11 @@ Guide
   
 
 <main>
-<aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
-<div><strong data-it="Prova Investor gratis per 30 giorni" data-en="Try Investor free for 30 days">Prova Investor gratis per 30 giorni</strong>
-<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
-<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
-<a href="/login/?intent=investor-trial" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside>
+
 
 
 <!-- 🔥 SOURCE + TRUST -->
-<div id="property-source"
-style="
-margin-bottom:30px;
-padding:16px;
-background:linear-gradient(135deg,#ecfdf5 0%,#f8fffd 100%);
-border-left:5px solid #10b981;
-border-radius:10px;
-font-size:14px;
-line-height:1.5;
-max-width:1200px;
-margin:auto;
-box-shadow:
-0 12px 35px rgba(15,23,42,.06),
-0 2px 8px rgba(16,185,129,.08);
-">
 
-<div
-style="font-weight:700;margin-bottom:6px;color:#065f46;font-size:16px;"
-data-it="✔️ Analisi delle tue ipotesi con riferimenti illustrativi"
-data-en="✔️ Analyze your assumptions with illustrative references">
-
-✔️ Analisi delle tue ipotesi con riferimenti illustrativi
-
-</div>
-
-<div
-style="font-size:14px;color:#334155;line-height:1.7;"
-data-it="I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto."
-data-en="Results depend on your inputs. Market references are indicative; verify assumptions for your specific case.">
-
-I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto.
-
-</div>
-
-</div>  
 
 <section class="tool-hero">
 <!-- 🔥 BACKGROUND DINAMICO -->
@@ -1119,12 +1083,12 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
     data-en="Illustrative city references">
     Riferimenti illustrativi per città
   </div>
-</div>
+</div><nav class="rb-flow-nav" aria-label="Analisi / Analysis"><a href="#rb-analysis-inputs" data-it="1 · Dati" data-en="1 · Inputs">1 · Dati</a><a href="#rb-simulation-summary" data-it="2 · Risultati" data-en="2 · Results">2 · Risultati</a><a href="#rb-analysis-insights" data-it="3 · Approfondimenti" data-en="3 · Insights">3 · Approfondimenti</a></nav><p class="rb-flow-note" data-it="Stime basate sulle tue ipotesi. Fonti territoriali e relativi limiti sono negli approfondimenti." data-en="Estimates based on your assumptions. Territorial sources and their limits are in the insights.">Stime basate sulle tue ipotesi. Fonti territoriali e relativi limiti sono negli approfondimenti.</p>
 
-<aside class="container" style="margin:20px auto;padding:16px;border:1px solid #cbded1;border-radius:12px;background:#f1f8f4;color:#164a38"><strong data-it="Ufficio, locale o studio professionale?" data-en="Office, commercial unit or professional room?">Ufficio, locale o studio professionale?</strong> <a href="/immobili-commerciali/" style="color:#075b45;text-decoration:underline" data-it="Prova l’analisi commerciale · IT / EN" data-en="Try commercial property analysis · IT / EN">Prova l’analisi commerciale · IT / EN</a><small style="display:block" data-it="MVP pubblico con dati in memoria; salvataggi e PDF commerciali non inclusi." data-en="Public in-memory MVP; commercial account saving and PDFs are not included.">MVP pubblico con dati in memoria; salvataggi e PDF commerciali non inclusi.</small></aside>
-<section id="rb-journey-guide" class="rbj-guide" data-journey="analysis" aria-label="Autopilot"></section>
-<details class="rb-tool-guidance"><summary><strong data-it="Il percorso: dati → risultati → gestione" data-en="Your path: inputs → results → management">Il percorso: dati → risultati → gestione</strong><span data-it="Apri la guida e l’assistente" data-en="Open guidance and assistant">Apri la guida e l’assistente</span></summary><section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Il tuo investimento, passo dopo passo" data-en="Your investment, step by step">Il tuo investimento, passo dopo passo</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="#price"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="#rb-simulation-summary"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="inputs" data-it="Controlla i dati" data-en="Check inputs">Controlla i dati</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="results" data-it="Leggi la mia analisi" data-en="Read my analysis">Leggi la mia analisi</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section></details>
-<div class="container simulator-container">
+
+
+
+<div class="container simulator-container" id="rb-analysis-inputs">
 
   <div class="simulator-grid">
 
@@ -1203,7 +1167,7 @@ I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativ
         <div class="input-group">
           <label for="equity" id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
           <input type="number" id="equity" min="0" step="any" required placeholder="30000">
-<p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and operating yield. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p>
+<details class="rb-flow-disclosure"><summary  data-it="Capitale proprio: cosa include la simulazione" data-en="Equity: what the simulation includes">Capitale proprio: cosa include la simulazione</summary><div class="rb-flow-content"><p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and operating yield. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p></div></details>
         </div>
 
         <div class="input-group">
@@ -1229,12 +1193,12 @@ value="70">
         <div class="input-group">
           <label for="expenses" data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
           <input type="number" id="expenses" min="0" step="any" inputmode="decimal" placeholder="1200" required>
-          <small
+          <details class="rb-flow-disclosure"><summary  data-it="Costi mensili: cosa inserire" data-en="Monthly costs: what to include">Costi mensili: cosa inserire</summary><div class="rb-flow-content"><small
             style="display:block;margin-top:6px;color:#64748b;line-height:1.4;"
             data-it="Importo sempre espresso in euro, mai in percentuale. Totale mensile: includi pulizie, manutenzione, utenze e assicurazione. Non duplicare commissioni, imposte o rate. Costi iniziali e straordinari non sono inclusi automaticamente."
             data-en="This value is always expressed in euros, never as a percentage. Monthly total: include cleaning, maintenance, utilities and insurance. Do not duplicate commissions, tax or payments. Upfront and extraordinary costs are not automatically included.">
             Importo sempre espresso in euro, mai in percentuale. Totale mensile: includi pulizie, manutenzione, utenze e assicurazione. Non duplicare commissioni, imposte o rate. Costi iniziali e straordinari non sono inclusi automaticamente.
-          </small>
+          </small></div></details>
         </div>
 
 <details class="rb-assumptions-panel">
@@ -1416,8 +1380,47 @@ margin-right:auto;
 </div>
 </section>  
 
+<details class="rb-flow-disclosure" id="rb-analysis-help"><summary  data-it="Guida, Autopilot e limiti del simulatore" data-en="Guidance, Autopilot and simulator limitations">Guida, Autopilot e limiti del simulatore</summary><div class="rb-flow-content"><section id="rb-journey-guide" class="rbj-guide" data-journey="analysis" aria-label="Autopilot"></section><details class="rb-tool-guidance"><summary><strong data-it="Il percorso: dati → risultati → gestione" data-en="Your path: inputs → results → management">Il percorso: dati → risultati → gestione</strong><span data-it="Apri la guida e l’assistente" data-en="Open guidance and assistant">Apri la guida e l’assistente</span></summary><section class="rb-investment-hub" aria-label="RendimentoBB workspace"><header><div><span class="rb-hub-eyebrow" data-it="Tutto sotto controllo" data-en="Everything under control">Tutto sotto controllo</span><h2  data-it="Il tuo investimento, passo dopo passo" data-en="Your investment, step by step">Il tuo investimento, passo dopo passo</h2><p  data-it="Inserisci le ipotesi, leggi le stime e organizza le tue strutture." data-en="Enter your assumptions, read the estimates and organize your properties.">Inserisci le ipotesi, leggi le stime e organizza le tue strutture.</p></div></header><nav class="rb-hub-links" aria-label="Scorciatoie"><a href="#price"><strong  data-it="01 · Dati" data-en="01 · Inputs">01 · Dati</strong><span  data-it="Città, acquisto e costi" data-en="City, purchase and costs">Città, acquisto e costi</span></a><a href="#rb-simulation-summary"><strong  data-it="02 · Risultati" data-en="02 · Results">02 · Risultati</strong><span  data-it="ROI, cashflow e rischio stimati" data-en="Estimated ROI, cash flow and risk">ROI, cashflow e rischio stimati</span></a><a href="/dashboard/"><strong  data-it="03 · Dashboard" data-en="03 · Dashboard">03 · Dashboard</strong><span  data-it="Analisi e strutture in un posto" data-en="Analyses and properties in one place">Analisi e strutture in un posto</span></a><a href="/dashboard/"><strong  data-it="04 · Prenotazioni" data-en="04 · Bookings">04 · Prenotazioni</strong><span  data-it="Apri la gestione nel pannello" data-en="Open management in the dashboard">Apri la gestione nel pannello</span></a></nav><div class="rb-hub-assistant"><strong  data-it="Autopilot · Il prossimo passo è chiaro" data-en="Autopilot · A clear next step">Autopilot · Il prossimo passo è chiaro</strong><p  data-it="Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta." data-en="Guidance on inputs and checks. You decide what to change.">Ti guida sui dati e sulle verifiche da fare. Le modifiche restano una tua scelta.</p><div class="rb-hub-buttons"><button type="button" data-rb-investment-question="inputs" data-it="Controlla i dati" data-en="Check inputs">Controlla i dati</button><button type="button" data-rb-investment-question="assumptions" data-it="Quali ipotesi verificare?" data-en="Which assumptions should I check?">Quali ipotesi verificare?</button><button type="button" data-rb-investment-question="results" data-it="Leggi la mia analisi" data-en="Read my analysis">Leggi la mia analisi</button></div><p class="rb-hub-status" id="rb-investment-status" aria-live="polite"></p></div></section></details><div id="property-source"
+style="
+margin-bottom:30px;
+padding:16px;
+background:linear-gradient(135deg,#ecfdf5 0%,#f8fffd 100%);
+border-left:5px solid #10b981;
+border-radius:10px;
+font-size:14px;
+line-height:1.5;
+max-width:1200px;
+margin:auto;
+box-shadow:
+0 12px 35px rgba(15,23,42,.06),
+0 2px 8px rgba(16,185,129,.08);
+">
+
+<div
+style="font-weight:700;margin-bottom:6px;color:#065f46;font-size:16px;"
+data-it="✔️ Analisi delle tue ipotesi con riferimenti illustrativi"
+data-en="✔️ Analyze your assumptions with illustrative references">
+
+✔️ Analisi delle tue ipotesi con riferimenti illustrativi
+
+</div>
+
+<div
+style="font-size:14px;color:#334155;line-height:1.7;"
+data-it="I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto."
+data-en="Results depend on your inputs. Market references are indicative; verify assumptions for your specific case.">
+
+I risultati dipendono dai dati inseriti. I riferimenti di mercato sono indicativi; verifica le ipotesi sul caso concreto.
+
+</div>
+
+</div><aside class="container" style="margin:20px auto;padding:16px;border:1px solid #cbded1;border-radius:12px;background:#f1f8f4;color:#164a38"><strong data-it="Ufficio, locale o studio professionale?" data-en="Office, commercial unit or professional room?">Ufficio, locale o studio professionale?</strong> <a href="/immobili-commerciali/" style="color:#075b45;text-decoration:underline" data-it="Prova l’analisi commerciale · IT / EN" data-en="Try commercial property analysis · IT / EN">Prova l’analisi commerciale · IT / EN</a><small style="display:block" data-it="MVP pubblico con dati in memoria; salvataggi e PDF commerciali non inclusi." data-en="Public in-memory MVP; commercial account saving and PDFs are not included.">MVP pubblico con dati in memoria; salvataggi e PDF commerciali non inclusi.</small></aside></div></details><details class="rb-flow-disclosure"><summary  data-it="Salvare le analisi · prova Investor e condizioni" data-en="Save analyses · Investor trial and terms">Salvare le analisi · prova Investor e condizioni</summary><div class="rb-flow-content"><aside class="rb-trial-invite" data-rb-trial-invite hidden aria-label="Investor trial">
+<div><strong data-it="Prova Investor gratis per 30 giorni" data-en="Try Investor free for 30 days">Prova Investor gratis per 30 giorni</strong>
+<p data-it="Salva le analisi e prova dashboard e gestione del tuo B&amp;B." data-en="Save analyses and try the dashboard and B&amp;B management tools.">Salva le analisi e prova dashboard e gestione del tuo B&amp;B.</p>
+<small data-it="Senza carta • Nessun addebito automatico • PDF esclusi" data-en="No card • No automatic charges • PDFs excluded">Senza carta • Nessun addebito automatico • PDF esclusi</small></div>
+<a href="/login/?intent=investor-trial" data-rb-trial-start data-it="Attiva la prova gratuita →" data-en="Start your free trial →">Attiva la prova gratuita →</a></aside></div></details>
 <div id="financial-model-review" style="margin:16px 0;line-height:1.6"></div>
-<aside id="rb-result-next" class="rb180-result-next" hidden><strong data-it="Vuoi ritrovare questa analisi e confrontarne un’altra?" data-en="Want to retrieve this analysis and compare another?">Vuoi ritrovare questa analisi e confrontarne un’altra?</strong><p data-it="Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free." data-en="Free shows results in this session. Investor saves analyses in the dashboard and includes PMS management. Check eligibility for 30 free days: no card, charges or automatic renewal; PDFs excluded. You return to Free afterwards.">Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free.</p><p data-it="Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio." data-en="After activating Investor, recalculate the scenario to save it. The Free result is not automatically transferred to your archive.">Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio.</p><a href="/plans.html#tester-programme"><span data-it="Salva e confronta con Investor: scopri la prova →" data-en="Save and compare with Investor: explore the trial →">Salva e confronta con Investor: scopri la prova →</span></a></aside>
+<details id="rb-result-next" class="rb180-result-next rb-flow-disclosure" hidden><summary  data-it="Vuoi salvare e confrontare questa analisi?" data-en="Want to save and compare this analysis?">Vuoi salvare e confrontare questa analisi?</summary><div class="rb-flow-content"><strong data-it="Vuoi ritrovare questa analisi e confrontarne un’altra?" data-en="Want to retrieve this analysis and compare another?">Vuoi ritrovare questa analisi e confrontarne un’altra?</strong><p data-it="Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free." data-en="Free shows results in this session. Investor saves analyses in the dashboard and includes PMS management. Check eligibility for 30 free days: no card, charges or automatic renewal; PDFs excluded. You return to Free afterwards.">Free mostra il risultato nella sessione. Investor salva le analisi nella dashboard e include la gestione PMS. Verifica l’idoneità ai 30 giorni gratuiti: senza carta, addebiti o rinnovo automatico; PDF esclusi. Alla scadenza torni a Free.</p><p data-it="Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio." data-en="After activating Investor, recalculate the scenario to save it. The Free result is not automatically transferred to your archive.">Dopo aver attivato Investor, ricalcola lo scenario per salvarlo. Il risultato Free non viene trasferito automaticamente nel tuo archivio.</p><a href="/plans.html#tester-programme"><span data-it="Salva e confronta con Investor: scopri la prova →" data-en="Save and compare with Investor: explore the trial →">Salva e confronta con Investor: scopri la prova →</span></a></div></details>
 <!-- ================= RESULTS (UNICO BLOCCO) ================= -->
 
 <div id="results" class="results-card simulator-results" style="margin-top:40px;">
@@ -1788,7 +1791,7 @@ style="margin-top:22px;"></div>
 
 <!-- (CONTENUTO REALE SOTTO → MA NON VISIBILE SENZA PRO) -->
 
-<section class="tool-2026-details" aria-labelledby="tool-2026-details-title">
+<details class="rb-flow-disclosure" id="rb-analysis-insights"><summary  data-it="Mercato, fonti e scenari · apri gli approfondimenti" data-en="Market, sources and scenarios · open insights">Mercato, fonti e scenari · apri gli approfondimenti</summary><div class="rb-flow-content"><section class="tool-2026-details" aria-labelledby="tool-2026-details-title">
 
   <div class="tool-2026-details-heading">
     <div>
@@ -1824,6 +1827,7 @@ style="margin-top:22px;"></div>
   <div id="tool-panel-market" class="tool-2026-panel is-active"
     role="tabpanel" data-tool-panel="market">
 
+<p class="rb-flow-note" data-it="Tre fonti, tre usi: OMI per valori immobiliari di zona; ISTAT per flussi turistici; prezzi pubblicati per confrontare alloggi simili. Nessuna delle tre certifica il cashflow della tua struttura." data-en="Three sources, three purposes: OMI for area property values; ISTAT for tourism flows; advertised prices for comparing similar accommodation. None certifies your property’s cashflow.">Tre fonti, tre usi: OMI per valori immobiliari di zona; ISTAT per flussi turistici; prezzi pubblicati per confrontare alloggi simili. Nessuna delle tre certifica il cashflow della tua struttura.</p>
 <!-- FORECAST -->
 <div class="results-card investor-teaser">
   <h3
@@ -1840,7 +1844,7 @@ style="margin-top:22px;"></div>
 
 <section id="territorial-benchmarks" class="rb-territorial" data-territorial-benchmarks data-city="roma" aria-label="Confronto prezzi pubblicati"><p data-it="Confronto prezzi per zona: caricamento…" data-en="Area price comparison: loading…">Confronto prezzi per zona: caricamento…</p><noscript>Abilita JavaScript per consultare gli aggregati; fonte: Inside Airbnb.</noscript></section>
 <!-- BENCHMARK -->
-<div class="results-card investor-teaser">
+<details class="rb-flow-disclosure"><summary  data-it="Riferimento illustrativo interno · metodo e valori" data-en="Internal illustrative reference · method and values">Riferimento illustrativo interno · metodo e valori</summary><div class="rb-flow-content"><div class="results-card investor-teaser">
   <h3
     data-it="Riferimento illustrativo per città"
     data-en="Illustrative city reference">
@@ -1872,13 +1876,13 @@ style="margin-top:22px;"></div>
     </div>
 
   </div>
-</div>
+</div></div></details>
 
 <!-- MARKET COMPARISON -->
-<div class="results-card investor-teaser">
+<details class="rb-flow-disclosure"><summary  data-it="Confronto con il riferimento illustrativo" data-en="Comparison with the illustrative reference">Confronto con il riferimento illustrativo</summary><div class="rb-flow-content"><div class="results-card investor-teaser">
   <h3 data-it="Ricavi simulati e riferimento illustrativo" data-en="Simulated revenue and illustrative reference"></h3>
   <div id="market-comparison" class="kpi-grid"></div>
-</div>
+</div></div></details>
 
   </div>
 
@@ -1907,7 +1911,7 @@ style="margin-top:22px;"></div>
 
   </div>
 
-</section>
+</section></div></details>
 
 <!-- PDF EXPORT -->
 <div class="results-card pro-only" data-pdf-only style="text-align:center;">
@@ -2102,7 +2106,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261028-rc216"></script>
+<script type="module" src="/js/app.js?v=20261028-rc220"></script>
 
 <script>
 
