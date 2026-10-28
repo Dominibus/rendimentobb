@@ -161,9 +161,10 @@ test("consecutive simulations never inherit previous values", () => {
   assert.deepEqual(restored.riskBreakdown, strong.riskBreakdown);
 });
 
-test("invalid and negative inputs never produce NaN or Infinity", () => {
+test("invalid supplied numbers are rejected and legacy negative inputs remain finite", () => {
+  assert.throws(()=>calculateROI({price:"invalid"}),error=>error.code==='roi/invalid_input');
   const result = calculateROI({
-    price: "invalid",
+    price: 100000,
     equity: -1,
     loanAmount: -1,
     priceNight: -1,

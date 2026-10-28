@@ -1,3 +1,4 @@
+import {scenarioCashflow} from "./scenario-cashflow.js?v=20261028-rc213";
 import {illustrativeCityReference,referenceCity} from './city-reference.js?v=20261026-rc199';
 import "./data-provenance.js?v=20261023-rc191";
 import {portfolioBasis} from './portfolio-basis.js?v=20261020-rc161';
@@ -21,7 +22,7 @@ import {buildPMSDailyPlan} from './pms-daily-plan.js?v=20261006-rc36';
 import {createEmailVerification} from "./pms-email-verification.js?v=20261004-rc17";
 import {taskTrackingHTML,taskProgressBadge} from "./pms-task-tracking.js?v=20261004-rc16";
 import {visiblePMSTasks} from "./pms-tasks.js?v=20261004-rc15";
-import {createPMSApiClient} from "./pms-api-client.js?v=20261011-rc105";
+import {createPMSApiClient} from "./pms-api-client.js?v=20261028-rc213";
 import { evaluateAvailability, isKnownBookingStatus, canAdvanceBooking, createBookingOperationGuard } from "./pms-availability.js?v=20261004-rc12";
 import { stayNights, bookingNights as calendarBookingNights, nightsInMonth, weekendStayNights, calendarDayDifference } from "./pms-calendar.js?v=20261004-rc11";
 import { financialNumber, summarizeInvestments, interpretPortfolio, highestScenarioROI, targetEquity, scenarioCreatedTime } from "./portfolio-kpi.js?v=20261009-rc76";
@@ -482,6 +483,7 @@ function bookingOperationError(error){
   const messages = {
     "booking/demo_readonly": ["Modalità dimostrativa: questa anteprima non salva prenotazioni nell’account. Apri la Live Demo PMS per provare modifiche temporanee con dati fittizi. La gestione persistente richiede Investor o Pro; i PDF sono Pro.", "Demonstration mode: this preview does not save account bookings. Open the PMS Live Demo to try temporary changes with fictional data. Persistent management requires Investor or Pro; PDFs require Pro."],
     "booking/server_unavailable": ["Servizio PMS temporaneamente non disponibile. Riprova con gli stessi dati; se il problema persiste contatta il supporto.", "PMS service temporarily unavailable. Retry with the same data; contact support if the problem persists."],
+    "booking/pending_state_invalid": ["Il registro locale delle richieste PMS non è leggibile. Nessuna nuova richiesta inviata. Verifica le prenotazioni già presenti e contatta il supporto prima di riprovare; non cancellare i dati del browser.", "The local PMS request register cannot be read. No new request was sent. Check existing bookings and contact support before retrying; do not clear browser data."],
     "booking/write_uncertain": ["Esito non verificabile per un errore di connessione. Riprova con gli stessi dati: la richiesta mantiene il suo identificativo per evitare duplicati.", "Outcome cannot be verified due to a connection error. Retry with the same data: the request keeps its identifier to avoid duplicates."],
     "booking/task_resolved": ["Attività già risolta. Aggiorna le prenotazioni.", "Task already resolved. Refresh bookings."],
     "booking/stale_task": ["I dati dell’attività sono cambiati. Aggiorna le prenotazioni.", "Task details changed. Refresh bookings."],
@@ -2921,6 +2923,8 @@ function renderCashflowChart(){
   if(!container) return;
   if(cashflowChartInstance){ cashflowChartInstance.destroy(); cashflowChartInstance = null; }
   const scenarios = (window.dashboardSimulations || []).slice(0, 10);
+  const coverage=document.getElementById('cashflow-chart-coverage');
+  if(coverage){coverage.hidden=true;coverage.textContent='';}
   if(!scenarios.length){
     container.textContent = t("Nessuno scenario salvato.", "No saved scenarios.");
     return;
@@ -2928,14 +2932,19 @@ function renderCashflowChart(){
   container.innerHTML = '<canvas id="cashflowChart"></canvas>';
   const canvas = document.getElementById("cashflowChart");
   canvas.height = 300;
-  const amounts = scenarios.map(item => Number(item.net ?? item.cashflow ?? item.annualProfit ?? 0));
+  const amounts = scenarios.map(scenarioCashflow);
+  const missing = amounts.filter(value => value === null).length;
+  if(missing && coverage){
+    coverage.textContent=t(`${missing} scenari senza cashflow verificabile: N/D, esclusi dalle barre.`, `${missing} scenarios have no verifiable cashflow: N/A, omitted from bars.`);
+    coverage.hidden=false;
+  }
   cashflowChartInstance = new Chart(canvas.getContext("2d"), {
     type: "bar",
     data: {
-      labels: scenarios.map((item, index) => `${index + 1} · ${item.city || t("Scenario", "Scenario")}`),
+      labels: scenarios.map((item, index) => `${index + 1} · ${item.city || t("Scenario", "Scenario")}${amounts[index]===null ? t(" · N/D", " · N/A") : ""}`),
       datasets: [{
-        label: t("Profitto annuo stimato per scenario (€)", "Estimated annual profit per scenario (€)"),
-        data: amounts.map(value => Number.isFinite(value) ? value : 0),
+        label: t("Cashflow annuo stimato per scenario (€)", "Estimated annual cashflow per scenario (€)"),
+        data: amounts,
         backgroundColor: amounts.map(value => value >= 0 ? "#087f5b" : "#b4533c"),
         borderRadius: 6
       }]
@@ -2943,7 +2952,7 @@ function renderCashflowChart(){
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {legend: {display: false}, tooltip: {callbacks: {label: context => formatCurrency(context.parsed.y)}}},
-      scales: {y: {beginAtZero: true, title: {display: true, text: "€ / anno"}}}
+      scales: {y: {beginAtZero: true, title: {display: true, text: t("€ / anno", "€ / year")}}}
     }
   });
 }

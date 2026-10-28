@@ -1,8 +1,8 @@
 import {COMMERCIAL_STEPS,COMMERCIAL_FIELD_HELP} from './commercial-guidance.js?v=20261027-rc207';
-import {mountCommercial} from './commercial-property-ui.js?v=20261027-rc207';
-import {createCommercialModel,calculateCommercial} from './commercial-property-engine.js?v=20261025-rc196';
+import {mountCommercial} from './commercial-property-ui.js?v=20261028-rc213';
+import {createCommercialModel,calculateCommercial} from './commercial-property-engine.js?v=20261028-rc213';
 import {commercialWorkspaceSummary,applyCommercialOperation,newCommercialWorkspace,createCommercialWorkspaceDemo} from './commercial-workspace-model.js?v=20261025-rc196';
-import {commercialPriorities,answerCommercialAutopilot} from './commercial-autopilot.js?v=20261027-rc207';
+import {commercialPriorities,answerCommercialAutopilot} from './commercial-autopilot.js?v=20261028-rc213';
 
 export function createCommercialDemoClient(){
  const spaces=new Map();const initial=createCommercialWorkspaceDemo();spaces.set(initial.id,initial);let serial=0;

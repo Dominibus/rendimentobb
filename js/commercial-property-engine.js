@@ -103,7 +103,7 @@ export function calculateCommercial(m){
   const units=a.mode==='per_use'?uses:monthFraction(a.start,a.end,m.year);
   const contractualGross=a.amount*units,expectedGross=contractualGross*a.expectedPct/100;
   const divisor=a.vat.status==='unknown'?null:a.vat.status==='taxable'?1+a.vat.rate/100:1;
-  const contractualNet=divisor===null?null:contractualGross/divisor,expectedNet=divisor===null?null:expectedGross/divisor;
+  const contractualNet=contractualGross===0?0:divisor===null?null:contractualGross/divisor,expectedNet=expectedGross===0?0:divisor===null?null:expectedGross/divisor;
   return {id:a.id,roomId:a.roomId,code:a.code,mode:a.mode,amount:a.amount,vat:a.vat,expectedPct:a.expectedPct,start:a.start,end:a.end,weekdays:a.weekdays,slotIds:a.slotIds,units,reserved,expectedSlots,contractualGross,expectedGross,contractualNet,expectedNet,expectedVAT:expectedNet===null?null:expectedGross-expectedNet};
  });
  const contractualGross=sum(assignments.map(a=>a.contractualGross)),expectedGross=sum(assignments.map(a=>a.expectedGross));

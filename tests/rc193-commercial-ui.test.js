@@ -53,10 +53,10 @@ test('RC193 no tariff is assumed in UI; calendar, custom slots and expected shar
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('RC193 public pages: IT/EN, truthful limits, shared account shell without planner account writes, paths and versioned engine',()=>{
  for(const lang of ['','en/']){
-  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261027-rc207/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.match(page,/id="global-header"/);assert.match(page,/js\/header.js/);assert.doesNotMatch(page,/application\/ld\+json/);
+  const page=read(lang+'immobili-commerciali/index.html');assert.match(page,/data-commercial-app/);assert.match(page,/commercial-property-ui.js\?v=20261028-rc213/);assert.match(page,/hreflang="en"/);assert.match(page,/id="main"/);assert.match(page,/30/);assert.match(page,/MVP/);assert.match(page,/id="global-header"/);assert.match(page,/js\/header.js/);assert.doesNotMatch(page,/application\/ld\+json/);
  }
  for(const f of ['js/commercial-property-engine.js','js/commercial-property-ui.js'])assert.doesNotMatch(read(f),/\b(?:fetch|localStorage|sessionStorage|indexedDB|sendBeacon|addDoc|setDoc)\s*[.(]|document\.cookie/);
- assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261025-rc196/);
+ assert.match(read('js/commercial-property-ui.js'),/commercial-property-engine.js\?v=20261028-rc213/);
  for(const f of ['immobili/index.html','tool/index.html','sitemap.xml'])assert.match(read(f),/\/immobili-commerciali\//);
 });
 
@@ -70,7 +70,7 @@ test('RC193 chatbot preserves privacy, guarantees, focused documents and ordinar
  w.rbDocumentManager={getLast:()=>({id:'doc'})};w.rbPDFConversationDocumentId='doc';w.rbGenerateResponse=()=>({type:'document_grounded',textIT:'Document context'});const r=await w.rbProcessAIMessage('Ricavi studio medico');assert.notEqual(r.intent?.intent,'commercial_property_scope');
 });
 test('RC193 parent cache references updated without changing unrelated engines',()=>{
- assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261027-rc211/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261027-rc211/);
+ assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261027-rc212/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261027-rc212/);
  function walk(dir){return readdirSync(dir).flatMap(n=>{const p=dir+'/'+n;return n==='node_modules'?[]:statSync(p).isDirectory()?walk(p):p.endsWith('.html')?[p]:[];});}
  for(const p of walk(new URL('..',import.meta.url).pathname)){const s=readFileSync(p,'utf8');assert.doesNotMatch(s,/\/(?:js\/header|js\/chatbot-loader)\.js\?v=20261023-rc192/,p);}
 });

@@ -8,6 +8,12 @@ import { calculateMortgage } from "./mortgage-engine.js?v=20261012-rc106";
 // ================= CORE ENGINE =================
 function calculateROI(input = {}){
 
+  // Invalid supplied numbers must not become apparently valid financial results.
+  for(const field of ['price','equity','loanAmount','priceNight','occupancy','expenses','commission','tax','interestRate','loanYears']){
+    if(input[field]!==undefined && !Number.isFinite(Number(input[field]))){
+      const error=new RangeError(`Invalid ROI input: ${field}`);error.code='roi/invalid_input';throw error;
+    }
+  }
   // ================= SAFE PARSER =================
   const safe = (v, def = 0) => {
     const n = Number(v);
@@ -39,6 +45,9 @@ function calculateROI(input = {}){
   const interestRate = safePositive(input.interestRate, 3.5);
   const loanYears    = safePositive(input.loanYears, 20);
 
+  if(loanAmount>0 && loanYears<=0){
+    const error=new RangeError('Invalid ROI input: loanYears');error.code='roi/invalid_input';throw error;
+  }
   // ================= CORE CALC =================
   const nights = 365 * (occupancy / 100);
   const gross = priceNight * nights;

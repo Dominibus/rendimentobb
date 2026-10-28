@@ -1,7 +1,7 @@
 import {COMMERCIAL_FIELD_HELP} from './commercial-guidance.js?v=20261027-rc207';
 import {stageCommercialTransfer} from './commercial-transfer.js?v=20261025-rc196';
 import {createCommercialActivityPlan} from './commercial-activity-plan.js?v=20261025-rc196';
-import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261025-rc196';
+import {calculateCommercial,commercialSensitivity,createCommercialModel,createCommercialDemo} from './commercial-property-engine.js?v=20261028-rc213';
 
 export function mountCommercial(root,{english=false,onTransfer=null,embedded=false}={}){
  const t=(it,en)=>english?en:it,locale=english?'en-GB':'it-IT';

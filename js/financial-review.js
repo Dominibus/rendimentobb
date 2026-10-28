@@ -1,4 +1,4 @@
-import {calculateROI} from './roi-engine.js?v=20261027-rc211';
+import {calculateROI} from './roi-engine.js?v=20261028-rc213';
 import {readInvestmentAssumptions,requiredAnnualRevenue} from './investment-assumptions.js?v=20261009-rc91';
 
 // Read-only review of a complete versioned snapshot; never migrates saved data.

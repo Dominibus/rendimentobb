@@ -1,6 +1,6 @@
 import {commercialGuidance} from './commercial-guidance.js?v=20261027-rc207';
 import {commercialWorkspaceSummary} from './commercial-workspace-model.js?v=20261025-rc196';
-import {calculateCommercial} from './commercial-property-engine.js?v=20261025-rc196';
+import {calculateCommercial} from './commercial-property-engine.js?v=20261028-rc213';
 const normalize=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().slice(0,500);
 export function commercialPriorities(w,{today,month,english=false}={}){
  const t=(it,en)=>english?en:it,model=w.operating||w.scenario,s=commercialWorkspaceSummary(w,month),items=[];

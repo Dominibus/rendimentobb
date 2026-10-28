@@ -8,7 +8,7 @@ import {TERMS_VERSION} from "./subscription-offer.js?v=20261016-rc140";
 // ===============================================
 // ================= FIRESTORE ================
 import { buildInvestmentAssumptions, readInvestmentAssumptions } from "./investment-assumptions.js?v=20261009-rc91";
-import { calculateROI } from "./roi-engine.js?v=20261027-rc211";
+import { calculateROI } from "./roi-engine.js?v=20261028-rc213";
 import { buildPDFScenarioCommentary } from "./pdf-scenario-commentary.js?v=20261006-rc45";
 import { createInvestmentAnalysisState } from "./investment-analysis-state.js?v=20261020-rc158";
 const investmentAnalysisState = createInvestmentAnalysisState(window, document);
@@ -16,7 +16,7 @@ import {installToolPresentation} from "./tool-presentation.js?v=20261023-rc189";
 installToolPresentation(window, document);
 import { initPropertyMode, renderPropertyModeResults } from "./property-mode.js?v=20261011-rc104";
 initPropertyMode(window, document);
-import {financialReview,financialScenarios,financialReviewHTML,financialScenariosHTML} from "./financial-review.js?v=20261027-rc211";
+import {financialReview,financialScenarios,financialReviewHTML,financialScenariosHTML} from "./financial-review.js?v=20261028-rc213";
 import { buildRevenueScenarios } from "./revenue-scenarios.js?v=20261006-rc42";
 import { renderFreeSimulationPreview } from "./free-preview.js?v=20261027-rc211";
 
