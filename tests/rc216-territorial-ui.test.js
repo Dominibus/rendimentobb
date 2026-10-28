@@ -15,7 +15,7 @@ test('Trento public UI selects a valid segment and explains historical stay date
  const previous={document:globalThis.document,window:globalThis.window,fetch:globalThis.fetch};
  try{
  globalThis.document={querySelectorAll:()=>[root],createElement:tag=>new Element(tag),createTextNode:text=>({textContent:text}),addEventListener:(k,f)=>events[k]=f};
- globalThis.window={currentLang:'it'};globalThis.fetch=async(url,options)=>{calls.push({url,options});assert.match(url,/^\/data\/territorial\/trento.json/);return {ok:true,json:async()=>data};};
+ globalThis.window={currentLang:'it'};globalThis.fetch=async(url,options)=>{calls.push({url,options});assert.match(url,/^\/data\/(territorial\/trento|tourism\/istat-capitals-2025).json/);return {ok:true,json:async()=>url.includes('/tourism/')?JSON.parse(fs.readFileSync(new URL('../data/tourism/istat-capitals-2025.json',import.meta.url))):data};};
  await import('../js/territorial-benchmark-ui.js?rc216-ui');await new Promise(setImmediate);
  const row=data.rows.find(r=>r[6]!==null);
  for(const [i,field]of ['zone','propertyType','roomType','capacity','stayMonth','stayLength'].entries()){
@@ -23,6 +23,6 @@ test('Trento public UI selects a valid segment and explains historical stay date
  }
  assert.match(root.text(),/Mediana del prezzo base/);assert.match(root.text(),/Trento, Trentino/);assert.match(root.text(),/date dei soggiorni quotati sono trascorse/);
  window.currentLang='en';events.rb_language_changed();assert.match(root.text(),/quoted stay dates have passed/);assert.match(root.text(),/not receipts or ADR/);
- assert.equal(calls.length,1);assert.equal(calls[0].options.credentials,'omit');
+ assert.equal(calls.length,2);assert.equal(calls.filter(c=>c.url.includes('/territorial/')).length,1);assert.equal(calls[0].options.credentials,'omit');
  }finally{for(const [key,value]of Object.entries(previous)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
 });

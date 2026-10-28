@@ -61,7 +61,7 @@ test('RC192 PMS same-day turnover is available and never charges the departing n
 });
 test('RC192 public pages and bilingual demos load correct resources',()=>{
  for(const page of ['market/index.html','market/napoli/index.html','market/roma/index.html','market/milano/index.html','market/firenze/index.html','tool/index.html']){
-  const s=read(page);assert.equal((s.match(/data-territorial-benchmarks/g)||[]).length,1);assert.match(s,/territorial-benchmark-ui.js\?v=20261028-rc216/);assert.match(s,/territorial-benchmarks.css\?v=20261023-rc192/);
+  const s=read(page);assert.equal((s.match(/data-territorial-benchmarks/g)||[]).length,1);assert.match(s,/territorial-benchmark-ui.js\?v=20261028-rc217/);assert.match(s,/territorial-benchmarks.css\?v=20261028-rc217/);
  }
  for(const lang of ['','en/'])assert.match(read(lang+'demo/hospitality-pms/index.html'),/pms-product-demo.js\?v=20261023-rc192/);
  assert.match(read('js/chatbot/core/market-evidence.js'),/\/market\/#territorial-benchmarks/);assert.match(read('js/pms-product-demo.js'),/authority_requires_documents/);

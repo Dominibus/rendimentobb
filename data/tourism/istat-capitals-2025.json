@@ -1,0 +1,1484 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "acquiredAt": "2026-10-28",
+  "source": {
+    "provider": "ISTAT",
+    "flow": "IT1/DF_BULK_DCSC_OCCUPCOLLE/1.0",
+    "downloadURL": "https://esploradati.istat.it/databrowser/DWL/Servizi/DCSC_Occupancy_in_collective_accommodation.zip",
+    "workbook": "2_dati_comunali.xlsx",
+    "workbookSHA256": "f900914afe009aeb05ee34ea12d31a7233cf55bff5cef3424cda4df6df48c592",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://www.istat.it/dati/open-data/",
+    "annualSheet": "Comunali annuali | Annual data",
+    "monthlySheet": "Comunali Mensili | Monthly data"
+  },
+  "crosswalk": {
+    "old": "092009",
+    "current": "118006",
+    "effectiveFrom": "2026-01-01",
+    "sourceURL": "https://www.istat.it/wp-content/uploads/2024/09/Codici-statistici-e-denominazioni-delle-unita-amministrative-della-Sardegna.zip"
+  },
+  "records": [
+    {
+      "istat": "042002",
+      "key": "ancona",
+      "name": "Ancona",
+      "sourceIstat": "042002",
+      "flag": "f",
+      "annualSourceRow": 2973,
+      "monthlySourceRow": 1781,
+      "arrivals": 224000,
+      "personNights": 490860,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 12737,
+          "personNights": 25362
+        },
+        {
+          "month": 2,
+          "arrivals": 14549,
+          "personNights": 26875
+        },
+        {
+          "month": 3,
+          "arrivals": 14194,
+          "personNights": 27370
+        },
+        {
+          "month": 4,
+          "arrivals": 18527,
+          "personNights": 38117
+        },
+        {
+          "month": 5,
+          "arrivals": 21381,
+          "personNights": 42455
+        },
+        {
+          "month": 6,
+          "arrivals": 22533,
+          "personNights": 47942
+        },
+        {
+          "month": 7,
+          "arrivals": 25307,
+          "personNights": 56688
+        },
+        {
+          "month": 8,
+          "arrivals": 27663,
+          "personNights": 70240
+        },
+        {
+          "month": 9,
+          "arrivals": 21805,
+          "personNights": 52219
+        },
+        {
+          "month": 10,
+          "arrivals": 18432,
+          "personNights": 43348
+        },
+        {
+          "month": 11,
+          "arrivals": 14072,
+          "personNights": 32991
+        },
+        {
+          "month": 12,
+          "arrivals": 12800,
+          "personNights": 27253
+        }
+      ]
+    },
+    {
+      "istat": "007003",
+      "key": "aosta",
+      "name": "Aosta",
+      "sourceIstat": "007003",
+      "flag": "f",
+      "annualSourceRow": 514,
+      "monthlySourceRow": 213,
+      "arrivals": 155032,
+      "personNights": 326674,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 11669,
+          "personNights": 28387
+        },
+        {
+          "month": 2,
+          "arrivals": 11322,
+          "personNights": 29412
+        },
+        {
+          "month": 3,
+          "arrivals": 10126,
+          "personNights": 23302
+        },
+        {
+          "month": 4,
+          "arrivals": 10394,
+          "personNights": 18740
+        },
+        {
+          "month": 5,
+          "arrivals": 11918,
+          "personNights": 22021
+        },
+        {
+          "month": 6,
+          "arrivals": 13594,
+          "personNights": 25748
+        },
+        {
+          "month": 7,
+          "arrivals": 19247,
+          "personNights": 40427
+        },
+        {
+          "month": 8,
+          "arrivals": 20106,
+          "personNights": 47126
+        },
+        {
+          "month": 9,
+          "arrivals": 13117,
+          "personNights": 25844
+        },
+        {
+          "month": 10,
+          "arrivals": 9573,
+          "personNights": 17879
+        },
+        {
+          "month": 11,
+          "arrivals": 8629,
+          "personNights": 15278
+        },
+        {
+          "month": 12,
+          "arrivals": 15337,
+          "personNights": 32510
+        }
+      ]
+    },
+    {
+      "istat": "072006",
+      "key": "bari",
+      "name": "Bari",
+      "sourceIstat": "072006",
+      "flag": "f",
+      "annualSourceRow": 3746,
+      "monthlySourceRow": 2109,
+      "arrivals": 1071910,
+      "personNights": 2211660,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 41729,
+          "personNights": 85472
+        },
+        {
+          "month": 2,
+          "arrivals": 49649,
+          "personNights": 100012
+        },
+        {
+          "month": 3,
+          "arrivals": 66625,
+          "personNights": 133165
+        },
+        {
+          "month": 4,
+          "arrivals": 96003,
+          "personNights": 197384
+        },
+        {
+          "month": 5,
+          "arrivals": 112180,
+          "personNights": 226332
+        },
+        {
+          "month": 6,
+          "arrivals": 107640,
+          "personNights": 217354
+        },
+        {
+          "month": 7,
+          "arrivals": 112221,
+          "personNights": 235331
+        },
+        {
+          "month": 8,
+          "arrivals": 112500,
+          "personNights": 259397
+        },
+        {
+          "month": 9,
+          "arrivals": 122162,
+          "personNights": 249892
+        },
+        {
+          "month": 10,
+          "arrivals": 119700,
+          "personNights": 238286
+        },
+        {
+          "month": 11,
+          "arrivals": 67741,
+          "personNights": 140278
+        },
+        {
+          "month": 12,
+          "arrivals": 63760,
+          "personNights": 128757
+        }
+      ]
+    },
+    {
+      "istat": "037006",
+      "key": "bologna",
+      "name": "Bologna",
+      "sourceIstat": "037006",
+      "flag": "f",
+      "annualSourceRow": 2428,
+      "monthlySourceRow": 1362,
+      "arrivals": 2271428,
+      "personNights": 5240124,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 137141,
+          "personNights": 322587
+        },
+        {
+          "month": 2,
+          "arrivals": 153313,
+          "personNights": 343168
+        },
+        {
+          "month": 3,
+          "arrivals": 185166,
+          "personNights": 437830
+        },
+        {
+          "month": 4,
+          "arrivals": 213010,
+          "personNights": 505795
+        },
+        {
+          "month": 5,
+          "arrivals": 210924,
+          "personNights": 527271
+        },
+        {
+          "month": 6,
+          "arrivals": 212037,
+          "personNights": 477928
+        },
+        {
+          "month": 7,
+          "arrivals": 210246,
+          "personNights": 462146
+        },
+        {
+          "month": 8,
+          "arrivals": 182732,
+          "personNights": 385196
+        },
+        {
+          "month": 9,
+          "arrivals": 200873,
+          "personNights": 482213
+        },
+        {
+          "month": 10,
+          "arrivals": 221562,
+          "personNights": 524631
+        },
+        {
+          "month": 11,
+          "arrivals": 194396,
+          "personNights": 432279
+        },
+        {
+          "month": 12,
+          "arrivals": 150028,
+          "personNights": 339080
+        }
+      ]
+    },
+    {
+      "istat": "118006",
+      "key": "cagliari",
+      "name": "Cagliari",
+      "sourceIstat": "092009",
+      "flag": "f",
+      "annualSourceRow": 4451,
+      "monthlySourceRow": 2440,
+      "arrivals": 442441,
+      "personNights": 1121834,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 16588,
+          "personNights": 35523
+        },
+        {
+          "month": 2,
+          "arrivals": 19536,
+          "personNights": 39978
+        },
+        {
+          "month": 3,
+          "arrivals": 24652,
+          "personNights": 49775
+        },
+        {
+          "month": 4,
+          "arrivals": 38863,
+          "personNights": 92087
+        },
+        {
+          "month": 5,
+          "arrivals": 47638,
+          "personNights": 110915
+        },
+        {
+          "month": 6,
+          "arrivals": 47906,
+          "personNights": 125023
+        },
+        {
+          "month": 7,
+          "arrivals": 51966,
+          "personNights": 153720
+        },
+        {
+          "month": 8,
+          "arrivals": 53715,
+          "personNights": 175291
+        },
+        {
+          "month": 9,
+          "arrivals": 53197,
+          "personNights": 140402
+        },
+        {
+          "month": 10,
+          "arrivals": 42737,
+          "personNights": 105152
+        },
+        {
+          "month": 11,
+          "arrivals": 21586,
+          "personNights": 46531
+        },
+        {
+          "month": 12,
+          "arrivals": 24057,
+          "personNights": 47437
+        }
+      ]
+    },
+    {
+      "istat": "070006",
+      "key": "campobasso",
+      "name": "Campobasso",
+      "sourceIstat": "070006",
+      "flag": "f",
+      "annualSourceRow": 3492,
+      "monthlySourceRow": 1997,
+      "arrivals": 17123,
+      "personNights": 35007,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 652,
+          "personNights": 1309
+        },
+        {
+          "month": 2,
+          "arrivals": 1188,
+          "personNights": 2182
+        },
+        {
+          "month": 3,
+          "arrivals": 2073,
+          "personNights": 3792
+        },
+        {
+          "month": 4,
+          "arrivals": 168,
+          "personNights": 207
+        },
+        {
+          "month": 5,
+          "arrivals": 2260,
+          "personNights": 4508
+        },
+        {
+          "month": 6,
+          "arrivals": 2322,
+          "personNights": 4614
+        },
+        {
+          "month": 7,
+          "arrivals": 1431,
+          "personNights": 3859
+        },
+        {
+          "month": 8,
+          "arrivals": 1852,
+          "personNights": 4698
+        },
+        {
+          "month": 9,
+          "arrivals": 1797,
+          "personNights": 3604
+        },
+        {
+          "month": 10,
+          "arrivals": 447,
+          "personNights": 711
+        },
+        {
+          "month": 11,
+          "arrivals": 971,
+          "personNights": 1532
+        },
+        {
+          "month": 12,
+          "arrivals": 1962,
+          "personNights": 3991
+        }
+      ]
+    },
+    {
+      "istat": "079023",
+      "key": "catanzaro",
+      "name": "Catanzaro",
+      "sourceIstat": "079023",
+      "flag": "f",
+      "annualSourceRow": 4049,
+      "monthlySourceRow": 2253,
+      "arrivals": 64824,
+      "personNights": 131818,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 3713,
+          "personNights": 6725
+        },
+        {
+          "month": 2,
+          "arrivals": 4384,
+          "personNights": 7460
+        },
+        {
+          "month": 3,
+          "arrivals": 5161,
+          "personNights": 9386
+        },
+        {
+          "month": 4,
+          "arrivals": 5556,
+          "personNights": 11836
+        },
+        {
+          "month": 5,
+          "arrivals": 6080,
+          "personNights": 11063
+        },
+        {
+          "month": 6,
+          "arrivals": 5055,
+          "personNights": 9822
+        },
+        {
+          "month": 7,
+          "arrivals": 5993,
+          "personNights": 14287
+        },
+        {
+          "month": 8,
+          "arrivals": 7339,
+          "personNights": 21778
+        },
+        {
+          "month": 9,
+          "arrivals": 5493,
+          "personNights": 10264
+        },
+        {
+          "month": 10,
+          "arrivals": 5602,
+          "personNights": 9531
+        },
+        {
+          "month": 11,
+          "arrivals": 5430,
+          "personNights": 9322
+        },
+        {
+          "month": 12,
+          "arrivals": 5018,
+          "personNights": 10344
+        }
+      ]
+    },
+    {
+      "istat": "048017",
+      "key": "firenze",
+      "name": "Firenze",
+      "sourceIstat": "048017",
+      "flag": "f",
+      "annualSourceRow": 2648,
+      "monthlySourceRow": 1520,
+      "arrivals": 4758667,
+      "personNights": 11515398,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 261711,
+          "personNights": 609969
+        },
+        {
+          "month": 2,
+          "arrivals": 265752,
+          "personNights": 615485
+        },
+        {
+          "month": 3,
+          "arrivals": 360679,
+          "personNights": 859364
+        },
+        {
+          "month": 4,
+          "arrivals": 438976,
+          "personNights": 1079915
+        },
+        {
+          "month": 5,
+          "arrivals": 475127,
+          "personNights": 1295934
+        },
+        {
+          "month": 6,
+          "arrivals": 476902,
+          "personNights": 1107018
+        },
+        {
+          "month": 7,
+          "arrivals": 446486,
+          "personNights": 1058994
+        },
+        {
+          "month": 8,
+          "arrivals": 437074,
+          "personNights": 1031336
+        },
+        {
+          "month": 9,
+          "arrivals": 467460,
+          "personNights": 1132496
+        },
+        {
+          "month": 10,
+          "arrivals": 472355,
+          "personNights": 1162803
+        },
+        {
+          "month": 11,
+          "arrivals": 340868,
+          "personNights": 799094
+        },
+        {
+          "month": 12,
+          "arrivals": 315277,
+          "personNights": 762990
+        }
+      ]
+    },
+    {
+      "istat": "010025",
+      "key": "genova",
+      "name": "Genova",
+      "sourceIstat": "010025",
+      "flag": "f",
+      "annualSourceRow": 2210,
+      "monthlySourceRow": 1219,
+      "arrivals": 1061221,
+      "personNights": 2285375,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 56549,
+          "personNights": 138775
+        },
+        {
+          "month": 2,
+          "arrivals": 56093,
+          "personNights": 136567
+        },
+        {
+          "month": 3,
+          "arrivals": 72664,
+          "personNights": 165828
+        },
+        {
+          "month": 4,
+          "arrivals": 101576,
+          "personNights": 210329
+        },
+        {
+          "month": 5,
+          "arrivals": 103821,
+          "personNights": 217308
+        },
+        {
+          "month": 6,
+          "arrivals": 100487,
+          "personNights": 222702
+        },
+        {
+          "month": 7,
+          "arrivals": 120101,
+          "personNights": 252013
+        },
+        {
+          "month": 8,
+          "arrivals": 125714,
+          "personNights": 256592
+        },
+        {
+          "month": 9,
+          "arrivals": 99368,
+          "personNights": 210641
+        },
+        {
+          "month": 10,
+          "arrivals": 95560,
+          "personNights": 197329
+        },
+        {
+          "month": 11,
+          "arrivals": 64770,
+          "personNights": 142285
+        },
+        {
+          "month": 12,
+          "arrivals": 64518,
+          "personNights": 135006
+        }
+      ]
+    },
+    {
+      "istat": "066049",
+      "key": "l-aquila",
+      "name": "L'Aquila",
+      "sourceIstat": "066049",
+      "flag": "f",
+      "annualSourceRow": 3341,
+      "monthlySourceRow": 1931,
+      "arrivals": 121844,
+      "personNights": 342707,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 8588,
+          "personNights": 23243
+        },
+        {
+          "month": 2,
+          "arrivals": 7899,
+          "personNights": 21268
+        },
+        {
+          "month": 3,
+          "arrivals": 7627,
+          "personNights": 23371
+        },
+        {
+          "month": 4,
+          "arrivals": 8661,
+          "personNights": 24387
+        },
+        {
+          "month": 5,
+          "arrivals": 10243,
+          "personNights": 27513
+        },
+        {
+          "month": 6,
+          "arrivals": 10806,
+          "personNights": 28947
+        },
+        {
+          "month": 7,
+          "arrivals": 12998,
+          "personNights": 33970
+        },
+        {
+          "month": 8,
+          "arrivals": 16838,
+          "personNights": 45640
+        },
+        {
+          "month": 9,
+          "arrivals": 11978,
+          "personNights": 31610
+        },
+        {
+          "month": 10,
+          "arrivals": 9339,
+          "personNights": 25109
+        },
+        {
+          "month": 11,
+          "arrivals": 7052,
+          "personNights": 26668
+        },
+        {
+          "month": 12,
+          "arrivals": 9815,
+          "personNights": 30981
+        }
+      ]
+    },
+    {
+      "istat": "015146",
+      "key": "milano",
+      "name": "Milano",
+      "sourceIstat": "015146",
+      "flag": "f",
+      "annualSourceRow": 815,
+      "monthlySourceRow": 363,
+      "arrivals": 7640762,
+      "personNights": 17748326,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 475038,
+          "personNights": 1116458
+        },
+        {
+          "month": 2,
+          "arrivals": 516499,
+          "personNights": 1224041
+        },
+        {
+          "month": 3,
+          "arrivals": 572643,
+          "personNights": 1300139
+        },
+        {
+          "month": 4,
+          "arrivals": 674540,
+          "personNights": 1614902
+        },
+        {
+          "month": 5,
+          "arrivals": 739577,
+          "personNights": 1692755
+        },
+        {
+          "month": 6,
+          "arrivals": 701638,
+          "personNights": 1580459
+        },
+        {
+          "month": 7,
+          "arrivals": 732716,
+          "personNights": 1663604
+        },
+        {
+          "month": 8,
+          "arrivals": 617337,
+          "personNights": 1452167
+        },
+        {
+          "month": 9,
+          "arrivals": 691436,
+          "personNights": 1657387
+        },
+        {
+          "month": 10,
+          "arrivals": 722790,
+          "personNights": 1693051
+        },
+        {
+          "month": 11,
+          "arrivals": 617303,
+          "personNights": 1427732
+        },
+        {
+          "month": 12,
+          "arrivals": 579245,
+          "personNights": 1325631
+        }
+      ]
+    },
+    {
+      "istat": "063049",
+      "key": "napoli",
+      "name": "Napoli",
+      "sourceIstat": "063049",
+      "flag": "f",
+      "annualSourceRow": 3575,
+      "monthlySourceRow": 2027,
+      "arrivals": 1508755,
+      "personNights": 4351939,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 77317,
+          "personNights": 214625
+        },
+        {
+          "month": 2,
+          "arrivals": 93146,
+          "personNights": 242493
+        },
+        {
+          "month": 3,
+          "arrivals": 119436,
+          "personNights": 311020
+        },
+        {
+          "month": 4,
+          "arrivals": 127611,
+          "personNights": 361481
+        },
+        {
+          "month": 5,
+          "arrivals": 162497,
+          "personNights": 429857
+        },
+        {
+          "month": 6,
+          "arrivals": 153721,
+          "personNights": 405423
+        },
+        {
+          "month": 7,
+          "arrivals": 141816,
+          "personNights": 406095
+        },
+        {
+          "month": 8,
+          "arrivals": 134210,
+          "personNights": 454135
+        },
+        {
+          "month": 9,
+          "arrivals": 146086,
+          "personNights": 437893
+        },
+        {
+          "month": 10,
+          "arrivals": 145743,
+          "personNights": 436725
+        },
+        {
+          "month": 11,
+          "arrivals": 102731,
+          "personNights": 323989
+        },
+        {
+          "month": 12,
+          "arrivals": 104441,
+          "personNights": 328203
+        }
+      ]
+    },
+    {
+      "istat": "082053",
+      "key": "palermo",
+      "name": "Palermo",
+      "sourceIstat": "082053",
+      "flag": "f",
+      "annualSourceRow": 4173,
+      "monthlySourceRow": 2311,
+      "arrivals": 1202472,
+      "personNights": 3112683,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 46694,
+          "personNights": 124268
+        },
+        {
+          "month": 2,
+          "arrivals": 55709,
+          "personNights": 137304
+        },
+        {
+          "month": 3,
+          "arrivals": 80990,
+          "personNights": 201050
+        },
+        {
+          "month": 4,
+          "arrivals": 124572,
+          "personNights": 309057
+        },
+        {
+          "month": 5,
+          "arrivals": 135808,
+          "personNights": 333542
+        },
+        {
+          "month": 6,
+          "arrivals": 123107,
+          "personNights": 311352
+        },
+        {
+          "month": 7,
+          "arrivals": 118485,
+          "personNights": 332986
+        },
+        {
+          "month": 8,
+          "arrivals": 129036,
+          "personNights": 379744
+        },
+        {
+          "month": 9,
+          "arrivals": 140297,
+          "personNights": 356922
+        },
+        {
+          "month": 10,
+          "arrivals": 130800,
+          "personNights": 324138
+        },
+        {
+          "month": 11,
+          "arrivals": 63224,
+          "personNights": 163418
+        },
+        {
+          "month": 12,
+          "arrivals": 53750,
+          "personNights": 138902
+        }
+      ]
+    },
+    {
+      "istat": "054039",
+      "key": "perugia",
+      "name": "Perugia",
+      "sourceIstat": "054039",
+      "flag": "f",
+      "annualSourceRow": 2876,
+      "monthlySourceRow": 1718,
+      "arrivals": 495825,
+      "personNights": 1306109,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 26264,
+          "personNights": 78114
+        },
+        {
+          "month": 2,
+          "arrivals": 25472,
+          "personNights": 67979
+        },
+        {
+          "month": 3,
+          "arrivals": 33166,
+          "personNights": 85839
+        },
+        {
+          "month": 4,
+          "arrivals": 47264,
+          "personNights": 120231
+        },
+        {
+          "month": 5,
+          "arrivals": 51463,
+          "personNights": 129242
+        },
+        {
+          "month": 6,
+          "arrivals": 39442,
+          "personNights": 109467
+        },
+        {
+          "month": 7,
+          "arrivals": 45840,
+          "personNights": 126372
+        },
+        {
+          "month": 8,
+          "arrivals": 45854,
+          "personNights": 130048
+        },
+        {
+          "month": 9,
+          "arrivals": 49698,
+          "personNights": 127639
+        },
+        {
+          "month": 10,
+          "arrivals": 50388,
+          "personNights": 125738
+        },
+        {
+          "month": 11,
+          "arrivals": 41859,
+          "personNights": 104812
+        },
+        {
+          "month": 12,
+          "arrivals": 39115,
+          "personNights": 100628
+        }
+      ]
+    },
+    {
+      "istat": "076063",
+      "key": "potenza",
+      "name": "Potenza",
+      "sourceIstat": "076063",
+      "flag": "f",
+      "annualSourceRow": 3946,
+      "monthlySourceRow": 2217,
+      "arrivals": 37834,
+      "personNights": 59734,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 2764,
+          "personNights": 4188
+        },
+        {
+          "month": 2,
+          "arrivals": 2741,
+          "personNights": 4299
+        },
+        {
+          "month": 3,
+          "arrivals": 3531,
+          "personNights": 5407
+        },
+        {
+          "month": 4,
+          "arrivals": 3237,
+          "personNights": 5257
+        },
+        {
+          "month": 5,
+          "arrivals": 3853,
+          "personNights": 5778
+        },
+        {
+          "month": 6,
+          "arrivals": 3353,
+          "personNights": 5437
+        },
+        {
+          "month": 7,
+          "arrivals": 2600,
+          "personNights": 4529
+        },
+        {
+          "month": 8,
+          "arrivals": 2474,
+          "personNights": 4231
+        },
+        {
+          "month": 9,
+          "arrivals": 3414,
+          "personNights": 5259
+        },
+        {
+          "month": 10,
+          "arrivals": 3549,
+          "personNights": 5394
+        },
+        {
+          "month": 11,
+          "arrivals": 3453,
+          "personNights": 5336
+        },
+        {
+          "month": 12,
+          "arrivals": 2865,
+          "personNights": 4619
+        }
+      ]
+    },
+    {
+      "istat": "058091",
+      "key": "roma",
+      "name": "Roma",
+      "sourceIstat": "058091",
+      "flag": "f",
+      "annualSourceRow": 3234,
+      "monthlySourceRow": 1889,
+      "arrivals": 13482329,
+      "personNights": 50383357,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 705373,
+          "personNights": 3253265
+        },
+        {
+          "month": 2,
+          "arrivals": 767097,
+          "personNights": 3333876
+        },
+        {
+          "month": 3,
+          "arrivals": 968470,
+          "personNights": 4177661
+        },
+        {
+          "month": 4,
+          "arrivals": 1066982,
+          "personNights": 4678331
+        },
+        {
+          "month": 5,
+          "arrivals": 1063019,
+          "personNights": 4816756
+        },
+        {
+          "month": 6,
+          "arrivals": 1370584,
+          "personNights": 4705825
+        },
+        {
+          "month": 7,
+          "arrivals": 1341114,
+          "personNights": 4934553
+        },
+        {
+          "month": 8,
+          "arrivals": 1167624,
+          "personNights": 3752733
+        },
+        {
+          "month": 9,
+          "arrivals": 1380670,
+          "personNights": 4175645
+        },
+        {
+          "month": 10,
+          "arrivals": 1491582,
+          "personNights": 4714515
+        },
+        {
+          "month": 11,
+          "arrivals": 1102177,
+          "personNights": 3822084
+        },
+        {
+          "month": 12,
+          "arrivals": 1057637,
+          "personNights": 4018113
+        }
+      ]
+    },
+    {
+      "istat": "001272",
+      "key": "torino",
+      "name": "Torino",
+      "sourceIstat": "001272",
+      "flag": "f",
+      "annualSourceRow": 121,
+      "monthlySourceRow": 52,
+      "arrivals": 1831636,
+      "personNights": 4750749,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 125783,
+          "personNights": 343801
+        },
+        {
+          "month": 2,
+          "arrivals": 129046,
+          "personNights": 333510
+        },
+        {
+          "month": 3,
+          "arrivals": 151730,
+          "personNights": 426174
+        },
+        {
+          "month": 4,
+          "arrivals": 162297,
+          "personNights": 432737
+        },
+        {
+          "month": 5,
+          "arrivals": 177870,
+          "personNights": 454619
+        },
+        {
+          "month": 6,
+          "arrivals": 137392,
+          "personNights": 370850
+        },
+        {
+          "month": 7,
+          "arrivals": 154663,
+          "personNights": 412211
+        },
+        {
+          "month": 8,
+          "arrivals": 140545,
+          "personNights": 355211
+        },
+        {
+          "month": 9,
+          "arrivals": 153441,
+          "personNights": 397177
+        },
+        {
+          "month": 10,
+          "arrivals": 177809,
+          "personNights": 436532
+        },
+        {
+          "month": 11,
+          "arrivals": 165210,
+          "personNights": 409562
+        },
+        {
+          "month": 12,
+          "arrivals": 155850,
+          "personNights": 378365
+        }
+      ]
+    },
+    {
+      "istat": "022205",
+      "key": "trento",
+      "name": "Trento",
+      "sourceIstat": "022205",
+      "flag": "f",
+      "annualSourceRow": 1464,
+      "monthlySourceRow": 745,
+      "arrivals": 515586,
+      "personNights": 1367821,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 36265,
+          "personNights": 112175
+        },
+        {
+          "month": 2,
+          "arrivals": 34601,
+          "personNights": 109220
+        },
+        {
+          "month": 3,
+          "arrivals": 33602,
+          "personNights": 100087
+        },
+        {
+          "month": 4,
+          "arrivals": 33442,
+          "personNights": 85977
+        },
+        {
+          "month": 5,
+          "arrivals": 40817,
+          "personNights": 103814
+        },
+        {
+          "month": 6,
+          "arrivals": 45127,
+          "personNights": 114794
+        },
+        {
+          "month": 7,
+          "arrivals": 55877,
+          "personNights": 141270
+        },
+        {
+          "month": 8,
+          "arrivals": 63195,
+          "personNights": 148426
+        },
+        {
+          "month": 9,
+          "arrivals": 47816,
+          "personNights": 119524
+        },
+        {
+          "month": 10,
+          "arrivals": 39626,
+          "personNights": 107292
+        },
+        {
+          "month": 11,
+          "arrivals": 32261,
+          "personNights": 84843
+        },
+        {
+          "month": 12,
+          "arrivals": 52957,
+          "personNights": 140399
+        }
+      ]
+    },
+    {
+      "istat": "032006",
+      "key": "trieste",
+      "name": "Trieste",
+      "sourceIstat": "032006",
+      "flag": "f",
+      "annualSourceRow": 2072,
+      "monthlySourceRow": 1130,
+      "arrivals": 674246,
+      "personNights": 1665429,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 31542,
+          "personNights": 85292
+        },
+        {
+          "month": 2,
+          "arrivals": 33399,
+          "personNights": 85926
+        },
+        {
+          "month": 3,
+          "arrivals": 44442,
+          "personNights": 112493
+        },
+        {
+          "month": 4,
+          "arrivals": 62458,
+          "personNights": 150308
+        },
+        {
+          "month": 5,
+          "arrivals": 64156,
+          "personNights": 159112
+        },
+        {
+          "month": 6,
+          "arrivals": 61440,
+          "personNights": 154018
+        },
+        {
+          "month": 7,
+          "arrivals": 78336,
+          "personNights": 184059
+        },
+        {
+          "month": 8,
+          "arrivals": 86954,
+          "personNights": 202487
+        },
+        {
+          "month": 9,
+          "arrivals": 67131,
+          "personNights": 165803
+        },
+        {
+          "month": 10,
+          "arrivals": 59793,
+          "personNights": 147202
+        },
+        {
+          "month": 11,
+          "arrivals": 40538,
+          "personNights": 108040
+        },
+        {
+          "month": 12,
+          "arrivals": 44057,
+          "personNights": 110689
+        }
+      ]
+    },
+    {
+      "istat": "027042",
+      "key": "venezia",
+      "name": "Venezia",
+      "sourceIstat": "027042",
+      "flag": "f",
+      "annualSourceRow": 1849,
+      "monthlySourceRow": 1000,
+      "arrivals": 5858665,
+      "personNights": 12925741,
+      "months": [
+        {
+          "month": 1,
+          "arrivals": 265019,
+          "personNights": 599718
+        },
+        {
+          "month": 2,
+          "arrivals": 327233,
+          "personNights": 744190
+        },
+        {
+          "month": 3,
+          "arrivals": 405010,
+          "personNights": 935220
+        },
+        {
+          "month": 4,
+          "arrivals": 543267,
+          "personNights": 1242283
+        },
+        {
+          "month": 5,
+          "arrivals": 577499,
+          "personNights": 1297698
+        },
+        {
+          "month": 6,
+          "arrivals": 597031,
+          "personNights": 1281428
+        },
+        {
+          "month": 7,
+          "arrivals": 647341,
+          "personNights": 1350852
+        },
+        {
+          "month": 8,
+          "arrivals": 618991,
+          "personNights": 1336806
+        },
+        {
+          "month": 9,
+          "arrivals": 577064,
+          "personNights": 1255461
+        },
+        {
+          "month": 10,
+          "arrivals": 587502,
+          "personNights": 1306718
+        },
+        {
+          "month": 11,
+          "arrivals": 353280,
+          "personNights": 800203
+        },
+        {
+          "month": 12,
+          "arrivals": 359428,
+          "personNights": 775164
+        }
+      ]
+    }
+  ]
+}

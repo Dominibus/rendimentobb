@@ -1,3 +1,4 @@
+import {mountTourismContext} from './tourism-context-ui.js?v=20261028-rc217';
 import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261028-rc216';
 import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
 import {loadMunicipalities,municipalityCoverage,municipalityToolURL,municipalityLabel} from './municipalities.js?v=20261028-rc216';
@@ -10,7 +11,8 @@ function install(root){
  const mainCity=document.getElementById?.('market-city');
  let data=null,city=mainCity?null:territorialCity(root.dataset.city),selection={},generation=0,municipality=null;
  const search=document.createElement('section');search.className='rb-municipality-search';root.before(search);
- const picker=mountMunicipalityPicker(search,{onSelect:selectMunicipality,onEdit:()=>{municipality=null;city=null;generation++;data=null;setMunicipalityURL(null);renderUnavailable();}});
+ const tourismPanel=document.createElement('section');root.before(tourismPanel);const tourism=mountTourismContext(tourismPanel);
+ const picker=mountMunicipalityPicker(search,{onSelect:selectMunicipality,onEdit:()=>{municipality=null;city=null;generation++;data=null;setMunicipalityURL(null);tourism.select(null);renderUnavailable();}});
  function selectMunicipality(row){if(/^\/market\/[^/]+\/?$/.test(window.location?.pathname||'')&&municipalityCoverage(row)!==territorialCity(root.dataset.city)){window.location.assign('/market/?municipality='+encodeURIComponent(row.istat));return;}municipality=row;city=municipalityCoverage(row);picker.setSelection(row);if(mainCity){applyMunicipalityToTool(row);return;}setMunicipalityURL(row);load();}
  const t=(it,en)=>window.currentLang==='en'?en:it;
  const add=(parent,tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;parent.append(node);return node;};
@@ -24,13 +26,14 @@ function install(root){
   select.value=value;select.addEventListener('change',()=>change(select.value));return select;
  }
  async function load(){
+  const tourismIdentity=municipality?.istat||REGIONAL_CAPITALS.find(r=>r.key===city)?.istat;void tourism.select(tourismIdentity);
   const run=++generation;data=null;selection={};if(!city){root.setAttribute('aria-busy','false');renderUnavailable();return;}root.setAttribute('aria-busy','true');root.replaceChildren();add(root,'p',t('Carico il confronto documentato…','Loading the documented comparison…'));
   try{const result=await loadTerritorialCity(city);if(run!==generation)return;data=result;const best=data.rows.filter(r=>r[6]!==null).sort((a,b)=>b[6]-a[6])[0]||data.rows[0];selection=Object.fromEntries(SEGMENT_FIELDS.map((field,i)=>[field,String(best[i])]));render();}
   catch{if(run!==generation)return;root.replaceChildren();add(root,'h2',t('Confronto temporaneamente non disponibile','Comparison temporarily unavailable'));add(root,'p',t('Nessun numero viene sostituito con un’ipotesi interna. Riprova il caricamento.','No figures are substituted with an internal assumption. Retry loading.'));const retry=add(root,'button',t('Riprova','Retry'));retry.type='button';retry.onclick=load;}
   finally{if(run===generation)root.setAttribute('aria-busy','false');}
  }
  function renderUnavailable(){
-  root.replaceChildren();const box=add(root,'div',undefined,'rb-municipality-empty');if(!municipality){add(box,'h2',t('Scegli il comune da confrontare','Choose the municipality to compare'));add(box,'p',t('Cerca il nome e seleziona un risultato. Mostriamo soltanto dati riferiti al comune scelto, quando disponibili.','Search by name and select a result. We only show data for the selected municipality, when available.'));return;}add(box,'h2',t('Dati territoriali non disponibili','Territorial data unavailable'));add(box,'p',(municipality?municipalityLabel(municipality)+'. ':'')+t('Non abbiamo una fonte documentata per questo comune. Non usiamo i dati di un’altra città: puoi simulare con le tue ipotesi.','We have no documented source for this municipality. We do not use another city’s data: you can simulate with your own assumptions.'));if(municipality){const a=add(box,'a',t('Crea uno scenario per questo comune','Build a scenario for this municipality'));a.href=municipalityToolURL(municipality);}
+  root.replaceChildren();const box=add(root,'div',undefined,'rb-municipality-empty');if(!municipality){add(box,'h2',t('Scegli il comune da confrontare','Choose the municipality to compare'));add(box,'p',t('Cerca il nome e seleziona un risultato. Mostriamo soltanto dati riferiti al comune scelto, quando disponibili.','Search by name and select a result. We only show data for the selected municipality, when available.'));return;}add(box,'h2',t('Prezzi per notte non disponibili','Nightly prices unavailable'));add(box,'p',(municipality?municipalityLabel(municipality)+'. ':'')+t('Non abbiamo una serie di prezzi per notte documentata per questo comune. Non usiamo i dati di un’altra città: puoi simulare con le tue ipotesi.','We have no documented nightly price series for this municipality. We do not use another city’s data: you can simulate with your own assumptions.'));if(municipality){const a=add(box,'a',t('Crea uno scenario per questo comune','Build a scenario for this municipality'));a.href=municipalityToolURL(municipality);}
  }
  function render(focusField=null){
   if(!city){renderUnavailable();return;}if(!data)return;root.replaceChildren();root.classList.add('rb-territorial');root.setAttribute('aria-label',t('Confronto prezzi pubblicati','Advertised price comparison'));
@@ -86,7 +89,7 @@ function install(root){
  customInput?.addEventListener('input',updateCustom);
  document.addEventListener('rb_municipality_edit',updateCustom);
  document.addEventListener('rb_municipality_changed',event=>{municipality=event.detail;city=municipalityCoverage(municipality);picker.setSelection(municipality);load();});
- document.addEventListener('rb_language_changed',()=>render());
+ document.addEventListener('rb_language_changed',()=>{render();tourism.render();});
  const requested=new URLSearchParams(window.location?.search||'').get('municipality');
  if(!mainCity&&/^\d{6}$/.test(requested||'')){
   city=null;renderUnavailable();loadMunicipalities().then(rows=>{const row=rows.find(r=>r.istat===requested);if(row)selectMunicipality(row);}).catch(()=>{});
