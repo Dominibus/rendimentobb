@@ -32,6 +32,9 @@ jobs:
       - name: Controlla collegamenti editoriali esistenti
         if: always()
         run: python3 scripts/check-reference-links.py --output /tmp/rb-source-review/reference-links.json
+      - name: Copertura e coerenza dei 20 capoluoghi
+        if: always()
+        run: node scripts/audit-territorial-coverage.mjs /tmp/rb-source-review/coverage.json
       - name: Riepilogo
         if: always()
         run: |
