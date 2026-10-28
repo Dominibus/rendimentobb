@@ -1,4 +1,4 @@
-import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261027-rc205';
+import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261028-rc216';
 // ISTAT administrative identity is independent of the availability of market evidence.
 export const MUNICIPALITY_SOURCE='https://www.istat.it/classificazione/codici-dei-comuni-delle-province-e-delle-regioni/';
 export const COVERED_MUNICIPALITIES=Object.freeze(Object.fromEntries(TERRITORIAL_COVERAGE.map(row=>[row.istat,row.key])));

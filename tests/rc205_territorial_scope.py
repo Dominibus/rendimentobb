@@ -21,11 +21,17 @@ class MunicipalScope(unittest.TestCase):
   for mutation in [{'equals':'Puglia'},{'field':'neighbourhood'},{'kind':'nearest_city'}]:
    c=self.city();c['geographyFilter'].update(mutation)
    with self.assertRaises(ValueError):etl.aggregate_city([],c)
+ def test_trento_exact_source_label_excludes_rest_of_region(self):
+  city={'name':'Trento','geographyFilter':{'field':'neighbourhood_cleansed','equals':'Trento, Trentino','kind':'source_municipality'}}
+  rows=[fixture(i,neighbourhood_cleansed='Trento, Trentino') for i in range(1,13)]+[fixture(i,neighbourhood_cleansed='Trentino') for i in range(50,80)]
+  result=etl.aggregate_city(rows,city);self.assertEqual(result['regionalSourceRows'],42);self.assertEqual(result['sourceRows'],12);self.assertEqual(result['rows'][0][8],6.5)
+  city['geographyFilter']['equals']='Trentino'
+  with self.assertRaises(ValueError):etl.aggregate_city(rows,city)
  def test_original_city_aggregation_unchanged(self):
   rows=[fixture(i) for i in range(1,15)];self.assertEqual(etl.aggregate_city(rows,{'name':'Roma'}),etl.aggregate(rows))
- def test_current_live_catalog_checks_all_eight_without_downloading_or_deploying(self):
+ def test_current_live_catalog_checks_all_configured_without_downloading_or_deploying(self):
   config=json.loads((ROOT/'scripts/territorial-sources.json').read_text());html=''.join('<a href="'+c['url']+'">data</a>' for c in config['cities'])
   with tempfile.TemporaryDirectory() as out:
    r=refresh.prepare(config,html,out,date(2026,10,27),fetch=lambda *a:self.fail('Same snapshots must not download'))
-   self.assertEqual(len(r['checks']),8);self.assertEqual(r['status'],'up_to_date');self.assertFalse(r['published']);self.assertFalse((Path(out)/'candidate').exists())
+   self.assertEqual(len(r['checks']),9);self.assertEqual(r['status'],'up_to_date');self.assertFalse(r['published']);self.assertFalse((Path(out)/'candidate').exists())
 if __name__=='__main__':unittest.main()

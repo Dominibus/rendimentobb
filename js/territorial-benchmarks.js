@@ -1,4 +1,4 @@
-import {territorialDefinition} from './territorial-coverage.js?v=20261027-rc205';
+import {territorialDefinition} from './territorial-coverage.js?v=20261028-rc216';
 // Public source-derived asking prices. Never a substitute for booked ADR, occupancy or ROI.
 export const TERRITORIAL_METHOD='quoted-nightly-subtotal-v1';
 export const SEGMENT_FIELDS=['zone','propertyType','roomType','capacity','stayMonth','stayLength'];
@@ -20,7 +20,7 @@ export function exactTerritorialSegment(rows,selection){return rows.find(row=>SE
 export function territorialSummary(data,row,now=Date.now()){
  if(!row)return {status:'no_match',median:null,occupancy:null,adr:null,roi:null};
  const age=Math.floor((Number(now)-Date.parse(data.city.observationEnd+'T00:00:00Z'))/86400000);
- return {status:row[6]===null?'insufficient_sample':'available',city:data.city.key,source:data.city.url,snapshot:data.city.snapshot,observationStart:row[10],observationEnd:row[11],stayStart:row[12],stayEnd:row[13],ageDays:age,stale:age>180,minimumSample:10,
+ return {status:row[6]===null?'insufficient_sample':'available',city:data.city.key,source:data.city.url,snapshot:data.city.snapshot,observationStart:row[10],observationEnd:row[11],stayStart:row[12],stayEnd:row[13],ageDays:age,stale:age>180,quotedStayEnded:row[13]!==null&&row[13]<=new Date(Number(now)).toISOString().slice(0,10),minimumSample:10,
   n:row[6],p25:row[7],median:row[8],p75:row[9],currency:'EUR',measure:'advertised_base_nightly_rate',classification:'B',inputClassification:'D_documented_public_quote',verifiedBookings:false,occupancy:null,adr:null,roi:null};
 }
 const pending=new Map();

@@ -1,4 +1,4 @@
-import {territorialCity} from './territorial-benchmarks.js?v=20261023-rc192';
+import {territorialCity} from './territorial-benchmarks.js?v=20261028-rc216';
 import "./market-data.js?v=20261023-rc191";
 
 /* ================= FORMATTERS ================= */

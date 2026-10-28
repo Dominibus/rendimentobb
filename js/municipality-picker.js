@@ -1,5 +1,5 @@
 import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
-import {loadMunicipalities,searchMunicipalities,municipalityLabel,municipalityCoverage,MUNICIPALITY_SOURCE} from './municipalities.js?v=20261025-rc198';
+import {loadMunicipalities,searchMunicipalities,municipalityLabel,municipalityCoverage,MUNICIPALITY_SOURCE} from './municipalities.js?v=20261028-rc216';
 let sequence=0;
 export function mountMunicipalityPicker(parent,{input=null,selected=null,onSelect=()=>{},onEdit=()=>{},label=null,load=loadMunicipalities,language=()=>window.currentLang||'it',display=municipalityLabel}={}){
  const t=(it,en)=>language()==='en'?en:it;

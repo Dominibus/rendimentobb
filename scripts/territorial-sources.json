@@ -70,6 +70,18 @@
         "equals": "Palermo",
         "kind": "source_municipality"
       }
+    },
+    {
+      "key": "trento",
+      "name": "Trento",
+      "snapshot": "2026-09-28",
+      "url": "https://data.insideairbnb.com/italy/trentino-alto-adige-südtirol/trentino/2026-09-28/data/listings.csv.gz",
+      "sha256": "f675b932b2a3db6e8383a32df5e6104380eee962f3dcdfe9b773a519227b805e",
+      "geographyFilter": {
+        "field": "neighbourhood_cleansed",
+        "equals": "Trento, Trentino",
+        "kind": "source_municipality"
+      }
     }
   ]
 }

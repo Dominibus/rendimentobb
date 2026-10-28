@@ -1,9 +1,9 @@
-import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261027-rc205';
+import {TERRITORIAL_COVERAGE} from './territorial-coverage.js?v=20261028-rc216';
 import {REGIONAL_CAPITALS} from './regional-capitals.js?v=20261026-rc199';
-import {loadMunicipalities,municipalityCoverage,municipalityToolURL,municipalityLabel} from './municipalities.js?v=20261025-rc198';
-import {mountMunicipalityPicker} from './municipality-picker.js?v=20261026-rc199';
-import {applyMunicipalityToTool,setMunicipalityURL} from './municipality-tool.js?v=20261025-rc198';
-import {loadTerritorialCity,SEGMENT_FIELDS,exactTerritorialSegment,territorialSummary,territorialCity,territorialCSV} from './territorial-benchmarks.js?v=20261023-rc192';
+import {loadMunicipalities,municipalityCoverage,municipalityToolURL,municipalityLabel} from './municipalities.js?v=20261028-rc216';
+import {mountMunicipalityPicker} from './municipality-picker.js?v=20261028-rc216';
+import {applyMunicipalityToTool,setMunicipalityURL} from './municipality-tool.js?v=20261028-rc216';
+import {loadTerritorialCity,SEGMENT_FIELDS,exactTerritorialSegment,territorialSummary,territorialCity,territorialCSV} from './territorial-benchmarks.js?v=20261028-rc216';
 const roots=document.querySelectorAll('[data-territorial-benchmarks]');
 for(const root of roots)install(root);
 function install(root){
@@ -61,6 +61,7 @@ function install(root){
     const csv=territorialCSV(data,row,window.currentLang);if(!csv)return;
     const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='RendimentoBB-territorial-'+city+'-'+row[4]+'.csv';root.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
    };
+   if(result.quotedStayEnded)add(box,'p',t('Le date dei soggiorni quotati sono trascorse: usa il dato come riferimento storico, non come tariffa disponibile per una nuova prenotazione.','The quoted stay dates have passed: use this as a historical reference, not as an available rate for a new booking.'));
    if(result.stale)add(box,'p',t('Snapshot storico: oltre 180 giorni dall’ultima osservazione. Non descrive i prezzi attuali.','Historical snapshot: over 180 days since the last observation. It does not describe current prices.'));
   }else{
    add(box,'strong',t('Campione insufficiente','Insufficient sample'));

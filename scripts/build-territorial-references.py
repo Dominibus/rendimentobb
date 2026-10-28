@@ -67,7 +67,7 @@ def aggregate(rows):
 def aggregate_city(rows,city):
  selection=city.get('geographyFilter')
  if selection is None:return aggregate(rows)
- if selection!={'field':'neighbourhood_cleansed','equals':city['name'],'kind':'source_municipality'}:raise ValueError('Invalid municipality filter')
+ if selection!={'field':'neighbourhood_cleansed','equals':{'Trento':'Trento, Trentino'}.get(city['name'],city['name']),'kind':'source_municipality'}:raise ValueError('Invalid municipality filter')
  total=0
  def selected():
   nonlocal total

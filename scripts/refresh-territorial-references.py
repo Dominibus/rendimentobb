@@ -47,7 +47,7 @@ def prepare(config,html,out,today,fetch=download):
   checks.append({'city':city['key'],'currentSnapshot':city['snapshot'],'latestListedSnapshot':snapshot})
   if snapshot>city['snapshot']:
    changed.append(city['key']);city.update(snapshot=snapshot,url=url)
- report={'checkedAt':datetime.now(timezone.utc).isoformat(),'status':'up_to_date','checks':checks,'updatedCities':changed,'requiresReview':True,'published':False,'reviewWarnings':[]}
+ report={'checkedAt':datetime.now(timezone.utc).isoformat(),'status':'up_to_date','verificationScope':'Provider catalog dates only for unchanged snapshots; raw checksums validated during candidate builds','checks':checks,'updatedCities':changed,'requiresReview':True,'published':False,'reviewWarnings':[]}
  for city in candidate['cities']:
   current=json.loads((ROOT/'data/territorial'/(city['key']+'.json')).read_text())
   age=(today-date.fromisoformat(current['city']['observationEnd'])).days

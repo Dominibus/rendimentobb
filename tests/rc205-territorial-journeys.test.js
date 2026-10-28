@@ -10,9 +10,9 @@ import {stageCommercialTransfer,consumeCommercialTransfer} from '../js/commercia
 import {createCommercialDemo,calculateCommercial} from '../js/commercial-property-engine.js';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const json=p=>JSON.parse(read(p));
-test('RC205 eight exact administrative identities agree with sources and catalog; twelve capitals have no substitute',async()=>{
+test('RC205 nine exact administrative identities agree with sources and catalog; eleven capitals have no substitute',async()=>{
  const config=json('scripts/territorial-sources.json'),catalog=json('data/territorial/catalog.json');
- assert.equal(TERRITORIAL_COVERAGE.length,8);
+ assert.equal(TERRITORIAL_COVERAGE.length,9);
  const keys=TERRITORIAL_COVERAGE.map(c=>c.key).sort();
  assert.deepEqual(config.cities.map(c=>c.key).sort(),keys);assert.deepEqual(catalog.cities.map(c=>c.key).sort(),keys);
  let covered=0,unsupported=0;
@@ -22,9 +22,9 @@ test('RC205 eight exact administrative identities agree with sources and catalog
   if(definition){covered++;assert.equal(c.istat,definition.istat);const data=validateTerritorialData(json('data/territorial/'+c.key+'.json'),c.key);assert.equal(data.city.url,config.cities.find(r=>r.key===c.key).url);const row=data.rows.find(r=>r[6]!==null);const summary=territorialSummary(data,row);assert.equal(summary.adr,null);assert.equal(summary.occupancy,null);assert.equal(summary.roi,null);}
   else{unsupported++;await assert.rejects(loadTerritorialCity(c.key,{fetcher:()=>assert.fail('No fetch for an unsupported city')}),/CITY_NOT_COVERED/);}
  }
- assert.equal(covered,8);assert.equal(unsupported,12);assert.equal(territorialDefinition('venice').key,'venezia');
+ assert.equal(covered,9);assert.equal(unsupported,11);assert.equal(territorialDefinition('venice').key,'venezia');
 });
-for(const city of ['bari','palermo'])test('RC205 regional '+city+' aggregate fails closed when municipality scope is missing or mixed',()=>{
+for(const city of ['bari','palermo','trento'])test('RC205 regional '+city+' aggregate fails closed when municipality scope is missing or mixed',()=>{
  const data=json('data/territorial/'+city+'.json');assert.equal(validateTerritorialData(data,city),data);assert.ok(data.city.regionalSourceRows>data.city.sourceRows);
  for(const mutate of [d=>delete d.city.geographyFilter,d=>d.city.geographyFilter.equals='Regional average',d=>d.rows[0][0]='Other municipality']){const bad=structuredClone(data);mutate(bad);assert.throws(()=>validateTerritorialData(bad,city),/INVALID_MUNICIPALITY_SCOPE/);}
 });

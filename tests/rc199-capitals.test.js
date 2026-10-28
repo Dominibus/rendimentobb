@@ -13,7 +13,7 @@ for(const capital of REGIONAL_CAPITALS)test('capital reference never inherits na
  const table={italy:{roi:8,occupancy:60,adr:120},roma:{roi:9,occupancy:65,adr:130}};
  const actual=illustrativeCityReference(table,capital.key);
  assert.equal(actual,capital.key==='roma'?table.roma:null);
- if(!['roma','napoli','milano','firenze','bologna','venezia','bari','palermo'].includes(capital.key))assert.equal(municipalityCoverage(capital),null);
+ if(!['roma','napoli','milano','firenze','bologna','venezia','bari','palermo','trento'].includes(capital.key))assert.equal(municipalityCoverage(capital),null);
 });
 test('city reference accepts known aliases but rejects inherited and incomplete entries',()=>{
  const roma={roi:0,occupancy:0,adr:0};assert.equal(illustrativeCityReference({rome:roma},'Roma (RM)'),roma);

@@ -1,5 +1,5 @@
-import {mountMunicipalityPicker} from './municipality-picker.js?v=20261026-rc199';
-import {municipalityLocation} from './municipalities.js?v=20261025-rc198';
+import {mountMunicipalityPicker} from './municipality-picker.js?v=20261028-rc216';
+import {municipalityLocation} from './municipalities.js?v=20261028-rc216';
 for(const id of ['rb167-a-city','rb167-b-city']){
  const input=document.getElementById(id);if(!input)continue;
  const host=document.createElement('div');input.before(host);host.append(input);

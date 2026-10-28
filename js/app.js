@@ -22,7 +22,7 @@ import { renderFreeSimulationPreview } from "./free-preview.js?v=20261027-rc211"
 
 import {
 renderMarketBenchmark
-} from "./market-engine.js?v=20261027-rc211";
+} from "./market-engine.js?v=20261028-rc216";
 
 import {
 renderExecutiveKPI

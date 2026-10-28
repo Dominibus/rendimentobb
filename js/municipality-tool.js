@@ -1,4 +1,4 @@
-import {municipalityCoverage,municipalityLocation} from './municipalities.js?v=20261025-rc198';
+import {municipalityCoverage,municipalityLocation} from './municipalities.js?v=20261028-rc216';
 export function setMunicipalityURL(row){
  try{const url=new URL(window.location.href);if(row)url.searchParams.set('municipality',row.istat);else url.searchParams.delete('municipality');window.history.replaceState(null,'',url.pathname+url.search+url.hash);}catch{}
 }

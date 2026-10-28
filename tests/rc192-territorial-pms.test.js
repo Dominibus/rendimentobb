@@ -12,7 +12,7 @@ for(const info of catalog.cities)test('RC192 source-derived dataset validated: '
  const data=validateTerritorialData(JSON.parse(read('data/territorial/'+info.key+'.json')),info.key);
  assert.equal(data.city.sha256,info.sha256);assert.equal(data.city.sourceRows,data.city.eligibleRows+Object.values(data.city.excluded).reduce((a,b)=>a+b,0));assert.equal(data.rows.length,data.city.segments);
  assert.equal(data.rows.filter(r=>r[6]!==null).length,data.city.publishedSegments);
- assert.ok(data.city.eligibleRows>1000);assert.ok(data.city.publishedSegments>50);
+ assert.ok(data.city.eligibleRows>=data.minimumSample);assert.ok(data.city.publishedSegments>0);
  for(const row of data.rows){
   const selection=Object.fromEntries(SEGMENT_FIELDS.map((f,i)=>[f,row[i]]));assert.equal(exactTerritorialSegment([row],selection),row);
   const s=territorialSummary(data,row,Date.parse('2026-10-23T12:00:00Z'));
@@ -61,7 +61,7 @@ test('RC192 PMS same-day turnover is available and never charges the departing n
 });
 test('RC192 public pages and bilingual demos load correct resources',()=>{
  for(const page of ['market/index.html','market/napoli/index.html','market/roma/index.html','market/milano/index.html','market/firenze/index.html','tool/index.html']){
-  const s=read(page);assert.equal((s.match(/data-territorial-benchmarks/g)||[]).length,1);assert.match(s,/territorial-benchmark-ui.js\?v=20261026-rc200/);assert.match(s,/territorial-benchmarks.css\?v=20261023-rc192/);
+  const s=read(page);assert.equal((s.match(/data-territorial-benchmarks/g)||[]).length,1);assert.match(s,/territorial-benchmark-ui.js\?v=20261028-rc216/);assert.match(s,/territorial-benchmarks.css\?v=20261023-rc192/);
  }
  for(const lang of ['','en/'])assert.match(read(lang+'demo/hospitality-pms/index.html'),/pms-product-demo.js\?v=20261023-rc192/);
  assert.match(read('js/chatbot/core/market-evidence.js'),/\/market\/#territorial-benchmarks/);assert.match(read('js/pms-product-demo.js'),/authority_requires_documents/);

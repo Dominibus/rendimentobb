@@ -62,3 +62,40 @@ Bologna e Venezia usano i dataset cittadini. Bari e Palermo sono selezioni ESATT
 Escluso Trento: la fonte regionale disponibile non offriva nella prima verifica una selezione comunale univoca validata; non si pubblica la media del Trentino come media di Trento. Esclusi i restanti capoluoghi senza fonte compatibile in questo catalogo. Nessuna pretesa che fonti alternative non possano esistere.
 
 La configurazione e lo stesso elaboratore alimentano anche il workflow RC204: i quattro comuni nuovi partecipano ai controlli mensili successivi senza modifiche al cron. Nuove serie sempre sottoposte a revisione, non pubblicate automaticamente. Raw CSV regionali/cittadini solo nella cache privata temporanea, mai nello ZIP o nel repository. Python standard library, nessuna nuova dipendenza o API a pagamento.
+
+## RC216 — Trento e verifica della copertura
+
+La verifica del 28 ottobre 2026 estende la serie a Trento: 9 capoluoghi su 20.
+Il file regionale Trentino del 28 settembre 2026 distingue due etichette geografiche:
+`Trento, Trentino` (602 righe) e `Trentino` (9.635 righe). La prima compare anche
+nel GeoJSON di quartiere pubblicato dallo stesso fornitore. L'elaborazione seleziona
+ESATTAMENTE `neighbourhood_cleansed == "Trento, Trentino"`: non include le 9.635
+righe della seconda etichetta. Nome amministrativo Trento, ISTAT 022205; la
+geografia resta quella dichiarata dalla fonte, basata su coordinate approssimate,
+non una certificazione indipendente della posizione degli annunci o una garanzia
+di censimento completo del comune. Questa verifica supera l'esclusione prudenziale
+descritta nella sezione RC205, senza estenderla ad altre selezioni regionali.
+
+Risultato: 515 preventivi ammissibili, 175 segmenti, 11 pubblicabili. Esclusi 62
+preventivi per valuta e 25 non disponibili/mensili. Osservazioni del 28–29 settembre
+2026; le date dei soggiorni restano separate e visibili. Medesime formule, quartili,
+soglia 10 e soppressione dei gruppi piccoli delle altre città. Nessuna occupazione,
+ADR incassato o ROI territoriale aggiunto. Nessun dato delle altre otto città è
+stato ricalcolato o sostituito. Anche per uno snapshot recente il pannello ora
+avvisa se le date del soggiorno quotato sono trascorse.
+
+Fonte aggiunta e SHA-256 sono in `scripts/territorial-sources.json`; il controllo
+mensile comprende automaticamente Trento. Il comando
+`node scripts/audit-territorial-coverage.mjs /percorso/coverage.json` produce la matrice dei 20 capoluoghi e verifica coerenza
+fra configurazione, catalogo, aggregati, geografia e lettore pubblico. Il workflow
+allega `coverage.json` accanto a `report.json`: non introduce una pubblicazione
+automatica. L'esito `up_to_date` controlla le date del catalogo del provider; per
+snapshot invariati non riscarica né ricertifica il checksum dei CSV remoti.
+I checksum dei file scaricati per un candidato continuano a essere controllati.
+
+I campi `not_imported` nel rapporto si riferiscono a questa serie territoriale:
+prezzi di acquisto, canoni di lungo periodo e statistiche turistiche richiedono
+serie separate, unità, periodi e metodi propri. Le ipotesi interne del prodotto
+non diventano dati pubblici verificati. Restano senza serie compatibile validata:
+Ancona, Aosta, Cagliari, Campobasso, Catanzaro, Genova, L'Aquila, Perugia, Potenza,
+Torino e Trieste. Non si usano valori sostitutivi di città vicine.
