@@ -28,7 +28,8 @@ jobs:
           python3 -m unittest discover -s tests -p '*territorial*.py'
           python3 -m unittest discover -s tests -p 'rc203_reference_links.py'
           python3 -m unittest discover -s tests -p 'rc217_tourism.py'
-          node --test tests/rc217-tourism.test.js
+          node --test tests/rc217-tourism.test.js tests/rc218-omi.test.js
+          python3 -m unittest discover -s tests -p 'rc218_omi.py'
       - name: Prepara aggiornamento da revisionare
         run: python3 scripts/refresh-territorial-references.py --output-dir /tmp/rb-source-review
       - name: Controlla collegamenti editoriali esistenti
@@ -40,6 +41,9 @@ jobs:
       - name: Controllo archivio ISTAT (nessuna pubblicazione)
         if: always()
         run: python3 scripts/check-tourism-source.py --output /tmp/rb-source-review/tourism-source.json
+      - name: Integrità e anzianità della fornitura OMI locale
+        if: always()
+        run: node scripts/audit-omi.mjs /tmp/rb-source-review/omi-integrity.json
       - name: Riepilogo
         if: always()
         run: |
@@ -50,6 +54,10 @@ jobs:
           if [ -f /tmp/rb-source-review/tourism-source.json ]; then
             echo '## Archivio ISTAT (controllo impronta, non certificazione dei valori)' >> "$GITHUB_STEP_SUMMARY"
             cat /tmp/rb-source-review/tourism-source.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f /tmp/rb-source-review/omi-integrity.json ]; then
+            echo '## OMI (integrità locale, ultimo semestre del provider non verificato)' >> "$GITHUB_STEP_SUMMARY"
+            cat /tmp/rb-source-review/omi-integrity.json >> "$GITHUB_STEP_SUMMARY"
           fi
       - uses: actions/upload-artifact@v6
         if: always()
