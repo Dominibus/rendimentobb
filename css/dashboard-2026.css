@@ -1531,3 +1531,40 @@ body.dashboard-bg {
     text-align: left;
   }
 }
+
+/* RC215: property summary labels must wrap on phones and short landscape views. */
+@media (max-width: 900px) {
+  #pms-properties-section .property-revenue-meta {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  #pms-properties-section .property-revenue-meta > div {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center;
+    align-items: stretch !important;
+    grid-column: auto !important;
+    min-width: 0;
+    max-width: 100%;
+    height: auto !important;
+    padding: 12px !important;
+    gap: 6px !important;
+    text-align: center;
+    white-space: normal !important;
+  }
+
+  #pms-properties-section .property-revenue-meta strong,
+  #pms-properties-section .property-revenue-meta span {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    height: auto !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+    letter-spacing: normal !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+}
