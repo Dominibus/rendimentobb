@@ -27,6 +27,8 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p '*territorial*.py'
           python3 -m unittest discover -s tests -p 'rc203_reference_links.py'
+          python3 -m unittest discover -s tests -p 'rc217_tourism.py'
+          node --test tests/rc217-tourism.test.js
       - name: Prepara aggiornamento da revisionare
         run: python3 scripts/refresh-territorial-references.py --output-dir /tmp/rb-source-review
       - name: Controlla collegamenti editoriali esistenti
@@ -35,12 +37,19 @@ jobs:
       - name: Copertura e coerenza dei 20 capoluoghi
         if: always()
         run: node scripts/audit-territorial-coverage.mjs /tmp/rb-source-review/coverage.json
+      - name: Controllo archivio ISTAT (nessuna pubblicazione)
+        if: always()
+        run: python3 scripts/check-tourism-source.py --output /tmp/rb-source-review/tourism-source.json
       - name: Riepilogo
         if: always()
         run: |
           if [ -f /tmp/rb-source-review/report.json ]; then
             echo '## Esito controllo fonti (nessuna pubblicazione)' >> "$GITHUB_STEP_SUMMARY"
             cat /tmp/rb-source-review/report.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f /tmp/rb-source-review/tourism-source.json ]; then
+            echo '## Archivio ISTAT (controllo impronta, non certificazione dei valori)' >> "$GITHUB_STEP_SUMMARY"
+            cat /tmp/rb-source-review/tourism-source.json >> "$GITHUB_STEP_SUMMARY"
           fi
       - uses: actions/upload-artifact@v6
         if: always()
