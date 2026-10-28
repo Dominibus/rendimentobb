@@ -54,8 +54,12 @@ test('RC199 regional shortcut cancels a pending municipality search and keeps IT
  const host=new E();let selected;const picker=mountMunicipalityPicker(host,{load:()=>new Promise(resolve=>release=resolve),onSelect:r=>selected=r});
  picker.input.value='Roma';picker.input.fire('input');await tick();
  const capital=host.find(n=>n.tag==='select');capital.value='001272';await capital.fire('change');assert.equal(selected.name,'Torino');assert.match(picker.input.value,/Torino/);
+ const coverage=host.find(n=>n.className==='rb-capital-coverage');assert.equal(coverage.hidden,false);assert.match(coverage.textContent,/Prezzi turistici per notte: dati non disponibili/);assert.match(coverage.textContent,/OMI e ISTAT hanno coperture separate/);assert.equal(capital.attrs['aria-describedby'],coverage.id);
+ assert.equal(capital.children.length,21);for(const option of capital.children.slice(1)){assert.match(option.textContent,/^.+ \([A-Z]{2}\)$/);assert.doesNotMatch(option.textContent,/ · |ipotesi proprie|confronto disponibile/);}assert.equal(capital.children.find(n=>n.value==='001272').textContent,'Torino (TO)');
  release(rows);await tick();assert.equal(picker.input.attrs['aria-expanded'],'false');assert.equal(picker.getSelection().istat,'001272');
- window.currentLang='en';events.rb_language_changed();assert.equal(capital.value,'001272');assert.ok(host.text().includes('regional capital'));
+ window.currentLang='en';events.rb_language_changed();assert.equal(capital.value,'001272');assert.ok(host.text().includes('regional capital'));assert.match(coverage.textContent,/Nightly tourist prices: data unavailable/);assert.match(coverage.textContent,/OMI and ISTAT have separate coverage/);
+ capital.value='058091';await capital.fire('change');assert.equal(selected.istat,'058091');assert.match(coverage.textContent,/documented comparison available/);assert.doesNotMatch(coverage.textContent,/data unavailable/);
+ picker.input.value='Roma modificata';await picker.input.fire('input');assert.equal(coverage.hidden,true);assert.equal(coverage.textContent,'');assert.equal(picker.getSelection(),null);
  delete globalThis.window;delete globalThis.document;
 });
 test('RC200 opening Market without a municipality never preselects an unsupported capital',async()=>{

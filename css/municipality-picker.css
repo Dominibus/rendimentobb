@@ -5,3 +5,6 @@
 
 #city-select{max-width:100%;min-height:44px;font-size:16px}.rb-capital-reference-note{font-size:.85rem;line-height:1.6;color:#405e50}.rb-capital-reference-link{display:inline-flex;align-items:center;min-height:44px;color:#075c43;font-weight:650;white-space:normal}
 .rb-municipality-picker label[hidden]{display:none!important}
+
+/* RC219: keep native options short; show price-series coverage outside the selector. */
+.rb-municipality-picker .rb-capital-select{min-width:0;padding-right:32px}.rb-municipality-picker .rb-capital-coverage{padding:10px 12px;border-left:3px solid #08785b;background:#edf8f2;border-radius:8px;white-space:normal;overflow-wrap:anywhere}.rb-municipality-picker .rb-capital-coverage[hidden]{display:none}
