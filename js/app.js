@@ -516,18 +516,16 @@ async function saveAnalysis(data){
 
   try{
 
-    const safeMarketCity =
-  data.marketCity ||
-  window.currentCity ||
-  sessionStorage.getItem("tool_city") ||
-  localStorage.getItem("selected_city") ||
-  "";
+    // Explicit empty fields mean that this analysis has no selected location.
+    // Browser memories are a fallback only for legacy callers omitting the fields.
+    const safeMarketCity = data.marketCity !== undefined
+      ? String(data.marketCity ?? "").trim()
+      : window.currentCity || sessionStorage.getItem("tool_city") ||
+        localStorage.getItem("selected_city") || "";
 
-const safeRealCity =
-  data.realCity ||
-  data.city ||
-  document.getElementById("custom-location")?.value?.trim() ||
-  safeMarketCity;
+    const safeRealCity = data.realCity !== undefined
+      ? String(data.realCity ?? "").trim()
+      : data.city || document.getElementById("custom-location")?.value?.trim() || safeMarketCity;
 
 await addDoc(collection(db,"analyses"),{
 
