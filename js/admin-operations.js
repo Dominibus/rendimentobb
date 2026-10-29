@@ -1,6 +1,6 @@
 import {auth} from './firebase-init.js?v=20261016-rc140';
 import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
-import {renderOperations} from './admin-operations-view.js?v=20261029-rc228';
+import {renderOperations} from './admin-operations-view.js?v=20261029-rc229';
 const root=document.getElementById('operations-content');
 const feedback=document.getElementById('operations-feedback');
 const refresh=document.getElementById('operations-refresh');
@@ -9,8 +9,12 @@ const allowed=user=>user?.emailVerified===true&&String(user.email||'').toLowerCa
 let data=null,generation=0,controller=null,state='locked',loadedAt=0;
 function paint(){
  refresh.disabled=!allowed(auth.currentUser)||state==='loading';
+ const openDetails=new Set(Array.from(root.querySelectorAll?.('details[id]')||[]).filter(e=>e.open).map(e=>e.id));
  root.replaceChildren();
- if(data)renderOperations(root,data,window.currentLang);
+ if(data){
+  renderOperations(root,data,window.currentLang);
+  for(const element of root.querySelectorAll?.('details[id]')||[])element.open=openDetails.has(element.id);
+ }
  feedback.textContent=state==='locked'?t('Accesso riservato all’amministratore con email verificata.','Access requires an administrator with a verified email.'):
  state==='loading'?t('Lettura dei dati operativi…','Reading operational data…'):
  state==='error'?t('Lettura non riuscita. I dati precedenti sono stati rimossi: premi Aggiorna per riprovare.','Read failed. Previous data have been cleared: select Refresh to retry.'):

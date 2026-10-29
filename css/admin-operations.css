@@ -36,3 +36,14 @@
 .ops-source-summary{min-height:44px;box-sizing:border-box;padding:10px 0;cursor:pointer;overflow-wrap:anywhere;line-height:1.5}
 .ops-source-summary:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
 .ops-source-registry a{display:inline-block;min-height:44px;padding:10px 0;box-sizing:border-box;color:#14533f}
+
+/* RC229: founder task list and recorded work, before optional technical details. */
+.ops-management section{margin:24px 0}.ops-management article{min-width:0;overflow-wrap:anywhere}
+.ops-management li{margin:10px 0;line-height:1.6}.ops-management ol{padding-left:24px}
+.ops-management a{display:inline-block;min-height:44px;box-sizing:border-box;padding:10px 14px;margin:4px 8px 4px 0;border:1px solid #abc8bc;border-radius:10px;color:#14533f;background:white;overflow-wrap:anywhere}
+.ops-review-card{padding:18px;margin:14px 0;border:1px solid #d8ae61;border-left:5px solid #b87512;border-radius:12px;background:#fffdf5}
+.ops-review-card summary,.ops-technical>summary{min-height:44px;box-sizing:border-box;padding:12px 0;cursor:pointer;line-height:1.5;font-weight:700}
+.ops-technical{margin:28px 0;border-top:1px solid #cbd5e1;padding-top:12px}
+.ops-management a:focus-visible,.ops-review-card summary:focus-visible,.ops-technical>summary:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+#ops-your-actions,#ops-system-work,#ops-alert-guide{scroll-margin-top:110px}
+@media(max-width:480px){.ops-review-card{padding:14px}.ops-management a{display:block;margin-right:0}}

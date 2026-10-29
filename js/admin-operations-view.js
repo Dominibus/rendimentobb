@@ -1,5 +1,6 @@
 import {controlSummary} from './admin-control-model.js?v=20261022-rc178';
 import {renderSourceRegistry} from './admin-source-registry-view.js?v=20261029-rc228';
+import {renderManagement} from './admin-management-view.js?v=20261029-rc229';
 const copy={
  task_notifications:['Email PMS','PMS emails'],analysis_reminders:['Promemoria analisi','Analysis reminders'],
  withdrawal_receipts:['Ricevute recesso','Withdrawal receipts'],subscription_confirmations:['Conferme abbonamento','Subscription confirmations'],
@@ -12,6 +13,9 @@ const copy={
  expiredReminders:['Promemoria scaduti','Expired reminders'],oldestDueAgeMs:['Ritardo più vecchio registrato (min)','Recorded oldest delay (min)']
 };
 export function renderOperations(root,data,language='it',now=Date.now()){
+ renderManagement(root,data,language,now);
+ const evidence=root.ownerDocument.createElement('details');evidence.className='ops-technical';evidence.id='ops-technical';
+ const title=root.ownerDocument.createElement('summary');title.textContent=language==='en'?'Technical evidence and complete source registry':'Dettagli tecnici e registro completo delle fonti';evidence.append(title);root.append(evidence);root=evidence;
  const en=language==='en',t=(it,eng)=>en?eng:it;
  const label=key=>copy[key]?.[en?1:0]||key;
  const doc=root.ownerDocument;
