@@ -595,8 +595,8 @@ box-shadow:
 <link rel="stylesheet" href="/css/mobile-app-rc186.css?v=20261029-rc221">
 <link rel="stylesheet" href="/css/mobile-shell.css?v=20261029-rc221">
 <script src="/js/mobile-shell.js?v=20261029-rc221" defer></script>
-<link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc223">
-<script src="/js/free-flow-rc222.js?v=20261029-rc223" defer></script>
+<link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc225">
+<script src="/js/free-flow-rc222.js?v=20261029-rc225" defer></script>
 </head>
 
 <body class="mortgage-page">
@@ -958,15 +958,16 @@ data-it-placeholder="Ricavi annui B&B" data-en-placeholder="Annual B&B revenue">
 <label class="mortgage-field"><span data-it="Aliquota del modello (%)" data-en="Model tax rate (%)">Aliquota del modello (%)</span><input id="transfer-tax" inputmode="decimal"></label>
 </div></details>
 <button class="btn-main"
-id="calc-btn"
+id="calc-btn" type="button" disabled aria-describedby="mortgage-ready-status"
 
 data-it="Calcola impatto"
 data-en="Calculate impact">
 Calcola impatto
 </button>
 
+<p id="mortgage-ready-status" role="status" data-it="Preparazione del calcolatore…" data-en="Preparing the calculator…">Preparazione del calcolatore…</p>
 <p id="mortgage-input-status" role="alert"></p>
-<button type="button" class="btn-main" onclick="continueMortgage()" data-it="Continua in Analizza →" data-en="Continue in Analyze →">Continua in Analizza →</button>
+<button type="button" class="btn-main" data-mortgage-transfer disabled aria-describedby="mortgage-ready-status" onclick="continueMortgage()" data-it="Continua in Analizza →" data-en="Continue in Analyze →">Continua in Analizza →</button>
 <p data-it="Importo, durata, tasso e ricavi vengono trasferiti. In Analizza completa prezzo, capitale proprio e costi." data-en="Amount, duration, rate and revenue are transferred. In Analyze complete the purchase price, equity and costs.">Importo, durata, tasso e ricavi vengono trasferiti. In Analizza completa prezzo, capitale proprio e costi.</p>
 <div id="roi-alert" class="roi-alert"></div>
 
@@ -2311,10 +2312,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const btn = document.getElementById("calc-btn");
 
-  if(btn){
+  if(btn && typeof window.RBInvestmentJourney?.payment === "function"){
     btn.addEventListener("click", calculate);
-  }else{
-    
+    btn.disabled = false;
+    document.querySelector("[data-mortgage-transfer]").disabled = false;
+    const ready = document.getElementById("mortgage-ready-status");
+    ready.dataset.it = "Calcolatore pronto";
+    ready.dataset.en = "Calculator ready";
+    ready.textContent = t(ready.dataset.it, ready.dataset.en);
   }
 
   document.addEventListener("rb_language_changed", () => {

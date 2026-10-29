@@ -786,8 +786,8 @@ SAFE
 <link rel="stylesheet" href="/css/mobile-app-rc186.css?v=20261029-rc221">
 <link rel="stylesheet" href="/css/mobile-shell.css?v=20261029-rc221">
 <script src="/js/mobile-shell.js?v=20261029-rc221" defer></script>
-<link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc223">
-<script src="/js/free-flow-rc222.js?v=20261029-rc223" defer></script>
+<link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc225">
+<script src="/js/free-flow-rc222.js?v=20261029-rc225" defer></script>
 </head>
 
 <body class="tool-page">
@@ -1343,7 +1343,7 @@ margin-top:12px;
           <strong id="profit-live">—</strong>
         </div>
 
-        <div class="metric">
+        <div class="metric rb225-property-return">
           <span data-it="Cashflow / valore immobile stimato" data-en="Estimated cashflow / property value"></span>
           <strong id="roi-preview-live">—</strong>
         </div>
@@ -1360,17 +1360,11 @@ margin-top:12px;
 
       </div>
 
-      <!-- CHART -->
-      <div
-class="roi-chart"
-style="
-margin-top:34px;
-max-width:230px;
-margin-left:auto;
-margin-right:auto;
-">
-        <canvas id="roiChart"></canvas>
-      </div>
+      <details class="rb225-return-method">
+        <summary data-it="Come leggere il rendimento" data-en="How to read the return">Come leggere il rendimento</summary>
+        <p data-it="Cashflow / valore immobile = cashflow annuo simulato / prezzo o valore indicato. ROI sul capitale proprio = cashflow annuo simulato / capitale proprio. Sono rapporti diversi; senza un denominatore positivo il relativo indicatore non è applicabile." data-en="Cashflow / property value = simulated annual cashflow / stated price or value. Return on equity = simulated annual cashflow / equity. These are different ratios; without a positive denominator the relevant metric is not applicable.">Cashflow / valore immobile = cashflow annuo simulato / prezzo o valore indicato. ROI sul capitale proprio = cashflow annuo simulato / capitale proprio. Sono rapporti diversi; senza un denominatore positivo il relativo indicatore non è applicabile.</p>
+        <p data-it="Il rendimento non è una probabilità di successo o un ricavo garantito. Verifica ricavi, costi, imposte e finanziamento nelle tue ipotesi." data-en="Return is not a probability of success or guaranteed income. Review revenue, costs, taxes and financing under your assumptions.">Il rendimento non è una probabilità di successo o un ricavo garantito. Verifica ricavi, costi, imposte e finanziamento nelle tue ipotesi.</p>
+      </details>
 
       <!-- RISK -->
       <div id="risk-bar" style="margin-top:15px;"></div>
@@ -2112,7 +2106,7 @@ window.updateInvestmentScore = function(score){
 
 </script>  
   
-<script type="module" src="/js/app.js?v=20261029-rc222"></script>
+<script type="module" src="/js/app.js?v=20261029-rc225"></script>
 
 <script>
 

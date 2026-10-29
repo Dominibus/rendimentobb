@@ -3789,9 +3789,9 @@ const visualROI =
 // 🔥 salva ROI stimato globale
 window.realROI = realROI;
 
-// 🔥 render chart con cap visivo
+// Reveal computed results only after a successful analysis.
 document.body?.setAttribute("data-rb-analysis-ready", "true");
-renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI, access.isFree ? result.propertyROIAvailable : result.roiAvailable);
+document.querySelector(".rb225-property-return")?.classList.toggle("rb225-duplicate", !!access.isFree);
 
 // 🔥 testo reale
 const roiText = realROI.toFixed(1) + "%";
@@ -4889,87 +4889,6 @@ window.roiChartInstance = new Chart(ctx,{
         }
       }
 
-    }
-
-  });
-
-}
-
-// ================= MAIN ROI CHART (FIX DEFINITIVO) =================
-function renderROIChart(roi, available = true){
-
-  const canvas = document.getElementById("roiChart");
-
-  if(!canvas){
-    appDebugWarn("⛔ roiChart non trovato");
-    return;
-  }
-
-  const frame = canvas.closest?.('.roi-chart') || canvas.parentElement;
-  if(frame){frame.hidden = !available;frame.style.display = available ? '' : 'none';}
-  if(!available){
-    window.mainROIChart?.destroy();
-    window.mainROIChart = null;
-    return;
-  }
-  if(typeof Chart === "undefined"){
-    appDebugWarn("⛔ Chart.js non caricato");
-    return;
-  }
-
-  const ctx = canvas.getContext("2d");
-
-  // 🔥 destroy vecchio
-  if(window.mainROIChart){
-    window.mainROIChart.destroy();
-  }
-
-  // 🔥 colore dinamico
-  let color = "#ef4444";
-
-  if(roi >= 20){
-    color = "#10b981";
-  }
-  else if(roi >= 10){
-    color = "#f59e0b";
-  }
-
-  window.mainROIChart = new Chart(ctx,{
-
-    type:"doughnut",
-
-    data:{
-      labels:["ROI","Remaining"],
-
-      datasets:[{
-        data:[
-          Math.min(roi,100),
-          Math.max(0,100-roi)
-        ],
-
-        backgroundColor:[
-          color,
-          "#e5e7eb"
-        ],
-
-        borderWidth:0
-      }]
-    },
-
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      cutout:"78%",
-
-      plugins:{
-        legend:{
-          display:false
-        },
-
-        tooltip:{
-          enabled:false
-        }
-      }
     }
 
   });

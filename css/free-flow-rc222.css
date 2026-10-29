@@ -150,3 +150,15 @@ body.cm-page .cm-hero>.rb222-group{margin:12px 0;box-shadow:none}
   overflow-wrap:normal!important;word-break:normal!important;flex-shrink:0;
  }
 }
+/* RC225: compact results without arbitrary ROI progress/composition graphics. */
+body.tool-page .roi-main{align-items:start!important;gap:10px 16px!important}
+body.tool-page .roi-metrics{min-height:0!important;height:auto!important;align-self:start;align-content:start;grid-auto-rows:min-content}
+body.tool-page .roi-metrics .metric{min-height:0!important;height:auto!important;padding:12px 14px!important}
+body.tool-page .rb225-property-return.rb225-duplicate{display:none!important}
+body.tool-page .rb225-return-method{grid-column:1/-1;min-width:0;margin:6px 0 0;padding:12px 14px;border:1px solid #cfdfd8;border-radius:12px;background:#f1f8f4;color:#234b3f}
+body.tool-page .rb225-return-method summary{cursor:pointer;font-size:14px;font-weight:700;line-height:1.5}
+body.tool-page .rb225-return-method p{font-size:13px;line-height:1.6;margin:10px 0 0}
+body.tool-page .rb225-return-method summary:focus-visible{outline:3px solid #087e61;outline-offset:4px}
+.rb225-demo-context{max-width:1120px;margin:12px auto;padding:12px 16px;border-left:3px solid #087e61;background:#edf6f1;color:#234b3f;font-size:14px;line-height:1.6}
+#mortgage-ready-status{font-size:13px;line-height:1.5;color:#31594a}
+#calc-btn:disabled,[data-mortgage-transfer]:disabled{opacity:.55;cursor:wait}

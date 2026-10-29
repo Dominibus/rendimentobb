@@ -56,9 +56,4 @@ test('owned zero-capital verdict never describes N/A as inferior ROI or recommen
   assert.doesNotMatch(els['investment-verdict'].innerHTML,/ACQUISTA|>BUY|ROI inferiore|ROI below/);assert.match(els['investment-verdict'].innerHTML,/GESTIONE|MANAGEMENT/);assert.match(els['investment-risk-meter'].innerHTML,lang==='en'?/Unavailable ROI is excluded/:/ROI non applicabile è escluso/);
  }
 });
-test('main ROI donut disappears for unavailable ROI and can render the next valid scenario',()=>{
- const start=app.indexOf('function renderROIChart('),end=app.indexOf('\nfunction ',start+20);const code=app.slice(start,end);
- const frame={style:{}},canvas={closest:()=>frame,getContext:()=>({})};let created=0,destroyed=0;
- const c={window:{},document:{getElementById:()=>canvas},Chart:class{constructor(){created++;}destroy(){destroyed++;}},appDebugWarn(){}};
- vm.runInNewContext(code,c);c.renderROIChart(10,true);assert.equal(created,1);c.renderROIChart(0,false);assert.equal(frame.style.display,'none');assert.equal(destroyed,1);c.renderROIChart(8,true);assert.equal(created,2);assert.equal(frame.hidden,false);
-});
+// The tool no longer renders an ROI donut (RC225). N/A financial-state tests above remain applicable.
