@@ -8,9 +8,16 @@ import { calculateMortgage } from "./mortgage-engine.js?v=20261012-rc106";
 // ================= CORE ENGINE =================
 function calculateROI(input = {}){
 
+  if(!input || typeof input !== 'object' || Array.isArray(input)){
+    const error=new RangeError('Invalid ROI input');error.code='roi/invalid_input';throw error;
+  }
+  // Omitted/undefined fields keep the existing optional-input defaults.
+  // An explicitly missing or non-numeric value must not become intentional zero.
   // Invalid supplied numbers must not become apparently valid financial results.
   for(const field of ['price','equity','loanAmount','priceNight','occupancy','expenses','commission','tax','interestRate','loanYears']){
-    if(input[field]!==undefined && !Number.isFinite(Number(input[field]))){
+    const value=input[field];
+    if(value!==undefined && (value===null || !['number','string'].includes(typeof value) ||
+       String(value).trim()==='' || !Number.isFinite(Number(value)))){
       const error=new RangeError(`Invalid ROI input: ${field}`);error.code='roi/invalid_input';throw error;
     }
   }

@@ -19,6 +19,6 @@ test('report export metadata preserves distinct cashflow yield and cap rate',()=
 test('actual report metadata call registers cashflow/value and NOI/value separately',()=>{
  const h=helpers(),start=html.indexOf('window.lastExecutiveReport ='),end=html.indexOf('});',start)+3;
  const fallback={net:9799.82,noi:22976.25},window={buildExecutiveReport:v=>v};
- vm.runInNewContext(html.slice(start,end),{window,fallback,city:'Citta fittizia',price:150000,capRate:15.3175,risk:25,equity:30000,loan:120000,annualProfit:9799.82,score:86,canonicalVerdict:'BUY',reportCashflowYield:h.reportCashflowYield});
+ vm.runInNewContext(html.slice(start,end),{window,fallback,city:'Citta fittizia',price:150000,capRate:15.3175,roi:32.666,pdfState:{roiNotApplicable:false,incomplete:false},risk:25,equity:30000,loan:120000,annualProfit:9799.82,score:86,canonicalVerdict:'BUY',reportCashflowYield:h.reportCashflowYield});
  assert.equal(window.lastExecutiveReport.capRate,15.3175);assert.ok(Math.abs(window.lastExecutiveReport.realROI-6.533213333333333)<1e-9);assert.equal(window.lastExecutiveReport.net,9799.82);
 });

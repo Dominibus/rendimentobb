@@ -6,7 +6,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('report language event redraws saved results and preserves selected simulation',()=>{
  const s=read('dashboard-report/index.html');const start=s.indexOf('document.addEventListener("rb_language_changed", () => {',s.indexOf('// ================= START ================='));
  const end=s.indexOf('\n});',start)+4;let refresh;const selector={value:'2'};const calls=[];
- const c={lang:'it',reportOwnerUid:'annual',price:150000,isPro:true,window:{currentUser:{uid:'annual'},currentLang:'en',applyTranslations:()=>calls.push('static')},document:{addEventListener:(name,fn)=>refresh=fn,getElementById:()=>selector}};
+ const c={lang:'it',reportOwnerUid:'annual',ownedProperty:false,price:150000,isPro:true,window:{currentUser:{uid:'annual'},currentLang:'en',applyTranslations:()=>calls.push('static')},document:{addEventListener:(name,fn)=>refresh=fn,getElementById:()=>selector}};
  for(const name of ['renderData','renderVerdict','renderOperationalReport','renderChart','renderAdvanced']) c[name]=()=>calls.push(name);
  c.populateSimulations=()=>{selector.value='0';};vm.createContext(c);vm.runInContext(s.slice(start,end),c);
  refresh();assert.equal(c.lang,'en');assert.equal(selector.value,'2');assert.equal(calls.length,6);
