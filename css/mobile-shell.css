@@ -1,0 +1,43 @@
+/* RC221: consistent persistent navigation and touch layout across public/portal shells. */
+@media(max-width:760px){
+ body[data-public-shell].rb-mobile-app{padding-top:82px}
+ .rb-public-inner{min-height:80px;flex-wrap:nowrap;justify-content:space-between;padding:10px 16px}
+ .rb-public-header .rb-public-brand{width:180px;margin:0}
+ .rb-public-brand>span{justify-content:center}
+ .rb-public-brand small{display:none}
+ .rb-public-actions{width:auto;gap:8px;margin:0}
+ .rb-public-header .rb-public-languages,.rb-public-header .rb-public-login{display:none}
+ .rb-public-header .rb-public-menu>nav .rb-public-languages{display:flex}
+ .rb-public-header .rb-public-menu>nav .rb-public-login{display:inline-flex}
+ .rb-public-header .rb-public-assistant-panel{position:fixed;top:84px;right:16px;max-height:calc(100dvh - 190px)}
+ .rb-public-header .rb-public-menu>nav{max-height:calc(100dvh - 190px)}
+ .rb-public-header summary{min-height:44px;min-width:44px}
+ body[data-public-shell] .bb-section{scroll-margin-top:96px}
+ .rb-public-footer.global-footer{background:#07111f;color:#eaf5ef;margin-top:32px}
+ .rb-public-footer .footer-cta h3,.rb-public-footer .footer-col strong{color:#eaf5ef}
+ .rb-public-footer .footer-col p,.rb-public-footer .footer-col a,.rb-public-footer .footer-bottom{color:#adbfca}
+ .rb-public-footer .footer-cta,.rb-public-footer .footer-bottom{border-color:#ffffff26}
+ .rb-public-footer .footer-socials a,.rb-public-footer .rb-public-proposal a{color:#c5d9df}
+ .rb-public-footer .footer-col:first-child{grid-column:auto}
+ /* Only nested sections lose the spacing reserved for standalone page sections. */
+ .rb-flow-content>section{padding-block:20px;margin-block:0}
+ .rb-flow-content>section>.container{padding-block:0}
+ body.home-page .rb158-preview{padding:16px}
+ body.home-page .rb158-preview .rb158-preview-checks{gap:8px}
+}
+@media(max-width:760px){
+ /* Local task shortcuts remain below the measured header after reaching them. */
+ body.rb-mobile-app #dashboard-workspace-nav,
+ body.rb-mobile-app .cw-tabs{position:sticky;top:var(--rb-shell-header-height,82px);z-index:90;background:#fff;margin-block:12px;padding:6px;border-radius:14px;box-shadow:0 3px 12px #173b2810}
+ body.rb-mobile-app #dashboard-workspace-nav .pms-nav{margin:0;padding:0;gap:4px}
+ body.rb-mobile-app #dashboard-workspace-nav .pms-tab{min-height:44px;padding:8px 5px;font-size:12px}
+ html:has(body.rb-mobile-app){scroll-padding-top:calc(var(--rb-shell-header-height,82px) + 112px)}
+}
+@media(max-width:360px){.rb-public-header .rb-public-brand,.rb-public-brand img{width:148px}.rb-public-brand strong{font-size:10px}.rb-public-inner{gap:6px;padding-inline:12px}}
+@media(max-width:760px){
+ body.home-page .rb-flow-content>section{padding-block:20px!important;margin-block:0!important}
+ body.home-page .rb-flow-content>section>.container{padding-block:0!important}
+ body.home-page .rb158-preview-top{padding-bottom:12px}
+ body.home-page .rb158-preview-track{margin-block:12px}
+ body.home-page .rb158-preview-checks li{padding-block:6px}
+}
