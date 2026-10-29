@@ -925,7 +925,7 @@ const analyses = querySnapshot.docs.map(doc => {
     roiAvailable: financialNumber(data.equity) === 0 || data.roiAvailable === false ? false : true,
 
     visualROI:
-      data.visualROI || 0,
+      financialNumber(data.visualROI),
 
     realROI:
       financialNumber(data.realROI),
