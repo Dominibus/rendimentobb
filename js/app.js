@@ -2704,28 +2704,11 @@ if(window.RB_DEBUG === true){
         0
       );
 
-    const mortgagePercent =
-  Number(result?.mortgagePercent) > 0
-
-    ? Number(result.mortgagePercent)
-
-    : (
-        propertyPrice > 0
-
-          ? Math.round(
-              (
-                Number(
-                  loanAmount ||
-                  mortgage ||
-                  0
-                )
-                /
-                propertyPrice
-              ) * 100
-            )
-
-          : 0
-      );
+    // Use the same unrounded financing ratio as the live snapshot and ROI engine.
+    // Display rounding must not move a scenario across the 60/80/90% score bands.
+    const mortgagePercent = propertyPrice > 0
+      ? (Number(result?.loan ?? result?.loanAmount ?? loanAmount ?? mortgage ?? 0) / propertyPrice) * 100
+      : 0;
 
     const market =
       window.currentCity ||
@@ -3028,29 +3011,8 @@ Number(
   0
 ),
 
-mortgagePercent:
+mortgagePercent,
 
-Number(
-  mortgagePercent ||
-
-  (
-    propertyPrice > 0
-
-      ? Math.round(
-          (
-            Number(
-              loanAmount ||
-              mortgage ||
-              0
-            )
-            /
-            Number(propertyPrice)
-          ) * 100
-        )
-
-      : 0
-  )
-),
 
 // 💰 REVENUE
 pricePerNight: nightly,
@@ -3103,6 +3065,11 @@ if(window.RB_DEBUG === true){
 
 
 }
+
+// Reconcile visible panels with the exact snapshot used by save and PDF.
+renderInvestmentScore(finalROI, riskScore);
+renderInvestmentVerdict(finalROI, riskScore, Number(net ?? 0), occupancyRate, canonicalSaveVerdict);
+renderInvestmentRanking(finalROI, canonicalSaveScore);
 
 // =====================================
 // 📄 EXECUTIVE DOCUMENT
@@ -3991,7 +3958,7 @@ const executiveScoreData =
         roiAvailable: Number(equity) > 0,
         risk: Number(risk ?? 0),
         occupancy: Number(occupancy ?? 0),
-        mortgagePercent: Number(price > 0 ? (calculatedLoan / price) * 100 : 0),
+        mortgagePercent: Number(price > 0 ? (loanAmount / price) * 100 : 0),
         cashflow: Number(net ?? 0),
         city: marketCity || ""
       })

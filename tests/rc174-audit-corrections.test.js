@@ -110,7 +110,7 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name === 'app' ? '20261029-rc225' : name === 'header' ? '20261029-rc221' : '20261027-rc212',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],name === 'app' ? '20261029-rc226' : name === 'header' ? '20261029-rc221' : '20261027-rc212',file+' '+name);
     }
   }
   assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261027-rc212/);

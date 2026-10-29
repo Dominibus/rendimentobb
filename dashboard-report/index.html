@@ -1511,8 +1511,8 @@ function renderVerdict(){
 
     text =
       lang === "en"
-        ? "Wait and optimize the investment before proceeding."
-        : "Attendere e ottimizzare l’investimento prima di procedere.";
+        ? "Review costs, occupancy and financing under the saved assumptions before deciding."
+        : "Verifica costi, occupazione e finanziamento nelle ipotesi salvate prima di decidere.";
 
   }
 
@@ -1521,7 +1521,7 @@ function renderVerdict(){
     : verdict === "BUY"
     ? (lang === "en" ? "FAVORABLE SCENARIO" : "SCENARIO FAVOREVOLE")
     : verdict === "AVOID" ? (lang === "en" ? "CRITICAL SCENARIO" : "SCENARIO CRITICO")
-    : (lang === "en" ? "ASSUMPTIONS TO REVIEW" : "IPOTESI DA RIVEDERE");
+    : (lang === "en" ? "ASSUMPTIONS TO REVIEW" : "IPOTESI DA VERIFICARE");
 
   document.getElementById(
     "verdict-text"

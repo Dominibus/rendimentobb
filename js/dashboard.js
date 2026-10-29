@@ -3626,6 +3626,17 @@ function generateInvestmentVerdict(result){
   if(roi === null || cashflow === null || risk === null || risk < 0 || risk > 100){
     return {type:"incomplete",color:"#64748b",title:t("Dati dello scenario incompleti", "Incomplete scenario data"),subtitle:t("COMPLETA I DATI", "COMPLETE THE DATA"),action:t("Completa ROI, cashflow e rischio", "Complete ROI, cash flow and risk"),message:t("Non è possibile formulare una sintesi coerente con i dati riconosciuti. I valori mancanti non sono considerati zero.", "The recognized data does not support a coherent summary. Missing values are not treated as zero.")};
   }
+  // A saved score assessment is authoritative; do not reclassify it from ROI alone.
+  const canonical = String(result.verdict ?? '').trim().toUpperCase();
+  if(['BUY','ACQUISTA'].includes(canonical)){
+    return {type:'excellent',color:'#10b981',title:t('Scenario favorevole nelle ipotesi','Favorable scenario under assumptions'),subtitle:t('ESITO DEL MODELLO SALVATO','SAVED MODEL ASSESSMENT'),action:t('Verifica le ipotesi prudenti','Check conservative assumptions'),message:t('Valutazione della singola simulazione salvata. Verifica costi, domanda e finanziamento prima di decidere.','Assessment of the individual saved simulation. Verify costs, demand and financing before deciding.')};
+  }
+  if(['WAIT','WATCH','ATTENDI'].includes(canonical)){
+    return {type:'good',color:'#f59e0b',title:t('Ipotesi da verificare','Assumptions to review'),subtitle:t('ESITO DEL MODELLO SALVATO','SAVED MODEL ASSESSMENT'),action:t('Confronta uno scenario prudente','Compare a conservative scenario'),message:t('Il modello salvato richiede una verifica delle ipotesi, anche con ROI e cashflow positivi.','The saved model requires a review of assumptions, even with positive ROI and cashflow.')};
+  }
+  if(['AVOID','NO_BUY','EVITA'].includes(canonical)){
+    return {type:'risk',color:'#ef4444',title:t('Scenario critico nelle ipotesi','Critical scenario under assumptions'),subtitle:t('ESITO DEL MODELLO SALVATO','SAVED MODEL ASSESSMENT'),action:t('Rivedi le ipotesi prima di decidere','Review assumptions before deciding'),message:t('Il modello salvato rileva criticità: rivedi costi, domanda e finanziamento.','The saved model identifies issues: review costs, demand and financing.')};
+  }
   if(roi < 0 || cashflow < 0 || risk >= 70){
     return {type:"risk",color:"#ef4444",title:t("Scenario con criticità", "Scenario with issues"),subtitle:t("VERIFICA PERDITE E RISCHIO", "REVIEW LOSSES AND RISK"),action:t("Rivedi le ipotesi prima di decidere", "Review assumptions before deciding"),message:t("Lo scenario ha ROI negativo, cashflow negativo o un indice di rischio elevato. Il solo ROI positivo non compensa queste criticità.", "The scenario has negative ROI, negative cash flow or a high risk index. Positive ROI alone does not offset these issues.")};
   }
