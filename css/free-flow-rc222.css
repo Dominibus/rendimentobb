@@ -137,3 +137,16 @@ body.cm-page .cm-hero>.rb222-group{margin:12px 0;box-shadow:none}
 }
 @media(max-width:760px){body.rb-mobile-app #global-header #rb-header-ai-btn{display:inline-flex!important;align-items:center;justify-content:center}}
 @media(max-width:760px){body.rb-mobile-app{padding-top:calc(var(--rb-shell-header-height,80px) + 2px)!important}}
+/* RC224: Italian help label needs intrinsic width, including the mobile padding. */
+@media(max-width:760px){
+ body.rb-mobile-app #global-header #rb-header-ai-btn,
+ body[data-public-shell] .rb-public-header .rb-public-assistant>summary{
+  width:auto!important;min-width:64px!important;max-width:none!important;
+  flex:0 0 auto!important;white-space:nowrap!important;
+  overflow-wrap:normal!important;word-break:normal!important;
+ }
+ body.rb-mobile-app #global-header #rb-header-ai-btn span{
+  font-size:inherit!important;white-space:nowrap!important;
+  overflow-wrap:normal!important;word-break:normal!important;flex-shrink:0;
+ }
+}
