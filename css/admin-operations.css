@@ -29,3 +29,10 @@
 .ops-warning{padding:12px;border-left:4px solid #a66b00;color:#704900;background:#fff7e6;line-height:1.6}
 #operations-refresh,#lead-search,#ops-coverage{scroll-margin-top:110px}
 @media(max-width:480px){.ops-overview{padding:16px}.ops-quick-links{flex-direction:column}.ops-quick-links a{width:100%}}
+
+/* RC228: inspectable source metadata; separate from live operational records. */
+.ops-source-registry{margin-top:24px}
+.ops-source-registry details{padding:8px 0;border-bottom:1px solid #cbd5e1}
+.ops-source-summary{min-height:44px;box-sizing:border-box;padding:10px 0;cursor:pointer;overflow-wrap:anywhere;line-height:1.5}
+.ops-source-summary:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.ops-source-registry a{display:inline-block;min-height:44px;padding:10px 0;box-sizing:border-box;color:#14533f}

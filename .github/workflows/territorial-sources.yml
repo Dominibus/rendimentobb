@@ -30,8 +30,13 @@ jobs:
           python3 -m unittest discover -s tests -p 'rc217_tourism.py'
           node --test tests/rc217-tourism.test.js tests/rc218-omi.test.js
           python3 -m unittest discover -s tests -p 'rc218_omi.py'
-      - name: Prepara aggiornamento da revisionare
+      - name: Gate condizioni provider (acquisizione sospesa)
         run: python3 scripts/refresh-territorial-references.py --output-dir /tmp/rb-source-review
+      - name: Integrità locale del registro fonti
+        if: always()
+        run: |
+          mkdir -p /tmp/rb-source-review
+          node scripts/audit-source-registry.mjs > /tmp/rb-source-review/source-registry.json
       - name: Controlla collegamenti editoriali esistenti
         if: always()
         run: python3 scripts/check-reference-links.py --output /tmp/rb-source-review/reference-links.json

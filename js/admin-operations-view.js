@@ -1,4 +1,5 @@
 import {controlSummary} from './admin-control-model.js?v=20261022-rc178';
+import {renderSourceRegistry} from './admin-source-registry-view.js?v=20261029-rc228';
 const copy={
  task_notifications:['Email PMS','PMS emails'],analysis_reminders:['Promemoria analisi','Analysis reminders'],
  withdrawal_receipts:['Ricevute recesso','Withdrawal receipts'],subscription_confirmations:['Conferme abbonamento','Subscription confirmations'],
@@ -84,5 +85,6 @@ export function renderOperations(root,data,language='it',now=Date.now()){
  }
  const coverage=add(root,'h3',t('Servizi e verifiche ancora da collegare','Services and checks not yet connected'));coverage.id='ops-coverage';
  note(t('Disponibilità esterna, login, correttezza PDF/CSV e calcoli, backup e prova ripristino, costi, ricavi e salute Stripe: non verificati da questa schermata. Il riepilogo email facoltativo dipende dal cron: non rileva il fermo del cron stesso. Nessun ticket automatico è attivo.','External availability, login, PDF/CSV and calculation accuracy, backups and restore drills, costs, revenue and Stripe health are not verified by this screen. The optional email digest depends on cron: it cannot detect cron itself stopping. No automatic tickets are active.'));
+ renderSourceRegistry(root,language,now);
 }
 

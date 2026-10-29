@@ -87,9 +87,16 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('--output-dir',type=Path,required=True);args=p.parse_args()
  if args.output_dir.exists() and any(args.output_dir.iterdir()):p.error('Use an empty output directory')
  try:
-  config=json.loads((ROOT/'scripts/territorial-sources.json').read_text())
-  html=download(config['homepage'],5*1024*1024).decode('utf-8')
-  result=prepare(config,html,args.output_dir,date.today());print(json.dumps(result,ensure_ascii=False))
+  # RC228: website scraping and reuse conditions require separate review.
+  # Offline ETL helpers remain available; this entrypoint makes no network call.
+  args.output_dir.mkdir(parents=True,exist_ok=True)
+  result={'checkedAt':datetime.now(timezone.utc).isoformat(),
+   'status':'blocked_provider_policy_review','published':False,'requiresReview':True,
+   'remoteAvailabilityChecked':False,'updatedCities':[],
+   'reason':'Inside Airbnb acquisition/reuse terms require review; no network request made',
+   'policyURL':'https://insideairbnb.com/data-policies/'}
+  (args.output_dir/'report.json').write_text(json.dumps(result,indent=2)+'\n')
+  print(json.dumps(result))
  except Exception as error:
   args.output_dir.mkdir(parents=True,exist_ok=True)
   # Never leave a partial candidate that could be mistaken for a valid update.

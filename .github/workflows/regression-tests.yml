@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: Regressioni Node
         run: npm test
+      - name: Registro fonti (solo integrità locale)
+        run: node scripts/audit-source-registry.mjs
       - name: Identità finanziarie indipendenti
         run: node tests/rc213-financial-identities.mjs
       - uses: actions/setup-python@v6

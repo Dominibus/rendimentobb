@@ -1,0 +1,1097 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "rc228-inventory-1",
+  "inventoriedAt": "2026-10-29",
+  "baselineCommit": "ad44c31c2baa72627171dd0147232bd37ea7ec48",
+  "scope": "Public metadata and local code/data fingerprints only; no live source or account certification",
+  "datasets": [
+    {
+      "id": "istat-municipalities",
+      "name": "Anagrafica comuni ISTAT",
+      "classification": "official",
+      "definition": "Codici e denominazioni amministrative; non misure di mercato",
+      "publisher": "ISTAT",
+      "sourceURL": "https://www.istat.it/classificazione/codici-dei-comuni-delle-province-e-delle-regioni/",
+      "dataset": "Elenco-comuni-italiani.xlsx",
+      "license": "CC BY 4.0 salvo diversa indicazione",
+      "licenseURL": "https://www.istat.it/note-legali/",
+      "licenseStatus": "publisher_policy_checked",
+      "coverage": "Italia; 7.894 comuni nello snapshot",
+      "granularity": "Comune, provincia/città metropolitana, regione",
+      "observationPeriod": "2026-02-21: riferimento dichiarato nel file",
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": "2026-10-25",
+      "declaredFrequency": null,
+      "methodology": "Selezione colonne XLSX; codici preservati come stringhe.",
+      "transformations": [
+        "Ordinamento per nome italiano",
+        "Raccordi espliciti per variazioni amministrative"
+      ],
+      "limitations": [
+        "Non prova che lo snapshot sia l’ultima pubblicazione disponibile.",
+        "Data pubblicazione e frequenza del singolo file non ricostruite."
+      ],
+      "consumers": [
+        "Selettori comuni",
+        "Identità territoriali"
+      ],
+      "version": "schema-1/2026-02-21",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "data/geography/municipalities-it.json",
+          "sha256": "07a33a129f82ada017885481e33b758dac3321db5b09dfc22fc54cbe9e3e001d"
+        }
+      ]
+    },
+    {
+      "id": "istat-tourism",
+      "name": "Contesto turistico ISTAT",
+      "classification": "official",
+      "definition": "Arrivi e presenze, annuali e mensili, non camere-notti",
+      "publisher": "ISTAT",
+      "sourceURL": "https://esploradati.istat.it/databrowser/DWL/Servizi/DCSC_Occupancy_in_collective_accommodation.zip",
+      "dataset": "IT1/DF_BULK_DCSC_OCCUPCOLLE/1.0; 2_dati_comunali.xlsx",
+      "license": "CC BY 4.0 salvo diversa indicazione",
+      "licenseURL": "https://www.istat.it/dati/open-data/",
+      "licenseStatus": "publisher_policy_checked",
+      "coverage": "20 capoluoghi di regione",
+      "granularity": "Comune × mese/anno × tipologia × residenza",
+      "observationPeriod": "2025",
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": "2026-10-28",
+      "declaredFrequency": null,
+      "methodology": "Aggregati ufficiali dal workbook; flag f mantenuto.",
+      "transformations": [
+        "Estrazione 20 identità esatte",
+        "Riconciliazione totali e 12 mesi",
+        "Raccordo Cagliari 092009 → 118006"
+      ],
+      "limitations": [
+        "Discontinuità f dal 2025: nessuna crescita su anni precedenti.",
+        "Non determina ADR, occupazione o ROI di un immobile.",
+        "Nessun trasferimento nel motore finanziario."
+      ],
+      "consumers": [
+        "Mercato",
+        "Analizza: contesto"
+      ],
+      "version": "schema-1/2025/f",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "data/tourism/istat-capitals-2025.json",
+          "sha256": "02da058e1718755b0d674ac85aa7351bd92bf60c03082efdeb61ba2031b85086"
+        }
+      ]
+    },
+    {
+      "id": "omi-values",
+      "name": "Intervalli immobiliari OMI",
+      "classification": "official",
+      "definition": "Intervalli zonali vendita e locazione per superficie/tipologia/stato",
+      "publisher": "Agenzia Entrate - OMI",
+      "sourceURL": "https://www.agenziaentrate.gov.it/portale/schede/fabbricatiterreni/omi/forniture-dati-omi-cittadini",
+      "dataset": "Fornitura OMI nazionale, estratto 20 capoluoghi",
+      "license": "CC BY 4.0 dichiarata nei file locali; prova specifica da conservare",
+      "licenseURL": "https://telematici.agenziaentrate.gov.it/pdf/guidaFornitureOMI.pdf",
+      "licenseStatus": "requires_review",
+      "coverage": "20 capoluoghi; non copertura nazionale nel prodotto",
+      "granularity": "Zona OMI × tipologia × stato × superficie L/N",
+      "observationPeriod": "2026/1",
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": "2026-10-28",
+      "declaredFrequency": "Semestrale (guida ufficiale OMI)",
+      "methodology": "Min/max vendita €/m², locazione €/m²/mese; selezione esplicita.",
+      "transformations": [
+        "Codici catastali/ISTAT raccordati esplicitamente",
+        "0/0 assente convertito null",
+        "Nessuna media tra zone o superfici"
+      ],
+      "limitations": [
+        "Non sostituisce perizia puntuale.",
+        "Hash e anzianità locali non provano l’ultimo semestre pubblicato.",
+        "Licenza della fornitura originale da documentare."
+      ],
+      "consumers": [
+        "Mercato",
+        "Analizza: contesto"
+      ],
+      "version": "schema-1/2026-1",
+      "validationState": "requires_review",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "data/omi/ancona.json",
+          "sha256": "1d84e7cc6e75c1ea32aec22d12726ce770a2f87eb78d75243b5492f8967cdd93"
+        },
+        {
+          "path": "data/omi/aosta.json",
+          "sha256": "277f9b72f04f3bad0b9deca0e99d820849771a86faa04df176c6cf175f04bdf3"
+        },
+        {
+          "path": "data/omi/bari.json",
+          "sha256": "c343007274f389620218fbbb898e7ace6863a5817a0ee3a7d9d95aab773b932e"
+        },
+        {
+          "path": "data/omi/bologna.json",
+          "sha256": "94ae34a54ff2fc4fb066c420f21dddb2367e4b727768fcc2f150fc0f229dd533"
+        },
+        {
+          "path": "data/omi/cagliari.json",
+          "sha256": "f132887f5f1637134b0e7b0785d0deefca94145cd86d249a9852a13825417c08"
+        },
+        {
+          "path": "data/omi/campobasso.json",
+          "sha256": "4e397c23127b2e0b6de797907de242e99ae0d4926a0d8d7756bf00e1c68cdb9f"
+        },
+        {
+          "path": "data/omi/catanzaro.json",
+          "sha256": "a10077574d8c5d8000e51494d6b060c04abc2161f1f6009a21aa042ffd68d265"
+        },
+        {
+          "path": "data/omi/firenze.json",
+          "sha256": "912a1302a2e662bff49e6172174c5d2b42d2d85e2426548075518de46d2a590f"
+        },
+        {
+          "path": "data/omi/genova.json",
+          "sha256": "aafd568d5c0e597961849db316c0a940f85e7b4ce4939d2907764251fbedcc29"
+        },
+        {
+          "path": "data/omi/l-aquila.json",
+          "sha256": "3cc464c070c56ded70c98cd8fa5ad788d3591ecd7fc1b3ae5efb180d339ef032"
+        },
+        {
+          "path": "data/omi/milano.json",
+          "sha256": "6085649724de55573ffb6dca72264f2ed7e18e130e9182cb4c32743269447a19"
+        },
+        {
+          "path": "data/omi/napoli.json",
+          "sha256": "51ef3044601eaab0a1de9f197dc0613bb318b29e8a01a280b23de93e4d000251"
+        },
+        {
+          "path": "data/omi/palermo.json",
+          "sha256": "db44112d33037993dbea4d0468d50f560d9f351bb0caa9d8dfc6aa740483358d"
+        },
+        {
+          "path": "data/omi/perugia.json",
+          "sha256": "d4a350c4ef81ac41678eca1a0e62c5f19e2b99935335aeae98738f5f079a095a"
+        },
+        {
+          "path": "data/omi/potenza.json",
+          "sha256": "d883740f95c5be17aa7e78a1e19de7e7b5f07445032bff258a837f637f8efcf6"
+        },
+        {
+          "path": "data/omi/roma.json",
+          "sha256": "daa1446e9a1f1e74c3ee8549ec1e20e1bbe9f8c07ebbf2e89fbdcb1e207c34ff"
+        },
+        {
+          "path": "data/omi/torino.json",
+          "sha256": "57e7574c0f867338e22fb106922c88c9d0204f162914fcce1b4d298434f26225"
+        },
+        {
+          "path": "data/omi/trento.json",
+          "sha256": "a9ca63116e25d44f1568ffbb53177927f2aed80bc7119ab3d2200b54f4078f67"
+        },
+        {
+          "path": "data/omi/trieste.json",
+          "sha256": "42195353069a3ffb5699ae5c0d3f1b5b7c7f0bb81192d931c75ab71c093b25c3"
+        },
+        {
+          "path": "data/omi/venezia.json",
+          "sha256": "5ba0a415d094298ea1781c3969af7673ef9be0d168bc6125787d0fe7b19e1b36"
+        }
+      ]
+    },
+    {
+      "id": "inside-airbnb",
+      "name": "Prezzi pubblicizzati Inside Airbnb",
+      "classification": "private_provider",
+      "definition": "Prezzi base notturni pubblicizzati aggregati, non prenotazioni realizzate",
+      "publisher": "Inside Airbnb",
+      "sourceURL": "https://insideairbnb.com/get-the-data/",
+      "dataset": "listings.csv.gz; 9 snapshot città/regionali",
+      "license": "CC BY 4.0 dichiarata; condizioni operative e riuso derivato da revisionare",
+      "licenseURL": "https://insideairbnb.com/data-policies/",
+      "licenseStatus": "requires_review",
+      "coverage": "Napoli Roma Milano Firenze Bologna Venezia Bari Palermo Trento",
+      "granularity": "Segmenti città/quartiere/tipo/capacità e finestre dichiarate nei JSON",
+      "observationPeriod": "Snapshot 2026-09-16…2026-09-28; finestre di prezzo nei singoli city.observationStart/End",
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Filtri esatti, valuta EUR, soglia minima campione 10; dettagli data/territorial/README.md.",
+      "transformations": [
+        "Filtri città per archivi regionali",
+        "Esclusione prezzi mancanti/valute incompatibili",
+        "Aggregati mediana/quartili per segmenti"
+      ],
+      "limitations": [
+        "Disponibilità non distingue prenotato da bloccato.",
+        "Prezzi richiesti non ADR realizzato; nessuna stima di ROI.",
+        "Data Policies chiede niente scraping e niente ripubblicazione; verificare uso derivato.",
+        "Acquisizione programmata sospesa in attesa di revisione."
+      ],
+      "consumers": [
+        "Mercato",
+        "Analizza: contesto territoriale"
+      ],
+      "version": "quoted-nightly-subtotal-v1",
+      "validationState": "requires_review",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "data/territorial/bari.json",
+          "sha256": "edbaddae883f1ea1f51c4eabb01a1bee13621128ad5eda3c38e452e3a866fa47"
+        },
+        {
+          "path": "data/territorial/bologna.json",
+          "sha256": "9907e7a31d318f8df3ec1f7ed39b742871eb81c881d94a06c2c323a96698be62"
+        },
+        {
+          "path": "data/territorial/catalog.json",
+          "sha256": "425851f9fd8d674bddb751696fe7e01f6e6b54e50572ea759b5d4aeec0b0666e"
+        },
+        {
+          "path": "data/territorial/firenze.json",
+          "sha256": "c979770915f5a7ea39810f93e243adeb8f840bd297bba92acbc02d63beeae466"
+        },
+        {
+          "path": "data/territorial/milano.json",
+          "sha256": "4d2dc3bc088f443379addbbcc15994ce68a159efee0e0498fb02656955ba9808"
+        },
+        {
+          "path": "data/territorial/napoli.json",
+          "sha256": "481cb853f10f3a95652eb93c0cab0b9456ee729da3903d4984c736cca1c1f2e3"
+        },
+        {
+          "path": "data/territorial/palermo.json",
+          "sha256": "c2c12929c3f82fa6d4c9a6844a5f36ff21b81f790d5ebdf47d80e2abc81c1558"
+        },
+        {
+          "path": "data/territorial/roma.json",
+          "sha256": "cae6b11e1123e40b5c4a3fdbaad321cbff59cea889b81de879cc89bdc9fa2f1f"
+        },
+        {
+          "path": "data/territorial/trento.json",
+          "sha256": "3e4cc40a0f6fd83615cc5540faa9dd8d5b5f904d78f2087fafeafd8284780043"
+        },
+        {
+          "path": "data/territorial/venezia.json",
+          "sha256": "378575ac867e2173ac2c0169b4dc6988ff05c925f75da5e2d6870c83c6c5b501"
+        },
+        {
+          "path": "scripts/territorial-sources.json",
+          "sha256": "4b977ef6d8cf74b362a211877a95c9a0625d6668827d2560329dafca760c378b"
+        }
+      ]
+    },
+    {
+      "id": "market-assumptions",
+      "name": "Ipotesi illustrative mercato",
+      "classification": "internal_assumption",
+      "definition": "Prezzi, occupazioni, rendimenti e descrizioni interni per città",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Etichetta città, nessuna rilevazione locale",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Nessuna fonte esterna, periodo o validazione di mercato.",
+        "Tabelle duplicate possono divergere; usare il contesto effettivo.",
+        "Non attribuire questi numeri a ISTAT/OMI."
+      ],
+      "consumers": [
+        "Simulatore: esempi",
+        "Mercato",
+        "Chatbot"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/chatbot/knowledge/markets.js",
+          "sha256": "385cc8dbe01c336e06398d3038387452224b031699005be856754c6c66ac74f1"
+        },
+        {
+          "path": "js/chatbot/market-data.js",
+          "sha256": "1e5694072de4da061a1b7e6960ebc57068ac57cc249f579f5deee5f6ba1cbc44"
+        },
+        {
+          "path": "js/data-provenance.js",
+          "sha256": "17a80441eb3a53bae25f44eb5e92bb82b95f3bf908705bc3255e7e0db61afffd"
+        },
+        {
+          "path": "js/market-data.js",
+          "sha256": "1010ae892708e1cc7d2d4fca56fcf840b80037bb0d87fc5b1de1958f26fcd3a8"
+        },
+        {
+          "path": "js/market-engine.js",
+          "sha256": "b376c8abc6d40a6224e5085d42af28720801c33055fec58d2849e2de79497b50"
+        }
+      ]
+    },
+    {
+      "id": "mortgage-assumptions",
+      "name": "Mutui e preventivi inseriti",
+      "classification": "internal_assumption",
+      "definition": "Tassi interni o TAN/TAEG/spese forniti dall’utente",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Scenario/preventivo individuale",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Nessun feed bancario o offerta certificata.",
+        "TAEG dichiarato non ricalcolato, tasso costante nel piano.",
+        "Spese sconosciute non vanno stimate zero."
+      ],
+      "consumers": [
+        "Mutui",
+        "Analizza"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/mortgage-engine.js",
+          "sha256": "d8f5175c0c38ab3baa58bbf5970d16b2db314c0ebef745135e95d80280080351"
+        },
+        {
+          "path": "js/mortgage-quotes.js",
+          "sha256": "4194f097dfa7a903e1874f8b822c15d7d1d4fabd6f3b529fc0dcd9c39b6fdd71"
+        },
+        {
+          "path": "js/mortgage-rates.js",
+          "sha256": "1173c9f5063482e8ced84627d6733d153dc7ab862f84792971a433448c0847d9"
+        }
+      ]
+    },
+    {
+      "id": "property-examples",
+      "name": "Esempi ricerca immobili",
+      "classification": "synthetic",
+      "definition": "Scenari statici per città e collegamenti a portali",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": null,
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Nessun annuncio acquisito/verificato.",
+        "Link a portale non è fonte dei prezzi sintetici."
+      ],
+      "consumers": [
+        "Ricerca immobili"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "api/property-search.js",
+          "sha256": "d3b7ee66b6577dc59f080d2ec3038bf3d8c66d150502aa41335866a97707636d"
+        }
+      ]
+    },
+    {
+      "id": "roi-model",
+      "name": "Motore ROI e score",
+      "classification": "calculated",
+      "definition": "Formule economiche e euristiche su input utente/default",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": "Codice versionato; non dataset osservazionale",
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": null,
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "365×occupazione×prezzo; costi e commissioni; imposta sul margine positivo; debito; ROI equity. Manuale formule e test identità.",
+      "transformations": [],
+      "limitations": [
+        "Default fiscale 21 è ipotesi semplificata da validare per il caso.",
+        "Score/rischio non probabilità osservate.",
+        "L’impronta di questa baseline non viene attribuita retroattivamente alle analisi."
+      ],
+      "consumers": [
+        "Analizza",
+        "Dashboard",
+        "Report",
+        "Autopilot"
+      ],
+      "version": "main-ad44c31/roi",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/chatbot/core/investment-autopilot-engine.js",
+          "sha256": "0b7f50774a7942b3dfa754f5049a5aeb37f73b592d01a4e6911918fab5f8d81f"
+        },
+        {
+          "path": "js/chatbot/core/score-engine.js",
+          "sha256": "544e82c4cc0fc6da5581053594cbe2da31da3fe91ee882dcb7fcc7c4e5922500"
+        },
+        {
+          "path": "js/financial-review.js",
+          "sha256": "abf52babce1168d4580f146021b631e4a51cfa31ff7ad4b12e6e6c23728e558d"
+        },
+        {
+          "path": "js/investment-assumptions.js",
+          "sha256": "01b7f12bc217fcc9ecc8a728070ed34b5f9646d0db6371bbd595d0374891e1e9"
+        },
+        {
+          "path": "js/mortgage-engine.js",
+          "sha256": "d8f5175c0c38ab3baa58bbf5970d16b2db314c0ebef745135e95d80280080351"
+        },
+        {
+          "path": "js/roi-engine.js",
+          "sha256": "8f0b205d5e1a0bd45b5eaeedf969ec5d46127e742a9381c7562ebb0c03f98ec7"
+        }
+      ]
+    },
+    {
+      "id": "commercial-model",
+      "name": "Locali, studi e contratti",
+      "classification": "calculated",
+      "definition": "Stanze/fasce/contratti e IVA dichiarata, scenari economici",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Immobile/stanza/fascia/contratto/anno",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Nessuna determinazione automatica del regime IVA.",
+        "Canoni contrattuali, attesi e incassi sono distinti.",
+        "Nessun dato clinico dei pazienti."
+      ],
+      "consumers": [
+        "Simulatore commerciale",
+        "Archivio commerciale",
+        "Autopilot commerciale"
+      ],
+      "version": "commercial-property-v1/code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/commercial-autopilot.js",
+          "sha256": "7de22484de6e406e45fd7bfecc40742e929f6ae4a8972870388ecb0e581c21bb"
+        },
+        {
+          "path": "js/commercial-property-engine.js",
+          "sha256": "32c3f2c7d1911e607b7676f9c1f1268d67adb7eeb40a9c06d482e565a3f6675b"
+        },
+        {
+          "path": "js/commercial-workspace-model.js",
+          "sha256": "fe4ae6729e1e66f4f293332244735878f574c6070b822db145a0fda38fcba766"
+        }
+      ]
+    },
+    {
+      "id": "pms-user-data",
+      "name": "Dati operativi inseriti/importati",
+      "classification": "user_supplied",
+      "definition": "Prenotazioni, importi e stati dichiarati nell’account",
+      "publisher": null,
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Account/proprietà/soggiorno/periodo",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Checkout escluso; ricavi prenotati ripartiti sulle notti; identità e collegamenti verificati dal codice.",
+      "transformations": [],
+      "limitations": [
+        "Non prova incasso bancario né adempimento amministrativo.",
+        "Dati personali e record reali non inclusi nel registro.",
+        "Snapshot reali non ispezionati in questo inventario."
+      ],
+      "consumers": [
+        "PMS",
+        "Calendario",
+        "Dashboard",
+        "Report",
+        "Autopilot"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/chatbot/core/pms-autopilot-engine.js",
+          "sha256": "e1b53a22487e8070ac1335238dc9693495833f9ff2017368e6dae87a9d821153"
+        },
+        {
+          "path": "js/pms-availability.js",
+          "sha256": "54f5d95434106b3e360cf4495177f58ea490ea240f24508e4287d90c6d1e4106"
+        },
+        {
+          "path": "js/pms-booking-operations.js",
+          "sha256": "8bf067f861b3b6289cc3611c6650e67d417a76161fdafbdf2b2cdf7ae81da4f5"
+        },
+        {
+          "path": "js/pms-calendar.js",
+          "sha256": "ac5f4cefa561dbf8a3e9d3e101c2025bc3f3f1734f681b5154fac40200a62e3a"
+        },
+        {
+          "path": "js/pms-daily-checklist.js",
+          "sha256": "daddc1760c541fd40ab9a2dd1736f8db7839fcb1a7a96489ca072dcf0b71b195"
+        },
+        {
+          "path": "js/pms-daily-plan.js",
+          "sha256": "e2a7cf83bc982355269a82c0e8ed740dadac56c0f513ae15a850e2ca959e6ea7"
+        },
+        {
+          "path": "js/pms-operational-report.js",
+          "sha256": "fd9c1db4abae28ed83383ada7a39c0bb330ca09387da481dca90cdf223b419fc"
+        },
+        {
+          "path": "js/property-performance.js",
+          "sha256": "492cd87e8c475fcd3206371c453f3c1b84b56fb43b769edef63ee4bc792f3cb7"
+        },
+        {
+          "path": "js/report-provenance.js",
+          "sha256": "864990657aaf2d295f89451cb6776bf3dbdac7cfbbafcae370720aec50c345a6"
+        }
+      ]
+    },
+    {
+      "id": "pms-demo",
+      "name": "Demo PMS e suggerimenti tariffa",
+      "classification": "synthetic",
+      "definition": "Prenotazioni, tassa e stagionalità fittizie",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Proprietà demo / ottobre 2026",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Demo: base ADR120, fattori interni; tassa fittizia €2/ospite/notte max5, non regola comunale.",
+      "transformations": [],
+      "limitations": [
+        "Non un modello di previsione o tariffario ufficiale.",
+        "Nessun invio alle autorità dalla demo."
+      ],
+      "consumers": [
+        "Demo pubblica PMS"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "js/pms-product-demo-model.js",
+          "sha256": "9e2fc283f649c43f6299e44e769063970d6c4f0419b0d071522fef669ede64f0"
+        }
+      ]
+    },
+    {
+      "id": "exports-documents",
+      "name": "PDF, CSV e documenti correnti",
+      "classification": "calculated",
+      "definition": "Rappresentazione dei record o estrazione dal documento selezionato",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": null,
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Schema documento non garantisce provenienza completa del modello storico.",
+        "Testo estratto non autentica il PDF.",
+        "Prima integrazione di provenance envelope da revisionare separatamente."
+      ],
+      "consumers": [
+        "Report",
+        "PDF",
+        "CSV",
+        "Chatbot documenti"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "dashboard-report/index.html",
+          "sha256": "d4a58a5284dcfe3da2d88e42cf0a5d31785f91dc09e50a07d8d7a0b5fef72c15"
+        },
+        {
+          "path": "js/chatbot/core/pms-document-evidence.js",
+          "sha256": "4081e772656c4ac0815353643383f75742697781375cfa66e1123238be502069"
+        },
+        {
+          "path": "js/chatbot/document-engine.js",
+          "sha256": "748160d3438e6e87131e0b874f6972d644573a276c8bd448cc6ff9ba8ff65a26"
+        },
+        {
+          "path": "js/pdf-scenario-commentary.js",
+          "sha256": "4381ce7f7a877531c9ccf09aee6ff492d88a4b9c8b910ca1624f7ff15755e3e0"
+        },
+        {
+          "path": "js/property-performance-pdf.js",
+          "sha256": "17ada04957fa71d80c8ce62362b42f05fddf8f6a2c385c6cfadee25dac7bd4bf"
+        },
+        {
+          "path": "js/report-csv.js",
+          "sha256": "28df376bc180a1b2a00688337dcd252a89b9fe132b9cfd93bed10ac460277f1e"
+        }
+      ]
+    },
+    {
+      "id": "editorial-knowledge",
+      "name": "Academy, SEO, conoscenza e normativa",
+      "classification": "editorial",
+      "definition": "Testi editoriali e orientamento; URL per file/linea nell’indice",
+      "publisher": "RendimentoBB",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "not_applicable",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": "Articolo/risposta; territorio e atto da mappare",
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Nessun monitor normativo live.",
+        "Atto/articolo/decorrenza e revisore non documentati per ogni affermazione.",
+        "Non certifica conformità fiscale, amministrativa o sanitaria."
+      ],
+      "consumers": [
+        "Academy",
+        "SEO",
+        "Chatbot",
+        "Autopilot"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "requires_review",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "academy/errori/index.html",
+          "sha256": "74d6142ac2ea12c418094987d36f0037825c2da9082f774ef8786ca65e5b8999"
+        },
+        {
+          "path": "academy/index.html",
+          "sha256": "bceae02c085109844e591f903c43c0e0893bac5a92c03b9cd0a1214002f54dac"
+        },
+        {
+          "path": "academy/mutuo/index.html",
+          "sha256": "201d1627c4400991ad885fc9bfeaabab0277fcf2ff834b75ce9894bb847a0969"
+        },
+        {
+          "path": "academy/roi/index.html",
+          "sha256": "b7cecc83d171798cd5d8e012d8cc04ba59b5cfae776f974fc8296a452626a3cd"
+        },
+        {
+          "path": "academy/strategia/index.html",
+          "sha256": "bf4b22c3d7bd0396f54ca4977f9c0d79e002ac8e248d1eeff18725fa33ef541f"
+        },
+        {
+          "path": "aprire-bnb-conviene/index.html",
+          "sha256": "85897123ce63c44ea5fff6b4b321d437a239669cbb028a732c6df1e9e00cb4b8"
+        },
+        {
+          "path": "costi-aprire-bnb/index.html",
+          "sha256": "13070626a26a34d387348914b97c9cdf97275a629c35b70422420480d9f707e3"
+        },
+        {
+          "path": "immobili/firenze/index.html",
+          "sha256": "2aee87e633faedb0779f19b0ae9909473db8f93655e1b2f7998f6dcac4a37a62"
+        },
+        {
+          "path": "immobili/index.html",
+          "sha256": "bb949bf3e7240fa5c9f72b33b19f65de2666da810cfd75820c5517740828c158"
+        },
+        {
+          "path": "immobili/milano/index.html",
+          "sha256": "7b0162af26880bf950c9105ff6fe2ca9cf057ffb2d286e8ef3bbcc88ed7b04fa"
+        },
+        {
+          "path": "immobili/napoli/index.html",
+          "sha256": "e7735ee89e6462bb88d9a9b900ffdb07e9b85c61155e965071f2330df385f575"
+        },
+        {
+          "path": "immobili/roma/index.html",
+          "sha256": "abf5297eeace4dd2315d519fe494b6b9b6dcf4014176315acd4e36e7bc009db7"
+        },
+        {
+          "path": "js/ai-knowledge.js",
+          "sha256": "a41fd198e891f319d7056d261509ce96e76cd7b5bc358d152f3f242bcd56ca57"
+        },
+        {
+          "path": "js/chatbot/knowledge/airbnb.js",
+          "sha256": "1afda01af1ef450a90d94666e177a625b789b2e32f0b9c878b26759730b49a4a"
+        },
+        {
+          "path": "js/chatbot/knowledge/beginner.js",
+          "sha256": "3eebf7d29f883b20183a903fcdde4eea27b3574f17aea03cfc7b2142c4deaa58"
+        },
+        {
+          "path": "js/chatbot/knowledge/finance.js",
+          "sha256": "e36f7f9f08f49bd617e89730e0d38d51ff04cb04aa8f89c08ba9996749cc3fc5"
+        },
+        {
+          "path": "js/chatbot/knowledge/glossary.js",
+          "sha256": "472a47c6a5c02e505a039cc064e68f70532d4c3eee275a2a51f00ca7572879f9"
+        },
+        {
+          "path": "js/chatbot/knowledge/legal.js",
+          "sha256": "b53df26342304a5bb201fdde4adbafa3b15d0dfd7d6b68e730812fd32ea5264d"
+        },
+        {
+          "path": "js/chatbot/knowledge/markets.js",
+          "sha256": "385cc8dbe01c336e06398d3038387452224b031699005be856754c6c66ac74f1"
+        },
+        {
+          "path": "js/chatbot/knowledge/mistakes.js",
+          "sha256": "e7362020f1dd11d3a3df09f5abc1de0557f2cb693ef008d295b8c3f564d917b5"
+        },
+        {
+          "path": "js/chatbot/knowledge/mortgages.js",
+          "sha256": "607e9a2beb499b41487554c5d3e2675292bb8b6580160b3d438ae5446d0ee692"
+        },
+        {
+          "path": "js/chatbot/knowledge/property-analysis.js",
+          "sha256": "c45be8aa23392184372b51954c20cb8ce9530a82a4891733021f63a4665673ce"
+        },
+        {
+          "path": "js/chatbot/knowledge/real-estate.js",
+          "sha256": "f5046ae5a2f0794bd120118b37d3ae8d20798ff48de51b852ccafe9cf342cf01"
+        },
+        {
+          "path": "js/chatbot/knowledge/risk.js",
+          "sha256": "93c375e08412f5da3259e56742b8ec5607144f7781ec85b1fdb83946ca9c9c76"
+        },
+        {
+          "path": "js/chatbot/knowledge/roi.js",
+          "sha256": "6e6e705a15a85e9ffe75af50e0a07849f47b6f07243d99c44dea25831a06d6f8"
+        },
+        {
+          "path": "js/chatbot/knowledge/shortrent.js",
+          "sha256": "9663141d3232a076ad0c748405c9867bead9ae9c1f1afa45b9a4670d35761d7b"
+        },
+        {
+          "path": "js/chatbot/knowledge/subscriptions.js",
+          "sha256": "1245c8a04c8583f5a2cdb5ac146ed59bce67464190f2855237ade999fd796bc9"
+        },
+        {
+          "path": "js/chatbot/knowledge/support.js",
+          "sha256": "93647c26da01b5174d5761ce7cb6f0112e9ec8bf824487b19765c772af87aa24"
+        },
+        {
+          "path": "js/chatbot/knowledge/taxes.js",
+          "sha256": "86f80a6c201528008c0210a8e06a1c2eef03dff41bc5b9570f8f348706247475"
+        },
+        {
+          "path": "market/firenze/index.html",
+          "sha256": "70c7eee506be0a0c728840c7b015637db034a168e283eac59b22aea5694831dc"
+        },
+        {
+          "path": "market/index.html",
+          "sha256": "319d6cb622f1bc1c859c84ab651cdfaf0903517e99047c1d09ea7148910e6c57"
+        },
+        {
+          "path": "market/milano/index.html",
+          "sha256": "229d1eb0d6dfe5e795eeef9a5d94ced385bac83a515b5673e50643c21f3759d9"
+        },
+        {
+          "path": "market/napoli/index.html",
+          "sha256": "b91c6d5c11d3572f9d713a878d3b858b362595c39bb253eebe03a8c9d670a11e"
+        },
+        {
+          "path": "market/roma/index.html",
+          "sha256": "0aa1ec200d671e54e2794bf177c8dd022a21e65e1de12ceaaf5f6c211880d365"
+        },
+        {
+          "path": "privacy.html",
+          "sha256": "aedcee8b84e3e7885e5030ed1d57bffb20c3e52499db544b01780c49d87e296f"
+        },
+        {
+          "path": "quanto-guadagna-bnb/index.html",
+          "sha256": "d4bdaacfc957654e60f76a4bd97fbf34d5283c240ee39f913391c9edf95ea147"
+        },
+        {
+          "path": "roi-bnb/firenze/index.html",
+          "sha256": "5e725ca63975cde999077de7fa3b43686dbf5750c577fb794d1179a9b78f7a6b"
+        },
+        {
+          "path": "roi-bnb/index.html",
+          "sha256": "bac8ea647fa86a6d60d4cb2ba38cb97249fadbe01038c811988fedb52a33f256"
+        },
+        {
+          "path": "roi-bnb/milano/index.html",
+          "sha256": "621d814aa65782a01f2d2361e57a8f96d4fdff263143d40e6607c2a3c0d2fba4"
+        },
+        {
+          "path": "roi-bnb/napoli/index.html",
+          "sha256": "d74d43b7581b90cc048a34e898c2b5406852bdebf65117e493331b9a8fcafccc"
+        },
+        {
+          "path": "roi-bnb/roma/index.html",
+          "sha256": "e97b2f4a36b0f649c7d1edbee1a4a7955fb2292f859b474fa8ac7c485a5ace82"
+        },
+        {
+          "path": "terms.html",
+          "sha256": "4056e6cd89290964f1b9202e9066aa492ef86b3f211466b4a50e462d5d9a1523"
+        }
+      ]
+    },
+    {
+      "id": "platform-providers",
+      "name": "Provider tecnici del servizio",
+      "classification": "private_provider",
+      "definition": "Stati applicativi e servizi Firebase/Stripe/Resend",
+      "publisher": "Google/Firebase, Stripe, Resend (ruoli distinti)",
+      "sourceURL": null,
+      "dataset": null,
+      "license": null,
+      "licenseURL": null,
+      "licenseStatus": "requires_review",
+      "coverage": "Definita dai file e dal contesto selezionato",
+      "granularity": null,
+      "observationPeriod": null,
+      "publishedAt": null,
+      "sourceUpdatedAt": null,
+      "acquiredAt": null,
+      "declaredFrequency": null,
+      "methodology": "Vedere i file censiti e il manuale; nessuna fonte esterna inferita.",
+      "transformations": [],
+      "limitations": [
+        "Non sono fonti di benchmark immobiliari.",
+        "Accettazione email non certifica consegna.",
+        "Solo metadati di codice; nessun segreto o dato utente."
+      ],
+      "consumers": [
+        "Account",
+        "Piani",
+        "Operations Center",
+        "Email"
+      ],
+      "version": "code-baseline-rc228",
+      "validationState": "inventoried",
+      "nextReviewAt": "2026-11-29",
+      "reviewFrequency": "mensile: politica interna, non frequenza dichiarata dal provider",
+      "lastUpdate": {
+        "status": "not_observed",
+        "at": null,
+        "error": null
+      },
+      "previousVersion": null,
+      "automaticAcquisition": "disabled",
+      "automaticPublication": false,
+      "assets": [
+        {
+          "path": "lib/admin-operations-alerts.js",
+          "sha256": "6c442318d754689c182dce10ba1b8c2dee23cd00cbc0bb8fe9401dc40445a4ad"
+        },
+        {
+          "path": "lib/admin-operations.js",
+          "sha256": "48200750ba34f034a58faf49f154768e20e16acf59ba4c75e6b89f17467e3c26"
+        },
+        {
+          "path": "package.json",
+          "sha256": "bace8995c4d200f7c72fecb5ff2f1963660f037f8a213086e8753821b44c5cc9"
+        }
+      ]
+    }
+  ]
+}
