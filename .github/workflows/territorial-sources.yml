@@ -1,68 +1,37 @@
-name: Controllo mensile fonti territoriali
+name: Regressioni prodotto
 on:
+  push:
+    branches: [main]
+  pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '23 7 5 * *'
 permissions:
   contents: read
 concurrency:
-  group: territorial-source-review
-  cancel-in-progress: false
+  group: regressions-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  check:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Installa le dipendenze dal lockfile
+        run: npm ci
+      - name: Regressioni Node
+        run: npm test
+      - name: Identità finanziarie indipendenti
+        run: node tests/rc213-financial-identities.mjs
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          package-manager-cache: false
-      - name: Test delle fonti e delle aggregazioni
+      - name: Dati territoriali, OMI e turismo
         run: |
           python3 -m unittest discover -s tests -p '*territorial*.py'
-          python3 -m unittest discover -s tests -p 'rc203_reference_links.py'
-          python3 -m unittest discover -s tests -p 'rc217_tourism.py'
-          node --test tests/rc217-tourism.test.js tests/rc218-omi.test.js
           python3 -m unittest discover -s tests -p 'rc218_omi.py'
-      - name: Prepara aggiornamento da revisionare
-        run: python3 scripts/refresh-territorial-references.py --output-dir /tmp/rb-source-review
-      - name: Controlla collegamenti editoriali esistenti
-        if: always()
-        run: python3 scripts/check-reference-links.py --output /tmp/rb-source-review/reference-links.json
-      - name: Copertura e coerenza dei 20 capoluoghi
-        if: always()
-        run: node scripts/audit-territorial-coverage.mjs /tmp/rb-source-review/coverage.json
-      - name: Controllo archivio ISTAT (nessuna pubblicazione)
-        if: always()
-        run: python3 scripts/check-tourism-source.py --output /tmp/rb-source-review/tourism-source.json
-      - name: Integrità e anzianità della fornitura OMI locale
-        if: always()
-        run: node scripts/audit-omi.mjs /tmp/rb-source-review/omi-integrity.json
-      - name: Riepilogo
-        if: always()
-        run: |
-          if [ -f /tmp/rb-source-review/report.json ]; then
-            echo '## Esito controllo fonti (nessuna pubblicazione)' >> "$GITHUB_STEP_SUMMARY"
-            cat /tmp/rb-source-review/report.json >> "$GITHUB_STEP_SUMMARY"
-          fi
-          if [ -f /tmp/rb-source-review/tourism-source.json ]; then
-            echo '## Archivio ISTAT (controllo impronta, non certificazione dei valori)' >> "$GITHUB_STEP_SUMMARY"
-            cat /tmp/rb-source-review/tourism-source.json >> "$GITHUB_STEP_SUMMARY"
-          fi
-          if [ -f /tmp/rb-source-review/omi-integrity.json ]; then
-            echo '## OMI (integrità locale, ultimo semestre del provider non verificato)' >> "$GITHUB_STEP_SUMMARY"
-            cat /tmp/rb-source-review/omi-integrity.json >> "$GITHUB_STEP_SUMMARY"
-          fi
-      - uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: territorial-source-review
-          path: /tmp/rb-source-review/
-          retention-days: 14
-          if-no-files-found: warn
+          python3 -m unittest discover -s tests -p 'rc217_tourism.py'
