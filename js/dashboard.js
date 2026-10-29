@@ -918,7 +918,7 @@ const analyses = querySnapshot.docs.map(doc => {
 
     id: doc.id,
     reportFieldsVersion: 1,
-    propertyMode: assumptions?.source === "owned_property" ? "owned" : "purchase",
+    propertyMode: data.propertyMode === "owned" || assumptions?.source === "owned_property" ? "owned" : "purchase",
 
     roi:
       financialNumber(data.equity) === 0 || data.roiAvailable === false ? null : financialNumber(data.roi),
@@ -1041,7 +1041,7 @@ const analyses = querySnapshot.docs.map(doc => {
       data.occupancy || 0,
 
     net:
-      financialNumber(data.netAfterMortgage ?? data.net ?? data.cashflow),
+      financialNumber(data.netAfterMortgage ?? data.net ?? data.cashflow ?? data.annualProfit ?? data.profit),
 
     risk:
   financialNumber(data.risk),
@@ -1086,7 +1086,7 @@ const analyses = querySnapshot.docs.map(doc => {
       Number(data.annualDebtService ?? data.mortgageYearly ?? 0),
 
     investmentScore:
-  financialNumber(data.investmentScore),
+  financialNumber(data.investmentScore ?? data.score),
 
     isPortfolio:
       data.isPortfolio === true,

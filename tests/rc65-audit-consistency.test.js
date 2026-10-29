@@ -20,10 +20,14 @@ test('annual shared header has Dashboard, badge and logout from resolved access'
  window.currentLang='en';c.renderUser(window.currentUser);assert.match(nodes['user-area'].innerHTML,/PRO ANNUAL/);
 });
 test('risk hero uses the same 40 and 65 boundaries as the PDF',()=>{
- const src=read('dashboard-report/index.html');const start=src.indexOf('  riskHero.innerText =');const end=src.indexOf('\n}',start);const expression=src.slice(start,end);
+ const src=read('dashboard-report/index.html');
+ const helpers=src.slice(src.indexOf('function reportNumber('),src.indexOf('const canonicalInvestmentScore'));
+ const c={};vm.createContext(c);vm.runInContext(helpers,c);
  for(const [risk,expected] of [[0,'BASSO'],[33,'BASSO'],[39,'BASSO'],[40,'MEDIO'],[64,'MEDIO'],[65,'ALTO'],[100,'ALTO']]){
-  const riskHero={};vm.runInNewContext(expression,{riskHero,risk,equity:30000,lang:'it'});assert.equal(riskHero.innerText,expected);
+  const state=c.readReportFinancialState({price:150000,equity:30000,roi:10,net:100,risk,investmentScore:78});
+  assert.equal(c.reportFinancialLabels(state,'it').riskLabel,expected);
  }
+
 });
 test('duplicate Firebase module evaluation keeps the loaded annual state and one observer',()=>{
  const src=read('js/firebase-init.js');const start=src.indexOf('if(!window.__rbFirebaseBootstrapInitialized){');const code=src.slice(start);

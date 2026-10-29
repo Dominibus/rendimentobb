@@ -16,10 +16,14 @@ test('snapshot preserves unavailable property ROI and real zero/negative ROI',()
  assert.equal(f(5.27,{propertyROIAvailable:true}),'5.3%');
 });
 test('web hero marks risk partial when ROI denominator is absent in both languages',()=>{
- const src=read('dashboard-report/index.html');const start=src.indexOf('  riskHero.innerText =');const code=src.slice(start,src.indexOf('\n}',start));
+ const src=read('dashboard-report/index.html');
+ const helpers=src.slice(src.indexOf('function reportNumber('),src.indexOf('const canonicalInvestmentScore'));
+ const c={};vm.createContext(c);vm.runInContext(helpers,c);
  for(const [lang,expected] of [['it','PARZIALE'],['en','PARTIAL']]){
- const riskHero={};vm.runInNewContext(code,{riskHero,risk:15,equity:0,lang});assert.equal(riskHero.innerText,expected);
+  const state=c.readReportFinancialState({price:150000,equity:0,roi:0,net:100,risk:15,investmentScore:78});
+  assert.equal(c.reportFinancialLabels(state,lang).riskLabel,expected);
  }
+
 });
 test('purchase verdict is a scenario assessment rather than purchase advice',()=>{
  const src=read('tool/index.html');assert.doesNotMatch(src,/Acquisto consigliato|Buy recommended/);

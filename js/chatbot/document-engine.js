@@ -349,6 +349,12 @@ window.rbDocumentManager = {
 
 window.buildExecutiveReport = function(data = {}){
 
+    const number = value => value === null || value === undefined ||
+        !['number','string'].includes(typeof value) || String(value).trim() === '' ||
+        !Number.isFinite(Number(value)) ? null : Number(value);
+    const roiNotApplicable = number(data.equity) === 0 || data.roiAvailable === false;
+    const roi = roiNotApplicable ? null : data.reportSource === 'dashboard_report'
+        ? number(data.roi) : number(data.realROI ?? data.visualROI ?? data.roi);
     const report = {
 
         id:
@@ -392,14 +398,10 @@ source:
             data.marketCity ||
             null,
 
-        roi:
-            data.realROI ??
-            data.visualROI ??
-            data.roi ??
-            0,
+        roi,
 
         risk:
-            data.risk ?? 0,
+            number(data.risk),
 
         occupancy:
             data.occupancy ?? 0,
@@ -410,9 +412,10 @@ source:
             0,
 
         cashflow:
-            data.net ??
-            data.annualProfit ??
-            0,
+            number(data.net ?? data.cashflow ?? data.annualProfit),
+
+        investmentScore:
+            number(data.investmentScore ?? data.score),
 
         propertyPrice:
             data.propertyPrice ??
