@@ -95,3 +95,45 @@ body.tool-page .roi-chart canvas{max-height:140px!important;max-width:140px!impo
  body[data-public-shell] .bb-hero h1{font-size:30px;line-height:1.15}
  body[data-public-shell] .bb-hero p{font-size:16px;line-height:1.6}
 }
+/* RC223: compact in-flow cookie control; bottom offsets belong to fixed controls. */
+body.rb-mobile-app .rb-consent-settings{position:static!important;inset:auto!important;margin:12px 16px!important;align-self:center;width:auto;max-width:calc(100% - 32px);flex:none}
+body.home-page .rb223-topic{padding:16px 0!important;margin:0!important;border:0;border-bottom:1px solid #e0e9e4;background:transparent;min-width:0}
+body.home-page .rb223-topic:last-child{border-bottom:0}
+body.home-page .rb223-topic>h2{font-size:20px!important;line-height:1.35!important;margin:0 0 14px!important;color:#164a3a}
+body.home-page .rb223-topic>.rb-flow-content{padding:0}
+body.home-page .rb223-guides{padding:20px 0!important;margin:0;background:transparent!important}
+body.home-page .rb223-guides h2{font-size:20px!important;text-align:left!important}
+body.home-page .rb223-guides .container{width:100%;padding:0!important}
+body.home-page .rb223-guides .feature-card{padding:14px!important;min-height:0!important;box-shadow:none!important}
+body.home-page .rb223-guides .feature-card h3{font-size:17px!important}
+body.cm-page .cm-hero>.rb222-group{margin:12px 0;box-shadow:none}
+.rb223-demo-start{margin:4px 0 16px}
+@media(max-width:760px){
+ body.rb-mobile-app .global-footer{margin-top:16px!important}
+ body.cm-page main{padding-bottom:16px!important}
+ body.cm-page main>.rb222-group:last-child{margin-bottom:0}
+ body.home-page .rb223-topic .rb-flow-content>section{padding:12px 0!important}
+ body.home-page .rb223-guides .container>div{margin-top:14px!important;gap:10px!important}
+ body.home-page .rb223-topic .rb158-section-head{margin-bottom:16px}
+ /* Matching dimensions for both existing shells, without importing account code. */
+ body.rb-mobile-app #global-header .rb-inner{width:calc(100% - 32px)!important;min-height:80px!important;padding:10px 0!important;gap:8px!important}
+ body.rb-mobile-app #global-header .rb158-brand,body[data-public-shell] .rb-public-header .rb-public-brand{width:138px!important;gap:2px}
+ body.rb-mobile-app #global-header .rb-logo,body[data-public-shell] .rb-public-brand img{width:138px!important;height:auto!important;max-height:none}
+ body.rb-mobile-app #global-header .rb158-brand-caption,body[data-public-shell] .rb-public-brand>span{padding-left:3px!important;line-height:1.4!important;justify-content:flex-start}
+ body.rb-mobile-app #global-header .rb158-brand-caption strong,body[data-public-shell] .rb-public-brand strong{font-size:12px!important}
+ body[data-public-shell] .rb-public-inner{min-height:80px;padding:10px 16px;gap:8px}
+ body[data-public-shell] .rb-public-header summary,body.rb-mobile-app #global-header #rb-burger{width:44px!important;height:44px!important;min-height:44px!important;padding:8px!important;font-size:22px!important;border-radius:10px!important}
+ body[data-public-shell] .rb-public-header .rb-public-assistant>summary{width:auto!important;font-size:14px!important;padding:10px 12px!important}
+ body.rb-mobile-app #global-header #rb-header-ai-btn{min-height:44px!important;padding:10px 12px!important;font-size:14px!important}
+ body[data-public-shell] .rb-public-header .rb-public-assistant-panel{top:82px}
+ body[data-public-shell] .bb-hero h1{font-size:28px;line-height:1.15;margin:12px 0}
+ body[data-public-shell] .bb-hero .bb-ribbon{padding:12px;font-size:14px;line-height:1.5;gap:4px}
+ body[data-public-shell] .bb-hero{padding:18px 0!important}
+ body.cm-page main :is(.cm-hero,.cw-hero){padding-top:6px!important;padding-bottom:8px!important}
+ body.cm-page .cw-hero .cm-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}
+ body.cm-page .cw-hero .cm-actions>a{font-size:14px;line-height:1.5;padding-block:8px}
+ body.cm-page .cw-hero .cm-actions>a:first-child{grid-column:1/-1}
+ body.cm-page .cw-hero .cm-note{font-size:13px;line-height:1.5}
+}
+@media(max-width:760px){body.rb-mobile-app #global-header #rb-header-ai-btn{display:inline-flex!important;align-items:center;justify-content:center}}
+@media(max-width:760px){body.rb-mobile-app{padding-top:calc(var(--rb-shell-header-height,80px) + 2px)!important}}
