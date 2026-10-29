@@ -1,0 +1,38 @@
+name: Regressioni prodotto
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: regressions-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Installa le dipendenze dal lockfile
+        run: npm ci
+      - name: Regressioni Node
+        run: npm test
+      - name: Identità finanziarie indipendenti
+        run: node tests/rc213-financial-identities.mjs
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Dati territoriali, OMI e turismo
+        run: |
+          python3 -m unittest discover -s tests -p '*territorial*.py'
+          python3 -m unittest discover -s tests -p 'rc218_omi.py'
+          python3 -m unittest discover -s tests -p 'rc217_tourism.py'
+
