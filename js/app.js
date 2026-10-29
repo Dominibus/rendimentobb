@@ -3790,6 +3790,7 @@ const visualROI =
 window.realROI = realROI;
 
 // 🔥 render chart con cap visivo
+document.body?.setAttribute("data-rb-analysis-ready", "true");
 renderROIChart(access.isFree ? Math.max(0, realROI) : visualROI, access.isFree ? result.propertyROIAvailable : result.roiAvailable);
 
 // 🔥 testo reale

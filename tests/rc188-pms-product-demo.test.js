@@ -55,7 +55,7 @@ test('RC188: IT/EN demo keeps isolation and supplies matching accessible control
  const script=read('js/pms-product-demo.js'),ids=[...script.matchAll(/\$\('([^']+)'\)/g)].map(x=>x[1]);
  for(const file of ['demo/hospitality-pms/index.html','en/demo/hospitality-pms/index.html']){
   const html=read(file);for(const id of ids)assert.ok(html.includes(`id="${id}"`),`${file}: ${id}`);
-  assert.match(html,/pms-product-demo.js\?v=20261023-rc192/);assert.match(html,/pms-product-demo.css\?v=20261023-rc188/);assert.match(html,/public-shell.js/);assert.doesNotMatch(html,/bb-demo.js|firebase|chatbot.js|header.js/);
+  assert.match(html,/pms-product-demo.js\?v=20261029-rc222/);assert.match(html,/pms-product-demo.css\?v=20261023-rc188/);assert.match(html,/public-shell.js/);assert.doesNotMatch(html,/bb-demo.js|firebase|chatbot.js|header.js/);
   const allIds=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);assert.equal(new Set(allIds).size,allIds.length);
  }
  assert.doesNotMatch(script,/fetch\(|localStorage|sessionStorage|indexedDB|XMLHttpRequest|https:\/\//);

@@ -56,6 +56,7 @@ export function mountCommercialWorkspace(root,{client,english=false,demo=false,o
  }
  function render(){
   planner=null;renderHeader();nav.replaceChildren();content.replaceChildren();
+  nav.hidden=!owner;content.hidden=!owner;help.hidden=!owner;
   if(!owner)return;
   for(const [key,label]of Object.entries(views)){const b=button(label,()=>{if(busy)return;if(view!==key&&!guard())return;scenarioDraft=null;setDirty(false);view=key;render();content.focus();});b.setAttribute('aria-current',view===key?'page':'false');nav.append(b);}
   if(!workspace&&view!=='scenario'){view='scenario';render();return;}

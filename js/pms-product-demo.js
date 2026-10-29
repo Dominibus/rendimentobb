@@ -89,9 +89,10 @@ $('demo-booking-form').addEventListener('submit',event=>{
  if(!$('demo-booking-form').reportValidity())return;
  try{
   const values={status:$('demo-booking-status').value,totalAmount:$('demo-total').value,documentsReceived:$('demo-documents-received').value,authorityStatus:$('demo-authority').value,taxableGuests:$('demo-taxable').value,taxStatus:$('demo-tax-status').value,cleaningStatus:$('demo-cleaning-status').value,issueStatus:$('demo-issue-status').value};
+  const cleaningCompleted=selected().cleaning.status!=='completed'&&values.cleaningStatus==='completed';
   const updated=updateDemoBooking(selected(),values);bookings=bookings.map(b=>b.id===selectedId?updated:b);render();
   $('demo-stay-summary').textContent=`${date(updated.checkin)} → ${date(updated.checkout)} · ${updated.guests} ${t('ospiti','guests')} · ${labels[updated.status]}`;
-  notify(t('Salvato nella demo. Calendario, KPI e attività aggiornati. Nessun dato inviato o salvato sul tuo account.','Saved in the demo. Calendar, KPIs and tasks updated. No data sent or saved to your account.'));
+  notify((cleaningCompleted?t('Pulizia completata · ','Cleaning completed · ')+guest(updated)+'. ':'')+t('Salvato nella demo. Calendario, KPI e attività aggiornati. Nessun dato inviato o salvato sul tuo account.','Saved in the demo. Calendar, KPIs and tasks updated. No data sent or saved to your account.'));
  }catch(error){notify(error.message==='authority_requires_documents'?t('Prima di indicare la comunicazione completata, registra tutti i documenti ricevuti. Nessun invio viene effettuato dalla demo. Nessuna modifica salvata.','Before marking reporting complete, record all received documents. The demo sends nothing to authorities. No changes saved.'):error.message==='exemption_requires_zero'?t('Per esenzione indica zero ospiti tassabili. Nessuna modifica salvata.','Exemption requires zero taxable guests. No changes saved.'):t('Controlla importi e numero di documenti/ospiti. Nessuna modifica salvata.','Check amounts and document/guest counts. No changes saved.'));}
 });
 $('demo-reset').addEventListener('click',()=>{bookings=createDemoBookings();selectedId='demo-2';$('demo-task-filter').value='all';populate();render();notify(t('Esempi ripristinati. Tutte le modifiche demo sono state azzerate.','Examples restored. All demo changes have been reset.'));});

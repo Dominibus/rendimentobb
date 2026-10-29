@@ -1,0 +1,97 @@
+/* RC222: presentation fixes from the signed-out iPhone audit. No access overrides. */
+body.cm-page main{width:100%;min-width:0;max-width:1120px;box-sizing:border-box;margin:0 auto}
+body.cm-page main :is(section,article,div,fieldset){min-width:0}
+body.cm-page main :is(h1,h2,h3,p,a,summary,legend){white-space:normal;overflow-wrap:anywhere;max-width:100%}
+body.cm-page main .cm-table-scroll{overflow:auto;max-width:100%}
+body.cm-page main fieldset{min-inline-size:0}
+body.cm-page [hidden]{display:none!important}
+body.tool-page:not([data-rb-analysis-ready="true"]) :is(.simulator-right,#results,.investor-teaser){display:none!important}
+body.tool-page:not([data-rb-analysis-ready="true"]) .simulator-grid{grid-template-columns:minmax(0,1fr)!important}
+.rb222-result-wait{padding:14px 18px;margin:14px auto;border:1px solid #cbded5;border-radius:12px;background:#f1f8f4;color:#31594a;font-size:14px;max-width:1180px}
+body.tool-page[data-rb-analysis-ready="true"] .rb222-result-wait{display:none}
+body.tool-page .roi-chart{height:140px!important;min-height:0!important;max-height:140px!important;width:140px!important;max-width:140px!important;align-self:start}
+body.tool-page .roi-chart canvas{max-height:140px!important;max-width:140px!important}
+.rb222-group{box-sizing:border-box;margin:14px auto;max-width:1200px;border:1px solid #cfdfd8;border-radius:14px;background:#fff;color:#143c32;min-width:0}
+.rb222-group>summary{cursor:pointer;min-height:48px;padding:16px 20px;font-weight:750;line-height:1.4}
+.rb222-group>.rb222-group-content{padding:10px 14px}
+.rb222-group-content>.rb-flow-disclosure{margin:10px 0;max-width:100%}
+.rb222-group summary:focus-visible,.rb222-calendar-return:focus-visible{outline:3px solid #087e61;outline-offset:3px}
+.rb222-preview-more>summary{font-size:14px;padding:10px 0;cursor:pointer;font-weight:650}
+.rb222-preview-more .rb158-preview-note{margin-bottom:0}
+@media(max-width:760px){
+ /* Do not clip overflow: shrink the actual layout and keep table scrolling local. */
+ body.cm-page main{max-width:100%;padding:20px 14px 28px!important}
+ body.cm-page main :is(.cm-hero,.cw-hero){padding:12px 0 16px!important;min-height:0!important;margin:0!important}
+ body.cm-page main h1{font-size:30px!important;line-height:1.14!important;margin:12px 0 16px!important;letter-spacing:-.025em}
+ body.cm-page main .cm-lead{font-size:16px!important;line-height:1.6!important}
+ body.cm-page main .cm-badge{font-size:14px;line-height:1.6;padding:12px}
+ body.cm-page main .cm-actions{gap:10px;align-items:stretch}
+ body.cm-page main .cm-actions :is(a,button){max-width:100%;white-space:normal;min-width:0}
+ body.cm-page main .cw-content[hidden],body.cm-page main .cw-tabs[hidden]{display:none!important}
+ body.rb-mobile-app #rb-mobile-tabs button{display:flex!important;background:transparent!important;color:#475f57!important;border:0!important;font-size:11px!important;padding:6px 2px!important}
+ body.rb-mobile-app #rb-mobile-tabs button svg{color:inherit!important}
+ body.rb-mobile-app :is(.hero.hero-bg,.hero,.rb158-hero){min-height:0!important;padding-top:28px!important;padding-bottom:28px!important}
+ body.rb-mobile-app .hero .container{padding-top:0!important;padding-bottom:0!important}
+ body.rb-mobile-app .hero :is(h1,.page-title h1){font-size:30px!important;line-height:1.15!important;letter-spacing:-.025em!important;max-width:100%;overflow-wrap:break-word}
+ body.rb-mobile-app .hero p{font-size:16px!important;line-height:1.6!important}
+ body.rb-mobile-app .hero .hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px!important}
+ body.rb-mobile-app .hero .hero-cta>a{min-width:0;max-width:100%;min-height:44px;padding:12px 16px!important;font-size:16px!important;border-radius:12px!important}
+ body.rb-mobile-app .rb-content-breadcrumb{width:100%;max-width:100%;margin:0!important;padding:12px 16px!important;font-size:12px!important;background:transparent}
+ body.rb-mobile-app .rb-content-breadcrumb+main{margin-top:0!important;padding-top:0!important}
+ body.rb-mobile-app .rb171-market{padding-top:24px}
+ body.rb-mobile-app .global-footer{margin-top:24px!important}
+ body.rb-mobile-app main{padding-bottom:24px}
+ body.home-page .rb158-hero-grid{gap:18px}
+ body.home-page .rb158-hero h1{font-size:34px!important;line-height:1.12!important}
+ body.home-page .rb158-preview{padding:16px;transform:none}
+ body.home-page .rb158-preview h2{font-size:22px;margin:8px 0}
+ body.home-page .rb158-preview-card{padding:12px;margin:10px 0}
+ body.home-page .rb158-preview-top{padding-bottom:6px}
+ body.home-page .rb158-preview-track{margin:8px 0}
+ body.home-page .rb222-group{margin:12px 16px}
+ body.home-page .rb222-group-content>.rb-flow-disclosure{margin:8px 0}
+ body.tool-page .tool-hero{min-height:0!important;padding:18px 0 24px!important}
+ body.tool-page .simulator-container{margin-bottom:0!important;padding:0 12px!important}
+ body.tool-page .simulator-grid{gap:16px!important;grid-template-columns:minmax(0,1fr)!important}
+ body.tool-page .simulator-left,body.tool-page .simulator-right{min-width:0;padding:16px!important}
+ body.tool-page .roi-main{gap:12px!important;grid-template-columns:minmax(0,1fr)!important}
+ body.tool-page .roi-main>*{min-height:0!important}
+ body.tool-page .roi-value{padding:12px!important}
+ body.tool-page .roi-metrics{gap:8px!important}
+ body.tool-page .input-group{padding:12px!important}
+ body.tool-page .rb222-result-wait{margin:12px}
+ body.rb-mobile-app .rb188-demo .bb-hero{padding:24px 0 20px!important}
+ body.rb-mobile-app .rb188-demo .bb-hero h1{font-size:30px;line-height:1.15;margin:14px 0}
+ body.rb-mobile-app .rb188-demo .bb-hero p{font-size:16px;line-height:1.6}
+ body.rb-mobile-app .rb188-demo .bb-ribbon{padding:12px;font-size:14px}
+ body.rb-mobile-app .rb188-demo .bb-section{padding:24px 0}
+ body.rb-mobile-app .rb188-demo .rb188-metrics{gap:8px}
+ body.rb-mobile-app .rb188-demo .bb-demo-metric{padding:12px}
+ body.rb-mobile-app .rb222-calendar-return{width:100%;min-height:44px}
+ body.rb-mobile-app #demo-calendar{scroll-margin-top:calc(var(--rb-shell-header-height,82px) + 32px)}
+ body.dashboard-bg .rb-hero{padding:18px!important;gap:12px!important;margin-top:12px!important}
+ body.dashboard-bg .rb-hero h1{font-size:28px!important;margin:0 0 12px!important;line-height:1.15!important}
+ body.dashboard-bg .rb-hero p{font-size:14px!important;line-height:1.6!important;margin:8px 0!important}
+ body.dashboard-bg .rb-hero .rb-flow-disclosure{margin:6px 0}
+ body.dashboard-bg .rb179-demo-entry a{padding:12px!important;font-size:14px!important;min-height:44px}
+ body.dashboard-bg .rb161-control-actions{gap:8px;margin-top:12px!important}
+ body.dashboard-bg .rb161-control-actions button{padding:10px!important;font-size:14px!important;min-height:44px}
+ body.rb-mobile-app .rb222-group-content>.cm-card{padding:14px;margin:0;border:0;box-shadow:none}
+}
+@media(max-width:760px){
+ body.tool-page .rb-municipality-picker{padding:0}
+ body.tool-page .rb-municipality-picker p{font-size:12px;line-height:1.5}
+ body.tool-page .rb-municipality-source{margin-top:8px}
+ body.tool-page .input-group>.rb-flow-disclosure{margin:10px 0}
+ body.tool-page .rb222-group{margin:10px 0}
+ body.tool-page .rb222-group-content{padding:10px}
+}
+@media(max-width:760px){
+ body[data-public-shell] .rb-public-header .rb-public-brand{width:146px}
+ body[data-public-shell] .rb-public-brand img{width:146px;height:auto}
+ body[data-public-shell] .rb-public-brand strong{font-size:12px}
+ body[data-public-shell] .rb-public-brand>span{justify-content:flex-start;padding-left:3px}
+ body[data-public-shell] .bb-hero{padding:24px 0!important}
+ body[data-public-shell] .bb-hero h1{font-size:30px;line-height:1.15}
+ body[data-public-shell] .bb-hero p{font-size:16px;line-height:1.6}
+}

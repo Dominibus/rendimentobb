@@ -1,4 +1,4 @@
-import {mountCommercialWorkspace,createCommercialDemoClient} from './commercial-workspace-ui.js?v=20261028-rc213';
+import {mountCommercialWorkspace,createCommercialDemoClient} from './commercial-workspace-ui.js?v=20261029-rc222';
 import {createCommercialClient} from './commercial-workspace-client.js?v=20261025-rc196';
 import {consumeCommercialTransfer} from './commercial-transfer.js?v=20261025-rc196';
 const root=document.querySelector('[data-commercial-workspace]'),english=document.documentElement.lang==='en',demo=new URLSearchParams(location.search).get('demo')==='1';

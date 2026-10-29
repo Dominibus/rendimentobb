@@ -67,3 +67,15 @@ test('RC197 changing month preserves the calendar room instead of silently retur
 for(const english of [false,true])test('RC207 visible input guide, descriptions and compilation shortcut '+english,async()=>{
  const {root,app,field,click}=setup({english});await app.setOwner('demo');assert.ok(root.find(n=>n.id==='commercial-input-help'));await click(english?/^Scenarios$/:/^Scenari$/);assert.match(field('fixedAnnual').attributes['aria-describedby'],/help$/);assert.equal(field('fixedAnnual').attributes['aria-label'],english?'Annual fixed operating costs (€)':'Costi operativi fissi annui (€)');await click(/^Autopilot$/);await click(english?/^How do I fill in the PMS\?$/:/^Come compilo il PMS\?$/);assert.match(root.textContent,english?/Input guide/:/Guida alla compilazione/);assert.equal(app.isDirty(),false);
 });
+for(const english of [false,true])test('RC222 signed-out workspace has no empty operational panel and restores it after sign-in '+(english?'EN':'IT'),async()=>{
+ const {root,app}=setup({english});
+ const panel=root.find(n=>n.attributes?.tabindex==='-1'||n.tag==='section'&&n.className==='cm-card cw-content')||root.children.at(-1);
+ const nav=root.find(n=>n.tag==='nav');
+ assert.equal(panel.hidden,true);assert.equal(nav.hidden,true);
+ await app.setOwner('demo');
+ assert.equal(panel.hidden,false);assert.equal(nav.hidden,false);
+ assert.ok(nav.children.length>=6);assert.match(panel.textContent,english?/Today/:/Oggi/);
+ await app.setOwner(null);
+ assert.equal(panel.hidden,true);assert.equal(nav.hidden,true);
+ assert.equal(panel.textContent,'');assert.equal(app.getWorkspace(),null);
+});
