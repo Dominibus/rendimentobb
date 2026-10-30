@@ -70,7 +70,7 @@ test('RC193 chatbot preserves privacy, guarantees, focused documents and ordinar
  w.rbDocumentManager={getLast:()=>({id:'doc'})};w.rbPDFConversationDocumentId='doc';w.rbGenerateResponse=()=>({type:'document_grounded',textIT:'Document context'});const r=await w.rbProcessAIMessage('Ricavi studio medico');assert.notEqual(r.intent?.intent,'commercial_property_scope');
 });
 test('RC193 parent cache references updated without changing unrelated engines',()=>{
- assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261030-a1-a4/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261030-a1-a4/);
+ assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261030-candidates/);assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261030-candidates/);
  function walk(dir){return readdirSync(dir).flatMap(n=>{const p=dir+'/'+n;return n==='node_modules'?[]:statSync(p).isDirectory()?walk(p):p.endsWith('.html')?[p]:[];});}
  for(const p of walk(new URL('..',import.meta.url).pathname)){const s=readFileSync(p,'utf8');assert.doesNotMatch(s,/\/(?:js\/header|js\/chatbot-loader)\.js\?v=20261023-rc192/,p);}
 });

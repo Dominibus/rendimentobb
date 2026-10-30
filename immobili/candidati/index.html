@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow">
+<title data-it="Confronta i tuoi candidati | RendimentoBB" data-en="Compare your property candidates | RendimentoBB">Confronta i tuoi candidati | RendimentoBB</title>
+<meta name="description" content="Confronta immobili candidati con criteri espliciti e dati dichiarati. Nessuna promessa di rendimento.">
+<link rel="canonical" href="https://www.rendimentobb.it/immobili/candidati/">
+<link rel="icon" href="/img/favicon.svg?v=20261019-rc153" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css?v=20261021-rc172"><link rel="stylesheet" href="/css/candidate-workspace.css?v=20261030-candidates">
+<link rel="stylesheet" href="/css/mobile-app-rc186.css?v=20261029-rc221"><link rel="stylesheet" href="/css/mobile-shell.css?v=20261029-rc221"><script src="/js/mobile-shell.js?v=20261029-rc221" defer></script></head><body class="candidate-page"><div id="global-header"></div><main class="candidate-shell" id="candidate-workspace">
+
+<a data-it="← Torna a Immobili" data-en="← Back to Properties" href="/immobili/">← Torna a Immobili</a>
+<p data-it="Dai molti candidati alle verifiche giuste" data-en="From many candidates to focused checks" class="candidate-kicker">Dai molti candidati alle verifiche giuste</p>
+<h1 data-it="Quali immobili meritano di approfondire?" data-en="Which properties deserve a closer look?">Quali immobili meritano di approfondire?</h1>
+<p data-it="Inserisci fino a 50 candidati e confrontali con i tuoi vincoli. Ogni esito mostra motivi e informazioni mancanti: non è una classifica degli investimenti migliori." data-en="Enter up to 50 candidates and compare them with your constraints. Each result shows reasons and missing information: this is not a ranking of the best investments." class="candidate-intro">Inserisci fino a 50 candidati e confrontali con i tuoi vincoli. Ogni esito mostra motivi e informazioni mancanti: non è una classifica degli investimenti migliori.</p>
+<p data-it="Solo nella memoria di questa pagina. Ricaricare, chiudere o cambiare account elimina l’elenco. Analizza si apre in una nuova scheda per conservarlo qui. Non inserire nomi, contatti di proprietari o agenti." data-en="Only in this page’s memory. Reloading, closing or changing accounts clears the list. Analyse opens in a new tab to keep it here. Do not enter owner or agent names or contact details." class="candidate-note">Solo nella memoria di questa pagina. Ricaricare, chiudere o cambiare account elimina l’elenco. Analizza si apre in una nuova scheda per conservarlo qui. Non inserire nomi, contatti di proprietari o agenti.</p>
+<ol class="candidate-steps">
+<li data-it="Inserisci o importa" data-en="Enter or import">Inserisci o importa</li>
+<li data-it="Definisci i criteri" data-en="Define criteria">Definisci i criteri</li>
+<li data-it="Confronta e approfondisci" data-en="Compare and investigate">Confronta e approfondisci</li>
+</ol>
+<label for="candidate-number-format">
+<span data-it="Formato numerico dei prossimi inserimenti/CSV" data-en="Number format for new inputs/CSV">Formato numerico dei prossimi inserimenti/CSV</span>
+<select id="candidate-number-format"><option value="it">IT · 150.000,50</option><option value="en">EN · 150,000.50</option></select></label>
+<section class="candidate-panel" aria-labelledby="candidate-entry-title">
+<h2 data-it="1. Inserisci i candidati" data-en="1. Enter candidates" id="candidate-entry-title">1. Inserisci i candidati</h2>
+<details open><summary>
+<span data-it="Inserimento manuale" data-en="Manual entry">Inserimento manuale</span>
+</summary>
+<p data-it="Usa un riferimento interno, oppure lascialo vuoto per generarne uno. Prezzo e superficie devono essere positivi se indicati. Gli altri importi possono essere zero; vuoto significa mancante." data-en="Use an internal reference, or leave it blank to generate one. Price and area must be positive if supplied. Other amounts may be zero; blank means missing.">Usa un riferimento interno, oppure lascialo vuoto per generarne uno. Prezzo e superficie devono essere positivi se indicati. Gli altri importi possono essere zero; vuoto significa mancante.</p>
+<form id="candidate-manual" novalidate><div id="candidate-manual-fields" class="candidate-grid"></div><details><summary data-it="Ipotesi economiche facoltative" data-en="Optional economic assumptions">Ipotesi economiche facoltative</summary><div id="candidate-manual-economic-fields" class="candidate-grid"></div></details><div class="candidate-actions">
+<button data-it="Aggiungi candidato" data-en="Add candidate" type="submit" class="btn btn-primary">Aggiungi candidato</button>
+</div></form></details>
+<details><summary>
+<span data-it="Importa CSV con anteprima" data-en="Import CSV with preview">Importa CSV con anteprima</span>
+</summary>
+<p data-it="Il modello contiene tre esempi sintetici, non annunci verificati. Sostituiscili con i tuoi dati. Massimo 50 righe e 500 KB. Intestazioni tecniche identiche in IT/EN; separatore punto e virgola, virgola o tab. Il modello usa numeri IT. Date YYYY-MM-DD. Nessuna colonna contatti è ammessa." data-en="The template contains three synthetic examples, not verified listings. Replace them with your data. Maximum 50 rows and 500 KB. Machine headers are identical in IT/EN; semicolon, comma or tab delimiter. The template uses IT numbers. Dates YYYY-MM-DD. Contact columns are not accepted.">Il modello contiene tre esempi sintetici, non annunci verificati. Sostituiscili con i tuoi dati. Massimo 50 righe e 500 KB. Intestazioni tecniche identiche in IT/EN; separatore punto e virgola, virgola o tab. Il modello usa numeri IT. Date YYYY-MM-DD. Nessuna colonna contatti è ammessa.</p>
+<div class="candidate-actions">
+<button data-it="Scarica modello con esempi" data-en="Download template with examples" type="button" id="candidate-template">Scarica modello con esempi</button>
+</div><label class="candidate-file" for="candidate-file">
+<span data-it="File CSV" data-en="CSV file">File CSV</span>
+<input id="candidate-file" type="file" accept=".csv,text/csv"></label><div class="candidate-actions">
+<button data-it="Mostra anteprima, senza aggiungere" data-en="Preview without adding" type="button" id="candidate-preview-button">Mostra anteprima, senza aggiungere</button>
+</div><div id="candidate-preview" hidden></div></details></section>
+<section class="candidate-panel" aria-labelledby="candidate-criteria-title">
+<h2 data-it="2. Definisci criteri e preferenze" data-en="2. Define criteria and preferences" id="candidate-criteria-title">2. Definisci criteri e preferenze</h2>
+<p data-it="I vincoli sono facoltativi, ma impostane almeno uno per classificare i candidati. Il budget totale comprende prezzo, lavori e altre spese dichiarate, prima del finanziamento. Il capitale disponibile viene confrontato con il capitale proprio previsto da te: non è una valutazione bancaria. Comune e zona sono etichette dichiarate, non geocodificate." data-en="Constraints are optional, but set at least one to classify candidates. Total budget includes price, works and other stated upfront costs before financing. Available equity is compared with the equity you plan: this is not a lending assessment. Town and area are entered labels, not geocoded.">I vincoli sono facoltativi, ma impostane almeno uno per classificare i candidati. Il budget totale comprende prezzo, lavori e altre spese dichiarate, prima del finanziamento. Il capitale disponibile viene confrontato con il capitale proprio previsto da te: non è una valutazione bancaria. Comune e zona sono etichette dichiarate, non geocodificate.</p>
+<form id="candidate-criteria" novalidate><div class="candidate-grid">
+<label for="criterion-maxTotal"><span data-it="Budget totale massimo EUR" data-en="Maximum total budget EUR">Budget totale massimo EUR</span><input id="criterion-maxTotal" type="text" maxlength="80" autocomplete="off"></label>
+<label for="criterion-minArea"><span data-it="Superficie minima m²" data-en="Minimum floor area m²">Superficie minima m²</span><input id="criterion-minArea" type="text" maxlength="80" autocomplete="off"></label>
+<label for="criterion-availableCapital"><span data-it="Capitale disponibile EUR" data-en="Available equity EUR">Capitale disponibile EUR</span><input id="criterion-availableCapital" type="text" maxlength="80" autocomplete="off"></label>
+<label for="criterion-city"><span data-it="Comune obbligatorio (corrispondenza esatta)" data-en="Required town (exact match)">Comune obbligatorio (corrispondenza esatta)</span><input id="criterion-city" type="text" maxlength="80" autocomplete="off"></label>
+<label for="criterion-zone"><span data-it="Zona obbligatoria (corrispondenza esatta)" data-en="Required area (exact match)">Zona obbligatoria (corrispondenza esatta)</span><input id="criterion-zone" type="text" maxlength="80" autocomplete="off"></label>
+<label for="criterion-preferredZone"><span data-it="Preferenza zona, non obbligatoria" data-en="Preferred area, optional">Preferenza zona, non obbligatoria</span><input id="criterion-preferredZone" type="text" maxlength="80" autocomplete="off"></label>
+
+</div><div class="candidate-actions">
+<button data-it="Applica criteri" data-en="Apply criteria" type="submit" class="btn btn-primary">Applica criteri</button>
+</div></form>
+<details><summary>
+<span data-it="Ipotesi economiche comuni: applicazione esplicita" data-en="Common economic assumptions: explicit application">Ipotesi economiche comuni: applicazione esplicita</span>
+</summary>
+<p data-it="Seleziona i candidati nella tabella. Solo i campi compilati sostituiranno quelli dei riferimenti selezionati; i campi vuoti non cancellano valori. Nessun default viene aggiunto. Aliquota e base fiscale del modello devono essere verificate con un professionista." data-en="Select candidates in the table. Only supplied fields replace values on the selected references; blanks do not clear existing values. No defaults are added. Model tax assumptions and tax base require professional review.">Seleziona i candidati nella tabella. Solo i campi compilati sostituiranno quelli dei riferimenti selezionati; i campi vuoti non cancellano valori. Nessun default viene aggiunto. Aliquota e base fiscale del modello devono essere verificate con un professionista.</p>
+<p id="candidate-selected-summary"></p><form id="candidate-common" novalidate><div id="candidate-common-fields" class="candidate-grid"></div><div class="candidate-actions">
+<button data-it="Applica ai riferimenti selezionati" data-en="Apply to selected references" type="submit">Applica ai riferimenti selezionati</button>
+</div></form></details></section>
+<section class="candidate-panel" aria-labelledby="candidate-results-title">
+<h2 data-it="3. Confronta e approfondisci" data-en="3. Compare and investigate" id="candidate-results-title">3. Confronta e approfondisci</h2>
+<p id="candidate-summary" role="status"></p><div class="candidate-actions"><label for="candidate-filter">
+<span data-it="Mostra" data-en="Show">Mostra</span>
+<select id="candidate-filter">
+<option data-it="Tutti" data-en="All" value="all">Tutti</option>
+<option data-it="Compatibili" data-en="Matching" value="compatible">Compatibili</option>
+<option data-it="Fuori criterio" data-en="Outside criteria" value="outside">Fuori criterio</option>
+<option data-it="Informazioni insufficienti" data-en="Insufficient information" value="insufficient">Informazioni insufficienti</option>
+</select></label><label for="candidate-sort">
+<span data-it="Ordina (nessun punteggio)" data-en="Sort (no score)">Ordina (nessun punteggio)</span>
+<select id="candidate-sort">
+<option data-it="Ordine di inserimento" data-en="Entry order" value="entered">Ordine di inserimento</option>
+<option data-it="Prezzo crescente" data-en="Price ascending" value="price:asc">Prezzo crescente</option>
+<option data-it="Totale crescente" data-en="Total ascending" value="total:asc">Totale crescente</option>
+<option data-it="Superficie decrescente" data-en="Area descending" value="sqm:desc">Superficie decrescente</option>
+</select></label>
+<button data-it="Seleziona tutti i visibili" data-en="Select all visible" type="button" id="candidate-select-visible">Seleziona tutti i visibili</button>
+<button data-it="Deseleziona tutti" data-en="Deselect all" type="button" id="candidate-deselect">Deseleziona tutti</button>
+</div>
+<p data-it="Negli ordinamenti numerici i candidati incompleti vanno in fondo; poi si usa il valore scelto. Un candidato incompleto non è dichiarato compatibile. Nessun peso nascosto; la preferenza di zona non altera lo stato." data-en="Numeric sorts put incomplete candidates last, then use the selected value. An incomplete candidate is not declared a match. No hidden weights; the area preference does not change status.">Negli ordinamenti numerici i candidati incompleti vanno in fondo; poi si usa il valore scelto. Un candidato incompleto non è dichiarato compatibile. Nessun peso nascosto; la preferenza di zona non altera lo stato.</p>
+<div class="candidate-table-wrap" role="region" aria-label="Confronto candidati / Candidate comparison" tabindex="0"><table><caption>
+<span data-it="Dati dichiarati, non verificati con portali" data-en="Entered data, not checked with portals">Dati dichiarati, non verificati con portali</span>
+</caption><thead><tr>
+<th data-it="Seleziona" data-en="Select" scope="col">Seleziona</th>
+<th data-it="Riferimento" data-en="Reference" scope="col">Riferimento</th>
+<th data-it="Comune e zona" data-en="Town and area" scope="col">Comune e zona</th>
+<th data-it="Prezzo EUR" data-en="Price EUR" scope="col">Prezzo EUR</th>
+<th data-it="Superficie m²" data-en="Area m²" scope="col">Superficie m²</th>
+<th data-it="Totale EUR" data-en="Total EUR" scope="col">Totale EUR</th>
+<th data-it="Esito e motivi" data-en="Result and reasons" scope="col">Esito e motivi</th>
+<th data-it="Prossimo passo" data-en="Next step" scope="col">Prossimo passo</th>
+</tr></thead><tbody id="candidate-rows"></tbody></table></div>
+<h3>
+<span data-it="Spiegazione dello stesso contesto" data-en="Explanation from the same context">Spiegazione dello stesso contesto</span>
+</h3><p id="candidate-explanation" tabindex="-1"></p>
+<p data-it="Qui non calcoliamo rendimenti o investment score. Apri Analizza per completare i dati e usare il motore esistente con i permessi del tuo piano. Lavori e altre spese iniziali non diventano costi mensili. OMI e turismo non forniscono automaticamente tariffa, occupazione o ricavi." data-en="No returns or investment scores are calculated here. Open Analyse to complete inputs and use the existing engine with your plan permissions. Works and upfront costs do not become monthly expenses. OMI and tourism do not automatically supply rates, occupancy or revenue.">Qui non calcoliamo rendimenti o investment score. Apri Analizza per completare i dati e usare il motore esistente con i permessi del tuo piano. Lavori e altre spese iniziali non diventano costi mensili. OMI e turismo non forniscono automaticamente tariffa, occupazione o ricavi.</p>
+<div class="candidate-actions">
+<button data-it="Svuota elenco e criteri" data-en="Clear list and criteria" type="button" id="candidate-clear">Svuota elenco e criteri</button>
+<a data-it="Torna al confronto A/B" data-en="Back to A/B comparison" href="/immobili/#rb167-comparison">Torna al confronto A/B</a>
+</div></section><p id="candidate-status" class="candidate-status" role="status" aria-live="polite"></p>
+<noscript>
+<p data-it="Attiva JavaScript per usare il confronto locale. Nessun file è stato importato." data-en="Enable JavaScript to use the local comparison. No file has been imported.">Attiva JavaScript per usare il confronto locale. Nessun file è stato importato.</p>
+</noscript></main><div id="global-footer"></div>
+<script src="/js/ui-system.js?v=20261011-rc99" defer></script><script type="module" src="/js/header.js?v=20261029-rc221"></script><script type="module" src="/js/footer.js?v=20261025-rc196"></script><script type="module" src="/js/candidate-workspace.js?v=20261030-candidates"></script></body></html>

@@ -1,0 +1,4 @@
+﻿"reference";"city";"zone";"price_eur";"area_sqm";"works_eur";"other_upfront_eur";"equity_eur";"nightly_eur";"occupancy_pct";"monthly_costs_eur";"commission_pct";"model_tax_pct";"interest_pct";"loan_years";"listing_url";"checked_on"
+"C-001";"Roma";"Nord";"150000";"70";"10000";"5000";"30000";"120";"60";"300";"15";"21";"3,5";"20";"";"2026-10-30"
+"C-002";"Roma";"Sud";"260000";"50";"0";"10000";"";"";"";"";"";"";"";"";"";""
+"C-003";"Roma";"Nord";"170000";"";"";"";"";"";"";"";"";"";"";"";"";""

@@ -13,7 +13,7 @@ test('RC221 every portal/public-shell document loads one independent mobile shel
   assert.equal((s.match(/src="\/js\/mobile-shell.js\?v=20261029-rc221" defer/g)||[]).length,1,file);
   assert.match(s,/mobile-shell.css\?v=20261029-rc221/);count++;
  }
- assert.equal(count,47);
+ assert.equal(count,48);
 });
 test('RC221 mobile shell stays isolated from account and calculation code',()=>{
  const s=read('js/mobile-shell.js');assert.doesNotMatch(s,/firebase|fetch\(|getUserAccess|saveAnalysis|calculate\(/);

@@ -38,5 +38,5 @@ test('every page exposing the shared Assistant has a centralized loader fallback
   }
   else assert.ok(url.pathname.endsWith('/login/index.html')||url.pathname.endsWith('/guest-report/index.html')||url.pathname.endsWith('/account-action/index.html'),`Unexpected page without shared header: ${url.pathname}`);
  }
- assert.equal(covered,43);
+ assert.equal(covered,44);
 });
