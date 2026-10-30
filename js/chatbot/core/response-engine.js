@@ -925,6 +925,12 @@ if(
 // 🏨 PMS DATA
 // =====================================
 
+// Never let legacy aggregate templates turn an unavailable account snapshot into zero.
+if(/^pms(?:_|$)/.test(intent.intent || '')){
+  const availability=window.rbBuildPMSAvailabilityResponse?.(message,intent.intent);
+  if(availability)return availability;
+}
+
 const pmsData =
 
   window.rbPMSData ||

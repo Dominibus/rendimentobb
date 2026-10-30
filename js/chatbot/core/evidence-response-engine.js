@@ -1,0 +1,124 @@
+// Read-only conversational evidence. No inferred account facts or historical source versions.
+(function(){
+ 'use strict';
+ const norm=v=>String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ const number=v=>['number','string'].includes(typeof v)&&String(v).trim()!==''&&Number.isFinite(Number(v))?Number(v):null;
+ const reply=(type,it,en,metadata={},actions=[])=>({type,confidence:1,textIT:it,textEN:en,actions,metadata});
+ const commercial=q=>/\b(?:investor|pro|free|abbonament\w*|subscriptions?|plans?|trial)\b|pian[oi].*(?:prezz|cost)|(?:prezz|cost).*(?:pian[oi])/.test(q);
+ const scope=()=>{
+  const filter=window.bookingsPropertyFilter;
+  return typeof filter==='string'&&filter&&filter!=='all'?filter:
+   window.bookingsAllPropertiesView===false&&typeof window.currentPropertyId==='string'?window.currentPropertyId:null;
+ };
+ window.rbReadPMSEvidence=function(){
+  const data=window.rbPMSData,uid=window.currentUser?.uid,access=window.getUserAccess?.()||{};
+  const demo=window.isDemoDashboard===true&&data?.isDemo===true;
+  if(!demo&&access.isLoading)return {state:'loading'};
+  if(!demo&&(!uid||uid==='demo-user'||!(access.isInvestor||access.isPro||access.isAdmin)))return {state:'access'};
+  const load=window.rbPMSSnapshotLoad;
+  if(!demo&&load?.ownerUid===uid&&['loading','error'].includes(load.status))return {state:load.status};
+  if(!data||(!demo&&(data.isDemo===true||data.ownerUid!==uid||data.portalSnapshotReady!==true))||!Array.isArray(data.propertyList))return {state:'absent'};
+  const rows=demo?data.bookingList:data.portalBookingList;
+  if(!Array.isArray(rows))return {state:'absent'};
+  const properties=data.propertyList.filter(p=>typeof p.id==='string'&&p.id&&(!p.uid||p.uid===uid||demo));
+  const ids=new Set(properties.map(p=>p.id));
+  // A complete loaded directory is the authority for property scope, never a remembered name.
+  const bookings=rows.filter(b=>ids.has(b.propertyId)&&(!b.uid||b.uid===uid||demo));
+  return {state:bookings.length?'populated':'empty',ownerUid:demo?null:uid,demo,properties,bookings,scopePropertyId:scope()};
+ };
+ window.rbBuildPMSAvailabilityResponse=function(message,intent=''){
+  const e=window.rbReadPMSEvidence();
+  const labels={
+   access:['La lettura dei dati PMS richiede un account con Investor, Pro o prova attiva. Accedi e verifica il piano; non posso dedurre quante prenotazioni hai.','Reading account PMS data requires Investor, Pro or an active trial. Sign in and check your plan; I cannot infer your booking count.'],
+   absent:['Lo snapshot PMS non è disponibile o non è completo in questa schermata. Apri Dashboard → Gestione e carica i dati. Dati non disponibili non significano zero prenotazioni.','The PMS snapshot is unavailable or incomplete on this screen. Open Dashboard → Management and load the records. Unavailable data do not mean zero bookings.'],
+   loading:['Le prenotazioni PMS sono in caricamento. Attendi e ripeti la domanda: non posso ancora confermare conteggi o attività.','PMS bookings are loading. Wait and ask again: counts and tasks cannot yet be confirmed.'],
+   error:['Il caricamento PMS non è riuscito. Riprova dalla Dashboard; se il problema persiste verifica connessione e accesso. Non considero vuoto lo snapshot e non confermo che le attività siano completate.','PMS loading failed. Retry from the Dashboard; if it persists check your connection and access. I do not treat the snapshot as empty or confirm that tasks are complete.']
+  };
+  if(labels[e.state])return reply('pms_context',...labels[e.state],{source:'pms_availability',state:e.state});
+  // Legacy aggregate replies may use only explicitly available metrics, including intentional zero.
+  const required={pms_analysis:['bookings','revenue','occupancy','adr'],pms_overview:['properties','bookings','revenue','occupancy','adr','guests','arrivals','checkins','checkouts'],pms_bookings:['bookings'],pms_arrivals:['arrivals'],pms_checkins:['checkins'],pms_checkouts:['checkouts'],pms_revenue:['revenue'],pms_occupancy:['occupancy'],pms_adr:['adr'],pms_guests:['guests']};
+  if((required[intent]||[]).some(k=>number(window.rbPMSData[k])===null))return reply('pms_context','L’indicatore richiesto non è disponibile nello snapshot caricato. Verifica periodo e completezza nella Dashboard; non lo sostituisco con zero.','The requested metric is unavailable in the loaded snapshot. Check the period and completeness in the Dashboard; I will not replace it with zero.',{source:'pms_availability',state:'missing_metric'});
+  return null;
+ };
+ window.rbValidateEvidenceBookingAction=function(action){
+  const e=window.rbReadPMSEvidence();
+  return ['empty','populated'].includes(e.state)&&e.ownerUid===action.contextOwnerUid&&e.demo===action.contextDemo&&e.scopePropertyId===action.contextScopePropertyId&&
+   e.bookings.filter(b=>b.id===action.bookingId&&b.propertyId===action.propertyId).length===1;
+ };
+ window.rbBuildBookingNavigationResponse=function(message){
+  const q=norm(message);
+  if(!/prenotazion|\bbookings?\b|reservations?/.test(q)||!/portami|apri|vai a|take me|open|navigate|go to/.test(q)||/pdf|esport|export|import|crea|create|cancell|delete/.test(q))return null;
+  const unavailable=window.rbBuildPMSAvailabilityResponse(message);if(unavailable)return unavailable;
+  const e=window.rbReadPMSEvidence();
+  const properties=e.properties.filter(p=>norm(p.name).length>=3&&q.includes(norm(p.name)));
+  const propertyIds=properties.length?properties.map(p=>p.id):e.scopePropertyId?[e.scopePropertyId]:null;
+  if(propertyIds?.some(id=>!e.properties.some(p=>p.id===id)))return reply('booking_selection','La proprietà selezionata non è disponibile nello snapshot. Seleziona di nuovo un immobile autorizzato nella Dashboard.','The selected property is unavailable in the snapshot. Select an authorized property again in the Dashboard.',{state:'unknown_property'});
+  if(properties.length===0&&/\b(?:per|di|for|in)\s+(?:l['’])?(?:immobile|property)\s+/.test(q))return reply('booking_selection','Non riconosco la proprietà richiesta nel contesto autorizzato. Selezionala nella Dashboard.','I cannot identify the requested property in the authorized context. Select it in the Dashboard.',{state:'unknown_property'});
+  let bookings=e.bookings.filter(b=>typeof b.id==='string'&&b.id&&(!propertyIds||propertyIds.includes(b.propertyId)));
+  // Exact saved references only; no ID is manufactured from dates, names or array positions.
+  const named=bookings.filter(b=>[b.id,b.guestName,b.importReference?.reference].some(v=>typeof v==='string'&&v.trim().length>=3&&q.includes(norm(v.trim()))));
+  if(named.length)bookings=named;
+  const label=b=>`${e.properties.find(p=>p.id===b.propertyId)?.name||b.propertyId} · ${b.checkin||'—'} → ${b.checkout||'—'} · ${b.id}`;
+  const actions=bookings.slice(0,5).map(b=>({type:'open_booking',bookingId:b.id,propertyId:b.propertyId,contextOwnerUid:e.ownerUid,contextDemo:e.demo,contextScopePropertyId:e.scopePropertyId,labelIT:label(b),labelEN:label(b)}));
+  const tailIT=(e.demo?'Dati DEMO. ':'Snapshot account verificato. ')+'Aprire una scorciatoia non modifica il soggiorno. Non ho aperto o aggiornato prenotazioni.';
+  const tailEN=(e.demo?'DEMO data. ':'Verified account snapshot. ')+'Opening a shortcut does not change a stay. I have not opened or updated any booking.';
+  return reply('booking_selection',bookings.length?`${bookings.length===1?'Puoi aprire questa prenotazione':'Quale prenotazione vuoi aprire? Seleziona una delle prenotazioni caricate'}${bookings.length>5?' (prime 5; restringi per immobile o riferimento)':''}.\n\n${tailIT}`:`Nessuna prenotazione identificabile nello snapshot verificato per questo ambito. Seleziona un immobile o verifica i riferimenti nella Dashboard.\n\n${tailIT}`,
+   bookings.length?`${bookings.length===1?'You can open this booking':'Which booking do you want to open? Select one of the loaded bookings'}${bookings.length>5?' (first 5; narrow by property or reference)':''}.\n\n${tailEN}`:`No identifiable booking in the verified snapshot for this scope. Select a property or check references in the Dashboard.\n\n${tailEN}`,{source:e.demo?'demo_pms':'account_pms',state:e.state,propertyIds:propertyIds||e.properties.map(p=>p.id)},actions);
+ };
+ window.rbBuildROINotApplicableResponse=function(message){
+  const q=norm(message);
+  if(!/\broi\b|return on (?:equity|investment)/.test(q)||!/(?:n\s*\/\s*a|n\/d|not applicable|non applicabil|non disponibile|unavailable)/.test(q))return null;
+  return reply('roi_applicability',
+   'ROI N/A significa che il rapporto non è applicabile o non può essere determinato con i dati disponibili. Per il ROI sul capitale proprio: cashflow annuo ÷ capitale proprio × 100. Con capitale proprio zero il denominatore è zero: N/A, non 0% e non infinito. Con capitale o cashflow mancanti/non validi, invece, i dati sono insufficienti; non vanno riempiti con zero. Il rendimento sul valore dell’immobile ha un denominatore diverso.\n\nÈ una spiegazione generale accessibile anche con Free: non dimostra quale sia la causa nel tuo caso e non sblocca risultati riservati. Ti riferisci al ROI equity, al rendimento sul valore, a una simulazione salvata o a un PDF? Controlla denominatore e campi mancanti nel contesto scelto.',
+   'ROI N/A means the ratio is not applicable or cannot be determined from available data. Equity ROI is annual cashflow ÷ invested equity × 100. With zero equity the denominator is zero: N/A, not 0% or infinity. Missing or invalid equity or cashflow instead means insufficient data; missing values must not be filled with zero. Return on property value has a different denominator.\n\nThis is a general explanation also available with Free: it does not establish the cause in your case or unlock restricted results. Do you mean equity ROI, return on property value, a saved simulation or a PDF? Check the denominator and missing fields in the chosen context.',{source:'calculation_method',personalCauseVerified:false});
+ };
+ const sourceIds=q=>/\bomi\b/.test(q)?['omi-values']:/turism|tourism|presenz|person.nights/.test(q)?['istat-tourism']:/comuni|municipalit/.test(q)?['istat-municipalities']:/inside airbnb|prezzi.*annunci|listing prices/.test(q)?['inside-airbnb']:[];
+ window.rbBuildSourceClarificationResponse=function(message){
+  const q=norm(message),omi=/\bomi\b/.test(q);
+  if(commercial(q))return null;
+  const asks=/da dove (?:viene|vengono)|quale font[ei]|quali fonti|fonte.*usat|which sources?|what sources?|where.*(?:number|figure).*come from|aggiornat.*dat|dat.*aggiornat|up.to.date|data.*(?:fresh|updated)|periodo.*dat|data.*period|ultimo controllo|last check|acquisi|acquired/.test(q);
+  if(!omi&&!asks&&!/^(?:turismo istat|istat turismo|istat tourism|inside airbnb|comuni istat|istat municipalities)[?.!]*$/.test(q))return null;
+  const doc=window.rbDocumentManager?.getLast?.();
+  const explicitDoc=/\bpdf\b|document|brochure|\bfile\b/.test(q);
+  const explicitPublic=omi||/istat|inside airbnb|turism|tourism|comuni|municipalit/.test(q);
+  const pdf=explicitDoc||(!explicitPublic&&doc?.id&&window.rbPDFConversationDocumentId===doc.id);
+  if(pdf)return reply('source_clarification',
+   `Ti riferisci a quale numero o tabella del PDF${doc?.fileName?' «'+doc.fileName+'»':''}? Indica pagina e indicatore. Il documento caricato è la fonte da esaminare, non una prova di autenticità o attualità. Periodo di osservazione, acquisizione e ultimo controllo sono informazioni diverse: se non sono documentate restano non disponibili. Non attribuisco il registro corrente a questo report o a risultati storici privi di provenienza.`,
+   `Which PDF number or table${doc?.fileName?' in “'+doc.fileName+'”':''} do you mean? Give the page and metric. The uploaded document is the source to examine, not proof of authenticity or freshness. Observation period, acquisition and last check are different facts: if undocumented they remain unavailable. I do not attribute the current registry to this report or historical results without provenance.`,{source:'document_scope',documentId:doc?.id||null});
+  if(!explicitPublic&&/storico|salvat|saved|histor|report/.test(q))return reply('source_clarification',
+   'Quale analisi salvata e quale indicatore intendi? Seleziona il report e verifica ID e data. Le versioni storiche di fonti e modello possono non essere disponibili: il registro attuale non dimostra quali versioni abbiano prodotto quel risultato. Nessun ricalcolo o aggiornamento dello storico è stato eseguito.',
+   'Which saved analysis and metric do you mean? Select the report and check its ID and date. Historical source and model versions may be unavailable: the current registry does not establish which versions produced that result. No historical result has been recalculated or updated.',{source:'historical_scope',historicalProvenanceVerified:false});
+  const ids=sourceIds(q),registry=window.rbSourceRegistry;
+  const datasets=ids.map(id=>registry?.datasets?.find(d=>d.id===id)).filter(Boolean);
+  const omiIT='OMI (Agenzia delle Entrate) pubblica intervalli per territorio/comune, zona, tipologia e stato dell’immobile, riferiti a un semestre. Vendita in €/m² e locazione in €/m²/mese hanno unità diverse; verifica anche la superficie di riferimento. Non determina il prezzo puntuale del tuo immobile, non è una perizia, non misura ADR turistico e non garantisce rendimenti.';
+  const omiEN='OMI (Italian Revenue Agency) publishes ranges by territory/municipality, area, property type and condition, for a half-year period. Sale prices in €/m² and rents in €/m²/month use different units; also check the reference surface. OMI does not determine your individual property price, replace an appraisal, measure tourist ADR or guarantee returns.';
+  const details=en=>datasets.map(d=>{
+   const missing=en?'unavailable':'non disponibile';
+   return [
+    `${en?'Current distributed dataset':'Dataset attualmente distribuito'}: ${d.id} · ${d.publisher||missing}`,
+    `${en?'Observation period':'Periodo di osservazione'}: ${d.observationPeriod||missing}`,
+    `${en?'Declared acquisition':'Acquisizione dichiarata'}: ${d.acquiredAt||missing}`,
+    `${en?'Inventory date (not a live check)':'Data inventario (non controllo live)'}: ${registry.inventoriedAt||missing}`,
+    `${en?'Last observed update':'Ultimo aggiornamento osservato'}: ${d.lastUpdate?.at||missing}`,
+    `${en?'Last remote check':'Ultimo controllo remoto'}: ${missing}`,
+    `${en?'Classification':'Classificazione'}: ${{official:en?'official':'ufficiale',private_provider:en?'private provider':'provider privato',internal_assumption:en?'internal assumption':'ipotesi interna',calculated:en?'calculated':'calcolato',user_supplied:en?'user supplied':'input utente',synthetic:en?'synthetic demo':'demo sintetica',editorial:en?'editorial':'editoriale'}[d.classification]||missing}`,
+    `${en?'Coverage':'Copertura'}: ${d.coverage||missing}`,
+    `${en?'Reference':'Riferimento'}: ${d.sourceURL||missing}`,
+    en?'These metadata describe the current distribution, not source versions used by saved results. No live availability or newer release has been verified.':'Questi metadati descrivono la distribuzione corrente, non le versioni usate nei risultati salvati. Disponibilità live e nuove pubblicazioni non sono state verificate.'
+   ].join('\n');
+  }).join('\n\n');
+  if(ids.length)return reply(omi?'omi_evidence':'source_evidence',
+   [omi?omiIT:'La fonte selezionata descrive dati di contesto, non certifica rendimenti del singolo immobile.',datasets.length?details(false):'Metadati della distribuzione non disponibili in questa schermata: non posso indicare periodo, acquisizione o ultimo controllo.',omi?'Per confrontare un intervallo indica comune, zona OMI, tipologia e semestre; conferma la zona sulla cartografia ufficiale.':'Specifica territorio, indicatore e periodo; non deduco prezzi o ROI dalla sola presenza di dati turistici.'].join('\n\n'),
+   [omi?omiEN:'The selected source provides context, not certified returns for an individual property.',datasets.length?details(true):'Distribution metadata are unavailable on this screen: I cannot state the period, acquisition or last check.',omi?'To compare a range, specify municipality, OMI area, property type and half-year; confirm the area on official mapping.':'Specify territory, metric and period; tourism data alone do not establish prices or ROI.'].join('\n\n'),{source:'current_distribution_metadata',datasetIds:datasets.map(d=>d.id),historicalProvenanceVerified:false});
+  const path=window.location?.pathname||'';
+  const context=/dashboard-report/.test(path)?'report':/dashboard/.test(path)?'pms':/tool/.test(path)?'simulation':/market/.test(path)?'market':'page';
+  const options={
+   simulation:['Quale numero del simulatore intendi: ricavi, ROI, cashflow oppure dati OMI/turismo di contesto? I risultati sono calcoli da input e ipotesi, non rendimenti ufficiali.','Which simulator number do you mean: revenue, ROI, cashflow or OMI/tourism context? Results are calculations from inputs and assumptions, not official returns.'],
+   pms:['Quale proprietà, periodo e indicatore della Dashboard intendi: ricavi prenotati, occupazione oppure una simulazione salvata? Le prenotazioni inserite/importate non provano incassi.','Which Dashboard property, period and metric do you mean: booked revenue, occupancy or a saved simulation? Entered/imported bookings do not prove receipts.'],
+   report:['Quale indicatore e quale analisi del report intendi? Controlla ID e data: la provenienza storica non può essere ricostruita dal registro corrente.','Which report metric and analysis do you mean? Check the ID and date: historical provenance cannot be reconstructed from the current registry.'],
+   market:['Quale fonte della pagina Mercato intendi: OMI, turismo ISTAT, prezzi degli annunci Inside Airbnb o ipotesi interne? Specifica anche città e indicatore.','Which Market-page source do you mean: OMI, ISTAT tourism, Inside Airbnb listing prices or internal assumptions? Also specify the city and metric.'],
+   page:['Quale numero e quale schermata intendi: simulatore, Mercato, Dashboard o PDF? Indica l’etichetta del valore per identificare la fonte.','Which number and screen do you mean: simulator, Market, Dashboard or PDF? Give the value label to identify its source.']
+  };
+  return reply('source_clarification',options[context][0]+'\n\nPeriodo osservato, acquisizione e ultimo controllo non sono la stessa data. Scegli la fonte: userò solo i metadati disponibili, senza attribuirli a storici privi di provenienza.',options[context][1]+'\n\nObservation period, acquisition and last check are different dates. Choose the source: I will use only available metadata, without attributing them to historical results lacking provenance.',{source:'clarification_required',pageContext:context});
+ };
+})();

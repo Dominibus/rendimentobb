@@ -80,6 +80,8 @@
     const totalBookings=bookingsRequest&&/in totale|complessiv|tutte le prenotazioni|in total|all bookings|all reservations/.test(query)&&!/oggi|domani|today|tomorrow|mese|month|settimana|week|anno|year|\d{4}-\d{2}-\d{2}|prossim|upcoming|next/.test(query);
     const overviewRequest=/riepilog.*(portale|pms|gestione)|stato.*(portale|pms)|portal summary/.test(query);
     if(!valueRequest&&!costRequest&&!ledgerRequest&&!bookingsRequest&&!overviewRequest)return null;
+    const availability=window.rbBuildPMSAvailabilityResponse?.(message);
+    if(availability)return {...availability,metadata:{...availability.metadata,answerMode:availability.metadata.state==='absent'?'unavailable':availability.metadata.state}};
     const access=window.getUserAccess?.() || {};
     const data=window.rbPMSData;
     const demo=data?.isDemo===true && window.isDemoDashboard===true;
