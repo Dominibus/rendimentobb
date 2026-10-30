@@ -49,3 +49,7 @@ In campo economico **ricavo prenotato**, **incasso**, **margine operativo**, **c
 Portare il modello e un caso riproducibile con prezzo/capitale/debito/costi, non soltanto il ROI. Da validare: regime del soggetto/attività, base imponibile del21% modellato, deducibilità, IVA, contributi, capitale/interessi delle rate, acquisto/lavori esclusi o inclusi, imposta soggiorno comunale, incassi/competenza, locali/studi e applicabilità territoriale. L'incontro può validare o richiedere una nuova versione delle ipotesi; il software non certifica la conformità.
 
 Vendite sospese, trial Investor di 30 giorni e limitazioni PDF restano quelli del codice esistente.
+
+## Chiarimenti dell'assistente A1–A4
+
+Lo stato PMS distingue lettura assente, in corso e fallita da un elenco vuoto verificato. Le richieste di apertura chiedono una selezione dai soli ID caricati e ricontrollano il contesto al clic. ROI N/A ha una spiegazione generale anche per Free; non apre risultati riservati. Chiedendo fonte o aggiornamento, indica numero/schermata e scegli la fonte: periodo osservato, acquisizione, inventario e controllo remoto restano distinti. I risultati storici non ereditano le fonti correnti. Vedi [comportamento e collaudo Work](CHATBOT-A1-A4.md) e [proposta A5 separata](PROPOSTA-PROVENIENZA-NUOVE-ANALISI.md).

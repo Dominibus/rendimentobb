@@ -12077,31 +12077,46 @@ async function loadPMSStats({fresh=false}={}){
   if(!canUseFirestorePMS()) return;
   const pmsOwnerUid = window.currentUser.uid;
   const readStats=fresh?getDocsFromServer:getDocs;
+  // In-memory read status only; no changes to Firestore records or permission checks.
+  const snapshotLoad={ownerUid:pmsOwnerUid,status:'loading'};
+  window.rbPMSSnapshotLoad=snapshotLoad;
+  let propertiesSnap,bookingsSnap;
+  try{
 
-  const propertiesSnap =
+  propertiesSnap =
     await readStats(
       query(
         collection(db,"properties"),
         where(
           "uid",
           "==",
-          window.currentUser.uid
+          pmsOwnerUid
         )
       )
     );
 
-  const bookingsSnap =
+  if(window.currentUser?.uid!==pmsOwnerUid || window.rbPMSSnapshotLoad!==snapshotLoad || !canUseFirestorePMS())return;
+
+  bookingsSnap =
     await readStats(
       query(
         collection(db,"bookings"),
         where(
           "uid",
           "==",
-          window.currentUser.uid
+          pmsOwnerUid
         )
       )
     );
 
+  }catch(error){
+    if(window.currentUser?.uid===pmsOwnerUid && window.rbPMSSnapshotLoad===snapshotLoad){
+      snapshotLoad.status='error';
+      if(window.rbPMSData?.ownerUid===pmsOwnerUid)window.rbPMSData.portalSnapshotReady=false;
+    }
+    throw error;
+  }
+  if(window.rbPMSSnapshotLoad!==snapshotLoad) return;
   if(window.currentUser?.uid !== pmsOwnerUid || !canUseFirestorePMS()) return;
 
   const properties =
@@ -12778,6 +12793,8 @@ window.rbPMSData = {
   pendingBookings
 
 };
+
+snapshotLoad.status='ready';
 
 try{
  const reportMonth=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');

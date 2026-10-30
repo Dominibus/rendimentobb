@@ -78,6 +78,10 @@
   // =============================================
 
   function loadScript(src) {
+    if(src.startsWith('/js/source-registry-data.js?')){
+      return import(src).then(module=>{window.rbSourceRegistry=module.default;})
+        .catch(()=>{window.rbSourceRegistry=null;reportLoadError('Source metadata');});
+    }
     // PDF.js is an ES module. Await its export before loading document tools.
     if(src === "/js/vendor/pdfjs/pdf.min.mjs"){
       return import(src)
@@ -132,6 +136,8 @@
   const scripts = [
     "/js/market-data.js?v=20261023-rc191",
     "/js/data-provenance.js?v=20261023-rc191",
+    "/js/source-registry-data.js?v=20261029-rc228",
+    "/js/chatbot/core/evidence-response-engine.js?v=20261030-a1-a4",
     "/js/chatbot/core/market-evidence.js?v=20261023-rc192",
     "/js/chatbot/knowledge-base.js",
 
@@ -159,7 +165,7 @@
     "/js/chatbot/core/semantic-router.js?v=20261009-rc76",
     "/js/chatbot/core/entity-engine.js?v=20261011-rc99",
     "/js/chatbot/core/intent-engine.js?v=20261011-rc99",
-    "/js/chatbot/core/memory-engine.js?v=20261011-rc99",
+    "/js/chatbot/core/memory-engine.js?v=20261030-a1-a4",
     "/js/chatbot/core/conversation-engine.js?v=20261001-22",
     "/js/chatbot/core/investor-profile-engine.js?v=20261011-rc99",
     "/js/chatbot/core/score-engine.js?v=20261011-rc99",
@@ -177,23 +183,23 @@
     "/js/chatbot/core/ai-brain.js?v=20261011-rc99",
     "/js/chatbot/core/executive-brain-v2.js?v=20261012-rc108",
     "/js/chatbot/core/executive-response-builder.js?v=20261027-rc211",
-    "/js/chatbot/core/response-engine.js?v=20261027-rc211",
+    "/js/chatbot/core/response-engine.js?v=20261030-a1-a4",
     "/js/chatbot/core/chatbot-file-dispatcher.js?v=20261001-22",
     "/js/chatbot/core/confirmed-portfolio-engine.js?v=20261008-rc59",
-    "/js/chatbot/core/portal-facts-engine.js?v=20261023-rc185",
-    "/js/chatbot/core/pms-autopilot-engine.js?v=20261014-rc120",
+    "/js/chatbot/core/portal-facts-engine.js?v=20261030-a1-a4",
+    "/js/chatbot/core/pms-autopilot-engine.js?v=20261030-a1-a4",
     "/js/chatbot/core/investment-autopilot-engine.js?v=20261027-rc211",
     "/js/chatbot/core/renovation-recovery-engine.js?v=20261009-rc76",
     "/js/chatbot/core/pro-report-guide.js?v=20261023-rc185",
     "/js/chatbot/core/practical-guide.js?v=20261023-rc185",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20261027-rc212",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20261030-a1-a4",
 
     "/js/chatbot/support-engine.js?v=20261015-rc137",
     "/js/chatbot/core/advisor-engine.js?v=20261011-rc99",
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
     "/js/chatbot/ui/free-home-snapshot.js?v=20261027-rc211",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261027-rc211",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261030-a1-a4",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];
@@ -209,6 +215,13 @@
 
     for (const src of scripts) {
       await loadScript(src);
+    }
+
+    // A missing evidence module must not reactivate the legacy zero/default answers.
+    if(typeof window.rbBuildPMSAvailabilityResponse!=='function'){
+      window.rbProcessAIMessage=async()=>({success:true,response:{type:'assistant_unavailable',confidence:0,actions:[],
+        textIT:'L’assistente non è disponibile in questa sessione. Ricarica la pagina e riprova; non posso confermare dati o attività.',
+        textEN:'The assistant is unavailable in this session. Reload the page and retry; I cannot confirm data or tasks.'}});
     }
 
     if (typeof window.initRBChatbotUI === "function") {

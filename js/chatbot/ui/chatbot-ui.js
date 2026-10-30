@@ -1471,6 +1471,10 @@ function showThinking(){
             }finally{actionButton.disabled=false;}
             return;
           }
+          if(Object.hasOwn(action,'contextOwnerUid') && !window.rbValidateEvidenceBookingAction?.(action)){
+            addMessage('bot',t('Il contesto della prenotazione è cambiato. Chiedi di nuovo la selezione con la proprietà e l’account attuali.','The booking context changed. Ask for a new selection with the current property and account.'),false);
+            return;
+          }
           const pmsHandler={open_pms_task:'openPMSAutopilotTask',open_pms_checklist:'openPMSDailyChecklist',
             open_pms_arrival:'openPMSUpcomingArrival',open_pms_all_tasks:'openPMSAllTasks'}[action.type];
           if(typeof window[pmsHandler || 'openBookingFromCopilot']!=='function'){

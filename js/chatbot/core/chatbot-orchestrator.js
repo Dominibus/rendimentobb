@@ -177,6 +177,13 @@ async function(message){
     const privacyResponse = window.rbBuildAccountPrivacyResponse(text);
     if(privacyResponse)return {success:true,response:privacyResponse,intent:{intent:'account_privacy'}};
 
+    // Public explanations and evidence selection precede price-keyword and paid-analysis routes.
+    // Each builder reads the current context; no account values are retained between calls.
+    const evidenceResponse = window.rbBuildBookingNavigationResponse?.(text)
+      || window.rbBuildROINotApplicableResponse?.(text)
+      || window.rbBuildSourceClarificationResponse?.(text);
+    if(evidenceResponse)return {success:true,response:evidenceResponse,intent:{intent:evidenceResponse.type}};
+
     const limitsResponse = window.rbBuildProductLimitsResponse(text);
     if(limitsResponse) return {success:true,response:limitsResponse,intent:{intent:'product_limits'}};
 
@@ -329,7 +336,15 @@ async function(message){
       return {success:true,response:investmentResponse,intent:{intent:'investment_autopilot'}};
     }
 
+    if(window.rbIsPMSAutopilotQuestion?.(text)){
+      const availability=window.rbBuildPMSAvailabilityResponse?.(text);
+      if(availability)return {success:true,response:availability,intent:{intent:'pms_context'}};
+    }
     const autopilotResponse=await window.rbBuildPMSAutopilotResponse?.(text);
+    if(autopilotResponse?.type==='pms_autopilot_unavailable'){
+      const availability=window.rbBuildPMSAvailabilityResponse?.(text);
+      if(availability)return {success:true,response:availability,intent:{intent:'pms_context'}};
+    }
     if(autopilotResponse){
       window.rbPDFConversationDocumentId=null;
       window.rbRememberMessage?.({role:'user',message:text,intent:{intent:'pms_autopilot_daily'}});
