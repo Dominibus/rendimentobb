@@ -25,8 +25,11 @@ export function installCandidateWorkspace(window,document){
   const root=$('candidate-preview');root.replaceChildren();root.hidden=!state.preview.length;
   if(!state.preview.length)return;
   add(root,'h3',t('Anteprima: nulla è stato aggiunto','Preview: nothing has been added'));
-  for(const r of state.preview){const line=add(root,'label');const check=add(line,'input');check.type='checkbox';check.dataset.previewLine=String(r.line);check.disabled=!r.valid;if(r.selected===undefined)r.selected=r.valid;check.checked=r.selected;check.addEventListener('change',()=>{r.selected=check.checked;});
+  for(const r of state.preview){const previewRow=add(root,'div');const line=add(previewRow,'label');const check=add(line,'input');check.type='checkbox';check.dataset.previewLine=String(r.line);check.disabled=!r.valid;if(r.selected===undefined)r.selected=r.valid;check.checked=r.selected;check.addEventListener('change',()=>{r.selected=check.checked;});
    add(line,'span',t('Riga ','Row ')+r.line+' · '+(r.candidate?.reference||'—')+' · '+(r.valid?t('Valida','Valid'):t('Non importabile: ','Cannot import: ')+r.errors.join(', ')));
+   if(r.candidate){const values=add(previewRow,'details');add(values,'summary',t('Valori letti e unità, prima di aggiungere','Parsed values and units, before adding'));const list=add(values,'dl');
+    for(const f of CANDIDATE_FIELDS){add(list,'dt',label(f,en()?'en':'it'));const v=r.candidate[f];add(list,'dd',v===null||v===''?t('Non indicato','Not supplied'):typeof v==='number'?Number.isFinite(v)?new Intl.NumberFormat(en()?'en-GB':'it-IT',{maximumFractionDigits:2}).format(v):t('Non valido','Invalid'):String(v));}
+   }
   }
   const b=add(root,'button',t('Aggiungi le righe selezionate','Add selected rows'),'btn btn-primary');b.type='button';b.addEventListener('click',()=>{
    try{const selected=[...root.querySelectorAll('input[data-preview-line]:checked')].map(e=>Number(e.dataset.previewLine));state.candidates=commitCandidatePreview(state.candidates,state.preview,selected);state.preview=[];renderPreview();render();status('Candidati aggiunti solo a questa pagina.','Candidates added only to this page.');}catch{status('Selezione non valida, duplicati o limite di 50 candidati superato.','Invalid selection, duplicates or 50-candidate limit exceeded.');}

@@ -36,7 +36,7 @@ test('manual -> criteria -> filter -> explanation -> new-tab simulator uses one 
  h.$('candidate-sort').value='total:asc';await h.$('candidate-sort').emit('change');h.$('candidate-filter').value='compatible';await h.$('candidate-filter').emit('change');assert.equal(h.w.rbCandidateWorkspace.getContext().rows[0].reference,'C-1');
 });
 test('CSV preview is inert, preserves row selection on language change and commits chosen valid rows only',async()=>{
- const h=harness();h.$('candidate-file').files=[{size:1000,text:async()=>candidateTemplate()}];await h.$('candidate-preview-button').click();assert.equal(h.state.candidates.length,0);
+ const h=harness();h.$('candidate-file').files=[{size:1000,text:async()=>candidateTemplate()}];await h.$('candidate-preview-button').click();assert.equal(h.state.candidates.length,0);assert.match(h.$('candidate-preview').textContent,/Valori letti e unità/);assert.match(h.$('candidate-preview').textContent,/150\.000/);
  let checks=h.$('candidate-preview').all().filter(e=>e.tag==='input');checks[1].checked=false;await checks[1].emit('change');checks[2].checked=false;await checks[2].emit('change');
  h.w.currentLang='en';await h.doc.emit('rb_language_changed');checks=h.$('candidate-preview').all().filter(e=>e.tag==='input');assert.deepEqual(checks.map(e=>e.checked),[true,false,false]);
  await h.$('candidate-preview').all().find(e=>e.tag==='button').click();assert.equal(h.state.candidates.length,1);assert.equal(h.state.candidates[0].reference,'C-001');assert.match(h.$('candidate-status').textContent,/only to this page/);
