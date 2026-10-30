@@ -1,3 +1,4 @@
+import {installCandidateTransfer} from './candidate-transfer.js?v=20261030-candidates';
 // RC201: repair the existing city-card -> simulator input handoff.
 // No calculation, persistence, market inference or entitlement changes.
 export function readPropertyScenario(search='') {
@@ -19,6 +20,7 @@ export function readPropertyScenario(search='') {
 }
 
 export function installPropertyScenarioInputs(window,document){
+  if(installCandidateTransfer(window,document))return;
   const scenario=readPropertyScenario(window.location.search);
   if(scenario.status==='absent')return;
   const apply=()=>{

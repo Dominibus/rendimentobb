@@ -179,6 +179,8 @@ async function(message){
 
     // Public explanations and evidence selection precede price-keyword and paid-analysis routes.
     // Each builder reads the current context; no account values are retained between calls.
+    const candidateResponse=window.rbBuildCandidateResponse?.(text);
+    if(candidateResponse)return {success:true,response:candidateResponse,intent:{intent:'candidate_explanation'}};
     const evidenceResponse = window.rbBuildBookingNavigationResponse?.(text)
       || window.rbBuildROINotApplicableResponse?.(text)
       || window.rbBuildSourceClarificationResponse?.(text);

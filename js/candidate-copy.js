@@ -1,0 +1,16 @@
+export const candidateLabels={
+ reference:['Riferimento interno','Internal reference'],city:['Comune dichiarato','Entered town'],zone:['Zona dichiarata','Entered area'],price:['Prezzo richiesto EUR','Asking price EUR'],sqm:['Superficie m²','Floor area m²'],works:['Lavori/allestimento EUR','Works/setup EUR'],other:['Altre spese iniziali EUR','Other upfront costs EUR'],equity:['Capitale proprio previsto EUR','Planned equity EUR'],priceNight:['Tariffa ipotizzata EUR/notte','Assumed nightly rate EUR'],occupancy:['Occupazione ipotizzata %','Assumed occupancy %'],expenses:['Costi operativi EUR/mese','Operating costs EUR/month'],commission:['Commissioni ipotizzate %','Assumed fees %'],tax:['Aliquota del modello %','Model tax rate %'],interestRate:['TAN ipotizzato %','Assumed nominal interest %'],loanYears:['Durata mutuo anni','Loan term years'],url:['Link HTTPS facoltativo','Optional HTTPS listing URL'],date:['Data verifica dichiarata YYYY-MM-DD','Declared check date YYYY-MM-DD'],total:['Prezzo + lavori + altre spese EUR','Price + works + other upfront costs EUR'],criteria:['Almeno un vincolo obbligatorio','At least one mandatory constraint']
+};
+export const candidateStatus={compatible:['Compatibile con i criteri: da approfondire','Matches entered criteria: investigate further'],outside:['Fuori dai criteri inseriti','Outside entered criteria'],insufficient:['Informazioni insufficienti','Insufficient information']};
+export const label=(key,lang='it')=>candidateLabels[key]?.[lang==='en'?1:0]||key;
+export function explainCandidate(row,lang='it'){
+ const en=lang==='en',t=(it,eng)=>en?eng:it,fmt=v=>typeof v==='number'?new Intl.NumberFormat(en?'en-GB':'it-IT',{maximumFractionDigits:2}).format(v):String(v);
+ const why={maxTotal:t('Totale superiore al budget','Total exceeds budget'),minArea:t('Superficie inferiore al minimo','Area below minimum'),availableCapital:t('Capitale previsto superiore a quello disponibile','Planned equity exceeds available capital'),city:t('Comune diverso dal vincolo','Town differs from constraint'),zone:t('Zona diversa dal vincolo','Area differs from constraint')};
+ const lines=[row.candidate.reference+' · '+candidateStatus[row.status][en?1:0]];
+ for(const r of row.reasons)lines.push(`${why[r.code]}: ${fmt(r.actual)}; ${t('criterio','criterion')} ${fmt(r.expected)}.`);
+ if(row.missing.length)lines.push(t('Mancano: ','Missing: ')+row.missing.map(f=>label(f,lang)).join(', ')+'.');
+ if(row.status==='compatible')lines.push(t('I vincoli dichiarati risultano rispettati; prezzo e costi non sono stati verificati con la fonte. Non è una raccomandazione di acquisto.','The entered constraints are met; price and costs have not been checked with the source. This is not a purchase recommendation.'));
+ if(row.preference)lines.push(t('Preferenza zona (non vincolo): ','Area preference (not mandatory): ')+row.preference.requested+' · '+(row.preference.matches===null?t('dato mancante','data missing'):row.preference.matches?t('corrisponde','matches'):t('non corrisponde','does not match'))+'.');
+ lines.push(t('Origine: dati dichiarati e ipotesi dell’utente. Nessuna verifica automatica degli annunci o stima OMI dei ricavi.','Origin: user-declared data and assumptions. No automatic listing verification or OMI-derived revenue.'));
+ return lines.join('\n');
+}

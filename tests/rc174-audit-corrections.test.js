@@ -110,12 +110,12 @@ test('entry points and nested modules invalidate cached versions of changed asse
     const source=read(file);
     for(const name of ['header','chatbot-loader','app']){
       const refs=[...source.matchAll(new RegExp('/js/'+name+'\\.js\\?v=([^"\\s]+)','g'))];
-      for(const ref of refs)assert.equal(ref[1],name === 'app' ? '20261029-rc226' : name === 'header' ? '20261029-rc221' : '20261027-rc212',file+' '+name);
+      for(const ref of refs)assert.equal(ref[1],name === 'app' ? (file==='tool/index.html'?'20261030-candidates':'20261029-rc226') : name === 'header' ? '20261029-rc221' : '20261027-rc212',file+' '+name);
     }
   }
-  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261030-a1-a4/);
+  assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261030-candidates/);
   assert.match(read('js/app.js'),/market-engine\.js\?v=20261028-rc216/);
-  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261030-a1-a4':'20261026-rc200')));
+  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261030-candidates':'20261026-rc200')));
 });
 test('new English result city survives a delayed static translation pass',()=>{
   const source=read('js/app.js'),start=source.indexOf('const resultCity =\n  document.getElementById("tool-result-city")');
