@@ -45,6 +45,60 @@
   return ['empty','populated'].includes(e.state)&&e.ownerUid===action.contextOwnerUid&&e.demo===action.contextDemo&&e.scopePropertyId===action.contextScopePropertyId&&
    e.bookings.filter(b=>b.id===action.bookingId&&b.propertyId===action.propertyId).length===1;
  };
+ window.rbBuildProfessionalPMSResponse=async function(message){
+  const q=norm(message);
+  // Keep document, commercial workspace and explicit plan questions in their own routes.
+  if(commercial(q)||/\bpdf\b|brochure|documento caricato|uploaded document|locali|studi|commercial|uffici|offices|poliambulator|simulazion|simulation|simulator/.test(q))return null;
+  const costs=/costi|spese|costs?|expenses?/.test(q)&&/prevision|previst|preventiv|forecast|budget/.test(q)&&/superior|oltre|rispetto|scostament|above|over|versus|against|exceed|higher/.test(q);
+  const statement=/rendicont|owner statement/.test(q)&&/manc|missing|complet|complete/.test(q);
+  const arrivals=/arriv|\barrivals?\b/.test(q)&&/oggi|today/.test(q)&&/quali|elenc|which|list/.test(q);
+  const overlaps=/prenotazion|bookings?|reservations?/.test(q)&&/sovrappost|sovrapposizion|conflitt|overlap|conflict/.test(q);
+  if(!costs&&!statement&&!arrivals&&!overlaps)return null;
+  if(costs||statement)return reply('pms_accounting_limits',
+   costs?'Non posso identificare strutture con costi effettivi superiori alle previsioni dalle sole prenotazioni. Il PMS B&B non dispone di un registro completo di spese e incassi riconciliati: ricavi prenotati e costi ipotizzati nel simulatore non dimostrano costi sostenuti. Servono immobile, periodo, previsione collegata, spese documentate, commissioni e imposte con criteri omogenei. Non ho calcolato scostamenti né modificato dati.':'Per completare un rendiconto proprietario B&B servono immobile e periodo, prenotazioni con date/stati/importi validi, incassi riconciliati, costi documentati, commissioni, imposte applicabili e accordi con il proprietario. Il report attuale riepiloga ricavi prenotati; non è un rendiconto contabile completo. Questa è una checklist generale: non ho verificato quali documenti manchino nel tuo caso. Indica struttura e periodo per esaminare i dati disponibili, mantenendo esterni gli incassi e i costi non registrati.',
+   costs?'I cannot identify properties with actual costs above forecast from bookings alone. The B&B PMS has no complete ledger of reconciled expenses and receipts: booked revenue and simulator cost assumptions do not establish incurred expenses. A property, period, linked forecast, documented expenses, commissions and taxes on a consistent basis are required. I have not calculated variances or changed records.':'Completing a B&B owner statement requires a property and period, bookings with valid dates/statuses/amounts, reconciled receipts, documented costs, commissions, applicable taxes and owner agreements. The current report summarizes booked revenue; it is not a complete accounting statement. This is a general checklist: I have not verified which documents are missing in your case. Specify a property and period to review available data, keeping unrecorded receipts and costs external.',
+   {source:'current_product_scope',answerMode:costs?'cost_comparison_unavailable':'statement_requirements',personalCompletenessVerified:false});
+  let e=window.rbReadPMSEvidence();
+  const unavailable=window.rbBuildPMSAvailabilityResponse(message);
+  if(unavailable)return unavailable;
+  const identity={uid:e.ownerUid,demo:e.demo,scope:e.scopePropertyId};
+  // On the account dashboard, re-read the server snapshot. A failed refresh cannot reuse old facts.
+  if(!e.demo&&typeof window.rbRefreshPortalSnapshot==='function'){
+   let refreshed;
+   try{refreshed=await window.rbRefreshPortalSnapshot();}catch{/* Fail closed below. */}
+   e=window.rbReadPMSEvidence();
+   if(!refreshed||e.ownerUid!==identity.uid||e.demo!==identity.demo||e.scopePropertyId!==identity.scope||!['empty','populated'].includes(e.state)){
+    return reply('pms_context','Non posso confermare il risultato: il caricamento è fallito o account/immobile sono cambiati. Ricarica il PMS e ripeti la domanda.','I cannot confirm the result: loading failed or the account/property changed. Reload the PMS and ask again.',{source:'pms_availability',state:'refresh_unavailable'});
+   }
+  }
+  const named=e.properties.filter(p=>norm(p.name).length>=3&&q.includes(norm(p.name)));
+  const ids=named.length?named.map(p=>p.id):e.scopePropertyId?[e.scopePropertyId]:e.properties.map(p=>p.id);
+  if(ids.some(id=>!e.properties.some(p=>p.id===id))||named.some(p=>e.scopePropertyId&&p.id!==e.scopePropertyId)||
+   (!named.length&&/\b(?:per|di|for|in|a)\s+(?:l['’])?(?:immobile|property|struttura|casa)\s+/.test(q)))return reply('pms_context','La struttura richiesta non è identificabile nell’ambito selezionato. Selezionala nella Dashboard e ripeti la domanda.','The requested property cannot be identified in the selected scope. Select it in the Dashboard and ask again.',{state:'unknown_property'});
+  const tools=window.rbPMSProfessionalTools;
+  if(!tools?.inspect||!tools?.today)return reply('pms_context','Apri la Dashboard per verificare arrivi e sovrapposizioni con il calendario PMS. I controlli non sono disponibili in questa schermata.','Open the Dashboard to check arrivals and overlaps using the PMS calendar. These checks are unavailable on this screen.',{state:'tools_unavailable'});
+  if(/domani|tomorrow|ieri|yesterday|mese|month|settimana|week|\d{4}-\d{2}-\d{2}/.test(q))return reply('pms_context','Per questa verifica usa arrivi di oggi oppure sovrapposizioni dell’intero elenco caricato. Per un altro periodo apri il calendario e imposta le date: non applico un periodo diverso da quello richiesto.','This check supports today’s arrivals or overlaps across the loaded list. For another period, open the calendar and set dates: I will not silently substitute another period.',{state:'period_required'});
+  const bookings=e.bookings.filter(b=>ids.includes(b.propertyId));
+  const result=tools.inspect(bookings,tools.today());
+  if(!result||result.state!=='ready')return reply('pms_context','Non posso completare il controllo di questo elenco. Restringi a una struttura e verifica il calendario; non considero assenti i conflitti non controllati.','I cannot complete the check for this list. Narrow to one property and review the calendar; unexamined conflicts are not considered absent.',{state:'scan_unavailable'});
+  const selected=overlaps?result.conflicts:result.arrivals;
+  const name=b=>e.properties.find(p=>p.id===b.propertyId)?.name||b.propertyId;
+  const label=b=>`${name(b)} · ${b.checkin} → ${b.checkout} · ${b.id||'—'} · ${b.status||'arrival'}`;
+  const preview=selected.slice(0,5);
+  const actions=preview.filter(b=>typeof b.id==='string'&&b.id&&e.bookings.filter(row=>row.id===b.id).length===1)
+   .map(b=>({type:'open_booking',bookingId:b.id,propertyId:b.propertyId,contextOwnerUid:e.ownerUid,contextDemo:e.demo,contextScopePropertyId:e.scopePropertyId,labelIT:label(b),labelEN:label(b)}));
+  const text=en=>[
+   e.demo?(en?'DEMO data':'Dati DEMO'):(en?'Loaded account snapshot; no OTA synchronization is implied.':'Snapshot account caricato; non implica sincronizzazione OTA.'),
+   (en?'Scope: ':'Ambito: ')+ids.map(id=>e.properties.find(p=>p.id===id)?.name||id).join(', '),
+   overlaps?(en?`${selected.length} bookings involved in at least one overlap in the loaded list (not a count of pairs). Checkout is excluded; pending and cancelled bookings are excluded.`:`${selected.length} prenotazioni coinvolte in almeno una sovrapposizione nell’elenco caricato (non numero di coppie). Check-out escluso; prenotazioni in attesa e cancellate escluse.`):
+    (en?`${result.today}: ${selected.length} bookings with arrival today. Saved statuses are shown, including arrivals already checked in.`:`${result.today}: ${selected.length} prenotazioni con arrivo oggi. Sono mostrati gli stati salvati, inclusi gli arrivi già registrati.`),
+   ...preview.map(label),
+   selected.length>5?(en?`Showing 5 of ${selected.length}: narrow by property for the others.`:`Mostrate 5 su ${selected.length}: restringi per struttura per le altre.`):'',
+   result.invalidCount?(en?`${result.invalidCount} active bookings have invalid dates, statuses or non-unique/missing IDs: this check is incomplete.`:`${result.invalidCount} prenotazioni attive hanno date, stati o ID non validi/univoci: questo controllo è incompleto.`):'',
+   en?'Records without a unique booking ID cannot be opened from this answer. No bookings have been opened or changed.':'I record senza ID prenotazione univoco non sono apribili da questa risposta. Non ho aperto o modificato prenotazioni.'
+  ].filter(Boolean).join('\n\n');
+  return reply('pms_professional',text(false),text(true),{source:e.demo?'demo_pms':'account_pms',answerMode:overlaps?'overlaps':'arrivals_today',propertyIds:ids,today:result.today,matchedBookings:selected.length,invalidBookings:result.invalidCount,complete:result.invalidCount===0},actions);
+ };
  window.rbBuildBookingNavigationResponse=function(message){
   const q=norm(message);
   if(!/prenotazion|\bbookings?\b|reservations?/.test(q)||!/portami|apri|vai a|take me|open|navigate|go to/.test(q)||/pdf|esport|export|import|crea|create|cancell|delete/.test(q))return null;

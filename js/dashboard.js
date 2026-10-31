@@ -1,3 +1,4 @@
+import {inspectProfessionalBookings} from './pms-professional-queries.js?v=20261031-professional';
 import {scenarioCashflow} from "./scenario-cashflow.js?v=20261028-rc213";
 import {illustrativeCityReference,referenceCity} from './city-reference.js?v=20261026-rc199';
 import "./data-provenance.js?v=20261023-rc191";
@@ -10233,6 +10234,9 @@ window.checkPMSEmailVerification=()=>runPMSEmailVerification('check');
 document.addEventListener('rb_language_changed',()=>{pmsVerificationFeedback='';renderPMSEmailVerification();});
 
 // Read-only account snapshot for chatbot facts after a filtered booking view.
+// Reuse the canonical calendar and availability rules for read-only assistant queries.
+window.rbPMSProfessionalTools={inspect:inspectProfessionalBookings,today:checklistDay};
+
 window.rbRefreshPortalSnapshot=async function(){
   const owner=window.currentUser?.uid;
   if(!owner || auth.currentUser?.uid!==owner || !canUseFirestorePMS() || isDemo())return null;
