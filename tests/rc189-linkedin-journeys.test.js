@@ -54,7 +54,7 @@ test('RC189: trial anchor has a local bilingual action without accepting or chan
 });
 test('RC189: changed modules and loader entry points have matching cache versions',()=>{
  assert.match(read('js/header.js'),/chatbot-loader.js\?v=20261030-a1-a4/);
- assert.match(read('js/chatbot-loader.js'),/query-normalizer.js\?v=20261026-rc200/);assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261030-a1-a4/);
+ assert.match(read('js/chatbot-loader.js'),/query-normalizer.js\?v=20261026-rc200/);assert.match(read('js/chatbot-loader.js'),/chatbot-orchestrator.js\?v=20261031-professional/);
  assert.match(read('js/app.js'),/tool-presentation.js\?v=20261023-rc189/);
  for(const file of ['index.html','tool/index.html','dashboard/index.html','plans.html'])assert.match(read(file),/header.js\?v=20261029-rc221/);
  for(const file of ['index.html','tool/index.html'])assert.match(read(file),/app.js\?v=20261029-rc226/);

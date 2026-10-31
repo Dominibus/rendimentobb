@@ -115,7 +115,7 @@ test('entry points and nested modules invalidate cached versions of changed asse
   }
   assert.match(read('js/header.js'),/chatbot-loader\.js\?v=20261030-a1-a4/);
   assert.match(read('js/app.js'),/market-engine\.js\?v=20261028-rc216/);
-  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261030-a1-a4':'20261026-rc200')));
+  for(const name of ['chatbot-orchestrator','pdf-parser-engine'])assert.match(read('js/chatbot-loader.js'),new RegExp(name+'\\.js\\?v='+(name==='chatbot-orchestrator'?'20261031-professional':'20261026-rc200')));
 });
 test('new English result city survives a delayed static translation pass',()=>{
   const source=read('js/app.js'),start=source.indexOf('const resultCity =\n  document.getElementById("tool-result-city")');
