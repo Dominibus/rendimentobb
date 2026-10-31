@@ -20,10 +20,10 @@
   if(!data||(!demo&&(data.isDemo===true||data.ownerUid!==uid||data.portalSnapshotReady!==true))||!Array.isArray(data.propertyList))return {state:'absent'};
   const rows=demo?data.bookingList:data.portalBookingList;
   if(!Array.isArray(rows))return {state:'absent'};
-  const properties=data.propertyList.filter(p=>typeof p.id==='string'&&p.id&&(!p.uid||p.uid===uid||demo));
+  const properties=data.propertyList.filter(p=>p&&typeof p.id==='string'&&p.id&&(!p.uid||p.uid===uid||demo));
   const ids=new Set(properties.map(p=>p.id));
   // A complete loaded directory is the authority for property scope, never a remembered name.
-  const bookings=rows.filter(b=>ids.has(b.propertyId)&&(!b.uid||b.uid===uid||demo));
+  const bookings=rows.filter(b=>b&&ids.has(b.propertyId)&&(!b.uid||b.uid===uid||demo));
   return {state:bookings.length?'populated':'empty',ownerUid:demo?null:uid,demo,properties,bookings,scopePropertyId:scope()};
  };
  window.rbBuildPMSAvailabilityResponse=function(message,intent=''){
@@ -40,9 +40,52 @@
   if((required[intent]||[]).some(k=>number(window.rbPMSData[k])===null))return reply('pms_context','L’indicatore richiesto non è disponibile nello snapshot caricato. Verifica periodo e completezza nella Dashboard; non lo sostituisco con zero.','The requested metric is unavailable in the loaded snapshot. Check the period and completeness in the Dashboard; I will not replace it with zero.',{source:'pms_availability',state:'missing_metric'});
   return null;
  };
+ // The professional scan must validate references before any property filter.
+ // An orphan row cannot disappear and turn an incomplete snapshot into a complete one.
+ function professionalIntegrity(e){
+  const data=window.rbPMSData,properties=data?.propertyList;
+  const rows=e.demo?data?.bookingList:data?.portalBookingList;
+  if(!Array.isArray(properties)||!Array.isArray(rows))return false;
+  const id=v=>typeof v==='string'&&v.trim()!=='';
+  const owned=row=>e.demo||!row.uid||row.uid===e.ownerUid;
+  const ids=new Set(),bookingIds=new Set();
+  for(const p of properties){
+   if(!p||!id(p.id)||ids.has(p.id)||!owned(p))return false;
+   ids.add(p.id);
+  }
+  for(const b of rows){
+   if(!b||!id(b.id)||bookingIds.has(b.id)||!ids.has(b.propertyId)||!owned(b))return false;
+   bookingIds.add(b.id);
+  }
+  return true;
+ }
+ function professionalSelection(q,e,overlaps){
+  let rest=q;
+  const named=[];
+  // Consume exact names, longest first; a known prefix must not swallow an unknown suffix.
+  const names=[...new Set(e.properties.map(p=>norm(p.name).trim()).filter(Boolean))].sort((a,b)=>b.length-a.length);
+  for(const name of names){
+   const escaped=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+   const pattern=new RegExp('(^|[^\\p{L}\\p{N}])'+escaped+'(?=$|[^\\p{L}\\p{N}])','gu');
+   if(pattern.test(rest)){
+    named.push(...e.properties.filter(p=>norm(p.name).trim()===name));
+    rest=rest.replace(pattern,' ');
+   }
+  }
+  const period=/\b(?:gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|monday|tuesday|wednesday|thursday|friday|saturday|sunday|domani|tomorrow|ieri|yesterday|mese|mesi|months?|settimana|settimane|weeks?|anno|anni|years?|trimestre|quarter|q[1-4]|inverno|estate|autunno|primavera|winter|summer|autumn|fall|spring|prossim\w*|scors\w*|next|last|\d{4})\b|\d{1,4}[-./]\d{1,2}[-./]\d{1,4}/;
+  if(period.test(rest)||overlaps&&/\b(?:oggi|today|adesso|now)\b/.test(rest))return {state:'period_required'};
+  // This bounded read-only query accepts only understood wording. Unknown names
+  // and residual qualifiers require clarification rather than widening to all properties.
+  rest=rest.replace(/\b(?:quali|quale|ci|sono|ciascuna|ciascuno|prenotazion[ei]|sovrappost[aeio]|sovrapposizion[ei]|conflitt[oi]|struttur[ae]|immobil[ei]|hanno|ha|arriv[oi]|oggi|per|di|in|a|ad|al|alla|alle|presso|le|la|il|gli|i|l|dell|delle|della|degli|dei|del|nell|nelle|nella|nel|sul|sulla|sulle|su|e|ed|o|tutt[aeio]|intero|elenco|elenca|elencami|elencarmi|caricat[aeio]|selezionat[aeio]|pms|dashboard|puoi|mostra|mostrami|mostrarmi|mostrare|verifica|verificare|controlla|controllare|which|what|properties|property|have|has|arrivals?|today|are|there|any|overlaps?|overlapping|conflicts?|bookings?|reservations?|list|show|me|please|the|all|whole|loaded|selected|for|at|in|on|of|and|or|can|you|check)\b/g,'').replace(/[\s\p{P}\p{S}]/gu,'');
+  if(rest||named.some(p=>e.scopePropertyId&&p.id!==e.scopePropertyId)||
+   names.some(name=>named.filter(p=>norm(p.name).trim()===name).length>1))return {state:'unknown_property'};
+  if(e.scopePropertyId&&/\b(?:tutte|tutti|all|whole)\b/.test(q))return {state:'unknown_property'};
+  const ids=named.length?named.map(p=>p.id):e.scopePropertyId?[e.scopePropertyId]:e.properties.map(p=>p.id);
+  return ids.some(id=>!e.properties.some(p=>p.id===id))?{state:'unknown_property'}:{ids};
+ }
  window.rbValidateEvidenceBookingAction=function(action){
   const e=window.rbReadPMSEvidence();
-  return ['empty','populated'].includes(e.state)&&e.ownerUid===action.contextOwnerUid&&e.demo===action.contextDemo&&e.scopePropertyId===action.contextScopePropertyId&&
+  return ['empty','populated'].includes(e.state)&&(!action.professionalQuery||professionalIntegrity(e))&&e.ownerUid===action.contextOwnerUid&&e.demo===action.contextDemo&&e.scopePropertyId===action.contextScopePropertyId&&
    e.bookings.filter(b=>b.id===action.bookingId&&b.propertyId===action.propertyId).length===1;
  };
  window.rbBuildProfessionalPMSResponse=async function(message){
@@ -52,7 +95,7 @@
   const costs=/costi|spese|costs?|expenses?/.test(q)&&/prevision|previst|preventiv|forecast|budget/.test(q)&&/superior|oltre|rispetto|scostament|above|over|versus|against|exceed|higher/.test(q);
   const statement=/rendicont|owner statement/.test(q)&&/manc|missing|complet|complete/.test(q);
   const arrivals=/arriv|\barrivals?\b/.test(q)&&/oggi|today/.test(q)&&/quali|elenc|which|list/.test(q);
-  const overlaps=/prenotazion|bookings?|reservations?/.test(q)&&/sovrappost|sovrapposizion|conflitt|overlap|conflict/.test(q);
+  const overlaps=/sovrappost|sovrapposizion|conflitt|overlap|conflict/.test(q)&&(/prenotazion|bookings?|reservations?/.test(q)||/dashboard/.test(window.location?.pathname||''));
   if(!costs&&!statement&&!arrivals&&!overlaps)return null;
   if(costs||statement)return reply('pms_accounting_limits',
    costs?'Non posso identificare strutture con costi effettivi superiori alle previsioni dalle sole prenotazioni. Il PMS B&B non dispone di un registro completo di spese e incassi riconciliati: ricavi prenotati e costi ipotizzati nel simulatore non dimostrano costi sostenuti. Servono immobile, periodo, previsione collegata, spese documentate, commissioni e imposte con criteri omogenei. Non ho calcolato scostamenti né modificato dati.':'Per completare un rendiconto proprietario B&B servono immobile e periodo, prenotazioni con date/stati/importi validi, incassi riconciliati, costi documentati, commissioni, imposte applicabili e accordi con il proprietario. Il report attuale riepiloga ricavi prenotati; non è un rendiconto contabile completo. Questa è una checklist generale: non ho verificato quali documenti manchino nel tuo caso. Indica struttura e periodo per esaminare i dati disponibili, mantenendo esterni gli incassi e i costi non registrati.',
@@ -71,13 +114,12 @@
     return reply('pms_context','Non posso confermare il risultato: il caricamento è fallito o account/immobile sono cambiati. Ricarica il PMS e ripeti la domanda.','I cannot confirm the result: loading failed or the account/property changed. Reload the PMS and ask again.',{source:'pms_availability',state:'refresh_unavailable'});
    }
   }
-  const named=e.properties.filter(p=>norm(p.name).length>=3&&q.includes(norm(p.name)));
-  const ids=named.length?named.map(p=>p.id):e.scopePropertyId?[e.scopePropertyId]:e.properties.map(p=>p.id);
-  if(ids.some(id=>!e.properties.some(p=>p.id===id))||named.some(p=>e.scopePropertyId&&p.id!==e.scopePropertyId)||
-   (!named.length&&/\b(?:per|di|for|in|a)\s+(?:l['’])?(?:immobile|property|struttura|casa)\s+/.test(q)))return reply('pms_context','La struttura richiesta non è identificabile nell’ambito selezionato. Selezionala nella Dashboard e ripeti la domanda.','The requested property cannot be identified in the selected scope. Select it in the Dashboard and ask again.',{state:'unknown_property'});
+  if(!professionalIntegrity(e))return reply('pms_context','Il controllo è incompleto: l’elenco caricato contiene riferimenti a strutture o ID prenotazione mancanti, duplicati o non verificabili. Verifica gli identificativi e i collegamenti nella Dashboard; restringere il filtro non risolve questa anomalia. Non propongo scorciatoie da questi dati.','This check is incomplete: the loaded directory contains missing, duplicate or unverifiable property references or booking IDs. Verify each unique booking ID and property link in the Dashboard; narrowing the filter does not resolve this anomaly. I will not offer shortcuts from these data.',{state:'data_quality',complete:false});
+  const selection=professionalSelection(q,e,overlaps),ids=selection.ids;
+  if(selection.state==='period_required')return reply('pms_context','Per questa verifica usa arrivi di oggi oppure sovrapposizioni dell’intero elenco caricato. Per un altro periodo apri il calendario e imposta le date: non applico un periodo diverso da quello richiesto.','This check supports today’s arrivals or overlaps across the loaded list. For another period, open the calendar and set dates: I will not silently substitute another period.',{state:'period_required',complete:false});
+  if(selection.state)return reply('pms_context','Non posso identificare con certezza tutte le strutture e le condizioni richieste nell’ambito selezionato. Seleziona una struttura nella Dashboard e ripeti la domanda; per l’intero elenco seleziona prima tutte le strutture.','I cannot identify every requested property and qualifier with certainty in the selected scope. Select a property in the Dashboard and ask again; for the whole list, first select all properties.',{state:'unknown_property',complete:false});
   const tools=window.rbPMSProfessionalTools;
   if(!tools?.inspect||!tools?.today)return reply('pms_context','Apri la Dashboard per verificare arrivi e sovrapposizioni con il calendario PMS. I controlli non sono disponibili in questa schermata.','Open the Dashboard to check arrivals and overlaps using the PMS calendar. These checks are unavailable on this screen.',{state:'tools_unavailable'});
-  if(/domani|tomorrow|ieri|yesterday|mese|month|settimana|week|\d{4}-\d{2}-\d{2}/.test(q))return reply('pms_context','Per questa verifica usa arrivi di oggi oppure sovrapposizioni dell’intero elenco caricato. Per un altro periodo apri il calendario e imposta le date: non applico un periodo diverso da quello richiesto.','This check supports today’s arrivals or overlaps across the loaded list. For another period, open the calendar and set dates: I will not silently substitute another period.',{state:'period_required'});
   const bookings=e.bookings.filter(b=>ids.includes(b.propertyId));
   const result=tools.inspect(bookings,tools.today());
   if(!result||result.state!=='ready')return reply('pms_context','Non posso completare il controllo di questo elenco. Restringi a una struttura e verifica il calendario; non considero assenti i conflitti non controllati.','I cannot complete the check for this list. Narrow to one property and review the calendar; unexamined conflicts are not considered absent.',{state:'scan_unavailable'});
@@ -86,7 +128,7 @@
   const label=b=>`${name(b)} · ${b.checkin} → ${b.checkout} · ${b.id||'—'} · ${b.status||'arrival'}`;
   const preview=selected.slice(0,5);
   const actions=preview.filter(b=>typeof b.id==='string'&&b.id&&e.bookings.filter(row=>row.id===b.id).length===1)
-   .map(b=>({type:'open_booking',bookingId:b.id,propertyId:b.propertyId,contextOwnerUid:e.ownerUid,contextDemo:e.demo,contextScopePropertyId:e.scopePropertyId,labelIT:label(b),labelEN:label(b)}));
+   .map(b=>({type:'open_booking',professionalQuery:true,bookingId:b.id,propertyId:b.propertyId,contextOwnerUid:e.ownerUid,contextDemo:e.demo,contextScopePropertyId:e.scopePropertyId,labelIT:label(b),labelEN:label(b)}));
   const text=en=>[
    e.demo?(en?'DEMO data':'Dati DEMO'):(en?'Loaded account snapshot; no OTA synchronization is implied.':'Snapshot account caricato; non implica sincronizzazione OTA.'),
    (en?'Scope: ':'Ambito: ')+ids.map(id=>e.properties.find(p=>p.id===id)?.name||id).join(', '),

@@ -145,3 +145,62 @@ test('more than five matches are disclosed and actions remain bound to visible r
  const data=snapshot();data.portalBookingList=Array.from({length:8},(_,i)=>booking('stay-'+i));
  const r=await setup({data}).ask(arrivalQueries[0]);assert.equal(r.metadata.matchedBookings,8);assert.equal(r.actions.length,5);assert.match(r.textEN,/Showing 5 of 8/);
 });
+
+for(const q of [
+ 'Quali strutture hanno arrivi oggi per Villa Gamma?',
+ 'Which properties have arrivals today at Villa Gamma?',
+ 'Quali arrivi oggi a Villa Gamma?',
+ 'Quali arrivi oggi presso Villa Gamma?',
+ 'Quali arrivi oggi per Casa Alfa e Villa Gamma?',
+ 'Which properties have arrivals today for Villa Gamma and Casa Alfa?',
+ 'Quali arrivi oggi per Casa Alfa Sud?'
+])test('unknown property never widens the requested scope: '+q,async()=>{
+ const r=await setup().ask(q);
+ assert.equal(r.metadata.state,'unknown_property');assert.equal(r.actions.length,0);
+ assert.doesNotMatch(r.textIT+r.textEN,/Casa Alfa|Casa Beta|one|two/);
+});
+
+for(const change of ['missing_property','unknown_property','duplicate_outside_filter','duplicate_foreign_property','duplicate_property_id','missing_directory_id','null_booking'])test('global directory/reference anomalies never become complete inside a filter: '+change,async()=>{
+ const data=snapshot();
+ if(change==='missing_property')data.portalBookingList.push(booking('orphan',undefined,{propertyId:undefined}));
+ if(change==='unknown_property')data.portalBookingList.push(booking('orphan','unknown-secret'));
+ if(change==='duplicate_outside_filter')data.portalBookingList.push(booking('one','b'));
+ if(change==='duplicate_foreign_property')data.portalBookingList.push(booking('one','secret'));
+ if(change==='duplicate_property_id')data.propertyList.push({id:'a',name:'Other name'});
+ if(change==='missing_directory_id')data.propertyList.push({name:'Missing ID'});
+ if(change==='null_booking')data.portalBookingList.push(null);
+ const {w,ask}=setup({data});w.bookingsPropertyFilter='a';
+ const r=await ask(arrivalQueries[0]);
+ assert.equal(r.metadata.state,'data_quality');assert.equal(r.metadata.complete,false);assert.equal(r.actions.length,0);
+ assert.doesNotMatch(JSON.stringify(r),/unknown-secret|orphan|Other name|Missing ID/);
+});
+
+for(const month of ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre',
+ 'January','February','March','April','May','June','July','August','September','October','November','December'])test('named month is never silently replaced by the whole loaded list: '+month,async()=>{
+ const r=await setup().ask(`Ci sono prenotazioni sovrapposte in ${month}?`);
+ assert.equal(r.metadata.state,'period_required');assert.equal(r.actions.length,0);assert.doesNotMatch(r.textEN,/Casa Alfa|Casa Beta/);
+});
+for(const period of ['Q4 2026','31/10/2026','31.10.2026','next winter','this year','ieri','lunedì'])test('other explicit periods fail closed: '+period,async()=>{
+ const r=await setup().ask('Are there overlapping bookings '+period+'?');
+ assert.equal(r.metadata.state,'period_required');assert.equal(r.actions.length,0);
+});
+for(const q of ['Sovrapposizioni a dicembre?','Overlaps in December?','Ci sono prenotazioni sovrapposte oggi?','Are there overlapping bookings today?'])test('short or current-day overlap questions do not silently scan a different period: '+q,async()=>{
+ const r=await setup().ask(q);assert.equal(r.metadata.state,'period_required');assert.equal(r.actions.length,0);
+});
+test('a previously offered professional action is invalidated by an orphan or cross-property duplicate',async()=>{
+ const {w,ask}=setup();const r=await ask(arrivalQueries[0]);const action=r.actions[0];
+ assert.equal(w.rbValidateEvidenceBookingAction(action),true);
+ w.rbPMSData.portalBookingList.push(booking('orphan','unknown'));
+ assert.equal(w.rbValidateEvidenceBookingAction(action),false);
+ w.rbPMSData.portalBookingList.pop();w.bookingsPropertyFilter=null;
+ w.rbPMSData.portalBookingList.push(booking('one','b'));
+ assert.equal(w.rbValidateEvidenceBookingAction(action),false);
+});
+test('month words inside an exact known property name are not mistaken for requested periods',async()=>{
+ const data=snapshot();data.propertyList[0].name='Casa Dicembre';
+ const r=await setup({data}).ask('Quali arrivi oggi per Casa Dicembre?');assert.equal(r.type,'pms_professional');assert.equal(r.actions[0].bookingId,'one');
+});
+test('a known property with an unknown suffix cannot borrow that property’s bookings',async()=>{
+ const r=await setup().ask('Which properties have arrivals today at Casa Alfa Annex?');
+ assert.equal(r.metadata.state,'unknown_property');assert.equal(r.actions.length,0);
+});

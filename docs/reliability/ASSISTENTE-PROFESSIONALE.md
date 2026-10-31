@@ -59,6 +59,18 @@ Riproduzione prima della patch: sui primi 33 nuovi casi, con il nuovo helper pur
 
 La prima CI completa ha eseguito 2.251 casi: cinque controlli statici richiedevano ancora il precedente identificativo cache dell'orchestratore. Sono aggiornati esclusivamente quei riferimenti in RC169/174/189/193/194, conservando le altre asserzioni. Il nuovo esito CI va verificato sul commit finale; non confondere il primo run fallito con i test locali mirati o con la preview Vercel.
 
+## Correzioni dopo la revisione indipendente di a7dcc882
+
+La revisione Codex ha dimostrato tre P2 non intercettati dai test precedenti. Il collaudo browser di accettazione resta sospeso fino al loro controllo sul nuovo commit:
+
+- **Struttura sconosciuta:** il testo viene interpretato in modo conservativo. I nomi corrispondono per intero; nomi sconosciuti, nomi misti o suffissi non riconosciuti richiedono selezione nella Dashboard. Non si sostituisce Villa Gamma con l'elenco generale. Anche qualificatori residui non compresi bloccano la risposta; questa prima versione può quindi chiedere di riformulare frasi legittime anziché tentare un'interpretazione incerta.
+- **Completezza apparente dopo il filtro:** prima della scansione si verificano directory e riferimenti dell'intero snapshot, inclusi ID duplicati fuori dal filtro e prenotazioni orfane. Un errore restituisce `data_quality`, `complete:false` e nessuna scorciatoia. Non vengono mostrati nomi o ID scartati. È un controllo globale conservativo: filtrare una struttura sana non risolve un'anomalia d'identità altrove. Non modifica o ripara record. Il controllo viene ripetuto anche al clic su una scorciatoia professionale precedentemente generata.
+- **Periodo ignorato:** mesi IT/EN, abbreviazioni, giorni della settimana, anni, trimestri, stagioni e date numeriche non vengono sostituiti dall'intero elenco. Si richiede il calendario, con `period_required` e nessuna prenotazione nella risposta. Anche gli overlap di oggi sono rifiutati, perché il controllo disponibile opera sull'intero elenco. Un mese nel nome completo di una struttura riconosciuta non viene interpretato come periodo.
+
+Riproduzione iniziale dei nuovi casi: 44 fallimenti su 45 prima della correzione. La suite professionale passa ora 87 test (35 originari e 52 aggiunti), compresi ulteriori controlli su scorciatoie, nomi completi e richieste brevi. La regressione mirata passa 346 test; il nuovo esito CI completo resta distinto e va letto sulla PR. Nessun nuovo controllo browser eseguito in questa correzione.
+
+Per il controllo indipendente aggiungere: `Villa Gamma` IT/EN, Casa Alfa + Villa Gamma, Casa Alfa Sud, proprietà mancanti/sconosciute, ID duplicati nell'altra struttura, directory con ID duplicati, dicembre/December e mesi restanti, periodi numerici, cambio qualità dello snapshot prima del clic. Verificare che nessuna di queste anomalie generi `complete:true` o scorciatoie verso un immobile sostitutivo.
+
 ## Controllo indipendente Codex
 
 - Verificare base e diff esatti; nessuna modifica a formule, rules, endpoint, persistenza o condizioni commerciali.
