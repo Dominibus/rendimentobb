@@ -57,6 +57,8 @@ Le prove conversazionali caricano i moduli nell'ordine del loader reale, in VM c
 
 Riproduzione prima della patch: sui primi 33 nuovi casi, con il nuovo helper puro ma loader/orchestratore/evidence originali di main, 23 falliscono e 10 passano. Dopo la correzione e gli ulteriori due controlli sullo scan/bridge: 35 nuovi casi passati. La regressione estesa comprende 294 test; 638 identità finanziarie passate. Non è una nuova esecuzione della suite completa, degli emulatori o del collaudo browser.
 
+La prima CI completa ha eseguito 2.251 casi: cinque controlli statici richiedevano ancora il precedente identificativo cache dell'orchestratore. Sono aggiornati esclusivamente quei riferimenti in RC169/174/189/193/194, conservando le altre asserzioni. Il nuovo esito CI va verificato sul commit finale; non confondere il primo run fallito con i test locali mirati o con la preview Vercel.
+
 ## Controllo indipendente Codex
 
 - Verificare base e diff esatti; nessuna modifica a formule, rules, endpoint, persistenza o condizioni commerciali.
