@@ -71,6 +71,16 @@ Riproduzione iniziale dei nuovi casi: 44 fallimenti su 45 prima della correzione
 
 Per il controllo indipendente aggiungere: `Villa Gamma` IT/EN, Casa Alfa + Villa Gamma, Casa Alfa Sud, proprietà mancanti/sconosciute, ID duplicati nell'altra struttura, directory con ID duplicati, dicembre/December e mesi restanti, periodi numerici, cambio qualità dello snapshot prima del clic. Verificare che nessuna di queste anomalie generi `complete:true` o scorciatoie verso un immobile sostitutivo.
 
+## Regressione di routing segnalata su 72514c41
+
+Il riesame indipendente ha confermato la chiusura dei tre P2 precedenti, ma ha riprodotto un nuovo P2: la presenza nella Dashboard faceva interpretare qualsiasi domanda sui conflitti come richiesta PMS. Le domande OMI/annunci perdevano così la spiegazione pubblica e potevano richiedere un piano a Free.
+
+La selezione dell'intento ora richiede un riferimento esplicito a prenotazioni/bookings/reservations. Solo le richieste brevi delimitate (ad esempio «Sovrapposizioni?» oppure «Overlaps in December?») possono usare la Dashboard come contesto. Parole generiche come conflitti, overlap o Dashboard non stabiliscono da sole l'intento operativo. Nessun accesso o caricamento PMS viene richiesto per la domanda pubblica OMI riprodotta.
+
+Aggiunti 10 test: otto combinazioni IT/EN e Free/Investor sulle domande OMI/annunci, una verifica di richieste generiche estranee al PMS e una verifica delle richieste operative ancora disponibili. Prima della correzione 9 di questi 10 test falliscono; dopo la correzione la suite professionale passa 97 casi. Le domande usano anche uno snapshot assente e un refresh che fallirebbe il test se invocato: la risposta pubblica non dipende dai dati account.
+
+Per Codex: ripetere le domande sui conflitti fra quotazioni OMI e annunci, anche in inglese e con Free, senza dati PMS caricati; verificare `omi_evidence` senza richiesta di upgrade o selezione immobile. Ripetere i tre P2 precedenti e i percorsi prenotazioni. Collaudo browser ancora non eseguito; nessun merge o deploy in produzione.
+
 ## Controllo indipendente Codex
 
 - Verificare base e diff esatti; nessuna modifica a formule, rules, endpoint, persistenza o condizioni commerciali.

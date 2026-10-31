@@ -95,7 +95,11 @@
   const costs=/costi|spese|costs?|expenses?/.test(q)&&/prevision|previst|preventiv|forecast|budget/.test(q)&&/superior|oltre|rispetto|scostament|above|over|versus|against|exceed|higher/.test(q);
   const statement=/rendicont|owner statement/.test(q)&&/manc|missing|complet|complete/.test(q);
   const arrivals=/arriv|\barrivals?\b/.test(q)&&/oggi|today/.test(q)&&/quali|elenc|which|list/.test(q);
-  const overlaps=/sovrappost|sovrapposizion|conflitt|overlap|conflict/.test(q)&&(/prenotazion|bookings?|reservations?/.test(q)||/dashboard/.test(window.location?.pathname||''));
+  // A Dashboard URL is not evidence of booking intent. Only explicit bookings
+  // or a bounded short overlap request may enter the PMS access/snapshot branch.
+  const shortOverlap=/^(?:ci sono |are there )?(?:sovrapposizioni|overlaps?)(?:\s+(?:oggi|today)|\s+(?:a|in)\s+(?:gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|january|february|march|april|may|june|july|august|september|october|november|december)(?:\s+\d{4})?)?[?.!]*$/.test(q);
+  const overlaps=/sovrappost|sovrapposizion|conflitt|overlap|conflict/.test(q)&&
+   (/prenotazion|bookings?|reservations?/.test(q)||shortOverlap&&/dashboard/.test(window.location?.pathname||''));
   if(!costs&&!statement&&!arrivals&&!overlaps)return null;
   if(costs||statement)return reply('pms_accounting_limits',
    costs?'Non posso identificare strutture con costi effettivi superiori alle previsioni dalle sole prenotazioni. Il PMS B&B non dispone di un registro completo di spese e incassi riconciliati: ricavi prenotati e costi ipotizzati nel simulatore non dimostrano costi sostenuti. Servono immobile, periodo, previsione collegata, spese documentate, commissioni e imposte con criteri omogenei. Non ho calcolato scostamenti né modificato dati.':'Per completare un rendiconto proprietario B&B servono immobile e periodo, prenotazioni con date/stati/importi validi, incassi riconciliati, costi documentati, commissioni, imposte applicabili e accordi con il proprietario. Il report attuale riepiloga ricavi prenotati; non è un rendiconto contabile completo. Questa è una checklist generale: non ho verificato quali documenti manchino nel tuo caso. Indica struttura e periodo per esaminare i dati disponibili, mantenendo esterni gli incassi e i costi non registrati.',

@@ -204,3 +204,26 @@ test('a known property with an unknown suffix cannot borrow that property’s bo
  const r=await setup().ask('Which properties have arrivals today at Casa Alfa Annex?');
  assert.equal(r.metadata.state,'unknown_property');assert.equal(r.actions.length,0);
 });
+for(const q of [
+ 'Ci sono conflitti tra quotazioni OMI e prezzi degli annunci?',
+ 'Are there conflicts between OMI quotations and listing prices?',
+ 'Ci sono sovrapposizioni tra dati OMI e prezzi degli annunci?',
+ 'Are there overlaps between OMI data and listing prices?'
+])for(const paid of [false,true])test('market evidence remains public and is not intercepted by PMS: '+paid+' '+q,async()=>{
+ const {w,ask}=setup({paid});w.rbPMSData=null;
+ w.rbRefreshPortalSnapshot=()=>assert.fail('a public source question must not load PMS records');
+ const r=await ask(q);assert.equal(r.type,'omi_evidence');assert.equal(r.actions.length,0);
+ assert.match(r.textEN,/OMI does not determine your individual property price/);
+ assert.doesNotMatch(r.textEN,/Sign in|Investor|selected property|Reload the PMS|Reading account PMS/);
+});
+test('generic conflicts on the Dashboard do not establish booking intent',async()=>{
+ const {w}=setup({paid:false});
+ for(const q of ['Ci sono conflitti tra fonti ufficiali e annunci?','Are there conflicts between datasets?','Conflitti di interessi?','Overlaps in OMI?']){
+  assert.equal(await w.rbBuildProfessionalPMSResponse(q),null,q);
+ }
+});
+test('explicit booking conflicts still require PMS access, while short temporal overlap requests stay supported',async()=>{
+ const free=setup({paid:false});assert.equal((await free.ask(overlapQueries[0])).metadata.state,'access');
+ const {ask}=setup();assert.equal((await ask('Sovrapposizioni?')).type,'pms_professional');
+ assert.equal((await ask('Overlaps in December?')).metadata.state,'period_required');
+});
