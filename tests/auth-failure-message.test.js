@@ -2,14 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
-import {authFailureMessage} from '../js/auth-failure-message.js';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
+const authPage=read('js/auth-page.js');
+const presentation=authPage.split('// BEGIN AUTH FAILURE PRESENTATION\n')[1].split('// END AUTH FAILURE PRESENTATION')[0];
+const authFailureMessage=vm.runInNewContext(presentation+'\nauthFailureMessage;');
 
 for(const [code,reference] of [
  ['auth/unauthorized-domain','AUTH-DOMAIN'],['auth/app-not-authorized','AUTH-APP'],
  ['auth/invalid-api-key','AUTH-CONFIG'],['auth/operation-not-allowed','AUTH-METHOD'],
  ['auth/web-storage-unsupported','AUTH-STORAGE'],['auth/unsupported-persistence-type','AUTH-STORAGE'],
- ['auth/invalid-persistence-type','AUTH-STORAGE'],['auth/internal-error','AUTH-INTERNAL']
+ ['auth/invalid-persistence-type','AUTH-PERSISTENCE'],['auth/internal-error','AUTH-INTERNAL']
 ])test('safe reference and bilingual explanation: '+code,()=>{
  const r=authFailureMessage(code);assert.equal(r.reference,reference);
  assert.match(r.textIT,/Riferimento: AUTH-/);assert.match(r.textEN,/Reference: AUTH-/);
@@ -38,4 +40,14 @@ test('existing credential and network messages retain their current semantics',(
  }
  assert.equal(renderError('auth/network-request-failed')[1],'Connection unavailable. Try again when online.');
  assert.equal(renderError('auth/too-many-requests')[1],'Too many attempts. Please wait before trying again.');
+});
+test('invalid persistence is an application configuration issue, not an unsupported browser claim',()=>{
+ const r=authFailureMessage('auth/invalid-persistence-type');
+ assert.equal(r.reference,'AUTH-PERSISTENCE');
+ assert.match(r.textIT,/tipo di persistenza.*non è valido/i);
+ assert.match(r.textEN,/persistence type.*invalid/i);
+ assert.doesNotMatch(r.textIT,/browser|verifica le impostazioni/i);
+ assert.doesNotMatch(r.textEN,/browser|check browser settings/i);
+ const unsupported=authFailureMessage('auth/unsupported-persistence-type');
+ assert.notEqual(unsupported.reference,r.reference);
 });
