@@ -179,7 +179,10 @@ async function(message){
 
     // Public explanations and evidence selection precede price-keyword and paid-analysis routes.
     // Each builder reads the current context; no account values are retained between calls.
-    const evidenceResponse = window.rbBuildBookingNavigationResponse?.(text)
+    const candidateResponse=window.rbBuildCandidateResponse?.(text);
+    if(candidateResponse)return {success:true,response:candidateResponse,intent:{intent:'candidate_explanation'}};
+    const evidenceResponse = await window.rbBuildProfessionalPMSResponse?.(text)
+      || window.rbBuildBookingNavigationResponse?.(text)
       || window.rbBuildROINotApplicableResponse?.(text)
       || window.rbBuildSourceClarificationResponse?.(text);
     if(evidenceResponse)return {success:true,response:evidenceResponse,intent:{intent:evidenceResponse.type}};

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "registryVersion": "rc228-inventory-1",
+  "registryVersion": "rc228-inventory-1/candidate-navigation-20261030",
   "inventoriedAt": "2026-10-29",
   "baselineCommit": "ad44c31c2baa72627171dd0147232bd37ea7ec48",
   "scope": "Public metadata and local code/data fingerprints only; no live source or account certification",
@@ -899,7 +899,7 @@
         },
         {
           "path": "immobili/index.html",
-          "sha256": "bb949bf3e7240fa5c9f72b33b19f65de2666da810cfd75820c5517740828c158"
+          "sha256": "ee6f08bc15223ce5e2455ff3912d88691ffd4f2d141474277ab9dcf94aae4ead"
         },
         {
           "path": "immobili/milano/index.html",

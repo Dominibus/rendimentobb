@@ -3419,6 +3419,9 @@ function getValueOrDefault(id, fallback){
 window.__LAST_CALCULATION__ = 0;
 
 window.calculate = async function(mode = false){
+  // Candidate handoffs must never fill missing economic inputs from legacy defaults.
+  if(window.location?.search && new URLSearchParams(window.location.search).get('from')==='candidate' && window.rbCandidateInputsReady?.()!==true)return;
+
 
  
   const isUIRefresh =
