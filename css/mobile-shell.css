@@ -41,3 +41,11 @@
  body.home-page .rb158-preview-track{margin-block:12px}
  body.home-page .rb158-preview-checks li{padding-block:6px}
 }
+
+
+/* Header clearance, including the async shared portal header and Safari rotation. */
+@media(max-width:760px){
+ body.rb-mobile-app:has(>#global-header){padding-top:calc(max(82px,var(--rb-shell-header-height,100px)) + 12px)!important}
+ html:has(body.tool-page.rb-mobile-app){scroll-padding-top:calc(max(82px,var(--rb-shell-header-height,100px)) + 12px)}
+ body.tool-page.rb-mobile-app :is(#rb-analysis-inputs,#rb-simulation-summary,#rb-analysis-insights){scroll-margin-top:12px}
+}

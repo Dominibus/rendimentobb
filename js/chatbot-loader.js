@@ -200,7 +200,7 @@
 
     "/js/chatbot/ui/chatbot-attachments.js?v=20261011-rc99",
     "/js/chatbot/ui/free-home-snapshot.js?v=20261027-rc211",
-    "/js/chatbot/ui/chatbot-ui.js?v=20261030-a1-a4",
+    "/js/chatbot/ui/chatbot-ui.js?v=20261030-a1-a4-review20261101",
 
     "/js/ai-engine.js?v=20261011-rc99"
   ];
@@ -256,3 +256,4 @@
     init();
   }
 })();
+

@@ -37,13 +37,30 @@ function initializeMobileTabs(){
 }
 
 window.rbMountMobileShell=initializeMobileTabs;
+// Observe the fixed header itself: its host can have zero layout height.
+function trackMobileHeader(){
+ let observed=null, resize=null, pending=null;
+ const update=()=>{
+  const height=Math.ceil(observed.getBoundingClientRect().height);
+  if(Number.isFinite(height)&&height>0)document.documentElement.style.setProperty('--rb-shell-header-height',height+'px');
+ };
+ const bind=()=>{
+  const header=document.querySelector('#global-header .rb-header') || document.querySelector('.rb-public-header');
+  if(!header || header===observed)return;
+  resize?.disconnect();observed=header;
+  if(window.ResizeObserver){resize=new window.ResizeObserver(update);resize.observe(header);}
+  update();pending?.disconnect();
+ };
+ bind();
+ const host=document.getElementById('global-header');
+ if(!observed && host && window.MutationObserver){
+  pending=new window.MutationObserver(bind);pending.observe(host,{childList:true,subtree:true});
+ }
+ window.addEventListener('resize',()=>{if(observed)update();});
+}
 function mount(){
  initializeMobileTabs();
- const header=document.getElementById('global-header') || document.querySelector('.rb-public-header');
- if(header && window.ResizeObserver){
-  const update=()=>document.documentElement.style.setProperty('--rb-shell-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');
-  new window.ResizeObserver(update).observe(header);update();
- }
+ trackMobileHeader();
  // Keep language and login reachable in the menu when the compact header is shown.
  const publicHeader=document.querySelector('.rb-public-header');
  if(publicHeader){
@@ -75,3 +92,4 @@ function mount(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
+

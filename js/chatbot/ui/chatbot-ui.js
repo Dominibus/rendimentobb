@@ -12,6 +12,14 @@ function rbFormatPropertySnapshotROI(value, analysis = window.lastAnalysisData |
     return Number(value).toFixed(1) + "%";
 }
 
+function rbFormatEquitySnapshotROI(analysis = window.lastAnalysisData || {}) {
+ const equity = analysis.equity ?? analysis.assumptions?.equity;
+ if (analysis.roiAvailable === false || (equity !== null && equity !== undefined && equity !== '' && typeof equity !== 'boolean' && Number(equity) === 0)) return "N/A";
+ const value = analysis.roi;
+ if (value == null || value === '' || typeof value === 'boolean' || !Number.isFinite(Number(value))) return "--";
+ return Number(value).toFixed(1) + "%";
+}
+
 window.initRBChatbotUI = function(){
 
     const IS_DEVELOPMENT =
@@ -239,7 +247,7 @@ HOME
 
                                 ${
     canSeeFullSnapshot()
-        ? rbFormatPropertySnapshotROI(window.rbChatMemory.lastROI)
+        ? rbFormatEquitySnapshotROI(window.lastAnalysisData || {})
         : "--"
 }
 
@@ -789,12 +797,7 @@ function refreshHomeSnapshot(){
     context.lastCity ??
     memory.lastCity;
 
-const roi =
-    analysis.realROI ??
-    analysis.safeROI ??
-    context.roi ??
-    context.lastROI ??
-    memory.lastROI;
+const roi = analysis.roi;
 
 const cashflow =
     analysis.cashflow ??
@@ -917,7 +920,7 @@ const fullSnapshotAllowed =
 
 metrics[1].textContent =
     fullSnapshotAllowed
-        ? rbFormatPropertySnapshotROI(roi, analysis)
+        ? rbFormatEquitySnapshotROI(analysis)
         : "--";
 
 metrics[2].textContent =
@@ -2195,3 +2198,4 @@ document.addEventListener(
 
   }
 );
+
