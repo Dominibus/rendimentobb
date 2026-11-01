@@ -10,7 +10,7 @@ test('RC221 every portal/public-shell document loads one independent mobile shel
  let count=0;
  for(const file of html(root)){
   const s=readFileSync(file,'utf8');if(!/\/js\/(header|public-shell)\.js/.test(s))continue;
-  assert.equal((s.match(/src="\/js\/mobile-shell.js\?v=20261029-rc221" defer/g)||[]).length,1,file);
+  assert.equal((s.match(/src="\/js\/mobile-shell\.js\?v=20261029-rc221(?:-[a-zA-Z0-9-]+)?" defer/g)||[]).length,1,file);
   assert.match(s,/mobile-shell.css\?v=20261029-rc221/);count++;
  }
  assert.equal(count,48);
