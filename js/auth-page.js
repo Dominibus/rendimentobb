@@ -5,6 +5,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 import { safeAuthDestination, createAuthActionGuard } from './auth-safety.js?v=20261025-rc196';
+import { authFailureMessage } from './auth-failure-message.js?v=20261101-diagnostics';
 
 const auth = getAuth(app), db = getFirestore(app), guard = createAuthActionGuard();
 const $ = id => document.getElementById(id);
@@ -57,7 +58,9 @@ function error(code) {
     'auth/too-many-requests': ['Troppi tentativi. Attendi prima di riprovare.', 'Too many attempts. Please wait before trying again.'],
     'auth/network-request-failed': ['Connessione non disponibile. Riprova quando sei online.', 'Connection unavailable. Try again when online.']
   };
-  message(...(errors[code] || ['Operazione non completata. Riprova tra poco.', 'Operation incomplete. Please try again shortly.']));
+  if (Object.hasOwn(errors, code)) { message(...errors[code]); return; }
+  const fallback = authFailureMessage(code);
+  message(fallback.textIT, fallback.textEN);
 }
 window.changeLang = lang => { window.setLang?.(lang); ui(); };
 document.addEventListener('rb_language_changed', ui);
