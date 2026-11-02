@@ -107,8 +107,16 @@
    {source:'current_product_scope',answerMode:costs?'cost_comparison_unavailable':'statement_requirements',personalCompletenessVerified:false});
   let e=window.rbReadPMSEvidence();
   const unavailable=window.rbBuildPMSAvailabilityResponse(message);
-  if(unavailable)return unavailable;
-  const identity={uid:e.ownerUid,demo:e.demo,scope:e.scopePropertyId};
+  // Opening/filtering bookings invalidates report completeness. Recover only an
+  // owned, previously loaded account snapshot through the canonical server bridge.
+  const data=window.rbPMSData,load=window.rbPMSSnapshotLoad,uid=window.currentUser?.uid;
+  const refreshInvalidated=e.state==='absent' && !!uid && data?.ownerUid===uid &&
+   data.isDemo!==true && window.isDemoDashboard!==true && data.portalSnapshotReady===false &&
+   load?.ownerUid===uid && load.status==='ready' && Array.isArray(data.propertyList) &&
+   Array.isArray(data.portalBookingList) && typeof window.rbRefreshPortalSnapshot==='function';
+  if(unavailable&&!refreshInvalidated)return unavailable;
+  const identity=refreshInvalidated?{uid,demo:false,scope:scope()}:
+   {uid:e.ownerUid,demo:e.demo,scope:e.scopePropertyId};
   // On the account dashboard, re-read the server snapshot. A failed refresh cannot reuse old facts.
   if(!e.demo&&typeof window.rbRefreshPortalSnapshot==='function'){
    let refreshed;

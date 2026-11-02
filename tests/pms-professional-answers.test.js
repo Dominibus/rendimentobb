@@ -227,3 +227,26 @@ test('explicit booking conflicts still require PMS access, while short temporal 
  const {ask}=setup();assert.equal((await ask('Sovrapposizioni?')).type,'pms_professional');
  assert.equal((await ask('Overlaps in December?')).metadata.state,'period_required');
 });
+
+for(const q of [...arrivalQueries,...overlapQueries])test('filtered-view invalidation refreshes canonical account data: '+q,async()=>{
+ const data=snapshot();data.portalSnapshotReady=false;
+ const {w,ask}=setup({data});w.rbPMSSnapshotLoad={ownerUid:'owner',status:'ready'};
+ let calls=0;w.rbRefreshPortalSnapshot=async()=>{calls++;w.rbPMSData=snapshot();return w.rbPMSData;};
+ const r=await ask(q);assert.equal(calls,1);assert.equal(r.type,'pms_professional');assert.equal(r.metadata.source,'account_pms');
+});
+for(const change of ['reject','null','logout','account','scope','still_incomplete'])test('invalidated refresh fails closed: '+change,async()=>{
+ const data=snapshot();data.portalSnapshotReady=false;const {w,ask}=setup({data});
+ w.rbPMSSnapshotLoad={ownerUid:'owner',status:'ready'};
+ w.rbRefreshPortalSnapshot=async()=>{if(change==='reject')throw Error('offline');if(change==='null')return null;
+  w.rbPMSData=snapshot();if(change==='logout')w.currentUser=null;if(change==='account')w.currentUser={uid:'other'};
+  if(change==='scope')w.bookingsPropertyFilter='b';if(change==='still_incomplete')w.rbPMSData.portalSnapshotReady=false;return w.rbPMSData;};
+ const r=await ask(overlapQueries[0]);assert.equal(r.metadata.state,'refresh_unavailable');assert.equal(r.actions.length,0);assert.doesNotMatch(JSON.stringify(r),/Casa Alfa|"one"/);
+});
+for(const state of ['access','foreign','loading','error','no_load','demo'])test('invalidated snapshot cannot bypass boundary: '+state,async()=>{
+ const data=snapshot();data.portalSnapshotReady=false;const {w,ask}=setup({data,paid:state!=='access'});
+ w.rbPMSSnapshotLoad={ownerUid:'owner',status:'ready'};
+ if(state==='foreign')w.currentUser={uid:'other'};if(['loading','error'].includes(state))w.rbPMSSnapshotLoad.status=state;
+ if(state==='no_load')w.rbPMSSnapshotLoad=null;if(state==='demo')data.isDemo=true;
+ let calls=0;w.rbRefreshPortalSnapshot=async()=>{calls++;return snapshot();};const r=await ask(arrivalQueries[0]);
+ assert.equal(calls,0);assert.equal(r.actions.length,0);assert.doesNotMatch(JSON.stringify(r),/Casa Alfa|"one"/);
+});
