@@ -271,3 +271,8 @@ test('canonical account and scope writes emit invalidation before assignment',()
   assert.ok(writes.length>0);for(const write of writes)assert.match(source.slice(Math.max(0,write.index-150),write.index),/dispatchEvent\(new Event\('rb_pms_context_changed'\)\);\s*$/);
  }
 });
+test('dashboard retains mandatory booking entrypoints and professional bridge',()=>{
+ const source=read('js/dashboard.js');
+ for(const name of ['openBookings','openCurrentBookings','filterBookingsByProperty','rbRefreshPortalSnapshot','rbPMSProfessionalTools'])assert.match(source,new RegExp('window\\.'+name+'\\s*='),name);
+ assert.doesNotMatch(source,/tokens truncated/);
+});

@@ -9,3 +9,9 @@ Il controllo finale di identità, accesso, completezza e filtro resta presente. 
 Verifiche: sei nuove riproduzioni asincrone sospendono il refresh e applicano filtro A-B-A, account A-B-A o logout-A, con snapshot completo e invalidato. Senza il controllo della revisione falliscono tutte e sei; con la correzione passano. Un controllo aggiuntivo verifica che ogni assegnazione canonica censita emetta l'evento prima della modifica. Il vecchio harness dell'ordine delle risposte riceve Event/dispatchEvent del browser senza cambiarne le asserzioni.
 
 120 test professionali passati. CI, revisione indipendente e browser Firebase reale ancora da eseguire; le sequenze account/logout simulate non dimostrano fuga dati fra account. Nessun merge o deploy manuale.
+
+## Ripristino dopo il riesame P1
+
+Il precedente commit 2c446f0 conteneva una dashboard troncata durante il trasferimento del sorgente. Ripristinati i byte della dashboard base dal blob 2db90cfd4ab08149c02e0216d4b9adda51ad1111, poi riapplicate le sole 13 notifiche sincrone. Nessuna altra parte della dashboard eliminata o riscritta. Controllo sintattico passato. Blob pubblicato della dashboard verificato uguale ai byte locali testati. Gli altri sette file del commit precedente coincidevano con i byte locali.
+
+127 test mirati passati, incluso un nuovo controllo di presenza degli entrypoint e bridge attesi, e assenza del marcatore di troncamento. Suite generale prima dell'ultimo controllo statico: 2.409 passati, due file bloccati dalle dipendenze locali note. CI sul commit corretto e riesame indipendente ancora richiesti. Main invariato.
