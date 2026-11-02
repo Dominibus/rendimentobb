@@ -48,12 +48,31 @@
   const nextStep=/miglior|prossim|da dove|cosa (?:fare|faccio|controll)|priorit|improv|next step|what should i|where do i/.test(q);
   const occupancyQuestion=/occupazion|occupancy/.test(q),adrQuestion=/\badr\b/.test(q),varianceQuestion=/scostament|variance/.test(q);
   const missing=/manc|missing|complet|sufficient/.test(q),finance=/\broi\b|cashflow|cash flow|dscr|prezzo|price|profit|utile|margine|margin/.test(q);
+  const requested={
+   revenue:/ricav|revenue/.test(q),occupancy:occupancyQuestion,adr:adrQuestion,
+   revpar:/\brevpar\b/.test(q),stays:/soggiorn|\bstays?\b/.test(q),
+   nights:/notti|\bnights?\b/.test(q),variance:varianceQuestion
+  };
+  const requestedCount=Object.values(requested).filter(Boolean).length;
+  // A compound request must not lose its other metrics to the single-intent precedence.
+  const compound=requestedCount>1 || (requestedCount>0 && (finance||missing));
   const render=en=>{
    const t=(a,b)=>en?b:a,locale=en?'en-GB':'it-IT';
    const n=v=>v===null?t('N/D','N/A'):new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(v);
    const money=v=>v===null?t('N/D','N/A'):new Intl.NumberFormat(locale,{style:'currency',currency:'EUR'}).format(v);
    const lines=[t(d.kind==='pms_operational'?'Report operativo PMS — dati del PDF':d.kind==='integrated'?'Sezione PMS del report integrato — dati del PDF':'Andamento immobili e portfolio — dati del PDF',d.kind==='pms_operational'?'PMS operations report — PDF evidence':d.kind==='integrated'?'PMS section of the integrated report — PDF evidence':'Property and portfolio performance — PDF evidence'),t('Ambito: ','Scope: ')+(/^(?:All properties|Tutte le proprietà)$/i.test(d.scope||'')?t('Tutte le proprietà','All properties'):(d.scope||t('non riconosciuto','not recognized'))),t('Periodo: ','Period: ')+(d.period||t('non riconosciuto','not recognized'))];
-   if(!finance&&!missing){
+   if(compound){
+    if(requested.revenue)lines.push(t('Ricavi prenotati attribuiti al periodo: ','Booked revenue allocated to the period: ')+money(d.revenue)+'.');
+    if(requested.occupancy)lines.push(t('Occupazione registrata: ','Recorded occupancy: ')+n(d.occupancy)+(d.occupancy===null?'':'%')+'.');
+    if(requested.adr)lines.push('ADR: '+money(d.adr)+'.');
+    if(requested.revpar)lines.push('RevPAR: '+money(d.revpar)+'.');
+    if(requested.stays)lines.push(t('Soggiorni: ','Stays: ')+n(d.stays)+'.');
+    if(requested.nights)lines.push(t('Notti prenotate: ','Booked nights: ')+n(d.nights)+'.');
+    if(requested.variance){
+     if(d.expected!==null)lines.push(t('Confronto sullo stesso sottoinsieme: ricavi registrati ','Same-subset comparison: recorded revenue ')+money(d.comparedRevenue)+t(', quota prevista ',', expected allocation ')+money(d.expected)+t(', scostamento ',', variance ')+n(d.variance)+(d.variance===null?'':'%')+'.');
+     else lines.push(t('Il PDF non riporta un confronto omogeneo riconosciuto.','No recognized like-for-like comparison is reported in this PDF.'));
+    }
+   }else if(!finance&&!missing){
     if(occupancyQuestion){
      lines.push(t('Occupazione registrata: ','Recorded occupancy: ')+n(d.occupancy)+(d.occupancy===null?'':'%')+'.');
      lines.push(t('Misura le notti occupate rispetto alle notti disponibili nell’ambito e nel periodo scelti. Il report ipotizza una unità per immobile ogni giorno: verifica chiusure e completezza del calendario prima di leggere il dato come domanda effettiva.','This measures occupied nights against available nights for the selected scope and period. The report assumes one unit per property every day: check closures and calendar completeness before interpreting this as actual demand.'));
