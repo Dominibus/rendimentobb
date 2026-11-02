@@ -137,7 +137,7 @@
     "/js/market-data.js?v=20261023-rc191",
     "/js/data-provenance.js?v=20261023-rc191",
     "/js/source-registry-data.js?v=20261029-rc228",
-    "/js/chatbot/core/evidence-response-engine.js?v=20261031-professional-review3",
+    "/js/chatbot/core/evidence-response-engine.js?v=20261102-pms-refresh",
     "/js/chatbot/core/candidate-response-engine.js?v=20261030-candidates",
     "/js/chatbot/core/market-evidence.js?v=20261023-rc192",
     "/js/chatbot/knowledge-base.js",
