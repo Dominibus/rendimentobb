@@ -15,6 +15,9 @@ const snapshot=()=>({ownerUid:'owner',portalSnapshotReady:true,isDemo:false,
 function setup({paid=true,data=snapshot(),path='/dashboard/'}={}){
  const window={currentUser:{uid:'owner'},getUserAccess:()=>paid?{isInvestor:true}:{},location:{pathname:path},currentLang:'it',dispatchEvent(){},rbPMSData:data,
   rbPMSProfessionalTools:{inspect:inspectProfessionalBookings,today:()=>day}};
+ const listeners=new Map();
+ window.addEventListener=(name,fn)=>{const list=listeners.get(name)||[];list.push(fn);listeners.set(name,list);};
+ window.dispatchEvent=event=>{for(const fn of listeners.get(event.type)||[])fn(event);};
  const storage=()=>({getItem:()=>null,setItem(){},removeItem(){}});
  const c=vm.createContext({window,console,Date,Intl,document:{getElementById:()=>null,addEventListener(){},dispatchEvent(){}},localStorage:storage(),sessionStorage:storage(),CustomEvent:class{}});
  const loader=read('js/chatbot-loader.js'),block=loader.slice(loader.indexOf('const scripts = ['),loader.indexOf('];',loader.indexOf('const scripts = [')));
@@ -249,4 +252,22 @@ for(const state of ['access','foreign','loading','error','no_load','demo'])test(
  if(state==='no_load')w.rbPMSSnapshotLoad=null;if(state==='demo')data.isDemo=true;
  let calls=0;w.rbRefreshPortalSnapshot=async()=>{calls++;return snapshot();};const r=await ask(arrivalQueries[0]);
  assert.equal(calls,0);assert.equal(r.actions.length,0);assert.doesNotMatch(JSON.stringify(r),/Casa Alfa|"one"/);
+});
+
+for(const transition of ['scope_return','account_return','logout_return'])for(const invalidated of [false,true])test('context revision rejects ABA transition '+transition+' invalidated='+invalidated,async()=>{
+ const data=snapshot();data.portalSnapshotReady=!invalidated;
+ const {w,ask}=setup({data});w.bookingsPropertyFilter='a';w.rbPMSSnapshotLoad={ownerUid:'owner',status:'ready'};
+ let finish,started;const pending=new Promise(resolve=>{finish=resolve;});const entered=new Promise(resolve=>{started=resolve;});
+ w.rbRefreshPortalSnapshot=async()=>{started();await pending;w.rbPMSData=snapshot();return w.rbPMSData;};
+ const response=ask(arrivalQueries[0]);await entered;
+ if(transition==='scope_return'){w.bookingsPropertyFilter='b';w.dispatchEvent({type:'rb_pms_context_changed'});w.bookingsPropertyFilter='a';}
+ else {w.currentUser=transition==='logout_return'?null:{uid:'other'};w.dispatchEvent({type:'rb_pms_context_changed'});w.currentUser={uid:'owner'};}
+ w.dispatchEvent({type:'rb_pms_context_changed'});finish();const result=await response;
+ assert.equal(result.metadata.state,'refresh_unavailable');assert.equal(result.actions.length,0);assert.doesNotMatch(JSON.stringify(result),/Casa Alfa|"one"/);
+});
+test('canonical account and scope writes emit invalidation before assignment',()=>{
+ for(const path of ['js/dashboard.js','js/firebase-init.js']){
+  const source=read(path);const writes=[...source.matchAll(/^[ \t]*window\.(?:currentUser|currentPropertyId|bookingsPropertyFilter|bookingsAllPropertiesView)\s*=\s*[^=]/gm)];
+  assert.ok(writes.length>0);for(const write of writes)assert.match(source.slice(Math.max(0,write.index-150),write.index),/dispatchEvent\(new Event\('rb_pms_context_changed'\)\);\s*$/);
+ }
 });

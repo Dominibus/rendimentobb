@@ -5,6 +5,8 @@
  const number=v=>['number','string'].includes(typeof v)&&String(v).trim()!==''&&Number.isFinite(Number(v))?Number(v):null;
  const reply=(type,it,en,metadata={},actions=[])=>({type,confidence:1,textIT:it,textEN:en,actions,metadata});
  const commercial=q=>/\b(?:investor|pro|free|abbonament\w*|subscriptions?|plans?|trial)\b|pian[oi].*(?:prezz|cost)|(?:prezz|cost).*(?:pian[oi])/.test(q);
+ let contextRevision=0;
+ window.addEventListener?.('rb_pms_context_changed',()=>{contextRevision++;});
  const scope=()=>{
   const filter=window.bookingsPropertyFilter;
   return typeof filter==='string'&&filter&&filter!=='all'?filter:
@@ -117,12 +119,13 @@
   if(unavailable&&!refreshInvalidated)return unavailable;
   const identity=refreshInvalidated?{uid,demo:false,scope:scope()}:
    {uid:e.ownerUid,demo:e.demo,scope:e.scopePropertyId};
+  const requestRevision=contextRevision;
   // On the account dashboard, re-read the server snapshot. A failed refresh cannot reuse old facts.
   if(!e.demo&&typeof window.rbRefreshPortalSnapshot==='function'){
    let refreshed;
    try{refreshed=await window.rbRefreshPortalSnapshot();}catch{/* Fail closed below. */}
    e=window.rbReadPMSEvidence();
-   if(!refreshed||e.ownerUid!==identity.uid||e.demo!==identity.demo||e.scopePropertyId!==identity.scope||!['empty','populated'].includes(e.state)){
+   if(contextRevision!==requestRevision||!refreshed||e.ownerUid!==identity.uid||e.demo!==identity.demo||e.scopePropertyId!==identity.scope||!['empty','populated'].includes(e.state)){
     return reply('pms_context','Non posso confermare il risultato: il caricamento è fallito o account/immobile sono cambiati. Ricarica il PMS e ripeti la domanda.','I cannot confirm the result: loading failed or the account/property changed. Reload the PMS and ask again.',{source:'pms_availability',state:'refresh_unavailable'});
    }
   }
