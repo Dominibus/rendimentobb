@@ -60,6 +60,8 @@ window.firebaseAuth = auth;
 // GLOBAL STATE
 // ===============================
 
+window.dispatchEvent(new Event('rb_pms_context_changed'));
+
 window.currentUser = null;
 let rbAuthSnapshotOwner = null;
 let stopAccountAccessObserver = null;
@@ -511,6 +513,7 @@ onAuthStateChanged(auth, async (user) => {
     window.bestInvestmentData = null;
   }
   rbAuthSnapshotOwner = user?.uid || null;
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
   window.currentUser = user;
   window.rbSyncChatIdentity?.(user?.uid || null);
   window.firebaseReady = false;
@@ -523,6 +526,7 @@ onAuthStateChanged(auth, async (user) => {
 
     
     window.rbAccountData=null; window.rbAccountOwner=null;
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentUser = null;
     window.currentPlan = "free";
     window.userRole = "user";

@@ -790,6 +790,9 @@ async function loadDashboard({languageOnly = false} = {}){
   if(!window.currentUser){
 
     
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
+
+    
     window.currentUser = {
 
       uid:"demo-user",
@@ -2758,6 +2761,7 @@ window.addEventListener("DOMContentLoaded", () => {
 }
 
     // ================= USER OK =================
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentUser = user;
     
     try{
@@ -4922,6 +4926,7 @@ window.loadCurrentPropertyTouristTax = async function(propertyId = window.curren
   // Free/guest dashboards use local demo data and must never query
   // Firestore properties, which are intentionally protected by rules.
   if(isDemo() || !canUseFirestorePMS()){
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentPropertyId = propertyId;
     window.currentPropertyData = null;
     window.currentPropertyTouristTaxConfig = null;
@@ -4933,6 +4938,7 @@ window.loadCurrentPropertyTouristTax = async function(propertyId = window.curren
   );
   if(viewVersion !== (window.rbBookingViewVersion || 0) || propertyRequest !== window.rbPropertyLoadVersion) return null;
   const propertyData = propertySnap.exists() ? propertySnap.data() : null;
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
   window.currentPropertyId = propertyId;
   window.currentPropertyData = propertyData;
   window.currentPropertyTouristTaxConfig = propertyData?.touristTaxConfig || null;
@@ -9337,12 +9343,16 @@ window.openBookings = async function(propertyId, bookingId = null, viewAllProper
   if(window.closeBookingForm?.() === false) return false;
   window.rbBookingsReturnFocus=document.activeElement;
 
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
+
   window.bookingsAllPropertiesView = viewAllProperties === true;
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
   window.bookingsPropertyFilter = viewAllProperties ? "all" : propertyId;
 
 
   // Salva la proprietà corrente
   if(propertyId){
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentPropertyId = propertyId;
     await window.loadCurrentPropertyTouristTax(propertyId);
   }
@@ -9621,6 +9631,8 @@ window.openCurrentBookings = async function({fresh=false}={}){
 
   if(isDemo() || !canUseFirestorePMS()){
 
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
+
     window.currentPropertyId = "demo-property";
     await openBookings(window.currentPropertyId);
     return;
@@ -9690,6 +9702,8 @@ window.openCurrentBookings = async function({fresh=false}={}){
       propertiesSnap.docs[0].id;
   }
 
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
+
   window.currentPropertyId = propertyId;
   await openBookings(propertyId, null, true);
 
@@ -9698,8 +9712,11 @@ window.openCurrentBookings = async function({fresh=false}={}){
 window.filterBookingsByProperty = async function(propertyId){
   if(!window.bookingsAllPropertiesView) return;
 
+  window.dispatchEvent(new Event('rb_pms_context_changed'));
+
   window.bookingsPropertyFilter = propertyId || "all";
   if(propertyId && propertyId !== "all"){
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentPropertyId = propertyId;
     await window.loadCurrentPropertyTouristTax(propertyId);
   }
@@ -10159,9 +10176,11 @@ window.dispatchEvent(
   closeBookingModal(true);
 
   try{
+    window.dispatchEvent(new Event('rb_pms_context_changed'));
     window.currentPropertyId = selectedPropertyId;
     await window.loadCurrentPropertyTouristTax(selectedPropertyId);
     if(window.bookingsAllPropertiesView && !returnToAllProperties){
+      window.dispatchEvent(new Event('rb_pms_context_changed'));
       window.bookingsPropertyFilter = selectedPropertyId;
       const propertyFilter = document.getElementById("bookings-property-filter");
       if(propertyFilter) propertyFilter.value = selectedPropertyId;
