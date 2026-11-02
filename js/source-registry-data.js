@@ -1,7 +1,7 @@
 // Generated from data/source-registry.json. Do not edit. Public metadata only.
 export default {
   "schemaVersion": 1,
-  "registryVersion": "rc228-inventory-1/candidate-navigation-20261030",
+  "registryVersion": "rc228-inventory-1/candidate-navigation-20261030/compound-pdf-20261102",
   "inventoriedAt": "2026-10-29",
   "baselineCommit": "ad44c31c2baa72627171dd0147232bd37ea7ec48",
   "scope": "Public metadata and local code/data fingerprints only; no live source or account certification",
@@ -802,7 +802,7 @@ export default {
         },
         {
           "path": "js/chatbot/core/pms-document-evidence.js",
-          "sha256": "4081e772656c4ac0815353643383f75742697781375cfa66e1123238be502069"
+          "sha256": "fe8c18d69847c989d0e5389e4bc14e8be4c78e6a5e84e413f6ab76462c1c430f"
         },
         {
           "path": "js/chatbot/document-engine.js",

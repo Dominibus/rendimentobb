@@ -175,7 +175,7 @@
 
     "/js/chatbot/document-engine.js?v=20261023-rc194",
     "/js/chatbot/pdf-extraction-engine.js?v=20261011-rc99",
-    "/js/chatbot/core/pms-document-evidence.js?v=20261016-rc141",
+    "/js/chatbot/core/pms-document-evidence.js?v=20261102-compound-pdf",
     "/js/chatbot/pdf-parser-engine.js?v=20261026-rc200",
     "/js/chatbot/core/document-classifier.js?v=20261015-rc137",
     "/js/chatbot/document-reasoning-engine.js",
