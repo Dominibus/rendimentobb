@@ -39,6 +39,7 @@
         "aria-selected",
         String(isActive)
       );
+      tab.tabIndex = isActive ? 0 : -1;
 
     });
 
@@ -345,6 +346,20 @@
           "[data-rb-panel-target]"
         )
         .forEach(tab => {
+
+          tab.addEventListener("keydown", event => {
+            const tabs = [...document.querySelectorAll("[data-rb-panel-target]")];
+            const index = tabs.indexOf(tab);
+            let next;
+            if(event.key === "ArrowRight") next = (index + 1) % tabs.length;
+            else if(event.key === "ArrowLeft") next = (index + tabs.length - 1) % tabs.length;
+            else if(event.key === "Home") next = 0;
+            else if(event.key === "End") next = tabs.length - 1;
+            else return;
+            event.preventDefault();
+            tabs[next].click();
+            tabs[next].focus();
+          });
 
           tab.addEventListener(
             "click",

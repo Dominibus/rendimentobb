@@ -1,0 +1,20 @@
+/* First-use guidance: presentation only; account and calculation rules stay in their modules. */
+.rb-skip-link{position:fixed;top:8px;left:12px;z-index:2147483647;transform:translateY(-180%);padding:12px 18px;border-radius:8px;background:#fff;color:#123e32;font-weight:700;box-shadow:0 2px 12px #123e3233}
+.rb-skip-link:focus{transform:none;outline:3px solid #087e61}
+.rb-first-use-steps{list-style:decimal;margin:16px 0;padding-left:24px;color:#123e32}
+.rb-first-use-steps li{padding-left:4px;margin:0 0 14px;line-height:1.5}
+.rb-first-use-steps li::marker{font-weight:800;color:#087e61}
+.rb-first-use-steps strong,.rb-first-use-steps span{display:block}
+.rb-first-use-steps strong{font-size:16px;margin-bottom:3px}
+.rb-first-use-steps span,.rb-first-use-note,.rb-input-help{font-size:14px;line-height:1.6;color:#405b50}
+.rb-first-use-link{display:inline-flex;align-items:center;min-height:44px;max-width:100%;color:#075d46;font-size:15px;font-weight:750;text-underline-offset:3px;overflow-wrap:anywhere}
+.rb-first-use-link:focus-visible,.rb-home-tab:focus-visible{outline:3px solid #087e61;outline-offset:4px}
+.rb-first-use-note{margin:10px 0 16px}
+.rb-input-help{margin:8px 0 0}
+.rb-auth-steps{margin:16px 0;text-align:left;border:1px solid #cfdfd8;border-radius:12px;padding:12px;color:#254c3e;background:#f5faf7}
+.rb-auth-steps summary{cursor:pointer;font-weight:700;font-size:14px;line-height:1.5;min-height:44px;display:list-item;align-content:center}
+.rb-auth-steps summary:focus-visible{outline:3px solid #087e61;outline-offset:3px}
+.rb-auth-steps ol{padding-left:22px;font-size:14px;line-height:1.6}
+.rb-auth-steps li{margin:8px 0}
+.rb-auth-field-label{display:block;text-align:left;font-size:14px;font-weight:650;color:#294d40;margin-bottom:6px}
+@media(max-width:760px){.rb-first-use-steps li{margin-bottom:12px}.rb-first-use-steps strong{font-size:15px}}
