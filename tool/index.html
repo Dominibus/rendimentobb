@@ -8,9 +8,9 @@
 
 <!-- 🔥 TITLE OTTIMIZZATO CONVERSION + SEO --> 
 <title id="page-title"
-data-it="Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)"
-data-en="B&B ROI Calculator – See how much you can earn (or lose)">
-Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)
+data-it="Simulatore B&B gratuito — ricavi, costi e mutuo"
+data-en="Free B&B simulator — revenue, costs and financing">
+Simulatore B&B gratuito — ricavi, costi e mutuo
 </title>
 
 <!-- 🔥 DESCRIPTION PSICOLOGICA -->
@@ -23,7 +23,7 @@ content="Simula ROI, cashflow e rischio del modello per un B&B. Confronta ipotes
 
 <!-- 🔥 OPEN GRAPH (SOCIAL) -->
 <meta property="og:title" content="Simulatore ROI B&B – Analisi delle ipotesi di investimento">
-<meta property="og:description" content="Scopri quanto puoi guadagnare (o perdere) prima di investire in un B&B.">
+<meta property="og:description" content="Inserisci le tue ipotesi per simulare ricavi, costi e mutuo di un B&B. Stime, non rendimenti garantiti.">
 <meta property="og:image" content="https://www.rendimentobb.it/img/dashboard-preview.png">
 <meta property="og:type" content="website">
 
@@ -787,6 +787,7 @@ SAFE
 <link rel="stylesheet" href="/css/mobile-shell.css?v=20261029-rc221-mobilefix20261101">
 <script src="/js/mobile-shell.js?v=20261029-rc221-mobilefix20261101" defer></script>
 <link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc225">
+<link rel="stylesheet" href="/css/first-use.css?v=20261126">
 <script src="/js/free-flow-rc222.js?v=20261029-rc225" defer></script>
 </head>
 
@@ -1051,7 +1052,8 @@ Guide
 
   
 
-<main>
+<a class="rb-skip-link" href="#main-content" data-it="Vai al contenuto" data-en="Skip to content">Vai al contenuto</a>
+<main id="main-content" tabindex="-1">
 
 
 
@@ -1065,9 +1067,9 @@ Guide
 <div class="tool-2026-hero-copy">
   <div>
     <div class="tool-2026-eyebrow"
-      data-it="AI INVESTMENT SIMULATOR"
-      data-en="AI INVESTMENT SIMULATOR">
-      AI INVESTMENT SIMULATOR
+      data-it="SIMULATORE GRATUITO"
+      data-en="FREE SIMULATOR">
+      SIMULATORE GRATUITO
     </div>
 
     <h1
@@ -1077,9 +1079,9 @@ Guide
     </h1>
 
     <p
-      data-it="Inserisci prezzo, capitale e costi. Valuta cashflow, rata, ROI e rischio nelle tue ipotesi; salva lo scenario e confrontalo nella dashboard."
-      data-en="Enter price, equity and costs. Review cash flow, loan payments, ROI and risk under your assumptions; save the scenario and compare it in the dashboard.">
-      Inserisci prezzo, capitale e costi. Valuta cashflow, rata, ROI e rischio nelle tue ipotesi; salva lo scenario e confrontalo nella dashboard.
+      data-it="Inserisci prezzo, capitale, ricavi e costi ipotizzati. Leggi gratis le prime stime, senza account. Per salvare lo scenario e confrontarlo nella dashboard serve Investor."
+      data-en="Enter your assumed price, equity, revenue and costs. Read the initial estimates for free, without an account. Saving scenarios and comparing them in the dashboard requires Investor.">
+      Inserisci prezzo, capitale, ricavi e costi ipotizzati. Leggi gratis le prime stime, senza account. Per salvare lo scenario e confrontarlo nella dashboard serve Investor.
     </p>
   </div>
 
@@ -1165,27 +1167,29 @@ Guide
           <p id="owned-property-help" hidden role="note" data-it="Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili. Indica spese di avvio una tantum nel capitale e spese ricorrenti nei costi mensili, evitando duplicazioni. Il mutuo residuo usa tasso e durata rimanenti; le imposte sono un’ipotesi semplificata." data-en="Estimate revenue, costs and cashflow for a property you already own. Property value is optional and does not create a new loan. With zero startup capital, return on capital and payback are not applicable. Enter one-off startup expenses as capital and recurring expenses as monthly costs, avoiding double counting. For remaining mortgage principal, use the remaining term and rate; taxes are a simplified assumption.">Stima ricavi, spese e cashflow della casa che possiedi già. Il valore della casa è facoltativo e non genera un nuovo mutuo. Con capitale di avvio pari a zero, il ROI sul capitale e il tempo di recupero non sono applicabili. Indica spese di avvio una tantum nel capitale e spese ricorrenti nei costi mensili, evitando duplicazioni. Il mutuo residuo usa tasso e durata rimanenti; le imposte sono un’ipotesi semplificata.</p>
         </div>
         <div class="input-group">
-          <label for="price" id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+          <label for="price" id="property-price-label" data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</label>
           <input type="number" id="price" min="0.01" step="any" required placeholder="150000">
         </div>
 
         <div class="input-group">
-          <label for="equity" id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
+          <label for="equity" id="property-equity-label" data-it="Capitale proprio (€)" data-en="Equity (€)">Capitale proprio (€)</label>
           <input type="number" id="equity" min="0" step="any" required placeholder="30000">
 <details class="rb-flow-disclosure"><summary  data-it="Capitale proprio: cosa include la simulazione" data-en="Equity: what the simulation includes">Capitale proprio: cosa include la simulazione</summary><div class="rb-flow-content"><p id="purchase-equity-help" data-it="Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto." data-en="You can simulate zero equity (100% financing). Equity ROI and equity payback are then not applicable: assess payments, cash flow and operating yield. This does not indicate bank approval or automatically include purchase transaction costs.">Puoi simulare capitale proprio pari a zero (mutuo al 100%). In questo caso il ROI sull’equity e il suo recupero non sono applicabili: valuta rata, cashflow e rendimento operativo. La simulazione non indica approvazione bancaria e non include automaticamente i costi accessori di acquisto.</p></div></details>
         </div>
 
         <div class="input-group">
-          <label for="priceNight" data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
-          <input type="number" id="priceNight" min="0" step="any" required placeholder="120">
+          <label for="priceNight" data-it="Prezzo notte (€)" data-en="Night price (€)">Prezzo notte (€)</label>
+          <input type="number" id="priceNight" min="0" step="any" required placeholder="120" aria-describedby="night-price-help">
+          <p id="night-price-help" class="rb-input-help" data-it="Tariffa media ipotizzata per una notte venduta, prima di commissioni e costi. Non è un prezzo di mercato verificato." data-en="Assumed average rate per sold night, before commissions and costs. This is not a verified market price.">Tariffa media ipotizzata per una notte venduta, prima di commissioni e costi. Non è un prezzo di mercato verificato.</p>
         </div>
 
         <div class="input-group">
-          <label for="occupancy" data-it="Occupazione (%)" data-en="Occupancy (%)"></label>
+          <label for="occupancy" data-it="Occupazione (%)" data-en="Occupancy (%)">Occupazione (%)</label>
 
           <input
 type="range"
 id="occupancy"
+aria-describedby="occupancy-input-help"
 min="0"
 max="100"
 value="70">
@@ -1193,10 +1197,11 @@ value="70">
           <div class="range-value">
             <span id="occ-value">70%</span>
           </div>
+          <p id="occupancy-input-help" class="rb-input-help" data-it="Quota delle notti annue che ipotizzi di vendere. Il valore iniziale è modificabile: non è un’occupazione rilevata. La simulazione annua non descrive la stagionalità." data-en="Share of annual nights you expect to sell. The initial value is editable: it is not observed occupancy. The annual simulation does not describe seasonality.">Quota delle notti annue che ipotizzi di vendere. Il valore iniziale è modificabile: non è un’occupazione rilevata. La simulazione annua non descrive la stagionalità.</p>
         </div>
 
         <div class="input-group">
-          <label for="expenses" data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
+          <label for="expenses" data-it="Costi mensili (€)" data-en="Monthly costs (€)">Costi mensili (€)</label>
           <input type="number" id="expenses" min="0" step="any" inputmode="decimal" placeholder="1200" required>
           <details class="rb-flow-disclosure"><summary  data-it="Costi mensili: cosa inserire" data-en="Monthly costs: what to include">Costi mensili: cosa inserire</summary><div class="rb-flow-content"><small
             style="display:block;margin-top:6px;color:#64748b;line-height:1.4;"

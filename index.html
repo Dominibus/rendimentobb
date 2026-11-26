@@ -118,10 +118,12 @@ document.documentElement.lang = window.currentLang || "it";
 <link rel="stylesheet" href="/css/mobile-shell.css?v=20261029-rc221">
 <script src="/js/mobile-shell.js?v=20261029-rc221" defer></script>
 <link rel="stylesheet" href="/css/free-flow-rc222.css?v=20261029-rc225">
+<link rel="stylesheet" href="/css/first-use.css?v=20261126">
 <script src="/js/free-flow-rc222.js?v=20261029-rc225" defer></script>
 </head>
 
 <body class="home-page">
+<a class="rb-skip-link" href="#main-content" data-it="Vai al contenuto" data-en="Skip to content">Vai al contenuto</a>
 
 <script>
 window.updateOverlayVisibility =
@@ -131,23 +133,29 @@ window.updateOverlayVisibility =
 
 <div id="global-header"></div>
 
-<main>
+<main id="main-content" tabindex="-1">
 <section class="rb158-hero" aria-labelledby="rb158-title">
 <div class="rb158-shell rb158-hero-grid"><div class="rb158-hero-copy">
-<p class="rb158-eyebrow" data-it="Basic &amp; Beyond — L’essenziale &amp; oltre" data-en="Basic &amp; Beyond — The essentials &amp; beyond">Basic &amp; Beyond — L’essenziale &amp; oltre</p>
-<h1 id="rb158-title"><span  data-it="Analizza il tuo immobile." data-en="Analyse your property.">Analizza il tuo immobile.</span><span  data-it="Gestisci B&amp;B, locali e studi." data-en="Manage B&amp;Bs and commercial spaces.">Gestisci B&amp;B, locali e studi.</span><span class="rb158-accent" data-it="Capisci i numeri." data-en="Understand the numbers.">Capisci i numeri.</span></h1>
-<p class="rb158-lead" data-it="Prima simuli. Poi gestisci. Confronti ciò che avevi previsto con ciò che registri." data-en="Simulate first. Then manage. Compare your forecast with what you record.">Prima simuli. Poi gestisci. Confronti ciò che avevi previsto con ciò che registri.</p>
-<div class="rb158-actions"><a href="/tool/" class="rb158-button" data-it="Analizza un investimento →" data-en="Analyse an investment →">Analizza un investimento →</a><a href="/dashboard/" class="rb158-button rb158-button-light" data-it="Gestisci una struttura →" data-en="Manage a property →">Gestisci una struttura →</a></div>
-<p class="rb158-proof" data-it="Demo senza account · Risultati basati sulle ipotesi inserite" data-en="Demo without an account · Results based on your inputs">Demo senza account · Risultati basati sulle ipotesi inserite</p>
-<p class="rb158-description" data-it="Simulazioni, prenotazioni e un assistente che ti spiega i dati e ti guida al prossimo passo. Parti dalle tue ipotesi, senza dover conoscere ogni indicatore." data-en="Simulations, bookings and an assistant that explains your data and guides your next step. Start with your assumptions, without knowing every metric.">Simulazioni, prenotazioni e un assistente che ti spiega i dati e ti guida al prossimo passo. Parti dalle tue ipotesi, senza dover conoscere ogni indicatore.</p>
+<p class="rb158-eyebrow" data-it="Simulazioni immobiliari e gestione B&amp;B" data-en="Property simulations and B&amp;B management">Simulazioni immobiliari e gestione B&amp;B</p>
+<h1 id="rb158-title"><span data-it="Valuta un immobile." data-en="Assess a property.">Valuta un immobile.</span><span class="rb158-accent" data-it="Prima di investire." data-en="Before you invest.">Prima di investire.</span></h1>
+<p class="rb158-lead" data-it="RendimentoBB aiuta investitori, proprietari e gestori a simulare ricavi, costi e mutuo e a organizzare la gestione degli immobili." data-en="RendimentoBB helps investors, owners and managers simulate revenue, costs and financing, and organize property operations.">RendimentoBB aiuta investitori, proprietari e gestori a simulare ricavi, costi e mutuo e a organizzare la gestione degli immobili.</p>
+<div class="rb158-actions"><a href="/tool/" class="rb158-button" data-it="Analizza un investimento gratis →" data-en="Analyse an investment for free →">Analizza un investimento gratis →</a><a href="/dashboard/" class="rb158-button rb158-button-light" data-it="Gestisci una struttura →" data-en="Manage a property →">Gestisci una struttura →</a></div>
+<p class="rb158-proof" data-it="Simulatore gratuito senza account · Nessun rendimento garantito" data-en="Free simulator without an account · No guaranteed returns">Simulatore gratuito senza account · Nessun rendimento garantito</p>
+<p class="rb158-description" data-it="Parti dalle tue ipotesi, anche per una casa già tua. Investor aggiunge salvataggio, confronto degli scenari e gestione PMS: qui sotto trovi come richiedere la prova di 30 giorni." data-en="Start with your assumptions, including a home you already own. Investor adds saved analyses, scenario comparisons and PMS operations: see below how to request the 30-day trial.">Parti dalle tue ipotesi, anche per una casa già tua. Investor aggiunge salvataggio, confronto degli scenari e gestione PMS: qui sotto trovi come richiedere la prova di 30 giorni.</p>
 <div class="rb196-choose" aria-label="Scegli immobile / Choose property"><a href="/tool/"><strong data-it="B&amp;B e affitti brevi" data-en="B&amp;Bs and short lets">B&amp;B e affitti brevi</strong><span data-it="Tariffe, notti e prenotazioni" data-en="Rates, nights and bookings">Tariffe, notti e prenotazioni</span></a><a href="/immobili-commerciali/"><strong data-it="Locali, studi e poliambulatori" data-en="Commercial units and professional rooms">Locali, studi e poliambulatori</strong><span data-it="Analisi canoni e costi · PMS dedicato" data-en="Rent and cost analysis · dedicated PMS">Analisi canoni e costi · PMS dedicato</span></a></div>
 
 <a class="rb161-path-link" href="#rb158-paths" data-it="Non sai da dove iniziare? Scegli il tuo percorso ↓" data-en="Not sure where to start? Choose your path ↓">Non sai da dove iniziare? Scegli il tuo percorso ↓</a>
 </div>
 <aside class="rb158-preview" aria-labelledby="rb158-preview-title">
 <div class="rb158-preview-top"><span class="rb158-wordmark">Rendimento<span>BB</span></span><span class="rb158-preview-badge" data-it="Anteprima del percorso" data-en="Journey preview">Anteprima del percorso</span></div>
-<h2 id="rb158-preview-title" data-it="Dal dato alla prossima scelta." data-en="From data to your next decision.">Dal dato alla prossima scelta.</h2>
-<div class="rb158-preview-track"><span class="rb158-track-step">01 <b><span  data-it="Capisci" data-en="Understand">Capisci</span></b></span><span class="rb158-track-step">02 <b><span  data-it="Valuta" data-en="Evaluate">Valuta</span></b></span><span class="rb158-track-step">03 <b><span  data-it="Gestisci" data-en="Manage">Gestisci</span></b></span></div>
+<h2 id="rb158-preview-title" data-it="Da dove iniziare" data-en="Where to start">Da dove iniziare</h2>
+<ol class="rb-first-use-steps">
+<li><strong data-it="Simula gratis" data-en="Simulate for free">Simula gratis</strong><span data-it="Inserisci le ipotesi dell’immobile. Leggi le stime senza registrarti." data-en="Enter your property assumptions. Read the estimates without registering.">Inserisci le ipotesi dell’immobile. Leggi le stime senza registrarti.</span></li>
+<li><strong data-it="Crea l’account e verifica l’email" data-en="Create an account and verify your email">Crea l’account e verifica l’email</strong><span data-it="È il primo passo per richiedere Investor; non attiva la prova." data-en="This is the first step to request Investor; it does not start the trial.">È il primo passo per richiedere Investor; non attiva la prova.</span></li>
+<li><strong data-it="Conferma la prova in Abbonamento" data-en="Confirm the trial in Subscription">Conferma la prova in Abbonamento</strong><span data-it="30 giorni per account Free idonei che non l’hanno già usata. Poi analizza, salva e riapri lo scenario nella dashboard." data-en="30 days for eligible Free accounts that have not used it before. Then analyze, save and reopen your scenario in the dashboard.">30 giorni per account Free idonei che non l’hanno già usata. Poi analizza, salva e riapri lo scenario nella dashboard.</span></li>
+</ol>
+<a class="rb-first-use-link" href="/login/?intent=investor-trial" data-it="Crea account o accedi per la prova →" data-en="Create an account or sign in for the trial →">Crea account o accedi per la prova →</a>
+<p class="rb-first-use-note" data-it="Senza carta, addebiti o rinnovo automatico. PDF esclusi. Alla scadenza torni a Free. Nuovi acquisti sospesi." data-en="No card, charges or automatic renewal. PDFs excluded. You return to Free when it ends. New purchases are paused.">Senza carta, addebiti o rinnovo automatico. PDF esclusi. Alla scadenza torni a Free. Nuovi acquisti sospesi.</p>
 <div class="rb158-preview-card"><span class="rb158-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3Z"/></svg></span><div><strong  data-it="Autopilot" data-en="Autopilot">Autopilot</strong><p  data-it="Meno dubbi. Il prossimo passo, spiegato." data-en="Fewer doubts. Your next step, explained.">Meno dubbi. Il prossimo passo, spiegato.</p></div></div>
 <ul class="rb158-preview-checks"><li><span  data-it="Controlla le ipotesi inserite" data-en="Check your entered assumptions">Controlla le ipotesi inserite</span></li><li><span  data-it="Interpreta la simulazione corrente" data-en="Interpret the current simulation">Interpreta la simulazione corrente</span></li><li><span  data-it="Prepara le priorità nel PMS" data-en="Prepare priorities in the PMS">Prepara le priorità nel PMS</span></li></ul>
 <p class="rb158-preview-note" data-it="La guida usa il contesto disponibile. Sei tu a decidere e confermare le operazioni." data-en="Guidance uses the available context. You decide and confirm operations.">La guida usa il contesto disponibile. Sei tu a decidere e confermare le operazioni.</p>
@@ -175,6 +183,8 @@ window.updateOverlayVisibility =
         type="button"
         class="rb-home-tab is-active"
         role="tab"
+        id="rb-home-tab-simulator"
+        aria-controls="rb-quick-calculation"
         aria-selected="true"
         data-rb-panel-target="simulator">
         <span aria-hidden="true">◫</span>
@@ -185,6 +195,9 @@ window.updateOverlayVisibility =
         type="button"
         class="rb-home-tab"
         role="tab"
+        id="rb-home-tab-demo"
+        aria-controls="rendimentobb-video"
+        tabindex="-1"
         aria-selected="false"
         data-rb-panel-target="demo">
         <span aria-hidden="true">▶</span>
@@ -195,6 +208,9 @@ window.updateOverlayVisibility =
         type="button"
         class="rb-home-tab"
         role="tab"
+        id="rb-home-tab-pricing"
+        aria-controls="pricing"
+        tabindex="-1"
         aria-selected="false"
         data-rb-panel-target="pricing">
         <span aria-hidden="true">◇</span>
@@ -1646,7 +1662,7 @@ Scopri di più →
 <!-- 🔥 UI -->
 <script type="module" src="/js/header.js?v=20261029-rc221"></script>
 <script src="/js/ui-system.js?v=20261011-rc99" defer></script> 
-<script src="/js/home-2026.js?v=20261028-rc220" defer></script>
+<script src="/js/home-2026.js?v=20261126-first-use" defer></script>
 <script src="/js/footer.js?v=20261025-rc196" defer></script>
 
 <!-- 🔥 FIREBASE INIT -->

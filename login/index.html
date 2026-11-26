@@ -307,6 +307,7 @@ font-size:22px;
 <link rel="stylesheet" href="/css/readability.css?v=20261016-rc145">
 <link rel="stylesheet" href="/css/brand-icons.css?v=20261016-rc146">
 <link rel="stylesheet" href="/css/legibility-rc159.css?v=20261020-rc159">
+<link rel="stylesheet" href="/css/first-use.css?v=20261126">
 </head>
 
 <body class="rb-login-page">
@@ -335,6 +336,16 @@ Analizza investimenti e gestisci il tuo B&B da un unico account
 </div>
 
 <p id="trial-auth-context" hidden style="padding:14px;border-radius:12px;background:#ecfdf5;color:#14532d;font-size:14px;line-height:1.6" role="note"></p>
+<details class="rb-auth-steps">
+<summary data-it="Come iniziare Investor per 30 giorni" data-en="How to start 30 days of Investor">Come iniziare Investor per 30 giorni</summary>
+<ol>
+<li data-it="Crea un account gratuito, oppure accedi se ne hai già uno." data-en="Create a free account, or sign in if you already have one.">Crea un account gratuito, oppure accedi se ne hai già uno.</li>
+<li data-it="Verifica l’email seguendo il messaggio ricevuto. Controlla anche lo spam." data-en="Verify your email using the message you receive. Check spam too.">Verifica l’email seguendo il messaggio ricevuto. Controlla anche lo spam.</li>
+<li data-it="Apri Abbonamento dal menu e conferma la prova, se sei Free e non l’hai già usata. La registrazione da sola non la attiva." data-en="Open Subscription from the menu and confirm the trial if you are Free and have not used it before. Registration alone does not activate it.">Apri Abbonamento dal menu e conferma la prova, se sei Free e non l’hai già usata. La registrazione da sola non la attiva.</li>
+<li data-it="Nel simulatore esegui l’analisi, salvala e ritrovala nella dashboard." data-en="Run an analysis in the simulator, save it and find it again in the dashboard.">Nel simulatore esegui l’analisi, salvala e ritrovala nella dashboard.</li>
+</ol>
+<p class="rb-first-use-note" data-it="Nessuna carta, addebito o rinnovo automatico. PDF esclusi. Alla scadenza torni a Free. Nuovi acquisti sospesi." data-en="No card, charges or automatic renewal. PDFs excluded. You return to Free when it ends. New purchases are paused.">Nessuna carta, addebito o rinnovo automatico. PDF esclusi. Alla scadenza torni a Free. Nuovi acquisti sospesi.</p>
+</details>
 <div id="login-message" class="message" role="status" aria-live="polite"></div>
 <form id="auth-form">
 
@@ -347,7 +358,7 @@ data-it-aria-label="Nome"
 data-en-aria-label="Name">
 
 <!-- 🔥 ROLE (REGISTER ONLY) -->
-<select id="role"
+<select id="role" aria-label="Profilo professionale" data-it-aria-label="Profilo professionale" data-en-aria-label="Professional profile"
 style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid #cbd5e1;">
 
   <option value=""
@@ -385,12 +396,14 @@ style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px 
 </select>
 
 <!-- 🔥 EMAIL -->
+<label for="email" class="rb-auth-field-label" data-it="Indirizzo email" data-en="Email address">Indirizzo email</label>
 <input id="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required maxlength="254" aria-label="Email"
 placeholder="Email"
 data-it="Email"
 data-en="Email">
 
 <!-- 🔥 PASSWORD -->
+<label for="password" class="rb-auth-field-label" data-it="Password" data-en="Password">Password</label>
 <input id="password" type="password" autocomplete="current-password" required aria-label="Password" aria-describedby="password-help"
 placeholder="Password"
 data-it="Password"
